@@ -25,7 +25,8 @@ html {
 
 /* ===== base & typography ===== */
 /* 	base font 1.25 rem - 20px, line 30px
-	grid half line 15px -> .625rem
+	grid: line third 10px -> .625rem
+	(sometimes 5px -> .3125rem)
 */
 
 html, body {
@@ -47,12 +48,15 @@ h1, h2, h3, h4, h5 {
 	/*line-height:1.2;*/
 }
 
-p, a {
+p, p a, span {
 	font-size:1.25rem;
+}
+i, b, u {
+	font-size: 100%;
 }
 p {
 	max-width:40em; /* 50em at 1.25rem */
-	margin-bottom:1.875rem;
+	margin-bottom:1.875rem; /* at 20px font */
 }
 a, a:link {
 	color:#004eff;
@@ -63,27 +67,33 @@ a:visited {
 a:hover, a:visited:hover {
 	color:#2f6eff;
 }
+a:focus {
+	background-color: #477abf;
+	color:#fff;
+}
 a, a:link, a i {
 	transition:  all .3s ease-out;
 }
 
 
 
-/* =====  ===== */
+/* ===== layout ===== */
 
 #menu {
 	background-color: #222;
+	/*background-color: #444;*/
 }
 #menu ul li {
 	list-style: none;
 	display: inline-block;
 	height: 3.75rem;
 }
-#menu ul li img {
+#menu ul li img, #menu ul li svg {
 	width: 2.5rem;
 	height: 2.5rem;
-	margin: 0 .3125rem 0 .3125rem;
+	margin: 0;
 }
+
 #menu a, #menu a span {
 	vertical-align: top;
 }
@@ -92,17 +102,29 @@ a, a:link, a i {
 	height: 3.75rem;
 	padding: .625rem;
 	color: #aaa;
+	font-size: 0;
 }
 #menu a:hover {
 	background-color: #333;
 	color:#fff;
 }
+#menu a:focus {
+	color:#fff;
+}
+#menu a .line {
+	transition:  fill .3s ease-out;
+}
+#menu a:hover .line, #menu a:focus .line {
+	fill:#ddd;
+}
+#menu a:hover .second, #menu a:focus .second {
+	fill:#33447e;
+}
 #menu a span {
 	display: inline-block;
 	font-size: 1rem;
 	line-height: 2.5rem;
-	
-	margin:0 .3125rem;
+	margin:0 .625rem;
 }
 
 
@@ -117,10 +139,51 @@ a, a:link, a i {
 	
 	background-color: #aaa;
 }
+.screen > div {
+	margin:1.25rem 0;
+}
+
+
+/* scrollbars
+todo hex colours, button icons */
+.screen::-webkit-scrollbar {
+	width: .9375rem;
+}
+.screen::-webkit-scrollbar-button {
+	height: .9375rem;
+	background: rgba(0,0,0,.17);
+}
+.screen::-webkit-scrollbar-button:vertical:decrement {
+	/* up */
+}
+.screen::-webkit-scrollbar-button:vertical:increment {
+	/* down */
+}
+.screen::-webkit-scrollbar-track {
+	background: rgba(0,0,0,.1);
+}
+.screen::-webkit-scrollbar-thumb {
+	background: rgba(0,0,0,.15); 
+}
+.screen::-webkit-scrollbar-thumb:hover, .screen::-webkit-scrollbar-button:hover {
+	background: rgba(60,30,0,.2);
+}
+.screen::-webkit-scrollbar-thumb:active, .screen::-webkit-scrollbar-button:active {
+	background: rgba(40,35,20,.5);
+}
+.screen::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(0,0,0,.075); 
+}
+
+.beside {
+	position: absolute;
+	left:52rem;
+}
+
 
 /* ==== responsive layouts ==== */
 
-@media screen and (max-width:52.99999em) {
+@media screen and (max-width:47.19999em) {
 	#menu a span {
 		display: none;
 	}
@@ -134,12 +197,9 @@ a, a:link, a i {
 	#menu ul {
 		width:200%;
 	}
-	#menu li {
+	#menu li:not(:last-child) {
 		border-right: 1px solid #333;
 		/*padding: 0 .3125rem;*/
-	}
-	#menu li:last-child {
-		border:0;
 	}
 	
 	#content {
@@ -149,6 +209,11 @@ a, a:link, a i {
 	.screen {
 		width: 100%;
 		left:0;
+	}
+	.screen:not(:first-child) {
+		/*top:-3.75rem;
+		height: calc(100% + 3.75rem);*/
+		/* whole viewport overlay except base */
 	}
 
 }
@@ -169,18 +234,20 @@ a, a:link, a i {
 		transition: width .3s .2s ease-in-out, height .3s .5s ease-in-out;
 		/* height added for responsive resizing */
 	}
-	#menu:hover {
+	#menu:hover, #menu.open {
 		width: 17rem;
+	}
+	#menu:hover {
 		transition-delay: .7s;
+	}
+	#menu.open {
+		transition-delay: 0s;
 	}
 	#menu ul, #menu ul li, #menu a {
 		width:22rem;
 	}
 	#menu li {
 		border-bottom: 1px solid #333;
-	}
-	#menu a {
-		padding-left: .3125rem;
 	}
 	
 	#content {
@@ -201,16 +268,29 @@ a, a:link, a i {
 		box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.7);
 		
 		transition: all .5s ease-in-out;
-		transition-property: flex-grow, background-color;
+		transition-property: flex-grow, background-color, width;
 		
 		flex-grow: 0.0000001;
 	}
-	.screenContent {
+
+	.screen > div {
 		width: 50rem;
 	}
+	
+	
+	.screen.limited.lim30 {
+		max-width: 31rem;
+	}
+	.screen.limited.lim30 > div {
+		width: 30rem;
+	}
+	
+	
+	/* .screen behaviour */
 	.screen.open, .screen.opening {
 		flex-grow: 1;
-		margin-right: .675rem;
+		/*margin-right: .675rem;*/
+		/* move scrollbar from shadow - unused with custom scrollbars */
 	}
 	.screen.open {
 		overflow-y: auto; 
@@ -218,6 +298,7 @@ a, a:link, a i {
 	}
 	.screen:last-child {
 		margin-right: 0;
+		/* cancel move scrollbar  - unused! */
 	}
 	.screen.retracted {
 		background-color: #888;
@@ -225,10 +306,169 @@ a, a:link, a i {
 	.screen.retracted:hover {
 		background-color: #939393;
 	}
+	.screen.closed {
+		width:0;
+	}
 	
 }
 
+@media screen and (max-width:74.99999em) {
+	.beside.hide {
+		display: none;
+	}
+}
+
+/* .screen content space */
+@media screen and (min-width:71em) {
+	.screen.wide > div {
+		width: 55rem;
+	}
+	.screen.wide .beside {
+		left:57rem;
+	}
+}
+@media screen and (min-width:76em) {
+	.screen.wide > div {
+		width: 60rem;
+	}
+	.screen.wide .beside {
+		left:62rem;
+	}
+}
+@media screen and (min-width:81em) {
+	.screen.wide > div {
+		width: 65rem;
+	}
+	.screen.wide .beside {
+		left:67rem;
+	}
+}
+@media screen and (min-width:86em) {
+	.screen.wide > div {
+		width: 70rem;
+	}
+	.screen.wide .beside {
+		left:72rem;
+	}
+}
+@media screen and (min-width:91em) {
+	.screen.wide > div {
+		width: 75rem;
+	}
+	.screen.wide .beside {
+		left:77rem;
+	}
+}
+@media screen and (min-width:96em) {
+	.screen.wide > div {
+		width: 80rem;
+	}
+	.screen.wide .beside {
+		left:82rem;
+	}
+}
+
+
+/* ===== elements ===== */
+
+/* todo ? adhere to grid 
+(with font size 1rem it sorta proportionally does) */
+.item {
+	display: flex;
+	margin:.375rem 0;
+}
+.item > div:not(:last-child) {
+	margin-right: .625rem;
+}
+.item-body {
+	flex-grow: 1;
+	
+	background: #ddd;
+}
+.item-button, .item-status, .item-check {
+	display: inline-block;
+	
+}
+.item-check {
+	vertical-align: middle;
+	line-height: 3.75rem;
+	font-size:1.25rem;
+	
+	line-height: 3rem;
+}
+.item-check input {
+	/*height:.625rem;
+	width: .625rem;*/
+}
+.item-status {
+	height:1.5rem;
+	width: 1.5rem;
+	flex-shrink: 0;
+	margin-top: .75rem;
+	
+	background-color: crimson;	
+}
+.item-button {
+	height: 3.75rem;
+	width:3.75rem;
+	height: 3rem;
+	width: 3rem;
+}
+.item-body-base {
+	display: flex;
+	
+	background: #ddd;
+}
+.item-expand, .item-body-controls {
+	flex-shrink: 0;
+	margin: auto 0;
+}
+.item-body-cols {
+	flex-grow: 1;
+	padding:.75rem .625rem;
+}
+.item-body-controls.two {
+	/* two buttons */
+	width:6rem;
+}
+
+.item-body-cols span {
+	font-size: 1rem;
+}
+.item-body-cols span.item-id {
+	font-size: .75rem;
+	display: inline-block;
+	margin-right: .75rem;
+	text-align: right;
+	
+	min-width:2rem;
+	
+	color: #999;
+}
+
+.item-body-expand {
+	font-size: 1rem;
+	
+	background: #ccc;
+	padding: 1rem;
+}
+
+
+
 /* ==== development === */
+
+
+
+.item {
+	margin: .375rem 1.25rem;
+}
+a.item-button {
+	background: rgba(255,255,255,.15);
+}
+a.item-button:hover {
+	background: rgba(0,0,255,.05);
+}
+
 
 #content {
 	/*border: 1px solid #f00;*/
@@ -253,12 +493,18 @@ p {
 
 }
 
-.beside {
-	position: absolute;
-	left:52rem;
+
+#menu a.current {
+	background: #444;
 }
-@media screen and (max-width:74.99999em) {
-	.beside.hide {
-		display: none;
-	}
+#menu a.current .line {
+	fill: #ddd;
+}
+
+
+
+
+/* .screen-content */
+.screen > div {
+	/*background: #ff0;*/
 }
