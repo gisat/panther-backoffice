@@ -25,8 +25,9 @@ html {
 
 /* ===== base & typography ===== */
 /* 	base font 1.25 rem - 20px, line 30px
-	grid: line third 10px -> .625rem
-	(sometimes 5px -> .3125rem)
+	grid: half line 15 px -> 1.875rem
+	sizes increments: line third 10px -> .625rem
+	(rarely 5px -> .3125rem)
 */
 
 html, body {
@@ -44,8 +45,8 @@ body {
 	color:#242424;
 }
 
-h1, h2, h3, h4, h5 {
-	/*line-height:1.2;*/
+input {
+	font-family:Open Sans;
 }
 
 p, p a, span {
@@ -74,6 +75,239 @@ a:focus {
 a, a:link, a i {
 	transition:  all .3s ease-out;
 }
+
+
+h1, h2, h3, h4, h5 {
+	padding: 0 1.25rem;
+}
+h1 {
+	font-size:3rem;
+	line-height: 3.75rem;
+	margin: 1.875rem 0;
+}
+h2 {
+	font-size: 1.875rem;
+	line-height: 2.8125rem;
+	margin: .9375rem 0;
+}
+h3 {
+	font-size: 1.25rem;
+	line-height: 1.875rem;
+}
+
+
+
+
+
+
+/* ===== atoms ===== */
+
+
+/* = forms = */
+
+.ptbtn, a.ptbtn {
+	display:inline-block;
+	
+	height:3.75rem;
+	font-size:1.563rem;
+	font-size:1.25rem;
+	line-height:3.75rem;
+	
+	margin:.9375rem 1.25rem;
+	
+	text-decoration: none;
+	
+	border-radius:.4rem;
+	text-align:center;
+	
+	-o-transition: background .3s ease-out, color .3s ease-out;
+	-ms-transition: background .3s ease-out, color .3s ease-out;
+	-moz-transition: background .3s ease-out, color .3s ease-out;
+	-webkit-transition: background .3s ease-out, color .3s ease-out;
+	transition:  background .3s ease-out, color .3s ease-out;
+	
+	background-color:#9e8;
+	background: linear-gradient(to bottom, #e3e1d3 0%,#d2d0c2 33%,#d2d0c2 66%,#e3e1d3 100%);
+	border:1px solid #bbb9ab;
+	color:#353531;
+	
+	background-size: auto 300%;
+    background-position: 0 top;
+	
+	cursor:pointer;
+}
+.ptbtn:hover, a.ptbtn:hover {
+	/*background: linear-gradient(to top, #9e8 0%,#8d7 100%);*/
+	background-position:0 bottom;
+	
+	border:1px solid #aaa;
+	color:#050505;
+}
+
+.ptbtn.ptbtn11 {
+	width:11rem;
+}
+
+.ptbtn.primary {
+	background-color:#9e8;
+	background: linear-gradient(to bottom, #9e8 0%,#8d7 33%,#8d7 66%,#9e8 100%);
+	color:#004a0a;
+	border:1px solid #8c5;
+	
+	background-size: auto 300%;
+    background-position: 0 top;
+}
+.ptbtn.primary:hover {
+	border:1px solid #8c5;
+	color:#002505;
+}
+.ptbtn.simple {
+	background-color:transparent;
+	background: linear-gradient(to bottom, #fbfbf9 0%,#f6f5f0 33%,#f6f5f0 66%,#fbfbf9 100%);
+	color:#4a4a43;
+	border:1px solid #e9e8e2;
+	
+	background-size: auto 300%;
+    background-position: 0 top;
+}
+.ptbtn.simple:hover {
+	border:1px solid #e9e8e2;
+}
+
+
+input, select {
+	line-height:1.875;
+	background:#fff;
+}
+div.input {
+	max-width:30rem;
+	background:#fff;
+	border:1px solid #666;
+	padding:0;
+	border-radius:.25rem;
+	margin-bottom:.9375rem;
+	
+	min-height: 3.75rem;
+}
+div.input label, div.input .label {
+	display:block;
+	width:100%;
+	height:100%;
+
+	padding:.125rem .3125rem 0 .3125rem;
+}
+div.input label span, div.input .label  {
+	font-size:.875rem;
+	text-transform:uppercase;
+	color:#76736e;
+}
+div.input label span {
+	height: 1.25rem;
+}
+div.input div.label {
+	padding:0;
+}
+div.input input, div.input input:focus, div.input select {
+	font-size:1.25rem;
+	line-height: 1.875rem;
+	height: 2.125rem;
+	border:0;
+	outline:0;
+	padding: 0;	
+	width:100%;
+}
+
+div.input.check, div.input.radio {
+	padding-bottom:.3125rem;
+}
+div.input.check label span, div.input.radio label span {
+	/*display:inline-block;*/
+	text-transform:none;
+	font-size:1rem;
+	padding:.25rem .562rem .25rem .562rem;
+	width:auto;
+}
+div.input.check input:checked + span, div.input.radio input:checked + span {
+	/*font-weight:bold;*/
+	color:#000;
+}
+div.input.single {
+	padding: 0;
+}
+div.input.single > label {
+	min-height: 3.75rem;
+	padding-top: 1.125rem;
+}
+div.input input[type="checkbox"],div.input input[type="radio"]  {
+	width:auto;
+	height: auto;
+}
+
+
+div.input.error, div.input.error input {
+	/*background:#faefef;*/
+}
+div.input.error input {
+	/*border-color:#c00;*/
+}
+div.input label .info {
+	height: auto;
+	width: calc(100% + .625rem);
+	position: relative;
+	left: -.3125rem;
+	overflow: hidden;
+	
+	transition:  height .3s ease-out;
+}
+div.input label .info span {
+	display:block;
+	width: 100%;
+	height: auto;
+	min-height: 1.875rem;
+	padding:.3125rem 0;
+	
+	padding: .3125rem .3125rem;
+	
+	border-radius:0 0 .25rem .25rem;
+}
+
+div.input label .info.closed {
+	height:0;
+}
+div.input label .info span {
+	color:#4b6ca2;
+	background:#f0f5ff;
+	border-top: 1px dashed #819ac4;
+}
+div.input label .info.error span {
+	color:#c00;
+	background:#ffdada;
+	border-top: 1px dashed #cb8181;
+}
+
+
+fieldset {
+	max-width:30rem;
+	border:0;
+	margin-bottom:1rem;
+}
+fieldset div.input {
+	margin:0;
+	border-radius:0;
+	border-top:0;
+}
+fieldset div.input label .info span {
+	border-radius:0;
+}
+fieldset div.input:first-child {
+	border-radius:.25rem .25rem 0 0;
+	border-top:1px solid #666;
+}
+fieldset div.input:last-child, fieldset div.input:last-child label .info span {
+	border-radius:0 0 .25rem .25rem;
+}
+
+
 
 
 
@@ -140,7 +374,7 @@ a, a:link, a i {
 	background-color: #aaa;
 }
 .screen > div {
-	margin:1.25rem 0;
+	margin:1.875rem 0;
 }
 
 
@@ -181,7 +415,7 @@ todo hex colours, button icons */
 }
 
 
-/* ==== responsive layouts ==== */
+/* = responsive layouts = */
 
 @media screen and (max-width:47.19999em) {
 	#menu a span {
@@ -369,13 +603,17 @@ todo hex colours, button icons */
 }
 
 
+
+
+
+
 /* ===== elements ===== */
 
 /* todo ? adhere to grid 
 (with font size 1rem it sorta proportionally does) */
 .item {
 	display: flex;
-	margin:.375rem 0;
+	padding:.3125rem 0;
 }
 .item > div:not(:last-child) {
 	margin-right: .625rem;
@@ -411,8 +649,8 @@ todo hex colours, button icons */
 .item-button {
 	height: 3.75rem;
 	width:3.75rem;
-	height: 3rem;
-	width: 3rem;
+	height: 3.125rem;
+	width: 3.125rem;
 }
 .item-body-base {
 	display: flex;
@@ -429,7 +667,7 @@ todo hex colours, button icons */
 }
 .item-body-controls.two {
 	/* two buttons */
-	width:6rem;
+	width:6.25rem;
 }
 
 .item-body-cols span {
@@ -451,7 +689,12 @@ todo hex colours, button icons */
 	
 	background: #ccc;
 	padding: 1rem;
+	
+	min-height: 3.75rem;
 }
+
+
+
 
 
 
@@ -460,13 +703,17 @@ todo hex colours, button icons */
 
 
 .item {
-	margin: .375rem 1.25rem;
+	margin: 0 1.25rem;
 }
 a.item-button {
 	background: rgba(255,255,255,.15);
 }
 a.item-button:hover {
 	background: rgba(0,0,255,.05);
+}
+
+div.input, fieldset {
+	margin-left: 1.25rem;
 }
 
 
@@ -503,8 +750,20 @@ p {
 
 
 
+.screen, .screen > div {
+	background: #aaa url("../img/grid6.png");
+	background-attachment: scroll;
+}
+
+h1, h2, h3, h4, h5 {
+	background: rgba(255,255,0,.3);
+}/**/
 
 /* .screen-content */
 .screen > div {
 	/*background: #ff0;*/
+}
+
+h1, h2, h3, h4, h5 {
+	
 }
