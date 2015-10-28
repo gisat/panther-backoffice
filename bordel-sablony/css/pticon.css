@@ -1,0 +1,89 @@
+@font-face {
+	font-family: 'pticon';
+	src:url('fonts/pticon.eot?qz5h9b');
+	src:url('fonts/pticon.eot?qz5h9b#iefix') format('embedded-opentype'),
+		url('fonts/pticon.ttf?qz5h9b') format('truetype'),
+		url('fonts/pticon.woff?qz5h9b') format('woff'),
+		url('fonts/pticon.svg?qz5h9b#pticon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.pticon {
+	font-family: 'pticon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.pticon-times:before {
+	content: "\e900";
+}
+.pticon-tick:before {
+	content: "\e901";
+}
+.pticon-plus:before {
+	content: "\e902";
+}
+.pticon-minus:before {
+	content: "\e903";
+}
+.pticon-equals:before {
+	content: "\e904";
+}
+.pticon-divide:before {
+	content: "\e905";
+}
+.pticon-chevron-right:before {
+	content: "\e911";
+}
+.pticon-chevron-left:before {
+	content: "\e912";
+}
+.pticon-arrow-right-thick:before {
+	content: "\e906";
+}
+.pticon-arrow-left-thick:before {
+	content: "\e907";
+}
+.pticon-arrow-forward:before {
+	content: "\e908";
+}
+.pticon-arrow-back:before {
+	content: "\e909";
+}
+.pticon-arrow-up-thick:before {
+	content: "\e913";
+}
+.pticon-arrow-down-thick:before {
+	content: "\e914";
+}
+.pticon-delete:before {
+	content: "\e90a";
+}
+.pticon-cancel:before {
+	content: "\e90b";
+}
+.pticon-refresh:before {
+	content: "\e90c";
+}
+.pticon-input-checked:before {
+	content: "\e90d";
+}
+.pticon-trash:before {
+	content: "\e90e";
+}
+.pticon-duplicate:before {
+	content: "\e90f";
+}
+.pticon-edit:before {
+	content: "\e910";
+}
+
