@@ -1,3 +1,31 @@
+var LinkTableByScopePlace = React.createClass({
+	render: function () {
+		return (
+			<div>
+				<span>tabulká!</span>
+			</div>
+		);
+
+	}
+});
+
+
+var TestPlaceScreen = React.createClass({
+	render: function () {
+		return (
+			<div>
+				<h1>Place</h1>
+				<LinkTableByScopePlace/>
+			</div>
+		);
+
+	}
+});
+
+/* ======================================================================================= */
+/* ======================================================================================= */
+
+
 var TestScreen = React.createClass({
 	render: function () {
 		return (
@@ -10,31 +38,41 @@ var TestScreen = React.createClass({
 	}
 });
 
-var vtabs = [
-	{ 
-		key: "vtab1", 
-		screens: [
-			{
-				key: "screen1",
-				classes: "open",
-				component: <TestScreen/>  
-			},
-			{
-				key: "screen2",
-				classes: "retracted",
-				component: <TestScreen/> 
-			}
-		]
-	}
-];
+
+
+/* ======================================================================================= */
+/* ======================================================================================= */
+
+
 
 
 var App = React.createClass({
+	getInitialState: function() {
+		var vtabs = [
+			{ 
+				key: "vtab1", 
+				screens: [
+					{
+						key: "screen1",
+						classes: "open",
+						component: <TestPlaceScreen/>  
+					},
+					{
+						key: "screen2",
+						classes: "retracted",
+						component: <TestScreen/> 
+					}
+				]
+			}
+		];
+		return {vtabs};
+	},
+	
 	render: function() {
 		return (
 			<div>
 				<Menu/>
-				<Content vtabs={vtabs}/>
+				<Content vtabs={this.state.vtabs}/>
 			</div>
 		);
 	},
@@ -155,7 +193,7 @@ var VTab = React.createClass({
 	render: function() {
 		var screenNodes = this.props.screens.map(function (screen) {
       return (
-			<Screen key={screen.key} component={screen.component} classes={screen.classes}/>
+			<ScreenContainer key={screen.key} component={screen.component} classes={screen.classes}/>
       );
     });
     return (
@@ -170,7 +208,7 @@ var VTab = React.createClass({
 	}
 });
 
-var Screen = React.createClass({
+var ScreenContainer = React.createClass({
 	render: function() {
 		var classes = "screen " + this.props.classes;
     return (
