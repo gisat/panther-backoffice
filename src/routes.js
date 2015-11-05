@@ -24,7 +24,7 @@ const router = new Router(on => {
   on('/register', async () => <RegisterPage />);
 
   on('*', async (state) => {
-    const content = await http.get(`/api/content?path=${state.path}`);
+    const content = await http.get(`/backoffice/api/content?path=${state.path}`);
     return content && <ContentPage {...content} />;
   });
 
