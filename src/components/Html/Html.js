@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { googleAnalyticsId } from '../../config';
+import { publicPath } from '../../config';
 
 class Html extends Component {
 
@@ -38,11 +39,12 @@ class Html extends Component {
         <meta name="description" content={this.props.description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+				<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.5/semantic.min.css" type="text/css" />
         <style id="css" dangerouslySetInnerHTML={{__html: this.props.css}} />
       </head>
       <body>
         <div id="app" dangerouslySetInnerHTML={{__html: this.props.body}} />
-        <script src="/app.js"></script>
+        <script src={publicPath+"/app.js"}></script>
         <script dangerouslySetInnerHTML={this.trackingCode()} />
       </body>
       </html>

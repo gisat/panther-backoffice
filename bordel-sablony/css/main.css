@@ -167,7 +167,8 @@ h3 {
 }
 .screen > div {
 	margin:1.875rem 0;
-	padding: 0 1.25rem;
+	/*padding: 0 1.25rem;*/
+	padding: 0 1.875rem;
 	position: relative;
 }
 
@@ -183,9 +184,13 @@ todo hex colours, button icons */
 }
 .screen::-webkit-scrollbar-button:vertical:decrement {
 	/* up */
+	background-image: url(../img/triangle-up.svg);
+	background-size: contain;
 }
 .screen::-webkit-scrollbar-button:vertical:increment {
 	/* down */
+	background-image: url(../img/triangle-down.svg);
+	background-size: contain;
 }
 .screen::-webkit-scrollbar-track {
 	background: rgba(0,0,0,.1);
