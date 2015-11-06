@@ -18,7 +18,9 @@
     "normalize.css": "3.0.3",
     "raf": "^3.1.0",
     "react": "0.14.0-rc1",
+    "react-addons-transition-group": "^0.14.2",
     "react-dom": "0.14.0-rc1",
+    "react-outsideclickhandler": "^0.1.0",
     "react-routing": "0.0.4",
     "source-map-support": "0.3.2",
     "superagent": "1.4.0"
