@@ -2,7 +2,6 @@
 
 import React, { Component, PropTypes } from 'react';
 import { googleAnalyticsId } from '../../config';
-import { publicPath } from '../../config';
 
 class Html extends Component {
 
@@ -44,7 +43,7 @@ class Html extends Component {
       </head>
       <body>
         <div id="app" dangerouslySetInnerHTML={{__html: this.props.body}} />
-        <script src={publicPath+"/app.js"}></script>
+        <script src="/app.js"></script>
         <script dangerouslySetInnerHTML={this.trackingCode()} />
       </body>
       </html>
