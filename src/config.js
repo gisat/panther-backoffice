@@ -3,5 +3,6 @@
 export default {
   googleAnalyticsId: 'UA-XXXXX-X',
 
-  publicPath: "/puma-backoffice"
+  //publicPath: "/puma-backoffice"
+  publicPath: ""
 };
