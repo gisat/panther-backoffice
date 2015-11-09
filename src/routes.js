@@ -13,6 +13,7 @@ import PageMetadataStructure from './components/PageMetadataStructure';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
+import { publicPath } from './config';
 
 const router = new Router(on => {
   on('*', async (state, next) => {
