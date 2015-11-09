@@ -41,9 +41,9 @@ class LinkTableByScopePlace extends Component {
 				}
 			],
 			auAttSets: [
-			{ 
+			{
 				key: 352,
-				name: "Land Cover classes L3", 
+				name: "Land Cover classes L3",
 				levels: [
 					{
 						key: 1,
@@ -122,9 +122,9 @@ class LinkTableByScopePlace extends Component {
 					}
 				]
 			}, // Attset
-			{ 
+			{
 				key: 623,
-				name: "Aggregated LC Classes Formation", 
+				name: "Aggregated LC Classes Formation",
 				levels: [
 					{
 						key: 1,
@@ -203,9 +203,9 @@ class LinkTableByScopePlace extends Component {
 					}
 				]
 			}, // Attset
-			{ 
+			{
 				key: 18,
-				name: "Populations1", 
+				name: "Populations1",
 				levels: [
 					{
 						key: 1,
@@ -295,9 +295,9 @@ class LinkTableByScopePlace extends Component {
 	}
 
 	render() {
-    
+
   	var thisComponent = this;
-		
+
 		var auLevelsInsert = this.state.auLevels.map(function (auLevel) {
       return (
 				<td className="selectable">
@@ -307,10 +307,10 @@ class LinkTableByScopePlace extends Component {
 				</td>
       );
     });
-		
-		
+
+
 		var auAttSetsInsert = this.state.auAttSets.map(function (auAttSet) {
-      
+
 			var auSingleAttSetInsert = auAttSet.levels.map(function (auASLevel) {
 				var dataNoneCount = 0;
 				var tdClassName = "selectable";
@@ -324,7 +324,7 @@ class LinkTableByScopePlace extends Component {
 					else if(period.data=="selected"){
 						iconName="check circle outline"
 					}
-					
+
 					return (
 						<span className={periodClassName}>
 							<Icon name={iconName}/>
@@ -333,7 +333,7 @@ class LinkTableByScopePlace extends Component {
 						</span>
 					);
 				});
-				
+
 				if(dataNoneCount==0){
 					tdClassName += " positive";
 				}
@@ -343,11 +343,11 @@ class LinkTableByScopePlace extends Component {
 				else {
 					tdClassName += " warning";
 				}
-				
+
 				return (
 					<td className={tdClassName}>
-						<a 
-							href="#" 
+						<a
+							href="#"
 							onClick={thisComponent.openScreenExample.bind(
 									thisComponent,
 									auAttSet.key,
@@ -359,7 +359,7 @@ class LinkTableByScopePlace extends Component {
 					</td>
 				);
 			});
-			
+
 			return (
 				<tr>
 					<td className="selectable">
@@ -371,14 +371,14 @@ class LinkTableByScopePlace extends Component {
 				</tr>
       );
     });
-		
+
 		return (
-		 			
+
 		/* -> tabs - reference periods */
 		<div>
 			<br/>
 			<p>{this.state.example}</p>
-			
+
 		<Table celled className="LinkTable ByScopePlace fixed">
 			<thead>
 				<tr>
@@ -396,7 +396,7 @@ class LinkTableByScopePlace extends Component {
 				{auAttSetsInsert}
 			</tbody>
 		</Table>
-		
+
 		</div>
     );
   }
@@ -404,20 +404,3 @@ class LinkTableByScopePlace extends Component {
 }
 
 export default LinkTableByScopePlace;
-=======
-//import styles from './PageAnalysis.css';
-//import withStyles from '../../decorators/withStyles';
-
-class LinkTableByScopePlace extends Component{
-  render() {
-    return (
-      <div>
-        <span>tabulká!</span>
-      </div>
-    );
-
-  }
-}
-
-export default LinkTableByScopePlace
->>>>>>> origin/improveAdmin
