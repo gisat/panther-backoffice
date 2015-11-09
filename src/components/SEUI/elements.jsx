@@ -3,6 +3,7 @@ export * from './elements/button/buttons';
 export * from './elements/button/labeledbutton';
 export * from './elements/button/iconbutton';
 export * from './elements/button/socialbutton';
+export * from './elements/button/popupbutton';
 
 export * from './elements/divider/divider';
 
