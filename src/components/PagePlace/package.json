@@ -1,0 +1,6 @@
+{
+  "name": "PagePlace",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./PagePlace.js"
+}
