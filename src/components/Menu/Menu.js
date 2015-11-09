@@ -1,35 +1,58 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import styles from './Menu.css';
 import withStyles from '../../decorators/withStyles';
+import Link from '../Link';
 
 
+@withStyles(styles)
+class Menu extends Component {
 
-var Menu = React.createClass({
-  render: function() {
+  static propTypes = {
+    className: PropTypes.string,
+  };
+
+
+  //  className="current"
+  render() {
     return (
-      <nav id="menu" >
+      <nav id="menu" className={this.props.className} >
         <ul>
-          <li><a href="#" tabIndex="1">
-            <img src="img/temp-dashboard.svg" className="svg" />
-            <span>Dashboard</span></a></li>
-          <li><a href="#" tabIndex="1" className="current">
-            <img src="img/temp-places.svg" className="svg"/>
-            <span>Places</span></a></li>
-          <li><a href="#" tabIndex="1">
-            <img src="img/temp-datalayers.svg" className="svg" />
-            <span>Data layers</span></a></li>
-          <li><a href="#" tabIndex="1">
-            <img src="img/temp-analyses.svg" className="svg" />
-            <span>Analyses</span></a></li>
-          <li><a href="#" tabIndex="1">
-            <img src="img/temp-metadata.svg" className="svg" />
-            <span>Metadata structures</span></a></li>
+          <li>
+            <a href="./dashboard" onClick={Link.handleClick} tabIndex="1">
+              <img src={require('./temp-dashboard.svg')} className="svg" />
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="./place" onClick={Link.handleClick} tabIndex="1">
+              <img src={require('./temp-places.svg')} className="svg"/>
+              <span>Places</span>
+            </a>
+          </li>
+          <li>
+            <a href="./datalayer" onClick={Link.handleClick} tabIndex="1">
+              <img src={require('./temp-datalayers.svg')} className="svg" />
+              <span>Data layers</span>
+            </a>
+          </li>
+          <li>
+            <a href="./analysis" onClick={Link.handleClick} tabIndex="1">
+              <img src={require('./temp-analyses.svg')} className="svg" />
+              <span>Analyses</span>
+            </a>
+          </li>
+          <li>
+            <a href="./metadata" onClick={Link.handleClick} tabIndex="1">
+              <img src={require('./temp-metadata.svg')} className="svg" />
+              <span>Metadata structures</span>
+            </a>
+          </li>
         </ul>
       </nav>
     );
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
 
     $("#menu").focusin(function() {
       $(this).addClass("open");
@@ -38,7 +61,8 @@ var Menu = React.createClass({
       $(this).removeClass("open");
     });
   }
-});
+
+}
 
 
 
