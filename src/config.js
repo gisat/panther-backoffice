@@ -1,5 +1,8 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 export default {
-  googleAnalyticsId: 'UA-XXXXX-X'
+  googleAnalyticsId: 'UA-XXXXX-X',
+
+  //publicPath: "/puma-backoffice"
+  publicPath: ""
 };

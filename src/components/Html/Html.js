@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { googleAnalyticsId } from '../../config';
+import { publicPath } from '../../config';
 
 class Html extends Component {
 
@@ -9,12 +10,12 @@ class Html extends Component {
     title: PropTypes.string,
     description: PropTypes.string,
     css: PropTypes.string,
-    body: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired
   };
 
   static defaultProps = {
     title: '',
-    description: '',
+    description: ''
   };
 
   trackingCode() {
@@ -30,7 +31,7 @@ class Html extends Component {
 
   render() {
     return (
-      <html className="no-js" lang="">
+      <html className="no-js" lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -39,11 +40,12 @@ class Html extends Component {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 				<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.5/semantic.min.css" type="text/css" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
         <style id="css" dangerouslySetInnerHTML={{__html: this.props.css}} />
       </head>
       <body>
         <div id="app" dangerouslySetInnerHTML={{__html: this.props.body}} />
-        <script src="/app.js"></script>
+        <script src={publicPath + '/app.js'}></script>
         <script dangerouslySetInnerHTML={this.trackingCode()} />
       </body>
       </html>

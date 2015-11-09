@@ -1,0 +1,6 @@
+{
+  "name": "PageAnalysis",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./PageAnalysis.js"
+}
