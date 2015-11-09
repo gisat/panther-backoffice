@@ -1,0 +1,31 @@
+
+/*.LinkTable.ByScopePlace th {
+	width:16%;
+}*/
+
+.LinkTable.ByScopePlace th:first-child {
+	width:20%;
+}
+
+
+/* todo replace with className */
+table.ByScopePlace tbody td.selectable:first-child, table.ByScopePlace tbody tr:first-child td:not(:first-child)  {
+	background: hsl(212, 100%, 96%);
+	font-weight: bold;
+}
+table.ByScopePlace tbody td.selectable:first-child:hover, table.ByScopePlace tbody tr:first-child td:not(:first-child):hover  {
+	background: hsl(212, 68%, 92%)!important;
+}
+
+.ByScopePlace span.data-none i {
+	color:#eee;
+}
+.ByScopePlace span.data-none span {
+	color:#eee;
+}
+.ByScopePlace span.data-selected i {
+	color:#8b8b8b;
+}
+.ByScopePlace span.data-only i {
+	color:#9a9a9a;
+}
