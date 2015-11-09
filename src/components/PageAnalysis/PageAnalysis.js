@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './PageAnalysis.css';
 import withStyles from '../../decorators/withStyles';
+import styles from './PageAnalysis.css';
 
 //import { Segment, Button, Input, Header, IconButton } from '../SEUI/elements';
 //import { Popup, Modal } from '../SEUI/modules';

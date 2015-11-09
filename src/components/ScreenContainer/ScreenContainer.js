@@ -22,6 +22,22 @@ class ScreenContainer extends Component{
   }
 
   componentDidMount() {
+    $(".screen").click(function() {
+      if ( $(this).hasClass("retracted") ) {
+        if ( !$(this).hasClass("limited") ) {
+          /* todo check if there is enough space */
+          $(this).siblings(".screen.open").removeClass("open").addClass("retracted");
+        }
+        $(this).removeClass("retracted").addClass("opening").delay(300).queue(function(){
+          $(this).removeClass("opening").addClass("open").dequeue();
+        });
+        /* todo tabindex behaviour? input disabling? anchors? */
+        $(this).siblings(".screen.retracted").find(":input").prop("disabled", true);
+        $(this).siblings(".screen.retracted").find("a").prop("tabindex", "-1");
+        /* disable inputs or tabindex=-1 only? */
+        /* todo enabling */
+      }
+    });
 
   }
 }
