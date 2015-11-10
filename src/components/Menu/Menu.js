@@ -18,7 +18,7 @@ class Menu extends Component {
       <nav id="menu" className={this.props.className} >
         <ul>
           <li>
-            <a href="./dashboard" onClick={Link.handleClick} tabIndex="1">
+            <a href="./" onClick={Link.handleClick} tabIndex="1">
               <img src={require('./temp-dashboard.svg')} className="svg" />
               <span>Dashboard</span>
             </a>

@@ -23,7 +23,7 @@ const router = new Router(on => {
 
   on('/login', async () => <LoginPage />);
 
-  on('/dashboard', async () => <PageDashboard />);
+  on('/', async () => <PageDashboard />);
 
   on('/places', async () => <PagePlaces />);
 
