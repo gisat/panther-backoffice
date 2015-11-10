@@ -4,6 +4,7 @@ import styles from './PagePlaces.css';
 
 import ScreenContainer from '../ScreenContainer';
 import ScreenPlacesBase from '../ScreenPlacesBase';
+import ScreenLinksByAttSetAULevel from '../ScreenLinksByAttSetAULevel';
 
 @withStyles(styles)
 class PagePlaces extends Component {
@@ -20,14 +21,14 @@ class PagePlaces extends Component {
       show: false,
       screens: [
         {
-          key: "screen1",
+          key: "screenPlacesBase",
           classes: "open",
           component: <ScreenPlacesBase />
         },
         {
-          key: "screen2",
-          classes: "retracted",
-          component: "<button>Nemačkej mě</button>"
+          key: "screenLinksByAttSetAULevel",
+          classes: "retracted limited lim40",
+          component: <ScreenLinksByAttSetAULevel />
         }
       ]
     };

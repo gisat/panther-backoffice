@@ -84,8 +84,11 @@ a:hover, a:visited:hover {
 a:focus, #menu a.current:focus {
   background-color: #477abf;
   color:#fff;
+	outline: none;
 }
-
+#menu a:focus:hover {
+  background-color: #4c7fc4;
+}
 a, a:link, a i {
   transition:  all .3s ease-out;
 }
@@ -94,17 +97,17 @@ a, a:link, a i {
 h1, h2, h3, h4, h5 {
 
 }
-h1 {
+h1, h1 span {
   font-size:3rem;
   line-height: 3.75rem;
   margin: 1.875rem 0;
 }
-h2 {
+h2, h2 span {
   font-size: 1.875rem;
   line-height: 2.8125rem;
   margin: .9375rem 0;
 }
-h3 {
+h3, h3 span {
   font-size: 1.25rem;
   line-height: 1.875rem;
 }
@@ -334,6 +337,19 @@ todo hex colours, button icons */
   .screen.limited.lim30 > div {
     width: 30rem;
   }
+	.screen.limited.lim40 {
+    max-width: 41rem;
+  }
+  .screen.limited.lim40 > div {
+    width: 40rem;
+  }
+	.screen.limited.lim50 {
+    max-width: 51rem;
+  }
+  .screen.limited.lim50 > div {
+    width: 50rem;
+  }
+	
 
 
   /* .screen behaviour */
@@ -446,6 +462,12 @@ todo hex colours, button icons */
 
 /* todo 1.25 margins */
 
+span.todo {
+	background: #f00;
+	color:#fff;
+	border: 2px dashed #ff0;
+	padding:2px 4px;
+}
 
 #menu a.current {
   background: #444;
