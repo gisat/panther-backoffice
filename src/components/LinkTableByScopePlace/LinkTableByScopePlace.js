@@ -294,14 +294,33 @@ class LinkTableByScopePlace extends Component {
 		/*alert("hey, " + idAttSet);*/
 	}
 
+	componentDidMount() {
+
+    $("#LinkTableByScopePlace td.selectable").each(function() {
+			$(this).focusin(function() {
+      	$(this).addClass("focus");
+    	});
+    	$(this).focusout(function() {
+      	$(this).removeClass("focus");
+    	});
+		});
+  }
+
 	render() {
 
   	var thisComponent = this;
 
 		var auLevelsInsert = this.state.auLevels.map(function (auLevel) {
       return (
-				<td className="selectable">
-					<a href="#">
+				<td className="selectable heading">
+					<a 
+						href="#"
+						onClick={thisComponent.openScreenExample.bind(
+								thisComponent,
+								null,
+								auLevel.key
+							)}
+					>
 						{auLevel.name}
 					</a>
 				</td>
@@ -362,8 +381,15 @@ class LinkTableByScopePlace extends Component {
 
 			return (
 				<tr>
-					<td className="selectable">
-						<a href="#">
+					<td className="selectable heading">
+						<a 
+							href="#"
+							onClick={thisComponent.openScreenExample.bind(
+									thisComponent,
+									auAttSet.key,
+									null
+								)}
+						>
 							{auAttSet.name}
 						</a>
 					</td>
@@ -379,7 +405,7 @@ class LinkTableByScopePlace extends Component {
 			<br/>
 			<p>{this.state.example}</p>
 
-		<Table celled className="LinkTable ByScopePlace fixed">
+		<Table celled className="LinkTable ByScopePlace fixed" id="LinkTableByScopePlace">
 			<thead>
 				<tr>
 					<th>Attribute Set</th>
