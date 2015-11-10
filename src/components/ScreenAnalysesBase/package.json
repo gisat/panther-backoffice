@@ -1,0 +1,6 @@
+{
+  "name": "ScreenAnalysesBase",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ScreenAnalysesBase.js"
+}

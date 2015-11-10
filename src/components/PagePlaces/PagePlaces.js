@@ -3,6 +3,7 @@ import withStyles from '../../decorators/withStyles';
 import styles from './PagePlaces.css';
 
 import ScreenContainer from '../ScreenContainer';
+import ScreenPlacesBase from '../ScreenPlacesBase';
 
 @withStyles(styles)
 class PagePlaces extends Component {
@@ -21,7 +22,7 @@ class PagePlaces extends Component {
         {
           key: "screen1",
           classes: "open",
-          component: "<h1>Dashboard</h1>"
+          component: <ScreenPlacesBase />
         },
         {
           key: "screen2",

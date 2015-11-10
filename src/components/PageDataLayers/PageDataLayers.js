@@ -3,6 +3,7 @@ import withStyles from '../../decorators/withStyles';
 import styles from './PageDataLayers.css';
 
 import ScreenContainer from '../ScreenContainer';
+import ScreenDataLayersBase from '../ScreenDataLayersBase';
 
 @withStyles(styles)
 class PageDataLayers extends Component {
@@ -21,7 +22,7 @@ class PageDataLayers extends Component {
         {
           key: "screen1",
           classes: "open",
-          component: "<h1>Dashboard</h1>"
+          component: <ScreenDataLayersBase/>
         },
         {
           key: "screen2",

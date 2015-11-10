@@ -9,7 +9,7 @@ import PageDashboard from './components/PageDashboard';
 import PagePlaces from './components/PagePlaces';
 import PageDataLayers from './components/PageDataLayers';
 import PageAnalyses from './components/PageAnalyses';
-import PageMetadataStructures from './components/PageMetadataStructures';
+import PageMetadata from './components/PageMetadata';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
@@ -31,7 +31,7 @@ const router = new Router(on => {
 
   on('/analyses', async () => <PageAnalyses />);
 
-  on('/metadata', async () => <PageMetadataStructures />);
+  on('/metadata', async () => <PageMetadata />);
 
   on('*', async (state) => {
     const content = await http.get(`${publicPath}/api/content?path=${state.path}`);

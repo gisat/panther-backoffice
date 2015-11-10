@@ -7,7 +7,7 @@ import styles from './PageAnalyses.css';
 //import { Form, Fields, Field } from '../SEUI/collections';
 
 import ScreenContainer from '../ScreenContainer';
-import TestPlaceScreen from '../TestPlaceScreen';
+import ScreenAnalysesBase from '../ScreenAnalysesBase';
 import TestScreen from '../TestScreen';
 
 @withStyles(styles)
@@ -29,7 +29,7 @@ class PageAnalyses extends Component {
         {
           key: "screen1",
           classes: "open",
-          component: <TestPlaceScreen/>
+          component: <ScreenAnalysesBase/>
         },
         {
           key: "screen2",

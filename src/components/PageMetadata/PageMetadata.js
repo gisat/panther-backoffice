@@ -1,11 +1,12 @@
 import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
-import styles from './PageMetadataStructures.css';
+import styles from './PageMetadata.css';
 
 import ScreenContainer from '../ScreenContainer';
+import ScreenMetadataBase from '../ScreenMetadataBase';
 
 @withStyles(styles)
-class PageMetadataStructures extends Component {
+class PageMetadata extends Component {
 
 
   static contextTypes = {
@@ -21,7 +22,7 @@ class PageMetadataStructures extends Component {
         {
           key: "screen1",
           classes: "open",
-          component: "<h1>Dashboard</h1>"
+          component: <ScreenMetadataBase/>
         },
         {
           key: "screen2",
@@ -55,4 +56,4 @@ class PageMetadataStructures extends Component {
 
 }
 
-export default PageMetadataStructures;
+export default PageMetadata;
