@@ -1,3 +1,6 @@
+@import './semantic.min.css';
+@import './semantic.overwrite.css';
+
 html {
   -webkit-box-sizing: border-box; /* Needed for mobile WebKit */
   -moz-box-sizing: border-box; /* Needed for Firefox */
@@ -30,6 +33,17 @@ html {
 	(rarely 5px -> .3125rem)
 */
 
+/* resets of reset to make SEUI work */
+.ui *, .ui *:before, .ui *:after {
+	font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 1.4285em;
+	font-smoothing: antialiased;
+}
+.icon, .icon:before, .icon:after {
+	font-family: Icons;
+}
+
 html, body, #app, #app > div, #content, .content {
   height: 100%;
   overflow: hidden;
@@ -39,14 +53,13 @@ html {
   font-size:100%;
 }
 body {
-  background:#DDD;
-  font-family:Open Sans;
+  background:#c0c0c0;
   line-height:1.5;
   color:#242424;
 }
 
-input, select {
-  font-family:Open Sans;
+body, input, select {
+  font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 p, p a, span {
@@ -72,6 +85,7 @@ a:focus, #menu a.current:focus {
   background-color: #477abf;
   color:#fff;
 }
+
 a, a:link, a i {
   transition:  all .3s ease-out;
 }
@@ -109,7 +123,6 @@ h3 {
 
 #menu {
   background-color: #222;
-  /*background-color: #444;*/
 }
 #menu ul li {
   list-style: none;
@@ -150,7 +163,7 @@ h3 {
 }
 #menu a span {
   display: inline-block;
-  font-size: 1rem;
+  font-size: 1.0625rem;
   line-height: 2.5rem;
   margin:0 .625rem;
 }
@@ -163,7 +176,7 @@ h3 {
   overflow: auto;
   position: absolute;
 
-  background-color: #aaa;
+  background-color: #bababa;
 }
 .screen > div {
   margin:1.875rem 0;
@@ -271,7 +284,7 @@ todo hex colours, button icons */
     width: 17rem;
   }
   #menu:hover {
-    transition-delay: .7s;
+    transition-delay: 1.2s;
   }
   #menu.open {
     transition-delay: 0s;
@@ -302,7 +315,7 @@ todo hex colours, button icons */
     width: 5rem;
     overflow: hidden;
 
-    box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.7);
+    box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.6);
 
     transition: all .5s ease-in-out;
     transition-property: flex-grow, background-color, width;
@@ -338,10 +351,10 @@ todo hex colours, button icons */
     /* cancel move scrollbar  - unused! */
   }
   .screen.retracted {
-    background-color: #888;
+    background-color: #9f9f9f;
   }
   .screen.retracted:hover {
-    background-color: #939393;
+    background-color: #a8a8a8;
   }
   /* todo elements inside */
   /*.screen.retracted > div {
