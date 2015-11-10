@@ -12,11 +12,20 @@ class ScreenContainer extends Component{
   //  component: PropTypes.object
   //};
 
-  render() {
+  constructor(props) {
+		super(props);
+
+		this.state = {
+			disabled: true
+		};
+	}
+	
+	render() {
     var classes = "screen " + this.props.classes;
     return (
       <div className={classes} id={this.props.key}><div>
-        {this.props.component}
+  			{React.cloneElement(this.props.component, { disabled: this.state.disabled })}
+				// apparently this is how we pass props to an unknown component
       </div></div>
     );
   }

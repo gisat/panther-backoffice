@@ -8,10 +8,20 @@ import SelectorPlace from '../SelectorPlace';
 @withStyles(styles)
 class ScreenPlacesBase extends Component{
   render() {
-    return (
+    
+		var isParentScreenDisabled = "NA";
+		if(this.props.disabled){
+			isParentScreenDisabled = "disabled"
+		}
+		else {
+			isParentScreenDisabled = "enabled"
+		}
+		
+		return (
       <div>
         <SelectorPlace/>
 				<h1>Ho Chi Minh City</h1>
+				<p>disable pass test: <b>{isParentScreenDisabled}</b></p>
 				<h2>Attribute sets</h2>
         <LinkTableByScopePlace/>
 				
