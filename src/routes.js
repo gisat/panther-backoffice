@@ -21,17 +21,17 @@ const router = new Router(on => {
     return component && <App context={state.context}>{component}</App>;
   });
 
-  on('/login', async () => <LoginPage />);
+  on(publicPath + '/login', async () => <LoginPage />);
 
-  on('/', async () => <PageDashboard />);
+  on(publicPath + '/', async () => <PageDashboard />);
 
-  on('/places', async () => <PagePlaces />);
+  on(publicPath + '/places', async () => <PagePlaces />);
 
-  on('/datalayers', async () => <PageDataLayers />);
+  on(publicPath + '/datalayers', async () => <PageDataLayers />);
 
-  on('/analyses', async () => <PageAnalyses />);
+  on(publicPath + '/analyses', async () => <PageAnalyses />);
 
-  on('/metadata', async () => <PageMetadata />);
+  on(publicPath + '/metadata', async () => <PageMetadata />);
 
   on('*', async (state) => {
     const content = await http.get(`${publicPath}/api/content?path=${state.path}`);

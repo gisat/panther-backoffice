@@ -6,6 +6,8 @@ import jade from 'jade';
 import fm from 'front-matter';
 import fs from '../utils/fs';
 
+import { publicPath } from '../config';
+
 // A folder with Jade/Markdown/HTML content pages
 const CONTENT_DIR = join(__dirname, './content');
 
@@ -20,7 +22,8 @@ const router = new Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const path = req.query.path;
+    const path = req.query.path.replace(new RegExp("^" + publicPath), "");
+    //console.log("~~~~~~~~~~ const path: " + path);
 
     if (!path || path === 'undefined') {
       res.status(400).send({error: `The 'path' query parameter cannot be empty.`});
