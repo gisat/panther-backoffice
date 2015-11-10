@@ -24,19 +24,19 @@ class Menu extends Component {
             </a>
           </li>
           <li>
-            <a href="./place" onClick={Link.handleClick} tabIndex="1">
+            <a href="./places" onClick={Link.handleClick} tabIndex="1">
               <img src={require('./temp-places.svg')} className="svg"/>
               <span>Places</span>
             </a>
           </li>
           <li>
-            <a href="./datalayer" onClick={Link.handleClick} tabIndex="1">
+            <a href="./datalayers" onClick={Link.handleClick} tabIndex="1">
               <img src={require('./temp-datalayers.svg')} className="svg" />
               <span>Data layers</span>
             </a>
           </li>
           <li>
-            <a href="./analysis" onClick={Link.handleClick} tabIndex="1">
+            <a href="./analyses" onClick={Link.handleClick} tabIndex="1">
               <img src={require('./temp-analyses.svg')} className="svg" />
               <span>Analyses</span>
             </a>
