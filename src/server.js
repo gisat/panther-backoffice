@@ -8,15 +8,18 @@ import ReactDOM from 'react-dom/server';
 import Router from './routes';
 import Html from './components/Html';
 
+import {publicPath, serverPort} from './config';
+
 const server = global.server = express();
 
-server.set('port', (process.env.PORT || 5000));
+//server.set('port', (process.env.PORT || 5000));
+server.set('port', serverPort);
 server.use(express.static(path.join(__dirname, 'public')));
 
 //
 // Register API middleware
 // -----------------------------------------------------------------------------
-server.use('/api/content', require('./api/content'));
+server.use(publicPath+'/api/content', require('./api/content'));
 
 //
 // Register server-side rendering middleware

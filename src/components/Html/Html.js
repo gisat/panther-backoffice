@@ -1,8 +1,7 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { Component, PropTypes } from 'react';
-import { googleAnalyticsId } from '../../config';
-import { publicPath } from '../../config';
+import { googleAnalyticsId, publicPath } from '../../config';
 
 class Html extends Component {
 

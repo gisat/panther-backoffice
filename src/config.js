@@ -2,4 +2,4 @@
 
 export const googleAnalyticsId = 'UA-XXXXX-X';
 export const publicPath = "";
-
+export const serverPort = 5555;
