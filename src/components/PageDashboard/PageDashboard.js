@@ -3,7 +3,7 @@ import withStyles from '../../decorators/withStyles';
 import styles from './PageDashboard.css';
 
 import ScreenContainer from '../ScreenContainer';
-import DummyDashboard from '../DummyDashboard';
+import ScreenDashboardBase from '../ScreenDashboardBase';
 
 @withStyles(styles)
 class PageDashboard extends Component {
@@ -22,7 +22,7 @@ class PageDashboard extends Component {
         {
           key: "screen1",
           classes: "open",
-          component: <DummyDashboard/>
+          component: <ScreenDashboardBase/>
         },
         {
           key: "screen2",
