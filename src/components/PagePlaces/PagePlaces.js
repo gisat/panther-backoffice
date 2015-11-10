@@ -1,11 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
-import styles from './PagePlace.css';
+import styles from './PagePlaces.css';
 
 import ScreenContainer from '../ScreenContainer';
 
 @withStyles(styles)
-class PagePlace extends Component {
+class PagePlaces extends Component {
 
 
   static contextTypes = {
@@ -55,4 +55,4 @@ class PagePlace extends Component {
 
 }
 
-export default PagePlace;
+export default PagePlaces;

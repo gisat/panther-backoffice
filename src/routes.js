@@ -6,10 +6,10 @@ import http from './core/HttpClient';
 import App from './components/App';
 import ContentPage from './components/ContentPage';
 import PageDashboard from './components/PageDashboard';
-import PagePlace from './components/PagePlace';
-import PageDataLayer from './components/PageDataLayer';
-import PageAnalysis from './components/PageAnalysis';
-import PageMetadataStructure from './components/PageMetadataStructure';
+import PagePlaces from './components/PagePlaces';
+import PageDataLayers from './components/PageDataLayers';
+import PageAnalyses from './components/PageAnalyses';
+import PageMetadataStructures from './components/PageMetadataStructures';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
@@ -25,13 +25,13 @@ const router = new Router(on => {
 
   on('/dashboard', async () => <PageDashboard />);
 
-  on('/place', async () => <PagePlace />);
+  on('/places', async () => <PagePlaces />);
 
-  on('/datalayer', async () => <PageDataLayer />);
+  on('/datalayers', async () => <PageDataLayers />);
 
-  on('/analysis', async () => <PageAnalysis />);
+  on('/analyses', async () => <PageAnalyses />);
 
-  on('/metadata', async () => <PageMetadataStructure />);
+  on('/metadata', async () => <PageMetadataStructures />);
 
   on('*', async (state) => {
     const content = await http.get(`${publicPath}/api/content?path=${state.path}`);

@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
-import styles from './PageAnalysis.css';
+import styles from './PageAnalyses.css';
 
 //import { Segment, Button, Input, Header, IconButton } from '../SEUI/elements';
 //import { Popup, Modal } from '../SEUI/modules';
@@ -11,7 +11,7 @@ import TestPlaceScreen from '../TestPlaceScreen';
 import TestScreen from '../TestScreen';
 
 @withStyles(styles)
-class PageAnalysis extends Component {
+class PageAnalyses extends Component {
 
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
@@ -104,4 +104,4 @@ class PageAnalysis extends Component {
 
 }
 
-export default PageAnalysis;
+export default PageAnalyses;
