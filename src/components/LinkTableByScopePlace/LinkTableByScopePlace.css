@@ -60,6 +60,7 @@ table#LinkTableByScopePlace tbody td.selectable:first-child:hover, table#LinkTab
 }
 #LinkTableByScopePlace a:focus {
 	background: transparent;
+	outline: none;
 }
 
 #LinkTableByScopePlace span.data-none i {
