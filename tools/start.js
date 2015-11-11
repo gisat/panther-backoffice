@@ -13,6 +13,8 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import task from './lib/task';
 
+import { serverPort } from '../src/config';
+
 global.WATCH = true;
 const webpackConfig = require('./config')[0]; // Client-side bundle configuration
 const bundler = webpack(webpackConfig);
@@ -28,7 +30,7 @@ export default task('start', async () => {
   browserSync({
     proxy: {
 
-      target: 'localhost:5000',
+      target: 'localhost:' + serverPort,
 
       middleware: [
         webpackDevMiddleware(bundler, {
