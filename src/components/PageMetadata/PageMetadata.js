@@ -23,11 +23,6 @@ class PageMetadata extends Component {
           key: "screen1",
           classes: "open",
           component: <ScreenMetadataBase/>
-        },
-        {
-          key: "screen2",
-          classes: "retracted",
-          component: "<button>Nemačkej mě</button>"
         }
       ]
     };

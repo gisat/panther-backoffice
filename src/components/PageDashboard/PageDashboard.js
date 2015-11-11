@@ -23,11 +23,6 @@ class PageDashboard extends Component {
           key: "screen1",
           classes: "open",
           component: <ScreenDashboardBase/>
-        },
-        {
-          key: "screen2",
-          classes: "retracted",
-          component: "Nic tu."
         }
       ]
     };

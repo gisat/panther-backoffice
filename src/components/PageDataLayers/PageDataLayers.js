@@ -23,11 +23,6 @@ class PageDataLayers extends Component {
           key: "screen1",
           classes: "open",
           component: <ScreenDataLayersBase/>
-        },
-        {
-          key: "screen2",
-          classes: "retracted",
-          component: "<button>Nemačkej mě</button>"
         }
       ]
     };
