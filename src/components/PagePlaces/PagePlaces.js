@@ -36,7 +36,7 @@ class PagePlaces extends Component {
 
 
   render() {
-    const title = 'Dashboard';
+    const title = 'Places';
     this.context.onSetTitle(title);
 
     var screenNodes = this.state.screens.map(function (screen) {

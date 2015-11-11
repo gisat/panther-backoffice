@@ -11,12 +11,6 @@ class ScreenLinksByAttSetAULevel extends Component{
     return (
       <div>
         <SelectorAttSetAULevel />
-			
-				<h3>
-					Aggregated LC classes Formation 
-					<br/>
-					@ Core City x Outer Urban Zone
-				</h3>
 				
 				<ConfigLinksByAttSetAULevel />
 				

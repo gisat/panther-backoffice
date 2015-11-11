@@ -1,0 +1,20 @@
+.Select-control {
+	border-color: #999;
+	background: #f1f1f1;
+}
+.Select-input {
+	padding:0;
+}
+.Select-input > input, .Select-placeholder, .Select-input > div {
+	font-size: 1.25rem;
+	padding: .03rem .625rem;
+}
+.has-value > .Select-control > .Select-placeholder {
+	color: #022393;
+/*	background: #d1e4ff;*/
+}
+
+.is-focused > .Select-control {
+  border-color: #999;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 5px -1px rgba(0, 136, 204, 0.5);
+}

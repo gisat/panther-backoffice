@@ -1,5 +1,8 @@
 @import './semantic.min.css';
 @import './semantic.overwrite.css';
+@import '../../../node_modules/react-select/dist/react-select.css';
+@import './react-select.overwrite.css';
+
 
 html {
   -webkit-box-sizing: border-box; /* Needed for mobile WebKit */
@@ -10,7 +13,7 @@ html {
   box-sizing: inherit;
   margin:0;
   padding:0;
-  font-size:0;
+  /*font-size:0;*/
 }
 
 .clearfix {
@@ -26,12 +29,6 @@ html {
   clear: both;
 }
 
-/* ===== base & typography ===== */
-/* 	base font 1.25 rem - 20px, line 30px
-	grid: half line 15 px -> 1.875rem
-	sizes increments: line third 10px -> .625rem
-	(rarely 5px -> .3125rem)
-*/
 
 /* resets of reset to make SEUI work */
 .ui *, .ui *:before, .ui *:after {
@@ -43,6 +40,15 @@ html {
 .icon, .icon:before, .icon:after {
 	font-family: Icons;
 }
+
+
+
+/* ===== base & typography ===== */
+/* 	base font 1.25 rem - 20px, line 30px
+	grid: half line 15 px -> 1.875rem
+	sizes increments: line third 10px -> .625rem
+	(rarely 5px -> .3125rem)
+*/
 
 html, body, #app, #app > div, #content, .content {
   height: 100%;
@@ -119,7 +125,12 @@ h3, h3 span {
 
 /* ===== atoms ===== */
 
-
+.selector {
+	padding:.9375rem;
+	border: 1px solid #aaa;
+	background: #ccc;
+	border-radius: .5rem;
+}
 
 
 /* ===== layout ===== */
@@ -467,6 +478,8 @@ span.todo {
 	color:#fff;
 	border: 2px dashed #ff0;
 	padding:2px 4px;
+	margin:1.875rem 0;
+	display: inline-block;
 }
 
 #menu a.current {

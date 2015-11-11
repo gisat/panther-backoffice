@@ -290,7 +290,7 @@ class LinkTableByScopePlace extends Component {
 
   openScreenExample(idAttSet,idAULevel) {
 		this.state.example = "Clicked on " + idAttSet + ", " + idAULevel;
-		this.forceUpdate();
+		/*this.forceUpdate();*/
 		/*alert("hey, " + idAttSet);*/
 	}
 
