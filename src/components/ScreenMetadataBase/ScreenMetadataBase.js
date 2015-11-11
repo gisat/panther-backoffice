@@ -9,8 +9,9 @@ class ScreenMetadataBase extends Component{
   render() {
     return (
       <div>
-        <h1>Metadata structures</h1>
-        
+        <div className="screen-content"><div>
+					<h1>Metadata structures</h1>
+        </div></div>
       </div>
     );
 

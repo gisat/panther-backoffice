@@ -9,8 +9,9 @@ class ScreenAnalysesBase extends Component{
   render() {
     return (
       <div>
-        <h1>Analyses</h1>
-        
+        <div className="screen-content"><div>
+					<h1>Analyses</h1>
+        </div></div>
       </div>
     );
 

@@ -69,7 +69,7 @@ body, input, select {
 }
 
 p, p a, span {
-  font-size:1.25rem;
+  font-size:1.125rem;
 }
 i, b, u {
   font-size: 100%;
@@ -126,12 +126,11 @@ h3, h3 span {
 /* ===== atoms ===== */
 
 .selector {
-	padding:.9375rem;
-	border: 1px solid #aaa;
-	background: #ccc;
-	border-radius: .5rem;
+	
 }
-
+.selector.double > div.input:not(:first-child) {
+	margin-top: .625rem;
+}
 
 /* ===== layout ===== */
 
@@ -192,10 +191,15 @@ h3, h3 span {
 
   background-color: #bababa;
 }
-.screen > div {
-  margin:1.875rem 0;
-  /*padding: 0 1.25rem;*/
-  padding: 0 1.875rem;
+.screen-setter {
+	border-bottom: 1px solid #aaa;
+	background: #ccc;
+}
+.screen-setter > div {
+	padding:.9375rem 1.875rem;
+}
+.screen-content > div{
+  padding: 1.875rem;
   position: relative;
 }
 
@@ -337,7 +341,11 @@ todo hex colours, button icons */
     flex-grow: 0.0000001;
   }
 
-  .screen > div {
+	.screen > div {
+		min-width: 50rem;
+	}
+	.screen-content > div,
+	.screen-setter > div {
     width: 50rem;
   }
 
@@ -345,19 +353,31 @@ todo hex colours, button icons */
   .screen.limited.lim30 {
     max-width: 31rem;
   }
-  .screen.limited.lim30 > div {
+  .screen.limited.lim30 .screen > div {
+    min-width: 30rem;
+  }
+	.screen.limited.lim30 .screen-content > div,
+	.screen.limited.lim30 .screen-setter > div {
     width: 30rem;
   }
 	.screen.limited.lim40 {
     max-width: 41rem;
   }
-  .screen.limited.lim40 > div {
+  .screen.limited.lim40 .screen > div {
+    min-width: 40rem;
+  }
+	.screen.limited.lim40 .screen-content > div,
+	.screen.limited.lim40 .screen-setter > div {
     width: 40rem;
   }
 	.screen.limited.lim50 {
     max-width: 51rem;
   }
-  .screen.limited.lim50 > div {
+  .screen.limited.lim50 .screen > div {
+    min-width: 50rem;
+  }
+	.screen.limited.lim50 .screen-content > div,
+	.screen.limited.lim50 .screen-setter > div {
     width: 50rem;
   }
 	
@@ -492,7 +512,7 @@ span.todo {
 /* grid underlay */
 /*
 
-.screen, .screen > div {
+.screen, .screen-content > div {
 	background: #aaa url("../img/grid6.png");
 	background-attachment: scroll;
 }

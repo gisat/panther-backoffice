@@ -27,8 +27,8 @@ class SelectorAttSetAULevel extends Component{
 		super(props);
 
 		this.state = {
-			valueAttSet: "Aggregated LC classes Formation",
-			valueAULevel: "Core City x Outer Urban Zone"
+			valueAttSet: 623,
+			valueAULevel: 2
 		};
 		
 	}
@@ -77,7 +77,7 @@ class SelectorAttSetAULevel extends Component{
 							/>
 						</label>
 					</div>
-					<span>@</span>
+					
 					<div className="input">
 						<label>
 							Analytical units level

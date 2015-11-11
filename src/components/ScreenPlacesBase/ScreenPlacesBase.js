@@ -19,18 +19,21 @@ class ScreenPlacesBase extends Component{
 		
 		return (
       <div>
-        <SelectorPlace/>
-				<h1>Ho Chi Minh City</h1>
-				<p>disable pass test: <b>{isParentScreenDisabled}</b></p>
-				<h2>Attribute sets</h2>
-        <LinkTableByScopePlace/>
-				
-				<h2>Vector layers</h2>
-        <LinkTableByScopePlace/>
-				
-				<h2>Raster layers</h2>
-        <LinkTableByScopePlace/>
-				
+        <div className="screen-setter"><div>
+					<SelectorPlace/>
+				</div></div>
+				<div className="screen-content"><div>
+					<h1>Ho Chi Minh City</h1>
+					<p>disable pass test: <b>{isParentScreenDisabled}</b></p>
+					<h2>Attribute sets</h2>
+					<LinkTableByScopePlace/>
+
+					<h2>Vector layers</h2>
+					<LinkTableByScopePlace/>
+
+					<h2>Raster layers</h2>
+					<LinkTableByScopePlace/>
+				</div></div>
       </div>
     );
 

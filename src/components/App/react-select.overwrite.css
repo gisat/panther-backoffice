@@ -6,7 +6,7 @@
 	padding:0;
 }
 .Select-input > input, .Select-placeholder, .Select-input > div {
-	font-size: 1.25rem;
+	font-size: 1.125rem;
 	padding: .03rem .625rem;
 }
 .has-value > .Select-control > .Select-placeholder {

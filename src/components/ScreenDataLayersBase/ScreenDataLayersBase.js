@@ -9,8 +9,9 @@ class ScreenDataLayersBase extends Component{
   render() {
     return (
       <div>
-        <h1>Data layers</h1>
-        
+        <div className="screen-content"><div>
+					<h1>Data layers</h1>
+        </div></div>
       </div>
     );
 
