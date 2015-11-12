@@ -175,7 +175,7 @@ class ConfigLinksByAttSetAULevel extends Component{
 				{/* todo -> component */}
 				<div className="row-select-config">
 					<CheckboxFields type="grouped" radio name="rsc-asaul-623-2-1">
-						<Checkbox checked="true" key="asaul-data-42" className="rsc-row  expandable">
+						<Checkbox key="asaul-data-42" className="rsc-row  expandable">
 							Data layer table
 						</Checkbox>
 						<div className="rsc-expand ">

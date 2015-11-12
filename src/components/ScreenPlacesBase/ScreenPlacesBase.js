@@ -3,6 +3,7 @@ import styles from './ScreenPlacesBase.css';
 import withStyles from '../../decorators/withStyles';
 
 import LinkTableByScopePlace from '../LinkTableByScopePlace';
+import LinkTableVectorByScopePlace from '../LinkTableVectorByScopePlace';
 import SelectorPlace from '../SelectorPlace';
 
 @withStyles(styles)
@@ -29,7 +30,7 @@ class ScreenPlacesBase extends Component{
 					<LinkTableByScopePlace/>
 
 					<h2>Vector layers</h2>
-					<LinkTableByScopePlace/>
+					<LinkTableVectorByScopePlace/>
 
 					<h2>Raster layers</h2>
 					<LinkTableByScopePlace/>

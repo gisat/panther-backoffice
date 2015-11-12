@@ -86,7 +86,7 @@ a:hover, a:visited:hover {
   color:#2f6eff;
 }
 /*a:focus, */
-#menu a.current:focus {
+#menu a:focus, #menu a.current:focus {
   background-color: #477abf;
   color:#fff;
 	outline: none;
@@ -111,6 +111,7 @@ h2, h2 span {
   font-size: 1.875rem;
   line-height: 2.8125rem;
   margin: .9375rem 0;
+	margin-top: 1.875rem;
 }
 h3, h3 span {
   font-size: 1.25rem;
@@ -501,6 +502,7 @@ todo hex colours, button icons */
   padding: 0 .625rem;
   background: #949494;
   color: #eee;
+	border-radius: .28571429rem .28571429rem 0 0;
 }
 .rsc-header:not(:first-child) {
 	margin-top:3.75rem;

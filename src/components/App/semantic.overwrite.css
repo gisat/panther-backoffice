@@ -1,5 +1,6 @@
 .ui.table {
 	background: transparent;
+	border-radius: .28571429rem .28571429rem 0 0;
 }
 
 .ui.table thead th, .ui.table td.header {
@@ -12,11 +13,78 @@
 }
 
 
+/* todo merge heading + header */
+.ui.table.LinkTable tbody td.selectable.heading  {
+	background: hsl(212, 37%, 78%);
+	font-weight: bold;
+}
+.ui.table.LinkTable td.selectable.heading:hover  {
+	background: hsl(212, 53%, 70%)!important;
+}
+.ui.table.LinkTable td.selectable {
+	height: 100%;
+}
+.ui.table.LinkTable tbody tr td.selectable > a:not(.ui) {
+	margin: -2em 0;
+  padding: 2.71428571em .71428571em;
+}
+
+.ui.table.LinkTable td.selectable.positive {
+	background: #c7f4ca!important;
+}
+.ui.table.LinkTable td.selectable.positive:hover {
+	background: #adebb1!important;
+}
+.ui.table.LinkTable td.selectable.negative {
+	background: #f4c9c7!important;
+}
+.ui.table.LinkTable td.selectable.negative:hover {
+	background: #eab5b2!important;
+}
+.ui.table.LinkTable td.selectable.warning {
+	background: #f4e2c7!important;
+}
+.ui.table.LinkTable td.selectable.warning:hover {
+	background: #edd0a5!important;
+}
+
+.ui.table.LinkTable tbody td.focus,
+.ui.table.LinkTable tbody td.focus:hover,
+.ui.table.LinkTable  td.selectable.heading.focus:hover {
+	background: #cfe5ff!important;
+	background: #ffff9e!important;
+	box-shadow: inset 0px 0px 3px 2px rgba(0,123,255,1);
+	box-shadow: inset 0px 0px 3px 2px rgb(239, 220, 1);
+}
+.ui.table.LinkTable a:focus {
+	background: transparent;
+	outline: none;
+}
+
+.ui.table.LinkTable span.data-none i {
+	color:#eee;
+}
+.ui.table.LinkTable span.data-none span {
+	color:#eee;
+}
+.ui.table.LinkTable span.data-selected i {
+	color:#8b8b8b;
+}
+.ui.table.LinkTable span.data-only i {
+	color:#9a9a9a;
+}
+
+
+
+
+
+
 .ui.checkbox label::before{
 	border: 1px solid #888;
 	transition: all .5s ease-in-out;
 }
-.ui.checkbox label:hover::before{
+.ui.checkbox label:hover::before,
+.ui.checkbox.focus {
 	border: 1px solid #06f;
 	box-shadow: 0 0 .3rem .15rem rgba(4, 110, 255, 0.6);
 }
