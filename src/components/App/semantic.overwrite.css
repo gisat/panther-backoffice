@@ -48,8 +48,8 @@
 	background: #edd0a5!important;
 }
 
-.ui.table.LinkTable tbody td.focus,
-.ui.table.LinkTable tbody td.focus:hover,
+.ui.table.LinkTable tbody td.selectable.focus,
+.ui.table.LinkTable tbody td.selectable.focus:hover,
 .ui.table.LinkTable  td.selectable.heading.focus:hover {
 	background: #cfe5ff!important;
 	background: #ffff9e!important;
