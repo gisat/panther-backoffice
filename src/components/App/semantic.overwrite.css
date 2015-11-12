@@ -1,12 +1,32 @@
 .ui.table {
 	background: transparent;
 }
-.ui.table thead th {
+
+.ui.table thead th, .ui.table td.header {
 	background: #a6a6a6;
+	font-weight: bold;
+}
+
+.ui.table.fixed td.allowOverflow {
+	overflow: visible;
 }
 
 
+.ui.checkbox label::before{
+	border: 1px solid #888;
+	transition: all .5s ease-in-out;
+}
+.ui.checkbox label:hover::before{
+	border: 1px solid #06f;
+	box-shadow: 0 0 .3rem .15rem rgba(4, 110, 255, 0.6);
+}
 
+.ui.checkbox label {
+	transition: all .5s ease-in-out;
+}
+.ui.checkbox label:hover {
+	color: #0043c3;
+}
 
 /*
 .ui.input input::-webkit-input-placeholder {

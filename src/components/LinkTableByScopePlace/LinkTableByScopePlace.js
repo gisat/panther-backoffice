@@ -402,8 +402,10 @@ class LinkTableByScopePlace extends Component {
 
 		/* -> tabs - reference periods */
 		<div>
+			{/*
 			<br/>
-			<p>{this.state.example}</p>
+			<p>{this.state.example}</p> 
+			*/}
 
 		<Table celled className="LinkTable ByScopePlace fixed" id="LinkTableByScopePlace">
 			<thead>

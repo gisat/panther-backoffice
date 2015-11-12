@@ -59,7 +59,7 @@ class SelectorPlace extends Component{
       <div>
         <div className="selector">
 					<div className="input">
-						<label>
+						<label className="container">
 							Place
 							<Select 
 								onChange={this.onChange.bind(this)}

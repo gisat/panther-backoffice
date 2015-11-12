@@ -24,7 +24,7 @@ class ScreenPlacesBase extends Component{
 				</div></div>
 				<div className="screen-content"><div>
 					<h1>Ho Chi Minh City</h1>
-					<p>disable pass test: <b>{isParentScreenDisabled}</b></p>
+			{/* <p>disable pass test: <b>{isParentScreenDisabled}</b></p> */}
 					<h2>Attribute sets</h2>
 					<LinkTableByScopePlace/>
 

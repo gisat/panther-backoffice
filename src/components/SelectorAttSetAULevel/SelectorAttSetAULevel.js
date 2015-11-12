@@ -27,7 +27,7 @@ class SelectorAttSetAULevel extends Component{
 		super(props);
 
 		this.state = {
-			valueAttSet: 623,
+			valueAttSet: 352,
 			valueAULevel: 2
 		};
 		
@@ -64,7 +64,7 @@ class SelectorAttSetAULevel extends Component{
       <div>
         <div className="selector double">
 					<div className="input">
-						<label>
+						<label className="container">
 							Attribute set
 							<Select 
 								onChange={this.onChangeAttSet.bind(this)}
@@ -79,7 +79,7 @@ class SelectorAttSetAULevel extends Component{
 					</div>
 					
 					<div className="input">
-						<label>
+						<label className="container">
 							Analytical units level
 							<Select 
 								onChange={this.onChangeAULevel.bind(this)}

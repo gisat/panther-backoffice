@@ -1,7 +1,14 @@
 .Select-control {
 	border-color: #999;
 	background: #f1f1f1;
+	
+	transition: all .5s ease-in-out;
 }
+
+.Select-control:hover, .Select-control:focus {
+	box-shadow: 0 0 .3rem .15rem rgba(4, 110, 255, 0.6);
+}
+
 .Select-input {
 	padding:0;
 }

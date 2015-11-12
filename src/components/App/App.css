@@ -31,11 +31,9 @@ html {
 
 
 /* resets of reset to make SEUI work */
-.ui *, .ui *:before, .ui *:after {
-	font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+.ui td span {
 	font-size: 14px;
 	line-height: 1.4285em;
-	font-smoothing: antialiased;
 }
 .icon, .icon:before, .icon:after {
 	font-family: Icons;
@@ -87,7 +85,8 @@ a:visited {
 a:hover, a:visited:hover {
   color:#2f6eff;
 }
-a:focus, #menu a.current:focus {
+/*a:focus, */
+#menu a.current:focus {
   background-color: #477abf;
   color:#fff;
 	outline: none;
@@ -125,11 +124,9 @@ h3, h3 span {
 
 /* ===== atoms ===== */
 
-.selector {
-	
-}
-.selector.double > div.input:not(:first-child) {
-	margin-top: .625rem;
+label.container {
+	  display: block;
+    margin-bottom: .9315rem;
 }
 
 /* ===== layout ===== */
@@ -194,6 +191,7 @@ h3, h3 span {
 .screen-setter {
 	border-bottom: 1px solid #aaa;
 	background: #ccc;
+	/*box-shadow: inset 0px -10px 15px -10px rgba(0,0,0,0.2);/* nope */
 }
 .screen-setter > div {
 	padding:.9375rem 1.875rem;
@@ -488,6 +486,146 @@ todo hex colours, button icons */
 
 /* ===== elements ===== */
 
+.selector {
+	
+}
+.selector.double > div.input:not(:first-child) {
+	margin-top: .625rem;
+}
+
+
+.rsc-header {
+  height: 2.8125rem;
+	line-height: 2.8125rem;
+  margin: 0;
+  padding: 0 .625rem;
+  background: #949494;
+  color: #eee;
+}
+.rsc-header:not(:first-child) {
+	margin-top:3.75rem;
+}
+.row-select-config > div {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	border-bottom: 1px solid #888;
+}
+.row-select-config > div > * {
+	flex-shrink: 0;
+	flex-grow: 0;
+	width: 100%;
+}
+.rsc-row{
+	border-top: 1px solid #888;
+	width: 100%;
+	/*height:1.875rem;*/
+	padding:0 7.5rem 0 3.125rem;
+	
+	position: relative;
+}
+.rsc-row.expandable {
+	padding-right:7.5rem;
+}
+.rsc-row::before {
+	content: "";
+	/*font-family: Icons;
+	font-size: 1.25rem;*/
+	font-size: .75rem;
+	display: block;
+	width:3.125rem;
+	position: absolute;
+	left: 0;
+	top:50%;
+	text-align:center;
+	transform:translateY(-50%);
+	color:#378437;
+}
+.rsc-row.active::before {
+	content: "\f05d"; /* check circle outline */
+	content: "Active";
+}
+
+.rsc-row > * {
+	height:3.75rem;
+	line-height: 3.75rem;
+}
+.rsc-row.ui.radio.checkbox label {
+	font-size:1.125rem;
+	padding-left: 2.625rem;
+}
+.rsc-row.ui.radio.checkbox label span {
+	font-size:1.125rem;
+}
+.rsc-row.ui.radio.checkbox label:before, 
+.rsc-row.ui.radio.checkbox label:after, 
+.rsc-row.ui.radio.checkbox input {
+	top:calc(50% - 7.5px);
+	left:.625rem;
+}
+
+.rsc-btn-expand  {
+	display: block;
+	width:7.5rem;
+	height: 3.75rem;
+	position: absolute;
+	right: 0;
+	top:-3.75rem;
+	padding-right: 1.875rem;
+	line-height: 3.75rem;
+	text-align: right;
+}
+.rsc-btn-expand b {
+	display: block;
+	width:1.875rem;
+	height: 3.75rem;
+	position: absolute;
+	right: 0;
+	top:.08rem;
+	text-align: center;
+	
+	transition: all .2s ease-in-out;
+}
+.rsc-btn-expand b::after {
+	content: "\f0d7";
+	font-family: Icons;
+	font-size: 1.25rem;
+
+}
+.expanded .rsc-btn-expand b {
+	/*content: "\f0d8";*/
+	transform: rotate(180deg);
+}
+
+.rsc-expand {
+	position: relative;
+}
+.rsc-expand > div {
+	/*height: 0;
+	overflow: hidden;*/
+	display: none;
+}
+.rsc-row.expanded, .rsc-expand.expanded {
+	background: #C5C7CC;
+}
+.rsc-row, .rsc-expand {
+	transition: all .2s ease-in-out;
+}
+.rsc-expand.expanded > div {
+	/*height: auto;*/
+	display: block;
+}
+.rsc-expand > div > div {
+	border-top: 1px dashed #999;
+	padding:1.25rem 1.25rem;
+}
+
+.rsc-expand .ui.table thead tr th:first-child {
+	width: 30%;
+}
+.rsc-expand .ui.table td:not(.header) {
+	background: #ccc;
+}
 
 /* ==== development === */
 
