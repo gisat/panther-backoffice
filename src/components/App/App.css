@@ -495,6 +495,28 @@ todo hex colours, button icons */
 }
 
 
+
+.input-wrapper {
+	display: flex;
+}
+.input-wrapper > div {
+	flex-shrink: 0;
+	flex-grow: 1;
+}
+.input-wrapper > div:nth-child(2) {
+	flex-grow: 0;
+	position: relative;
+	
+	width: 5.625rem;
+}
+.input-wrapper > div:nth-child(2) .buttons {
+	position: absolute;
+	bottom:.9315rem;
+	right:0;
+}
+
+
+
 .rsc-header {
   height: 2.8125rem;
 	line-height: 2.8125rem;
