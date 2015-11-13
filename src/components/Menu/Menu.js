@@ -47,13 +47,6 @@ class Menu extends Component {
               <span>Metadata structures</span>
             </a>
           </li>
-
-          <li>
-            <a href="./privacy" onClick={Link.handleClick} tabIndex="1">
-              <img src={require('./temp-metadata.svg')} className="svg" />
-              <span>Privacy (static test)</span>
-            </a>
-          </li>
         </ul>
       </nav>
     );
