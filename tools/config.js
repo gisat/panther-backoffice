@@ -11,6 +11,8 @@ import path from 'path';
 import webpack from 'webpack';
 import merge from 'lodash.merge';
 
+import { publicPath } from '../src/config';
+
 const DEBUG = !process.argv.includes('release');
 const VERBOSE = process.argv.includes('verbose');
 const WATCH = global.WATCH === undefined ? false : global.WATCH;
@@ -44,7 +46,7 @@ const JS_LOADER = {
 
 const config = {
   output: {
-    publicPath: '/',
+    publicPath: publicPath,
     sourcePrefix: '  ',
   },
 
