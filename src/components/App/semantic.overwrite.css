@@ -76,7 +76,34 @@
 
 
 
+.ui.button, .ui.buttons .button {
+	/*font-size: .875rem;*/
+	line-height: .875rem;
+	padding: .625rem;
+}
+.ui.icon.button, .ui.icon.buttons .button {
+	padding: .625rem;
+}
 
+.ui.basic.button,
+.ui.basic.buttons .button,
+.ui.basic.buttons,
+.ui.basic.icon.buttons .button,
+.ui.basic.icon.buttons{
+	border-color:#999!important;
+	background: #f1f1f1!important;
+}
+
+.button:hover, .button:focus {
+	box-shadow: 0 0 .3rem .15rem rgba(4, 110, 255, 0.6);
+}
+
+.ui.basic.button:focus, 
+.ui.basic.button:hover, 
+.ui.basic.buttons .button:focus, 
+.ui.basic.buttons .button:hover {
+	background: #e0ecff;
+}
 
 
 .ui.checkbox label::before{
