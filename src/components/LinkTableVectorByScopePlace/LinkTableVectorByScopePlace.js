@@ -137,7 +137,7 @@ class LinkTableVectorByScopePlace extends Component {
 					}
 				]
 			} // layer
-			
+
 		]
 		};
 	}
@@ -162,7 +162,7 @@ class LinkTableVectorByScopePlace extends Component {
 
   	var thisComponent = this;
 
-		
+
 		/* how many max attsets under one layer? */
 		var maxLayerAttSets = 0;
 		for (var layer of this.state.vectorLayers) {
@@ -170,7 +170,7 @@ class LinkTableVectorByScopePlace extends Component {
 			maxLayerAttSets = (currentAttSetsLength > maxLayerAttSets ? currentAttSetsLength : maxLayerAttSets);
 		}
 		var vectorAttSetsColumns = maxLayerAttSets * 2;
-		
+
 
 		var vectorLayersInsert = this.state.vectorLayers.map(function (vectorLayer) {
 
@@ -205,15 +205,15 @@ class LinkTableVectorByScopePlace extends Component {
 			else {
 				tdLayerClassName += " warning";
 			}
-			
+
 			var brandNewAttSets = [];
 			for (var i = 0; i < vectorLayer.attSets.length; i++) {
 				brandNewAttSets[2*i] = vectorLayer.attSets[i];
 				brandNewAttSets[(2*i)+1] = vectorLayer.attSets[i];
 			}
-			
+
 			var isItHeaderTime = true;
-			
+
 			var vectorLayerAttSetsInsert = brandNewAttSets.map(function (layerAttSet) {
 				if(isItHeaderTime) {
 					isItHeaderTime = !isItHeaderTime;
@@ -273,13 +273,13 @@ class LinkTableVectorByScopePlace extends Component {
 					);
 				}
 			});
-			
+
 			var additionalColumns = vectorAttSetsColumns - (vectorLayer.attSets.length * 2);
 			var additionalColumnsInsert;
 			if(additionalColumns) {
 				additionalColumnsInsert = <td colSpan={additionalColumns}></td>;
 			}
-			
+
 			return (
 				<tr>
 					<td className="header">
@@ -307,9 +307,9 @@ class LinkTableVectorByScopePlace extends Component {
 
 		/* -> tabs - reference periods */
 		<div>
-			{/*}
+			{/*
 			<br/>
-			<p>{this.state.example}</p> 
+			<p>{this.state.example}</p>
 			*/}
 
 		<Table celled className="LinkTable ByScopePlace fixed separateRows" id="LinkTableVectorByScopePlace">
