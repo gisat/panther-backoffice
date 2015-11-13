@@ -30,7 +30,7 @@ class PageDataLayers extends Component {
 
 
   render() {
-    const title = 'Dashboard';
+    const title = 'Data layer management';
     this.context.onSetTitle(title);
 
     var screenNodes = this.state.screens.map(function (screen) {

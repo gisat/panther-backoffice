@@ -32,8 +32,7 @@ class ScreenPlacesBase extends Component{
 					<h2>Vector layers</h2>
 					<LinkTableVectorByScopePlace/>
 
-					<h2>Raster layers</h2>
-					<LinkTableByScopePlace/>
+					
 				</div></div>
       </div>
     );
