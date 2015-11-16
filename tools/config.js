@@ -46,7 +46,7 @@ const JS_LOADER = {
 
 const config = {
   output: {
-    publicPath: publicPath,
+    publicPath: publicPath+"/",
     sourcePrefix: '  ',
   },
 
