@@ -16,7 +16,7 @@ export class CheckboxFields extends Component {
         defaultClasses: React.PropTypes.bool,
         disabled: React.PropTypes.bool,
         name: React.PropTypes.string.isRequired,
-        onClick: React.PropTypes.func,
+        onChange: React.PropTypes.func, //EDIT
         radio: React.PropTypes.bool,
         readOnly: React.PropTypes.bool,
         type: React.PropTypes.oneOf([
@@ -47,6 +47,7 @@ export class CheckboxFields extends Component {
         // but do remove for everything else
         } else {
             this.setActive(key);
+						this.props.onChange(key); //EDIT
         }
     }
 
