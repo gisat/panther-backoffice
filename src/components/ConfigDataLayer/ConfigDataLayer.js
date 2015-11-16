@@ -8,6 +8,11 @@ import { Table } from '../SEUI/collections';
 import Select from 'react-select';
 import _ from 'underscore';
 
+import ConfigDataLayerVector from '../ConfigDataLayerVector';
+import ConfigDataLayerRaster from '../ConfigDataLayerRaster';
+import ConfigDataLayerAnalytical from '../ConfigDataLayerAnalytical';
+
+
 const SCOPES = [
 			{ key: 1, scope: 'Local' },
 			{ key: 2, scope: 'National' },
@@ -43,147 +48,68 @@ const THEMES = [
 
 @withStyles(styles)
 class ConfigDataLayer extends Component{
-  
+	
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			valueScope: 1,
-			valuesPlaces: [2,3],
-			valuesTopics: [12,22]
+			layerType: -1
 		};
 		
 	}
 	
-	resolveThemes(topics) {
-//		var themes = [];
-//		for(var topicKey of this.state.valuesTopics) {
-//			console.log(topicKey);
-//			var topic = _.where(TOPICS, {key: topicKey});
-//			themes = _.union(themes, topic.themes);
-//			//console.log(topic.themes);
-//		}
-//		console.log(typeof themes);
+	onChangeType (key) {
+		this.setState({
+			layerType: key
+		});
 	}
-	
-	
-	onChangeScope (value) {
-		this.state.valueScope = value;
-	}
-	onChangePlaces (values) {
-		this.state.valuesPlaces = values;
-	}
-	onChangeTopics (values) {
-		this.state.valuesTopics = values;
-//		this.resolveThemes(values);
-		console.log(values);
-	}
-	
 	
 	componentDidMount() {
-		
-		
 		
 	}
 	
 	render() {
-    
-		var selectInputProps = {
-			className: "" //"ui input"
-		};
+		
+		// TODO overwrite to hide and keep state
+		var layerTypeConfig;
+		if(this.state.layerType==0){
+			layerTypeConfig = <ConfigDataLayerVector/>;
+		}
+		else if(this.state.layerType==1){
+			layerTypeConfig = <ConfigDataLayerRaster/>;
+		}
+		else if(this.state.layerType==2){
+			layerTypeConfig = <ConfigDataLayerAnalytical/>;
+		}
+		else {
+			layerTypeConfig = <span>Select layer type</span>;
+		}
 		
 		return (
       <div>
 				
-				<CheckboxFields type="grouped" radio name="dl-722">
-					<Checkbox key="dl-vector">
+				<div className="dataLayerTypeSelect">
+				<span>Layer type</span>
+				<CheckboxFields 
+					type="grouped" 
+					radio 
+					name="dl-722" 
+					onChange={this.onChangeType.bind(this)}
+				>
+					<Checkbox key="0">
 						Vector layer
 					</Checkbox>
-					<Checkbox key="dl-vector">
+					<Checkbox key="1">
 						Raster layer
 					</Checkbox>
-					<Checkbox key="dl-vector">
+					<Checkbox key="2">
 						Analytical units layer
 					</Checkbox>
 				</CheckboxFields>
-				
-				
-				<div className="input-wrapper">
-					<div>
-						<label className="container">
-							Scope
-							<Select 
-								onChange={this.onChangeScope.bind(this)}
-								//loadOptions={this.getScopes}
-								options={SCOPES}
-								valueKey="key" 
-								labelKey="scope" 
-								inputProps={selectInputProps} 
-								value={this.state.valueScope}
-							/>
-						</label>
-					</div>
-					<div>
-						<Buttons basic icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
-				</div>
-					
-				<div className="input-wrapper">
-					<div>
-						<label className="container">
-							Places
-							<Select 
-								multi
-								onChange={this.onChangePlaces.bind(this)}
-								//loadOptions={this.getScopes}
-								options={PLACES}
-								valueKey="key" 
-								labelKey="place" 
-								inputProps={selectInputProps} 
-								value={this.state.valuesPlaces}
-							/>
-						</label>
-					</div>
-					<div>
-						<Buttons basic icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
 				</div>
 				
 				
-				<div className="input-wrapper">
-					<div>
-						<label className="container">
-							Topics
-							<Select 
-								multi
-								onChange={this.onChangeTopics.bind(this)}
-								//loadOptions={this.getScopes}
-								options={TOPICS}
-								valueKey="key" 
-								labelKey="topic" 
-								inputProps={selectInputProps} 
-								value={this.state.valuesTopics}
-							/>
-						</label>
-					</div>
-					<div>
-						<Buttons basic icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
-				</div>
-				
-				<span><b>Themes:</b> Land cover, Population</span>
-				
-				
-
+				{layerTypeConfig}
 				
 			</div>
     );

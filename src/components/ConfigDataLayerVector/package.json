@@ -1,0 +1,6 @@
+{
+  "name": "ConfigDataLayerVector",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ConfigDataLayerVector.js"
+}

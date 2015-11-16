@@ -307,7 +307,7 @@ class LinkTableVectorByScopePlace extends Component {
 
 		/* -> tabs - reference periods */
 		<div>
-			{/*}
+			{/*
 			<br/>
 			<p>{this.state.example}</p> 
 			*/}
