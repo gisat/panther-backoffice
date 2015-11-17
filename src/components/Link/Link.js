@@ -43,6 +43,8 @@ class Link extends Component {
       Location.pushState(
         this.props && this.props.state || null,
         this.props && this.props.to || (link.pathname + link.search));
+      if ("activeElement" in document)
+        document.activeElement.blur();
     }
   };
 
