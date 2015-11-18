@@ -11,7 +11,7 @@ class ScreenLinksByAttSetAULevel extends Component{
     return (
       <div>
         <div className="screen-setter"><div>
-					<h2>Attribute set data linking</h2>
+					<h2>Data source selection</h2>
 					<SelectorAttSetAULevel />
 				</div></div>
 				<div className="screen-content"><div>

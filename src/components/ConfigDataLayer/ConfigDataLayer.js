@@ -70,7 +70,7 @@ class ConfigDataLayer extends Component{
 	
 	render() {
 		
-		// TODO overwrite to hide and keep state
+		// TODO overwrite to keep state in this component ?
 		var layerTypeConfig;
 		if(this.state.layerType==0){
 			layerTypeConfig = <ConfigDataLayerVector/>;

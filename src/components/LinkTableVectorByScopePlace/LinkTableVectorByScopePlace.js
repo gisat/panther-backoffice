@@ -84,22 +84,6 @@ class LinkTableVectorByScopePlace extends Component {
 								data: "none"
 							}
 						]
-					},
-					{
-						key: 666,
-						name: "Arbitrary second AttSet",
-						periods: [
-							{
-								key: 1,
-								name: "2000",
-								data: "none"
-							},
-							{
-								key: 2,
-								name: "2010",
-								data: "none"
-							}
-						]
 					}
 				]
 			}, // layer

@@ -31,6 +31,11 @@ const AULEVELS = [
 			{ key: 4, name: "GADM3" },
 			{ key: 5, name: "GADM4" }
 		];
+const DESTINATIONS = [
+			{ key: "I", isAttribute: false, name: 'FID (feature identifier)' },
+			{ key: "N", isAttribute: false, name: 'Feature name' },
+			{ key: "P", isAttribute: false, name: 'Parent feature identifier' }
+		];
 
 @withStyles(styles)
 class ConfigDataLayerAnalytical extends Component{
@@ -143,6 +148,248 @@ class ConfigDataLayerAnalytical extends Component{
 					</div>
 				</div>
 				
+				<h3>Tabular data</h3>
+				<Table celled className="fixed" id="ConfigDataLayerAnalyticalColumnTable">
+					<thead>
+						<tr>
+							<th>Source column</th>
+							<th>Use as</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr>
+							<td className="header">C_L1_1</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">C_L2_11</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">C_L2_12</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">C_L2_14</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">ID_0</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="P"
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">ID_1_CC</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">ID_2</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="I"
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">NAME_0</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">NAME_1_CC</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">NAME_2</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="N"
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">name</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">Shape_Leng</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">Shape_Area</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">SUM_pop_00</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">SUM_pop_10</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+					</tbody>
+				</Table>
+				
+				
+				<IconButton name="check" primary>
+					Save
+				</IconButton>
 				
 			</div>
     );

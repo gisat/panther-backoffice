@@ -8,6 +8,13 @@ import { Table } from '../SEUI/collections';
 import Select from 'react-select';
 import _ from 'underscore';
 
+const LAYERTEMPLATES = [
+			{ key: 1, name: 'Population grid' },
+			{ key: 2, name: 'Population density grid' },
+			{ key: 3, name: 'Urban expansion grid' },
+			{ key: 4, name: 'Urban areas' },
+			{ key: 5, name: 'Global urban footprint' }
+		];
 const SCOPES = [
 			{ key: 1, scope: 'Local' },
 			{ key: 2, scope: 'National' },
@@ -52,6 +59,7 @@ class ConfigDataLayerRaster extends Component{
 		super(props);
 
 		this.state = {
+			valueTemplate: 2,
 			valueScope: 1,
 			valuesPlaces: [2,3],
 			valuesTopics: [12,22],
@@ -71,6 +79,9 @@ class ConfigDataLayerRaster extends Component{
 //		console.log(typeof themes);
 	}
 	
+	onChangeTemplate (value) {
+		this.state.valueTemplate = value;
+	}
 	onChangeScope (value) {
 		this.state.valueScope = value;
 	}
@@ -102,6 +113,29 @@ class ConfigDataLayerRaster extends Component{
 		return (
       <div>
 					
+				
+				<div className="input-wrapper">
+					<div>
+						<label className="container">
+							Layer template (Name)
+							<Select 
+								onChange={this.onChangeTemplate.bind(this)}
+								//loadOptions={this.getScopes}
+								options={LAYERTEMPLATES}
+								valueKey="key" 
+								labelKey="name" 
+								inputProps={selectInputProps} 
+								value={this.state.valueTemplate}
+							/>
+						</label>
+					</div>
+					<div>
+						<Buttons basic icon>
+							<IconButton name="write" />
+							<IconButton name="plus" />
+						</Buttons>
+					</div>
+				</div>
 				
 				<div className="input-wrapper">
 					<div>
@@ -200,7 +234,10 @@ class ConfigDataLayerRaster extends Component{
 						</Buttons>
 					</div>
 				</div>
-
+				
+				<IconButton name="check" primary>
+					Save
+				</IconButton>
 				
 			</div>
     );

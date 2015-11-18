@@ -8,6 +8,14 @@ import { Table } from '../SEUI/collections';
 import Select from 'react-select';
 import _ from 'underscore';
 
+const LAYERTEMPLATES = [
+			{ key: 1, name: 'Road network' },
+			{ key: 2, name: 'Hospitals' },
+			{ key: 3, name: 'Land cover' },
+			{ key: 4, name: 'Land cover change' },
+			{ key: 5, name: 'Possible low-income settlements (areals)' },
+			{ key: 7, name: 'Possible low-income settlements (mid-points)' }
+		];
 const SCOPES = [
 			{ key: 1, scope: 'Local' },
 			{ key: 2, scope: 'National' },
@@ -22,7 +30,7 @@ const PLACES = [
 			{ key: 74, scope: 2, place: 'Japan' },
 			{ key: 82, scope: 2, place: 'Laos' },
 			{ key: 135, scope: 2, place: 'Vietnam' },
-			{ key: 625, scope: 3, place: 'East Asia and Pacific' },
+			{ key: 625, scope: 3, place: 'East Asia and Pacific' }
 		];
 const TOPICS = [
 			{ key: 7, topic: 'Land cover structure', themes: [18,23,32] },
@@ -44,6 +52,25 @@ const LAYERGROUPS = [
 			{ key: 1, name: 'Information layers' },
 			{ key: 2, name: 'Reference satellite images' }
 		];
+const STYLES = [
+			{ key: 10, name: 'detailed' },
+			{ key: 18, name: 'aggregated' },
+			{ key: 23, name: 'urban fabric' },
+			{ key: 30, name: 'flows' }
+		];
+const DESTINATIONS = [
+			{ key: "I", isAttribute: false, name: 'FID (feature identifier)' },
+			{ key: "N", isAttribute: false, name: 'Feature name' },
+			{ key: 220, isAttribute: true, attset: "Change code", name: 'LCF code' },
+			{ key: 221, isAttribute: true, attset: "Change code", name: 'Current code' },
+			{ key: 222, isAttribute: true, attset: "Change code", name: 'Previous code' },
+			{ key: 223, isAttribute: true, attset: "Change code", name: 'UF code' },
+			{ key: 287, isAttribute: true, attset: "Status code", name: 'Code' },
+			{ key: 315, isAttribute: true, attset: "Aggregated LC Classes", name: 'Urban fabric' },
+			{ key: 316, isAttribute: true, attset: "Aggregated LC Classes", name: 'Artificial areas' },
+			{ key: 317, isAttribute: true, attset: "Aggregated LC Classes", name: 'Natural and semi-natural areas' },
+			{ key: 318, isAttribute: true, attset: "Aggregated LC Classes", name: 'Water' }
+		];
 
 @withStyles(styles)
 class ConfigDataLayerVector extends Component{
@@ -52,10 +79,12 @@ class ConfigDataLayerVector extends Component{
 		super(props);
 
 		this.state = {
+			valueTemplate: 4,
 			valueScope: 1,
 			valuesPlaces: [2,3],
 			valuesTopics: [12,22],
-			valueGroup: 1
+			valueGroup: 1,
+			valuesStyles: [30]
 		};
 		
 	}
@@ -71,6 +100,9 @@ class ConfigDataLayerVector extends Component{
 //		console.log(typeof themes);
 	}
 	
+	onChangeTemplate (value) {
+		this.state.valueTemplate = value;
+	}
 	onChangeScope (value) {
 		this.state.valueScope = value;
 	}
@@ -84,6 +116,9 @@ class ConfigDataLayerVector extends Component{
 	}
 	onChangeGroup (value) {
 		this.state.valueGroup = value;
+	}
+	onChangeStyles (values) {
+		this.state.valuesStyles = values;
 	}
 	
 	
@@ -102,6 +137,28 @@ class ConfigDataLayerVector extends Component{
 		return (
       <div>
 				
+				<div className="input-wrapper">
+					<div>
+						<label className="container">
+							Layer template (Name)
+							<Select 
+								onChange={this.onChangeTemplate.bind(this)}
+								//loadOptions={this.getScopes}
+								options={LAYERTEMPLATES}
+								valueKey="key" 
+								labelKey="name" 
+								inputProps={selectInputProps} 
+								value={this.state.valueTemplate}
+							/>
+						</label>
+					</div>
+					<div>
+						<Buttons basic icon>
+							<IconButton name="write" />
+							<IconButton name="plus" />
+						</Buttons>
+					</div>
+				</div>
 				
 				<div className="input-wrapper">
 					<div>
@@ -200,7 +257,244 @@ class ConfigDataLayerVector extends Component{
 						</Buttons>
 					</div>
 				</div>
+				
+				<div className="input-wrapper">
+					<div>
+						<label className="container">
+							Styles (symbologies)
+							<Select 
+								multi
+								onChange={this.onChangeStyles.bind(this)}
+								//loadOptions={this.getScopes}
+								options={STYLES}
+								valueKey="key" 
+								labelKey="name" 
+								inputProps={selectInputProps} 
+								value={this.state.valuesStyles}
+							/>
+						</label>
+					</div>
+					<div>
+						<Buttons basic icon>
+							<IconButton name="write" />
+							<IconButton name="plus" />
+						</Buttons>
+					</div>
+				</div>
+				
+				<h3>Tabular data</h3>
+				<Table celled className="fixed" id="ConfigDataLayerVectorColumnTable">
+					<thead>
+						<tr>
+							<th>Source column</th>
+							<th>Use as</th>
+						</tr>
+					</thead>
+					<tbody>
 
+						<tr>
+							<td className="header">code_00</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="222"
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">code_10</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="221"
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">poly_ID</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="I"
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">CO</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">FO</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">LCF</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">LCF_N</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">Shape_Leng</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">Shape_Area</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">AC_00</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">AC_10</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">UF</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value=""
+								/>
+							</td>
+						</tr>
+
+						<tr>
+							<td className="header">name</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={DESTINATIONS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="N"
+								/>
+							</td>
+						</tr>
+
+
+					</tbody>
+				</Table>
+				
+				
+				<IconButton name="check" primary>
+					Save
+				</IconButton>
 				
 			</div>
     );
