@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenDashboardBase.css';
 import withStyles from '../../decorators/withStyles';
 
-import DummyDashboard from '../DummyDashboard';
+import Dashboard from '../Dashboard';
 
 @withStyles(styles)
 class ScreenDashboardBase extends Component{
@@ -11,7 +11,7 @@ class ScreenDashboardBase extends Component{
       <div>
         <div className="screen-content"><div>
 					<h1>Dashboard</h1>
-					<DummyDashboard/>
+					<Dashboard/>
 				</div></div>
       </div>
     );
