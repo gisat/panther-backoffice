@@ -51,6 +51,11 @@ const LAYERGROUPS = [
 			{ key: 1, name: 'Information layers' },
 			{ key: 2, name: 'Reference satellite images' }
 		];
+const PERIODS = [
+			{ key: 1, name: '1990' },
+			{ key: 2, name: '2000' },
+			{ key: 3, name: '2010' }
+		];
 
 @withStyles(styles)
 class ConfigDataLayerRaster extends Component{
@@ -62,6 +67,7 @@ class ConfigDataLayerRaster extends Component{
 			valueTemplate: 2,
 			valueScope: 1,
 			valuesPlaces: [2,3],
+			valuesPeriods: [2],
 			valuesTopics: [12,22],
 			valueGroup: 2
 		};
@@ -87,6 +93,9 @@ class ConfigDataLayerRaster extends Component{
 	}
 	onChangePlaces (values) {
 		this.state.valuesPlaces = values;
+	}
+	onChangePeriods (values) {
+		this.state.valuesPeriods = values;
 	}
 	onChangeTopics (values) {
 		this.state.valuesTopics = values;
@@ -173,6 +182,31 @@ class ConfigDataLayerRaster extends Component{
 								labelKey="place" 
 								inputProps={selectInputProps} 
 								value={this.state.valuesPlaces}
+							/>
+						</label>
+					</div>
+					<div>
+						<Buttons basic icon>
+							<IconButton name="write" />
+							<IconButton name="plus" />
+						</Buttons>
+					</div>
+				</div>
+				
+				
+				<div className="input-wrapper">
+					<div>
+						<label className="container">
+							Imaging/reference periods
+							<Select 
+								multi
+								onChange={this.onChangePeriods.bind(this)}
+								//loadOptions={this.getScopes}
+								options={PERIODS}
+								valueKey="key" 
+								labelKey="name" 
+								inputProps={selectInputProps} 
+								value={this.state.valuesPeriods}
 							/>
 						</label>
 					</div>

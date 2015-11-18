@@ -12,6 +12,11 @@
 	overflow: visible;
 }
 
+.ui td.resetui span {
+	font-size: 1.125rem;
+	line-height: 1.5;
+}
+
 
 /* todo merge heading + header */
 .ui.table.LinkTable tbody td.selectable.heading  {

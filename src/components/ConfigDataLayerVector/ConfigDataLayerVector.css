@@ -1,3 +1,6 @@
 #ConfigDataLayerVectorColumnTable thead tr th:first-child {
-	width:12rem;
+	width:10rem;
+}
+#ConfigDataLayerVectorColumnTable thead tr th:nth-child(3) {
+	width:11rem;
 }

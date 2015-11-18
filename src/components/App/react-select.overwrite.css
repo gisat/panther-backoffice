@@ -36,6 +36,9 @@
 	color: #022393;
 	background: #d3e5ff;
 }
+.ui td.resetui span.Select-item {
+	line-height: 1.5rem;
+}
 .Select-item, .Select-item-icon {
 	border-color: #bed4ef;
 }

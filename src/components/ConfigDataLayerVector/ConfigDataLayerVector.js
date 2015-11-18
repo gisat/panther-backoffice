@@ -71,6 +71,11 @@ const DESTINATIONS = [
 			{ key: 317, isAttribute: true, attset: "Aggregated LC Classes", name: 'Natural and semi-natural areas' },
 			{ key: 318, isAttribute: true, attset: "Aggregated LC Classes", name: 'Water' }
 		];
+const PERIODS = [
+			{ key: 1, name: '1990' },
+			{ key: 2, name: '2000' },
+			{ key: 3, name: '2010' }
+		];
 
 @withStyles(styles)
 class ConfigDataLayerVector extends Component{
@@ -82,6 +87,7 @@ class ConfigDataLayerVector extends Component{
 			valueTemplate: 4,
 			valueScope: 1,
 			valuesPlaces: [2,3],
+			valuesPeriods: [3],
 			valuesTopics: [12,22],
 			valueGroup: 1,
 			valuesStyles: [30]
@@ -108,6 +114,9 @@ class ConfigDataLayerVector extends Component{
 	}
 	onChangePlaces (values) {
 		this.state.valuesPlaces = values;
+	}
+	onChangePeriods (values) {
+		this.state.valuesPeriods = values;
 	}
 	onChangeTopics (values) {
 		this.state.valuesTopics = values;
@@ -211,6 +220,31 @@ class ConfigDataLayerVector extends Component{
 				<div className="input-wrapper">
 					<div>
 						<label className="container">
+							Imaging/reference periods
+							<Select 
+								multi
+								onChange={this.onChangePeriods.bind(this)}
+								//loadOptions={this.getScopes}
+								options={PERIODS}
+								valueKey="key" 
+								labelKey="name" 
+								inputProps={selectInputProps} 
+								value={this.state.valuesPeriods}
+							/>
+						</label>
+					</div>
+					<div>
+						<Buttons basic icon>
+							<IconButton name="write" />
+							<IconButton name="plus" />
+						</Buttons>
+					</div>
+				</div>
+				
+				
+				<div className="input-wrapper">
+					<div>
+						<label className="container">
 							Topics
 							<Select 
 								multi
@@ -282,12 +316,16 @@ class ConfigDataLayerVector extends Component{
 					</div>
 				</div>
 				
+				
+				
+				
 				<h3>Tabular data</h3>
 				<Table celled className="fixed" id="ConfigDataLayerVectorColumnTable">
 					<thead>
 						<tr>
 							<th>Source column</th>
 							<th>Use as</th>
+							<th>Imaging/reference periods</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -305,6 +343,18 @@ class ConfigDataLayerVector extends Component{
 									value="222"
 								/>
 							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
+								/>
+							</td>
 						</tr>
 
 						<tr>
@@ -318,6 +368,18 @@ class ConfigDataLayerVector extends Component{
 									labelKey="name" 
 									//inputProps={selectInputProps} 
 									value="221"
+								/>
+							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
 								/>
 							</td>
 						</tr>
@@ -335,6 +397,18 @@ class ConfigDataLayerVector extends Component{
 									value="I"
 								/>
 							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
+								/>
+							</td>
 						</tr>
 
 						<tr>
@@ -348,6 +422,18 @@ class ConfigDataLayerVector extends Component{
 									labelKey="name" 
 									//inputProps={selectInputProps} 
 									value=""
+								/>
+							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
 								/>
 							</td>
 						</tr>
@@ -365,6 +451,18 @@ class ConfigDataLayerVector extends Component{
 									value=""
 								/>
 							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
+								/>
+							</td>
 						</tr>
 
 						<tr>
@@ -378,6 +476,18 @@ class ConfigDataLayerVector extends Component{
 									labelKey="name" 
 									//inputProps={selectInputProps} 
 									value=""
+								/>
+							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
 								/>
 							</td>
 						</tr>
@@ -395,6 +505,18 @@ class ConfigDataLayerVector extends Component{
 									value=""
 								/>
 							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
+								/>
+							</td>
 						</tr>
 
 						<tr>
@@ -408,6 +530,18 @@ class ConfigDataLayerVector extends Component{
 									labelKey="name" 
 									//inputProps={selectInputProps} 
 									value=""
+								/>
+							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
 								/>
 							</td>
 						</tr>
@@ -425,6 +559,18 @@ class ConfigDataLayerVector extends Component{
 									value=""
 								/>
 							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
+								/>
+							</td>
 						</tr>
 
 						<tr>
@@ -438,6 +584,18 @@ class ConfigDataLayerVector extends Component{
 									labelKey="name" 
 									//inputProps={selectInputProps} 
 									value=""
+								/>
+							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
 								/>
 							</td>
 						</tr>
@@ -455,6 +613,18 @@ class ConfigDataLayerVector extends Component{
 									value=""
 								/>
 							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
+								/>
+							</td>
 						</tr>
 
 						<tr>
@@ -470,6 +640,18 @@ class ConfigDataLayerVector extends Component{
 									value=""
 								/>
 							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
+								/>
+							</td>
 						</tr>
 
 						<tr>
@@ -483,6 +665,18 @@ class ConfigDataLayerVector extends Component{
 									labelKey="name" 
 									//inputProps={selectInputProps} 
 									value="N"
+								/>
+							</td>
+							<td className="allowOverflow resetui">
+								<Select 
+									//onChange={this.onChangeAttSet.bind(this)}
+									//loadOptions={this.getPlaces}
+									multi 
+									options={PERIODS}
+									valueKey="key" 
+									labelKey="name" 
+									//inputProps={selectInputProps} 
+									value="3"
 								/>
 							</td>
 						</tr>
