@@ -1,6 +1,0 @@
-{
-  "name": "DummyDashboard",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./DummyDashboard.js"
-}
