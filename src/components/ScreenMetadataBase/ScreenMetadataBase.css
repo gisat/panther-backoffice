@@ -14,11 +14,11 @@
 	/*border: 1px solid rgba(34,36,38,.1);
 	border-left: 0;*/
 }
-.metadata-grid-items .item {
+.metadata-grid-items .items {
 	padding: 1rem;
 	display: none;
 }
-.metadata-grid-items .item.active {
+.metadata-grid-items .items.active {
 	padding: 1rem;
 	display: block;
 }

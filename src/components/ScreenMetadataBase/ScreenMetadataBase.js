@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenMetadataBase.css';
 import withStyles from '../../decorators/withStyles';
 
-
+import MetadataListLayerVector from '../MetadataListLayerVector';
 
 @withStyles(styles)
 class ScreenMetadataBase extends Component{
@@ -40,7 +40,7 @@ class ScreenMetadataBase extends Component{
 								>
 									Scope
 								</a>
-
+								
 								<a className="header item">
 									Templates
 								</a>
@@ -120,14 +120,14 @@ class ScreenMetadataBase extends Component{
 						<div className="metadata-grid-items">
 							
 							<div 
-								className={this.state.activeMenuItem==2 ? 'item active' : 'item'} 
+								className={this.state.activeMenuItem==2 ? 'items active' : 'items'} 
 								id="metadata-items-vectorLayer"
 							>
-								(vector layer)
+								<MetadataListLayerVector/>
 							</div>
 							
 							<div 
-								className={this.state.activeMenuItem==3 ? 'item active' : 'item'} 
+								className={this.state.activeMenuItem==3 ? 'items active' : 'items'} 
 								id="metadata-items-rasterLayer"
 							>
 								(raster layer)
