@@ -2,11 +2,12 @@ import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './PageMetadata.css';
 
+import Page from '../Page';
 import ScreenContainer from '../ScreenContainer';
 import ScreenMetadataBase from '../ScreenMetadataBase';
 
 @withStyles(styles)
-class PageMetadata extends Component {
+class PageMetadata extends Page {
 
 
   static contextTypes = {

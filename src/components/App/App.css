@@ -487,6 +487,43 @@ todo hex colours, button icons */
 
 /* ===== elements ===== */
 
+
+.puma-item, a.puma-item {
+	display: block;
+	border-radius: .25rem;
+	border: 2px solid #95A6C7;
+	background: #ABBAD8;
+	background: #B6BCC7;
+	margin-bottom: .875rem;
+	
+	padding: 0 .5rem;
+	color: #1452A2;
+}
+.puma-item span {
+	line-height: 1.875rem;
+}
+.puma-item:hover {
+	border-color: #4d8aff;
+}
+
+.puma-item.template, .puma-item.add {
+	background: transparent;
+}
+.puma-item.add {
+	border-style: dashed;
+	border-color: #9c9c9c;
+	color: #8e8e8e;
+}
+.puma-item.add:hover {
+	border-color: #4d8aff;
+	color: #797979;
+}
+.puma-item.selected {
+	border-color: #ffff00;
+	background: rgba(255, 255, 0, 0.2);
+}
+
+
 .selector {
 	
 }
