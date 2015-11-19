@@ -2,6 +2,9 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenContainer.css';
 import withStyles from '../../decorators/withStyles';
 
+const OPEN = 1;
+const CLOSED = 2;
+const RETRACTED = 3;
 
 @withStyles(styles)
 class ScreenContainer extends Component{
@@ -19,7 +22,7 @@ class ScreenContainer extends Component{
 			disabled: true
 		};
 	}
-	
+
 	render() {
     var classes = "screen " + this.props.classes;
     return (
@@ -50,6 +53,11 @@ class ScreenContainer extends Component{
     });
 
   }
+
+  setPosition(position){
+    console.log("Nastavuji se na ", position);
+  }
+
 }
 
 
