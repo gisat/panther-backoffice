@@ -6,12 +6,13 @@ import styles from './PageAnalyses.css';
 //import { Popup, Modal } from '../SEUI/modules';
 //import { Form, Fields, Field } from '../SEUI/collections';
 
+import Page from '../Page';
 import ScreenContainer from '../ScreenContainer';
 import ScreenAnalysesBase from '../ScreenAnalysesBase';
 import TestScreen from '../TestScreen';
 
 @withStyles(styles)
-class PageAnalyses extends Component {
+class PageAnalyses extends Page {
 
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
