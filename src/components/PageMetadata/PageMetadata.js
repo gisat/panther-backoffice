@@ -30,7 +30,7 @@ class PageMetadata extends Component {
 
 
   render() {
-    const title = 'Metadata structures';
+    const title = 'Dashboard';
     this.context.onSetTitle(title);
 
     var screenNodes = this.state.screens.map(function (screen) {
