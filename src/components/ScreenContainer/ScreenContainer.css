@@ -1,0 +1,34 @@
+.screen-controls {
+	
+	position: fixed;
+	top: .8rem;
+	/*top:50%;
+	transform: translateY(-50%);*/
+	z-index: 20;
+}
+.screen-controls, 
+.screen-controls .ui.basic.buttons {
+	width: 1.5rem;
+	border-radius: 0 .2rem .2rem 0;
+	
+	border-left:0;
+}
+.screen-controls .ui.vertical.buttons .button {
+	padding-left: .1rem;
+	border-left:0;
+}
+.screen-controls .ui.vertical.buttons .button:first-child {
+	border-radius: 0 .2rem 0 0;
+}
+.screen-controls .ui.vertical.buttons .button:last-child {
+	border-radius: 0 0 .2rem 0;
+}
+.screen-controls .ui.basic.icon.buttons .button, .screen-controls .ui.basic.icon.buttons {
+	border-color: rgba(82, 82, 82, 0.2)!important;
+	background: transparent!important;
+	color: rgba(82,82,82,0.6)!important;
+}
+
+.screen:first-child .screen-controls {
+	display: none;
+}

@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenContainer.css';
 import withStyles from '../../decorators/withStyles';
 
+import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
 @withStyles(styles)
 class ScreenContainer extends Component{
@@ -23,11 +24,20 @@ class ScreenContainer extends Component{
 	render() {
     var classes = "screen " + this.props.classes;
     return (
-      <div className={classes} id={this.props.key}><div>
-  			{/*this.props.component*/}
-				{React.cloneElement(this.props.component, { disabled: this.state.disabled })}
-				{/* apparently this is how we pass props to an unknown component */}
-      </div></div>
+      <div className={classes} id={this.props.key}>
+				<div>
+					<div className="screen-controls">
+						<Buttons basic icon vertical>
+							<IconButton name="chevron right" />
+							<IconButton name="remove" />
+						</Buttons>
+					</div>
+				
+					{/*this.props.component*/}
+					{React.cloneElement(this.props.component, { disabled: this.state.disabled })}
+					{/* apparently this is how we pass props to an unknown component */}
+				</div>
+			</div>
     );
   }
 
