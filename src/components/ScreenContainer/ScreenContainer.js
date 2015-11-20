@@ -26,13 +26,16 @@ class ScreenContainer extends Component{
     return (
       <div className={classes} id={this.props.key}>
 				<div>
-					<div className="screen-controls">
+					<div className="screen-controls top">
 						<Buttons basic icon vertical>
-							<IconButton name="chevron right" />
 							<IconButton name="remove" />
 						</Buttons>
 					</div>
-				
+					<div className="screen-controls middle">
+						<Buttons basic icon vertical>
+							<IconButton name="chevron right" />
+						</Buttons>
+					</div>
 					{/*this.props.component*/}
 					{React.cloneElement(this.props.component, { disabled: this.state.disabled })}
 					{/* apparently this is how we pass props to an unknown component */}
