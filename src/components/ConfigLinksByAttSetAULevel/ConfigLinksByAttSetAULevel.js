@@ -25,8 +25,8 @@ class ConfigLinksByAttSetAULevel extends Component{
 		
 		$(".rsc-btn-expand").click(function() {
       var parentElement = $(this).parent();
-			parentElement.toggleClass("expanded",500);
-			parentElement.prev().children(".rsc-row").toggleClass("expanded",500);
+			parentElement.toggleClass("expanded");
+			parentElement.prev().children(".rsc-row").toggleClass("expanded");
     });
 		
 	}

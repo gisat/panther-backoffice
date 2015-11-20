@@ -5,6 +5,7 @@ import styles from './PageMetadata.css';
 import Page from '../Page';
 import ScreenContainer from '../ScreenContainer';
 import ScreenMetadataBase from '../ScreenMetadataBase';
+import ScreenMetadataLayerVector from '../ScreenMetadataLayerVector';
 
 @withStyles(styles)
 class PageMetadata extends Page {
@@ -24,6 +25,11 @@ class PageMetadata extends Page {
           key: "screen1",
           classes: "open",
           component: <ScreenMetadataBase/>
+        },
+				{
+          key: "screen2",
+          classes: "open limited lim40",
+          component: <ScreenMetadataLayerVector/>
         }
       ]
     };

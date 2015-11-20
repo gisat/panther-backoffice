@@ -74,7 +74,7 @@ class MetadataListLayerVector extends Component{
 		return (
       <div>
 				
-				{itemsInsert}
+				
 					
 				<a 
 					className="puma-item add"
@@ -88,6 +88,7 @@ class MetadataListLayerVector extends Component{
 					<span><Icon name="plus"/></span>
 				</a>
 				
+				{itemsInsert}
 				
 			</div>
     );
