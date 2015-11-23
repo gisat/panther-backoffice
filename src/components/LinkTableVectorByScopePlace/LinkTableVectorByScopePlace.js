@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import styles from './LinkTableVectorByScopePlace.css';
 import withStyles from '../../decorators/withStyles';
 
+import UIScreenButton from '../UIScreenButton';
+
 import { Segment, Button, Input, Header, IconButton, Icon, PopupButton } from '../SEUI/elements';
 import { Popup, Modal } from '../SEUI/modules';
 import { Form, Fields, Field, Table } from '../SEUI/collections';
