@@ -5,3 +5,9 @@
 #LinkTableRasterByScopePlace tbody tr td:nth-child(2) {
 	width:8rem;
 }
+#LinkTableRasterByScopePlace tbody tr td {
+	border-left:0;
+}
+#LinkTableRasterByScopePlace tbody tr:not(:first-child) td {
+	border-top:.25rem solid #888;
+}
