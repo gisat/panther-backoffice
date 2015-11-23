@@ -29,11 +29,11 @@
 .ui.table.LinkTable td.selectable {
 	height: 100%;
 	position: relative;
-	padding-right: 1.3rem;
 }
 .ui.table.LinkTable tbody tr td.selectable > a:not(.ui) {
 	margin: -2em 0;
   padding: 2.71428571em .71428571em;
+	padding-right: 1.3rem;
 }
 
 .ui.table.LinkTable td.selectable.positive {
@@ -73,6 +73,7 @@ td.selectable::after {
 	right:.3rem;
 	top:50%;
 	transform: translateY(-50%);
+	pointer-events: none;
 	
 	color: rgba(40,40,40,.2);
 }
