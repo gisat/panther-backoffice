@@ -2,13 +2,32 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenPlacesBase.css';
 import withStyles from '../../decorators/withStyles';
 
+import UIScreenButton from '../UIScreenButton';
+
 import LinkTableByScopePlace from '../LinkTableByScopePlace';
 import LinkTableVectorByScopePlace from '../LinkTableVectorByScopePlace';
 import SelectorPlace from '../SelectorPlace';
 
+
 @withStyles(styles)
 class ScreenPlacesBase extends Component{
-  render() {
+  
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			activeScreenOpener: null
+		};
+		
+	}
+	
+	openScreenScopeExample(openerKey,scopeKey,e) {
+		this.setState({
+			activeScreenOpener: openerKey
+		});
+	}
+	
+	render() {
     
 		var isParentScreenDisabled = "NA";
 		if(this.props.disabled){
@@ -24,7 +43,16 @@ class ScreenPlacesBase extends Component{
 					<SelectorPlace/>
 				</div></div>
 				<div className="screen-content"><div>
-					<h1>Ho Chi Minh City</h1>
+					<h1 className="fit-after">Ho Chi Minh City</h1>
+					<div className="heading-sub">
+						Scope:&nbsp;
+						<UIScreenButton
+							onClick={this.openScreenScopeExample.bind(this,1,1)}
+							className={this.state.activeScreenOpener==1 ? 'selected' : ''}
+						>
+							Local
+						</UIScreenButton>
+					</div>
 			{/* <p>disable pass test: <b>{isParentScreenDisabled}</b></p> */}
 					<h2>Attribute sets</h2>
 					<LinkTableByScopePlace/>

@@ -309,7 +309,11 @@ class LinkTableVectorByScopePlace extends Component {
 				{vectorLayersInsert}
 			</tbody>
 		</Table>
-
+		
+		<div className="note">
+			Set available layers in <UIScreenButton>scope settings</UIScreenButton>
+		</div>
+		
 		</div>
     );
   }
