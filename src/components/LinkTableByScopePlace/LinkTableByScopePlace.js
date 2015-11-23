@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import styles from './LinkTableByScopePlace.css';
 import withStyles from '../../decorators/withStyles';
 
+import UIScreenButton from '../UIScreenButton';
+
 import { Segment, Button, Input, Header, IconButton, Icon, PopupButton } from '../SEUI/elements';
 import { Popup, Modal } from '../SEUI/modules';
 import { Form, Fields, Field, Table } from '../SEUI/collections';
@@ -424,6 +426,10 @@ class LinkTableByScopePlace extends Component {
 				{auAttSetsInsert}
 			</tbody>
 		</Table>
+		
+		<div className="note">
+			Set available attribute sets & AU levels in <UIScreenButton>scope settings</UIScreenButton>
+		</div>
 
 		</div>
     );

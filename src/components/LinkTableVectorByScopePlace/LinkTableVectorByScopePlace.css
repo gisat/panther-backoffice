@@ -1,12 +1,14 @@
+#LinkTableVectorByScopePlace {
+	width: auto;
+	min-width: 40rem;
+}
 #LinkTableVectorByScopePlace tbody tr td {
 	/*border-top:.4375rem solid #bababa;*/
 	border-left:0;
 }
-#LinkTableVectorByScopePlace tbody tr td:not(:first-child) {
-	box-shadow: inset 1px 0 0 0 rgba(34,36,38,.1);
-}
 #LinkTableVectorByScopePlace tbody tr:not(:first-child) td {
-	border-top:.4375rem solid #888;
+/*	border-top:.4375rem solid #888;*/
+	border-top:.25rem solid #888;
 }
 
 #LinkTableVectorByScopePlace tbody tr td.header:not(:first-child) {

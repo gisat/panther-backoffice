@@ -102,6 +102,10 @@ a, a:link, a i {
 h1, h2, h3, h4, h5 {
 
 }
+h1.fit-after, h2.fit-after, 
+h3.fit-after, h4.fit-after {
+	margin-bottom:0;
+}
 h1, h1 span {
   font-size:3rem;
   line-height: 3.75rem;
@@ -128,6 +132,10 @@ h3, h3 span {
 label.container {
 	  display: block;
     margin-bottom: .9315rem;
+}
+
+.heading-sub {
+	margin-bottom: 4rem;
 }
 
 /* ===== layout ===== */
@@ -498,12 +506,26 @@ todo hex colours, button icons */
 	
 	padding: 0 .5rem;
 	color: #1452A2;
+	
+	position: relative;
 }
 .puma-item span {
 	line-height: 1.875rem;
 }
 .puma-item:hover {
 	border-color: #4d8aff;
+}
+
+.puma-item::after {
+	content: "\f101";
+	font-family: Icons;
+	font-size: 1.25rem;
+	display: block;
+	position: absolute;
+	right:.4rem;
+	top:0;
+/*	color: #6B90BF;*/
+	color: #859FBF;
 }
 
 .puma-item.template, .puma-item.add {
@@ -518,9 +540,73 @@ todo hex colours, button icons */
 	border-color: #4d8aff;
 	color: #797979;
 }
+.puma-item.add::after {
+	color: #a2a2a2;
+}
+
 .puma-item.selected {
 	border-color: #ffff00;
 	background: rgba(255, 255, 0, 0.2);
+}
+@keyframes puma-item-selected {
+	0% { right: .4rem; }
+	50% { right: .2rem; }
+	100% { right: .4rem; }
+}
+.puma-item.selected::after {
+	color: #ff0;
+	animation-name: puma-item-selected;
+	animation-duration: 1s;
+	animation-iteration-count: 3;
+}
+
+
+.note {
+	color:#888;
+}
+
+
+.ui.labeled.icon.button.puma-screen-button > .icon, 
+.ui.labeled.icon.buttons.puma-screen-button > .button > .icon {
+	background: transparent;
+	font-size: 1.25rem;
+	width: 1.5rem;
+	color: rgba(0,0,0,.4);
+}
+.ui[class*="right labeled"].icon.button.puma-screen-button {
+	padding-right: 2.5rem!important;
+	padding-left: 1rem!important;
+	transition: all .2s ease-in-out;
+}
+
+.ui.basic.button.puma-screen-button.selected {
+	/*border-color: #ffff00!important;*/
+	background: rgba(255, 255, 0, 0.2)!important;
+	box-shadow: 0 0 0 1px #ff0 inset;
+}
+@keyframes puma-screen-button-selected {
+	0% { right: 0; }
+	50% { right: .2rem; }
+	100% { right: 0; }
+}
+.ui.labeled.icon.button.puma-screen-button.selected > .icon {
+	color: #ff0;
+	animation-name: puma-screen-button-selected;
+	animation-duration: 1s;
+	animation-iteration-count: 3;
+}
+
+
+.note > .ui.basic.button,
+.note > .ui.basic.buttons .button,
+.note > .ui.basic.buttons,
+.note > .ui.basic.icon.buttons .button,
+.note > .ui.basic.icon.buttons{
+	box-shadow: 0 0 0 1px rgba(34,36,38,.08) inset;
+}
+.note .button span,
+.note .ui.labeled.icon.button.puma-screen-button .icon {
+	color:#888;
 }
 
 
