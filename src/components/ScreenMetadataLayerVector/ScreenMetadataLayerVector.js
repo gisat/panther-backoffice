@@ -11,7 +11,7 @@ class ScreenMetadataLayerVector extends Component{
     return (
       <div>
 				<div className="screen-setter"><div>
-					<h2>Vector layer settings</h2>
+					<h2>Vector layer template</h2>
 					<SelectorMetadataLayerVector />
 				</div></div>
 				<div className="screen-content"><div>
