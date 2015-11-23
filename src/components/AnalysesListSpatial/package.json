@@ -1,0 +1,6 @@
+{
+  "name": "AnalysesListSpatial",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./AnalysesListSpatial.js"
+}

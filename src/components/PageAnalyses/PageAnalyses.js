@@ -2,24 +2,19 @@ import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './PageAnalyses.css';
 
-//import { Segment, Button, Input, Header, IconButton } from '../SEUI/elements';
-//import { Popup, Modal } from '../SEUI/modules';
-//import { Form, Fields, Field } from '../SEUI/collections';
-
 import Page from '../Page';
 import ScreenContainer from '../ScreenContainer';
 import ScreenAnalysesBase from '../ScreenAnalysesBase';
-import TestScreen from '../TestScreen';
+import ScreenAnalysisSpatial from '../ScreenAnalysisSpatial';
+
 
 @withStyles(styles)
 class PageAnalyses extends Page {
 
-  static contextTypes = {
+  
+	static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
   };
-
-
-
 
   constructor(props) {
     super(props);
@@ -34,24 +29,13 @@ class PageAnalyses extends Page {
         },
         {
           key: "screen2",
-          classes: "retracted",
-          component: <TestScreen/>
+          classes: "retracted limited lim40",
+          component: <ScreenAnalysisSpatial/>
         }
       ]
     };
   }
 
-  onMouseEnter() {
-    this.setState({
-      show: true
-    });
-  }
-
-  onMouseLeave() {
-    this.setState({
-      show: false
-    });
-  }
 
   render() {
     const title = 'Analyses';
@@ -65,41 +49,11 @@ class PageAnalyses extends Page {
 
 
     return (
-
-
       <div id="content">
         <div className="content" id={this.props.key}>
           {screenNodes}
         </div>
       </div>
-
-
-      //<div className="ContactPage">
-      //  <div className="ContactPage-container">
-      //    <h1>{title}</h1>
-      //    <p>...</p>
-      //    <Header dividing tag="h1" key="popokatepetl">
-      //      Header
-      //    </Header>
-      //    <IconButton
-      //      name="heart"
-      //      onMouseEnter={this.onMouseEnter.bind(this)}
-      //      onMouseLeave={this.onMouseLeave.bind(this)}
-      //    >
-      //      It's alive!
-      //      <Popup active={this.state.show}>Very much so.</Popup>
-      //    </IconButton>
-      //    <IconButton
-      //      name="idea"
-      //      onMouseEnter={this.onMouseEnter.bind(this)}
-      //      onMouseLeave={this.onMouseLeave.bind(this)}
-      //    >
-      //      I know!
-      //      <Popup active={this.state.show}>I am clever like that.</Popup>
-      //    </IconButton>
-      //  </div>
-      //</div>
-
     );
   }
 
