@@ -553,6 +553,18 @@ todo hex colours, button icons */
 }
 
 
+.ui.labeled.icon.button.puma-screen-button > .icon, 
+.ui.labeled.icon.buttons.puma-screen-button > .button > .icon {
+	background: transparent;
+	font-size: 1.25rem;
+	width: 1.5rem;
+	color: rgba(0,0,0,.4);
+}
+.ui[class*="right labeled"].icon.button.puma-screen-button {
+    padding-right: 2.5rem!important;
+    padding-left: 1rem!important;
+}
+
 
 
 .selector {

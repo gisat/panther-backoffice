@@ -98,7 +98,7 @@ class ConfigMetadataLayerVector extends Component{
 						</label>
 					</div>
 					<div>
-						<Buttons basic icon>
+						<Buttons icon>
 							<IconButton name="write" />
 							<IconButton name="plus" />
 						</Buttons>
@@ -125,7 +125,7 @@ class ConfigMetadataLayerVector extends Component{
 						</label>
 					</div>
 					<div>
-						<Buttons basic icon>
+						<Buttons icon>
 							<IconButton name="write" />
 							<IconButton name="plus" />
 						</Buttons>
@@ -151,7 +151,7 @@ class ConfigMetadataLayerVector extends Component{
 						</label>
 					</div>
 					<div>
-						<Buttons basic icon>
+						<Buttons icon>
 							<IconButton name="write" />
 							<IconButton name="plus" />
 						</Buttons>
@@ -175,7 +175,7 @@ class ConfigMetadataLayerVector extends Component{
 						</label>
 					</div>
 					<div>
-						<Buttons basic icon>
+						<Buttons icon>
 							<IconButton name="write" />
 							<IconButton name="plus" />
 						</Buttons>

@@ -131,23 +131,69 @@ td.selectable.focus::after {
 	padding: .625rem;
 }
 
+
+.ui.buttons {
+	box-shadow: none;
+	border: 1px solid #222426;
+	border: 1px solid rgba(34,36,38,.15);
+	border-radius: .28571429rem;
+}
+.ui.buttons .button {
+	border-radius: 0;
+	border-left: 1px solid rgba(34,36,38,.15);
+	box-shadow: none;
+}
+/*
+.ui.buttons .button:first-child {
+	border-left: none;
+	margin-left: 0;
+	border-top-left-radius: .28571429rem;
+	border-bottom-left-radius: .28571429rem;
+}
+*/
+
+.ui.button,
+.ui.buttons .button,
+.ui.buttons,
+.ui.icon.buttons .button,
+.ui.icon.buttons{
+	border-color:#999;
+	background: #f1f1f1;
+}
+
+
 .ui.basic.button,
 .ui.basic.buttons .button,
 .ui.basic.buttons,
 .ui.basic.icon.buttons .button,
 .ui.basic.icon.buttons{
-	border-color:#999!important;
-	background: #f1f1f1!important;
+	border-color:rgba(59, 59, 59, 0.29)!important;
+	background: transparent!important;
 }
+.ui.basic.button:focus, 
+.ui.basic.button:hover, 
+.ui.basic.buttons .button:focus, 
+.ui.basic.buttons .button:hover {
+    background: rgba(255, 255, 255, 0.1)!important;
+}
+
 
 .button:hover, .button:focus {
 	box-shadow: 0 0 .3rem .15rem rgba(4, 110, 255, 0.6);
 }
 
+/*
 .ui.basic.button:focus, 
 .ui.basic.button:hover, 
 .ui.basic.buttons .button:focus, 
 .ui.basic.buttons .button:hover {
+	background: #e0ecff;
+}
+*/
+.ui.button:focus, 
+.ui.button:hover, 
+.ui.buttons .button:focus, 
+.ui.buttons .button:hover {
 	background: #e0ecff;
 }
 
