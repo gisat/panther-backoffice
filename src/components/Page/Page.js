@@ -6,6 +6,8 @@ import styles from './Page.css';
 @withStyles(styles)
 class Page extends Component {
 
+
+
 }
 
 export default Page;

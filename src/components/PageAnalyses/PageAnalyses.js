@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './PageAnalyses.css';
+import _ from 'underscore';
 
 //import { Segment, Button, Input, Header, IconButton } from '../SEUI/elements';
 //import { Popup, Modal } from '../SEUI/modules';
@@ -30,38 +31,55 @@ class PageAnalyses extends Page {
         {
           key: "screen1",
           classes: "open",
+          disabled: false,
           component: <ScreenAnalysesBase/>
         },
         {
           key: "screen2",
           classes: "retracted",
+          disabled: true,
           component: <TestScreen/>
         }
       ]
     };
   }
 
-  onMouseEnter() {
-    this.setState({
-      show: true
-    });
-  }
 
-  onMouseLeave() {
-    this.setState({
-      show: false
+
+  closeScreen(screenKey) {
+
+    var newScreens = this.state.screens;
+    newScreens.map(function(obj){
+      var newObj = obj;
+      if(obj.key == screenKey){
+        newObj.classes = "closed";
+      }
+      return newObj;
     });
+
+    console.log("newScreens: ", newScreens);
+
+
+    this.setState({
+      screens: newScreens
+    });
+
+    //s[0].classes = "closed";
+    //console.log("s: ", s);
   }
 
   render() {
     const title = 'Analyses';
     this.context.onSetTitle(title);
 
+    var me = this;
     var screenNodes = this.state.screens.map(function (screen) {
+      console.log("screen.classes v Page...: ",screen.classes);
       return (
-        <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes}/>
+        <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes} closeme={me.closeScreen.bind(me, screen.key)}/>
       );
     });
+
 
 
     return (
@@ -72,34 +90,6 @@ class PageAnalyses extends Page {
           {screenNodes}
         </div>
       </div>
-
-
-      //<div className="ContactPage">
-      //  <div className="ContactPage-container">
-      //    <h1>{title}</h1>
-      //    <p>...</p>
-      //    <Header dividing tag="h1" key="popokatepetl">
-      //      Header
-      //    </Header>
-      //    <IconButton
-      //      name="heart"
-      //      onMouseEnter={this.onMouseEnter.bind(this)}
-      //      onMouseLeave={this.onMouseLeave.bind(this)}
-      //    >
-      //      It's alive!
-      //      <Popup active={this.state.show}>Very much so.</Popup>
-      //    </IconButton>
-      //    <IconButton
-      //      name="idea"
-      //      onMouseEnter={this.onMouseEnter.bind(this)}
-      //      onMouseLeave={this.onMouseLeave.bind(this)}
-      //    >
-      //      I know!
-      //      <Popup active={this.state.show}>I am clever like that.</Popup>
-      //    </IconButton>
-      //  </div>
-      //</div>
-
     );
   }
 
