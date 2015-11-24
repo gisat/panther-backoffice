@@ -3,24 +3,19 @@ import withStyles from '../../decorators/withStyles';
 import styles from './PageAnalyses.css';
 import _ from 'underscore';
 
-//import { Segment, Button, Input, Header, IconButton } from '../SEUI/elements';
-//import { Popup, Modal } from '../SEUI/modules';
-//import { Form, Fields, Field } from '../SEUI/collections';
-
 import Page from '../Page';
 import ScreenContainer from '../ScreenContainer';
 import ScreenAnalysesBase from '../ScreenAnalysesBase';
-import TestScreen from '../TestScreen';
+import ScreenAnalysisSpatial from '../ScreenAnalysisSpatial';
+
 
 @withStyles(styles)
 class PageAnalyses extends Page {
 
-  static contextTypes = {
+
+	static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
   };
-
-
-
 
   constructor(props) {
     super(props);
@@ -36,9 +31,9 @@ class PageAnalyses extends Page {
         },
         {
           key: "screen2",
-          classes: "retracted",
+          classes: "retracted constant const40",
           disabled: true,
-          component: <TestScreen/>
+          component: <ScreenAnalysisSpatial/>
         }
       ]
     };
@@ -74,7 +69,6 @@ class PageAnalyses extends Page {
 
     var me = this;
     var screenNodes = this.state.screens.map(function (screen) {
-      console.log("screen.classes v Page...: ",screen.classes);
       return (
         <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes} closeme={me.closeScreen.bind(me, screen.key)}/>
       );
@@ -83,8 +77,6 @@ class PageAnalyses extends Page {
 
 
     return (
-
-
       <div id="content">
         <div className="content" id={this.props.key}>
           {screenNodes}

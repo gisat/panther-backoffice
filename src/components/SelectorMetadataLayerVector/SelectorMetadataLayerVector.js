@@ -42,7 +42,6 @@ class SelectorMetadataLayerVector extends Component{
         <div className="selector">
 					<div className="input">
 						<label className="container">
-							Template
 							<Select 
 								onChange={this.onChangeLayerVector.bind(this)}
 								options={LAYERTEMPLATES}

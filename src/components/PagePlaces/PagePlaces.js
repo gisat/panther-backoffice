@@ -28,7 +28,7 @@ class PagePlaces extends Page {
         },
         {
           key: "screenLinksByAttSetAULevel",
-          classes: "open limited lim40",
+          classes: "open constant const40",
           component: <ScreenLinksByAttSetAULevel />
         }
       ]

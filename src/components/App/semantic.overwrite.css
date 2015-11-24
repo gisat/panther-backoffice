@@ -376,6 +376,14 @@ td.selectable.focus::after {
 .ui.form .error:focus::-moz-placeholder {
 	color: #efd6d6
 }
+
+.ui.input {
+	transition: all .5s ease-in-out;
+}
+.ui.input:hover, .ui.input:focus {
+	box-shadow: 0 0 .3rem .15rem rgba(4, 110, 255, 0.6);
+}
+
 /*
 .ui.form input:not([type]):focus,
 .ui.form input[type=text]:focus,

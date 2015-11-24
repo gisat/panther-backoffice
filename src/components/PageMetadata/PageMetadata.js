@@ -28,7 +28,7 @@ class PageMetadata extends Page {
         },
 				{
           key: "screen2",
-          classes: "open limited lim40",
+          classes: "open constant const40",
           component: <ScreenMetadataLayerVector/>
         }
       ]

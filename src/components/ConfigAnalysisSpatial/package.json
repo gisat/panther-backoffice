@@ -1,0 +1,6 @@
+{
+  "name": "ConfigAnalysisSpatial",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ConfigAnalysisSpatial.js"
+}
