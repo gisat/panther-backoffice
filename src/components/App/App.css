@@ -197,6 +197,15 @@ label.container {
 
   background-color: #bababa;
 }
+.screen-scroll {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top:0;
+	left:0;
+	bottom: 0;
+	right: 0;
+}
 .screen-setter {
 	border-bottom: 1px solid #aaa;
 	background: #ccc;
@@ -213,36 +222,36 @@ label.container {
 
 /* scrollbars
 todo hex colours, button icons */
-.screen::-webkit-scrollbar {
+.screen-scroll::-webkit-scrollbar {
   width: .9375rem;
 }
-.screen::-webkit-scrollbar-button {
+.screen-scroll::-webkit-scrollbar-button {
   height: .9375rem;
   background: rgba(0,0,0,.17);
 }
-.screen::-webkit-scrollbar-button:vertical:decrement {
+.screen-scroll::-webkit-scrollbar-button:vertical:decrement {
   /* up */
   background-image: url(./triangle-up.svg);
   background-size: contain;
 }
-.screen::-webkit-scrollbar-button:vertical:increment {
+.screen-scroll::-webkit-scrollbar-button:vertical:increment {
   /* down */
   background-image: url(./triangle-down.svg);
   background-size: contain;
 }
-.screen::-webkit-scrollbar-track {
+.screen-scroll::-webkit-scrollbar-track {
   background: rgba(0,0,0,.1);
 }
-.screen::-webkit-scrollbar-thumb {
+.screen-scroll::-webkit-scrollbar-thumb {
   background: rgba(0,0,0,.15);
 }
-.screen::-webkit-scrollbar-thumb:hover, .screen::-webkit-scrollbar-button:hover {
+.screen-scroll::-webkit-scrollbar-thumb:hover, .screen-scroll::-webkit-scrollbar-button:hover {
   background: rgba(60,30,0,.2);
 }
-.screen::-webkit-scrollbar-thumb:active, .screen::-webkit-scrollbar-button:active {
+.screen-scroll::-webkit-scrollbar-thumb:active, .screen-scroll::-webkit-scrollbar-button:active {
   background: rgba(40,35,20,.5);
 }
-.screen::-webkit-scrollbar-thumb:window-inactive {
+.screen-scroll::-webkit-scrollbar-thumb:window-inactive {
   background: rgba(0,0,0,.075);
 }
 
@@ -347,13 +356,16 @@ todo hex colours, button icons */
 
     flex-grow: 0.0000001;
   }
+	.screen-scroll {
+		overflow: hidden;
+	}
 	.screen.retracted {
 		width: 5rem;
 		/*flex-grow: 0;*/
 		flex-grow: 0.0000001;
 	}
 
-	.screen > div {
+	.screen-scroll > div {
 		min-width: 50rem;
 	}
 	.screen-content > div,
@@ -368,15 +380,18 @@ todo hex colours, button icons */
     /*margin-right: .675rem;*/
     /* move scrollbar from shadow - unused with custom scrollbars */
   }
-  .screen.open {
+  .screen.open .screen-scroll {
     overflow-y: auto;
     /* overflow-x blocked (only here, at large screen sizes), only hides elements that count on it (.beside) */
   }
-  .screen:last-child {
+  /*cancel move scrollbar  - unused! */
+/*
+	.screen:last-child {
     margin-right: 0;
-    /* cancel move scrollbar  - unused! */
+     
   }
 	
+*/
 	
   .screen.const30 {
     max-width: 31rem;
@@ -385,9 +400,6 @@ todo hex colours, button icons */
 	.screen.const30.open,
 	.screen.const30.opening {
 		width: 31rem;
-  }
-  .screen.const30 .screen > div {
-    min-width: 30rem;
   }
 	.screen.const30 .screen-content > div,
 	.screen.const30 .screen-setter > div {
@@ -402,9 +414,6 @@ todo hex colours, button icons */
 	.screen.const40.opening  {
 		width: 41rem;
   }
-  .screen.const40 .screen > div {
-    min-width: 40rem;
-  }
 	.screen.const40 .screen-content > div,
 	.screen.const40 .screen-setter > div {
     width: 40rem;
@@ -418,9 +427,6 @@ todo hex colours, button icons */
 	.screen.const50.opening  {
 		width: 51rem;
   }
-  .screen.const50 .screen > div {
-    min-width: 50rem;
-  }
 	.screen.const50 .screen-content > div,
 	.screen.const50 .screen-setter > div {
     width: 50rem;
@@ -431,9 +437,6 @@ todo hex colours, button icons */
   .screen.limited.lim30 {
     max-width: 31rem;
   }
-  .screen.limited.lim30 .screen > div {
-    min-width: 30rem;
-  }
 	.screen.limited.lim30 .screen-content > div,
 	.screen.limited.lim30 .screen-setter > div {
     width: 30rem;
@@ -441,18 +444,12 @@ todo hex colours, button icons */
 	.screen.limited.lim40 {
     max-width: 41rem;
   }
-  .screen.limited.lim40 .screen > div {
-    min-width: 40rem;
-  }
 	.screen.limited.lim40 .screen-content > div,
 	.screen.limited.lim40 .screen-setter > div {
     width: 40rem;
   }
 	.screen.limited.lim50 {
     max-width: 51rem;
-  }
-  .screen.limited.lim50 .screen > div {
-    min-width: 50rem;
   }
 	.screen.limited.lim50 .screen-content > div,
 	.screen.limited.lim50 .screen-setter > div {
@@ -469,24 +466,32 @@ todo hex colours, button icons */
   }
 */
   /* todo elements inside */
-  /*.screen.retracted > div {
-        position: relative;
-    }
-    .screen.retracted > div::after {
-        content: "";
-        display: block;
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom:0;
-        right: 0;
-        background: rgba(0,0,0,.4);
-        transition: all .3s ease-in-out;
-    }
-    .screen.retracted:hover > div::after {
-        background: rgba(0,0,0,.33);
-    }*/
+  
+	.screen::after {
+		content: "";
+		display: block;
+		width: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background: transparent;
+		pointer-events: none;
+		transition: all .3s ease-in-out;
+	}
+	.screen.retracted::after,
+	.screen.closed::after {
+		/*background: rgba(100,100,100,.5);
+		background: rgba(130,130,130,.5);*/
+		background: rgba(120,120,120,.4);
+		pointer-events: all;
+	}
+	.screen.retracted:hover::after {
+/*			background: rgba(100,100,100,.33);
+		background: rgba(130,130,130,.33);*/
+		background: rgba(120,120,120,.3);
+	}
   .screen.closed {
     width:0;
   }
