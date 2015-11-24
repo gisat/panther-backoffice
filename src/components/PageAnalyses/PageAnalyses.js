@@ -29,7 +29,7 @@ class PageAnalyses extends Page {
         },
         {
           key: "screen2",
-          classes: "retracted limited lim40",
+          classes: "retracted constant const40",
           component: <ScreenAnalysisSpatial/>
         }
       ]

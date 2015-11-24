@@ -47,7 +47,7 @@ class ScreenContainer extends Component{
   componentDidMount() {
     $(".screen").click(function() {
       if ( $(this).hasClass("retracted") ) {
-        if ( !$(this).hasClass("limited") ) {
+        if ( !$(this).hasClass("limited") && !$(this).hasClass("constant") ) {
           /* todo check if there is enough space */
           $(this).siblings(".screen.open").removeClass("open").addClass("retracted");
         }

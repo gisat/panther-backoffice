@@ -337,7 +337,7 @@ todo hex colours, button icons */
 
   .screen {
     position: relative;
-    width: 5rem;
+    /*width: 5rem;*/
     overflow: hidden;
 
     box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.6);
@@ -347,6 +347,10 @@ todo hex colours, button icons */
 
     flex-grow: 0.0000001;
   }
+	.screen.retracted {
+		width: 5rem;
+		flex-grow: 0;
+	}
 
 	.screen > div {
 		min-width: 50rem;
@@ -356,7 +360,73 @@ todo hex colours, button icons */
     width: 50rem;
   }
 
+	
+	  /* .screen behaviour */
+  .screen.open, .screen.opening {
+    flex-grow: 1;
+    /*margin-right: .675rem;*/
+    /* move scrollbar from shadow - unused with custom scrollbars */
+  }
+  .screen.open {
+    overflow-y: auto;
+    /* overflow-x blocked (only here, at large screen sizes), only hides elements that count on it (.beside) */
+  }
+  .screen:last-child {
+    margin-right: 0;
+    /* cancel move scrollbar  - unused! */
+  }
+	
+	
+  .screen.const30 {
+    max-width: 31rem;
+		flex-grow: 0;
+  }
+	.screen.const30.open,
+	.screen.const30.opening {
+		width: 31rem;
+  }
+  .screen.const30 .screen > div {
+    min-width: 30rem;
+  }
+	.screen.const30 .screen-content > div,
+	.screen.const30 .screen-setter > div {
+    width: 30rem;
+  }
+	
+	.screen.const40 {
+    max-width: 41rem;
+		flex-grow: 0;
+  }
+	.screen.const40.open,
+	.screen.const40.opening  {
+		width: 41rem;
+  }
+  .screen.const40 .screen > div {
+    min-width: 40rem;
+  }
+	.screen.const40 .screen-content > div,
+	.screen.const40 .screen-setter > div {
+    width: 40rem;
+  }
+	
+	.screen.const50 {
+    max-width: 51rem;
+		flex-grow: 0;
+  }
+	.screen.const50.open,
+	.screen.const50.opening  {
+		width: 51rem;
+  }
+  .screen.const50 .screen > div {
+    min-width: 50rem;
+  }
+	.screen.const50 .screen-content > div,
+	.screen.const50 .screen-setter > div {
+    width: 50rem;
+  }
+	
 
+	/* we'll see if it's any use */
   .screen.limited.lim30 {
     max-width: 31rem;
   }
@@ -387,29 +457,16 @@ todo hex colours, button icons */
 	.screen.limited.lim50 .screen-setter > div {
     width: 50rem;
   }
-	
 
 
-  /* .screen behaviour */
-  .screen.open, .screen.opening {
-    flex-grow: 1;
-    /*margin-right: .675rem;*/
-    /* move scrollbar from shadow - unused with custom scrollbars */
-  }
-  .screen.open {
-    overflow-y: auto;
-    /* overflow-x blocked (only here, at large screen sizes), only hides elements that count on it (.beside) */
-  }
-  .screen:last-child {
-    margin-right: 0;
-    /* cancel move scrollbar  - unused! */
-  }
+/*
   .screen.retracted {
     background-color: #9f9f9f;
   }
   .screen.retracted:hover {
     background-color: #a8a8a8;
   }
+*/
   /* todo elements inside */
   /*.screen.retracted > div {
         position: relative;
