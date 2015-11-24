@@ -337,7 +337,7 @@ todo hex colours, button icons */
 
   .screen {
     position: relative;
-    /*width: 5rem;*/
+    width: 5rem;
     overflow: hidden;
 
     box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.6);
@@ -349,7 +349,8 @@ todo hex colours, button icons */
   }
 	.screen.retracted {
 		width: 5rem;
-		flex-grow: 0;
+		/*flex-grow: 0;*/
+		flex-grow: 0.0000001;
 	}
 
 	.screen > div {
@@ -791,7 +792,8 @@ todo hex colours, button icons */
 	transition: all .2s ease-in-out;
 }
 .rsc-btn-expand b::after {
-	content: "\f0d7";
+	/*content: "\f0d7";*/
+	content: "\f107";
 	font-family: Icons;
 	font-size: 1.25rem;
 
