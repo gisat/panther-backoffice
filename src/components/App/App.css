@@ -138,6 +138,10 @@ label.container {
 	margin-bottom: 4rem;
 }
 
+.isvg {
+	display: inline-block;
+}
+
 /* ===== layout ===== */
 
 #menu {
@@ -171,8 +175,16 @@ label.container {
 #menu a:focus {
   color:#fff;
 }
+
 #menu a .line {
-  transition:  fill .3s ease-out;
+  fill:#999;
+	transition:  fill .3s ease-out;
+}
+#menu a .first {
+	fill:#222;
+}
+#menu a .second {
+	fill:#354460;
 }
 #menu a:hover .line, #menu a:focus .line {
   fill:#ddd;
@@ -180,6 +192,7 @@ label.container {
 #menu a:hover .second, #menu a:focus .second {
   fill:#33447e;
 }
+
 #menu a span {
   display: inline-block;
   font-size: 1.0625rem;
