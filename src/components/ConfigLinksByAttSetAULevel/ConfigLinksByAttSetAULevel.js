@@ -2,7 +2,10 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ConfigLinksByAttSetAULevel.css';
 import withStyles from '../../decorators/withStyles';
 
-import { Icon } from '../SEUI/elements';
+import UISVG from '../UISVG';
+import UIScreenButton from '../UIScreenButton';
+
+import { Icon, IconButton } from '../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../SEUI/modules';
 import { Table } from '../SEUI/collections';
 import Select from 'react-select';
@@ -40,7 +43,8 @@ class ConfigLinksByAttSetAULevel extends Component{
 				<div className="row-select-config">
 					<CheckboxFields type="grouped" radio name="rsc-asaul-623-2-1">
 						<Checkbox key="asaul-data-42" className="rsc-row active expandable">
-							Data layer table
+							<UISVG src='icon-datalayers.isvg' className="positive" />
+							puma_hcmc_lulc_status_2000
 						</Checkbox>
 						<div className="rsc-expand ">
 							<a href="#" className="rsc-btn-expand">configure<b></b></a>
@@ -163,20 +167,35 @@ class ConfigLinksByAttSetAULevel extends Component{
 							</div></div>
 						</div>
 						<Checkbox key="asaul-data-841" className="rsc-row">
-							Analysis output: Status aggregated
+							<UISVG src='icon-analyses.isvg' className="positive" />
+							Status aggregated
 						</Checkbox>
 					</CheckboxFields>	
 				</div>
 				
-							
-							
-							
+				<div className="rsc-controls">
+					<IconButton name="plus" basic>
+						Add data layer source
+					</IconButton>
+					<UIScreenButton basic>
+						<Icon name="plus" />
+						New analysis
+					</UIScreenButton>
+					<IconButton name="check" basic color="blue">
+						Save
+					</IconButton>
+				</div>
+				
+				
+				
+				
 				<h3 className="rsc-header">2010</h3>
 				{/* todo -> component */}
 				<div className="row-select-config">
 					<CheckboxFields type="grouped" radio name="rsc-asaul-623-2-1">
 						<Checkbox key="asaul-data-42" className="rsc-row  expandable">
-							Data layer table
+							<UISVG src='icon-datalayers.isvg' className="positive" />
+							puma_hcmc_lulc_status_2010
 						</Checkbox>
 						<div className="rsc-expand ">
 							<a href="#" className="rsc-btn-expand">configure<b></b></a>
@@ -191,7 +210,7 @@ class ConfigLinksByAttSetAULevel extends Component{
 										valueKey="key" 
 										labelKey="key" 
 										//inputProps={selectInputProps} 
-										value="geonode:hcmc_b3_gadm_adm"
+										value="geonode:puma_hcmc_lulc_status_2010"
 									/>
 								</label>
 										
@@ -299,19 +318,31 @@ class ConfigLinksByAttSetAULevel extends Component{
 							</div></div>
 						</div>
 						<Checkbox key="asaul-data-841" className="rsc-row active">
-							Analysis output: Status aggregated
+							<UISVG src='icon-analyses.isvg' className="positive" />
+							Status aggregated
 						</Checkbox>
 						<Checkbox key="asaul-data-1250" className="rsc-row">
-							Analysis output: Status aggregated V2
+							<UISVG src='icon-analyses.isvg' className="positive" />
+							Status aggregated V2
 						</Checkbox>
 					</CheckboxFields>	
 				</div>
-							
-							
-							
-							
-
-						
+				
+				<div className="rsc-controls">
+					<IconButton name="plus" basic>
+						Add data layer source
+					</IconButton>
+					<UIScreenButton basic>
+						<Icon name="plus" />
+						New analysis
+					</UIScreenButton>
+					<IconButton name="check" basic color="blue">
+						Save
+					</IconButton>
+				</div>
+				
+				
+				
       </div>
     );
 

@@ -141,6 +141,16 @@ label.container {
 .isvg {
 	display: inline-block;
 }
+.isvg.positive .line {
+  fill:#505050;
+}
+.isvg.positive .first {
+	fill:#bbb;
+}
+.isvg.positive .second {
+/*	fill:#7d9ad0;*/
+	fill:#95a5c3;
+}
 
 /* ===== layout ===== */
 
@@ -830,7 +840,7 @@ todo hex colours, button icons */
 
 .rsc-row > * {
 	height:3.75rem;
-	line-height: 3.75rem;
+	line-height: 3.6875rem;
 }
 .rsc-row.ui.radio.checkbox label {
 	font-size:1.125rem;
@@ -842,8 +852,15 @@ todo hex colours, button icons */
 .rsc-row.ui.radio.checkbox label:before, 
 .rsc-row.ui.radio.checkbox label:after, 
 .rsc-row.ui.radio.checkbox input {
-	top:calc(50% - 7.5px);
+	top:calc(50% - 6.5px);
 	left:.625rem;
+}
+
+.rsc-row .isvg svg {
+	vertical-align: middle;
+	width: 2.5rem;
+	height: 2.5rem;
+	margin-right: .5rem;
 }
 
 .rsc-btn-expand  {
@@ -908,6 +925,12 @@ todo hex colours, button icons */
 }
 .rsc-expand .ui.table td:not(.header) {
 	background: #ccc;
+}
+
+.rsc-controls {
+	margin-top: 1rem;
+/*	margin-left: .1rem;*/
+	text-align: right;
 }
 
 /* ==== development === */
