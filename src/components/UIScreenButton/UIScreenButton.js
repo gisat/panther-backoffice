@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 
-import { IconButton } from '../SEUI/elements';
+import { Icon, Button } from '../SEUI/elements';
 
 
 class UIScreenButton extends Component{
@@ -18,15 +18,17 @@ class UIScreenButton extends Component{
 	render() {
     var { className, ...other } = this.props;
     return (
-      <IconButton
+      <Button
 				{...other}
 				basic 
-				labeled="right" 
-				name="angle double right" 
-				className={classNames("puma-screen-button icon",className)}
+				className={classNames("puma-screen-button",className)}
 			>
 				{this.props.children}
-			</IconButton>
+				<Icon
+					name="angle double right"
+					className="puma"
+				/>
+			</Button>
     );
   }
 

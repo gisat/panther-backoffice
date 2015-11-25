@@ -642,6 +642,65 @@ todo hex colours, button icons */
 }
 
 
+
+
+.ui.button.puma-screen-button {
+	padding-right: 2.5rem!important;
+	padding-left: 1rem!important;
+	transition: all .2s ease-in-out;
+	position: relative;
+}
+
+.ui.button.puma-screen-button > .icon.puma, .ui.buttons.puma-screen-button > .button > .icon.puma {
+	position: absolute;
+	height: 100%;
+	line-height: 1;
+	text-align: center;
+	margin: 0;
+	box-shadow: -1px 0 0 0 transparent inset;
+	top: 0;
+	left: auto;
+	right: 0;
+	border-radius: 0;
+	border-top-right-radius: inherit;
+	border-bottom-right-radius: inherit;
+	box-shadow: 1px 0 0 0 transparent inset;
+	background: transparent;
+	font-size: 1.25rem;
+	width: 1.5rem;
+	color: rgba(0,0,0,.4);
+}
+.ui.button.puma-screen-button > .icon.puma::after,
+.ui.button.puma-screen-button > .icon.puma::before, .ui.buttons.puma-screen-button > .button > .icon.puma::after, 
+.ui.buttons.puma-screen-button > .button > .icon.puma::before {
+    display: block;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    text-align: center;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.ui.basic.button.puma-screen-button.selected {
+	background: rgba(255, 255, 0, 0.2)!important;
+	box-shadow: 0 0 0 1px #ff0 inset;
+}
+@keyframes puma-screen-button-selected {
+	0% { right: 0; }
+	50% { right: .2rem; }
+	100% { right: 0; }
+}
+.ui.button.puma-screen-button.selected > .icon.puma {
+	color: #ff0;
+	animation-name: puma-screen-button-selected;
+	animation-duration: 1s;
+	animation-iteration-count: 3;
+}
+
+
+/*
 .ui.labeled.icon.button.puma-screen-button > .icon, 
 .ui.labeled.icon.buttons.puma-screen-button > .button > .icon {
 	background: transparent;
@@ -656,7 +715,6 @@ todo hex colours, button icons */
 }
 
 .ui.basic.button.puma-screen-button.selected {
-	/*border-color: #ffff00!important;*/
 	background: rgba(255, 255, 0, 0.2)!important;
 	box-shadow: 0 0 0 1px #ff0 inset;
 }
@@ -671,6 +729,7 @@ todo hex colours, button icons */
 	animation-duration: 1s;
 	animation-iteration-count: 3;
 }
+*/
 
 
 .note > .ui.basic.button,
