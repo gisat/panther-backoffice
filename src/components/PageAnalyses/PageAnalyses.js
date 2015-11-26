@@ -41,27 +41,27 @@ class PageAnalyses extends Page {
 
 
 
-  closeScreen(screenKey) {
-
-    var newScreens = this.state.screens;
-    newScreens.map(function(obj){
-      var newObj = obj;
-      if(obj.key == screenKey){
-        newObj.classes = "closed";
-      }
-      return newObj;
-    });
-
-    console.log("newScreens: ", newScreens);
-
-
-    this.setState({
-      screens: newScreens
-    });
-
-    //s[0].classes = "closed";
-    //console.log("s: ", s);
-  }
+  //closeScreen(screenKey) {
+  //
+  //  var newScreens = this.state.screens;
+  //  newScreens.map(function(obj){
+  //    var newObj = obj;
+  //    if(obj.key == screenKey){
+  //      newObj.classes = "closed";
+  //    }
+  //    return newObj;
+  //  });
+  //
+  //  //console.log("newScreens: ", newScreens);
+  //
+  //
+  //  this.setState({
+  //    screens: newScreens
+  //  });
+  //
+  //  //s[0].classes = "closed";
+  //  //console.log("s: ", s);
+  //}
 
   render() {
     const title = 'Analyses';
@@ -69,12 +69,11 @@ class PageAnalyses extends Page {
 
     var me = this;
     var screenNodes = this.state.screens.map(function (screen) {
+      console.log("me.closeScreen: ", me.closeScreen);
       return (
         <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes} closeme={me.closeScreen.bind(me, screen.key)}/>
       );
     });
-
-
 
     return (
       <div id="content">
