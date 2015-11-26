@@ -150,31 +150,31 @@ class ConfigAnalysisSpatial extends Component{
 					<tbody>
 
 						<tr>
-							<td className="header">Continuous Urban Fabric (S.L. > 80%)</td>
+							<td>Continuous Urban Fabric (S.L. > 80%)</td>
 							<td>SUM (area/length)</td>
 							<td>Status code: 111</td>
 						</tr>
 
 						<tr>
-							<td className="header">Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
+							<td>Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
 							<td>SUM (area/length)</td>
 							<td>Status code: 112</td>
 						</tr>
 
 						<tr>
-							<td className="header">Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
+							<td>Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
 							<td>SUM (area/length)</td>
 							<td>Status code: 113</td>
 						</tr>
 
 						<tr>
-							<td className="header">Industrial, Commercial and Transport Units</td>
+							<td>Industrial, Commercial and Transport Units</td>
 							<td>SUM (area/length)</td>
 							<td>Status code: 120, 121</td>
 						</tr>
 
 						<tr>
-							<td className="header">Construction sites</td>
+							<td>Construction sites</td>
 							<td>SUM (area/length)</td>
 							<td>Status code: 130</td>
 						</tr>

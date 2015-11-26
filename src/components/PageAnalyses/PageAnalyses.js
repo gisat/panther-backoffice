@@ -6,6 +6,7 @@ import Page from '../Page';
 import ScreenContainer from '../ScreenContainer';
 import ScreenAnalysesBase from '../ScreenAnalysesBase';
 import ScreenAnalysisSpatial from '../ScreenAnalysisSpatial';
+import ScreenAnalysisSpatialRules from '../ScreenAnalysisSpatialRules';
 
 
 @withStyles(styles)
@@ -23,14 +24,19 @@ class PageAnalyses extends Page {
       show: false,
       screens: [
         {
-          key: "screen1",
+          key: "analyses1",
           classes: "open",
           component: <ScreenAnalysesBase/>
         },
         {
-          key: "screen2",
+          key: "analyses2",
           classes: "retracted constant const40",
           component: <ScreenAnalysisSpatial/>
+        },
+        {
+          key: "analyses3",
+          classes: "retracted wide",
+          component: <ScreenAnalysisSpatialRules/>
         }
       ]
     };
