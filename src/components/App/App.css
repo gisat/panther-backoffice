@@ -540,7 +540,8 @@ todo hex colours, button icons */
 
 /* .screen content space */
 @media screen and (min-width:71em) {
-  .screen.wide > div {
+  .screen.wide .screen-content > div,
+	.screen.const50 .screen-setter > div  {
     width: 55rem;
   }
   .screen.wide .beside {
@@ -548,7 +549,8 @@ todo hex colours, button icons */
   }
 }
 @media screen and (min-width:76em) {
-  .screen.wide > div {
+  .screen.wide .screen-content > div,
+	.screen.wide .screen-setter > div  {
     width: 60rem;
   }
   .screen.wide .beside {
@@ -556,7 +558,8 @@ todo hex colours, button icons */
   }
 }
 @media screen and (min-width:81em) {
-  .screen.wide > div {
+  .screen.wide .screen-content > div,
+	.screen.wide .screen-setter > div  {
     width: 65rem;
   }
   .screen.wide .beside {
@@ -564,7 +567,8 @@ todo hex colours, button icons */
   }
 }
 @media screen and (min-width:86em) {
-  .screen.wide > div {
+  .screen.wide .screen-content > div,
+	.screen.wide .screen-setter > div  {
     width: 70rem;
   }
   .screen.wide .beside {
@@ -572,7 +576,8 @@ todo hex colours, button icons */
   }
 }
 @media screen and (min-width:91em) {
-  .screen.wide > div {
+  .screen.wide .screen-content > div,
+	.screen.wide .screen-setter > div  {
     width: 75rem;
   }
   .screen.wide .beside {
@@ -580,7 +585,8 @@ todo hex colours, button icons */
   }
 }
 @media screen and (min-width:96em) {
-  .screen.wide > div {
+  .screen.wide .screen-content > div,
+	.screen.wide .screen-setter > div  {
     width: 80rem;
   }
   .screen.wide .beside {
