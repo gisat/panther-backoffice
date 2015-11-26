@@ -138,6 +138,17 @@ label.container {
 	margin-bottom: 4rem;
 }
 
+.section-header {
+	text-align: right;
+	margin-top: 4rem;
+	border-top: 1px solid rgba(80,80,80,.3);
+	padding-top: 1rem;
+	margin-bottom: 1rem;
+}
+.section-header h3 {
+	float: left;
+}
+
 .isvg {
 	display: inline-block;
 }

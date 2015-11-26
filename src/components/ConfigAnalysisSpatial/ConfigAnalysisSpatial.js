@@ -2,8 +2,11 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ConfigAnalysisSpatial.css';
 import withStyles from '../../decorators/withStyles';
 
+import UIScreenButton from '../UIScreenButton';
+
 import { Input, Icon, IconButton, Buttons } from '../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../SEUI/modules';
+import { Table } from '../SEUI/collections';
 import Select from 'react-select';
 import _ from 'underscore';
 
@@ -121,15 +124,129 @@ class ConfigAnalysisSpatial extends Component{
 				
 				<span><b>Themes:</b> Land cover, Population</span><br/>
 				
-				<span className="todo">rules</span><br/>
+				<div className="rsc-controls">
+					<IconButton name="check" basic color="blue" disabled>
+						Saved
+					</IconButton>
+				</div>
 				
 				
+				<div className="section-header">
+					<h3>Operations</h3>
+					<UIScreenButton basic>
+						<Icon name="configure" />
+						Configure
+					</UIScreenButton>
+				</div>
+				
+				<Table celled className="fixed">
+					<thead>
+						<tr>
+							<th>Result Attribute</th>
+							<th>Operation</th>
+							<th>Filter</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr>
+							<td className="header">Continuous Urban Fabric (S.L. > 80%)</td>
+							<td>SUM (area/length)</td>
+							<td>Status code: 111</td>
+						</tr>
+
+						<tr>
+							<td className="header">Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
+							<td>SUM (area/length)</td>
+							<td>Status code: 112</td>
+						</tr>
+
+						<tr>
+							<td className="header">Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
+							<td>SUM (area/length)</td>
+							<td>Status code: 113</td>
+						</tr>
+
+						<tr>
+							<td className="header">Industrial, Commercial and Transport Units</td>
+							<td>SUM (area/length)</td>
+							<td>Status code: 120, 121</td>
+						</tr>
+
+						<tr>
+							<td className="header">Construction sites</td>
+							<td>SUM (area/length)</td>
+							<td>Status code: 130</td>
+						</tr>
+
+					</tbody>
+				</Table>
 				
 				
+				<div className="section-header">
+					<h3>Runs</h3>
+					<UIScreenButton basic>
+						<Icon name="plus" />
+						New run
+					</UIScreenButton>
+				</div>
 				
-				<IconButton name="check" primary>
-					Save
-				</IconButton>
+				<Table basic="very" className="fixed">
+					<thead>
+						<tr>
+							<th>Place</th>
+							<th>Period</th>
+							<th>AU levels</th>
+							<th>Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+						<tr>
+							<td>Cebu City</td>
+							<td>2000</td>
+							<td>GADM2</td>
+							<td>2015-11-17</td>
+						</tr>
+						
+						<tr>
+							<td>Cebu City</td>
+							<td>2010</td>
+							<td>GADM2</td>
+							<td>2015-11-17</td>
+						</tr>
+						
+						<tr>
+							<td>Hai Phong</td>
+							<td>2000</td>
+							<td>GADM2</td>
+							<td>2015-11-17</td>
+						</tr>
+						
+						<tr>
+							<td>Hai Phong</td>
+							<td>2010</td>
+							<td>GADM2</td>
+							<td>2015-11-17</td>
+						</tr>
+						
+						<tr>
+							<td>Ulaanbaatar</td>
+							<td>2000</td>
+							<td>GADM2</td>
+							<td>2015-11-17</td>
+						</tr>
+						
+						<tr>
+							<td>Ulaanbaatar</td>
+							<td>2010</td>
+							<td>GADM2</td>
+							<td>2015-11-17</td>
+						</tr>
+						
+
+					</tbody>
+				</Table>
 				
 			</div>
     );
