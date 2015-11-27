@@ -23,7 +23,7 @@ class SelectorAnalysisSpatial extends Component{
 		super(props);
 
 		this.state = {
-			valueAnalysisSpatial: 3
+			valueAnalysisSpatial: 1
 		};
 		
 	}

@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './Menu.css';
 import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
+import UISVG from '../UISVG';
 
 
 @withStyles(styles)
@@ -19,31 +20,31 @@ class Menu extends Component {
         <ul>
           <li>
             <a href="./" onClick={Link.handleClick} tabIndex="1">
-              <img src={require('./temp-dashboard.svg')} className="svg" />
+              <UISVG src='icon-dashboard.isvg' />
               <span>Dashboard</span>
             </a>
           </li>
           <li>
             <a href="./places" onClick={Link.handleClick} tabIndex="1">
-              <img src={require('./temp-places.svg')} className="svg"/>
+							<UISVG src='icon-places.isvg' />
               <span>Places</span>
             </a>
           </li>
           <li>
             <a href="./datalayers" onClick={Link.handleClick} tabIndex="1">
-              <img src={require('./temp-datalayers.svg')} className="svg" />
+							<UISVG src='icon-datalayers.isvg' />
               <span>Data layers</span>
             </a>
           </li>
           <li>
             <a href="./analyses" onClick={Link.handleClick} tabIndex="1">
-              <img src={require('./temp-analyses.svg')} className="svg" />
+							<UISVG src='icon-analyses.isvg' />
               <span>Analyses</span>
             </a>
           </li>
           <li>
             <a href="./metadata" onClick={Link.handleClick} tabIndex="1">
-              <img src={require('./temp-metadata.svg')} className="svg" />
+							<UISVG src='icon-metadata.isvg' />
               <span>Metadata structures</span>
             </a>
           </li>

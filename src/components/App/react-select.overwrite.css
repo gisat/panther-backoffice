@@ -15,6 +15,7 @@
 .Select-input > input, .Select-placeholder, .Select-input > div {
 	font-size: 1.125rem;
 	padding: .03rem .625rem;
+	padding-right: 2.5rem;
 }
 .has-value > .Select-control > .Select-placeholder {
 	color: #022393;

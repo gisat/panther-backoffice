@@ -79,7 +79,7 @@ const config = {
         test: /\.json$/,
         loader: 'json-loader',
       }, {
-        test: /\.txt$/,
+        test: /\.(txt|isvg)$/,
         loader: 'raw-loader',
       }, {
         test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,

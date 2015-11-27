@@ -120,6 +120,15 @@ td.selectable.focus::after {
 	color:#9a9a9a;
 }
 
+.ui.celled.table tbody.internal tr:first-child td {
+	border-top: 1px solid rgba(34,36,38,.1);
+}
+.ui.celled.table tbody.internal.row tr:first-child td {
+	border-top: .25rem solid #888;
+}
+.ui.celled.table tr.row-header td {
+	background: #A2B1BD;
+}
 
 
 .ui.button, .ui.buttons .button {
