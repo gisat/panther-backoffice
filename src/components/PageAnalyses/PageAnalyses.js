@@ -11,7 +11,7 @@ import ScreenAnalysisSpatialRules from '../ScreenAnalysisSpatialRules';
 
 
 @withStyles(styles)
-class PageAnalyses extends Page {
+class PageAnalyses extends Component {
 
 
 	static contextTypes = {

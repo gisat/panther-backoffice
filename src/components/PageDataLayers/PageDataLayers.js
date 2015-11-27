@@ -7,7 +7,7 @@ import ScreenContainer from '../ScreenContainer';
 import ScreenDataLayersBase from '../ScreenDataLayersBase';
 
 @withStyles(styles)
-class PageDataLayers extends Page {
+class PageDataLayers extends Component {
 
 
   static contextTypes = {

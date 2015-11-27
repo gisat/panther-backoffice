@@ -8,7 +8,7 @@ import ScreenMetadataBase from '../ScreenMetadataBase';
 import ScreenMetadataLayerVector from '../ScreenMetadataLayerVector';
 
 @withStyles(styles)
-class PageMetadata extends Page {
+class PageMetadata extends Component {
 
 
   static contextTypes = {

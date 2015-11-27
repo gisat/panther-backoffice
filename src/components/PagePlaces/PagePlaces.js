@@ -8,7 +8,7 @@ import ScreenPlacesBase from '../ScreenPlacesBase';
 import ScreenLinksByAttSetAULevel from '../ScreenLinksByAttSetAULevel';
 
 @withStyles(styles)
-class PagePlaces extends Page {
+class PagePlaces extends Component {
 
 
   static contextTypes = {

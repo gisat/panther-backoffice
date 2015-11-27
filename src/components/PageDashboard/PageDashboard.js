@@ -6,8 +6,10 @@ import Page from '../Page';
 import ScreenContainer from '../ScreenContainer';
 import ScreenDashboardBase from '../ScreenDashboardBase';
 
+import ScreenManager from '../ScreenManager';
+
 @withStyles(styles)
-class PageDashboard extends Page {
+class PageDashboard extends Component {
 
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
@@ -17,6 +19,10 @@ class PageDashboard extends Page {
     super(props);
 
     console.log("PageDashboard constructoir");
+
+    var sm = (<ScreenManager />);
+    console.log(sm);
+    //sm.closeScreen(this, 'x');
 
     this.state = {
       show: false,
@@ -33,7 +39,7 @@ class PageDashboard extends Page {
 
   render() {
 
-    this.testung();
+    //this.testung();
     //this.testung("5448");
 
     const title = 'Dashboard';
