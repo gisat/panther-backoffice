@@ -77,8 +77,8 @@ class PageAnalyses extends Page {
     var screenNodes = this.state.screens.map(function (screen) {
       console.log("me.closeScreen: ", me.closeScreen);
       return (
-        <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes} closeme={me.closeScreen.bind(me, screen.key)}/>
-      );
+        <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes} />
+      ); // closeme={me.closeScreen.bind(me, screen.key)}
     });
 
     return (

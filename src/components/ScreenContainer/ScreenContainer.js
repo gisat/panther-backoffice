@@ -20,7 +20,7 @@ class ScreenContainer extends Component{
 					<div className="screen-controls top">
 						<Buttons basic icon vertical>
 							<IconButton name="remove"
-                onClick={this.props.closeme.bind(this)}
+                //onClick={this.props.closeme.bind(this)}
               />
 						</Buttons>
 					</div>

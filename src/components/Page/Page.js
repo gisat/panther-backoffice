@@ -6,14 +6,22 @@ import styles from './Page.css';
 @withStyles(styles)
 class Page extends Component {
 
-  //constructor(props){
-  //  super(props);
-  //
-  //}
+  constructor(props){
+    super(props);
+
+    console.log("Page constructoir");
+
+    this.closeScreen = this.closeScreen.bind(this);
+    this.testung = this.testung.bind(this);
+  }
+
+  testung(param){
+    console.log("TESTUNG");
+    console.log("TESTUNG PARAM: ", param);
+  }
 
   closeScreen(screenKey) {
-
-    var newScreens = this.state.screens;
+    var newScreens = this.state.screens; // I'am not sure if it is not just link and if it is a problem
     newScreens.map(function(obj){
       var newObj = obj;
       if(obj.key == screenKey){
@@ -22,25 +30,19 @@ class Page extends Component {
       return newObj;
     });
 
-    //console.log("newScreens: ", newScreens);
-
-
     this.setState({
       screens: newScreens
     });
-
-    //s[0].classes = "closed";
-    //console.log("s: ", s);
   }
 
-  render() {
-    return (
-      <div id="content">
-        <div className="content" id={this.props.key}>
-        </div>
-      </div>
-    );
-  }
+  //render() {
+  //  return (
+  //    <div id="content">
+  //      <div className="content" id={this.props.key}>
+  //      </div>
+  //    </div>
+  //  );
+  //}
 
 }
 

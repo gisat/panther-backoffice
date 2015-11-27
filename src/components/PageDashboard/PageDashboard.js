@@ -9,13 +9,14 @@ import ScreenDashboardBase from '../ScreenDashboardBase';
 @withStyles(styles)
 class PageDashboard extends Page {
 
-
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
+
+    console.log("PageDashboard constructoir");
 
     this.state = {
       show: false,
@@ -31,6 +32,10 @@ class PageDashboard extends Page {
 
 
   render() {
+
+    this.testung();
+    //this.testung("5448");
+
     const title = 'Dashboard';
     this.context.onSetTitle(title);
 
