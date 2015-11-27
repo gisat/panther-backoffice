@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenAnalysisSpatialRules.css';
 import withStyles from '../../decorators/withStyles';
 
-import { Icon, IconButton } from '../SEUI/elements';
+import { Icon, IconButton, Buttons } from '../SEUI/elements';
 import { Table } from '../SEUI/collections';
 import Select from 'react-select';
 
@@ -76,6 +76,12 @@ const STATUSCODES = [
 				key: 520
 			}
 ];
+const ATTSETS = [
+			{ key: 352, name: "Land Cover classes L3" },
+			{ key: 623, name: "Aggregated LC Classes Formation" },
+			{ key: 18, name: "Populations1" },
+			{ key: 28, name: "Status code" },
+		];
 
 @withStyles(styles)
 class ScreenAnalysisSpatialRules extends Component{
@@ -83,7 +89,51 @@ class ScreenAnalysisSpatialRules extends Component{
     return (
       <div><div className="screen-content"><div>
 
-				<span className="todo">result and filter attribute setting</span>
+				<div className="input-wrapper">
+					<div>
+						<label className="container">
+							Attribute set
+							<Select 
+								//onChange={this.onChangeAttSet.bind(this)}
+								//loadOptions={this.getPlaces}
+								options={ATTSETS}
+								valueKey="key" 
+								labelKey="name" 
+								//inputProps={selectInputProps} 
+								value="352"
+							/>
+						</label>
+					</div>
+					<div>
+						<Buttons icon>
+							<IconButton name="write" />
+							<IconButton name="plus" />
+						</Buttons>
+					</div>
+				</div>
+							
+				<div className="input-wrapper">
+					<div>
+						<label className="container">
+							Attribute set
+							<Select 
+								//onChange={this.onChangeAttSet.bind(this)}
+								//loadOptions={this.getPlaces}
+								options={ATTSETS}
+								valueKey="key" 
+								labelKey="name" 
+								//inputProps={selectInputProps} 
+								value="28"
+							/>
+						</label>
+					</div>
+					<div>
+						<Buttons icon>
+							<IconButton name="write" />
+							<IconButton name="plus" />
+						</Buttons>
+					</div>
+				</div>
 
 				<Table celled className="fixed" id="AnalysisSpatialRuleTable">
 					<thead>
@@ -96,7 +146,7 @@ class ScreenAnalysisSpatialRules extends Component{
 					<tbody>
 
 						<tr className="row-header">
-							<td colSpan="4">Continuous Urban Fabric (S.L. > 80%)</td>
+							<td colSpan="4" className="resetui">Continuous Urban Fabric (S.L. > 80%)</td>
 						</tr>
 						<tr>
 							<td className="allowOverflow resetui">
@@ -134,7 +184,7 @@ class ScreenAnalysisSpatialRules extends Component{
 					<tbody className="internal row">
 
 						<tr className="row-header">
-							<td colSpan="4">Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
+							<td colSpan="4" className="resetui">Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
 						</tr>
 						<tr>
 							<td className="allowOverflow resetui">
@@ -199,7 +249,7 @@ class ScreenAnalysisSpatialRules extends Component{
 					<tbody className="internal row">
 
 						<tr className="row-header">
-							<td colSpan="4">Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
+							<td colSpan="4" className="resetui">Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
 						</tr>
 						<tr>
 							<td className="allowOverflow resetui">
@@ -250,6 +300,10 @@ class ScreenAnalysisSpatialRules extends Component{
 
 					</tbody>
 				</Table>
+				
+				<IconButton name="check" basic color="blue">
+					Save
+				</IconButton>
 					
       </div></div></div>
     );
