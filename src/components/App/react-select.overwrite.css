@@ -1,8 +1,9 @@
 .Select-control {
 	border-color: #999;
-	background: #f1f1f1;
+	/*background: #f1f1f1;*/
+	background: rgba(255,255,255,.2);
 	
-	transition: all .5s ease-in-out;
+	transition: box-shadow .5s ease-in-out;
 }
 
 .Select-control:hover, .Select-control:focus {
@@ -26,7 +27,9 @@
   border-color: #999;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 5px -1px rgba(0, 136, 204, 0.5);
 }
-
+.Select-arrow {
+	border-color: #7D7D7D transparent transparent;
+}
 .Select-item {
 	line-height: 1.5rem;
 	height: 1.875rem;
@@ -35,11 +38,13 @@
 	vertical-align: middle;
 	
 	color: #022393;
-	background: #d3e5ff;
+/*	background: #d3e5ff;*/
+	background: rgba(200,230,255,.3);
 }
 .ui td.resetui span.Select-item {
 	line-height: 1.5rem;
 }
 .Select-item, .Select-item-icon {
-	border-color: #bed4ef;
+/*	border-color: #bed4ef;*/
+	border-color: rgba(1, 104, 222, 0.22);
 }

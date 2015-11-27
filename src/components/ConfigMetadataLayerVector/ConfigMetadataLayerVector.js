@@ -186,7 +186,7 @@ class ConfigMetadataLayerVector extends Component{
 
 				
 				
-				<IconButton name="check" primary>
+				<IconButton name="check" basic color="blue">
 					Save
 				</IconButton>
 				

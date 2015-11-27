@@ -573,7 +573,7 @@ class ConfigDataLayerAnalytical extends Component{
 				</Table>
 				
 				
-				<IconButton name="check" primary>
+				<IconButton name="check" basic color="blue">
 					Save
 				</IconButton>
 				
