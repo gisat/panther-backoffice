@@ -12,7 +12,7 @@
 	overflow: visible;
 }
 
-.ui td.resetui span {
+.ui td.resetui span, .ui td.resetui {
 	font-size: 1.125rem;
 	line-height: 1.5;
 }
@@ -128,6 +128,8 @@ td.selectable.focus::after {
 }
 .ui.celled.table tr.row-header td {
 	background: #A2B1BD;
+	padding-bottom: .4rem;
+	padding-top: .5rem;
 }
 
 
@@ -167,7 +169,12 @@ td.selectable.focus::after {
 .ui.icon.buttons .button,
 .ui.icon.buttons{
 	border-color:#999;
-	background: #f1f1f1;
+	/*background: #f1f1f1;*/
+}
+.ui.button,
+.ui.buttons .button,
+.ui.icon.buttons .button {
+	background: rgba(255,255,255,.2);
 }
 
 
@@ -210,6 +217,7 @@ td.selectable.focus::after {
 .ui.checkbox label::before{
 	border: 1px solid #888;
 	transition: all .5s ease-in-out;
+	background: rgba(255,255,255,.4);
 }
 .ui.checkbox label:hover::before,
 .ui.checkbox.focus {
@@ -230,9 +238,11 @@ td.selectable.focus::after {
 	border: 1px solid;
 	border-color: #999;
 	height: 36px;
+	background: rgba(255,255,255,.2);
 }
 .ui.input, .ui.input input {
-	background: #f1f1f1;
+	/*background: #f1f1f1;*/
+	
 	border-radius: 4px;
 }
 .ui.input input {
@@ -240,6 +250,7 @@ td.selectable.focus::after {
 	font-size: 1.125rem;
 	padding: .03rem .625rem;
 	line-height: 34px;
+	background: transparent;
 }
 
 /*

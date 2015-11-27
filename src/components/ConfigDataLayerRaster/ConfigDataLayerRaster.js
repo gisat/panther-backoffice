@@ -177,7 +177,7 @@ class ConfigDataLayerRaster extends Component{
 					</div>
 				</div>
 				
-				<IconButton name="check" primary>
+				<IconButton name="check" basic color="blue">
 					Save
 				</IconButton>
 				
