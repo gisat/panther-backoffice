@@ -56,7 +56,6 @@ class ScreenContainer extends Component{
     //});
   }
 
-  }
 }
 
 
