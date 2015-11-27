@@ -3,7 +3,7 @@
 	/*background: #f1f1f1;*/
 	background: rgba(255,255,255,.2);
 	
-	transition: all .5s ease-in-out;
+	transition: box-shadow .5s ease-in-out;
 }
 
 .Select-control:hover, .Select-control:focus {
@@ -46,5 +46,5 @@
 }
 .Select-item, .Select-item-icon {
 /*	border-color: #bed4ef;*/
-	border-color: #A7BAD0;
+	border-color: rgba(1, 104, 222, 0.22);
 }
