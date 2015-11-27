@@ -58,7 +58,7 @@ class ScreenContainer extends Component{
         $(this).siblings(".screen.retracted").find(":input").prop("disabled", true);
         $(this).siblings(".screen.retracted").find("a").prop("tabindex", "-1");
         /* disable inputs or tabindex=-1 only? */
-        /* todo enabling */
+				$(this).find(":input").prop("disabled", false);
       }
     });
 
