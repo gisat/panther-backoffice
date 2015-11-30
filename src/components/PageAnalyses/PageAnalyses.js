@@ -35,7 +35,7 @@ class PageAnalyses extends Page {
         },
         {
           key: "analyses3",
-          classes: "retracted wide",
+          classes: "retracted too wide wide80", // too should not actually be set initially
           component: <ScreenAnalysisSpatialRules/>
         }
       ]
