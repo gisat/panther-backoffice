@@ -92,7 +92,7 @@ class ScreenAnalysisSpatialRules extends Component{
 				<div className="input-wrapper">
 					<div>
 						<label className="container">
-							Attribute set
+							Result attribute set
 							<Select 
 								//onChange={this.onChangeAttSet.bind(this)}
 								//loadOptions={this.getPlaces}
@@ -115,7 +115,7 @@ class ScreenAnalysisSpatialRules extends Component{
 				<div className="input-wrapper">
 					<div>
 						<label className="container">
-							Attribute set
+							Filter attribute set
 							<Select 
 								//onChange={this.onChangeAttSet.bind(this)}
 								//loadOptions={this.getPlaces}
