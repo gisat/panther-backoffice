@@ -75,15 +75,15 @@ class PageAnalyses extends Component {
 
     var me = this;
     var screenNodes = this.state.screens.map(function (screen) {
-      console.log("me.closeScreen: ", me.closeScreen);
+      console.log("PageAnalysis.render / state.screens.map / screen.key: ", screen.key, " / screen: ", screen);
       return (
-        <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes} />
+        <ScreenContainer key={screen.key} thekey={screen.key} component={screen.component} classes={screen.classes} page={me} />
       ); // closeme={me.closeScreen.bind(me, screen.key)}
     });
 
     return (
       <div id="content">
-        <div className="content" id={this.props.key}>
+        <div className="content">
           {screenNodes}
         </div>
       </div>

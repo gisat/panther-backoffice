@@ -47,7 +47,7 @@ class PageDashboard extends Component {
 
     var screenNodes = this.state.screens.map(function (screen) {
       return (
-        <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes}/>
+        <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes} page={this}/>
       );
     });
 

@@ -26,6 +26,22 @@ class App extends Component {
     ) : this.props.children;
   }
 
+  //closeScreen(page, screenKey) {
+  //  var newScreens = JSON.parse(JSON.stringify(page.state.screens));
+  //  newScreens.map(function(obj){
+  //    //var newObj = obj;
+  //    if(obj.key == screenKey){
+  //      obj.classes = "closed";
+  //    }
+  //    //return obj;
+  //  });
+  //  console.log("### state.screens: ", page.state.screens, "newScreens: ", newScreens);
+  //
+  //  page.setState({
+  //    screens: newScreens
+  //  });
+  //}
+
 }
 
 

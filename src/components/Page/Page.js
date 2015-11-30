@@ -20,20 +20,20 @@ class Page extends Component {
     console.log("TESTUNG PARAM: ", param);
   }
 
-  closeScreen(screenKey) {
-    var newScreens = this.state.screens; // I'am not sure if it is not just link and if it is a problem
-    newScreens.map(function(obj){
-      var newObj = obj;
-      if(obj.key == screenKey){
-        newObj.classes = "closed";
-      }
-      return newObj;
-    });
-
-    this.setState({
-      screens: newScreens
-    });
-  }
+  //closeScreen(screenKey) {
+  //  var newScreens = this.state.screens; // I'am not sure if it is not just link and if it is a problem
+  //  newScreens.map(function(obj){
+  //    var newObj = obj;
+  //    if(obj.key == screenKey){
+  //      newObj.classes = "closed";
+  //    }
+  //    return newObj;
+  //  });
+  //
+  //  this.setState({
+  //    screens: newScreens
+  //  });
+  //}
 
   //render() {
   //  return (

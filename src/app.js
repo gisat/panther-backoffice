@@ -25,6 +25,24 @@ const context = {
     meta.setAttribute('content', content);
     document.getElementsByTagName('head')[0].appendChild(meta);
   },
+  closeScreen: function(screenKey) {
+    //alert("CLOSE SCREEN");
+    console.log("CLOSE SCREEN: this.state: ", this.state, " this: ", this, "; screenKey: ", screenKey);
+    var newScreens = //JSON.parse(JSON.stringify(this.state.screens));
+      this.state.screens.slice(0); //it actualy is array. no need to clone object
+    newScreens.map(function(obj){
+      //var newObj = obj;
+      if(obj.key == screenKey){
+        obj.classes = "closed";
+      }
+      //return obj;
+    });
+    console.log("### state.screens: ", this.state.screens, "newScreens: ", newScreens);
+
+    this.setState({
+      screens: newScreens
+    });
+  }
 };
 
 function render(state) {
