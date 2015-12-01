@@ -16,6 +16,7 @@ class PageAnalyses extends Component {
 
 	static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
+    closeScreen: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -77,7 +78,7 @@ class PageAnalyses extends Component {
     var screenNodes = this.state.screens.map(function (screen) {
       console.log("PageAnalysis.render / state.screens.map / screen.key: ", screen.key, " / screen: ", screen);
       return (
-        <ScreenContainer key={screen.key} thekey={screen.key} component={screen.component} classes={screen.classes} page={me} />
+        <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes} close={me.context.closeScreen.bind(me, screen.key)} />
       ); // closeme={me.closeScreen.bind(me, screen.key)}
     });
 

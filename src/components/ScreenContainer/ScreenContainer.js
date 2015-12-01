@@ -13,20 +13,16 @@ class ScreenContainer extends Component{
   //  component: PropTypes.object
   //};
 
-  static contextTypes = {
-    closeScreen: PropTypes.func.isRequired
-  };
-
 
   render() {
-    console.log("ScreenContainer.render| props.page: ", this.props.page, " | props.thekey: ", this.props.thekey);
+    //console.log("ScreenContainer.render| props.page: ", this.props.page, " | props.thekey: ", this.props.thekey);
     return (
-      <div className={"screen " + this.props.classes} id={this.props.thekey}>
+      <div className={"screen " + this.props.classes}>
 				<div className="screen-scroll"><div>
 					<div className="screen-controls top">
 						<Buttons basic icon vertical>
 							<IconButton name="remove"
-                onClick={this.context.closeScreen.bind(this.props.page, this.props.thekey)}
+                onClick={this.props.close}
               />
 						</Buttons>
 					</div>

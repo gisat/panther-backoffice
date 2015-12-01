@@ -26,22 +26,27 @@ const context = {
     document.getElementsByTagName('head')[0].appendChild(meta);
   },
   closeScreen: function(screenKey) {
-    //alert("CLOSE SCREEN");
-    console.log("CLOSE SCREEN: this.state: ", this.state, " this: ", this, "; screenKey: ", screenKey);
-    var newScreens = //JSON.parse(JSON.stringify(this.state.screens));
-      this.state.screens.slice(0); //it actualy is array. no need to clone object
-    newScreens.map(function(obj){
-      //var newObj = obj;
+    //console.log("CLOSE SCREEN: this.state: ", this.state, " this: ", this, "; screenKey: ", screenKey);
+    var newScreens = this.state.screens.slice(0);
+    var index = -1;
+    newScreens.map(function(obj, i){
       if(obj.key == screenKey){
-        obj.classes = "closed";
+        index = i;
       }
-      //return obj;
     });
-    console.log("### state.screens: ", this.state.screens, "newScreens: ", newScreens);
 
+    newScreens[index].classes = "closed";
     this.setState({
       screens: newScreens
     });
+
+    var me = this;
+    setTimeout(function(){
+      delete newScreens[index];
+      me.setState({
+        screens: newScreens
+      });
+    }, 1000);
   }
 };
 
