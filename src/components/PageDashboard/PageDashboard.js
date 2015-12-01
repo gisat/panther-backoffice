@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './PageDashboard.css';
 
-import Page from '../Page';
 import ScreenContainer from '../ScreenContainer';
 import ScreenDashboardBase from '../ScreenDashboardBase';
 

@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './PageMetadata.css';
 
-import Page from '../Page';
 import ScreenContainer from '../ScreenContainer';
 import ScreenMetadataBase from '../ScreenMetadataBase';
 import ScreenMetadataLayerVector from '../ScreenMetadataLayerVector';

@@ -3,7 +3,6 @@ import withStyles from '../../decorators/withStyles';
 import styles from './PageAnalyses.css';
 import _ from 'underscore';
 
-import Page from '../Page';
 import ScreenContainer from '../ScreenContainer';
 import ScreenAnalysesBase from '../ScreenAnalysesBase';
 import ScreenAnalysisSpatial from '../ScreenAnalysisSpatial';
@@ -76,10 +75,9 @@ class PageAnalyses extends Component {
 
     var me = this;
     var screenNodes = this.state.screens.map(function (screen) {
-      console.log("PageAnalysis.render / state.screens.map / screen.key: ", screen.key, " / screen: ", screen);
       return (
         <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes} close={me.context.closeScreen.bind(me, screen.key)} />
-      ); // closeme={me.closeScreen.bind(me, screen.key)}
+      );
     });
 
     return (
