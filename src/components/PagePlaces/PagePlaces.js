@@ -40,6 +40,7 @@ class PagePlaces extends Component {
     const title = 'Place management';
     this.context.onSetTitle(title);
 
+    var me = this;
     var screenNodes = this.state.screens.map(function (screen) {
       return (
         <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes} close={me.context.closeScreen.bind(me, screen.key)} />
