@@ -7,6 +7,8 @@ import Router from './routes';
 import Location from './core/Location';
 import { addEventListener, removeEventListener } from './utils/DOMUtils';
 
+const screenStack = require('./stores/screenStack');
+
 let cssContainer = document.getElementById('css');
 const appContainer = document.getElementById('app');
 const context = {
@@ -28,7 +30,14 @@ const context = {
   setScreenPosition: function(screenKey, positionClass) {
     var me = this;
 
-    //console.log("SCREENPOS  screenStack: " + this.context.screenStack);
+
+    console.log("SCREENPOS  screenStack 1 ["+screenStack["PageAnalysis"][1].position+"]: ", screenStack);
+    setTimeout(function(){
+      screenStack["PageAnalysis"][1].position = "retracted!";
+      console.log("SCREENPOS  screenStack 2 ["+screenStack["PageAnalysis"][1].position+"]: ", screenStack);
+    }, 10000);
+
+
     var newScreens = this.state.screens.slice(0);
     var index = -1;
     newScreens.map(function(obj, i){
