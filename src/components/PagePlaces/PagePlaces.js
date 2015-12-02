@@ -23,12 +23,12 @@ class PagePlaces extends Component {
       screens: [
         {
           key: "screenPlacesBase",
-          classes: "open",
           component: <ScreenPlacesBase />
         },
         {
           key: "screenLinksByAttSetAULevel",
-          classes: "open constant const40",
+          type: "constant",
+          size: 40,
           component: <ScreenLinksByAttSetAULevel />
         }
       ]
@@ -45,10 +45,10 @@ class PagePlaces extends Component {
       return (
         <ScreenContainer
           key={screen.key}
-          component={screen.component}
-          classes={screen.classes}
+          screenState={screen}
           close={me.context.setScreenPosition.bind(me, screen.key, "closed")}
           retract={me.context.setScreenPosition.bind(me, screen.key, "retracted")}
+          open={me.context.setScreenPosition.bind(me, screen.key, "open")}
         />
       );
     });

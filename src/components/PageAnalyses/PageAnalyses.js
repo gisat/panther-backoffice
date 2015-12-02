@@ -26,19 +26,22 @@ class PageAnalyses extends Component {
       screens: [
         {
           key: "analyses1",
-          classes: "open",
           disabled: false,
           component: <ScreenAnalysesBase/>
         },
         {
           key: "analyses2",
-          classes: "retracted constant const40",
+          type: "constant",
+          size: 40,
+          position: "retracted",
           disabled: true,
           component: <ScreenAnalysisSpatial/>
         },
         {
           key: "analyses3",
-          classes: "retracted too wide wide80", // too should not actually be set initially
+          type: "too wide", // too should not actually be set initially
+          size: 80,
+          position: "retracted",
           component: <ScreenAnalysisSpatialRules/>
         }
       ]
@@ -55,10 +58,10 @@ class PageAnalyses extends Component {
       return (
         <ScreenContainer
           key={screen.key}
-          component={screen.component}
-          classes={screen.classes}
+          screenState={screen}
           close={me.context.setScreenPosition.bind(me, screen.key, "closed")}
           retract={me.context.setScreenPosition.bind(me, screen.key, "retracted")}
+          open={me.context.setScreenPosition.bind(me, screen.key, "open")}
         />
       );
     });

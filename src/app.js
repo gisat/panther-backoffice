@@ -37,9 +37,9 @@ const context = {
       }
     });
 
-    console.log("classes 0: [" + newScreens[index].classes + "]");
+    //console.log("classes 0: [" + newScreens[index].classes + "]");
     newScreens[index].classes = switchClass(newScreens[index].classes, ["open", "closed", "retracted"], positionClass);
-    console.log("classes 1: [" + newScreens[index].classes + "]");
+    //console.log("classes 1: [" + newScreens[index].classes + "]");
     this.setState({
       screens: newScreens
     });
@@ -55,7 +55,7 @@ const context = {
   }
 };
 
-function switchClass(text, from, to){
+function switchClass(text, from, to){ // :-(
   if(typeof from == 'string') from = [from];
   to = " " + to + " ";
   var search = "((^| )(" + from.join("|") + ")($| ))";

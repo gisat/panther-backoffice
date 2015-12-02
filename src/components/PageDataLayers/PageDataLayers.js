@@ -22,7 +22,6 @@ class PageDataLayers extends Component {
       screens: [
         {
           key: "screen1",
-          classes: "open",
           component: <ScreenDataLayersBase/>
         }
       ]
@@ -39,10 +38,10 @@ class PageDataLayers extends Component {
       return (
         <ScreenContainer
           key={screen.key}
-          component={screen.component}
-          classes={screen.classes}
+          screenState={screen}
           close={me.context.setScreenPosition.bind(me, screen.key, "closed")}
           retract={me.context.setScreenPosition.bind(me, screen.key, "retracted")}
+          open={me.context.setScreenPosition.bind(me, screen.key, "open")}
         />
       );
     });
