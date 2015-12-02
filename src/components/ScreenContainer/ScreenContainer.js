@@ -25,30 +25,25 @@ class ScreenContainer extends Component{
     return (
       <div className={classNames("screen", typeClass, sizeClass, positionClass, disabledClass)}>
 				<div className="screen-scroll"><div>
-					<div className="screen-controls top">
-						<Buttons basic icon vertical>
-							<IconButton
-                name="remove"
-                onClick={this.props.onClose}
-              />
-						</Buttons>
-					</div>
-					<div className="screen-controls middle">
-						<Buttons basic icon vertical>
-							<IconButton
-                name="chevron right"
-                onClick={this.props.onRetract}
-              />
-						</Buttons>
-					</div>
-					{/*this.props.component*/}
-					{React.cloneElement(this.props.screenState.component, { disabled: disabled })}
-					{/* apparently this is how we pass props to an unknown component */}
+					{React.cloneElement(this.props.component, { disabled: disabled })}
 				</div></div>
+				<div className="screen-controls middle">
+					<Buttons basic icon vertical>
+						<IconButton name="chevron right" />
+					</Buttons>
+				</div>
 				<div
-          className="screen-overlay"
-          onClick={this.props.onOpen}
+             className="screen-overlay"
+             onClick={this.props.onOpen}
         ></div>
+				<div className="screen-controls top">
+					<Buttons basic icon vertical>
+						<IconButton
+                            name="remove"
+							onClick={this.props.close}
+						/>
+					</Buttons>
+				</div>
 			</div>
     );
   }

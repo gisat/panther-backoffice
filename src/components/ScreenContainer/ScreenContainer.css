@@ -1,6 +1,5 @@
 .screen-controls {
-	position: fixed;
-	z-index: 20;
+	position: absolute;
 }
 .screen-controls.top {
 	top: .8rem;

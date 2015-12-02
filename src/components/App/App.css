@@ -519,6 +519,7 @@ todo hex colours, button icons */
 		background: rgba(130,130,130,.5);*/
 		background: rgba(120,120,120,.4);
 		pointer-events: all;
+		cursor: pointer;
 	}
 	.screen.retracted > .screen-overlay:hover {
 /*			background: rgba(100,100,100,.33);
