@@ -5,15 +5,15 @@ class Dashboard extends Component{
   render() {
 
     var prvni = (
-      <TestC colour="#d48e5e" text="první komponenta" />
+      <TestC colour="#d48e5e" text="první komponenta" key="1" />
     );
 
     var druha = (
-      <TestC colour="#5658fd" text="druhá" />
+      <TestC colour="#5658fd" text="druhá" key="2" />
     );
 
     var treti = (
-      <TestC colour="#e7f9ce" text="a ještě třetí" />
+      <TestC colour="#e7f9ce" text="a ještě třetí" key="3" />
     );
 
     return (

@@ -19,7 +19,7 @@ const LAYERTEMPLATES = [
 
 @withStyles(styles)
 class MetadataListLayerVector extends Component{
-	
+
 	constructor(props) {
 		super(props);
 
@@ -27,15 +27,15 @@ class MetadataListLayerVector extends Component{
 			itemType: "layerVector",
 			selectedTemplate: null
 		};
-		
-	}
-	
 
-	
+	}
+
+
+
 	onSelectTemplate (value) {
 		this.state.selectedTemplate = value;
 	}
-	
+
 	openScreenExample(itemType,itemKey) {
 		if(itemKey) {
 			this.state.selectedTemplate = itemKey;
@@ -43,21 +43,21 @@ class MetadataListLayerVector extends Component{
 			this.state.selectedTemplate = null;
 		}
 	}
-		
-	
+
+
 	componentDidMount() {
-		
-		
-		
+
+
+
 	}
-	
+
 	render() {
-		
+
 		var thisComponent = this;
-		
-		var itemsInsert = LAYERTEMPLATES.map(function (item) {
+
+		var itemsInsert = LAYERTEMPLATES.map(function (item, index) {
       return (
-				<a 
+				<a
 					className={thisComponent.state.selectedTemplate==item.key ? 'puma-item template selected' : 'puma-item template'}
 					href="#"
 					onClick={thisComponent.openScreenExample.bind(
@@ -65,18 +65,19 @@ class MetadataListLayerVector extends Component{
 							thisComponent.state.itemType,
 							item.key
 						)}
+          key={"layertemplate-"+index}
 				>
 					<span>{item.name}</span>
 				</a>
       );
     });
-		
+
 		return (
       <div>
-				
-				
-					
-				<a 
+
+
+
+				<a
 					className="puma-item add"
 					href="#"
 					onClick={thisComponent.openScreenExample.bind(
@@ -87,9 +88,9 @@ class MetadataListLayerVector extends Component{
 				>
 					<span><Icon name="plus"/></span>
 				</a>
-				
+
 				{itemsInsert}
-				
+
 			</div>
     );
 
