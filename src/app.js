@@ -25,7 +25,9 @@ const context = {
     meta.setAttribute('content', content);
     document.getElementsByTagName('head')[0].appendChild(meta);
   },
-  closeScreen: function(screenKey) {
+  setScreenPosition: function(screenKey, positionClass) {
+    var me = this;
+
     //console.log("CLOSE SCREEN: this.state: ", this.state, " this: ", this, "; screenKey: ", screenKey);
     var newScreens = this.state.screens.slice(0);
     var index = -1;
@@ -35,20 +37,31 @@ const context = {
       }
     });
 
-    newScreens[index].classes = "closed";
+    console.log("classes 0: [" + newScreens[index].classes + "]");
+    newScreens[index].classes = switchClass(newScreens[index].classes, ["open", "closed", "retracted"], positionClass);
+    console.log("classes 1: [" + newScreens[index].classes + "]");
     this.setState({
       screens: newScreens
     });
 
-    var me = this;
-    setTimeout(function(){
-      delete newScreens[index];
-      me.setState({
-        screens: newScreens
-      });
-    }, 1000);
+    if(positionClass == "closed") {
+      setTimeout(function () {
+        delete newScreens[index];
+        me.setState({
+          screens: newScreens
+        });
+      }, 1000);
+    }
   }
 };
+
+function switchClass(text, from, to){
+  if(typeof from == 'string') from = [from];
+  to = " " + to + " ";
+  var search = "((^| )(" + from.join("|") + ")($| ))";
+  var re = new RegExp(search, 'g');
+  return text.replace(re, to).replace(/\s\s+/g, ' ').trim();
+}
 
 function render(state) {
   Router.dispatch(state, (newState, component) => {

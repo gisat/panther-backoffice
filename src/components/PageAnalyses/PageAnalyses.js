@@ -15,7 +15,7 @@ class PageAnalyses extends Component {
 
 	static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
-    closeScreen: PropTypes.func.isRequired
+    setScreenPosition: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -53,7 +53,13 @@ class PageAnalyses extends Component {
     var me = this;
     var screenNodes = this.state.screens.map(function (screen) {
       return (
-        <ScreenContainer key={screen.key} component={screen.component} classes={screen.classes} close={me.context.closeScreen.bind(me, screen.key)} />
+        <ScreenContainer
+          key={screen.key}
+          component={screen.component}
+          classes={screen.classes}
+          close={me.context.setScreenPosition.bind(me, screen.key, "closed")}
+          retract={me.context.setScreenPosition.bind(me, screen.key, "retracted")}
+        />
       );
     });
 

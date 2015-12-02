@@ -21,14 +21,18 @@ class ScreenContainer extends Component{
 				<div className="screen-scroll"><div>
 					<div className="screen-controls top">
 						<Buttons basic icon vertical>
-							<IconButton name="remove"
+							<IconButton
+                name="remove"
                 onClick={this.props.close}
               />
 						</Buttons>
 					</div>
 					<div className="screen-controls middle">
 						<Buttons basic icon vertical>
-							<IconButton name="chevron right" />
+							<IconButton
+                name="chevron right"
+                onClick={this.props.retract}
+              />
 						</Buttons>
 					</div>
 					{/*this.props.component*/}

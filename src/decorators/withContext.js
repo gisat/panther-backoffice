@@ -12,7 +12,7 @@ function withContext(ComposedComponent) {
         onSetTitle: PropTypes.func,
         onSetMeta: PropTypes.func,
         onPageNotFound: PropTypes.func,
-        closeScreen: PropTypes.func
+        setScreenPosition: PropTypes.func
       }),
     };
 
@@ -21,7 +21,7 @@ function withContext(ComposedComponent) {
       onSetTitle: PropTypes.func.isRequired,
       onSetMeta: PropTypes.func.isRequired,
       onPageNotFound: PropTypes.func.isRequired,
-      closeScreen: PropTypes.func.isRequired
+      setScreenPosition: PropTypes.func.isRequired
     };
 
     getChildContext() {
@@ -31,7 +31,7 @@ function withContext(ComposedComponent) {
         onSetTitle: context.onSetTitle || emptyFunction,
         onSetMeta: context.onSetMeta || emptyFunction,
         onPageNotFound: context.onPageNotFound || emptyFunction,
-        closeScreen: context.closeScreen || emptyFunction
+        setScreenPosition: context.setScreenPosition || emptyFunction
       };
     }
 
