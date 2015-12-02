@@ -35,6 +35,7 @@ class ScreenContainer extends Component{
 					{React.cloneElement(this.props.component, { disabled: this.props.disabled })}
 					{/* apparently this is how we pass props to an unknown component */}
 				</div></div>
+				<div className="screen-overlay"></div>
 			</div>
     );
   }
