@@ -501,8 +501,7 @@ todo hex colours, button icons */
 */
   /* todo elements inside */
   
-	.screen::after {
-		content: "";
+	.screen > .screen-overlay {
 		display: block;
 		width: 100%;
 		position: absolute;
@@ -514,14 +513,14 @@ todo hex colours, button icons */
 		pointer-events: none;
 		transition: all .3s ease-in-out;
 	}
-	.screen.retracted::after,
-	.screen.closed::after {
+	.screen.retracted > .screen-overlay,
+	.screen.closed > .screen-overlay {
 		/*background: rgba(100,100,100,.5);
 		background: rgba(130,130,130,.5);*/
 		background: rgba(120,120,120,.4);
 		pointer-events: all;
 	}
-	.screen.retracted:hover::after {
+	.screen.retracted > .screen-overlay:hover {
 /*			background: rgba(100,100,100,.33);
 		background: rgba(130,130,130,.33);*/
 		background: rgba(120,120,120,.3);
