@@ -19,7 +19,7 @@ class ScreenContainer extends Component{
     //console.log("ScreenContainer.render| props.page: ", this.props.page, " | props.thekey: ", this.props.thekey);
     var disabled = this.props.screenState.disabled || false;
     var typeClass = this.props.screenState.type || "";
-    var sizeClass = this.props.screenState.size || "";
+    var sizeClass = this.props.screenState.size ? "const"+this.props.screenState.size : "";
     var positionClass = this.props.screenState.position || "open";
     var disabledClass = disabled ? "disabled":"";
     return (
