@@ -5,7 +5,6 @@ import styles from './PageDashboard.css';
 import ScreenContainer from '../ScreenContainer';
 import ScreenDashboardBase from '../ScreenDashboardBase';
 
-import ScreenManager from '../ScreenManager';
 
 @withStyles(styles)
 class PageDashboard extends Component {
@@ -17,13 +16,6 @@ class PageDashboard extends Component {
 
   constructor(props) {
     super(props);
-
-    console.log("PageDashboard constructoir");
-
-    var sm = (<ScreenManager />);
-    console.log(sm);
-    //sm.closeScreen(this, 'x');
-
     this.state = {
       show: false,
       screens: [

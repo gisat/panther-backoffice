@@ -46,29 +46,6 @@ class PageAnalyses extends Component {
   }
 
 
-
-  //closeScreen(screenKey) {
-  //
-  //  var newScreens = this.state.screens;
-  //  newScreens.map(function(obj){
-  //    var newObj = obj;
-  //    if(obj.key == screenKey){
-  //      newObj.classes = "closed";
-  //    }
-  //    return newObj;
-  //  });
-  //
-  //  //console.log("newScreens: ", newScreens);
-  //
-  //
-  //  this.setState({
-  //    screens: newScreens
-  //  });
-  //
-  //  //s[0].classes = "closed";
-  //  //console.log("s: ", s);
-  //}
-
   render() {
     const title = 'Analyses';
     this.context.onSetTitle(title);
