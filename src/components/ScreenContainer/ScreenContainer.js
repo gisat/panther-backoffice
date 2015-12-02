@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import styles from './ScreenContainer.css';
 import withStyles from '../../decorators/withStyles';
+import classNames from 'classnames';
 
 import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
@@ -16,14 +17,19 @@ class ScreenContainer extends Component{
 
   render() {
     //console.log("ScreenContainer.render| props.page: ", this.props.page, " | props.thekey: ", this.props.thekey);
+    var disabled = this.props.screenState.disabled || false;
+    var typeClass = this.props.screenState.type || "";
+    var sizeClass = this.props.screenState.size || "";
+    var positionClass = this.props.screenState.position || "open";
+    var disabledClass = disabled ? "disabled":"";
     return (
-      <div className={"screen " + this.props.classes}>
+      <div className={classNames("screen", typeClass, sizeClass, positionClass, disabledClass)}>
 				<div className="screen-scroll"><div>
 					<div className="screen-controls top">
 						<Buttons basic icon vertical>
 							<IconButton
                 name="remove"
-                onClick={this.props.close}
+                onClick={this.props.onClose}
               />
 						</Buttons>
 					</div>
@@ -31,15 +37,18 @@ class ScreenContainer extends Component{
 						<Buttons basic icon vertical>
 							<IconButton
                 name="chevron right"
-                onClick={this.props.retract}
+                onClick={this.props.onRetract}
               />
 						</Buttons>
 					</div>
 					{/*this.props.component*/}
-					{React.cloneElement(this.props.component, { disabled: this.props.disabled })}
+					{React.cloneElement(this.props.screenState.component, { disabled: disabled })}
 					{/* apparently this is how we pass props to an unknown component */}
 				</div></div>
-				<div className="screen-overlay"></div>
+				<div
+          className="screen-overlay"
+          onClick={this.props.onOpen}
+        ></div>
 			</div>
     );
   }

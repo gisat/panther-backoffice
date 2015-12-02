@@ -38,20 +38,32 @@ const context = {
     });
 
     //console.log("classes 0: [" + newScreens[index].classes + "]");
-    newScreens[index].classes = switchClass(newScreens[index].classes, ["open", "closed", "retracted"], positionClass);
+    //newScreens[index].classes = switchClass(newScreens[index].classes, ["open", "closed", "retracted"], positionClass);
     //console.log("classes 1: [" + newScreens[index].classes + "]");
+
+
+
+    newScreens[index].position = positionClass;
+
+    switch(positionClass){
+      case "close":
+            setTimeout(function () {
+              delete newScreens[index];
+              me.setState({
+                screens: newScreens
+              });
+            }, 1000);
+      case "retracted":
+            newScreens[index].disabled = true;
+            break;
+      case "open":
+            newScreens[index].disabled = false;
+    }
+
     this.setState({
       screens: newScreens
     });
 
-    if(positionClass == "closed") {
-      setTimeout(function () {
-        delete newScreens[index];
-        me.setState({
-          screens: newScreens
-        });
-      }, 1000);
-    }
   }
 };
 

@@ -46,9 +46,9 @@ class PageMetadata extends Component {
         <ScreenContainer
           key={screen.key}
           screenState={screen}
-          close={me.context.setScreenPosition.bind(me, screen.key, "closed")}
-          retract={me.context.setScreenPosition.bind(me, screen.key, "retracted")}
-          open={me.context.setScreenPosition.bind(me, screen.key, "open")}
+          onClose={me.context.setScreenPosition.bind(me, screen.key, "closed")}
+          onRetract={me.context.setScreenPosition.bind(me, screen.key, "retracted")}
+          onOpen={me.context.setScreenPosition.bind(me, screen.key, "open")}
         />
       );
     });
