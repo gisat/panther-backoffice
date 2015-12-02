@@ -11,7 +11,8 @@ class PageDashboard extends Component {
 
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
-    setScreenPosition: PropTypes.func.isRequired
+    setScreenPosition: PropTypes.func.isRequired,
+    screenStack: PropTypes.array
   };
 
   constructor(props) {
@@ -37,6 +38,8 @@ class PageDashboard extends Component {
     this.context.onSetTitle(title);
 
     var me = this;
+    console.log("PageDashboard constructoir  context: ", this.context);
+
     var screenNodes = this.state.screens.map(function (screen) {
       return (
         <ScreenContainer

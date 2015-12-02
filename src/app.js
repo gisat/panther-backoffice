@@ -28,7 +28,7 @@ const context = {
   setScreenPosition: function(screenKey, positionClass) {
     var me = this;
 
-    //console.log("CLOSE SCREEN: this.state: ", this.state, " this: ", this, "; screenKey: ", screenKey);
+    //console.log("SCREENPOS  screenStack: " + this.context.screenStack);
     var newScreens = this.state.screens.slice(0);
     var index = -1;
     newScreens.map(function(obj, i){
@@ -36,12 +36,6 @@ const context = {
         index = i;
       }
     });
-
-    //console.log("classes 0: [" + newScreens[index].classes + "]");
-    //newScreens[index].classes = switchClass(newScreens[index].classes, ["open", "closed", "retracted"], positionClass);
-    //console.log("classes 1: [" + newScreens[index].classes + "]");
-
-
 
     newScreens[index].position = positionClass;
 
