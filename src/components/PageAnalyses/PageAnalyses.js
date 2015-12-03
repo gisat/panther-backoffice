@@ -22,7 +22,7 @@ class PageAnalyses extends Component {
     super(props);
 
     this.state = {
-      show: false,
+      key: "analysis",
       screens: [
         {
           key: "analyses1",
@@ -65,6 +65,8 @@ class PageAnalyses extends Component {
         />
       );
     });
+
+    //this.context.setScreenPosition.bind(this)();
 
     return (
       <div id="content">

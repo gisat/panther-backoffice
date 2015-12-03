@@ -30,43 +30,79 @@ const context = {
   setScreenPosition: function(screenKey, positionClass) {
     var me = this;
 
-
-    console.log("SCREENPOS  screenStack 1 ["+screenStack["PageAnalysis"][1].position+"]: ", screenStack);
-    setTimeout(function(){
-      screenStack["PageAnalysis"][1].position = "retracted!";
-      console.log("SCREENPOS  screenStack 2 ["+screenStack["PageAnalysis"][1].position+"]: ", screenStack);
-    }, 10000);
-
-
-    var newScreens = this.state.screens.slice(0);
+    // clone state screen array and get index for actual screen
+    var newScreens = me.state.screens.slice(0);
     var index = -1;
-    newScreens.map(function(obj, i){
-      if(obj.key == screenKey){
-        index = i;
+    if(typeof screenKey != 'undefined') {
+      newScreens.map(function (obj, i) {
+        if (obj.key == screenKey) {
+          index = i;
+        }
+      });
+
+      // set new position class (open, retracted, closed)
+      newScreens[index].position = positionClass;
+
+      switch (positionClass) {
+        case "closed":
+          // when closing, delete screen from state after a while
+          setTimeout(function () {
+            delete newScreens[index];
+            me.setState({
+              screens: newScreens
+            });
+          }, 1000);
+        case "retracted":
+          // when closing or retracting, disable content of the screen
+          newScreens[index].disabled = true;
+          break;
+        case "open":
+          // when opening, enable content
+          newScreens[index].disabled = false;
+      }
+
+      // apply changes of state
+      me.setState({
+        screens: newScreens
+      });
+
+    } /// if screen defined
+    else{
+      console.log("@@@@@@@@@@@@@@@@@ setScreenPosition without screenKey @@@@@@@@@@@@@@@@@");
+    }
+
+    ////// log operation to screenStack
+    // create stack for the page
+    screenStack[me.state.key] = screenStack[me.state.key] || [];
+    // remove previous records for the same screen
+    screenStack[me.state.key].map(function(record, i){
+      if(record.key == screenKey) screenStack[me.state.key].splice(i, 1);
+    });
+    // add record for this operation
+    if(positionClass == "open" || positionClass == "retracted"){
+      screenStack[me.state.key].unshift({
+        key: screenKey,
+        position: positionClass
+      });
+    }
+
+    ////// compute widths
+    var menuWidth = 3.75;
+    var retractedWidth = 5;
+    var constPlus = 1;
+    var normalWidth = 50;
+
+    // predelat do pixelu
+
+    var availableWidth = window.innerWidth/16 - menuWidth - screenStack[me.state.key].length * retractedWidth;
+    screenStack[me.state.key].map(function(record, i){
+      if(record.position == "open"){
+        var screenSize = record.size || normalWidth;
+        availableWidth -= (screenSize + constPlus - retractedWidth);
       }
     });
 
-    newScreens[index].position = positionClass;
-
-    switch(positionClass){
-      case "close":
-            setTimeout(function () {
-              delete newScreens[index];
-              me.setState({
-                screens: newScreens
-              });
-            }, 1000);
-      case "retracted":
-            newScreens[index].disabled = true;
-            break;
-      case "open":
-            newScreens[index].disabled = false;
-    }
-
-    this.setState({
-      screens: newScreens
-    });
-
+    console.log("availableWidth: ", availableWidth, "screenStack: ", screenStack);
   }
 };
 

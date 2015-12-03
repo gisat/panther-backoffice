@@ -19,7 +19,7 @@ class PagePlaces extends Component {
     super(props);
 
     this.state = {
-      show: false,
+      key: "places",
       screens: [
         {
           key: "screenPlacesBase",

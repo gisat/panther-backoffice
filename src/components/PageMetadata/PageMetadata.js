@@ -19,7 +19,7 @@ class PageMetadata extends Component {
     super(props);
 
     this.state = {
-      show: false,
+      key: "metadata",
       screens: [
         {
           key: "screen1",

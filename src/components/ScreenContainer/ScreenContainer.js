@@ -14,14 +14,30 @@ class ScreenContainer extends Component{
   //  component: PropTypes.object
   //};
 
+  constructor(props){
+    super(props);
+
+    //// nasty thing
+    switch(props.screenState.position){
+      case "retracted":
+            props.onRetract();
+            break;
+      case "closed":
+            props.onClose();
+            break;
+      default:
+            props.onOpen();
+    }
+  }
 
   render() {
     //console.log("ScreenContainer.render| props.page: ", this.props.page, " | props.thekey: ", this.props.thekey);
     var disabled = this.props.screenState.disabled || false;
     var typeClass = this.props.screenState.type || "";
-    var sizeClass = this.props.screenState.size ? "const"+this.props.screenState.size : "";
+    var sizeClass = this.props.screenState.size ? "const" + this.props.screenState.size : "";
     var positionClass = this.props.screenState.position || "open";
     var disabledClass = disabled ? "disabled":"";
+
     return (
       <div className={classNames("screen", typeClass, sizeClass, positionClass, disabledClass)}>
         <div className="screen-scroll"><div>

@@ -18,7 +18,7 @@ class PageDataLayers extends Component {
     super(props);
 
     this.state = {
-      show: false,
+      key: "dataLayers",
       screens: [
         {
           key: "screen1",
