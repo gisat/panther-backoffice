@@ -902,20 +902,20 @@ var UIObjectSelect = React.createClass({
 			input = <div className="Select-input">&nbsp;</div>;
 		}
 		
-//		var objectSingleValue = [];
-//		var objectMultiValues = [];
-//		if(this.props.multi){
-//			objectMultiValues = value;
-//		} else {
-//			objectSingleValue = value;
-//		}
+		var objectSingleValue = [];
+		var objectMultiValues = [];
+		if(this.props.multi){
+			objectMultiValues = value;
+		} else {
+			objectSingleValue = value;
+		}
 		
 		return (
 			<div ref="wrapper" className={selectClass}>
 				<input type="hidden" ref="value" name={this.props.name} value={this.state.value} disabled={this.props.disabled} />
-//				{value}
+				{objectMultiValues}
 				<div className="Select-control" ref="control" onKeyDown={this.handleKeyDown} onMouseDown={this.handleMouseDown} onTouchEnd={this.handleMouseDown}>
-					{value}
+					{objectSingleValue}
 					{input}
 					{loading}
 					{clear}
