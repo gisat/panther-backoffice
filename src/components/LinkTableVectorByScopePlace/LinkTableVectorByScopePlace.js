@@ -160,6 +160,7 @@ class LinkTableVectorByScopePlace extends Component {
 
 		var vectorLayersInsert = this.state.vectorLayers.map(function (vectorLayer) {
 
+			var layerRowChildren = [];
 			var tdLayerClassName = "selectable";
 			var dataNoneCountLayer = 0;
 			var layerPeriodsInsert = vectorLayer.periods.map(function (period) {
@@ -191,26 +192,33 @@ class LinkTableVectorByScopePlace extends Component {
 			else {
 				tdLayerClassName += " warning";
 			}
+			
+			var layerHeaderElement = (
+				<td className="header">
+					{vectorLayer.name}
+				</td>
+			);
+			var layerPeriodsElement = (
+				<td className={tdLayerClassName}>
+					<a
+						href="#"
+						onClick={thisComponent.openScreenExample.bind(
+								thisComponent,
+								vectorLayer.key,
+								false
+							)}
+					>
+						{layerPeriodsInsert}
+					</a>
+				</td>
+			);
+			
+			layerRowChildren.push(layerHeaderElement,layerPeriodsElement);
+			
+			for (var layerAttSet of vectorLayer.attSets) {
+				
+				var attSetHeaderElement = React.createElement('td', {className: 'header'}, layerAttSet.name);
 
-			var brandNewAttSets = [];
-			for (var i = 0; i < vectorLayer.attSets.length; i++) {
-				brandNewAttSets[2*i] = vectorLayer.attSets[i];
-				brandNewAttSets[(2*i)+1] = vectorLayer.attSets[i];
-			}
-
-			var isItHeaderTime = true;
-
-			var vectorLayerAttSetsInsert = brandNewAttSets.map(function (layerAttSet) {
-				if(isItHeaderTime) {
-					isItHeaderTime = !isItHeaderTime;
-					return (
-						<td className="header">
-							{layerAttSet.name}
-						</td>
-					);
-				}
-				else {
-					isItHeaderTime = !isItHeaderTime;
 					var dataNoneCount = 0;
 					var tdClassName = "selectable";
 					var layerAttSetPeriodsInsert = layerAttSet.periods.map(function (period) {
@@ -242,8 +250,8 @@ class LinkTableVectorByScopePlace extends Component {
 					else {
 						tdClassName += " warning";
 					}
-
-					return (
+					
+					var attSetPeriodsElement = (
 						<td className={tdClassName}>
 							<a
 								href="#"
@@ -257,46 +265,25 @@ class LinkTableVectorByScopePlace extends Component {
 							</a>
 						</td>
 					);
-				}
-			});
+										
+					layerRowChildren.push(attSetHeaderElement,attSetPeriodsElement);
+			}
 
 			var additionalColumns = vectorAttSetsColumns - (vectorLayer.attSets.length * 2);
 			var additionalColumnsInsert;
 			if(additionalColumns) {
 				additionalColumnsInsert = <td colSpan={additionalColumns}></td>;
 			}
+			
+			layerRowChildren.push(additionalColumnsInsert);
 
-			return (
-				<tr>
-					<td className="header">
-						{vectorLayer.name}
-					</td>
-					<td className={tdLayerClassName}>
-						<a
-							href="#"
-							onClick={thisComponent.openScreenExample.bind(
-									thisComponent,
-									vectorLayer.key,
-									false
-								)}
-						>
-							{layerPeriodsInsert}
-						</a>
-					</td>
-					{vectorLayerAttSetsInsert}
-					{additionalColumnsInsert}
-				</tr>
-      );
+			return React.createElement('tr', null, layerRowChildren);
+			
     });
 
 		return (
 
-		/* -> tabs - reference periods */
 		<div>
-			{/*
-			<br/>
-			<p>{this.state.example}</p>
-			*/}
 
 		<Table celled className="LinkTable ByScopePlace fixed separateRows" id="LinkTableVectorByScopePlace">
 			<thead>
