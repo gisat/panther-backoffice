@@ -90,23 +90,10 @@ class ConfigMetadataLayerVector extends Component{
 		return (
       <div>
 				
-				<div className="input-wrapper">
-					<div>
-						<label className="container">
-							Name
-							<Input type="text" name="name" placeholder=" " value="Land cover" />
-						</label>
-					</div>
-					<div>
-						<Buttons icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
-				</div>
-				
-
-				
+				<label className="container">
+					Name
+					<Input type="text" name="name" placeholder=" " value="Land cover" />
+				</label>
 				
 				<div className="input-wrapper">
 					<div>
