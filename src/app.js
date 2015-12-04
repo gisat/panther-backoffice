@@ -91,10 +91,9 @@ const context = {
     var retractedWidth = 5;
     var constPlus = 1;
     var normalWidth = 50;
+    var remSize = 16;
 
-    // predelat do pixelu
-
-    var availableWidth = window.innerWidth/16 - menuWidth - screenStack[me.state.key].length * retractedWidth;
+    var availableWidth = window.innerWidth/remSize - menuWidth - screenStack[me.state.key].length*retractedWidth;
     screenStack[me.state.key].map(function(record, i){
       if(record.position == "open"){
         var screenSize = record.size || normalWidth;

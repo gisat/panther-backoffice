@@ -40,8 +40,8 @@ class PageAnalyses extends Component {
         {
           key: "analyses3",
           type: "too wide", // too should not actually be set initially
-          size: 80,
           position: "retracted",
+          disabled: true,
           component: <ScreenAnalysisSpatialRules/>
         }
       ]
