@@ -595,19 +595,21 @@ todo hex colours, button icons */
 }
 
 
+/*
 @media screen and (min-width:66em) {
 	.screen.wide80 .screen-content > div,
 	.screen.wide80 .screen-setter > div {
     width: 80rem;
   }
 }
+*/
 /*
 @media screen and 
 (min-width:66em) and
 (max-width:93.49999em) {
 */
-	.screen.too.wide80.open, 	
-	.screen.too.wide80.opening {
+	.screen.too.open, 	
+	.screen.too.opening {
   	position: absolute;
   	top: 0;
   	right: 0;
@@ -616,7 +618,7 @@ todo hex colours, button icons */
 		
 		z-index: 30;
   }
-	.screen.too.wide80.open .screen-scroll {
+	.screen.too.open .screen-scroll {
 		overflow: auto;
 	}
 /*}*/
