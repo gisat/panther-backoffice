@@ -832,7 +832,59 @@ todo hex colours, button icons */
 	right:0;
 }
 
-
+.object-input-wrapper {
+	border: 1px solid #999;
+	border-radius: .2rem;
+	margin-bottom: 1rem;
+}
+.object-input-wrapper > label {
+	padding: .875rem;
+	margin: 0;
+}
+.object-input-wrapper > label > .Select {
+	margin-top: .5rem;
+}
+.UIObjectSelect-control {
+	display: block;
+	border-radius: .25rem;
+	border: 2px dashed #9c9c9c;
+	margin-bottom: 14px;
+	margin-bottom: .875rem;
+/*	padding: 0 .5rem;*/
+	position: relative;
+	color: #8e8e8e;
+}
+.Select.has-value:not(.Select--multi) > .UIObjectSelect-control {
+	background: #B6BCC7;
+	color: #1452A2;
+	border-style: solid;
+	border-color: #95A6C7;
+}
+.Select.has-value:not(.Select--multi) .Select-placeholder {
+	color: #1452A2;
+}
+.Select--multi.has-value .UIObjectSelect .Select-input {
+	margin: 0;
+}
+.UIObjectSelect-item {
+	display: block;
+	border-radius: .25rem;
+	border: 2px solid #95A6C7;
+	background: #ABBAD8;
+	background: #B6BCC7;
+	margin-bottom: .875rem;
+	padding: 0 .5rem;
+	color: #1452A2;
+	position: relative;
+}
+.UIObjectSelect-control,
+.UIObjectSelect-item {
+	transition:  all .3s ease-out;
+}
+.UIObjectSelect-control:hover,
+.UIObjectSelect-item:hover {
+	border-color: #4d8aff;
+}
 
 .rsc-header {
   height: 2.8125rem;
