@@ -94,10 +94,26 @@ const context = {
     var remSize = 16;
 
     var availableWidth = window.innerWidth/remSize - menuWidth - screenStack[me.state.key].length*retractedWidth;
+
+    //switch(positionClass){
+    //  case "open":
+    //
+    //}
+
+    // open
     screenStack[me.state.key].map(function(record, i){
       if(record.position == "open"){
         var screenSize = record.size || normalWidth;
+        if((availableWidth - (screenSize + constPlus - retractedWidth)) < 0){
+          // disablovat
+        }else if(availableWidth < 0){
+          // disablovat
+          // retractovat
+        }
+
         availableWidth -= (screenSize + constPlus - retractedWidth);
+      }else if(record.position == "retracted"){
+
       }
     });
 
