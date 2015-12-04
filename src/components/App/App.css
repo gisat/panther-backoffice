@@ -397,6 +397,7 @@ todo hex colours, button icons */
 		width: 5rem;
 		/*flex-grow: 0;*/
 		flex-grow: 0.0000001;
+		flex-shrink: 0;
 	}
 
 	.screen-scroll > div {
@@ -434,6 +435,7 @@ todo hex colours, button icons */
 	.screen.const30.open,
 	.screen.const30.opening {
 		width: 31rem;
+		flex-shrink: 0;
   }
 	.screen.const30 .screen-content > div,
 	.screen.const30 .screen-setter > div {
@@ -447,6 +449,7 @@ todo hex colours, button icons */
 	.screen.const40.open,
 	.screen.const40.opening  {
 		width: 41rem;
+		flex-shrink: 0;
   }
 	.screen.const40 .screen-content > div,
 	.screen.const40 .screen-setter > div {
@@ -460,6 +463,7 @@ todo hex colours, button icons */
 	.screen.const50.open,
 	.screen.const50.opening  {
 		width: 51rem;
+		flex-shrink: 0;
   }
 	.screen.const50 .screen-content > div,
 	.screen.const50 .screen-setter > div {
@@ -513,15 +517,14 @@ todo hex colours, button icons */
 		pointer-events: none;
 		transition: all .3s ease-in-out;
 	}
-	.screen.retracted > .screen-overlay,
-	.screen.closed > .screen-overlay {
+	.screen.disabled > .screen-overlay {
 		/*background: rgba(100,100,100,.5);
 		background: rgba(130,130,130,.5);*/
 		background: rgba(120,120,120,.4);
 		pointer-events: all;
 		cursor: pointer;
 	}
-	.screen.retracted > .screen-overlay:hover {
+	.screen.disabled > .screen-overlay:hover {
 /*			background: rgba(100,100,100,.33);
 		background: rgba(130,130,130,.33);*/
 		background: rgba(120,120,120,.3);
@@ -595,19 +598,21 @@ todo hex colours, button icons */
 }
 
 
+/*
 @media screen and (min-width:66em) {
 	.screen.wide80 .screen-content > div,
 	.screen.wide80 .screen-setter > div {
     width: 80rem;
   }
 }
+*/
 /*
 @media screen and 
 (min-width:66em) and
 (max-width:93.49999em) {
 */
-	.screen.too.wide80.open, 	
-	.screen.too.wide80.opening {
+	.screen.too.open, 	
+	.screen.too.opening {
   	position: absolute;
   	top: 0;
   	right: 0;
@@ -616,7 +621,7 @@ todo hex colours, button icons */
 		
 		z-index: 30;
   }
-	.screen.too.wide80.open .screen-scroll {
+	.screen.too.open .screen-scroll {
 		overflow: auto;
 	}
 /*}*/
@@ -827,7 +832,59 @@ todo hex colours, button icons */
 	right:0;
 }
 
-
+.object-input-wrapper {
+	border: 1px solid #999;
+	border-radius: .2rem;
+	margin-bottom: 1rem;
+}
+.object-input-wrapper > label {
+	padding: .875rem;
+	margin: 0;
+}
+.object-input-wrapper > label > .Select {
+	margin-top: .5rem;
+}
+.UIObjectSelect-control {
+	display: block;
+	border-radius: .25rem;
+	border: 2px dashed #9c9c9c;
+	margin-bottom: 14px;
+	margin-bottom: .875rem;
+/*	padding: 0 .5rem;*/
+	position: relative;
+	color: #8e8e8e;
+}
+.Select.has-value:not(.Select--multi) > .UIObjectSelect-control {
+	background: #B6BCC7;
+	color: #1452A2;
+	border-style: solid;
+	border-color: #95A6C7;
+}
+.Select.has-value:not(.Select--multi) .Select-placeholder {
+	color: #1452A2;
+}
+.Select--multi.has-value .UIObjectSelect .Select-input {
+	margin: 0;
+}
+.UIObjectSelect-item {
+	display: block;
+	border-radius: .25rem;
+	border: 2px solid #95A6C7;
+	background: #ABBAD8;
+	background: #B6BCC7;
+	margin-bottom: .875rem;
+	padding: 0 .5rem;
+	color: #1452A2;
+	position: relative;
+}
+.UIObjectSelect-control,
+.UIObjectSelect-item {
+	transition:  all .3s ease-out;
+}
+.UIObjectSelect-control:hover,
+.UIObjectSelect-item:hover {
+	border-color: #4d8aff;
+}
 
 .rsc-header {
   height: 2.8125rem;

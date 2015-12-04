@@ -54,7 +54,7 @@ var Value = React.createClass({
 		}
 
 		return (
-			<div className={classes('Select-item', this.props.option.className)}
+			<div className={classes('UIObjectSelect-item', this.props.option.className)}
 				 style={this.props.option.style}
 				 title={this.props.option.title}>
 				<span className="Select-item-icon"
