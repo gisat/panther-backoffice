@@ -844,15 +844,21 @@ todo hex colours, button icons */
 .object-input-wrapper > label > .Select {
 	margin-top: .5rem;
 }
+.object-input-wrapper-info {
+	border-top: 1px solid rgba(0,0,0,.08);
+	padding: .5rem 1rem;
+}
+
 .UIObjectSelect-control {
 	display: block;
 	border-radius: .25rem;
 	border: 2px dashed #9c9c9c;
 	margin-bottom: 14px;
 	margin-bottom: .875rem;
-/*	padding: 0 .5rem;*/
+	padding: 0;
 	position: relative;
 	color: #8e8e8e;
+	cursor: text;
 }
 .Select.has-value:not(.Select--multi) > .UIObjectSelect-control {
 	background: #B6BCC7;
@@ -873,18 +879,86 @@ todo hex colours, button icons */
 	background: #ABBAD8;
 	background: #B6BCC7;
 	margin-bottom: .875rem;
-	padding: 0 .5rem;
+	padding: 0;
 	color: #1452A2;
 	position: relative;
+/*	cursor: pointer;*/
+	
+	padding-left: 2rem;
 }
+
 .UIObjectSelect-control,
 .UIObjectSelect-item {
 	transition:  all .3s ease-out;
+	
 }
 .UIObjectSelect-control:hover,
 .UIObjectSelect-item:hover {
 	border-color: #4d8aff;
 }
+.Select.has-value:not(.Select--multi) > .UIObjectSelect-control:hover {
+	border-color: #4d8aff;
+}
+.UIObjectSelect-item-icon {
+	position: absolute;
+	top: 0;
+	left: 0;
+
+	width: 2rem;
+	line-height: 1.875rem;
+	
+	cursor: pointer;
+	border-radius: .25rem 0 0 .25rem;
+	border-right: 1px solid #95A6C7;
+	padding: 0;
+	text-align: center;
+}
+.UIObjectSelect-item-icon:hover {
+	background: rgba(255,255,255,.3);
+}
+.UIObjectSelect-item-a,
+.UIObjectSelect-item-a:hover {
+	font-size: 1.125rem;
+	line-height: 1.875rem;
+	display: block;
+	cursor: pointer;
+	padding-left: .5rem;
+	color: #1452A2;
+	border-radius: 0 .25rem .25rem 0;
+}
+.UIObjectSelect-item-a:after,
+.Select.has-value:not(.Select--multi) .UIObjectSelect-control > .Select-placeholder:after {
+	content: "\F101";
+	font-family: Icons;
+	font-size: 20px;
+	font-size: 1.25rem;
+	display: block;
+	position: absolute;
+	right: 6px;
+	right: .4rem;
+	top: 0;
+	/* color: #6B90BF; */
+	color: #859FBF;
+}
+.Select .Select-input {
+	position: relative;
+	left: 2rem;
+}
+.Select--multi.has-value .Select-input {
+	margin-left: 0;
+}
+.UIObjectSelect-control > .Select-placeholder {
+	left: 2rem;
+	padding-right: 0;
+	line-height: 1.875rem;
+}
+.Select.has-value:not(.Select--multi) .UIObjectSelect-control > .Select-placeholder {
+	
+}
+.Select .UIObjectSelect-control .Select-input {
+	height: 1.875rem;
+}
+
 
 .rsc-header {
   height: 2.8125rem;

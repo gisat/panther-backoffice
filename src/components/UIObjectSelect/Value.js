@@ -42,7 +42,7 @@ var Value = React.createClass({
 
 		if (this.props.optionLabelClick) {
 			label = (
-				<a className={classes('Select-item-label__a', this.props.option.className)}
+				<a className={classes('UIObjectSelect-item-a', this.props.option.className)}
 					onMouseDown={this.blockEvent}
 					onTouchEnd={this.props.onOptionLabelClick}
 					onClick={this.props.onOptionLabelClick}
@@ -55,13 +55,15 @@ var Value = React.createClass({
 
 		return (
 			<div className={classes('UIObjectSelect-item', this.props.option.className)}
-				 style={this.props.option.style}
-				 title={this.props.option.title}>
-				<span className="Select-item-icon"
+				style={this.props.option.style}
+				title={this.props.option.title}
+			>
+				<span className="UIObjectSelect-item-icon"
 					onMouseDown={this.blockEvent}
 					onClick={this.handleOnRemove}
-					onTouchEnd={this.handleOnRemove}>&times;</span>
-				<span className="Select-item-label">{label}</span>
+					onTouchEnd={this.handleOnRemove}
+				>&times;</span>
+				{label}
 			</div>
 		);
 	}
