@@ -48,3 +48,6 @@
 /*	border-color: #bed4ef;*/
 	border-color: rgba(1, 104, 222, 0.22);
 }
+.Select--multi .Select-input {
+	margin-left: 0;
+}
