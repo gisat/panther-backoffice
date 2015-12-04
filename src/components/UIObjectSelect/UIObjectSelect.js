@@ -848,20 +848,25 @@ var UIObjectSelect = React.createClass({
 				<span className="Select-loading" />
 			</span>
 		) : null;
+//			<span className="Select-clear-zone" title={this.props.multi ? this.props.clearAllText : this.props.clearValueText} aria-label={this.props.multi ? this.props.clearAllText : this.props.clearValueText} onMouseDown={this.clearValue} onTouchEnd={this.clearValue} onClick={this.clearValue}>
+//				<span className="Select-clear" dangerouslySetInnerHTML={{ __html: '&times;' }} />
+//			</span>
+//		 clear "x" button
+		var singleClear = (this.props.clearable && this.state.value && !this.props.disabled && !this.props.multi && !(this.isLoading())) ? (
 
-		// clear "x" button
-		var clear = (this.props.clearable && this.state.value && !this.props.disabled && !(this.isLoading())) ? (
-			<span className="Select-clear-zone" title={this.props.multi ? this.props.clearAllText : this.props.clearValueText} aria-label={this.props.multi ? this.props.clearAllText : this.props.clearValueText} onMouseDown={this.clearValue} onTouchEnd={this.clearValue} onClick={this.clearValue}>
-				<span className="Select-clear" dangerouslySetInnerHTML={{ __html: '&times;' }} />
-			</span>
+			<span className="UIObjectSelect-item-icon"
+					onMouseDown={this.clearValue}
+					onClick={this.clearValue}
+					onTouchEnd={this.clearValue}
+				>&times;</span>
 		) : null;
 
 		// indicator arrow
-		var arrow = (
-			<span className="Select-arrow-zone" onMouseDown={this.handleMouseDownOnArrow}>
-				<span className="Select-arrow" onMouseDown={this.handleMouseDownOnArrow} />
-			</span>
-		);
+//		var arrow = (
+//			<span className="Select-arrow-zone" onMouseDown={this.handleMouseDownOnArrow}>
+//				<span className="Select-arrow" onMouseDown={this.handleMouseDownOnArrow} />
+//			</span>
+//		);
 
 		var menu;
 		var menuProps;
@@ -914,12 +919,11 @@ var UIObjectSelect = React.createClass({
 			<div ref="wrapper" className={selectClass}>
 				<input type="hidden" ref="value" name={this.props.name} value={this.state.value} disabled={this.props.disabled} />
 				{objectMultiValues}
-				<div className="Select-control" ref="control" onKeyDown={this.handleKeyDown} onMouseDown={this.handleMouseDown} onTouchEnd={this.handleMouseDown}>
+				<div className="UIObjectSelect-control" ref="control" onKeyDown={this.handleKeyDown} onMouseDown={this.handleMouseDown} onTouchEnd={this.handleMouseDown}>
+					{singleClear}
 					{objectSingleValue}
 					{input}
 					{loading}
-					{clear}
-					{arrow}
 				</div>
 				{menu}
 			</div>
