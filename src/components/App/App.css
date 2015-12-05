@@ -940,17 +940,19 @@ todo hex colours, button icons */
 	/* color: #6B90BF; */
 	color: #859FBF;
 }
-.Select .Select-input {
+.Select .UIObjectSelect-control .Select-input {
 	position: relative;
 	left: 2rem;
 }
-.Select--multi.has-value .Select-input {
-	margin-left: 0;
-}
+
 .UIObjectSelect-control > .Select-placeholder {
 	left: 2rem;
 	padding-right: 0;
 	line-height: 1.875rem;
+}
+
+.Select--multi.has-value .UIObjectSelect-control .Select-input {
+	margin-left: 0;
 }
 .Select.has-value:not(.Select--multi) .UIObjectSelect-control > .Select-placeholder {
 	
@@ -958,7 +960,16 @@ todo hex colours, button icons */
 .Select .UIObjectSelect-control .Select-input {
 	height: 1.875rem;
 }
-
+.UIObjectSelect-control .Select-input > input,
+.UIObjectSelect-control .Select-placeholder, 
+.UIObjectSelect-control .Select-input > div {
+	height: 1.875rem;
+	line-height: 1.875rem;
+}
+.UIObjectSelect-control .Select-input > input,
+.UIObjectSelect-control .Select-input > div {
+	color: #222;
+}
 
 .rsc-header {
   height: 2.8125rem;
