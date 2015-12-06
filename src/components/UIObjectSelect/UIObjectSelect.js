@@ -796,7 +796,7 @@ var UIObjectSelect = React.createClass({
 	},
 
 	render () {
-		var selectClass = classes('Select', this.props.className, {
+		var selectClass = classes('Select UIObjectSelect', this.props.className, {
 			'Select--multi': this.props.multi,
 			'is-searchable': this.props.searchable,
 			'is-open': this.state.isOpen,
@@ -805,7 +805,9 @@ var UIObjectSelect = React.createClass({
 			'is-disabled': this.props.disabled,
 			'has-value': this.state.value
 		});
-		var value = [];
+//		var value = [];
+		var objectInnerValue = [];
+		var objectOuterValues = [];
 		if (this.props.multi) {
 			this.state.values.forEach(function(val) {
 				var renderLabel = this.props.valueRenderer || this.renderOptionLabel;
@@ -820,14 +822,15 @@ var UIObjectSelect = React.createClass({
 					onRemove: onRemove,
 					disabled: this.props.disabled
 				});
-				value.push(valueComponent);
+				objectOuterValues.push(valueComponent);
 			}, this);
 		}
 
-		if (!this.state.inputValue && (!this.props.multi || !value.length)) {
+//		if (!this.state.inputValue && (!this.props.multi || !value.length)) {
+		if (!this.state.inputValue) {
 			var val = this.state.values[0] || null;
 			if (this.props.valueRenderer && !!this.state.values.length) {
-				value.push(<Value
+				objectInnerValue.push(<Value
 						key={0}
 						option={val}
 						renderer={this.props.valueRenderer}
@@ -838,7 +841,7 @@ var UIObjectSelect = React.createClass({
 					value: val,
 					placeholder: this.state.placeholder
 				});
-				value.push(singleValueComponent);
+				objectInnerValue.push(singleValueComponent);
 			}
 		}
 
@@ -907,21 +910,13 @@ var UIObjectSelect = React.createClass({
 			input = <div className="Select-input">&nbsp;</div>;
 		}
 		
-		var objectSingleValue = [];
-		var objectMultiValues = [];
-		if(this.props.multi){
-			objectMultiValues = value;
-		} else {
-			objectSingleValue = value;
-		}
-		
 		return (
 			<div ref="wrapper" className={selectClass}>
 				<input type="hidden" ref="value" name={this.props.name} value={this.state.value} disabled={this.props.disabled} />
-				{objectMultiValues}
+				{objectOuterValues}
 				<div className="UIObjectSelect-control" ref="control" onKeyDown={this.handleKeyDown} onMouseDown={this.handleMouseDown} onTouchEnd={this.handleMouseDown}>
 					{singleClear}
-					{objectSingleValue}
+					{objectInnerValue}
 					{input}
 					{loading}
 				</div>

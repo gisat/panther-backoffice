@@ -927,7 +927,7 @@ todo hex colours, button icons */
 	border-radius: 0 .25rem .25rem 0;
 }
 .UIObjectSelect-item-a:after,
-.Select.has-value:not(.Select--multi) .UIObjectSelect-control > .Select-placeholder:after {
+.Select.has-value:not(.Select--multi) .UIObjectSelect-control > .Select-placeholder::after {
 	content: "\F101";
 	font-family: Icons;
 	font-size: 20px;
@@ -940,14 +940,34 @@ todo hex colours, button icons */
 	/* color: #6B90BF; */
 	color: #859FBF;
 }
+.Select:not(.has-value):not(.Select--multi) .UIObjectSelect-control::before,
+.Select.Select--multi 
+.UIObjectSelect-control::before {
+	content: "\F067";
+	font-family: Icons;
+	font-size: 1.125rem;
+	display: block;
+	position: absolute;
+	left: .7rem;
+	top: .07rem;
+	line-height: 1.875rem;
+	color: #919191;
+	transition: all .3s ease-out;
+}
+.Select:not(.has-value):not(.Select--multi) .UIObjectSelect-control:hover::before,
+.Select.Select--multi 
+.UIObjectSelect-control:hover::before {
+	color: #797979;
+}
 .Select .UIObjectSelect-control .Select-input {
 	position: relative;
 	left: 2rem;
 }
 
-.UIObjectSelect-control > .Select-placeholder {
+.UIObjectSelect .Select-placeholder {
 	left: 2rem;
 	padding-right: 0;
+	height: 1.875rem;
 	line-height: 1.875rem;
 }
 
@@ -969,6 +989,13 @@ todo hex colours, button icons */
 .UIObjectSelect-control .Select-input > input,
 .UIObjectSelect-control .Select-input > div {
 	color: #222;
+}
+.UIObjectSelect.is-focused .UIObjectSelect-control,
+.UIObjectSelect.is-focused .UIObjectSelect-control:hover, 
+.UIObjectSelect.is-focused.has-value:not(.Select--multi) > .UIObjectSelect-control {
+	background: rgba(255,255,255,.4);
+	border-style: solid;
+	border-color: #4d8aff;
 }
 
 .rsc-header {
