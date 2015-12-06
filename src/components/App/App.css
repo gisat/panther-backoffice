@@ -964,11 +964,16 @@ todo hex colours, button icons */
 	left: 2rem;
 }
 
-.UIObjectSelect .Select-placeholder {
+.UIObjectSelect .Select-placeholder,
+.UIObjectSelect:not(.Select--multi) .UIObjectSelect-item-a {
 	left: 2rem;
 	padding-right: 0;
 	height: 1.875rem;
 	line-height: 1.875rem;
+}
+.UIObjectSelect:not(.Select--multi) .UIObjectSelect-item-a {
+	width: calc(100% - 2rem);
+	position: absolute;
 }
 
 .Select--multi.has-value .UIObjectSelect-control .Select-input {
@@ -976,6 +981,9 @@ todo hex colours, button icons */
 }
 .Select.has-value:not(.Select--multi) .UIObjectSelect-control > .Select-placeholder {
 	
+}
+.UIObjectSelect.has-value:not(.Select--multi) .Select-input {
+	pointer-events: none;
 }
 .Select .UIObjectSelect-control .Select-input {
 	height: 1.875rem;

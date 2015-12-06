@@ -381,6 +381,11 @@ var UIObjectSelect = React.createClass({
 		}
 		event.stopPropagation();
 		event.preventDefault();
+		
+		// UIObjectSelect: if single select with value and own click function, ignore it
+		if (!this.props.multi && !!this.props.onOptionLabelClick && !!this.state.values.length) {
+			return;
+		}
 
 		// for the non-searchable select, close the dropdown when button is clicked
 		if (this.state.isOpen && !this.props.searchable) {
@@ -787,6 +792,11 @@ var UIObjectSelect = React.createClass({
 
 	handleOptionLabelClick  (value, event) {
 		if (this.props.onOptionLabelClick) {
+			// UIObjectSelect: if single select, prevent focus
+			if (!this.props.multi) {
+				event.stopPropagation();
+				event.preventDefault();
+			}
 			this.props.onOptionLabelClick(value, event);
 		}
 	},
@@ -830,19 +840,34 @@ var UIObjectSelect = React.createClass({
 		if (!this.state.inputValue) {
 			var val = this.state.values[0] || null;
 			if (this.props.valueRenderer && !!this.state.values.length) {
-				objectInnerValue.push(<Value
+				var singleValueComponent = (
+					<Value
 						key={0}
 						option={val}
 						renderer={this.props.valueRenderer}
-						disabled={this.props.disabled} />);
+						disabled={this.props.disabled} 
+					/>
+				);
+			} else if (!this.props.multi && !!this.props.onOptionLabelClick && !!this.state.values.length) {
+				var onOptionLabelClick = this.handleOptionLabelClick.bind(this, val);
+				var singleValueComponent = (
+					<a className={classes('UIObjectSelect-item-a', val.className)}
+						onMouseDown={this.blockEvent}
+						onTouchEnd={this.props.onOptionLabelClick}
+						onClick={onOptionLabelClick}
+						style={val.style}
+						title={val.title}>
+						{val[this.props.labelKey]}
+					</a>
+				);
 			} else {
 				var singleValueComponent = React.createElement(this.props.singleValueComponent, {
 					key: 'placeholder',
 					value: val,
 					placeholder: this.state.placeholder
 				});
-				objectInnerValue.push(singleValueComponent);
 			}
+			objectInnerValue.push(singleValueComponent);
 		}
 
 		// loading spinner
