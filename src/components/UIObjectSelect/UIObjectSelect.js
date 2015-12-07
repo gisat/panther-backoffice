@@ -70,7 +70,7 @@ var UIObjectSelect = React.createClass({
 
 	getDefaultProps () {
 		return {
-			addLabelText: 'Add "{label}"?',
+			addLabelText: 'Add "{label}"',
 			allowCreate: false,
 			asyncOptions: undefined,
 			autoload: true,
@@ -273,9 +273,18 @@ var UIObjectSelect = React.createClass({
 	},
 
 	getFirstFocusableOption  (options) {
+		// UIObjectSelect: first try preexisting options
 		for (var optionIndex = 0; optionIndex < options.length; ++optionIndex) {
-			if (!options[optionIndex].disabled) {
+			if (!options[optionIndex].disabled && !options[optionIndex].create) {
 				return options[optionIndex];
+			}
+		}
+		// then new
+		if(this.props.allowCreate){
+			for (var optionIndex = 0; optionIndex < options.length; ++optionIndex) {
+				if (!options[optionIndex].disabled) {
+					return options[optionIndex];
+				}
 			}
 		}
 	},
@@ -309,6 +318,13 @@ var UIObjectSelect = React.createClass({
 					[this.props.labelKey]: val
 				};
 			} else {
+				// UIObjectSelect - passing correct keys on create
+				if(!val[this.props.valueKey] && !!val.value) {
+					val[this.props.valueKey] = val.value;
+				}
+				if(!val[this.props.labelKey] && !!val.label) {
+					val[this.props.labelKey] = val.label;
+				}
 				return val;
 			}
 		});
@@ -458,10 +474,14 @@ var UIObjectSelect = React.createClass({
 		}
 		this._blurTimeout = setTimeout(() => {
 			if (this._focusAfterUpdate || !this.isMounted()) return;
+			//UIObjectSelect: clear create option
+			this._optionsFilterString = '';
+			var newFilteredOptions = this.filterOptions(this.state.options);
 			this.setState({
 				inputValue: '',
 				isFocused: false,
-				isOpen: false
+				isOpen: false,
+				filteredOptions: newFilteredOptions
 			});
 		}, 50);
 		if (this.props.onBlur) {
@@ -544,11 +564,25 @@ var UIObjectSelect = React.createClass({
 			}, this._bindCloseMenuIfClickedOutside);
 		} else {
 			var filteredOptions = this.filterOptions(this.state.options);
+			// UIObjectSelect: need state.options AND current input
+			if(this.props.allowCreate && !(event.target.value=="")) {
+				var newOption = this.props.newOptionCreator ? this.props.newOptionCreator(event.target.value) : {
+					value: event.target.value,
+					label: event.target.value,
+					create: true
+				};
+				filteredOptions.unshift(newOption);
+			}
+			var newFocusedOption = this._getNewFocusedOption(filteredOptions);
+			if(!event.target.value.trim()){
+				newFocusedOption = null;
+			}
+			//
 			this.setState({
 				isOpen: true,
 				inputValue: event.target.value,
 				filteredOptions: filteredOptions,
-				focusedOption: this._getNewFocusedOption(filteredOptions)
+				focusedOption: newFocusedOption
 			}, this._bindCloseMenuIfClickedOutside);
 		}
 	},
@@ -735,12 +769,13 @@ var UIObjectSelect = React.createClass({
 		if (this.props.allowCreate && this.state.inputValue.trim()) {
 			var inputValue = this.state.inputValue;
 			options = options.slice();
-			var newOption = this.props.newOptionCreator ? this.props.newOptionCreator(inputValue) : {
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-			options.unshift(newOption);
+			// handled by handleInputChange now
+//			var newOption = this.props.newOptionCreator ? this.props.newOptionCreator(inputValue) : {
+//				value: inputValue,
+//				label: inputValue,
+//				create: true
+//			};
+//			options.unshift(newOption);
 		}
 		var ops = Object.keys(options).map(function(key) {
 			var op = options[key];
@@ -932,7 +967,6 @@ var UIObjectSelect = React.createClass({
 		} else if (!this.props.multi || !this.state.values.length) {
 			input = <div className="Select-input">&nbsp;</div>;
 		}
-		
 		return (
 			<div ref="wrapper" className={selectClass}>
 				<input type="hidden" ref="value" name={this.props.name} value={this.state.value} disabled={this.props.disabled} />

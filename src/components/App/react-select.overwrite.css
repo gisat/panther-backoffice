@@ -51,3 +51,8 @@
 .Select--multi .Select-input {
 	margin-left: 0;
 }
+
+
+.Select-option.is-focused {
+	background: #d3e7ff;
+}
