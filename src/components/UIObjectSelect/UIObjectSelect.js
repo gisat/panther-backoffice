@@ -792,11 +792,9 @@ var UIObjectSelect = React.createClass({
 
 	handleOptionLabelClick  (value, event) {
 		if (this.props.onOptionLabelClick) {
-			// UIObjectSelect: if single select, prevent focus
-			if (!this.props.multi) {
-				event.stopPropagation();
-				event.preventDefault();
-			}
+			// UIObjectSelect: prevent focus
+			event.stopPropagation();
+			event.preventDefault();
 			this.props.onOptionLabelClick(value, event);
 		}
 	},
