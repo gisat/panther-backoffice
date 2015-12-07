@@ -132,6 +132,8 @@ const context = {
       }
     });
 
+    console.log("newScreens: ", newScreens);
+
     // apply changes of state
     me.setState({
       screens: newScreens
