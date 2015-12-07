@@ -25,7 +25,7 @@ const THEMES = [
 			{ key: 30, theme: 'Urban expansion' },
 			{ key: 32, theme: 'Land cover' }
 		];
-const LAYERGROUPS = [
+var LAYERGROUPS = [
 			{ key: 1, name: 'Information layers' },
 			{ key: 2, name: 'Reference satellite images' }
 		];
@@ -63,19 +63,43 @@ class ConfigMetadataLayerVector extends Component{
 //		console.log(typeof themes);
 	}
 	
-	onChangeTopics (values) {
-		this.state.valuesTopics = values;
+	onChangeTopics (value, values) {
+		this.state.valuesTopics = value;
 //		this.resolveThemes(values);
 		console.log(values);
 	}
-	onChangeGroup (value) {
+	onChangeGroup (value, values) {
 		this.state.valueGroup = value;
+		console.log("onChangeGroup:");
+		console.log(values);
+		for (var singleValue of values) {
+			if(singleValue.create){
+				// replace with actual object creation and config screen opening
+				delete singleValue.create;
+				delete singleValue.label;
+				delete singleValue.value;
+				singleValue.key = Math.floor((Math.random() * 10000) + 1);
+				LAYERGROUPS.push(singleValue);
+			}
+		}
 	}
-	onChangeStyles (values) {
-		this.state.valuesStyles = values;
+	onChangeStyles (value) {
+		this.state.valuesStyles = value;
 	}
 	onObjectClick (value, event) {
 		console.log("yay! " + value["key"]);
+	}
+	
+	layerGroupOptionFactory (inputValue) {
+		var newOption = {
+//				key: Math.floor((Math.random() * 10000) + 1),
+				key: inputValue,
+				name: inputValue,
+				value: inputValue,
+				label: inputValue,
+				create: true
+			};
+		return newOption;
 	}
 	
 	componentDidMount() {
@@ -127,6 +151,8 @@ class ConfigMetadataLayerVector extends Component{
 								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={LAYERGROUPS}
+								allowCreate
+								newOptionCreator={this.layerGroupOptionFactory.bind(this)}
 								valueKey="key" 
 								labelKey="name" 
 								inputProps={selectInputProps} 
