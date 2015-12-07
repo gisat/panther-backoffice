@@ -6,6 +6,7 @@ import { Input, Icon, IconButton, Buttons } from '../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../SEUI/modules';
 import Select from 'react-select';
 import _ from 'underscore';
+import UIObjectSelect from '../UIObjectSelect';
 
 
 const TOPICS = [
@@ -45,7 +46,7 @@ class ConfigMetadataLayerVector extends Component{
 
 		this.state = {
 			valuesTopics: [12,22],
-			valueGroup: 1,
+			valueGroup: "",
 			valuesStyles: [30]
 		};
 		
@@ -73,7 +74,9 @@ class ConfigMetadataLayerVector extends Component{
 	onChangeStyles (values) {
 		this.state.valuesStyles = values;
 	}
-	
+	onObjectClick (value, event) {
+		console.log("yay! " + value["key"]);
+	}
 	
 	componentDidMount() {
 		
@@ -95,13 +98,13 @@ class ConfigMetadataLayerVector extends Component{
 					<Input type="text" name="name" placeholder=" " value="Land cover" />
 				</label>
 				
-				<div className="input-wrapper">
-					<div>
+				<div className="object-input-wrapper">
 						<label className="container">
 							Topics
-							<Select 
+							<UIObjectSelect 
 								multi
 								onChange={this.onChangeTopics.bind(this)}
+								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={TOPICS}
 								valueKey="key" 
@@ -110,24 +113,18 @@ class ConfigMetadataLayerVector extends Component{
 								value={this.state.valuesTopics}
 							/>
 						</label>
-					</div>
-					<div>
-						<Buttons icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
+						<div className="object-input-wrapper-info"><b>Themes:</b> Land cover, Population</div>
 				</div>
 				
-				<span><b>Themes:</b> Land cover, Population</span>
 				
 				
-				<div className="input-wrapper">
-					<div>
+				
+				<div className="object-input-wrapper">
 						<label className="container">
 							Layer group
-							<Select 
+							<UIObjectSelect 
 								onChange={this.onChangeGroup.bind(this)}
+								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={LAYERGROUPS}
 								valueKey="key" 
@@ -136,13 +133,6 @@ class ConfigMetadataLayerVector extends Component{
 								value={this.state.valueGroup}
 							/>
 						</label>
-					</div>
-					<div>
-						<Buttons icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
 				</div>
 				
 				<div className="input-wrapper">

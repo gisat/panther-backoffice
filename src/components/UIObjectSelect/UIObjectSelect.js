@@ -381,6 +381,11 @@ var UIObjectSelect = React.createClass({
 		}
 		event.stopPropagation();
 		event.preventDefault();
+		
+		// UIObjectSelect: if single select with value and own click function, ignore it
+		if (!this.props.multi && !!this.props.onOptionLabelClick && !!this.state.values.length) {
+			return;
+		}
 
 		// for the non-searchable select, close the dropdown when button is clicked
 		if (this.state.isOpen && !this.props.searchable) {
@@ -787,6 +792,9 @@ var UIObjectSelect = React.createClass({
 
 	handleOptionLabelClick  (value, event) {
 		if (this.props.onOptionLabelClick) {
+			// UIObjectSelect: prevent focus
+			event.stopPropagation();
+			event.preventDefault();
 			this.props.onOptionLabelClick(value, event);
 		}
 	},
@@ -796,7 +804,7 @@ var UIObjectSelect = React.createClass({
 	},
 
 	render () {
-		var selectClass = classes('Select', this.props.className, {
+		var selectClass = classes('Select UIObjectSelect', this.props.className, {
 			'Select--multi': this.props.multi,
 			'is-searchable': this.props.searchable,
 			'is-open': this.state.isOpen,
@@ -805,7 +813,9 @@ var UIObjectSelect = React.createClass({
 			'is-disabled': this.props.disabled,
 			'has-value': this.state.value
 		});
-		var value = [];
+//		var value = [];
+		var objectInnerValue = [];
+		var objectOuterValues = [];
 		if (this.props.multi) {
 			this.state.values.forEach(function(val) {
 				var renderLabel = this.props.valueRenderer || this.renderOptionLabel;
@@ -820,26 +830,42 @@ var UIObjectSelect = React.createClass({
 					onRemove: onRemove,
 					disabled: this.props.disabled
 				});
-				value.push(valueComponent);
+				objectOuterValues.push(valueComponent);
 			}, this);
 		}
 
-		if (!this.state.inputValue && (!this.props.multi || !value.length)) {
+//		if (!this.state.inputValue && (!this.props.multi || !value.length)) {
+		if (!this.state.inputValue) {
 			var val = this.state.values[0] || null;
 			if (this.props.valueRenderer && !!this.state.values.length) {
-				value.push(<Value
+				var singleValueComponent = (
+					<Value
 						key={0}
 						option={val}
 						renderer={this.props.valueRenderer}
-						disabled={this.props.disabled} />);
+						disabled={this.props.disabled} 
+					/>
+				);
+			} else if (!this.props.multi && !!this.props.onOptionLabelClick && !!this.state.values.length) {
+				var onOptionLabelClick = this.handleOptionLabelClick.bind(this, val);
+				var singleValueComponent = (
+					<a className={classes('UIObjectSelect-item-a', val.className)}
+						onMouseDown={this.blockEvent}
+						onTouchEnd={this.props.onOptionLabelClick}
+						onClick={onOptionLabelClick}
+						style={val.style}
+						title={val.title}>
+						{val[this.props.labelKey]}
+					</a>
+				);
 			} else {
 				var singleValueComponent = React.createElement(this.props.singleValueComponent, {
 					key: 'placeholder',
 					value: val,
 					placeholder: this.state.placeholder
 				});
-				value.push(singleValueComponent);
 			}
+			objectInnerValue.push(singleValueComponent);
 		}
 
 		// loading spinner
@@ -848,20 +874,25 @@ var UIObjectSelect = React.createClass({
 				<span className="Select-loading" />
 			</span>
 		) : null;
+//			<span className="Select-clear-zone" title={this.props.multi ? this.props.clearAllText : this.props.clearValueText} aria-label={this.props.multi ? this.props.clearAllText : this.props.clearValueText} onMouseDown={this.clearValue} onTouchEnd={this.clearValue} onClick={this.clearValue}>
+//				<span className="Select-clear" dangerouslySetInnerHTML={{ __html: '&times;' }} />
+//			</span>
+//		 clear "x" button
+		var singleClear = (this.props.clearable && this.state.value && !this.props.disabled && !this.props.multi && !(this.isLoading())) ? (
 
-		// clear "x" button
-		var clear = (this.props.clearable && this.state.value && !this.props.disabled && !(this.isLoading())) ? (
-			<span className="Select-clear-zone" title={this.props.multi ? this.props.clearAllText : this.props.clearValueText} aria-label={this.props.multi ? this.props.clearAllText : this.props.clearValueText} onMouseDown={this.clearValue} onTouchEnd={this.clearValue} onClick={this.clearValue}>
-				<span className="Select-clear" dangerouslySetInnerHTML={{ __html: '&times;' }} />
-			</span>
+			<span className="UIObjectSelect-item-icon"
+					onMouseDown={this.clearValue}
+					onClick={this.clearValue}
+					onTouchEnd={this.clearValue}
+				>&times;</span>
 		) : null;
 
 		// indicator arrow
-		var arrow = (
-			<span className="Select-arrow-zone" onMouseDown={this.handleMouseDownOnArrow}>
-				<span className="Select-arrow" onMouseDown={this.handleMouseDownOnArrow} />
-			</span>
-		);
+//		var arrow = (
+//			<span className="Select-arrow-zone" onMouseDown={this.handleMouseDownOnArrow}>
+//				<span className="Select-arrow" onMouseDown={this.handleMouseDownOnArrow} />
+//			</span>
+//		);
 
 		var menu;
 		var menuProps;
@@ -902,24 +933,15 @@ var UIObjectSelect = React.createClass({
 			input = <div className="Select-input">&nbsp;</div>;
 		}
 		
-		var objectSingleValue = [];
-		var objectMultiValues = [];
-		if(this.props.multi){
-			objectMultiValues = value;
-		} else {
-			objectSingleValue = value;
-		}
-		
 		return (
 			<div ref="wrapper" className={selectClass}>
 				<input type="hidden" ref="value" name={this.props.name} value={this.state.value} disabled={this.props.disabled} />
-				{objectMultiValues}
-				<div className="Select-control" ref="control" onKeyDown={this.handleKeyDown} onMouseDown={this.handleMouseDown} onTouchEnd={this.handleMouseDown}>
-					{objectSingleValue}
+				{objectOuterValues}
+				<div className="UIObjectSelect-control" ref="control" onKeyDown={this.handleKeyDown} onMouseDown={this.handleMouseDown} onTouchEnd={this.handleMouseDown}>
+					{singleClear}
+					{objectInnerValue}
 					{input}
 					{loading}
-					{clear}
-					{arrow}
 				</div>
 				{menu}
 			</div>
