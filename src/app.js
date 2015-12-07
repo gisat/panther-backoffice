@@ -61,10 +61,10 @@ const context = {
           newScreens[index].disabled = false;
       }
 
-      // apply changes of state
-      me.setState({
-        screens: newScreens
-      });
+      //// apply changes of state
+      //me.setState({
+      //  screens: newScreens
+      //});
 
     } /// if screen defined
     else{
@@ -86,48 +86,68 @@ const context = {
       });
     }
 
-    ////// compute widths
+    ////// manage overflowing screens
     var menuWidth = 3.75;
     var retractedWidth = 5;
     var constPlus = 1;
     var normalWidth = 50;
     var remSize = 16;
-
     var availableWidth = window.innerWidth/remSize - menuWidth - screenStack[me.state.key].length*retractedWidth;
 
-    //switch(positionClass){
-    //  case "open":
-    //
-    //}
+    screenStack[me.state.key].map(function (record) {
+      var screenSize = record.size || normalWidth;
+      var realScreenSize = screenSize + constPlus - retractedWidth;
+      switch (positionClass) {
+        case "open":
+              if (record.position == "open") {
+                if ((availableWidth - realScreenSize) < 0) {
+                  // disablovat
+                  update2DArray(newScreens, "key", record.key, "disabled", true);
+                  if (availableWidth < 0) {
+                    // retractovat
+                    update2DArray(newScreens, "key", record.key, "position", "retracted");
+                    record.position = "retracted";
+                  }
+                }
 
-    // open
-    screenStack[me.state.key].map(function(record, i){
-      if(record.position == "open"){
-        var screenSize = record.size || normalWidth;
-        if((availableWidth - (screenSize + constPlus - retractedWidth)) < 0){
-          // disablovat
-        }else if(availableWidth < 0){
-          // disablovat
-          // retractovat
-        }
-
-        availableWidth -= (screenSize + constPlus - retractedWidth);
-      }else if(record.position == "retracted"){
-
+                availableWidth -= realScreenSize;
+              } else if (record.position == "retracted") {
+                // asi nic?
+              }
+              break;
+        //case "retracted":
+        //      if (record.position == "open") {
+        //        availableWidth -= realScreenSize;
+        //      } else if (record.position == "retracted") {
+        //        if (availableWidth >= 0) {
+        //          // open
+        //          update2DArray(newScreens, "key", record.key, "position", "open");
+        //          record.position = "open";
+        //          if ((availableWidth - realScreenSize) >= 0) {
+        //            // enable
+        //            update2DArray(newScreens, "key", record.key, "disabled", false);
+        //          }
+        //        }
+        //      }
       }
     });
 
-    console.log("availableWidth: ", availableWidth, "screenStack: ", screenStack);
+    // apply changes of state
+    me.setState({
+      screens: newScreens
+    });
+
   }
 };
 
-function switchClass(text, from, to){ // :-(
-  if(typeof from == 'string') from = [from];
-  to = " " + to + " ";
-  var search = "((^| )(" + from.join("|") + ")($| ))";
-  var re = new RegExp(search, 'g');
-  return text.replace(re, to).replace(/\s\s+/g, ' ').trim();
+function update2DArray(theArray, testKey, testValue, setKey, setValue){
+  theArray.map(function(obj){
+    if(obj[testKey] == testValue){
+      obj[setKey] = setValue;
+    }
+  });
 }
+
 
 function render(state) {
   Router.dispatch(state, (newState, component) => {
