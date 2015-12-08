@@ -66,10 +66,23 @@ class ConfigMetadataLayerVector extends Component{
 	onChangeTopics (value, values) {
 		this.state.valuesTopics = value;
 //		this.resolveThemes(values);
+		
+		console.log("onChangeTopics:");
 		console.log(values);
+		for (var singleValue of values) {
+			if(singleValue.create){
+				// replace with actual object creation and config screen opening
+				delete singleValue.create;
+				delete singleValue.label;
+				delete singleValue.value;
+				singleValue.key = Math.floor((Math.random() * 10000) + 1);
+				TOPICS.push(singleValue);
+			}
+		}
 	}
 	onChangeGroup (value, values) {
 		this.state.valueGroup = value;
+		
 		console.log("onChangeGroup:");
 		console.log(values);
 		for (var singleValue of values) {
@@ -90,9 +103,18 @@ class ConfigMetadataLayerVector extends Component{
 		console.log("yay! " + value["key"]);
 	}
 	
+	topicOptionFactory (inputValue) {
+		var newOption = {
+				key: inputValue,
+				topic: inputValue,
+				value: inputValue,
+				label: inputValue,
+				create: true
+			};
+		return newOption;
+	}
 	layerGroupOptionFactory (inputValue) {
 		var newOption = {
-//				key: Math.floor((Math.random() * 10000) + 1),
 				key: inputValue,
 				name: inputValue,
 				value: inputValue,
@@ -131,6 +153,8 @@ class ConfigMetadataLayerVector extends Component{
 								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={TOPICS}
+								allowCreate
+								newOptionCreator={this.topicOptionFactory.bind(this)}
 								valueKey="key" 
 								labelKey="topic" 
 								inputProps={selectInputProps} 
