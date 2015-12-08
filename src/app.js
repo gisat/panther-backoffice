@@ -34,6 +34,8 @@ const context = {
     var newScreens = me.state.screens.slice(0);
     var index = -1;
     if(typeof screenKey != 'undefined') {
+
+      // get index
       newScreens.map(function (obj, i) {
         if (obj.key == screenKey) {
           index = i;
@@ -61,30 +63,44 @@ const context = {
           newScreens[index].disabled = false;
       }
 
-      //// apply changes of state
-      //me.setState({
-      //  screens: newScreens
-      //});
+
+      ////// log operation to screenStack
+      // create stack for the page
+      screenStack[me.state.key] = screenStack[me.state.key] || [];
+      // remove previous records for the same screen
+      screenStack[me.state.key].map(function(record, i){
+        if(record.key == screenKey) screenStack[me.state.key].splice(i, 1);
+      });
+      // add record for this operation
+      if(positionClass == "open" || positionClass == "retracted"){
+        screenStack[me.state.key].unshift({
+          key: screenKey,
+          position: positionClass
+        });
+      }
+
 
     } /// if screen defined
     else{
       console.log("@@@@@@@@@@@@@@@@@ setScreenPosition without screenKey @@@@@@@@@@@@@@@@@");
     }
 
-    ////// log operation to screenStack
-    // create stack for the page
-    screenStack[me.state.key] = screenStack[me.state.key] || [];
-    // remove previous records for the same screen
-    screenStack[me.state.key].map(function(record, i){
-      if(record.key == screenKey) screenStack[me.state.key].splice(i, 1);
+
+
+
+
+    //////////////// log
+    var log = "/ ";
+    newScreens.map(function(screen){
+      var posi = screen.position;
+      log += screen.key + " " + posi + "(" + (screen.disabled ? "DIS":"en") + ") | ";
     });
-    // add record for this operation
-    if(positionClass == "open" || positionClass == "retracted"){
-      screenStack[me.state.key].unshift({
-        key: screenKey,
-        position: positionClass
-      });
-    }
+    console.log(log);
+    console.log("| screenKey:", screenKey, "| action:", positionClass);
+    //////////////// log
+
+
+
 
     ////// manage overflowing screens
     var menuWidth = 3.75;
@@ -94,8 +110,14 @@ const context = {
     var remSize = 16;
     var availableWidth = window.innerWidth/remSize - menuWidth - screenStack[me.state.key].length*retractedWidth;
 
+    var retractAllFurther = false;
+    var first = true;
     screenStack[me.state.key].map(function (record) {
-      var screenSize = record.size || normalWidth;
+      var size = $.grep(newScreens, function(e){
+        if(typeof e == "undefined") return false;
+        return e.key == record.key;
+      })[0].size;
+      var screenSize = size || normalWidth;
       var realScreenSize = screenSize + constPlus - retractedWidth;
       switch (positionClass) {
         case "open":
@@ -103,36 +125,57 @@ const context = {
                 if ((availableWidth - realScreenSize) < 0) {
                   // disablovat
                   update2DArray(newScreens, "key", record.key, "disabled", true);
-                  if (availableWidth < 0) {
+                  if (availableWidth < 0 || retractAllFurther) {
                     // retractovat
                     update2DArray(newScreens, "key", record.key, "position", "retracted");
                     record.position = "retracted";
                   }
                 }
 
+                if( ! retractAllFurther && typeof size == "undefined" ) retractAllFurther = true;
                 availableWidth -= realScreenSize;
               } else if (record.position == "retracted") {
                 // asi nic?
               }
               break;
-        //case "retracted":
-        //      if (record.position == "open") {
-        //        availableWidth -= realScreenSize;
-        //      } else if (record.position == "retracted") {
-        //        if (availableWidth >= 0) {
-        //          // open
-        //          update2DArray(newScreens, "key", record.key, "position", "open");
-        //          record.position = "open";
-        //          if ((availableWidth - realScreenSize) >= 0) {
-        //            // enable
-        //            update2DArray(newScreens, "key", record.key, "disabled", false);
-        //          }
-        //        }
-        //      }
+        case "retracted":
+        case "closed":
+              if (record.position == "open") {
+                availableWidth -= realScreenSize;
+                if ((availableWidth - realScreenSize) >= 0 || typeof size == "undefined" ) {
+                  // enable
+                  update2DArray(newScreens, "key", record.key, "disabled", false);
+                }
+
+              } else if (record.position == "retracted") {
+                if (availableWidth >= 0 && !first && !retractAllFurther) {
+                  // open
+                  update2DArray(newScreens, "key", record.key, "position", "open");
+                  record.position = "open";
+                  if ((availableWidth - realScreenSize) >= 0 || typeof size == "undefined" ) {
+                    // enable
+                    update2DArray(newScreens, "key", record.key, "disabled", false);
+                  }
+                }
+              }
+              if(!first && !retractAllFurther && typeof size == "undefined" ) retractAllFurther = true;
       }
+      first = false;
     });
 
-    console.log("newScreens: ", newScreens);
+
+
+    //////////////// log
+    var log = "\\ ";
+    newScreens.map(function(screen){
+      var posi = screen.position;
+      log += screen.key + " " + posi + "(" + (screen.disabled ? "DIS":"en") + ") | ";
+    });
+    console.log(log);
+    console.log("----------------------------");
+    //////////////// log
+
+
 
     // apply changes of state
     me.setState({

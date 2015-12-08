@@ -26,7 +26,6 @@ class PageAnalyses extends Component {
       screens: [
         {
           key: "analyses1",
-          disabled: false,
           component: <ScreenAnalysesBase/>
         },
         {
