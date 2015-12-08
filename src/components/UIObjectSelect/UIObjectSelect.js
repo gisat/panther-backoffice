@@ -128,6 +128,7 @@ var UIObjectSelect = React.createClass({
 	componentWillMount () {
 		this._optionsCache = {};
 		this._optionsFilterString = '';
+		this._lastKeyDown = null;
 		this._closeMenuIfClickedOutside = (event) => {
 			if (!this.state.isOpen) {
 				return;
@@ -493,10 +494,11 @@ var UIObjectSelect = React.createClass({
 		if (this.props.disabled) return;
 		switch (event.keyCode) {
 			case 8: // backspace
-				if (!this.state.inputValue && this.props.backspaceRemoves) {
+				if (!this.state.inputValue && this.props.backspaceRemoves && !(this._lastKeyDown == 8)) {
 					event.preventDefault();
 					this.popValue();
 				}
+			this._lastKeyDown = event.keyCode;
 			return;
 			case 9: // tab
 				if (event.shiftKey || !this.state.isOpen || !this.state.focusedOption) {
@@ -533,6 +535,11 @@ var UIObjectSelect = React.createClass({
 			default: return;
 		}
 		event.preventDefault();
+	},
+	
+	// handle continuous key hold
+	handleKeyUp (event) {
+		this._lastKeyDown = null;
 	},
 
 	// Ensures that the currently focused option is available in filteredOptions.
@@ -971,7 +978,7 @@ var UIObjectSelect = React.createClass({
 			<div ref="wrapper" className={selectClass}>
 				<input type="hidden" ref="value" name={this.props.name} value={this.state.value} disabled={this.props.disabled} />
 				{objectOuterValues}
-				<div className="UIObjectSelect-control" ref="control" onKeyDown={this.handleKeyDown} onMouseDown={this.handleMouseDown} onTouchEnd={this.handleMouseDown}>
+				<div className="UIObjectSelect-control" ref="control" onKeyDown={this.handleKeyDown} onKeyUp={this.handleKeyUp} onMouseDown={this.handleMouseDown} onTouchEnd={this.handleMouseDown}>
 					{singleClear}
 					{objectInnerValue}
 					{input}
