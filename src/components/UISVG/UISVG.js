@@ -13,11 +13,12 @@ class UISVG extends Component{
 		element: 'div'
 	};
 	
+	svgRequire(src) {
+		return require('./img/' + src);
+	}
+	
 	loadMarkup() { 
-		//var svgrequire = '../../public/' + this.props.src;
-		var svgrequire = './img/' + this.props.src;
-		var svgsrc = require(svgrequire);
-		
+		var svgsrc = this.svgRequire(this.props.src);
 		return {__html: svgsrc}; 
 	};
 	
@@ -38,7 +39,3 @@ class UISVG extends Component{
 }
 
 export default UISVG;
-
-
-
-
