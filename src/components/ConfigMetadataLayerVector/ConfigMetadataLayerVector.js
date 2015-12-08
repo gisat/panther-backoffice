@@ -47,25 +47,45 @@ class ConfigMetadataLayerVector extends Component{
 		this.state = {
 			valuesTopics: [12,22],
 			valueGroup: "",
-			valuesStyles: [30]
+			valuesStyles: [30],
+			themesString: ""
 		};
 		
 	}
 	
 	resolveThemes(topics) {
-//		var themes = [];
-//		for(var topicKey of this.state.valuesTopics) {
-//			console.log(topicKey);
-//			var topic = _.where(TOPICS, {key: topicKey});
-//			themes = _.union(themes, topic.themes);
-//			//console.log(topic.themes);
-//		}
-//		console.log(typeof themes);
+		console.log("resolveThemes ------");
+		var stringThemes = "";
+		if(topics) {
+			var themes = [];
+			if (!Array.isArray(topics)) {
+				topics = topics.split(",");
+			}
+			for(var topicKey of topics) {
+				var topic = _.findWhere(TOPICS, {key: Number(topicKey)});
+				themes = _.union(themes, topic.themes);
+			}
+			themes = themes.sort(function (a, b) {return a - b});
+			for(var themeKey of themes) {
+				var theme = _.findWhere(THEMES, {key: themeKey});
+				if(stringThemes) {
+					stringThemes += ", ";
+				}
+				stringThemes += theme.theme;
+			}
+		}
+		this.setState({
+			themesString: stringThemes
+		});
 	}
 	
+	
+	
 	onChangeTopics (value, values) {
-		this.state.valuesTopics = value;
-//		this.resolveThemes(values);
+		this.setState({
+			valuesTopics: value
+		});
+		this.resolveThemes(value);
 		
 		console.log("onChangeTopics:");
 		console.log(values);
@@ -103,6 +123,8 @@ class ConfigMetadataLayerVector extends Component{
 		console.log("yay! " + value["key"]);
 	}
 	
+	
+	
 	topicOptionFactory (inputValue) {
 		var newOption = {
 				key: inputValue,
@@ -124,9 +146,11 @@ class ConfigMetadataLayerVector extends Component{
 		return newOption;
 	}
 	
+	
+	
 	componentDidMount() {
 		
-		
+		this.resolveThemes(this.state.valuesTopics);
 		
 	}
 	
@@ -161,7 +185,7 @@ class ConfigMetadataLayerVector extends Component{
 								value={this.state.valuesTopics}
 							/>
 						</label>
-						<div className="object-input-wrapper-info"><b>Themes:</b> Land cover, Population</div>
+						<div className="object-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
 				</div>
 				
 				
