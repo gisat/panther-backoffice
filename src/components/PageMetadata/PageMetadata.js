@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './PageMetadata.css';
+import classNames from 'classnames';
 
 import ScreenContainer from '../ScreenContainer';
 import ScreenMetadataBase from '../ScreenMetadataBase';
@@ -29,6 +30,7 @@ class PageMetadata extends Component {
           key: "screen2",
           type: "constant",
           size: 40,
+          position: "retracted",
           component: <ScreenMetadataLayerVector/>
         }
       ]
@@ -55,7 +57,7 @@ class PageMetadata extends Component {
 
     return (
       <div id="content">
-        <div className="content" id={this.props.key}>
+        <div className={classNames("content", {"has-maximised": this.state.hasMaximised})}>
           {screenNodes}
         </div>
       </div>

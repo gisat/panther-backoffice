@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './PageDashboard.css';
+import classNames from 'classnames';
 
 import ScreenContainer from '../ScreenContainer';
 import ScreenDashboardBase from '../ScreenDashboardBase';
@@ -30,14 +31,8 @@ class PageDashboard extends Component {
 
 
   render() {
-
-    //this.testung();
-    //this.testung("5448");
-
     const title = 'Dashboard';
     this.context.onSetTitle(title);
-
-    console.log("PageDashboard constructoir  context: ", this.context);
 
     var screenNodes = this.state.screens.map(function (screen) {
       return (
@@ -54,7 +49,7 @@ class PageDashboard extends Component {
 
     return (
       <div id="content">
-        <div className="content" id={this.props.key}>
+        <div className={classNames("content", {"has-maximised": this.state.hasMaximised})}>
           {screenNodes}
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './PagePlaces.css';
+import classNames from 'classnames';
 
 import ScreenContainer from '../ScreenContainer';
 import ScreenPlacesBase from '../ScreenPlacesBase';
@@ -29,6 +30,7 @@ class PagePlaces extends Component {
           key: "screenLinksByAttSetAULevel",
           type: "constant",
           size: 40,
+          position: "retracted",
           component: <ScreenLinksByAttSetAULevel />
         }
       ]
@@ -55,7 +57,7 @@ class PagePlaces extends Component {
 
     return (
       <div id="content">
-        <div className="content" id={this.props.key}>
+        <div className={classNames("content", {"has-maximised": this.state.hasMaximised})}>
           {screenNodes}
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './PageDataLayers.css';
+import classNames from 'classnames';
 
 import ScreenContainer from '../ScreenContainer';
 import ScreenDataLayersBase from '../ScreenDataLayersBase';
@@ -48,7 +49,7 @@ class PageDataLayers extends Component {
 
     return (
       <div id="content">
-        <div className="content" id={this.props.key}>
+        <div className={classNames("content", {"has-maximised": this.state.hasMaximised})}>
           {screenNodes}
         </div>
       </div>

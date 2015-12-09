@@ -20,13 +20,13 @@ class ScreenContainer extends Component{
     //// nasty thing
     switch(props.screenState.position){
       case "retracted":
-            props.onRetract();
+            props.onRetract({init: true});
             break;
       case "closed":
-            props.onClose();
+            props.onClose({init: true});
             break;
       default:
-            props.onOpen();
+            props.onOpen({init: true});
     }
   }
 
@@ -35,11 +35,12 @@ class ScreenContainer extends Component{
     var disabled = this.props.screenState.disabled || false;
     var typeClass = this.props.screenState.type || "";
     var sizeClass = this.props.screenState.size ? "const" + this.props.screenState.size : "";
+    var classes = this.props.screenState.classes || "";
     var positionClass = this.props.screenState.position || "open";
-    var disabledClass = disabled ? "disabled":"";
+    var disabledClass = (disabled || positionClass == "retracted" || positionClass == "closed") ? "disabled":"";
 
     return (
-      <div className={classNames("screen", typeClass, sizeClass, positionClass, disabledClass)}>
+      <div className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass)}>
         <div className="screen-scroll"><div>
           {React.cloneElement(this.props.screenState.component, { disabled: disabled})}
         </div></div>

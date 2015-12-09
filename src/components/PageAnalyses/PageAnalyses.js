@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './PageAnalyses.css';
 import _ from 'underscore';
+import classNames from 'classnames';
 
 import ScreenContainer from '../ScreenContainer';
 import ScreenAnalysesBase from '../ScreenAnalysesBase';
@@ -23,6 +24,7 @@ class PageAnalyses extends Component {
 
     this.state = {
       key: "analysis",
+      hasMaximised: true,
       screens: [
         {
           key: "analyses1",
@@ -33,14 +35,13 @@ class PageAnalyses extends Component {
           type: "constant",
           size: 40,
           position: "retracted",
-          disabled: true,
           component: <ScreenAnalysisSpatial/>
         },
         {
           key: "analyses3",
-          type: "too wide", // too should not actually be set initially
+          classes: "wide",
+          size: 80,
           position: "retracted",
-          disabled: true,
           component: <ScreenAnalysisSpatialRules/>
         }
       ]
@@ -64,9 +65,10 @@ class PageAnalyses extends Component {
       );
     }.bind(this));
 
+
     return (
       <div id="content">
-        <div className="content">
+        <div className={classNames("content", {"has-maximised": this.state.hasMaximised})}>
           {screenNodes}
         </div>
       </div>
