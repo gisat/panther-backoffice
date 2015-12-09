@@ -832,19 +832,20 @@ todo hex colours, button icons */
 	right:0;
 }
 
-.object-input-wrapper {
+.frame-input-wrapper {
 	border: 1px solid #999;
 	border-radius: .2rem;
-	margin-bottom: 1rem;
+	margin-bottom: 1.5rem;
+	box-shadow: .05rem .05rem .2rem 0 rgba(0,0,0,.07);
 }
-.object-input-wrapper > label {
+.frame-input-wrapper > label {
 	padding: .875rem;
 	margin: 0;
 }
-.object-input-wrapper > label > .Select {
+.frame-input-wrapper > label > .Select {
 	margin-top: .5rem;
 }
-.object-input-wrapper-info {
+.frame-input-wrapper-info {
 	border-top: 1px solid rgba(0,0,0,.08);
 	padding: .5rem 1rem;
 }
@@ -917,14 +918,18 @@ todo hex colours, button icons */
 	background: rgba(255,255,255,.3);
 }
 .UIObjectSelect-item-a,
-.UIObjectSelect-item-a:hover {
+.UIObjectSelect-item-a:hover,
+.UIObjectSelect-item span:not(.UIObjectSelect-item-icon) {
 	font-size: 1.125rem;
 	line-height: 1.875rem;
 	display: block;
-	cursor: pointer;
 	padding-left: .5rem;
 	color: #1452A2;
 	border-radius: 0 .25rem .25rem 0;
+}
+.UIObjectSelect-item-a,
+.UIObjectSelect-item-a:hover {
+	cursor: pointer;
 }
 .UIObjectSelect-item-a:after,
 .Select.has-value:not(.Select--multi) .UIObjectSelect-control > .Select-placeholder::after {
