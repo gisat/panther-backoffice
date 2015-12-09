@@ -50,6 +50,7 @@ class SelectorAnalysisSpatial extends Component{
 								labelKey="name" 
 								inputProps={selectInputProps} 
 								value={this.state.valueAnalysisSpatial}
+								clearable={false}
 							/>
 						</label>
 					</div>

@@ -46,7 +46,7 @@ class ConfigMetadataLayerVector extends Component{
 
 		this.state = {
 			valuesTopics: [12,22],
-			valueGroup: "",
+			valueGroup: [],
 			valuesStyles: [30],
 			themesString: ""
 		};
@@ -54,7 +54,6 @@ class ConfigMetadataLayerVector extends Component{
 	}
 	
 	resolveThemes(topics) {
-		console.log("resolveThemes ------");
 		var stringThemes = "";
 		if(topics) {
 			var themes = [];
@@ -79,51 +78,49 @@ class ConfigMetadataLayerVector extends Component{
 		});
 	}
 	
-	
+	handleNewObjects(values, store) {
+		var newValues = [];
+		for (var singleValue of values) {
+			if(singleValue.create){
+				// replace with actual object creation and config screen opening
+				delete singleValue.create;
+				delete singleValue.label;
+				delete singleValue.value;
+				singleValue.key = Math.floor((Math.random() * 10000) + 1);
+				store.push(singleValue);
+			}
+			newValues.push(singleValue.key);
+		}
+		return newValues;
+	}
 	
 	onChangeTopics (value, values) {
+		values = this.handleNewObjects(values, TOPICS);
 		this.setState({
-			valuesTopics: value
+			valuesTopics: values
 		});
-		this.resolveThemes(value);
-		
-		console.log("onChangeTopics:");
-		console.log(values);
-		for (var singleValue of values) {
-			if(singleValue.create){
-				// replace with actual object creation and config screen opening
-				delete singleValue.create;
-				delete singleValue.label;
-				delete singleValue.value;
-				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				TOPICS.push(singleValue);
-			}
-		}
+		this.resolveThemes(values);
 	}
+	
 	onChangeGroup (value, values) {
-		this.state.valueGroup = value;
-		
-		console.log("onChangeGroup:");
-		console.log(values);
-		for (var singleValue of values) {
-			if(singleValue.create){
-				// replace with actual object creation and config screen opening
-				delete singleValue.create;
-				delete singleValue.label;
-				delete singleValue.value;
-				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				LAYERGROUPS.push(singleValue);
-			}
-		}
+		values = this.handleNewObjects(values, LAYERGROUPS);
+		this.setState({
+			valueGroup: values
+		});
 	}
-	onChangeStyles (value) {
-		this.state.valuesStyles = value;
+	
+	onChangeStyles (value, values) {
+		values = this.handleNewObjects(values, STYLES);
+		this.setState({
+			valuesStyles: values
+		});
 	}
+	
+	
 	onObjectClick (value, event) {
 		console.log("yay! " + value["key"]);
 	}
-	
-	
+		
 	
 	topicOptionFactory (inputValue) {
 		var newOption = {
@@ -135,7 +132,7 @@ class ConfigMetadataLayerVector extends Component{
 			};
 		return newOption;
 	}
-	layerGroupOptionFactory (inputValue) {
+	keyNameOptionFactory (inputValue) {
 		var newOption = {
 				key: inputValue,
 				name: inputValue,
@@ -156,19 +153,17 @@ class ConfigMetadataLayerVector extends Component{
 	
 	render() {
 		
-		var selectInputProps = {
-			className: "" //"ui input"
-		};
-		
 		return (
       <div>
 				
-				<label className="container">
-					Name
-					<Input type="text" name="name" placeholder=" " value="Land cover" />
-				</label>
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Name
+						<Input type="text" name="name" placeholder=" " value="Land cover" />
+					</label>
+				</div>
 				
-				<div className="object-input-wrapper">
+				<div className="frame-input-wrapper">
 						<label className="container">
 							Topics
 							<UIObjectSelect 
@@ -179,58 +174,48 @@ class ConfigMetadataLayerVector extends Component{
 								options={TOPICS}
 								allowCreate
 								newOptionCreator={this.topicOptionFactory.bind(this)}
-								valueKey="key" 
-								labelKey="topic" 
-								inputProps={selectInputProps} 
+								valueKey="key"
+								labelKey="topic"
 								value={this.state.valuesTopics}
 							/>
 						</label>
-						<div className="object-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
+						<div className="frame-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
 				</div>
 				
 				
-				
-				
-				<div className="object-input-wrapper">
-						<label className="container">
-							Layer group
-							<UIObjectSelect 
-								onChange={this.onChangeGroup.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								options={LAYERGROUPS}
-								allowCreate
-								newOptionCreator={this.layerGroupOptionFactory.bind(this)}
-								valueKey="key" 
-								labelKey="name" 
-								inputProps={selectInputProps} 
-								value={this.state.valueGroup}
-							/>
-						</label>
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Layer group
+						<UIObjectSelect 
+							onChange={this.onChangeGroup.bind(this)}
+							onOptionLabelClick={this.onObjectClick.bind(this)}
+							//loadOptions={this.getScopes}
+							options={LAYERGROUPS}
+							allowCreate
+							newOptionCreator={this.keyNameOptionFactory.bind(this)}
+							valueKey="key" 
+							labelKey="name" 
+							value={this.state.valueGroup}
+						/>
+					</label>
 				</div>
 				
-				<div className="input-wrapper">
-					<div>
-						<label className="container">
-							Styles (symbologies)
-							<Select 
-								multi
-								onChange={this.onChangeStyles.bind(this)}
-								//loadOptions={this.getScopes}
-								options={STYLES}
-								valueKey="key" 
-								labelKey="name" 
-								inputProps={selectInputProps} 
-								value={this.state.valuesStyles}
-							/>
-						</label>
-					</div>
-					<div>
-						<Buttons icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Styles
+						<UIObjectSelect 
+							multi
+							onChange={this.onChangeStyles.bind(this)}
+							onOptionLabelClick={this.onObjectClick.bind(this)}
+							//loadOptions={this.getScopes}
+							options={STYLES}
+							allowCreate
+							newOptionCreator={this.keyNameOptionFactory.bind(this)}
+							valueKey="key" 
+							labelKey="name" 
+							value={this.state.valuesStyles}
+						/>
+					</label>
 				</div>
 				
 				

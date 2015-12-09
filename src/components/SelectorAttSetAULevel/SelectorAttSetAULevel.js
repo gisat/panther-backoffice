@@ -74,6 +74,7 @@ class SelectorAttSetAULevel extends Component{
 								labelKey="name" 
 								inputProps={selectInputProps} 
 								value={this.state.valueAttSet}
+								clearable={false}
 							/>
 						</label>
 					</div>
@@ -89,6 +90,7 @@ class SelectorAttSetAULevel extends Component{
 								labelKey="name" 
 								inputProps={selectInputProps} 
 								value={this.state.valueAULevel}
+								clearable={false}
 							/>
 						</label>
 					</div>	

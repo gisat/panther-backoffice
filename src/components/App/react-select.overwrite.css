@@ -17,6 +17,7 @@
 	font-size: 1.125rem;
 	padding: .03rem .625rem;
 	padding-right: 2.5rem;
+	cursor: text;
 }
 .has-value > .Select-control > .Select-placeholder {
 	color: #022393;

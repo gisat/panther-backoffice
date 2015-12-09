@@ -69,6 +69,7 @@ class SelectorPlace extends Component{
 								labelKey="place" 
 								inputProps={selectInputProps} 
 								value={this.state.value}
+								clearable={false}
 							/>
 						</label>
 					</div>

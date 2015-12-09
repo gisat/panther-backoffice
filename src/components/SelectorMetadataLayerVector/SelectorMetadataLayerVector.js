@@ -49,6 +49,7 @@ class SelectorMetadataLayerVector extends Component{
 								labelKey="name" 
 								inputProps={selectInputProps} 
 								value={this.state.valueLayerVector}
+								clearable={false}
 							/>
 						</label>
 					</div>

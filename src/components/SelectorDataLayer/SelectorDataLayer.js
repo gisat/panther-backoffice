@@ -57,6 +57,7 @@ class SelectorDataLayer extends Component{
 								labelKey="key" 
 								inputProps={selectInputProps} 
 								value={this.state.value}
+								clearable={false}
 							/>
 						</label>
 					</div>
