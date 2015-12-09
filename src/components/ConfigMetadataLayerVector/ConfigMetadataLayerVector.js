@@ -78,9 +78,7 @@ class ConfigMetadataLayerVector extends Component{
 		});
 	}
 	
-	
-	
-	onChangeTopics (value, values) {
+	handleNewObjects(values, store) {
 		var newValues = [];
 		for (var singleValue of values) {
 			if(singleValue.create){
@@ -89,60 +87,40 @@ class ConfigMetadataLayerVector extends Component{
 				delete singleValue.label;
 				delete singleValue.value;
 				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				//
-				TOPICS.push(singleValue);
+				store.push(singleValue);
 			}
 			newValues.push(singleValue.key);
 		}
+		return newValues;
+	}
+	
+	onChangeTopics (value, values) {
+		values = this.handleNewObjects(values, TOPICS);
 		this.setState({
-			valuesTopics: newValues
+			valuesTopics: values
 		});
-		this.resolveThemes(newValues);
+		this.resolveThemes(values);
 	}
 	
 	onChangeGroup (value, values) {
-		var newValues = [];
-		for (var singleValue of values) {
-			if(singleValue.create){
-				// replace with actual object creation and config screen opening
-				delete singleValue.create;
-				delete singleValue.label;
-				delete singleValue.value;
-				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				//
-				LAYERGROUPS.push(singleValue);
-			}
-			newValues.push(singleValue.key);
-		}
+		values = this.handleNewObjects(values, LAYERGROUPS);
 		this.setState({
-			valueGroup: newValues
+			valueGroup: values
 		});
 	}
 	
 	onChangeStyles (value, values) {
-		var newValues = [];
-		for (var singleValue of values) {
-			if(singleValue.create){
-				// replace with actual object creation and config screen opening
-				delete singleValue.create;
-				delete singleValue.label;
-				delete singleValue.value;
-				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				//
-				STYLES.push(singleValue);
-			}
-			newValues.push(singleValue.key);
-		}
+		values = this.handleNewObjects(values, STYLES);
 		this.setState({
-			valuesStyles: newValues
+			valuesStyles: values
 		});
 	}
+	
 	
 	onObjectClick (value, event) {
 		console.log("yay! " + value["key"]);
 	}
-	
-	
+		
 	
 	topicOptionFactory (inputValue) {
 		var newOption = {
@@ -154,17 +132,7 @@ class ConfigMetadataLayerVector extends Component{
 			};
 		return newOption;
 	}
-	layerGroupOptionFactory (inputValue) {
-		var newOption = {
-				key: inputValue,
-				name: inputValue,
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-		return newOption;
-	}
-	styleOptionFactory (inputValue) {
+	keyNameOptionFactory (inputValue) {
 		var newOption = {
 				key: inputValue,
 				name: inputValue,
@@ -224,7 +192,7 @@ class ConfigMetadataLayerVector extends Component{
 							//loadOptions={this.getScopes}
 							options={LAYERGROUPS}
 							allowCreate
-							newOptionCreator={this.layerGroupOptionFactory.bind(this)}
+							newOptionCreator={this.keyNameOptionFactory.bind(this)}
 							valueKey="key" 
 							labelKey="name" 
 							value={this.state.valueGroup}
@@ -242,7 +210,7 @@ class ConfigMetadataLayerVector extends Component{
 							//loadOptions={this.getScopes}
 							options={STYLES}
 							allowCreate
-							newOptionCreator={this.styleOptionFactory.bind(this)}
+							newOptionCreator={this.keyNameOptionFactory.bind(this)}
 							valueKey="key" 
 							labelKey="name" 
 							value={this.state.valuesStyles}
