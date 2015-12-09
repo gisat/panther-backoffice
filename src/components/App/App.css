@@ -393,13 +393,6 @@ todo hex colours, button icons */
 	.screen-scroll {
 		overflow: hidden;
 	}
-	.screen.retracted {
-		width: 5rem;
-		/*flex-grow: 0;*/
-		flex-grow: 0.0000001;
-		flex-shrink: 0;
-	}
-
 	.screen-scroll > div {
 		min-width: 50rem;
 	}
@@ -409,24 +402,29 @@ todo hex colours, button icons */
   }
 
 	
-	  /* .screen behaviour */
+	/* .screen behaviour */
+	.screen.retracted {
+		width: 5rem;
+		flex-grow: 0.0000001;
+		flex-shrink: 0;
+	}
+	
   .screen.open, .screen.opening {
     flex-grow: 1;
     /*margin-right: .675rem;*/
-    /* move scrollbar from shadow - unused with custom scrollbars */
+    /* move scrollbar from shadow - unused with custom scrollbars 
   }
+	.screen:last-child {
+    margin-right: 0;
+     */
+  }
+	
+
   .screen.open .screen-scroll {
     overflow-y: auto;
     /* overflow-x blocked (only here, at large screen sizes), only hides elements that count on it (.beside) */
   }
-  /*cancel move scrollbar  - unused! */
-/*
-	.screen:last-child {
-    margin-right: 0;
-     
-  }
-	
-*/
+
 	
   .screen.const30 {
     max-width: 31rem;
@@ -493,17 +491,6 @@ todo hex colours, button icons */
 	.screen.limited.lim50 .screen-setter > div {
     width: 50rem;
   }
-
-
-/*
-  .screen.retracted {
-    background-color: #9f9f9f;
-  }
-  .screen.retracted:hover {
-    background-color: #a8a8a8;
-  }
-*/
-  /* todo elements inside */
   
 	.screen > .screen-overlay {
 		display: block;
@@ -532,8 +519,21 @@ todo hex colours, button icons */
   .screen.closed {
     width:0;
   }
-
+	
+	.has-maximised .screen {
+		width: 0;
+		flex-grow: 0;
+	}
+	.screen.maximised {
+/*		width:100%;*/
+		max-width: 100%;
+		flex-grow: 1;
+	}
+	.screen.maximised .screen-scroll {
+		overflow: auto;
+	}
 }
+
 
 @media screen and (max-width:74.99999em) {
   .beside.hide {
@@ -611,6 +611,7 @@ todo hex colours, button icons */
 (min-width:66em) and
 (max-width:93.49999em) {
 */
+/*
 	.screen.too.open, 	
 	.screen.too.opening {
   	position: absolute;
@@ -624,6 +625,7 @@ todo hex colours, button icons */
 	.screen.too.open .screen-scroll {
 		overflow: auto;
 	}
+*/
 /*}*/
 
 /* ===== elements ===== */
@@ -661,13 +663,15 @@ todo hex colours, button icons */
 	color: #859FBF;
 }
 
-.puma-item.template, .puma-item.add {
-	background: transparent;
+.puma-item.template {
+/*	background: transparent;*/
+	background: #bebebe;
 }
 .puma-item.add {
 	border-style: dashed;
 	border-color: #9c9c9c;
 	color: #8e8e8e;
+	background: transparent;
 }
 .puma-item.add:hover {
 	border-color: #4d8aff;
@@ -677,18 +681,18 @@ todo hex colours, button icons */
 	color: #a2a2a2;
 }
 
-.puma-item.selected {
+.puma-item.screen-opener {
 	border-color: #ffff00;
 	background: rgba(255, 255, 0, 0.2);
 }
-@keyframes puma-item-selected {
+@keyframes puma-item-screen-opener {
 	0% { right: .4rem; }
 	50% { right: .2rem; }
 	100% { right: .4rem; }
 }
-.puma-item.selected::after {
+.puma-item.screen-opener::after {
 	color: #ff0;
-	animation-name: puma-item-selected;
+	animation-name: puma-item-screen-opener;
 	animation-duration: 1s;
 	animation-iteration-count: 3;
 }
@@ -740,18 +744,18 @@ todo hex colours, button icons */
     transform: translateY(-50%);
 }
 
-.ui.basic.button.puma-screen-button.selected {
+.ui.basic.button.puma-screen-button.screen-opener {
 	background: rgba(255, 255, 0, 0.2)!important;
 	box-shadow: 0 0 0 1px #ff0 inset;
 }
-@keyframes puma-screen-button-selected {
+@keyframes puma-screen-button-screen-opener {
 	0% { right: 0; }
 	50% { right: .2rem; }
 	100% { right: 0; }
 }
-.ui.button.puma-screen-button.selected > .icon.puma {
+.ui.button.puma-screen-button.screen-opener > .icon.puma {
 	color: #ff0;
-	animation-name: puma-screen-button-selected;
+	animation-name: puma-screen-button-screen-opener;
 	animation-duration: 1s;
 	animation-iteration-count: 3;
 }
@@ -771,18 +775,18 @@ todo hex colours, button icons */
 	transition: all .2s ease-in-out;
 }
 
-.ui.basic.button.puma-screen-button.selected {
+.ui.basic.button.puma-screen-button.screen-opener {
 	background: rgba(255, 255, 0, 0.2)!important;
 	box-shadow: 0 0 0 1px #ff0 inset;
 }
-@keyframes puma-screen-button-selected {
+@keyframes puma-screen-button-screen-opener {
 	0% { right: 0; }
 	50% { right: .2rem; }
 	100% { right: 0; }
 }
-.ui.labeled.icon.button.puma-screen-button.selected > .icon {
+.ui.labeled.icon.button.puma-screen-button.screen-opener > .icon {
 	color: #ff0;
-	animation-name: puma-screen-button-selected;
+	animation-name: puma-screen-button-screen-opener;
 	animation-duration: 1s;
 	animation-iteration-count: 3;
 }
@@ -854,8 +858,6 @@ todo hex colours, button icons */
 	display: block;
 	border-radius: .25rem;
 	border: 2px dashed #9c9c9c;
-	margin-bottom: 14px;
-	margin-bottom: .875rem;
 	padding: 0;
 	position: relative;
 	color: #8e8e8e;
@@ -886,6 +888,11 @@ todo hex colours, button icons */
 /*	cursor: pointer;*/
 	
 	padding-left: 2rem;
+}
+.UIObjectSelect.template .UIObjectSelect-item,
+.Select.template.has-value:not(.Select--multi) > .UIObjectSelect-control{
+/*	background: transparent;*/
+	background: #bebebe;
 }
 
 .UIObjectSelect-control,
