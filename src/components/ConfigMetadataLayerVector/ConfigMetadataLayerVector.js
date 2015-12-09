@@ -46,7 +46,7 @@ class ConfigMetadataLayerVector extends Component{
 
 		this.state = {
 			valuesTopics: [12,22],
-			valueGroup: "",
+			valueGroup: [],
 			valuesStyles: [30],
 			themesString: ""
 		};
@@ -54,7 +54,6 @@ class ConfigMetadataLayerVector extends Component{
 	}
 	
 	resolveThemes(topics) {
-		console.log("resolveThemes ------");
 		var stringThemes = "";
 		if(topics) {
 			var themes = [];
@@ -82,11 +81,7 @@ class ConfigMetadataLayerVector extends Component{
 	
 	
 	onChangeTopics (value, values) {
-		this.setState({
-			valuesTopics: value
-		});
-		this.resolveThemes(value);
-
+		var newValues = [];
 		for (var singleValue of values) {
 			if(singleValue.create){
 				// replace with actual object creation and config screen opening
@@ -94,14 +89,19 @@ class ConfigMetadataLayerVector extends Component{
 				delete singleValue.label;
 				delete singleValue.value;
 				singleValue.key = Math.floor((Math.random() * 10000) + 1);
+				//
 				TOPICS.push(singleValue);
 			}
+			newValues.push(singleValue.key);
 		}
+		this.setState({
+			valuesTopics: newValues
+		});
+		this.resolveThemes(newValues);
 	}
 	
 	onChangeGroup (value, values) {
-		this.state.valueGroup = value;
-
+		var newValues = [];
 		for (var singleValue of values) {
 			if(singleValue.create){
 				// replace with actual object creation and config screen opening
@@ -109,14 +109,18 @@ class ConfigMetadataLayerVector extends Component{
 				delete singleValue.label;
 				delete singleValue.value;
 				singleValue.key = Math.floor((Math.random() * 10000) + 1);
+				//
 				LAYERGROUPS.push(singleValue);
 			}
+			newValues.push(singleValue.key);
 		}
+		this.setState({
+			valueGroup: newValues
+		});
 	}
 	
 	onChangeStyles (value, values) {
-		this.state.valuesStyles = value;
-
+		var newValues = [];
 		for (var singleValue of values) {
 			if(singleValue.create){
 				// replace with actual object creation and config screen opening
@@ -124,9 +128,14 @@ class ConfigMetadataLayerVector extends Component{
 				delete singleValue.label;
 				delete singleValue.value;
 				singleValue.key = Math.floor((Math.random() * 10000) + 1);
+				//
 				STYLES.push(singleValue);
 			}
+			newValues.push(singleValue.key);
 		}
+		this.setState({
+			valuesStyles: newValues
+		});
 	}
 	
 	onObjectClick (value, event) {
