@@ -7,6 +7,7 @@ import { CheckboxFields, Checkbox } from '../SEUI/modules';
 import { Table } from '../SEUI/collections';
 import Select from 'react-select';
 import _ from 'underscore';
+import UIObjectSelect from '../UIObjectSelect';
 
 const LAYERTEMPLATES = [
 			{ key: 1, name: 'Road network' },
@@ -65,29 +66,87 @@ class ConfigDataLayerVector extends Component{
 		};
 		
 	}
+
 	
-	resolveThemes(topics) {
-//		var themes = [];
-//		for(var topicKey of this.state.valuesTopics) {
-//			console.log(topicKey);
-//			var topic = _.where(TOPICS, {key: topicKey});
-//			themes = _.union(themes, topic.themes);
-//			//console.log(topic.themes);
-//		}
-//		console.log(typeof themes);
+	handleNewObjects(values, store) {
+		var newValues = [];
+		for (var singleValue of values) {
+			if(singleValue.create){
+				// replace with actual object creation and config screen opening
+				delete singleValue.create;
+				delete singleValue.label;
+				delete singleValue.value;
+				singleValue.key = Math.floor((Math.random() * 10000) + 1);
+				store.push(singleValue);
+			}
+			newValues.push(singleValue.key);
+		}
+		return newValues;
 	}
 	
-	onChangeTemplate (value) {
-		this.state.valueTemplate = value;
+	onChangeTemplate (value, values) {
+		values = this.handleNewObjects(values, LAYERTEMPLATES);
+		this.setState({
+			valueTemplate: values
+		});
 	}
-	onChangeScope (value) {
-		this.state.valueScope = value;
+	
+	onChangeScope (value, values) {
+		values = this.handleNewObjects(values, SCOPES);
+		this.setState({
+			valueScope: values
+		});
 	}
-	onChangePlaces (values) {
-		this.state.valuesPlaces = values;
+	
+	onChangePlaces (value, values) {
+		values = this.handleNewObjects(values, PLACES);
+		this.setState({
+			valuesPlaces: values
+		});
 	}
-	onChangePeriods (values) {
-		this.state.valuesPeriods = values;
+	
+	onChangePeriods (value, values) {
+		values = this.handleNewObjects(values, PERIODS);
+		this.setState({
+			valuesPeriods: values
+		});
+	}	
+	
+	
+	onObjectClick (value, event) {
+		console.log("yay! " + value["key"]);
+	}
+	
+	
+	scopeOptionFactory (inputValue) {
+		var newOption = {
+				key: inputValue,
+				scope: inputValue,
+				value: inputValue,
+				label: inputValue,
+				create: true
+			};
+		return newOption;
+	}
+	placeOptionFactory (inputValue) {
+		var newOption = {
+				key: inputValue,
+				place: inputValue,
+				value: inputValue,
+				label: inputValue,
+				create: true
+			};
+		return newOption;
+	}
+	keyNameOptionFactory (inputValue) {
+		var newOption = {
+				key: inputValue,
+				name: inputValue,
+				value: inputValue,
+				label: inputValue,
+				create: true
+			};
+		return newOption;
 	}
 	
 	
@@ -106,99 +165,75 @@ class ConfigDataLayerVector extends Component{
 		return (
       <div>
 				
-				<div className="input-wrapper">
-					<div>
+				<div className="frame-input-wrapper">
 						<label className="container">
 							Layer template (Name)
-							<Select 
+							<UIObjectSelect 
 								onChange={this.onChangeTemplate.bind(this)}
+								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={LAYERTEMPLATES}
-								valueKey="key" 
-								labelKey="name" 
-								inputProps={selectInputProps} 
+								allowCreate
+								newOptionCreator={this.keyNameOptionFactory.bind(this)}
+								valueKey="key"
+								labelKey="name"
 								value={this.state.valueTemplate}
+								className="template"
 							/>
 						</label>
-					</div>
-					<div>
-						<Buttons icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
 				</div>
 				
-				<div className="input-wrapper">
-					<div>
+				<div className="frame-input-wrapper">
 						<label className="container">
 							Scope
-							<Select 
+							<UIObjectSelect 
 								onChange={this.onChangeScope.bind(this)}
+								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={SCOPES}
-								valueKey="key" 
-								labelKey="scope" 
-								inputProps={selectInputProps} 
+								allowCreate
+								newOptionCreator={this.scopeOptionFactory.bind(this)}
+								valueKey="key"
+								labelKey="scope"
 								value={this.state.valueScope}
 							/>
 						</label>
-					</div>
-					<div>
-						<Buttons icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
 				</div>
-					
-				<div className="input-wrapper">
-					<div>
+				
+				<div className="frame-input-wrapper">
 						<label className="container">
 							Places
-							<Select 
+							<UIObjectSelect 
 								multi
 								onChange={this.onChangePlaces.bind(this)}
+								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={PLACES}
-								valueKey="key" 
-								labelKey="place" 
-								inputProps={selectInputProps} 
+								allowCreate
+								newOptionCreator={this.placeOptionFactory.bind(this)}
+								valueKey="key"
+								labelKey="place"
 								value={this.state.valuesPlaces}
 							/>
 						</label>
-					</div>
-					<div>
-						<Buttons icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
 				</div>
 				
-				
-				<div className="input-wrapper">
-					<div>
+				<div className="frame-input-wrapper">
 						<label className="container">
 							Imaging/reference periods
-							<Select 
+							<UIObjectSelect 
 								multi
 								onChange={this.onChangePeriods.bind(this)}
+								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={PERIODS}
-								valueKey="key" 
-								labelKey="name" 
-								inputProps={selectInputProps} 
+								allowCreate
+								newOptionCreator={this.keyNameOptionFactory.bind(this)}
+								valueKey="key"
+								labelKey="name"
 								value={this.state.valuesPeriods}
 							/>
 						</label>
-					</div>
-					<div>
-						<Buttons icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
 				</div>
 				
 				
@@ -228,7 +263,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -236,7 +271,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -255,7 +290,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -263,7 +298,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -282,7 +317,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -290,7 +325,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -309,7 +344,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -317,7 +352,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -336,7 +371,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -344,7 +379,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -363,7 +398,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -371,7 +406,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -390,7 +425,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -398,7 +433,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -417,7 +452,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -425,7 +460,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -444,7 +479,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -452,7 +487,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -471,7 +506,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -479,7 +514,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -498,7 +533,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -506,7 +541,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -525,7 +560,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -533,7 +568,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
@@ -552,7 +587,7 @@ class ConfigDataLayerVector extends Component{
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<UIObjectSelect 
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi 
@@ -560,7 +595,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key" 
 									labelKey="name" 
 									//inputProps={selectInputProps} 
-									value="3"
+									value=""
 								/>
 							</td>
 						</tr>
