@@ -217,10 +217,7 @@ class ConfigMetadataLayerVector extends Component{
 						/>
 					</label>
 				</div>
-				
-				
-
-				
+					
 				
 				<IconButton name="check" basic color="blue">
 					Save

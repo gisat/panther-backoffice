@@ -152,6 +152,10 @@ class ConfigAnalysisSpatial extends Component{
 						<div className="frame-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
 				</div>
 				
+				<IconButton name="check" basic color="blue" disabled>
+					Saved
+				</IconButton>
+				
 				
 				<div className="section-header">
 					<h3>Operations</h3>
