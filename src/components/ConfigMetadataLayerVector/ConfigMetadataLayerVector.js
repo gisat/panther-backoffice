@@ -78,6 +78,10 @@ class ConfigMetadataLayerVector extends Component{
 		});
 	}
 	
+	onChangeName (e) {
+		console.log(e.target.value);
+	}
+	
 	handleNewObjects(values, store) {
 		var newValues = [];
 		for (var singleValue of values) {
@@ -159,7 +163,13 @@ class ConfigMetadataLayerVector extends Component{
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Name
-						<Input type="text" name="name" placeholder=" " value="Land cover" />
+						<Input 
+							type="text" 
+							name="name" 
+							placeholder=" " 
+							defaultValue="Land cover" 
+							onChange={this.onChangeName.bind(this)}
+						/>
 					</label>
 				</div>
 				

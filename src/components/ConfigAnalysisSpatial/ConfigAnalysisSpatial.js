@@ -129,7 +129,7 @@ class ConfigAnalysisSpatial extends Component{
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Name
-						<Input type="text" name="name" placeholder=" " value="Land cover status" />
+						<Input type="text" name="name" placeholder=" " defaultValue="Land cover status" />
 					</label>
 				</div>
 				

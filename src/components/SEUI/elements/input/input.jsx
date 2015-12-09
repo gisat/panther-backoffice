@@ -57,7 +57,7 @@ export class Input extends React.Component {
         this.processChildren();
 
         let { children, className, defaultClasses, icon, labeled, loading, name,
-              placeholder, tag, type, ...other } = this.props;
+              placeholder, tag, type, defaultValue, onChange, ...other } = this.props;
 
         other.className = classNames(
             this.props.className,
@@ -158,6 +158,8 @@ export class Input extends React.Component {
                                 key="input"
                                 placeholder={this.props.placeholder}
                                 type={this.props.type}
+                                defaultValue={this.props.defaultValue}
+                                onChange={this.props.onChange}
                             />
                         );
 
