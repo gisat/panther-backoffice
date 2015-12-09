@@ -9,6 +9,7 @@ import { CheckboxFields, Checkbox } from '../SEUI/modules';
 import { Table } from '../SEUI/collections';
 import Select from 'react-select';
 import _ from 'underscore';
+import UIObjectSelect from '../UIObjectSelect';
 
 
 const TOPICS = [
@@ -38,30 +39,75 @@ class ConfigAnalysisSpatial extends Component{
 
 		this.state = {
 			valuesTopics: [12,22],
-			valueGroup: 1,
-			valuesStyles: [30]
+			themesString: ""
 		};
 		
 	}
 	
 	resolveThemes(topics) {
-//		var themes = [];
-//		for(var topicKey of this.state.valuesTopics) {
-//			console.log(topicKey);
-//			var topic = _.where(TOPICS, {key: topicKey});
-//			themes = _.union(themes, topic.themes);
-//			//console.log(topic.themes);
-//		}
-//		console.log(typeof themes);
+		var stringThemes = "";
+		if(topics) {
+			var themes = [];
+			if (!Array.isArray(topics)) {
+				topics = topics.split(",");
+			}
+			for(var topicKey of topics) {
+				var topic = _.findWhere(TOPICS, {key: Number(topicKey)});
+				themes = _.union(themes, topic.themes);
+			}
+			themes = themes.sort(function (a, b) {return a - b});
+			for(var themeKey of themes) {
+				var theme = _.findWhere(THEMES, {key: themeKey});
+				if(stringThemes) {
+					stringThemes += ", ";
+				}
+				stringThemes += theme.theme;
+			}
+		}
+		this.setState({
+			themesString: stringThemes
+		});
 	}
 	
-	onChangeTopics (values) {
-		this.state.valuesTopics = values;
-//		this.resolveThemes(values);
-		console.log(values);
+	handleNewObjects(values, store) {
+		var newValues = [];
+		for (var singleValue of values) {
+			if(singleValue.create){
+				// replace with actual object creation and config screen opening
+				delete singleValue.create;
+				delete singleValue.label;
+				delete singleValue.value;
+				singleValue.key = Math.floor((Math.random() * 10000) + 1);
+				store.push(singleValue);
+			}
+			newValues.push(singleValue.key);
+		}
+		return newValues;
 	}
-	onChangeGroup (value) {
-		this.state.valueGroup = value;
+	
+	onChangeTopics (value, values) {
+		values = this.handleNewObjects(values, TOPICS);
+		this.setState({
+			valuesTopics: values
+		});
+		this.resolveThemes(values);
+	}
+	
+	
+	onObjectClick (value, event) {
+		console.log("yay! " + value["key"]);
+	}
+		
+	
+	topicOptionFactory (inputValue) {
+		var newOption = {
+				key: inputValue,
+				topic: inputValue,
+				value: inputValue,
+				label: inputValue,
+				create: true
+			};
+		return newOption;
 	}
 	
 	
@@ -80,46 +126,30 @@ class ConfigAnalysisSpatial extends Component{
 		return (
       <div>
 				
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Name
+						<Input type="text" name="name" placeholder=" " value="Land cover status" />
+					</label>
+				</div>
 				
-						<label className="container">
-							Name
-							<Input type="text" name="name" placeholder=" " value="Land cover" />
-						</label>
-			
-				
-
-				
-				
-				<div className="input-wrapper">
-					<div>
+				<div className="frame-input-wrapper">
 						<label className="container">
 							Topics
-							<Select 
+							<UIObjectSelect 
 								multi
 								onChange={this.onChangeTopics.bind(this)}
+								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={TOPICS}
-								valueKey="key" 
-								labelKey="topic" 
-								inputProps={selectInputProps} 
+								allowCreate
+								newOptionCreator={this.topicOptionFactory.bind(this)}
+								valueKey="key"
+								labelKey="topic"
 								value={this.state.valuesTopics}
 							/>
 						</label>
-					</div>
-					<div>
-						<Buttons icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
-				</div>
-				
-				<span><b>Themes:</b> Land cover, Population</span><br/>
-				
-				<div className="rsc-controls">
-					<IconButton name="check" basic color="blue" disabled>
-						Saved
-					</IconButton>
+						<div className="frame-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
 				</div>
 				
 				
