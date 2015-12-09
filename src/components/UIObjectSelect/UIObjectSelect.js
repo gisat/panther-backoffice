@@ -10,13 +10,6 @@ var classes = require('classnames');
 var Value = require('./Value');
 var SingleValue = require('./SingleValue');
 var Option = require('./Option');
-//var Value = require('react-select/Value');
-//var SingleValue = require('react-select/SingleValue');
-//var Option = require('react-select/Option');
-//var Value = require('../../../node_modules/react-select/src/Value');
-//var SingleValue = require('../../../node_modules/react-select/src/SingleValue');
-//var Option = require('../../../node_modules/react-select/src/Option');
-//import {Value, SingleValue, Option} from 'react-select';
 
 var requestId = 0;
 
@@ -771,19 +764,8 @@ var UIObjectSelect = React.createClass({
 		if (this.state.filteredOptions.length > 0) {
 			focusedValue = focusedValue == null ? this.state.filteredOptions[0] : focusedValue;
 		}
-		// Add the current value to the filtered options in last resort
 		var options = this.state.filteredOptions;
-		if (this.props.allowCreate && this.state.inputValue.trim()) {
-			var inputValue = this.state.inputValue;
-			options = options.slice();
-			// handled by handleInputChange now
-//			var newOption = this.props.newOptionCreator ? this.props.newOptionCreator(inputValue) : {
-//				value: inputValue,
-//				label: inputValue,
-//				create: true
-//			};
-//			options.unshift(newOption);
-		}
+		// [deleted]
 		var ops = Object.keys(options).map(function(key) {
 			var op = options[key];
 			var isSelected = this.state.value === op[this.props.valueKey];
@@ -916,9 +898,6 @@ var UIObjectSelect = React.createClass({
 				<span className="Select-loading" />
 			</span>
 		) : null;
-//			<span className="Select-clear-zone" title={this.props.multi ? this.props.clearAllText : this.props.clearValueText} aria-label={this.props.multi ? this.props.clearAllText : this.props.clearValueText} onMouseDown={this.clearValue} onTouchEnd={this.clearValue} onClick={this.clearValue}>
-//				<span className="Select-clear" dangerouslySetInnerHTML={{ __html: '&times;' }} />
-//			</span>
 //		 clear "x" button
 		var singleClear = (this.props.clearable && this.state.value && !this.props.disabled && !this.props.multi && !(this.isLoading())) ? (
 
@@ -928,13 +907,6 @@ var UIObjectSelect = React.createClass({
 					onTouchEnd={this.clearValue}
 				>&times;</span>
 		) : null;
-
-		// indicator arrow
-//		var arrow = (
-//			<span className="Select-arrow-zone" onMouseDown={this.handleMouseDownOnArrow}>
-//				<span className="Select-arrow" onMouseDown={this.handleMouseDownOnArrow} />
-//			</span>
-//		);
 
 		var menu;
 		var menuProps;
