@@ -37,7 +37,6 @@ class PageDashboard extends Component {
     const title = 'Dashboard';
     this.context.onSetTitle(title);
 
-    var me = this;
     console.log("PageDashboard constructoir  context: ", this.context);
 
     var screenNodes = this.state.screens.map(function (screen) {
@@ -45,12 +44,12 @@ class PageDashboard extends Component {
         <ScreenContainer
           key={screen.key}
           screenState={screen}
-          onClose={me.context.setScreenPosition.bind(me, screen.key, "closed")}
-          onRetract={me.context.setScreenPosition.bind(me, screen.key, "retracted")}
-          onOpen={me.context.setScreenPosition.bind(me, screen.key, "open")}
+          onClose={this.context.setScreenPosition.bind(this, screen.key, "closed")}
+          onRetract={this.context.setScreenPosition.bind(this, screen.key, "retracted")}
+          onOpen={this.context.setScreenPosition.bind(this, screen.key, "open")}
         />
       );
-    });
+    }.bind(this));
 
 
     return (
