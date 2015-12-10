@@ -41,8 +41,8 @@ const context = {
     console.log("###sSP  ["+screenKey+" » "+positionClass+"]  options:", options);
     //console.log("this class: "+this.constructor.name);
     var log = " /Stack: ";
-    screenStack[me.state.key].map(function(screen){
-      log += screen.key + " " + screen.position + " | ";
+    screenStack[me.state.key].map(function(screen, i){
+      log += " [" + i + "]" + screen.key + " " + screen.position;
     });
     console.log(log);
     log = "/ STATE: ";
@@ -50,7 +50,6 @@ const context = {
       log += screen.key + " " + screen.position + "(" + (screen.disabled ? "DIS":"en") + ") | ";
     });
     console.log(log);
-    console.log("| screenKey:", screenKey, "| action:", positionClass);
     //////////////// log
 
 
@@ -122,6 +121,7 @@ const context = {
 
       var retractAllFurther = false;
       var current = true;
+      var firstOpen = true;
       screenStack[me.state.key].map(function (record) {
         var size = $.grep(newScreens, function (e) {
           if (typeof e == "undefined") return false;
@@ -129,7 +129,7 @@ const context = {
         })[0].size;
         var screenSize = size || normalWidth;
         var realScreenSize = screenSize + constPlus - retractedWidth;
-        console.log("        =record size:"+size+" screenSize:"+screenSize+" realScreenSize:"+realScreenSize);
+        console.log("        =record "+record.key+"-"+record.position+"    size:"+size+"->"+screenSize+"->"+realScreenSize);
         switch (positionClass) {
           case "open":
             if (record.position == "open") {
@@ -147,7 +147,9 @@ const context = {
                   // doesn't fit at all
                   if (availableWidth < 0 || retractAllFurther) {
                     update2DArray(newScreens, "key", record.key, "position", "retracted");
+                    console.log("         =========== "+record.position+" => retracted ");
                     record.position = "retracted";
+                  }else{
                   }
 
                 }
@@ -157,7 +159,7 @@ const context = {
               if (typeof size == "undefined") retractAllFurther = true;
 
               availableWidth -= realScreenSize;
-              console.log("        ======= availableWidth:"+availableWidth);
+              console.log("         ======= availableWidth:"+availableWidth);
 
             } else if (record.position == "retracted") {
               // asi nic?
@@ -169,7 +171,8 @@ const context = {
 
             if (record.position == "open") {
               availableWidth -= realScreenSize;
-              console.log("        ======= availableWidth:"+availableWidth);
+              console.log("         ======= availableWidth:"+availableWidth);
+              firstOpen = false;
 
               if ((availableWidth - realScreenSize) >= 0 || typeof size == "undefined") {
                 // enable
@@ -179,12 +182,16 @@ const context = {
             } else if (record.position == "retracted") {
               if (availableWidth >= 0 && !current && !retractAllFurther) {
                 update2DArray(newScreens, "key", record.key, "position", "open");
+                console.log("         =========== "+record.position+" => open ");
                 record.position = "open";
-                if ((availableWidth - realScreenSize) >= 0) { //////  || typeof size == "undefined"
+                firstOpen = false;
+                if ((availableWidth - realScreenSize) >= 0 || (typeof size == "undefined" && !firstOpen)) {
                   update2DArray(newScreens, "key", record.key, "disabled", false);
                 }else{
                   update2DArray(newScreens, "key", record.key, "disabled", true);
                 }
+                availableWidth -= realScreenSize;
+                console.log("         ======= availableWidth:"+availableWidth);
               }
             }
             if (!current && !retractAllFurther && typeof size == "undefined") retractAllFurther = true;
@@ -209,8 +216,8 @@ const context = {
 
     //////////////// log
     log = "\\ Stack: ";
-    screenStack[me.state.key].map(function(screen){
-      log += screen.key + " " + screen.position + " | ";
+    screenStack[me.state.key].map(function(screen, i){
+      log += " [" + i + "]" + screen.key + " " + screen.position;
     });
     console.log(log);
     log = " \\STATE: ";
@@ -263,10 +270,10 @@ function render(state) {
 function run() {
   let currentLocation = null;
   let currentState = null;
-	
+
 	// TODO ga initialize
 	console.log("app.js run()");
-	
+
   // Make taps on links and buttons work fast on mobiles
   FastClick.attach(document.body);
 
