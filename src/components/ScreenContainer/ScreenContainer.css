@@ -42,6 +42,6 @@
 .screen-controls .ui.button>.icon:not(.button) {
 	transition: transform .2s .2s ease-in-out;
 }
-.screen.retracted .screen-controls i.chevron.right {
+.screen.disabled .screen-controls i.chevron.right {
 	transform: rotate(180deg);
 }
