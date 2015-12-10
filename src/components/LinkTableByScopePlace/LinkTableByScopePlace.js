@@ -314,7 +314,10 @@ class LinkTableByScopePlace extends Component {
 
 		var auLevelsInsert = this.state.auLevels.map(function (auLevel) {
       return (
-				<td className="selectable heading">
+				<td 
+					className="selectable heading"
+					key={"aulevel-" + auLevel.key}
+				>
 					<a 
 						href="#"
 						onClick={thisComponent.openScreenExample.bind(
@@ -347,7 +350,10 @@ class LinkTableByScopePlace extends Component {
 					}
 
 					return (
-						<span className={periodClassName}>
+						<span 
+							className={periodClassName}
+							key={"period-" + period.key}
+						>
 							<Icon name={iconName}/>
 							{period.name}
 							<br/>
@@ -366,7 +372,10 @@ class LinkTableByScopePlace extends Component {
 				}
 
 				return (
-					<td className={tdClassName}>
+					<td 
+						className={tdClassName}
+						key={"attset-" + auAttSet.key + "-aulevel-" + auASLevel.key + "-periods"}
+					>
 						<a
 							href="#"
 							onClick={thisComponent.openScreenExample.bind(
@@ -382,7 +391,9 @@ class LinkTableByScopePlace extends Component {
 			});
 
 			return (
-				<tr>
+				<tr
+					key={"auattset-" + auAttSet.key}
+				>
 					<td className="selectable heading">
 						<a 
 							href="#"

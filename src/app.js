@@ -263,7 +263,10 @@ function render(state) {
 function run() {
   let currentLocation = null;
   let currentState = null;
-
+	
+	// TODO ga initialize
+	console.log("app.js run()");
+	
   // Make taps on links and buttons work fast on mobiles
   FastClick.attach(document.body);
 

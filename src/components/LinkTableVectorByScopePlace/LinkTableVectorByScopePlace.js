@@ -175,7 +175,10 @@ class LinkTableVectorByScopePlace extends Component {
 				}
 
 				return (
-					<span className={periodClassName}>
+					<span 
+						className={periodClassName}
+						key={"period-" + period.key}
+					>
 						<Icon name={iconName}/>
 						{period.name}
 						<br/>
@@ -194,12 +197,18 @@ class LinkTableVectorByScopePlace extends Component {
 			}
 			
 			var layerHeaderElement = (
-				<td className="header">
+				<td 
+					className="header"
+					key="header"
+				>
 					{vectorLayer.name}
 				</td>
 			);
 			var layerPeriodsElement = (
-				<td className={tdLayerClassName}>
+				<td 
+					className={tdLayerClassName}
+					key={"layer-" + vectorLayer.key + "-periods"}
+				>
 					<a
 						href="#"
 						onClick={thisComponent.openScreenExample.bind(
@@ -217,7 +226,7 @@ class LinkTableVectorByScopePlace extends Component {
 			
 			for (var layerAttSet of vectorLayer.attSets) {
 				
-				var attSetHeaderElement = React.createElement('td', {className: 'header'}, layerAttSet.name);
+				var attSetHeaderElement = React.createElement('td', {className: 'header', key: layerAttSet.key}, layerAttSet.name);
 
 					var dataNoneCount = 0;
 					var tdClassName = "selectable";
@@ -233,7 +242,10 @@ class LinkTableVectorByScopePlace extends Component {
 						}
 
 						return (
-							<span className={periodClassName}>
+							<span 
+								className={periodClassName}
+								key={"period-" + period.key}
+							>
 								<Icon name={iconName}/>
 								{period.name}
 								<br/>
@@ -252,7 +264,10 @@ class LinkTableVectorByScopePlace extends Component {
 					}
 					
 					var attSetPeriodsElement = (
-						<td className={tdClassName}>
+						<td 
+							className={tdClassName}
+							key={"layer-" + vectorLayer.key + "-attset-" + layerAttSet.key + "-periods"}
+						>
 							<a
 								href="#"
 								onClick={thisComponent.openScreenExample.bind(
@@ -272,12 +287,12 @@ class LinkTableVectorByScopePlace extends Component {
 			var additionalColumns = vectorAttSetsColumns - (vectorLayer.attSets.length * 2);
 			var additionalColumnsInsert;
 			if(additionalColumns) {
-				additionalColumnsInsert = <td colSpan={additionalColumns}></td>;
+				additionalColumnsInsert = <td colSpan={additionalColumns} key="additionalcolumns"></td>;
 			}
 			
 			layerRowChildren.push(additionalColumnsInsert);
 
-			return React.createElement('tr', null, layerRowChildren);
+			return React.createElement('tr', {key: "vectorlayer-" + vectorLayer.key}, layerRowChildren);
 			
     });
 

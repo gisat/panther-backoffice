@@ -878,7 +878,9 @@ var UIObjectSelect = React.createClass({
 						onTouchEnd={this.props.onOptionLabelClick}
 						onClick={onOptionLabelClick}
 						style={val.style}
-						title={val.title}>
+						title={val.title}
+						key="value"
+					>
 						{val[this.props.labelKey]}
 					</a>
 				);

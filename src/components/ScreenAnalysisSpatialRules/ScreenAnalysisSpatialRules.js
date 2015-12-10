@@ -5,6 +5,7 @@ import withStyles from '../../decorators/withStyles';
 import { Icon, IconButton, Buttons } from '../SEUI/elements';
 import { Table } from '../SEUI/collections';
 import Select from 'react-select';
+import UIObjectSelect from '../UIObjectSelect';
 
 const OPERATIONS = [
 			{ key: "COUNT", name: "COUNT"	},
@@ -85,54 +86,105 @@ const ATTSETS = [
 
 @withStyles(styles)
 class ScreenAnalysisSpatialRules extends Component{
+	
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			valueResultAttSet: [352],
+			valueFilterAttSet: [28],
+			themesString: ""
+		};
+		
+	}
+	
+	
+	handleNewObjects(values, store) {
+		var newValues = [];
+		for (var singleValue of values) {
+			if(singleValue.create){
+				// replace with actual object creation and config screen opening
+				delete singleValue.create;
+				delete singleValue.label;
+				delete singleValue.value;
+				singleValue.key = Math.floor((Math.random() * 10000) + 1);
+				store.push(singleValue);
+			}
+			newValues.push(singleValue.key);
+		}
+		return newValues;
+	}
+	
+	onChangeResultAttSet (value, values) {
+		values = this.handleNewObjects(values, ATTSETS);
+		this.setState({
+			valueResultAttSet: values
+		});
+	}
+	
+	onChangeFilterAttSet (value, values) {
+		values = this.handleNewObjects(values, ATTSETS);
+		this.setState({
+			valueFilterAttSet: values
+		});
+	}
+	
+	
+	onObjectClick (value, event) {
+		console.log("yay! " + value["key"]);
+	}
+		
+	
+	keyNameOptionFactory (inputValue) {
+		var newOption = {
+				key: inputValue,
+				name: inputValue,
+				value: inputValue,
+				label: inputValue,
+				create: true
+			};
+		return newOption;
+	}
+	
+	
   render() {
     return (
       <div><div className="screen-content"><div>
 
-				<div className="input-wrapper">
-					<div>
+				<div className="frame-input-wrapper">
 						<label className="container">
 							Result attribute set
-							<Select 
-								//onChange={this.onChangeAttSet.bind(this)}
-								//loadOptions={this.getPlaces}
+							<UIObjectSelect 
+								onChange={this.onChangeResultAttSet.bind(this)}
+								onOptionLabelClick={this.onObjectClick.bind(this)}
+								//loadOptions={this.getScopes}
 								options={ATTSETS}
+								allowCreate
+								newOptionCreator={this.keyNameOptionFactory.bind(this)}
 								valueKey="key" 
 								labelKey="name" 
-								//inputProps={selectInputProps} 
-								value="352"
+								value={this.state.valueResultAttSet}
+								className="template"
 							/>
 						</label>
-					</div>
-					<div>
-						<Buttons icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
 				</div>
-							
-				<div className="input-wrapper">
-					<div>
+				
+				<div className="frame-input-wrapper">
 						<label className="container">
 							Filter attribute set
-							<Select 
-								//onChange={this.onChangeAttSet.bind(this)}
-								//loadOptions={this.getPlaces}
+							<UIObjectSelect 
+								onChange={this.onChangeFilterAttSet.bind(this)}
+								onOptionLabelClick={this.onObjectClick.bind(this)}
+								//loadOptions={this.getScopes}
 								options={ATTSETS}
+								allowCreate
+								newOptionCreator={this.keyNameOptionFactory.bind(this)}
 								valueKey="key" 
 								labelKey="name" 
-								//inputProps={selectInputProps} 
-								value="28"
+								value={this.state.valueFilterAttSet}
+								className="template"
 							/>
 						</label>
-					</div>
-					<div>
-						<Buttons icon>
-							<IconButton name="write" />
-							<IconButton name="plus" />
-						</Buttons>
-					</div>
 				</div>
 
 				<Table celled className="fixed" id="AnalysisSpatialRuleTable">

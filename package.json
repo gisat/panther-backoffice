@@ -22,6 +22,7 @@
     "react": "0.14.0-rc1",
     "react-addons-transition-group": "^0.14.2",
     "react-dom": "0.14.0-rc1",
+    "react-ga": "^1.2.0",
     "react-outsideclickhandler": "^0.1.0",
     "react-routing": "0.0.4",
     "react-select": "^0.9.1",

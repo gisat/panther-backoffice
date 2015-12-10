@@ -129,7 +129,7 @@ class ConfigAnalysisSpatial extends Component{
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Name
-						<Input type="text" name="name" placeholder=" " value="Land cover status" />
+						<Input type="text" name="name" placeholder=" " defaultValue="Land cover status" />
 					</label>
 				</div>
 				
@@ -151,6 +151,10 @@ class ConfigAnalysisSpatial extends Component{
 						</label>
 						<div className="frame-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
 				</div>
+				
+				<IconButton name="check" basic color="blue" disabled>
+					Saved
+				</IconButton>
 				
 				
 				<div className="section-header">

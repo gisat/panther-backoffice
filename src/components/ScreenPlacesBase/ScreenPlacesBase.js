@@ -49,7 +49,7 @@ class ScreenPlacesBase extends Component{
 						Scope:&nbsp;
 						<UIScreenButton
 							onClick={this.openScreenScopeExample.bind(this,1,1)}
-							className={this.state.activeScreenOpener==1 ? 'selected' : ''}
+							className={this.state.activeScreenOpener==1 ? 'screen-opener' : ''}
 						>
 							Local
 						</UIScreenButton>
