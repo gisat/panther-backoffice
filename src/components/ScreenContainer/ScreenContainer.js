@@ -48,19 +48,19 @@ class ScreenContainer extends Component{
           <Buttons basic icon vertical>
             <IconButton
               name="chevron right"
-              onClick={this.props.onRetract}
+              onClick={this.props.onRetract.bind(null,{init: false})}
             />
           </Buttons>
         </div>
         <div
           className="screen-overlay"
-          onClick={this.props.onOpen}
+          onClick={this.props.onOpen.bind(null,{init: false})}
         ></div>
         <div className="screen-controls top">
           <Buttons basic icon vertical>
             <IconButton
               name="remove"
-              onClick={this.props.onClose}
+              onClick={this.props.onClose.bind(null,{init: false})}
             />
           </Buttons>
         </div>

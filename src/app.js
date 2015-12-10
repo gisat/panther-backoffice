@@ -33,22 +33,25 @@ const context = {
     // clone state screen array
     var newScreens = me.state.screens.slice(0);
     var index = -1;
-
+    screenStack[me.state.key] = screenStack[me.state.key] || [];
 
 
     //////////////// log
     console.log("");
-    console.log("### setScreenPos... k: "+screenKey+" p: "+positionClass+" o:", options);
-    var log = "/ ";
+    console.log("###sSP  ["+screenKey+" » "+positionClass+"]  options:", options);
+    //console.log("this class: "+this.constructor.name);
+    var log = " /STACK: ";
+    screenStack[me.state.key].map(function(screen){
+      log += screen.key + " " + screen.position + " | ";
+    });
+    console.log(log);
+    log = "/ STATE: ";
     newScreens.map(function(screen){
-      var posi = screen.position;
-      log += screen.key + " " + posi + "(" + (screen.disabled ? "DIS":"en") + ") | ";
+      log += screen.key + " " + screen.position + "(" + (screen.disabled ? "DIS":"en") + ") | ";
     });
     console.log(log);
     console.log("| screenKey:", screenKey, "| action:", positionClass);
     //////////////// log
-
-
 
 
     if(typeof screenKey != 'undefined') {
@@ -84,8 +87,6 @@ const context = {
 
 
       ////// log operation to screenStack
-      // create stack for the page
-      screenStack[me.state.key] = screenStack[me.state.key] || [];
       // remove previous records for the same screen
       screenStack[me.state.key].map(function(record, i){
         if(record.key == screenKey) screenStack[me.state.key].splice(i, 1);
@@ -98,12 +99,13 @@ const context = {
         });
       }
 
+      //console.log("||||||| screenStack after operation log: ", screenStack);
+
 
     } /// if screen defined
     //else{
     //  console.log("@@@@@@@@@@@ setScreenPosition without screenKey @@@@@@@@@@@");
     //}
-
 
 
 
@@ -116,6 +118,7 @@ const context = {
       var normalWidth = 50;
       var remSize = 16;
       var availableWidth = window.innerWidth / remSize - menuWidth - screenStack[me.state.key].length * retractedWidth;
+      console.log("        =init innerWidth:" + window.innerWidth / remSize + " availableWidth:"+availableWidth);
 
       var retractAllFurther = false;
       var current = true;
@@ -126,34 +129,48 @@ const context = {
         })[0].size;
         var screenSize = size || normalWidth;
         var realScreenSize = screenSize + constPlus - retractedWidth;
+        console.log("        =record size:"+size+" screenSize:"+screenSize+" realScreenSize:"+realScreenSize);
         switch (positionClass) {
           case "open":
             if (record.position == "open") {
+
+              // fits partly or not at all
               if ((availableWidth - realScreenSize) < 0) {
-                // partly fits
-                update2DArray(newScreens, "key", record.key, "disabled", true);
+
                 if(current){
-                  // currently opened screen is large -> maximise it
                   update2DArray(newScreens, "key", record.key, "position", newScreens[index].position + " maximised");
+                  me.state.hasMaximised = true;
+                }else{
+
+                  update2DArray(newScreens, "key", record.key, "disabled", true);
+
+                  // doesn't fit at all
+                  if (availableWidth < 0 || retractAllFurther) {
+                    update2DArray(newScreens, "key", record.key, "position", "retracted");
+                    record.position = "retracted";
+                  }
+
                 }
 
-                if (availableWidth < 0 || retractAllFurther) {
-                  // not even a bit fits
-                  update2DArray(newScreens, "key", record.key, "position", "retracted");
-                  record.position = "retracted";
-                }
               }
 
-              if (!retractAllFurther && typeof size == "undefined") retractAllFurther = true;
+              if (typeof size == "undefined") retractAllFurther = true;
+
               availableWidth -= realScreenSize;
+              console.log("        ======= availableWidth:"+availableWidth);
+
             } else if (record.position == "retracted") {
               // asi nic?
             }
             break;
           case "retracted":
           case "closed":
+            me.state.hasMaximised = false;
+
             if (record.position == "open") {
               availableWidth -= realScreenSize;
+              console.log("        ======= availableWidth:"+availableWidth);
+
               if ((availableWidth - realScreenSize) >= 0 || typeof size == "undefined") {
                 // enable
                 update2DArray(newScreens, "key", record.key, "disabled", false);
@@ -163,8 +180,10 @@ const context = {
               if (availableWidth >= 0 && !current && !retractAllFurther) {
                 update2DArray(newScreens, "key", record.key, "position", "open");
                 record.position = "open";
-                if ((availableWidth - realScreenSize) >= 0 || typeof size == "undefined") {
+                if ((availableWidth - realScreenSize) >= 0) { //////  || typeof size == "undefined"
                   update2DArray(newScreens, "key", record.key, "disabled", false);
+                }else{
+                  update2DArray(newScreens, "key", record.key, "disabled", true);
                 }
               }
             }
@@ -175,15 +194,31 @@ const context = {
 
     }
 
+    // reorder screenStack to be open-first when init run
+    if(options.init){
+      //console.log("| / screenStack[me.state.key][0].key:", screenStack[me.state.key][0].key);
+      screenStack[me.state.key].sort(function(a, b){
+        if((a.position == "closed" || a.position == "retracted") && b.position == "open"){
+          return 1;
+        }
+        return 0;
+      });
+      //console.log("| \\ screenStack[me.state.key][0].key:", screenStack[me.state.key][0].key);
+    }
+
 
     //////////////// log
-    log = "\\ ";
-    newScreens.map(function(screen){
-      var posi = screen.position;
-      log += screen.key + " " + posi + "(" + (screen.disabled ? "DIS":"enb") + ") | ";
+    log = "\\ STACK:";
+    screenStack[me.state.key].map(function(screen){
+      log += screen.key + " " + screen.position + " | ";
     });
     console.log(log);
-    console.log("----------------------------");
+    log = " \\STATE:";
+    newScreens.map(function(screen){
+      log += screen.key + " " + screen.position + "(" + (screen.disabled ? "DIS":"enb") + ") | ";
+    });
+    console.log(log);
+    console.log("  ----------------------------");
     //////////////// log
 
 

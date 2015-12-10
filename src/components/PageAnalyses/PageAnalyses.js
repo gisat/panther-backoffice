@@ -24,7 +24,6 @@ class PageAnalyses extends Component {
 
     this.state = {
       key: "analysis",
-      hasMaximised: true,
       screens: [
         {
           key: "analyses1",
