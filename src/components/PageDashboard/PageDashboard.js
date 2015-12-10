@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './PageDashboard.css';
+import ga from 'react-ga';
 
 import ScreenContainer from '../ScreenContainer';
 import ScreenDashboardBase from '../ScreenDashboardBase';
@@ -26,6 +27,8 @@ class PageDashboard extends Component {
         }
       ]
     };
+		
+		ga.pageview('/');
   }
 
 
