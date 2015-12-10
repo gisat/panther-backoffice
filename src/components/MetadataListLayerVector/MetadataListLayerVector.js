@@ -55,7 +55,7 @@ class MetadataListLayerVector extends Component{
 
 		var thisComponent = this;
 
-		var itemsInsert = LAYERTEMPLATES.map(function (item, index) {
+		var itemsInsert = LAYERTEMPLATES.map(function (item) {
       return (
 				<a
 					className={thisComponent.state.selectedTemplate==item.key ? 'puma-item template screen-opener' : 'puma-item template'}
@@ -65,7 +65,7 @@ class MetadataListLayerVector extends Component{
 							thisComponent.state.itemType,
 							item.key
 						)}
-          key={"layertemplate-"+index}
+          key={"vectorlayertemplate-" + item.key}
 				>
 					<span>{item.name}</span>
 				</a>

@@ -66,6 +66,7 @@ class AnalysesListSpatial extends Component{
 							thisComponent.state.itemType,
 							item.key
 						)}
+          key={"spatialanalysis-" + item.key}
 				>
 					<span>{item.name}</span>
 				</a>

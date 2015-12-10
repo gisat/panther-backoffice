@@ -110,7 +110,10 @@ class LinkTableRasterByScopePlace extends Component {
 				}
 
 				return (
-					<span className={periodClassName}>
+					<span 
+						className={periodClassName}
+						key={"period-" + period.key}
+					>
 						<Icon name={iconName}/>
 						{period.name}
 						<br/>
@@ -129,7 +132,9 @@ class LinkTableRasterByScopePlace extends Component {
 			}
 
 			return (
-				<tr>
+				<tr
+					key={"rasterlayer-" + rasterLayer.key}
+				>
 					<td className="header">
 						{rasterLayer.name}
 					</td>
