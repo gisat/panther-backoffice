@@ -40,7 +40,7 @@ const context = {
     console.log("");
     console.log("###sSP  ["+screenKey+" » "+positionClass+"]  options:", options);
     //console.log("this class: "+this.constructor.name);
-    var log = " /STACK: ";
+    var log = " /Stack: ";
     screenStack[me.state.key].map(function(screen){
       log += screen.key + " " + screen.position + " | ";
     });
@@ -208,12 +208,12 @@ const context = {
 
 
     //////////////// log
-    log = "\\ STACK:";
+    log = "\\ Stack: ";
     screenStack[me.state.key].map(function(screen){
       log += screen.key + " " + screen.position + " | ";
     });
     console.log(log);
-    log = " \\STATE:";
+    log = " \\STATE: ";
     newScreens.map(function(screen){
       log += screen.key + " " + screen.position + "(" + (screen.disabled ? "DIS":"enb") + ") | ";
     });
