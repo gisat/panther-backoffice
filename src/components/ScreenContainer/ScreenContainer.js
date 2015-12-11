@@ -18,6 +18,8 @@ class ScreenContainer extends Component{
     super(props);
 
     //// nasty thing
+    // todo bez init, kdyz to neni ze statu
+    // prevest do page
     switch(props.screenState.position){
       case "retracted":
             props.onRetract({init: true});

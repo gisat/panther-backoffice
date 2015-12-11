@@ -89,14 +89,22 @@ const context = {
 
       ////// log operation to screenStack
       // remove previous records for the same screen
+      var order;
       screenStack[me.state.key].map(function(record, i){
-        if(record.key == screenKey) screenStack[me.state.key].splice(i, 1);
+        if(record.key == screenKey){
+          order = record.order;
+          screenStack[me.state.key].splice(i, 1);
+        }
       });
+      if(!order){
+        // novy
+      }
       // add record for this operation
       if(positionClass == "open" || positionClass == "retracted"){
         screenStack[me.state.key].unshift({
           key: screenKey,
-          position: positionClass
+          position: positionClass,
+          order: order
         });
       }
 
@@ -111,7 +119,7 @@ const context = {
 
 
     ////// manage overflowing screens
-    if(!options.init) {
+    if(true || !options.init) {
 
       var menuWidth = 3.75;
       var retractedWidth = 5;
@@ -123,7 +131,7 @@ const context = {
 
       var retractAllFurther = false;
       var current = true;
-      var firstOpen = true;
+      var foundOpen = false;
       screenStack[me.state.key].map(function (record) {
         var size = $.grep(newScreens, function (e) {
           if (typeof e == "undefined") return false;
@@ -174,29 +182,44 @@ const context = {
             if (record.position == "open") {
               availableWidth -= realScreenSize;
               console.log("         ======= availableWidth:"+availableWidth);
-              firstOpen = false;
+              foundOpen = true;
 
-              if ((availableWidth - realScreenSize) >= 0 || typeof size == "undefined") {
+              if ((availableWidth - realScreenSize) >= 0) { //  || typeof size == "undefined"
                 // enable
                 update2DArray(newScreens, "key", record.key, "disabled", false);
+              }else{
+                // disable
+                update2DArray(newScreens, "key", record.key, "disabled", true);
+                retractAllFurther = true;
               }
 
-            } else if (record.position == "retracted") {
+            } else if (record.position == "retracted") { // algoritmicky
               if (availableWidth >= 0 && !current && !retractAllFurther) {
+                // open
                 update2DArray(newScreens, "key", record.key, "position", "open");
                 console.log("         =========== "+record.position+" => open ");
                 record.position = "open";
-                firstOpen = false;
-                if ((availableWidth - realScreenSize) >= 0 || (typeof size == "undefined" && !firstOpen)) {
+                if ((availableWidth - realScreenSize) >= 0) {
+                  // enable
                   update2DArray(newScreens, "key", record.key, "disabled", false);
+                }else if(!foundOpen){
+                  // enable
+                  update2DArray(newScreens, "key", record.key, "disabled", false);
+                  // maximise
+                  update2DArray(newScreens, "key", record.key, "position", newScreens[index].position + " maximised");
+                  me.state.hasMaximised = true;
+                  retractAllFurther = true;
                 }else{
+                  // disable
                   update2DArray(newScreens, "key", record.key, "disabled", true);
+                  retractAllFurther = true;
                 }
+                foundOpen = true;
                 availableWidth -= realScreenSize;
                 console.log("         ======= availableWidth:"+availableWidth);
               }
             }
-            if (!current && !retractAllFurther && typeof size == "undefined") retractAllFurther = true;
+            if (!current && typeof size == "undefined") retractAllFurther = true;
         }
         current = false;
       });
