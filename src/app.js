@@ -6,6 +6,8 @@ import FastClick from 'fastclick';
 import Router from './routes';
 import Location from './core/Location';
 import { addEventListener, removeEventListener } from './utils/DOMUtils';
+import ga from 'react-ga';
+import { googleAnalyticsId } from './config';
 
 const screenStack = require('./stores/screenStack');
 
@@ -271,8 +273,8 @@ function run() {
   let currentLocation = null;
   let currentState = null;
 
-	// TODO ga initialize
-	console.log("app.js run()");
+	var gaOptions = { debug: true };
+	ga.initialize(googleAnalyticsId, gaOptions);
 
   // Make taps on links and buttons work fast on mobiles
   FastClick.attach(document.body);
