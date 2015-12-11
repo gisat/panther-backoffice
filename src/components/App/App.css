@@ -426,6 +426,20 @@ todo hex colours, button icons */
   }
 
 	
+	.screen.const20 {
+    max-width: 21rem;
+		flex-grow: 0;
+  }
+	.screen.const20.open,
+	.screen.const20.opening  {
+		width: 21rem;
+		flex-shrink: 0;
+  }
+	.screen.const20 .screen-content > div,
+	.screen.const20 .screen-setter > div {
+    width: 20rem;
+  }
+	
   .screen.const30 {
     max-width: 31rem;
 		flex-grow: 0;
@@ -466,6 +480,76 @@ todo hex colours, button icons */
 	.screen.const50 .screen-content > div,
 	.screen.const50 .screen-setter > div {
     width: 50rem;
+  }
+	
+	.screen.const60 {
+    max-width: 61rem;
+		flex-grow: 0;
+  }
+	.screen.const60.open,
+	.screen.const60.opening  {
+		width: 61rem;
+		flex-shrink: 0;
+  }
+	.screen.const60 .screen-content > div,
+	.screen.const60 .screen-setter > div {
+    width: 60rem;
+  }
+		
+	.screen.const70 {
+    max-width: 71rem;
+		flex-grow: 0;
+  }
+	.screen.const70.open,
+	.screen.const70.opening  {
+		width: 71rem;
+		flex-shrink: 0;
+  }
+	.screen.const70 .screen-content > div,
+	.screen.const70 .screen-setter > div {
+    width: 70rem;
+  }
+	
+	.screen.const80 {
+    max-width: 81rem;
+		flex-grow: 0;
+  }
+	.screen.const80.open,
+	.screen.const80.opening  {
+		width: 81rem;
+		flex-shrink: 0;
+  }
+	.screen.const80 .screen-content > div,
+	.screen.const80 .screen-setter > div {
+    width: 80rem;
+  }
+	
+	.screen.const90 {
+    max-width: 91rem;
+		flex-grow: 0;
+  }
+	.screen.const90.open,
+	.screen.const90.opening  {
+		width: 91rem;
+		flex-shrink: 0;
+  }
+	.screen.const90 .screen-content > div,
+	.screen.const90 .screen-setter > div {
+    width: 90rem;
+  }
+	
+	.screen.const100 {
+    max-width: 101rem;
+		flex-grow: 0;
+  }
+	.screen.const100.open,
+	.screen.const100.opening  {
+		width: 101rem;
+		flex-shrink: 0;
+  }
+	.screen.const100 .screen-content > div,
+	.screen.const100 .screen-setter > div {
+    width: 100rem;
   }
 	
 
