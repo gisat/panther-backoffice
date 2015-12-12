@@ -906,17 +906,18 @@ todo hex colours, button icons */
 .input-wrapper > div {
 	flex-shrink: 0;
 	flex-grow: 1;
-	max-width: calc(100% - 5.625rem);
+/*	max-width: calc(100% - 11rem);*/
 }
 .input-wrapper > div:nth-child(2) {
 	flex-grow: 0;
 	position: relative;
 	
-	width: 5.625rem;
+	width: 11rem;
 }
+.input-wrapper > div:nth-child(2) .button,
 .input-wrapper > div:nth-child(2) .buttons {
 	position: absolute;
-	bottom:.9315rem;
+	bottom:.9375rem;
 	right:0;
 }
 
