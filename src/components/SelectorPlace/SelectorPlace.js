@@ -4,6 +4,7 @@ import withStyles from '../../decorators/withStyles';
 
 import { Button, Input, Icon } from '../SEUI/elements';
 import Select from 'react-select';
+import UIScreenButton from '../UIScreenButton';
 
 //const MAX_ITEMS = 6;
 //const ASYNC_DELAY = 500;
@@ -58,20 +59,28 @@ class SelectorPlace extends Component{
 		return (
       <div>
         <div className="selector">
-					<div className="input">
-						<label className="container">
-							Place
-							<Select 
-								onChange={this.onChange.bind(this)}
-								//loadOptions={this.getPlaces}
-								options={PLACES}
-								valueKey="key" 
-								labelKey="place" 
-								inputProps={selectInputProps} 
-								value={this.state.value}
-								clearable={false}
-							/>
-						</label>
+					<div className="input-wrapper">
+						<div>
+							<label className="container">
+								Place
+								<Select 
+									onChange={this.onChange.bind(this)}
+									//loadOptions={this.getPlaces}
+									options={PLACES}
+									valueKey="key" 
+									labelKey="place" 
+									inputProps={selectInputProps} 
+									value={this.state.value}
+									clearable={false}
+								/>
+							</label>
+						</div>
+						<div>
+							<UIScreenButton basic>
+								<Icon name="plus" />
+								New place
+							</UIScreenButton>
+						</div>
 					</div>
 				</div>
       </div>

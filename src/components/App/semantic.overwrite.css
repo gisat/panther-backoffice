@@ -137,6 +137,7 @@ td.selectable.focus::after {
 	/*font-size: .875rem;*/
 	line-height: .875rem;
 	padding: .625rem;
+	height: 2.25rem;
 }
 .ui.icon.button, .ui.icon.buttons .button {
 	padding: .625rem;
