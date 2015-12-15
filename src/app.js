@@ -110,19 +110,12 @@ const context = {
           userDidThat: true
         });
       }
-
-      //console.log("||||||| screenStack after operation log: ", screenStack);
-
-
-    } /// if screen defined
-    //else{
-    //  console.log("@@@@@@@@@@@ setScreenPosition without screenKey @@@@@@@@@@@");
-    //}
+    }
 
 
 
     ////// manage overflowing screens
-    if(true || !options.init) {
+    //if(true || !options.init) { // todo odstranit?
 
       var menuWidth = 3.75;
       var retractedWidth = 5;
@@ -148,7 +141,7 @@ const context = {
             if (record.position == "open") {
 
               // fits partly or not at all
-              if ((availableWidth - realScreenSize) < 0) {
+              if ((availableWidth - realScreenSize) < 0 && !retractAllFurther) {
 
                 if(current){
                   maximiseScreen(record.key, newScreens);
@@ -160,19 +153,19 @@ const context = {
                   // doesn't fit at all
                   if (availableWidth < 0 || retractAllFurther) {
                     retractScreen(record.key, newScreens);
-                    console.log("         =========== "+record.position+" => retracted ");
                     record.position = "retracted";
                     record.userDidThat = false;
-                  }else{
                   }
 
                 }
 
+              }else if(retractAllFurther){
+                retractScreen(record.key, newScreens);
+                record.position = "retracted";
+                record.userDidThat = false;
               }
 
               if (typeof size == "undefined") retractAllFurther = true;
-
-              console.log("         ======= availableWidth:"+availableWidth);
 
             } else if (record.position == "retracted") {
               // asi nic?
@@ -183,7 +176,6 @@ const context = {
             me.state.hasMaximised = false;
 
             if (record.position == "open") {
-              console.log("         ======= availableWidth:"+availableWidth);
               foundOpen = true;
 
               if ((availableWidth - realScreenSize) >= 0) { //  || typeof size == "undefined"
@@ -199,8 +191,8 @@ const context = {
               if (availableWidth >= 0 && !current && !retractAllFurther && !record.userDidThat){
                 // open
                 openScreen(record.key, newScreens);
-                console.log("         =========== "+record.position+" => open ");
                 record.position = "open";
+                record.userDidThat = false;
                 if ((availableWidth - realScreenSize) >= 0) {
                   // enable
                   enableScreen(record.key, newScreens);
@@ -217,17 +209,19 @@ const context = {
                   retractAllFurther = true;
                 }
                 foundOpen = true;
-                console.log("         ======= availableWidth:"+availableWidth);
               }
             }
             if (!current && typeof size == "undefined") retractAllFurther = true;
+            // todo: Ted je otazka, jestli to nastavovat vzdy kdyz chybi velikost, nebo jen u wide. To by asi davalo vetsi smysl.
         }
+
         if (current) record.userDidThat = true;
         if (record.position == "open") availableWidth -= realScreenSize;
+        console.log("         ======= availableWidth:"+availableWidth);
         current = false;
       });
 
-    }
+    //} // if not init
 
     // reorder screenStack to be open-first when init run
     if(options.init){
@@ -255,7 +249,7 @@ const context = {
       log += screen.key + " " + screen.position + "(" + (screen.disabled ? "DIS":"enb") + ") | ";
     });
     console.log(log);
-    console.log("  ----------------------------");
+    //console.log("  ----------------------------");
     //////////////// log
 
 
