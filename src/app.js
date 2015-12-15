@@ -45,6 +45,7 @@ const context = {
     var log = " /Stack: ";
     screenStack[me.state.key].map(function(screen, i){
       log += " [" + i + "]" + screen.key + " " + screen.position;
+      if(!screen.allowRetract) log += "/xR";
     });
     console.log(log);
     log = "/ STATE: ";
@@ -89,22 +90,22 @@ const context = {
 
       ////// log operation to screenStack
       // remove previous records for the same screen
-      var order;
+      //var order = -1; // todo Zatim nepouzivane, mozna to nebude potreba.
+      //var allowRetract = (newScreens[0].key != screenKey); // todo Zatim nepouzivane, mozna to nebude potreba.
       screenStack[me.state.key].map(function(record, i){
         if(record.key == screenKey){
-          order = record.order;
+          //order = record.order;
+          //allowRetract = record.allowRetract;
           screenStack[me.state.key].splice(i, 1);
         }
       });
-      if(!order){
-        // novy
-      }
       // add record for this operation
       if(positionClass == "open" || positionClass == "retracted"){
         screenStack[me.state.key].unshift({
           key: screenKey,
           position: positionClass,
-          order: order
+          //order: order,
+          //allowRetract: allowRetract
         });
       }
 
@@ -148,15 +149,15 @@ const context = {
               if ((availableWidth - realScreenSize) < 0) {
 
                 if(current){
-                  update2DArray(newScreens, "key", record.key, "position", newScreens[index].position + " maximised");
+                  maximiseScreen(record.key, newScreens);
                   me.state.hasMaximised = true;
                 }else{
 
-                  update2DArray(newScreens, "key", record.key, "disabled", true);
+                  disableScreen(record.key, newScreens);
 
                   // doesn't fit at all
                   if (availableWidth < 0 || retractAllFurther) {
-                    update2DArray(newScreens, "key", record.key, "position", "retracted");
+                    retractScreen(record.key, newScreens);
                     console.log("         =========== "+record.position+" => retracted ");
                     record.position = "retracted";
                   }else{
@@ -168,7 +169,6 @@ const context = {
 
               if (typeof size == "undefined") retractAllFurther = true;
 
-              availableWidth -= realScreenSize;
               console.log("         ======= availableWidth:"+availableWidth);
 
             } else if (record.position == "retracted") {
@@ -180,47 +180,46 @@ const context = {
             me.state.hasMaximised = false;
 
             if (record.position == "open") {
-              availableWidth -= realScreenSize;
               console.log("         ======= availableWidth:"+availableWidth);
               foundOpen = true;
 
               if ((availableWidth - realScreenSize) >= 0) { //  || typeof size == "undefined"
                 // enable
-                update2DArray(newScreens, "key", record.key, "disabled", false);
+                enableScreen(record.key, newScreens);
               }else{
                 // disable
-                update2DArray(newScreens, "key", record.key, "disabled", true);
+                disableScreen(record.key, newScreens);
                 retractAllFurther = true;
               }
 
             } else if (record.position == "retracted") { // algoritmicky
               if (availableWidth >= 0 && !current && !retractAllFurther) {
                 // open
-                update2DArray(newScreens, "key", record.key, "position", "open");
+                openScreen(record.key, newScreens);
                 console.log("         =========== "+record.position+" => open ");
                 record.position = "open";
                 if ((availableWidth - realScreenSize) >= 0) {
                   // enable
-                  update2DArray(newScreens, "key", record.key, "disabled", false);
+                  enableScreen(record.key, newScreens);
                 }else if(!foundOpen){
                   // enable
-                  update2DArray(newScreens, "key", record.key, "disabled", false);
+                  enableScreen(record.key, newScreens);
                   // maximise
-                  update2DArray(newScreens, "key", record.key, "position", newScreens[index].position + " maximised");
+                  maximiseScreen(record.key, newScreens);
                   me.state.hasMaximised = true;
                   retractAllFurther = true;
                 }else{
                   // disable
-                  update2DArray(newScreens, "key", record.key, "disabled", true);
+                  disableScreen(record.key, newScreens);
                   retractAllFurther = true;
                 }
                 foundOpen = true;
-                availableWidth -= realScreenSize;
                 console.log("         ======= availableWidth:"+availableWidth);
               }
             }
             if (!current && typeof size == "undefined") retractAllFurther = true;
         }
+        if (record.position == "open") availableWidth -= realScreenSize;
         current = false;
       });
 
@@ -243,6 +242,7 @@ const context = {
     log = "\\ Stack: ";
     screenStack[me.state.key].map(function(screen, i){
       log += " [" + i + "]" + screen.key + " " + screen.position;
+      if(!screen.allowRetract) log += "/xR";
     });
     console.log(log);
     log = " \\STATE: ";
@@ -262,6 +262,33 @@ const context = {
 
   }
 };
+
+function retractScreen(screenKey, pageStateScreenArray){
+  update2DArray(pageStateScreenArray, "key", screenKey, "position", "retracted");
+}
+
+function openScreen(screenKey, pageStateScreenArray){
+  update2DArray(pageStateScreenArray, "key", screenKey, "position", "open");
+}
+
+function closeScreen(){
+
+}
+
+function maximiseScreen(screenKey, pageStateScreenArray){
+  //pageStateScreenArray.map(function(screen){
+  //  if(screen.key == screenKey && screen.position.match(/ maximised$/i)) screen.position += " maximised";
+  //});
+  update2DArray(pageStateScreenArray, "key", screenKey, "position", "open maximised");
+}
+
+function disableScreen(screenKey, pageStateScreenArray){
+  update2DArray(pageStateScreenArray, "key", screenKey, "disabled", true);
+}
+
+function enableScreen(screenKey, pageStateScreenArray){
+  update2DArray(pageStateScreenArray, "key", screenKey, "disabled", false);
+}
 
 function update2DArray(theArray, testKey, testValue, setKey, setValue){
   theArray.map(function(obj){
@@ -344,3 +371,4 @@ if (window.addEventListener) {
 } else {
   window.attachEvent('onload', run);
 }
+
