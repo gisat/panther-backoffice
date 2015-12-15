@@ -386,9 +386,11 @@ todo hex colours, button icons */
     box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.6);
 
     transition: all .5s ease-in-out;
-    transition-property: flex-grow, background-color, width;
+    transition-property: flex-grow, flex-shrink, background-color, width;
 
     flex-grow: 0.0000001;
+		
+		min-width: 5rem;
   }
 	.screen-scroll {
 		overflow: hidden;
@@ -406,7 +408,7 @@ todo hex colours, button icons */
 	.screen.retracted {
 		width: 5rem;
 		flex-grow: 0.0000001;
-		flex-shrink: 0;
+		flex-shrink: 0.0000001;
 	}
 	
   .screen.open, .screen.opening {
@@ -420,20 +422,28 @@ todo hex colours, button icons */
   }
 	
 
-  .screen.open .screen-scroll {
+  .screen.open:not(.disabled) .screen-scroll {
     overflow-y: auto;
     /* overflow-x blocked (only here, at large screen sizes), only hides elements that count on it (.beside) */
   }
 
+	.screen.constant {
+		flex-grow: 0.0000001;
+	}
+	.screen.constant.open:not(.disabled),
+	.screen.constant.opening:not(.disabled) {
+		flex-shrink: 0.0000001;
+	}
+	.screen.disabled:not(.retracted) {
+		flex-shrink: 9999999;
+	}
 	
 	.screen.const20 {
     max-width: 21rem;
-		flex-grow: 0;
   }
 	.screen.const20.open,
 	.screen.const20.opening  {
 		width: 21rem;
-		flex-shrink: 0;
   }
 	.screen.const20 .screen-content > div,
 	.screen.const20 .screen-setter > div {
@@ -442,12 +452,10 @@ todo hex colours, button icons */
 	
   .screen.const30 {
     max-width: 31rem;
-		flex-grow: 0;
   }
 	.screen.const30.open,
 	.screen.const30.opening {
 		width: 31rem;
-		flex-shrink: 0;
   }
 	.screen.const30 .screen-content > div,
 	.screen.const30 .screen-setter > div {
@@ -456,12 +464,10 @@ todo hex colours, button icons */
 	
 	.screen.const40 {
     max-width: 41rem;
-		flex-grow: 0;
   }
 	.screen.const40.open,
 	.screen.const40.opening  {
 		width: 41rem;
-		flex-shrink: 0;
   }
 	.screen.const40 .screen-content > div,
 	.screen.const40 .screen-setter > div {
@@ -470,12 +476,10 @@ todo hex colours, button icons */
 	
 	.screen.const50 {
     max-width: 51rem;
-		flex-grow: 0;
   }
 	.screen.const50.open,
 	.screen.const50.opening  {
 		width: 51rem;
-		flex-shrink: 0;
   }
 	.screen.const50 .screen-content > div,
 	.screen.const50 .screen-setter > div {
@@ -484,12 +488,10 @@ todo hex colours, button icons */
 	
 	.screen.const60 {
     max-width: 61rem;
-		flex-grow: 0;
   }
 	.screen.const60.open,
 	.screen.const60.opening  {
 		width: 61rem;
-		flex-shrink: 0;
   }
 	.screen.const60 .screen-content > div,
 	.screen.const60 .screen-setter > div {
@@ -498,12 +500,10 @@ todo hex colours, button icons */
 		
 	.screen.const70 {
     max-width: 71rem;
-		flex-grow: 0;
   }
 	.screen.const70.open,
 	.screen.const70.opening  {
 		width: 71rem;
-		flex-shrink: 0;
   }
 	.screen.const70 .screen-content > div,
 	.screen.const70 .screen-setter > div {
@@ -512,12 +512,10 @@ todo hex colours, button icons */
 	
 	.screen.const80 {
     max-width: 81rem;
-		flex-grow: 0;
   }
 	.screen.const80.open,
 	.screen.const80.opening  {
 		width: 81rem;
-		flex-shrink: 0;
   }
 	.screen.const80 .screen-content > div,
 	.screen.const80 .screen-setter > div {
@@ -526,12 +524,10 @@ todo hex colours, button icons */
 	
 	.screen.const90 {
     max-width: 91rem;
-		flex-grow: 0;
   }
 	.screen.const90.open,
 	.screen.const90.opening  {
 		width: 91rem;
-		flex-shrink: 0;
   }
 	.screen.const90 .screen-content > div,
 	.screen.const90 .screen-setter > div {
@@ -540,12 +536,10 @@ todo hex colours, button icons */
 	
 	.screen.const100 {
     max-width: 101rem;
-		flex-grow: 0;
   }
 	.screen.const100.open,
 	.screen.const100.opening  {
 		width: 101rem;
-		flex-shrink: 0;
   }
 	.screen.const100 .screen-content > div,
 	.screen.const100 .screen-setter > div {
