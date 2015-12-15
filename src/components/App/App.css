@@ -390,8 +390,11 @@ todo hex colours, button icons */
 
     flex-grow: 0.0000001;
 		
-		min-width: 5rem;
+		
   }
+	.content:not(.has-maximised) > .screen {
+		min-width: 5rem;
+	}
 	.screen-scroll {
 		overflow: hidden;
 	}
@@ -600,7 +603,7 @@ todo hex colours, button icons */
 	
 	.has-maximised .screen {
 		width: 0;
-		flex-grow: 0;
+		flex-grow: 0.0000001;
 	}
 	.screen.maximised {
 /*		width:100%;*/
