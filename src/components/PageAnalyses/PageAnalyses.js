@@ -38,7 +38,8 @@ class PageAnalyses extends Component {
         },
         {
           key: "analyses3",
-          classes: "wide",
+          //classes: "wide",
+          type: "constant",
           size: 80,
           position: "retracted",
           component: <ScreenAnalysisSpatialRules/>
