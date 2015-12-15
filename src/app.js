@@ -45,7 +45,8 @@ const context = {
     var log = " /Stack: ";
     screenStack[me.state.key].map(function(screen, i){
       log += " [" + i + "]" + screen.key + " " + screen.position;
-      if(!screen.allowRetract) log += "/xR";
+      //if(!screen.allowRetract) log += "/xR";
+      if(screen.userDidThat) log += "/U";
     });
     console.log(log);
     log = "/ STATE: ";
@@ -106,6 +107,7 @@ const context = {
           position: positionClass,
           //order: order,
           //allowRetract: allowRetract
+          userDidThat: true
         });
       }
 
@@ -160,6 +162,7 @@ const context = {
                     retractScreen(record.key, newScreens);
                     console.log("         =========== "+record.position+" => retracted ");
                     record.position = "retracted";
+                    record.userDidThat = false;
                   }else{
                   }
 
@@ -192,8 +195,8 @@ const context = {
                 retractAllFurther = true;
               }
 
-            } else if (record.position == "retracted") { // algoritmicky
-              if (availableWidth >= 0 && !current && !retractAllFurther) {
+            } else if (record.position == "retracted") {
+              if (availableWidth >= 0 && !current && !retractAllFurther && !record.userDidThat){
                 // open
                 openScreen(record.key, newScreens);
                 console.log("         =========== "+record.position+" => open ");
@@ -219,6 +222,7 @@ const context = {
             }
             if (!current && typeof size == "undefined") retractAllFurther = true;
         }
+        if (current) record.userDidThat = true;
         if (record.position == "open") availableWidth -= realScreenSize;
         current = false;
       });
@@ -242,7 +246,8 @@ const context = {
     log = "\\ Stack: ";
     screenStack[me.state.key].map(function(screen, i){
       log += " [" + i + "]" + screen.key + " " + screen.position;
-      if(!screen.allowRetract) log += "/xR";
+      //if(!screen.allowRetract) log += "/xR";
+      if(screen.userDidThat) log += "/U";
     });
     console.log(log);
     log = " \\STATE: ";
