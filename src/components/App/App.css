@@ -398,7 +398,8 @@ todo hex colours, button icons */
 	.screen-scroll {
 		overflow: hidden;
 	}
-	.screen-scroll > div {
+	.screen-scroll > div,
+	.screen:first-child > .screen-scroll {
 		min-width: 50rem;
 	}
 	.screen-content > div,
@@ -425,7 +426,7 @@ todo hex colours, button icons */
   }
 	
 
-  .screen.open:not(.disabled) .screen-scroll {
+/*  .screen.open:not(.disabled)*/ .screen-scroll {
     overflow-y: auto;
     /* overflow-x blocked (only here, at large screen sizes), only hides elements that count on it (.beside) */
   }
@@ -448,6 +449,9 @@ todo hex colours, button icons */
 	.screen.const20.opening  {
 		width: 21rem;
   }
+	.screen.const20 .screen-scroll {
+		min-width: 21rem;
+	}
 	.screen.const20 .screen-content > div,
 	.screen.const20 .screen-setter > div {
     width: 20rem;
@@ -460,6 +464,9 @@ todo hex colours, button icons */
 	.screen.const30.opening {
 		width: 31rem;
   }
+	.screen.const30 .screen-scroll {
+		min-width: 31rem;
+	}
 	.screen.const30 .screen-content > div,
 	.screen.const30 .screen-setter > div {
     width: 30rem;
@@ -472,6 +479,9 @@ todo hex colours, button icons */
 	.screen.const40.opening  {
 		width: 41rem;
   }
+	.screen.const40 .screen-scroll {
+		min-width: 41rem;
+	}
 	.screen.const40 .screen-content > div,
 	.screen.const40 .screen-setter > div {
     width: 40rem;
@@ -484,6 +494,9 @@ todo hex colours, button icons */
 	.screen.const50.opening  {
 		width: 51rem;
   }
+	.screen.const50 .screen-scroll {
+		min-width: 51rem;
+	}
 	.screen.const50 .screen-content > div,
 	.screen.const50 .screen-setter > div {
     width: 50rem;
@@ -496,6 +509,9 @@ todo hex colours, button icons */
 	.screen.const60.opening  {
 		width: 61rem;
   }
+	.screen.const60 .screen-scroll {
+		min-width: 61rem;
+	}
 	.screen.const60 .screen-content > div,
 	.screen.const60 .screen-setter > div {
     width: 60rem;
@@ -508,6 +524,9 @@ todo hex colours, button icons */
 	.screen.const70.opening  {
 		width: 71rem;
   }
+	.screen.const70 .screen-scroll {
+		min-width: 71rem;
+	}
 	.screen.const70 .screen-content > div,
 	.screen.const70 .screen-setter > div {
     width: 70rem;
@@ -520,6 +539,9 @@ todo hex colours, button icons */
 	.screen.const80.opening  {
 		width: 81rem;
   }
+	.screen.const80 .screen-scroll {
+		min-width: 81rem;
+	}
 	.screen.const80 .screen-content > div,
 	.screen.const80 .screen-setter > div {
     width: 80rem;
@@ -532,6 +554,9 @@ todo hex colours, button icons */
 	.screen.const90.opening  {
 		width: 91rem;
   }
+	.screen.const90 .screen-scroll {
+		min-width: 91rem;
+	}
 	.screen.const90 .screen-content > div,
 	.screen.const90 .screen-setter > div {
     width: 90rem;
@@ -544,6 +569,9 @@ todo hex colours, button icons */
 	.screen.const100.opening  {
 		width: 101rem;
   }
+	.screen.const100 .screen-scroll {
+		min-width: 101rem;
+	}
 	.screen.const100 .screen-content > div,
 	.screen.const100 .screen-setter > div {
     width: 100rem;
