@@ -432,7 +432,7 @@ todo hex colours, button icons */
   }
 
 	.screen.constant {
-		flex-grow: 0.0000001;
+/*		flex-grow: 0.0000001;*/
 	}
 	.screen.constant.open:not(.disabled),
 	.screen.constant.opening:not(.disabled) {
