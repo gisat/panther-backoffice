@@ -28,7 +28,7 @@ class PageMetadata extends Component {
         },
 				{
           key: "screen2",
-          type: "constant",
+          //type: "constant",
           size: 40,
           //position: "retracted",
           component: <ScreenMetadataLayerVector/>

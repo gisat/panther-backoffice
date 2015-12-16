@@ -28,7 +28,7 @@ class PagePlaces extends Component {
         },
         {
           key: "screenLinksByAttSetAULevel",
-          type: "constant",
+          //type: "constant",
           size: 40,
           position: "retracted",
           component: <ScreenLinksByAttSetAULevel />

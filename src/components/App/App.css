@@ -102,7 +102,7 @@ a, a:link, a i {
 h1, h2, h3, h4, h5 {
 
 }
-h1.fit-after, h2.fit-after, 
+h1.fit-after, h2.fit-after,
 h3.fit-after, h4.fit-after {
 	margin-bottom:0;
 }
@@ -389,8 +389,8 @@ todo hex colours, button icons */
     transition-property: flex-grow, flex-shrink, background-color, width;
 
     flex-grow: 0.0000001;
-		
-		
+
+
   }
 	.content:not(.has-maximised) > .screen {
 		min-width: 5rem;
@@ -407,24 +407,24 @@ todo hex colours, button icons */
     width: 50rem;
   }
 
-	
+
 	/* .screen behaviour */
 	.screen.retracted {
 		width: 5rem;
 		flex-grow: 0.0000001;
 		flex-shrink: 0.0000001;
 	}
-	
+
   .screen.open, .screen.opening {
     flex-grow: 1;
     /*margin-right: .675rem;*/
-    /* move scrollbar from shadow - unused with custom scrollbars 
+    /* move scrollbar from shadow - unused with custom scrollbars
   }
 	.screen:last-child {
     margin-right: 0;
      */
   }
-	
+
 
 /*  .screen.open:not(.disabled)*/ .screen-scroll {
     overflow-y: auto;
@@ -441,7 +441,7 @@ todo hex colours, button icons */
 	.screen.disabled:not(.retracted) {
 		flex-shrink: 9999999;
 	}
-	
+
 	.screen.const20 {
     max-width: 21rem;
   }
@@ -456,7 +456,7 @@ todo hex colours, button icons */
 	.screen.const20 .screen-setter > div {
     width: 20rem;
   }
-	
+
   .screen.const30 {
     max-width: 31rem;
   }
@@ -471,7 +471,7 @@ todo hex colours, button icons */
 	.screen.const30 .screen-setter > div {
     width: 30rem;
   }
-	
+
 	.screen.const40 {
     max-width: 41rem;
   }
@@ -486,7 +486,7 @@ todo hex colours, button icons */
 	.screen.const40 .screen-setter > div {
     width: 40rem;
   }
-	
+
 	.screen.const50 {
     max-width: 51rem;
   }
@@ -501,7 +501,7 @@ todo hex colours, button icons */
 	.screen.const50 .screen-setter > div {
     width: 50rem;
   }
-	
+
 	.screen.const60 {
     max-width: 61rem;
   }
@@ -516,7 +516,7 @@ todo hex colours, button icons */
 	.screen.const60 .screen-setter > div {
     width: 60rem;
   }
-		
+
 	.screen.const70 {
     max-width: 71rem;
   }
@@ -531,7 +531,7 @@ todo hex colours, button icons */
 	.screen.const70 .screen-setter > div {
     width: 70rem;
   }
-	
+
 	.screen.const80 {
     max-width: 81rem;
   }
@@ -546,7 +546,7 @@ todo hex colours, button icons */
 	.screen.const80 .screen-setter > div {
     width: 80rem;
   }
-	
+
 	.screen.const90 {
     max-width: 91rem;
   }
@@ -561,7 +561,7 @@ todo hex colours, button icons */
 	.screen.const90 .screen-setter > div {
     width: 90rem;
   }
-	
+
 	.screen.const100 {
     max-width: 101rem;
   }
@@ -576,7 +576,7 @@ todo hex colours, button icons */
 	.screen.const100 .screen-setter > div {
     width: 100rem;
   }
-	
+
 
 	/* we'll see if it's any use */
   .screen.limited.lim30 {
@@ -600,7 +600,7 @@ todo hex colours, button icons */
 	.screen.limited.lim50 .screen-setter > div {
     width: 50rem;
   }
-  
+
 	.screen > .screen-overlay {
 		display: block;
 		width: 100%;
@@ -628,7 +628,7 @@ todo hex colours, button icons */
   .screen.closed {
     width:0;
   }
-	
+
 	.has-maximised .screen {
 		width: 0;
 		flex-grow: 0.0000001;
@@ -652,56 +652,56 @@ todo hex colours, button icons */
 
 /* .screen content space */
 @media screen and (min-width:71em) {
-  .screen.wide .screen-content > div,
+  .screen.fill .screen-content > div,
 	.screen.const50 .screen-setter > div  {
     width: 55rem;
   }
-  .screen.wide .beside {
+  .screen.fill .beside {
     left:57rem;
   }
 }
 @media screen and (min-width:76em) {
-  .screen.wide .screen-content > div,
-	.screen.wide .screen-setter > div  {
+  .screen.fill .screen-content > div,
+	.screen.fill .screen-setter > div  {
     width: 60rem;
   }
-  .screen.wide .beside {
+  .screen.fill .beside {
     left:62rem;
   }
 }
 @media screen and (min-width:81em) {
-  .screen.wide .screen-content > div,
-	.screen.wide .screen-setter > div  {
+  .screen.fill .screen-content > div,
+	.screen.fill .screen-setter > div  {
     width: 65rem;
   }
-  .screen.wide .beside {
+  .screen.fill .beside {
     left:67rem;
   }
 }
 @media screen and (min-width:86em) {
-  .screen.wide .screen-content > div,
-	.screen.wide .screen-setter > div  {
+  .screen.fill .screen-content > div,
+	.screen.fill .screen-setter > div  {
     width: 70rem;
   }
-  .screen.wide .beside {
+  .screen.fill .beside {
     left:72rem;
   }
 }
 @media screen and (min-width:91em) {
-  .screen.wide .screen-content > div,
-	.screen.wide .screen-setter > div  {
+  .screen.fill .screen-content > div,
+	.screen.fill .screen-setter > div  {
     width: 75rem;
   }
-  .screen.wide .beside {
+  .screen.fill .beside {
     left:77rem;
   }
 }
 @media screen and (min-width:96em) {
-  .screen.wide .screen-content > div,
-	.screen.wide .screen-setter > div  {
+  .screen.fill .screen-content > div,
+	.screen.fill .screen-setter > div  {
     width: 80rem;
   }
-  .screen.wide .beside {
+  .screen.fill .beside {
     left:82rem;
   }
 }
@@ -709,26 +709,26 @@ todo hex colours, button icons */
 
 /*
 @media screen and (min-width:66em) {
-	.screen.wide80 .screen-content > div,
-	.screen.wide80 .screen-setter > div {
+	.screen.fill80 .screen-content > div,
+	.screen.fill80 .screen-setter > div {
     width: 80rem;
   }
 }
 */
 /*
-@media screen and 
+@media screen and
 (min-width:66em) and
 (max-width:93.49999em) {
 */
 /*
-	.screen.too.open, 	
+	.screen.too.open,
 	.screen.too.opening {
   	position: absolute;
   	top: 0;
   	right: 0;
   	bottom: 0;
   	width: 100%;
-		
+
 		z-index: 30;
   }
 	.screen.too.open .screen-scroll {
@@ -747,10 +747,10 @@ todo hex colours, button icons */
 	background: #ABBAD8;
 	background: #B6BCC7;
 	margin-bottom: .875rem;
-	
+
 	padding: 0 .5rem;
 	color: #1452A2;
-	
+
 	position: relative;
 }
 .puma-item span {
@@ -841,7 +841,7 @@ todo hex colours, button icons */
 	color: rgba(0,0,0,.4);
 }
 .ui.button.puma-screen-button > .icon.puma::after,
-.ui.button.puma-screen-button > .icon.puma::before, .ui.buttons.puma-screen-button > .button > .icon.puma::after, 
+.ui.button.puma-screen-button > .icon.puma::before, .ui.buttons.puma-screen-button > .button > .icon.puma::after,
 .ui.buttons.puma-screen-button > .button > .icon.puma::before {
     display: block;
     position: absolute;
@@ -871,7 +871,7 @@ todo hex colours, button icons */
 
 
 /*
-.ui.labeled.icon.button.puma-screen-button > .icon, 
+.ui.labeled.icon.button.puma-screen-button > .icon,
 .ui.labeled.icon.buttons.puma-screen-button > .button > .icon {
 	background: transparent;
 	font-size: 1.25rem;
@@ -916,7 +916,7 @@ todo hex colours, button icons */
 
 
 .selector {
-	
+
 }
 .selector.double > div.input:not(:first-child) {
 	margin-top: .625rem;
@@ -936,7 +936,7 @@ todo hex colours, button icons */
 .input-wrapper > div:nth-child(2) {
 	flex-grow: 0;
 	position: relative;
-	
+
 	width: 11rem;
 }
 .input-wrapper > div:nth-child(2) .button,
@@ -997,7 +997,7 @@ todo hex colours, button icons */
 	color: #1452A2;
 	position: relative;
 /*	cursor: pointer;*/
-	
+
 	padding-left: 2rem;
 }
 .UIObjectSelect.template .UIObjectSelect-item,
@@ -1009,7 +1009,7 @@ todo hex colours, button icons */
 .UIObjectSelect-control,
 .UIObjectSelect-item {
 	transition:  all .3s ease-out;
-	
+
 }
 .UIObjectSelect-control:hover,
 .UIObjectSelect-item:hover {
@@ -1025,7 +1025,7 @@ todo hex colours, button icons */
 
 	width: 2rem;
 	line-height: 1.875rem;
-	
+
 	cursor: pointer;
 	border-radius: .25rem 0 0 .25rem;
 	border-right: 1px solid #95A6C7;
@@ -1064,7 +1064,7 @@ todo hex colours, button icons */
 	color: #859FBF;
 }
 .Select:not(.has-value):not(.Select--multi) .UIObjectSelect-control::before,
-.Select.Select--multi 
+.Select.Select--multi
 .UIObjectSelect-control::before {
 	content: "\F067";
 	font-family: Icons;
@@ -1078,7 +1078,7 @@ todo hex colours, button icons */
 	transition: all .3s ease-out;
 }
 .Select:not(.has-value):not(.Select--multi) .UIObjectSelect-control:hover::before,
-.Select.Select--multi 
+.Select.Select--multi
 .UIObjectSelect-control:hover::before {
 	color: #797979;
 }
@@ -1103,7 +1103,7 @@ todo hex colours, button icons */
 	margin-left: 0;
 }
 .Select.has-value:not(.Select--multi) .UIObjectSelect-control > .Select-placeholder {
-	
+
 }
 .UIObjectSelect.has-value:not(.Select--multi) .Select-input {
 	pointer-events: none;
@@ -1112,7 +1112,7 @@ todo hex colours, button icons */
 	height: 1.875rem;
 }
 .UIObjectSelect-control .Select-input > input,
-.UIObjectSelect-control .Select-placeholder, 
+.UIObjectSelect-control .Select-placeholder,
 .UIObjectSelect-control .Select-input > div {
 	height: 1.875rem;
 	line-height: 1.875rem;
@@ -1122,7 +1122,7 @@ todo hex colours, button icons */
 	color: #222;
 }
 .UIObjectSelect.is-focused .UIObjectSelect-control,
-.UIObjectSelect.is-focused .UIObjectSelect-control:hover, 
+.UIObjectSelect.is-focused .UIObjectSelect-control:hover,
 .UIObjectSelect.is-focused.has-value:not(.Select--multi) > .UIObjectSelect-control {
 	background: rgba(255,255,255,.4);
 	border-style: solid;
@@ -1157,7 +1157,7 @@ todo hex colours, button icons */
 	width: 100%;
 	/*height:1.875rem;*/
 	padding:0 7.5rem 0 3.125rem;
-	
+
 	position: relative;
 }
 .rsc-row.expandable {
@@ -1193,8 +1193,8 @@ todo hex colours, button icons */
 .rsc-row.ui.radio.checkbox label span {
 	font-size:1.125rem;
 }
-.rsc-row.ui.radio.checkbox label:before, 
-.rsc-row.ui.radio.checkbox label:after, 
+.rsc-row.ui.radio.checkbox label:before,
+.rsc-row.ui.radio.checkbox label:after,
 .rsc-row.ui.radio.checkbox input {
 	top:calc(50% - 6.5px);
 	left:.625rem;
@@ -1226,7 +1226,7 @@ todo hex colours, button icons */
 	right: 0;
 	top:.08rem;
 	text-align: center;
-	
+
 	transition: all .2s ease-in-out;
 }
 .rsc-btn-expand b::after {

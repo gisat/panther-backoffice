@@ -35,14 +35,16 @@ class ScreenContainer extends Component{
   render() {
     //console.log("ScreenContainer.render| props.page: ", this.props.page, " | props.thekey: ", this.props.thekey);
     var disabled = this.props.screenState.disabled || false;
-    var typeClass = this.props.screenState.type || "";
+    //var typeClass = this.props.screenState.type || "";
+    var typeClass = this.props.screenState.size ? "constant" : "";
     var sizeClass = this.props.screenState.size ? "const" + this.props.screenState.size : "";
-    var classes = this.props.screenState.classes || "";
+    var contentAlignClass = this.props.screenState.contentAlign || "";
     var positionClass = this.props.screenState.position || "open";
     var disabledClass = (disabled || positionClass == "retracted" || positionClass == "closed") ? "disabled":"";
+    var classes = this.props.screenState.classes || "";
 
     return (
-      <div className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass)}>
+      <div className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass, contentAlignClass)}>
         <div className="screen-scroll"><div>
           {React.cloneElement(this.props.screenState.component, { disabled: disabled})}
         </div></div>

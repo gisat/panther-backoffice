@@ -129,13 +129,15 @@ const context = {
       var current = true;
       var foundOpen = false;
       screenStack[me.state.key].map(function (record) {
-        var size = $.grep(newScreens, function (e) {
+
+        var screenState = $.grep(newScreens, function (e) {
           if (typeof e == "undefined") return false;
           return e.key == record.key;
-        })[0].size;
-        var screenSize = size || normalWidth;
+        })[0];
+
+        var screenSize = screenState.size || normalWidth;
         var realScreenSize = screenSize + constPlus - retractedWidth;
-        console.log("        =record "+record.key+"-"+record.position+"    size:"+size+"->"+screenSize+"->"+realScreenSize);
+        console.log("        =record "+record.key+"-"+record.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
         switch (positionClass) {
           case "open":
             if (record.position == "open") {
@@ -165,7 +167,9 @@ const context = {
                 record.userDidThat = false;
               }
 
-              if (typeof size == "undefined") retractAllFurther = true;
+              //if (typeof size == "undefined") retractAllFurther = true;
+              if (screenState.contentAlign == "fill") retractAllFurther = true;
+              // todo: Ted je otazka, jestli to nastavovat vzdy, kdyz chybi velikost, nebo jen u wide/fill. To by asi davalo vetsi smysl.
 
             } else if (record.position == "retracted") {
               // asi nic?
@@ -211,8 +215,9 @@ const context = {
                 foundOpen = true;
               }
             }
-            if (!current && typeof size == "undefined") retractAllFurther = true;
-            // todo: Ted je otazka, jestli to nastavovat vzdy kdyz chybi velikost, nebo jen u wide. To by asi davalo vetsi smysl.
+            //if (!current && typeof screenState.size == "undefined") retractAllFurther = true;
+            if (!current && screenState.contentAlign == "fill") retractAllFurther = true;
+            // todo: Ted je otazka, jestli to nastavovat vzdy, kdyz chybi velikost, nebo jen u wide/fill. To by asi davalo vetsi smysl.
         }
 
         if (current) record.userDidThat = true;
@@ -270,9 +275,9 @@ function openScreen(screenKey, pageStateScreenArray){
   update2DArray(pageStateScreenArray, "key", screenKey, "position", "open");
 }
 
-function closeScreen(){
-
-}
+//function closeScreen(){
+//
+//}
 
 function maximiseScreen(screenKey, pageStateScreenArray){
   //pageStateScreenArray.map(function(screen){

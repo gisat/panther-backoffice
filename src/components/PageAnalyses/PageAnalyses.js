@@ -31,16 +31,15 @@ class PageAnalyses extends Component {
         },
         {
           key: "analyses2",
-          type: "constant",
+          //type: "constant",
           size: 40,
           position: "retracted",
           component: <ScreenAnalysisSpatial/>
         },
         {
           key: "analyses3",
-          //classes: "wide",
-          type: "constant",
-          size: 80,
+          contentAlign: "fill",
+          //size: 80,
           position: "retracted",
           component: <ScreenAnalysisSpatialRules/>
         }
