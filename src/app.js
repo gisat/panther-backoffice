@@ -69,6 +69,8 @@ const context = {
       /////////// set new position class (open, retracted, closed) ///////////
       newScreens[index].position = positionClass;
 
+      resetScreenWidth(screenKey, newScreens);
+
       // handle disabled
       switch (positionClass) {
         case "closed":
@@ -157,6 +159,8 @@ const context = {
                     retractScreen(record.key, newScreens);
                     record.position = "retracted";
                     record.userDidThat = false;
+                  }else{
+                    reduceScreenWidth(record.key, availableWidth + retractedWidth, newScreens);
                   }
 
                 }
@@ -187,6 +191,7 @@ const context = {
                 enableScreen(record.key, newScreens);
               }else{
                 // disable
+                reduceScreenWidth(record.key, availableWidth + retractedWidth, newScreens);
                 disableScreen(record.key, newScreens);
                 retractAllFurther = true;
               }
@@ -267,7 +272,26 @@ const context = {
   }
 };
 
+function resetScreenWidth(screenKey, pageStateScreenArray){
+  reduceScreenWidth(screenKey, null, pageStateScreenArray);
+}
+
+function reduceScreenWidth(screenKey, width, pageStateScreenArray){
+  pageStateScreenArray.map(function(obj){
+    if(obj.key == screenKey){
+      if(width === null){
+        obj.forceWidth = null;
+      }else if(!obj.forceWidth) {
+        obj.forceWidth = width;
+      }else{
+        obj.forceWidth = Math.min(obj.forceWidth, width);
+      }
+    }
+  });
+}
+
 function retractScreen(screenKey, pageStateScreenArray){
+  resetScreenWidth(screenKey, pageStateScreenArray);
   update2DArray(pageStateScreenArray, "key", screenKey, "position", "retracted");
 }
 
@@ -276,13 +300,14 @@ function openScreen(screenKey, pageStateScreenArray){
 }
 
 //function closeScreen(){
-//
+//  resetScreenWidth(screenKey, pageStateScreenArray);
 //}
 
 function maximiseScreen(screenKey, pageStateScreenArray){
   //pageStateScreenArray.map(function(screen){
   //  if(screen.key == screenKey && screen.position.match(/ maximised$/i)) screen.position += " maximised";
   //});
+  resetScreenWidth(screenKey, pageStateScreenArray);
   update2DArray(pageStateScreenArray, "key", screenKey, "position", "open maximised");
 }
 
@@ -291,6 +316,7 @@ function disableScreen(screenKey, pageStateScreenArray){
 }
 
 function enableScreen(screenKey, pageStateScreenArray){
+  resetScreenWidth(screenKey, pageStateScreenArray);
   update2DArray(pageStateScreenArray, "key", screenKey, "disabled", false);
 }
 

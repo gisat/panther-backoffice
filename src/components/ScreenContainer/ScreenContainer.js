@@ -43,8 +43,15 @@ class ScreenContainer extends Component{
     var disabledClass = (disabled || positionClass == "retracted" || positionClass == "closed") ? "disabled":"";
     var classes = this.props.screenState.classes || "";
 
+    var screenStyles = {};
+
+    var forceWidth = this.props.screenState.forceWidth || null;
+    if(forceWidth !== null){
+      screenStyles.width = forceWidth + "rem";
+    }
+
     return (
-      <div className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass, contentAlignClass)}>
+      <div className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass, contentAlignClass)} style={screenStyles}>
         <div className="screen-scroll"><div>
           {React.cloneElement(this.props.screenState.component, { disabled: disabled})}
         </div></div>
