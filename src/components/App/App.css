@@ -424,7 +424,9 @@ todo hex colours, button icons */
     margin-right: 0;
      */
   }
-
+	.content:not(.has-maximised) > .screen.open:not(.disabled):not(.constant) {
+		min-width: 51rem;
+	}
 
 /*  .screen.open:not(.disabled)*/ .screen-scroll {
     overflow-y: auto;
