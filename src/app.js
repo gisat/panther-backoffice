@@ -185,8 +185,9 @@ const context = {
             // asi nic?
           }
           break;
-        case "retracted":
         case "closed":
+          current = false;
+        case "retracted":
           me.state.hasMaximised = false;
 
           if (record.position == "open") {
