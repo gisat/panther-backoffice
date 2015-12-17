@@ -646,7 +646,8 @@ todo hex colours, button icons */
 /*		flex-shrink: 9999999;*/
 		width: 5rem;
 	}
-  .screen.closed {
+  .screen.closed,
+	.screen.closed.disabled {
     width:0;
   }
 	.screen.retracted {
