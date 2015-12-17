@@ -226,7 +226,8 @@ label.container {
 
 .screen {
   height: 100%;
-  overflow: auto;
+/*  overflow: auto;*/
+	overflow: hidden;
   position: absolute;
 
   background-color: #bababa;
@@ -239,6 +240,7 @@ label.container {
 	left:0;
 	bottom: 0;
 	right: 0;
+	overflow: auto;
 }
 .screen-setter {
 	border-bottom: 1px solid #aaa;
