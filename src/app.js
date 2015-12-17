@@ -221,6 +221,7 @@ const context = {
               }else{
                 // disable
                 disableScreen(record.key, newScreens);
+                reduceScreenWidth(record.key, availableWidth + retractedWidth, newScreens);
                 retractAllFurther = true;
               }
               foundOpen = true;
