@@ -386,10 +386,10 @@ todo hex colours, button icons */
     box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.6);
 
     transition: all .5s ease-in-out;
-    transition-property: width, background-color;
+    transition-property: width, background-color, flex-grow;
 
 /*    flex-grow: 0.0000001;*/
-		flex-grow: 1;
+		flex-grow: 0;
 		flex-shrink: 0;
 
 
@@ -433,7 +433,7 @@ todo hex colours, button icons */
     margin-right: 0;
      */
 		width: 51rem;
-/*		flex-grow: 1;*/
+		flex-grow: 1;
   }
 	
 	.content:not(.has-maximised) > .screen.open:not(.disabled):not(.constant) {
