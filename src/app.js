@@ -13,8 +13,14 @@ const screenStack = require('./stores/screenStack');
 
 let cssContainer = document.getElementById('css');
 const appContainer = document.getElementById('app');
+
+var activePageKey = null;
 const context = {
   onSetTitle: value => document.title = value,
+  activePageKey: function(newKey){
+    if(typeof newKey != "undefined") activePageKey = newKey;
+    return activePageKey;
+  },
   onSetMeta: (name, content) => {
     // Remove and create a new <meta /> tag in order to make it work
     // with bookmarks in Safari
@@ -29,7 +35,11 @@ const context = {
     meta.setAttribute('content', content);
     document.getElementsByTagName('head')[0].appendChild(meta);
   },
-  setScreenPosition: function(screenKey, positionClass, options) {
+  onScreenInteractivity: function(screenKey){
+    // todo
+    console.log("====onScreenInteractivity==== ~screenKey~ ", screenKey, " | ~activePageKey~ ", activePageKey, " | ~this~ ", this);
+  },
+  setScreenPosition: function(screenKey, positionClass, options){
     options = options || {};
     var me = this;
     // clone state screen array
@@ -115,123 +125,118 @@ const context = {
     }
 
 
+    var menuWidth = 3.75;
+    var retractedWidth = 5;
+    var constPlus = 1;
+    var normalWidth = 50;
+    var remSize = 16;
+    var availableWidth = window.innerWidth / remSize - menuWidth - screenStack[me.state.key].length * retractedWidth;
+    console.log("        =init innerWidth:" + window.innerWidth / remSize + " availableWidth:"+availableWidth);
 
-    ////// manage overflowing screens
-    //if(true || !options.init) { // todo odstranit?
+    var retractAllFurther = false;
+    var current = true;
+    var foundOpen = false;
+    screenStack[me.state.key].map(function (record) {
 
-      var menuWidth = 3.75;
-      var retractedWidth = 5;
-      var constPlus = 1;
-      var normalWidth = 50;
-      var remSize = 16;
-      var availableWidth = window.innerWidth / remSize - menuWidth - screenStack[me.state.key].length * retractedWidth;
-      console.log("        =init innerWidth:" + window.innerWidth / remSize + " availableWidth:"+availableWidth);
+      var screenState = $.grep(newScreens, function (e) {
+        if (typeof e == "undefined") return false;
+        return e.key == record.key;
+      })[0];
 
-      var retractAllFurther = false;
-      var current = true;
-      var foundOpen = false;
-      screenStack[me.state.key].map(function (record) {
+      var screenSize = screenState.size || normalWidth;
+      var realScreenSize = screenSize + constPlus - retractedWidth;
+      console.log("        =record "+record.key+"-"+record.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
+      switch (positionClass) {
+        case "open":
+          if (record.position == "open") {
 
-        var screenState = $.grep(newScreens, function (e) {
-          if (typeof e == "undefined") return false;
-          return e.key == record.key;
-        })[0];
+            // fits partly or not at all
+            if ((availableWidth - realScreenSize) < 0 && !retractAllFurther) {
 
-        var screenSize = screenState.size || normalWidth;
-        var realScreenSize = screenSize + constPlus - retractedWidth;
-        console.log("        =record "+record.key+"-"+record.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
-        switch (positionClass) {
-          case "open":
-            if (record.position == "open") {
+              if(current){
+                maximiseScreen(record.key, newScreens);
+                me.state.hasMaximised = true;
+              }else{
 
-              // fits partly or not at all
-              if ((availableWidth - realScreenSize) < 0 && !retractAllFurther) {
+                disableScreen(record.key, newScreens);
 
-                if(current){
-                  maximiseScreen(record.key, newScreens);
-                  me.state.hasMaximised = true;
+                // doesn't fit at all
+                if (availableWidth < 0 || retractAllFurther) {
+                  retractScreen(record.key, newScreens);
+                  record.position = "retracted";
+                  record.userDidThat = false;
                 }else{
-
-                  disableScreen(record.key, newScreens);
-
-                  // doesn't fit at all
-                  if (availableWidth < 0 || retractAllFurther) {
-                    retractScreen(record.key, newScreens);
-                    record.position = "retracted";
-                    record.userDidThat = false;
-                  }else{
-                    reduceScreenWidth(record.key, availableWidth + retractedWidth, newScreens);
-                  }
-
+                  reduceScreenWidth(record.key, availableWidth + retractedWidth, newScreens);
                 }
 
-              }else if(retractAllFurther){
-                retractScreen(record.key, newScreens);
-                record.position = "retracted";
-                record.userDidThat = false;
               }
 
-              //if (typeof size == "undefined") retractAllFurther = true;
-              if (screenState.contentAlign == "fill") retractAllFurther = true;
-              // todo: Ted je otazka, jestli to nastavovat vzdy, kdyz chybi velikost, nebo jen u wide/fill. To by asi davalo vetsi smysl.
-
-            } else if (record.position == "retracted") {
-              // asi nic?
+            }else if(retractAllFurther){
+              retractScreen(record.key, newScreens);
+              record.position = "retracted";
+              record.userDidThat = false;
             }
-            break;
-          case "retracted":
-          case "closed":
-            me.state.hasMaximised = false;
 
-            if (record.position == "open") {
-              foundOpen = true;
+            //if (typeof size == "undefined") retractAllFurther = true;
+            if (screenState.contentAlign == "fill") retractAllFurther = true;
+            // todo: Ted je otazka, jestli to nastavovat vzdy, kdyz chybi velikost, nebo jen u wide/fill. To by asi davalo vetsi smysl.
 
-              if ((availableWidth - realScreenSize) >= 0) { //  || typeof size == "undefined"
+          } else if (record.position == "retracted") {
+            // asi nic?
+          }
+          break;
+        case "retracted":
+        case "closed":
+          me.state.hasMaximised = false;
+
+          if (record.position == "open") {
+            foundOpen = true;
+
+            if ((availableWidth - realScreenSize) >= 0) { //  || typeof size == "undefined"
+              // enable
+              enableScreen(record.key, newScreens);
+            }else{
+              // disable
+              reduceScreenWidth(record.key, availableWidth + retractedWidth, newScreens);
+              disableScreen(record.key, newScreens);
+              retractAllFurther = true;
+            }
+
+          } else if (record.position == "retracted") {
+            if (availableWidth >= 0 && !current && !retractAllFurther && !record.userDidThat){
+              // open
+              openScreen(record.key, newScreens);
+              record.position = "open";
+              record.userDidThat = false;
+              if ((availableWidth - realScreenSize) >= 0) {
                 // enable
                 enableScreen(record.key, newScreens);
+              }else if(!foundOpen){
+                // enable
+                enableScreen(record.key, newScreens);
+                // maximise
+                maximiseScreen(record.key, newScreens);
+                me.state.hasMaximised = true;
+                retractAllFurther = true;
               }else{
                 // disable
-                reduceScreenWidth(record.key, availableWidth + retractedWidth, newScreens);
                 disableScreen(record.key, newScreens);
                 retractAllFurther = true;
               }
-
-            } else if (record.position == "retracted") {
-              if (availableWidth >= 0 && !current && !retractAllFurther && !record.userDidThat){
-                // open
-                openScreen(record.key, newScreens);
-                record.position = "open";
-                record.userDidThat = false;
-                if ((availableWidth - realScreenSize) >= 0) {
-                  // enable
-                  enableScreen(record.key, newScreens);
-                }else if(!foundOpen){
-                  // enable
-                  enableScreen(record.key, newScreens);
-                  // maximise
-                  maximiseScreen(record.key, newScreens);
-                  me.state.hasMaximised = true;
-                  retractAllFurther = true;
-                }else{
-                  // disable
-                  disableScreen(record.key, newScreens);
-                  retractAllFurther = true;
-                }
-                foundOpen = true;
-              }
+              foundOpen = true;
             }
-            //if (!current && typeof screenState.size == "undefined") retractAllFurther = true;
-            if (!current && screenState.contentAlign == "fill") retractAllFurther = true;
-            // todo: Ted je otazka, jestli to nastavovat vzdy, kdyz chybi velikost, nebo jen u wide/fill. To by asi davalo vetsi smysl.
-        }
+          }
+          //if (!current && typeof screenState.size == "undefined") retractAllFurther = true;
+          if (!current && screenState.contentAlign == "fill") retractAllFurther = true;
+          // todo: Ted je otazka, jestli to nastavovat vzdy, kdyz chybi velikost, nebo jen u wide/fill. To by asi davalo vetsi smysl.
+      }
 
-        if (current) record.userDidThat = true;
-        if (record.position == "open") availableWidth -= realScreenSize;
-        console.log("         ======= availableWidth:"+availableWidth);
-        current = false;
-      });
+      if (current) record.userDidThat = true;
+      if (record.position == "open") availableWidth -= realScreenSize;
+      console.log("         ======= availableWidth:"+availableWidth);
+      current = false;
+    });
 
-    //} // if not init
 
     // reorder screenStack to be open-first when init run
     if(options.init){

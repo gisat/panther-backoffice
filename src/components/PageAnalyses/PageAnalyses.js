@@ -16,6 +16,7 @@ class PageAnalyses extends Component {
 
 	static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
+    activePageKey: PropTypes.func.isRequired,
     setScreenPosition: PropTypes.func.isRequired
   };
 
@@ -51,6 +52,7 @@ class PageAnalyses extends Component {
   render() {
     const title = 'Analyses';
     this.context.onSetTitle(title);
+    this.context.activePageKey(this.state.key);
 
     var screenNodes = this.state.screens.map(function(screen) {
       return (

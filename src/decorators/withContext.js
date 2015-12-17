@@ -12,8 +12,10 @@ function withContext(ComposedComponent) {
         onSetTitle: PropTypes.func,
         onSetMeta: PropTypes.func,
         onPageNotFound: PropTypes.func,
-        setScreenPosition: PropTypes.func
-      }),
+        setScreenPosition: PropTypes.func,
+        onScreenInteractivity: PropTypes.func,
+        activePageKey: PropTypes.func
+      })
     };
 
     static childContextTypes = {
@@ -21,7 +23,9 @@ function withContext(ComposedComponent) {
       onSetTitle: PropTypes.func.isRequired,
       onSetMeta: PropTypes.func.isRequired,
       onPageNotFound: PropTypes.func.isRequired,
-      setScreenPosition: PropTypes.func.isRequired
+      setScreenPosition: PropTypes.func.isRequired,
+      onScreenInteractivity: PropTypes.func.isRequired,
+      activePageKey: PropTypes.func.isRequired
     };
 
     getChildContext() {
@@ -31,7 +35,9 @@ function withContext(ComposedComponent) {
         onSetTitle: context.onSetTitle || emptyFunction,
         onSetMeta: context.onSetMeta || emptyFunction,
         onPageNotFound: context.onPageNotFound || emptyFunction,
-        setScreenPosition: context.setScreenPosition || emptyFunction
+        setScreenPosition: context.setScreenPosition || emptyFunction,
+        onScreenInteractivity: context.onScreenInteractivity || emptyFunction,
+        activePageKey: context.activePageKey || emptyFunction
       };
     }
 
