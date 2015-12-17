@@ -386,14 +386,21 @@ todo hex colours, button icons */
     box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.6);
 
     transition: all .5s ease-in-out;
-    transition-property: flex-grow, flex-shrink, background-color, width;
+    transition-property: width, background-color;
 
-    flex-grow: 0.0000001;
+/*    flex-grow: 0.0000001;*/
+		flex-grow: 1;
+		flex-shrink: 0;
 
 
   }
+/*
+	.screen:first-child {
+		flex-grow: 1;
+	}
+*/
 	.content:not(.has-maximised) > .screen {
-		min-width: 5rem;
+/*		min-width: 5rem;*/
 	}
 	.screen-scroll {
 		overflow: hidden;
@@ -411,21 +418,27 @@ todo hex colours, button icons */
 	/* .screen behaviour */
 	.screen.retracted {
 		width: 5rem;
+/*
 		flex-grow: 0.0000001;
 		flex-shrink: 0.0000001;
+*/
 	}
 
   .screen.open, .screen.opening {
-    flex-grow: 1;
+/*    flex-grow: 1;*/
     /*margin-right: .675rem;*/
     /* move scrollbar from shadow - unused with custom scrollbars
   }
 	.screen:last-child {
     margin-right: 0;
      */
+		width: 51rem;
+/*		flex-grow: 1;*/
   }
+	
 	.content:not(.has-maximised) > .screen.open:not(.disabled):not(.constant) {
-		min-width: 51rem;
+/*		min-width: 51rem;*/
+		
 	}
 
 /*  .screen.open:not(.disabled)*/ .screen-scroll {
@@ -436,13 +449,15 @@ todo hex colours, button icons */
 	.screen.constant {
 /*		flex-grow: 0.0000001;*/
 	}
+	.screen.constant.open,
+	.screen.constant.opening {
+/*		flex-grow: 0;*/
+	}
 	.screen.constant.open:not(.disabled),
 	.screen.constant.opening:not(.disabled) {
-		flex-shrink: 0.0000001;
+/*		flex-shrink: 0.0000001;*/
 	}
-	.screen.disabled:not(.retracted) {
-		flex-shrink: 9999999;
-	}
+	
 
 	.screen.const20 {
     max-width: 21rem;
@@ -627,18 +642,24 @@ todo hex colours, button icons */
 		background: rgba(130,130,130,.33);*/
 		background: rgba(120,120,120,.3);
 	}
+	.screen.disabled:not(.retracted) {
+/*		flex-shrink: 9999999;*/
+		width: 5rem;
+	}
   .screen.closed {
     width:0;
   }
-
+	.screen.retracted {
+		width: 5rem;
+	}
 	.has-maximised .screen {
 		width: 0;
-		flex-grow: 0.0000001;
+/*		flex-grow: 0.0000001;*/
 	}
 	.screen.maximised {
-/*		width:100%;*/
-		max-width: 100%;
-		flex-grow: 1;
+		width:100%;
+/*		max-width: 100%;*/
+/*		flex-grow: 1;*/
 	}
 	.screen.maximised .screen-scroll {
 		overflow: auto;
