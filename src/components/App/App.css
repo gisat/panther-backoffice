@@ -388,22 +388,15 @@ todo hex colours, button icons */
     transition: all .5s ease-in-out;
     transition-property: width, background-color, flex-grow;
 
-/*    flex-grow: 0.0000001;*/
 		flex-grow: 0;
 		flex-shrink: 0;
 
 
   }
-/*
-	.screen:first-child {
-		flex-grow: 1;
-	}
-*/
-	.content:not(.has-maximised) > .screen {
-/*		min-width: 5rem;*/
-	}
+
 	.screen-scroll {
 		overflow: hidden;
+		overflow-y: auto;
 	}
 	.screen-scroll > div,
 	.screen:first-child > .screen-scroll {
@@ -418,46 +411,13 @@ todo hex colours, button icons */
 	/* .screen behaviour */
 	.screen.retracted {
 		width: 5rem;
-/*
-		flex-grow: 0.0000001;
-		flex-shrink: 0.0000001;
-*/
 	}
 
   .screen.open, .screen.opening {
-/*    flex-grow: 1;*/
-    /*margin-right: .675rem;*/
-    /* move scrollbar from shadow - unused with custom scrollbars
-  }
-	.screen:last-child {
-    margin-right: 0;
-     */
 		width: 51rem;
 		flex-grow: 1;
   }
-	
-	.content:not(.has-maximised) > .screen.open:not(.disabled):not(.constant) {
-/*		min-width: 51rem;*/
-		
-	}
 
-/*  .screen.open:not(.disabled)*/ .screen-scroll {
-    overflow-y: auto;
-    /* overflow-x blocked (only here, at large screen sizes), only hides elements that count on it (.beside) */
-  }
-
-	.screen.constant {
-/*		flex-grow: 0.0000001;*/
-	}
-	.screen.constant.open,
-	.screen.constant.opening {
-/*		flex-grow: 0;*/
-	}
-	.screen.constant.open:not(.disabled),
-	.screen.constant.opening:not(.disabled) {
-/*		flex-shrink: 0.0000001;*/
-	}
-	
 
 	.screen.const20 {
     max-width: 21rem;
@@ -596,6 +556,7 @@ todo hex colours, button icons */
 
 
 	/* we'll see if it's any use */
+/*
   .screen.limited.lim30 {
     max-width: 31rem;
   }
@@ -617,6 +578,7 @@ todo hex colours, button icons */
 	.screen.limited.lim50 .screen-setter > div {
     width: 50rem;
   }
+*/
 
 	.screen > .screen-overlay {
 		display: block;
@@ -631,20 +593,12 @@ todo hex colours, button icons */
 		transition: all .3s ease-in-out;
 	}
 	.screen.disabled > .screen-overlay {
-		/*background: rgba(100,100,100,.5);
-		background: rgba(130,130,130,.5);*/
 		background: rgba(120,120,120,.4);
 		pointer-events: all;
 		cursor: pointer;
 	}
 	.screen.disabled > .screen-overlay:hover {
-/*			background: rgba(100,100,100,.33);
-		background: rgba(130,130,130,.33);*/
 		background: rgba(120,120,120,.3);
-	}
-	.screen.disabled:not(.retracted) {
-/*		flex-shrink: 9999999;*/
-		width: 5rem;
 	}
   .screen.closed,
 	.screen.closed.disabled {
@@ -655,12 +609,9 @@ todo hex colours, button icons */
 	}
 	.has-maximised .screen {
 		width: 0;
-/*		flex-grow: 0.0000001;*/
 	}
 	.screen.maximised {
 		width:100%;
-/*		max-width: 100%;*/
-/*		flex-grow: 1;*/
 	}
 	.screen.maximised .screen-scroll {
 		overflow: auto;
