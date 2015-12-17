@@ -416,10 +416,12 @@ todo hex colours, button icons */
 	}
 
   .screen.open, .screen.opening {
-		width: 51rem;
 		flex-grow: 1;
   }
-
+	.screen.open:not(.disabled), 
+	.screen.opening:not(.disabled) {
+		width: 51rem;
+  }
 
 	.screen.const20 {
     max-width: 21rem;
