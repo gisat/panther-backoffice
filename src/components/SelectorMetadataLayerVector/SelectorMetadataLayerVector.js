@@ -17,37 +17,41 @@ const LAYERTEMPLATES = [
 
 @withStyles(styles)
 class SelectorMetadataLayerVector extends Component{
-  
-	constructor(props) {
+
+  static contextTypes = {
+    onInteraction: PropTypes.func.isRequired
+  };
+
+  constructor(props) {
 		super(props);
 
 		this.state = {
 			valueLayerVector: 3
 		};
-		
+
 	}
-	
+
 	onChangeLayerVector (value) {
 		this.state.valueLayerVector = value;
 	}
-	
-	
+
+
 	render() {
     var selectInputProps = {
 			className: "" //"ui input"
 		};
-		
+
 		return (
       <div>
         <div className="selector">
 					<div className="input">
 						<label className="container">
-							<Select 
-								onChange={this.onChangeLayerVector.bind(this)}
+							<Select
+								onChange={this.context.onInteraction( this.onChangeLayerVector.bind(this) )}
 								options={LAYERTEMPLATES}
-								valueKey="key" 
-								labelKey="name" 
-								inputProps={selectInputProps} 
+								valueKey="key"
+								labelKey="name"
+								inputProps={selectInputProps}
 								value={this.state.valueLayerVector}
 								clearable={false}
 							/>

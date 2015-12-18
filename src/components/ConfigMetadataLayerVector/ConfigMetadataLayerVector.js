@@ -40,7 +40,11 @@ const STYLES = [
 
 @withStyles(styles)
 class ConfigMetadataLayerVector extends Component{
-	
+
+  static contextTypes = {
+    onInteraction: PropTypes.func.isRequired
+  };
+
 	constructor(props) {
 		super(props);
 
@@ -50,9 +54,9 @@ class ConfigMetadataLayerVector extends Component{
 			valuesStyles: [30],
 			themesString: ""
 		};
-		
+
 	}
-	
+
 	resolveThemes(topics) {
 		var stringThemes = "";
 		if(topics) {
@@ -77,11 +81,11 @@ class ConfigMetadataLayerVector extends Component{
 			themesString: stringThemes
 		});
 	}
-	
+
 	onChangeName (e) {
 		console.log(e.target.value);
 	}
-	
+
 	handleNewObjects(values, store) {
 		var newValues = [];
 		for (var singleValue of values) {
@@ -97,7 +101,7 @@ class ConfigMetadataLayerVector extends Component{
 		}
 		return newValues;
 	}
-	
+
 	onChangeTopics (value, values) {
 		values = this.handleNewObjects(values, TOPICS);
 		this.setState({
@@ -105,27 +109,27 @@ class ConfigMetadataLayerVector extends Component{
 		});
 		this.resolveThemes(values);
 	}
-	
+
 	onChangeGroup (value, values) {
 		values = this.handleNewObjects(values, LAYERGROUPS);
 		this.setState({
 			valueGroup: values
 		});
 	}
-	
+
 	onChangeStyles (value, values) {
 		values = this.handleNewObjects(values, STYLES);
 		this.setState({
 			valuesStyles: values
 		});
 	}
-	
-	
+
+
 	onObjectClick (value, event) {
 		console.log("yay! " + value["key"]);
 	}
-		
-	
+
+
 	topicOptionFactory (inputValue) {
 		var newOption = {
 				key: inputValue,
@@ -146,40 +150,40 @@ class ConfigMetadataLayerVector extends Component{
 			};
 		return newOption;
 	}
-	
-	
-	
+
+
+
 	componentDidMount() {
-		
+
 		this.resolveThemes(this.state.valuesTopics);
-		
+
 	}
-	
+
 	render() {
-		
+
 		return (
       <div>
-				
+
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Name
-						<Input 
-							type="text" 
-							name="name" 
-							placeholder=" " 
-							defaultValue="Land cover" 
-							onChange={this.onChangeName.bind(this)}
+						<Input
+							type="text"
+							name="name"
+							placeholder=" "
+							defaultValue="Land cover"
+							onChange={this.context.onInteraction( this.onChangeName.bind(this) )}
 						/>
 					</label>
 				</div>
-				
+
 				<div className="frame-input-wrapper">
 						<label className="container">
 							Topics
-							<UIObjectSelect 
+							<UIObjectSelect
 								multi
-								onChange={this.onChangeTopics.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
+								onChange={this.context.onInteraction( this.onChangeTopics.bind(this) )}
+								onOptionLabelClick={this.context.onInteraction( this.onObjectClick.bind(this) )}
 								//loadOptions={this.getScopes}
 								options={TOPICS}
 								allowCreate
@@ -191,48 +195,48 @@ class ConfigMetadataLayerVector extends Component{
 						</label>
 						<div className="frame-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
 				</div>
-				
-				
+
+
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Layer group
-						<UIObjectSelect 
-							onChange={this.onChangeGroup.bind(this)}
-							onOptionLabelClick={this.onObjectClick.bind(this)}
+						<UIObjectSelect
+							onChange={this.context.onInteraction( this.onChangeGroup.bind(this) )}
+							onOptionLabelClick={this.context.onInteraction( this.onObjectClick.bind(this) )}
 							//loadOptions={this.getScopes}
 							options={LAYERGROUPS}
 							allowCreate
 							newOptionCreator={this.keyNameOptionFactory.bind(this)}
-							valueKey="key" 
-							labelKey="name" 
+							valueKey="key"
+							labelKey="name"
 							value={this.state.valueGroup}
 						/>
 					</label>
 				</div>
-				
+
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Styles
-						<UIObjectSelect 
+						<UIObjectSelect
 							multi
-							onChange={this.onChangeStyles.bind(this)}
-							onOptionLabelClick={this.onObjectClick.bind(this)}
+							onChange={this.context.onInteraction( this.onChangeStyles.bind(this) )}
+							onOptionLabelClick={this.context.onInteraction( this.onObjectClick.bind(this) )}
 							//loadOptions={this.getScopes}
 							options={STYLES}
 							allowCreate
 							newOptionCreator={this.keyNameOptionFactory.bind(this)}
-							valueKey="key" 
-							labelKey="name" 
+							valueKey="key"
+							labelKey="name"
 							value={this.state.valuesStyles}
 						/>
 					</label>
 				</div>
-					
-				
+
+
 				<IconButton name="check" basic color="blue">
 					Save
 				</IconButton>
-				
+
 			</div>
     );
 

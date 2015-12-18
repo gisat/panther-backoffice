@@ -6,65 +6,69 @@ import MetadataListLayerVector from '../MetadataListLayerVector';
 
 @withStyles(styles)
 class ScreenMetadataBase extends Component{
-  
+
+  static contextTypes = {
+    onInteraction: PropTypes.func.isRequired
+  };
+
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			activeMenuItem: 2
 		};
-		
+
 	}
-	
+
 	onChangeActive(key) {
 		this.setState({
 			activeMenuItem: key
 		});
 	}
-	
+
 	render() {
-    
-		
+
+
 		return (
       <div>
         <div className="screen-content"><div>
 					<h1>Metadata structures</h1>
-					
+
 					<div className="metadata-grid">
 						<div className="metadata-grid-types">
-			
+
 							<div className="ui smaller vertical tabular menu">
-								<a 
+								<a
 									className={this.state.activeMenuItem==1 ? 'item active' : 'item'}
-									onClick={this.onChangeActive.bind(this,1)}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,1) )}
 								>
 									Scope
 								</a>
-								
+
 								<a className="header item">
 									Templates
 								</a>
-								<a 
+								<a
 									className={this.state.activeMenuItem==2 ? 'item active' : 'item'}
-									onClick={this.onChangeActive.bind(this,2)}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,2) )}
 								>
 									Vector layer
 								</a>
-								<a 
+								<a
 									className={this.state.activeMenuItem==3 ? 'item active' : 'item'}
-									onClick={this.onChangeActive.bind(this,3)}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,3) )}
 								>
 									Raster layer
 								</a>
-								<a 
+								<a
 									className={this.state.activeMenuItem==4 ? 'item active' : 'item'}
-									onClick={this.onChangeActive.bind(this,4)}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,4) )}
 								>
 									Attribute set
 								</a>
-								<a 
+								<a
 									className={this.state.activeMenuItem==5 ? 'item active' : 'item'}
-									onClick={this.onChangeActive.bind(this,5)}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,5) )}
 								>
 									Attribute
 								</a>
@@ -72,27 +76,27 @@ class ScreenMetadataBase extends Component{
 								<a className="header item">
 									Metadata
 								</a>
-								<a 
+								<a
 									className={this.state.activeMenuItem==6 ? 'item active' : 'item'}
-									onClick={this.onChangeActive.bind(this,6)}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,6) )}
 								>
 									Place
 								</a>
-								<a 
+								<a
 									className={this.state.activeMenuItem==7 ? 'item active' : 'item'}
-									onClick={this.onChangeActive.bind(this,7)}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,7) )}
 								>
 									Imaging/reference period
 								</a>
-								<a 
+								<a
 									className={this.state.activeMenuItem==8 ? 'item active' : 'item'}
-									onClick={this.onChangeActive.bind(this,8)}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,8) )}
 								>
 									Theme
 								</a>
-								<a 
+								<a
 									className={this.state.activeMenuItem==9 ? 'item active' : 'item'}
-									onClick={this.onChangeActive.bind(this,9)}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,9) )}
 								>
 									Topic
 								</a>
@@ -100,42 +104,42 @@ class ScreenMetadataBase extends Component{
 								<a className="header item">
 									Display
 								</a>
-								<a 
+								<a
 									className={this.state.activeMenuItem==10 ? 'item active' : 'item'}
-									onClick={this.onChangeActive.bind(this,10)}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,10) )}
 								>
 									Layer group
 								</a>
-								<a 
+								<a
 									className={this.state.activeMenuItem==11 ? 'item active' : 'item'}
-									onClick={this.onChangeActive.bind(this,11)}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,11) )}
 								>
 									Style
 								</a>
 
 							</div>
-					
-					
+
+
 						</div>
 						<div className="metadata-grid-items">
-							
-							<div 
-								className={this.state.activeMenuItem==2 ? 'items active' : 'items'} 
+
+							<div
+								className={this.state.activeMenuItem==2 ? 'items active' : 'items'}
 								id="metadata-items-vectorLayer"
 							>
 								<MetadataListLayerVector/>
 							</div>
-							
-							<div 
-								className={this.state.activeMenuItem==3 ? 'items active' : 'items'} 
+
+							<div
+								className={this.state.activeMenuItem==3 ? 'items active' : 'items'}
 								id="metadata-items-rasterLayer"
 							>
 								(raster layer)
 							</div>
-							
+
 						</div>
 					</div>
-					
+
         </div></div>
       </div>
     );

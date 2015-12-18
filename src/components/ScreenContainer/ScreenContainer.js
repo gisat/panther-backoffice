@@ -20,7 +20,7 @@ class ScreenContainer extends Component{
     activePageKey: PropTypes.func.isRequired
   };
   static childContextTypes = {
-    onScreenInteractivity: React.PropTypes.func
+    onInteraction: React.PropTypes.func
   };
 
   constructor(props) {
@@ -43,16 +43,29 @@ class ScreenContainer extends Component{
 
   getChildContext(){
     return {
-      onScreenInteractivity: function(){
-        var page = this.context.activePageKey();
-        var removed = [];
-        screenStack[page].map(function(screen, index){
-          if(screen.key == this.props.screenState.key){
-            removed = screenStack[page].splice(index, 1);
-          }
-        }.bind(this));
-        screenStack[page].unshift(removed[0]);
-      }.bind(this)
+      // returns the function wrapping
+      //  - move the screen in screenStack to the front
+      //  - call another function
+      // param funcToRunAfter: another function to be called after
+      // Example use: <a onClick={this.context.onInteraction( this.onChangeActive.bind(this,1) )}>
+      //  ...or without parameter <input onFocus={this.context.onInteraction()}>
+      onInteraction: function(funcToRunAfter){
+        return function() {
+          var page = this.context.activePageKey();
+          var removed = [];
+          //console.log("/ screenStack[page][0]: ", screenStack[page][0]);
+          console.log("SCREEN-INTERACTION");
+          //console.log("ONSCREENINTERACTIVITY\nfuncToRunAfter:", funcToRunAfter, "\nthis:", this);
+          screenStack[page].map(function (screen, index) {
+            if (screen.key == this.props.screenState.key) {
+              removed = screenStack[page].splice(index, 1);
+            }
+          }.bind(this));
+          screenStack[page].unshift(removed[0]);
+          //console.log("\\ screenStack[page][0]: ", screenStack[page][0]);
+          if(funcToRunAfter) funcToRunAfter();
+        }.bind(this); // binds to ScreenContainer
+      }.bind(this) // binds to ScreenContainer
     };
   }
 
