@@ -172,7 +172,7 @@ class ConfigMetadataLayerVector extends Component{
 							name="name"
 							placeholder=" "
 							defaultValue="Land cover"
-							onChange={this.context.onInteraction( this.onChangeName.bind(this) )}
+							onChange={this.onChangeName.bind(this)}
 						/>
 					</label>
 				</div>
@@ -182,8 +182,8 @@ class ConfigMetadataLayerVector extends Component{
 							Topics
 							<UIObjectSelect
 								multi
-								onChange={this.context.onInteraction( this.onChangeTopics.bind(this) )}
-								onOptionLabelClick={this.context.onInteraction( this.onObjectClick.bind(this) )}
+								onChange={this.onChangeTopics.bind(this)}
+								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={TOPICS}
 								allowCreate
@@ -201,8 +201,8 @@ class ConfigMetadataLayerVector extends Component{
 					<label className="container">
 						Layer group
 						<UIObjectSelect
-							onChange={this.context.onInteraction( this.onChangeGroup.bind(this) )}
-							onOptionLabelClick={this.context.onInteraction( this.onObjectClick.bind(this) )}
+							onChange={this.onChangeGroup.bind(this)}
+							onOptionLabelClick={this.onObjectClick.bind(this)}
 							//loadOptions={this.getScopes}
 							options={LAYERGROUPS}
 							allowCreate
@@ -219,8 +219,8 @@ class ConfigMetadataLayerVector extends Component{
 						Styles
 						<UIObjectSelect
 							multi
-							onChange={this.context.onInteraction( this.onChangeStyles.bind(this) )}
-							onOptionLabelClick={this.context.onInteraction( this.onObjectClick.bind(this) )}
+							onChange={this.onChangeStyles.bind(this)}
+							onOptionLabelClick={this.onObjectClick.bind(this)}
 							//loadOptions={this.getScopes}
 							options={STYLES}
 							allowCreate
