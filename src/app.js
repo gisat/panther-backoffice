@@ -35,10 +35,6 @@ const context = {
     meta.setAttribute('content', content);
     document.getElementsByTagName('head')[0].appendChild(meta);
   },
-  onScreenInteractivity: function(screenKey){
-    // todo
-    console.log("====onScreenInteractivity==== ~screenKey~ ", screenKey, " | ~activePageKey~ ", activePageKey, " | ~this~ ", this);
-  },
   setScreenPosition: function(screenKey, positionClass, options){
     options = options || {};
     var me = this;

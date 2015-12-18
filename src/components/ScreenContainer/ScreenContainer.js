@@ -5,6 +5,8 @@ import classNames from 'classnames';
 
 import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
+const screenStack = require('../../stores/screenStack');
+
 @withStyles(styles)
 class ScreenContainer extends Component{
 
@@ -14,12 +16,19 @@ class ScreenContainer extends Component{
   //  component: PropTypes.object
   //};
 
-  constructor(props){
+  static contextTypes = {
+    activePageKey: PropTypes.func.isRequired
+  };
+  static childContextTypes = {
+    onScreenInteractivity: React.PropTypes.func
+  };
+
+  constructor(props) {
     super(props);
 
     //// nasty thing
     // todo bez init, kdyz to neni ze statu
-    // prevest do page
+    // prevest do page?
     switch(props.screenState.position){
       case "retracted":
             props.onRetract({init: true});
@@ -32,8 +41,23 @@ class ScreenContainer extends Component{
     }
   }
 
+  getChildContext(){
+    return {
+      onScreenInteractivity: function(){
+        var page = this.context.activePageKey();
+        var removed = [];
+        screenStack[page].map(function(screen, index){
+          if(screen.key == this.props.screenState.key){
+            removed = screenStack[page].splice(index, 1);
+          }
+        }.bind(this));
+        screenStack[page].unshift(removed[0]);
+      }.bind(this)
+    };
+  }
+
+
   render() {
-    //console.log("ScreenContainer.render| props.page: ", this.props.page, " | props.thekey: ", this.props.thekey);
     var disabled = this.props.screenState.disabled || false;
     //var typeClass = this.props.screenState.type || "";
     var typeClass = this.props.screenState.size ? "constant" : "";
