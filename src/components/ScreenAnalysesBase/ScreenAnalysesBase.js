@@ -77,7 +77,7 @@ class ScreenAnalysesBase extends Component{
                 className={this.state.activeMenuItem==3 ? 'items active' : 'items'}
                 id="analyses-items-math"
               >
-                (math)<br/>
+                (math)
               </div>
 
             </div>
