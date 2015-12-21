@@ -18,37 +18,38 @@ const ANALYSES = [
 
 @withStyles(styles)
 class SelectorAnalysisSpatial extends Component{
-  
+
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			valueAnalysisSpatial: 1
+			valueAnalysisSpatial: 1,
+      data: this.props.data
 		};
-		
+
 	}
-	
+
 	onChangeAnalysisSpatial (value) {
 		this.state.valueAnalysisSpatial = value;
 	}
-	
-	
+
+
 	render() {
     var selectInputProps = {
 			className: "" //"ui input"
 		};
-		
 		return (
       <div>
+        <p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
         <div className="selector">
 					<div className="input">
 						<label className="container">
-							<Select 
+							<Select
 								onChange={this.onChangeAnalysisSpatial.bind(this)}
 								options={ANALYSES}
-								valueKey="key" 
-								labelKey="name" 
-								inputProps={selectInputProps} 
+								valueKey="key"
+								labelKey="name"
+								inputProps={selectInputProps}
 								value={this.state.valueAnalysisSpatial}
 								clearable={false}
 							/>

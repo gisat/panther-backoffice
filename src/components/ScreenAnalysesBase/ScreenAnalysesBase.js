@@ -8,14 +8,17 @@ import AnalysesListSpatial from '../AnalysesListSpatial';
 class ScreenAnalysesBase extends Component{
 
   static contextTypes = {
-    onInteraction: PropTypes.func.isRequired
+    onInteraction: PropTypes.func.isRequired,
+    setScreenData: PropTypes.func.isRequired,
+    page: PropTypes.object.isRequired
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      activeMenuItem: 1
+      activeMenuItem: 1,
+      data: this.props.data
     };
   }
 
@@ -26,8 +29,10 @@ class ScreenAnalysesBase extends Component{
   }
 
   render() {
+    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% context.page: ", this.context.page);
     return (
       <div>
+        <p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
         <div className="screen-content"><div>
           <h1>Analyses</h1>
 
@@ -77,7 +82,7 @@ class ScreenAnalysesBase extends Component{
                 className={this.state.activeMenuItem==3 ? 'items active' : 'items'}
                 id="analyses-items-math"
               >
-                (math)
+                <a onClick={this.context.setScreenData("analyses2", {zkouska: "ne"})}>(math)</a>
               </div>
 
             </div>

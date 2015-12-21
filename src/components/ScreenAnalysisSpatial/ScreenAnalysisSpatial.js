@@ -12,10 +12,10 @@ class ScreenAnalysisSpatial extends Component{
       <div>
 				<div className="screen-setter"><div>
 					<h2>Analysis</h2>
-					<SelectorAnalysisSpatial />
+					<SelectorAnalysisSpatial data={this.props.data} />
 				</div></div>
 				<div className="screen-content"><div>
-					<ConfigAnalysisSpatial />
+					<ConfigAnalysisSpatial data={this.props.data} />
 				</div></div>
       </div>
     );

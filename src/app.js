@@ -35,13 +35,35 @@ const context = {
     meta.setAttribute('content', content);
     document.getElementsByTagName('head')[0].appendChild(meta);
   },
+  setScreenData: function(screenKey, data){
+    var page = this;
+    var index = -1;
+    console.log("SET-SCREEN-DATA ", screenKey);
+    page.state.screens.map(function (obj, i) {
+      if (obj.key == screenKey) {
+        index = i;
+      } else {
+        console.log(obj.key, "!=", screenKey);
+      }
+    });
+    console.log("SET-SCREEN-DATA index", index);
+    if (index == -1) return false;
+    var newScreens = page.state.screens.slice(0);
+    for (var key in data) {
+      newScreens[index].data[key] = data[key];
+    }
+    console.log("newScreens:", newScreens);
+    page.setState({
+      screens: newScreens
+    });
+  },
   setScreenPosition: function(screenKey, positionClass, options){
     options = options || {};
-    var me = this;
+    var page = this;
     // clone state screen array
-    var newScreens = me.state.screens.slice(0);
+    var newScreens = page.state.screens.slice(0);
     var index = -1;
-    screenStack[me.state.key] = screenStack[me.state.key] || [];
+    screenStack[page.state.key] = screenStack[page.state.key] || [];
 
 
     //////////////// log
@@ -49,7 +71,7 @@ const context = {
     console.log("###sSP  ["+screenKey+" » "+positionClass+"]  options:", options);
     //console.log("this class: "+this.constructor.name);
     var log = " /Stack: ";
-    screenStack[me.state.key].map(function(screen, i){
+    screenStack[page.state.key].map(function(screen, i){
       log += " [" + i + "]" + screen.key + " " + screen.position;
       //if(!screen.allowRetract) log += "/xR";
       if(screen.userDidThat) log += "/U";
@@ -83,7 +105,7 @@ const context = {
           // when closing, delete screen from state after a while
           setTimeout(function () {
             delete newScreens[index];
-            me.setState({
+            page.setState({
               screens: newScreens
             });
           }, 1000);
@@ -99,18 +121,18 @@ const context = {
 
       ////// log operation to screenStack
       // remove previous records for the same screen
-      //var order = -1; // todo Zatim nepouzivane, mozna to nebude potreba.
-      //var allowRetract = (newScreens[0].key != screenKey); // todo Zatim nepouzivane, mozna to nebude potreba.
-      screenStack[me.state.key].map(function(record, i){
+      //var order = -1; // Zatim nepouzivane, mozna to nebude potreba.
+      //var allowRetract = (newScreens[0].key != screenKey); // Zatim nepouzivane, mozna to nebude potreba.
+      screenStack[page.state.key].map(function(record, i){
         if(record.key == screenKey){
           //order = record.order;
           //allowRetract = record.allowRetract;
-          screenStack[me.state.key].splice(i, 1);
+          screenStack[page.state.key].splice(i, 1);
         }
       });
       // add record for this operation
       if(positionClass == "open" || positionClass == "retracted"){
-        screenStack[me.state.key].unshift({
+        screenStack[page.state.key].unshift({
           key: screenKey,
           position: positionClass,
           //order: order,
@@ -126,13 +148,13 @@ const context = {
     var constPlus = 1;
     var normalWidth = 50;
     var remSize = 16;
-    var availableWidth = window.innerWidth / remSize - menuWidth - screenStack[me.state.key].length * retractedWidth;
+    var availableWidth = window.innerWidth / remSize - menuWidth - screenStack[page.state.key].length * retractedWidth;
     console.log("        =init innerWidth:" + window.innerWidth / remSize + " availableWidth:"+availableWidth);
 
     var retractAllFurther = false;
-    var current = true;
+    var current = true; // first record in the screenStack is the screen which has been opened or retracted by user
     var foundOpen = false;
-    screenStack[me.state.key].map(function (record) {
+    screenStack[page.state.key].map(function (record) {
 
       var screenState = $.grep(newScreens, function (e) {
         if (typeof e == "undefined") return false;
@@ -151,7 +173,7 @@ const context = {
 
               if(current){
                 maximiseScreen(record.key, newScreens);
-                me.state.hasMaximised = true;
+                page.state.hasMaximised = true;
               }else{
 
                 disableScreen(record.key, newScreens);
@@ -182,9 +204,9 @@ const context = {
           }
           break;
         case "closed":
-          current = false;
+          current = false; // Beacause when screen has been closed, it's no more in the screenStack
         case "retracted":
-          me.state.hasMaximised = false;
+          page.state.hasMaximised = false;
 
           if (record.position == "open") {
             foundOpen = true;
@@ -213,7 +235,7 @@ const context = {
                 enableScreen(record.key, newScreens);
                 // maximise
                 maximiseScreen(record.key, newScreens);
-                me.state.hasMaximised = true;
+                page.state.hasMaximised = true;
                 retractAllFurther = true;
               }else{
                 // disable
@@ -239,7 +261,7 @@ const context = {
     // reorder screenStack to be open-first when init run
     if(options.init){
       //console.log("| / screenStack[me.state.key][0].key:", screenStack[me.state.key][0].key);
-      screenStack[me.state.key].sort(function(a, b){
+      screenStack[page.state.key].sort(function(a, b){
         if((a.position == "closed" || a.position == "retracted") && b.position == "open"){
           return 1;
         }
@@ -251,7 +273,7 @@ const context = {
 
     //////////////// log
     log = "\\ Stack: ";
-    screenStack[me.state.key].map(function(screen, i){
+    screenStack[page.state.key].map(function(screen, i){
       log += " [" + i + "]" + screen.key + " " + screen.position;
       //if(!screen.allowRetract) log += "/xR";
       if(screen.userDidThat) log += "/U";
@@ -268,7 +290,7 @@ const context = {
 
 
     // apply changes of state
-    me.setState({
+    page.setState({
       screens: newScreens
     });
 

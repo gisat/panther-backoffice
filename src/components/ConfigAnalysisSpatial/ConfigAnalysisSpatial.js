@@ -33,17 +33,18 @@ const THEMES = [
 
 @withStyles(styles)
 class ConfigAnalysisSpatial extends Component{
-	
+
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			valuesTopics: [12,22],
-			themesString: ""
+			themesString: "",
+      data: this.props.data
 		};
-		
+
 	}
-	
+
 	resolveThemes(topics) {
 		var stringThemes = "";
 		if(topics) {
@@ -68,7 +69,7 @@ class ConfigAnalysisSpatial extends Component{
 			themesString: stringThemes
 		});
 	}
-	
+
 	handleNewObjects(values, store) {
 		var newValues = [];
 		for (var singleValue of values) {
@@ -84,7 +85,7 @@ class ConfigAnalysisSpatial extends Component{
 		}
 		return newValues;
 	}
-	
+
 	onChangeTopics (value, values) {
 		values = this.handleNewObjects(values, TOPICS);
 		this.setState({
@@ -92,13 +93,13 @@ class ConfigAnalysisSpatial extends Component{
 		});
 		this.resolveThemes(values);
 	}
-	
-	
+
+
 	onObjectClick (value, event) {
 		console.log("yay! " + value["key"]);
 	}
-		
-	
+
+
 	topicOptionFactory (inputValue) {
 		var newOption = {
 				key: inputValue,
@@ -109,34 +110,34 @@ class ConfigAnalysisSpatial extends Component{
 			};
 		return newOption;
 	}
-	
-	
+
+
 	componentDidMount() {
-		
-		
-		
+
+
+
 	}
-	
+
 	render() {
-		
+
 		var selectInputProps = {
 			className: "" //"ui input"
 		};
-		
+
 		return (
       <div>
-				
+        <p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Name
 						<Input type="text" name="name" placeholder=" " defaultValue="Land cover status" />
 					</label>
 				</div>
-				
+
 				<div className="frame-input-wrapper">
 						<label className="container">
 							Topics
-							<UIObjectSelect 
+							<UIObjectSelect
 								multi
 								onChange={this.onChangeTopics.bind(this)}
 								onOptionLabelClick={this.onObjectClick.bind(this)}
@@ -151,12 +152,12 @@ class ConfigAnalysisSpatial extends Component{
 						</label>
 						<div className="frame-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
 				</div>
-				
+
 				<IconButton name="check" basic color="blue" disabled>
 					Saved
 				</IconButton>
-				
-				
+
+
 				<div className="section-header">
 					<h3>Operations</h3>
 					<UIScreenButton basic>
@@ -164,7 +165,7 @@ class ConfigAnalysisSpatial extends Component{
 						Configure
 					</UIScreenButton>
 				</div>
-				
+
 				<Table celled className="fixed">
 					<thead>
 						<tr>
@@ -207,8 +208,8 @@ class ConfigAnalysisSpatial extends Component{
 
 					</tbody>
 				</Table>
-				
-				
+
+
 				<div className="section-header">
 					<h3>Runs</h3>
 					<UIScreenButton basic>
@@ -216,7 +217,7 @@ class ConfigAnalysisSpatial extends Component{
 						New run
 					</UIScreenButton>
 				</div>
-				
+
 				<Table basic="very" className="fixed">
 					<thead>
 						<tr>
@@ -227,53 +228,53 @@ class ConfigAnalysisSpatial extends Component{
 						</tr>
 					</thead>
 					<tbody>
-						
+
 						<tr>
 							<td>Cebu City</td>
 							<td>2000</td>
 							<td>GADM2</td>
 							<td>2015-11-17</td>
 						</tr>
-						
+
 						<tr>
 							<td>Cebu City</td>
 							<td>2010</td>
 							<td>GADM2</td>
 							<td>2015-11-17</td>
 						</tr>
-						
+
 						<tr>
 							<td>Hai Phong</td>
 							<td>2000</td>
 							<td>GADM2</td>
 							<td>2015-11-17</td>
 						</tr>
-						
+
 						<tr>
 							<td>Hai Phong</td>
 							<td>2010</td>
 							<td>GADM2</td>
 							<td>2015-11-17</td>
 						</tr>
-						
+
 						<tr>
 							<td>Ulaanbaatar</td>
 							<td>2000</td>
 							<td>GADM2</td>
 							<td>2015-11-17</td>
 						</tr>
-						
+
 						<tr>
 							<td>Ulaanbaatar</td>
 							<td>2010</td>
 							<td>GADM2</td>
 							<td>2015-11-17</td>
 						</tr>
-						
+
 
 					</tbody>
 				</Table>
-				
+
 			</div>
     );
 

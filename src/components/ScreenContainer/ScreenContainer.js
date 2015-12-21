@@ -29,16 +29,16 @@ class ScreenContainer extends Component{
     //// nasty thing
     // todo bez init, kdyz to neni ze statu
     // prevest do page?
-    switch(props.screenState.position){
-      case "retracted":
-            props.onRetract({init: true});
-            break;
-      case "closed":
-            props.onClose({init: true});
-            break;
-      default:
-            props.onOpen({init: true});
-    }
+    //switch(props.screenState.position){
+    //  case "retracted":
+    //        props.onRetract({init: true});
+    //        break;
+    //  case "closed":
+    //        props.onClose({init: true});
+    //        break;
+    //  default:
+    //        props.onOpen({init: true});
+    //}
   }
 
   getChildContext(){
@@ -54,13 +54,13 @@ class ScreenContainer extends Component{
           var page = this.context.activePageKey();
           var removed = [];
           //console.log("/ screenStack[page][0]: ", screenStack[page][0]);
-          console.log("SCREEN-INTERACTION");
+          console.log("SCREEN-INTERACTION " + page + "/" + this.props.screenState.key);
           //console.log("ONSCREENINTERACTIVITY\nfuncToRunAfter:", funcToRunAfter, "\nthis:", this);
           screenStack[page].map(function (screen, index) {
             if (screen.key == this.props.screenState.key) {
               removed = screenStack[page].splice(index, 1);
             }
-          }.bind(this));
+          }.bind(this)); // binds to ScreenContainer
           screenStack[page].unshift(removed[0]);
           //console.log("\\ screenStack[page][0]: ", screenStack[page][0]);
           if(funcToRunAfter) funcToRunAfter();
@@ -90,7 +90,7 @@ class ScreenContainer extends Component{
     return (
       <div className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass, contentAlignClass)} style={screenStyles}>
         <div className="screen-scroll"><div>
-          {React.cloneElement(this.props.screenState.component, { disabled: disabled})}
+          {React.cloneElement(this.props.screenState.component, { disabled: disabled, data: this.props.screenState.data || {} })}
         </div></div>
         <div className="screen-controls middle">
           <Buttons basic icon vertical>
@@ -117,22 +117,18 @@ class ScreenContainer extends Component{
   }
 
   componentDidMount() {
-    //$(".screen").click(function() {
-    //  if ( $(this).hasClass("retracted") ) {
-    //    if ( !$(this).hasClass("limited") ) {
-    //      /* todo check if there is enough space */
-    //      $(this).siblings(".screen.open").removeClass("open").addClass("retracted");
-    //    }
-    //    $(this).removeClass("retracted").addClass("opening").delay(300).queue(function(){
-    //      $(this).removeClass("opening").addClass("open").dequeue();
-    //    });
-    //    /* todo tabindex behaviour? input disabling? anchors? */
-    //    $(this).siblings(".screen.retracted").find(":input").prop("disabled", true);
-    //    $(this).siblings(".screen.retracted").find("a").prop("tabindex", "-1");
-    //    /* disable inputs or tabindex=-1 only? */
-    //    /* todo enabling */
-    //  }
-    //});
+    //console.log("CDM");
+    switch(this.props.screenState.position){
+      case "retracted":
+        this.props.onRetract({init: true});
+        break;
+      case "closed":
+        this.props.onClose({init: true});
+        break;
+      default:
+        this.props.onOpen({init: true});
+    }
+
   }
 
 }

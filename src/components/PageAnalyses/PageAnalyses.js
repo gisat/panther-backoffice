@@ -17,7 +17,8 @@ class PageAnalyses extends Component {
 	static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
     activePageKey: PropTypes.func.isRequired,
-    setScreenPosition: PropTypes.func.isRequired
+    setScreenPosition: PropTypes.func.isRequired,
+    setScreenData: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -28,31 +29,44 @@ class PageAnalyses extends Component {
       screens: [
         {
           key: "analyses1",
-          component: <ScreenAnalysesBase/>
+          component: <ScreenAnalysesBase/>,
+          data: {
+            x: 7
+          }
         },
         {
           key: "analyses2",
           //type: "constant",
           size: 40,
           position: "retracted",
-          component: <ScreenAnalysisSpatial/>
+          component: <ScreenAnalysisSpatial/>,
+          data: {
+            neco: 42,
+            necojineho: 100
+          }
         },
         {
           key: "analyses3",
           contentAlign: "fill",
           //size: 80,
           position: "retracted",
-          component: <ScreenAnalysisSpatialRules/>
+          component: <ScreenAnalysisSpatialRules/>,
+          data: {
+            rule_id: 47,
+            title: "nimoy"
+          }
         }
       ]
     };
   }
 
-
   render() {
     const title = 'Analyses';
     this.context.onSetTitle(title);
     this.context.activePageKey(this.state.key);
+    //console.log("/ context.page: ", this.context.page);
+    this.context.page = this;
+    //console.log("\\ context.page: ", this.context.page);
 
     var screenNodes = this.state.screens.map(function(screen) {
       return (
@@ -62,6 +76,7 @@ class PageAnalyses extends Component {
           onClose={this.context.setScreenPosition.bind(this, screen.key, "closed")}
           onRetract={this.context.setScreenPosition.bind(this, screen.key, "retracted")}
           onOpen={this.context.setScreenPosition.bind(this, screen.key, "open")}
+          onSetScreenData={this.context.setScreenData.bind(this)}
         />
       );
     }.bind(this));
@@ -74,6 +89,14 @@ class PageAnalyses extends Component {
         </div>
       </div>
     );
+  }
+
+  componentDidMount(){
+    var page = this;
+    page.context.setScreenData.bind(this)("analyses2", {zkouska: "jo", necojineho: "neco uplne jineho"});
+    setTimeout(function(){
+      console.log(page.state);
+    }, 5000);
   }
 
 }
