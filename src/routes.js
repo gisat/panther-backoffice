@@ -18,20 +18,21 @@ import { publicPath } from './config';
 const router = new Router(on => {
   on('*', async (state, next) => {
     const component = await next();
-    return component && <App context={state.context}>{component}</App>;
+    console.log("routes.js stejt", state);
+    return component && <App context={state.context}>{React.cloneElement(component, {screenState: parseScreens(state.params.activePath, state.search)} )}</App>;
   });
 
-  on(publicPath + '/login', async () => <LoginPage />);
+  hookRoute(on, '/login', async () => <LoginPage />);
 
-  on(publicPath + '/', async () => <PageDashboard />);
+  hookRoute(on, '/', async () => <PageDashboard />);
 
-  on(publicPath + '/places', async () => <PagePlaces />);
+  hookRoute(on, '/places', async () => <PagePlaces />);
 
-  on(publicPath + '/datalayers', async () => <PageDataLayers />);
+  hookRoute(on, '/datalayers', async () => <PageDataLayers />);
 
-  on(publicPath + '/analyses', async () => <PageAnalyses />);
+  hookRoute(on, '/analyses/:activePath(.*)', async () => <PageAnalyses />);
 
-  on(publicPath + '/metadata', async () => <PageMetadata />);
+  hookRoute(on, '/metadata', async () => <PageMetadata />);
 
   on('*', async (state) => {
     const content = await http.get(`${publicPath}/api/content?path=${state.path}`);
@@ -43,5 +44,15 @@ const router = new Router(on => {
     <App context={state.context} error={error}><ErrorPage /></App>
   );
 });
+
+function hookRoute(on, path, func) {
+  on(publicPath + path, func);
+  on(path, func);
+}
+
+function parseScreens(activePath, search){
+  console.log("search: ", typeof search, search);
+  //return search.substr(1);
+}
 
 export default router;

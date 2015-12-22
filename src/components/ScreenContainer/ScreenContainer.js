@@ -26,6 +26,8 @@ class ScreenContainer extends Component{
   constructor(props) {
     super(props);
 
+    //console.log("refs: ", this.props.refs);
+
     //// nasty thing
     // todo bez init, kdyz to neni ze statu
     // prevest do page?
@@ -65,7 +67,8 @@ class ScreenContainer extends Component{
           //console.log("\\ screenStack[page][0]: ", screenStack[page][0]);
           if(funcToRunAfter) funcToRunAfter();
         }.bind(this); // binds to ScreenContainer
-      }.bind(this) // binds to ScreenContainer
+      }.bind(this), // binds to ScreenContainer
+      //onSetScreenData: this.props.onSetScreenData
     };
   }
 

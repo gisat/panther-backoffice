@@ -35,8 +35,7 @@ server.get('*', async (req, res, next) => {
       onSetMeta: (key, value) => data[key] = value,
       onPageNotFound: () => statusCode = 404,
     };
-
-    await Router.dispatch({ path: req.path, context }, (state, component) => {
+    await Router.dispatch({ path: req.url, context }, (state, component) => { // changed path: req.path -> req.url to include query string
       data.body = ReactDOM.renderToString(component);
       data.css = css.join('');
     });

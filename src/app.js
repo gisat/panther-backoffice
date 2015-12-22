@@ -356,6 +356,7 @@ function update2DArray(theArray, testKey, testValue, setKey, setValue){
 
 function render(state) {
   Router.dispatch(state, (newState, component) => {
+    console.log("newState: ", newState);
     ReactDOM.render(component, appContainer, () => {
       // Restore the scroll position if it was saved into the state
       if (state.scrollY !== undefined) {
@@ -391,8 +392,11 @@ function run() {
       path: location.pathname,
       query: location.query,
       state: location.state,
+      search: location.search,
       context
     });
+    console.log("currentState: ", currentState);
+    console.log("location: ", location);
     render(currentState);
   });
 

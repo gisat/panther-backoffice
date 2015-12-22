@@ -7,9 +7,13 @@ import ConfigAnalysisSpatial from '../ConfigAnalysisSpatial';
 
 @withStyles(styles)
 class ScreenAnalysisSpatial extends Component{
+  static contextTypes = {
+    onSetScreenData: PropTypes.func.isRequired
+  };
   render() {
     return (
       <div>
+        <a onClick={this.context.onSetScreenData.bind(null, "analyses3", {nastaveno: "jo"})}>nastav</a>
 				<div className="screen-setter"><div>
 					<h2>Analysis</h2>
 					<SelectorAnalysisSpatial data={this.props.data} />

@@ -118,6 +118,10 @@ class ConfigAnalysisSpatial extends Component{
 
 	}
 
+  onChangeName(){
+    console.log("name changed");
+  }
+
 	render() {
 
 		var selectInputProps = {
@@ -130,7 +134,7 @@ class ConfigAnalysisSpatial extends Component{
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Name
-						<Input type="text" name="name" placeholder=" " defaultValue="Land cover status" />
+						<Input type="text" name="name" placeholder=" " defaultValue="Land cover status" onChange={this.onChangeName.bind(this)} />
 					</label>
 				</div>
 

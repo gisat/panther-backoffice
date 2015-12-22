@@ -9,8 +9,7 @@ class ScreenAnalysesBase extends Component{
 
   static contextTypes = {
     onInteraction: PropTypes.func.isRequired,
-    setScreenData: PropTypes.func.isRequired,
-    page: PropTypes.object.isRequired
+    setScreenData: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -29,7 +28,6 @@ class ScreenAnalysesBase extends Component{
   }
 
   render() {
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% context.page: ", this.context.page);
     return (
       <div>
         <p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
@@ -82,7 +80,7 @@ class ScreenAnalysesBase extends Component{
                 className={this.state.activeMenuItem==3 ? 'items active' : 'items'}
                 id="analyses-items-math"
               >
-                <a onClick={this.context.setScreenData("analyses2", {zkouska: "ne"})}>(math)</a>
+                (math)
               </div>
 
             </div>

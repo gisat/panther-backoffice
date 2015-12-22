@@ -21,6 +21,10 @@ class PageAnalyses extends Component {
     setScreenData: PropTypes.func.isRequired
   };
 
+  static childContextTypes = {
+    onSetScreenData: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
 
@@ -53,10 +57,16 @@ class PageAnalyses extends Component {
           component: <ScreenAnalysisSpatialRules/>,
           data: {
             rule_id: 47,
-            title: "nimoy"
+            title: "pumpa"
           }
         }
       ]
+    };
+  }
+
+  getChildContext(){
+    return {
+      onSetScreenData: this.context.setScreenData.bind(this)
     };
   }
 
@@ -64,19 +74,18 @@ class PageAnalyses extends Component {
     const title = 'Analyses';
     this.context.onSetTitle(title);
     this.context.activePageKey(this.state.key);
-    //console.log("/ context.page: ", this.context.page);
-    this.context.page = this;
-    //console.log("\\ context.page: ", this.context.page);
 
     var screenNodes = this.state.screens.map(function(screen) {
       return (
         <ScreenContainer
+          ref={screen.key}
           key={screen.key}
           screenState={screen}
           onClose={this.context.setScreenPosition.bind(this, screen.key, "closed")}
           onRetract={this.context.setScreenPosition.bind(this, screen.key, "retracted")}
           onOpen={this.context.setScreenPosition.bind(this, screen.key, "open")}
           onSetScreenData={this.context.setScreenData.bind(this)}
+          refs={this.refs}
         />
       );
     }.bind(this));
@@ -92,11 +101,8 @@ class PageAnalyses extends Component {
   }
 
   componentDidMount(){
-    var page = this;
-    page.context.setScreenData.bind(this)("analyses2", {zkouska: "jo", necojineho: "neco uplne jineho"});
-    setTimeout(function(){
-      console.log(page.state);
-    }, 5000);
+    console.log("screenState: ", this.props.screenState);
+    //this.context.setScreenData.bind(this)("analyses2", {zkouska: "jo", necojineho: "neco uplne jineho"});
   }
 
 }
