@@ -18,7 +18,7 @@ class Dashboard extends Component{
 
     return (
       <div>
-        <p>Working on it. Please look at another pages on the left side.</p>
+        <p>Working on it. Please look at other pages on the left side.</p>
         {/*[
           prvni,
           druha,
