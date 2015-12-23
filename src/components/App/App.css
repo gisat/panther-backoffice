@@ -399,6 +399,8 @@ todo hex colours, button icons */
 	.screen-scroll {
 		overflow: hidden;
 		overflow-y: auto;
+		
+		min-width: 51rem;
 	}
 	.screen-scroll > div,
 	.screen:first-child > .screen-scroll {
@@ -616,9 +618,14 @@ todo hex colours, button icons */
 	}
 	.screen.maximised {
 		width:100%;
+		max-width: 100%;
 	}
 	.screen.maximised .screen-scroll {
 		overflow: auto;
+	}
+	.screen.maximised.did-open .screen-scroll {
+		overflow: auto;
+		min-width: initial;
 	}
 }
 
@@ -632,7 +639,7 @@ todo hex colours, button icons */
 /* .screen content space */
 @media screen and (min-width:71em) {
   .screen.fill .screen-content > div,
-	.screen.const50 .screen-setter > div  {
+	.screen.fill .screen-setter > div  {
     width: 55rem;
   }
   .screen.fill .beside {
