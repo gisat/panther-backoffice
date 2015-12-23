@@ -33,9 +33,10 @@ server.get('*', async (req, res, next) => {
       onInsertCss: value => css.push(value),
       onSetTitle: value => data.title = value,
       onSetMeta: (key, value) => data[key] = value,
-      onPageNotFound: () => statusCode = 404,
+      onPageNotFound: () => statusCode = 404
     };
-    await Router.dispatch({ path: req.url, context }, (state, component) => { // changed path: req.path -> req.url to include query string
+    let search = req.url.substr(req.url.indexOf("?"));
+    await Router.dispatch({ path: req.path, search: search, context }, (state, component) => {
       data.body = ReactDOM.renderToString(component);
       data.css = css.join('');
     });
