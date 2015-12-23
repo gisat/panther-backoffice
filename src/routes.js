@@ -18,7 +18,6 @@ import { publicPath } from './config';
 const router = new Router(on => {
   on('*', async (state, next) => {
     const component = await next();
-    console.log("routes.js stejt", state);
     return component && <App context={state.context}>{React.cloneElement(component, {screenState: parseScreens(state.params.activePath, state.search)} )}</App>;
   });
 
@@ -30,7 +29,7 @@ const router = new Router(on => {
 
   hookRoute(on, '/datalayers', async () => <PageDataLayers />);
 
-  hookRoute(on, '/analyses/:activePath(.*)', async () => <PageAnalyses />);
+  hookRoute(on, '/analyses', async () => <PageAnalyses />);
 
   hookRoute(on, '/metadata', async () => <PageMetadata />);
 
@@ -48,11 +47,14 @@ const router = new Router(on => {
 function hookRoute(on, path, func) {
   on(publicPath + path, func);
   on(path, func);
+  on(publicPath + path + "/:activePath(.*)", func);
+  on(path + "/:activePath(.*)", func);
 }
 
 function parseScreens(activePath, search){
-  console.log("search: ", typeof search, search);
-  //return search.substr(1);
+  if(search.substr(0, 1) == "?") search = search.substr(1);
+  // todo: finish
+  return search;
 }
 
 export default router;
