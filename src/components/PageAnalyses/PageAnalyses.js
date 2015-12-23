@@ -101,7 +101,7 @@ class PageAnalyses extends Component {
   }
 
   componentDidMount(){
-    console.log("screenState: ", this.props.screenState);
+    console.log("~~~~~~~~ pageAnalyses.props.screenState: ", this.props.screenState);
     //this.context.setScreenData.bind(this)("analyses2", {zkouska: "jo", necojineho: "neco uplne jineho"});
   }
 

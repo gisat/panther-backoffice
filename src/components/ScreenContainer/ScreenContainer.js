@@ -31,16 +31,16 @@ class ScreenContainer extends Component{
     //// nasty thing
     // todo bez init, kdyz to neni ze statu
     // prevest do page?
-    //switch(props.screenState.position){
-    //  case "retracted":
-    //        props.onRetract({init: true});
-    //        break;
-    //  case "closed":
-    //        props.onClose({init: true});
-    //        break;
-    //  default:
-    //        props.onOpen({init: true});
-    //}
+    switch(this.props.screenState.position){
+      case "retracted":
+        this.props.onRetract({init: true});
+        break;
+      case "closed":
+        this.props.onClose({init: true});
+        break;
+      default:
+        this.props.onOpen({init: true});
+    }
   }
 
   getChildContext(){
@@ -67,11 +67,14 @@ class ScreenContainer extends Component{
           //console.log("\\ screenStack[page][0]: ", screenStack[page][0]);
           if(funcToRunAfter) funcToRunAfter();
         }.bind(this); // binds to ScreenContainer
-      }.bind(this), // binds to ScreenContainer
+      }.bind(this) // binds to ScreenContainer
       //onSetScreenData: this.props.onSetScreenData
     };
   }
 
+  componentDidMount() {
+    //console.log("CDM");
+  }
 
   render() {
     var disabled = this.props.screenState.disabled || false;
@@ -117,21 +120,6 @@ class ScreenContainer extends Component{
         </div>
       </div>
     );
-  }
-
-  componentDidMount() {
-    //console.log("CDM");
-    switch(this.props.screenState.position){
-      case "retracted":
-        this.props.onRetract({init: true});
-        break;
-      case "closed":
-        this.props.onClose({init: true});
-        break;
-      default:
-        this.props.onOpen({init: true});
-    }
-
   }
 
 }

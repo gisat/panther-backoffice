@@ -75,6 +75,7 @@ const context = {
       log += " [" + i + "]" + screen.key + " " + screen.position;
       //if(!screen.allowRetract) log += "/xR";
       if(screen.userDidThat) log += "/U";
+      log += "{"+screen.order+"}";
     });
     console.log(log);
     log = "/ STATE: ";
@@ -83,7 +84,6 @@ const context = {
     });
     console.log(log);
     //////////////// log
-
 
     if(typeof screenKey != 'undefined') {
 
@@ -119,13 +119,11 @@ const context = {
       }
 
 
-      ////// log operation to screenStack
+      ////// log user operation to screenStack
       // remove previous records for the same screen
-      //var order = -1; // Zatim nepouzivane, mozna to nebude potreba.
       //var allowRetract = (newScreens[0].key != screenKey); // Zatim nepouzivane, mozna to nebude potreba.
       screenStack[page.state.key].map(function(record, i){
         if(record.key == screenKey){
-          //order = record.order;
           //allowRetract = record.allowRetract;
           screenStack[page.state.key].splice(i, 1);
         }
@@ -135,11 +133,17 @@ const context = {
         screenStack[page.state.key].unshift({
           key: screenKey,
           position: positionClass,
-          //order: order,
           //allowRetract: allowRetract
           userDidThat: true
         });
       }
+
+      // reindex screenStack orders
+      screenStack[page.state.key].map(function(record){
+        newScreens.map(function(stateRecord, stateIndex){
+          if(stateRecord.key == record.key) record.order = stateIndex;
+        });
+      });
     }
 
 
@@ -152,6 +156,7 @@ const context = {
     console.log("        =init innerWidth:" + window.innerWidth / remSize + " availableWidth:"+availableWidth);
 
     var retractAllFurther = false;
+    var retractAllLeftFrom = 0;
     var current = true; // first record in the screenStack is the screen which has been opened or retracted by user
     var foundOpen = false;
     screenStack[page.state.key].map(function (record) {
@@ -168,8 +173,13 @@ const context = {
         case "open":
           if (record.position == "open") {
 
+            if(retractAllFurther || record.order < retractAllLeftFrom) {
+              retractScreen(record.key, newScreens);
+              record.position = "retracted";
+              record.userDidThat = false;
+
             // fits partly or not at all
-            if ((availableWidth - realScreenSize) < 0 && !retractAllFurther) {
+            }else if ((availableWidth - realScreenSize) < 0) {
 
               if(current){
                 maximiseScreen(record.key, newScreens);
@@ -179,7 +189,7 @@ const context = {
                 disableScreen(record.key, newScreens);
 
                 // doesn't fit at all
-                if (availableWidth < 0 || retractAllFurther) {
+                if (availableWidth < 0) {
                   retractScreen(record.key, newScreens);
                   record.position = "retracted";
                   record.userDidThat = false;
@@ -189,15 +199,11 @@ const context = {
 
               }
 
-            }else if(retractAllFurther){
-              retractScreen(record.key, newScreens);
-              record.position = "retracted";
-              record.userDidThat = false;
             }
 
             //if (typeof size == "undefined") retractAllFurther = true;
-            if (screenState.contentAlign == "fill") retractAllFurther = true;
-            // todo: Ted je otazka, jestli to nastavovat vzdy, kdyz chybi velikost, nebo jen u wide/fill. To by asi davalo vetsi smysl.
+            if(screenState.contentAlign == "fill") retractAllFurther = true;
+            if(typeof screenState.size == "undefined") retractAllLeftFrom = Math.max(retractAllLeftFrom, record.order);
 
           } else if (record.position == "retracted") {
             // asi nic?
@@ -222,7 +228,7 @@ const context = {
             }
 
           } else if (record.position == "retracted") {
-            if (availableWidth >= 0 && !current && !retractAllFurther && !record.userDidThat){
+            if (availableWidth >= 0 && !current && !retractAllFurther &&  !(record.order < retractAllLeftFrom) && !record.userDidThat){
               // open
               openScreen(record.key, newScreens);
               record.position = "open";
@@ -246,9 +252,8 @@ const context = {
               foundOpen = true;
             }
           }
-          //if (!current && typeof screenState.size == "undefined") retractAllFurther = true;
+          if (!current && typeof screenState.size == "undefined") retractAllLeftFrom = record.order; // todo: nema se to testovat jenom pro otevrene?
           if (!current && screenState.contentAlign == "fill") retractAllFurther = true;
-          // todo: Ted je otazka, jestli to nastavovat vzdy, kdyz chybi velikost, nebo jen u wide/fill. To by asi davalo vetsi smysl.
       }
 
       if (current) record.userDidThat = true;
@@ -277,6 +282,7 @@ const context = {
       log += " [" + i + "]" + screen.key + " " + screen.position;
       //if(!screen.allowRetract) log += "/xR";
       if(screen.userDidThat) log += "/U";
+      log += "{"+screen.order+"}";
     });
     console.log(log);
     log = " \\STATE: ";
@@ -396,7 +402,6 @@ function run() {
       context
     });
     console.log("currentState: ", currentState);
-    console.log("location: ", location);
     render(currentState);
   });
 
