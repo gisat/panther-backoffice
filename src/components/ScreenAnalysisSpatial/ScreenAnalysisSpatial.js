@@ -33,7 +33,7 @@ class ScreenAnalysisSpatial extends Component{
   render() {
 		return (
       <div>
-        <a onClick={this.context.onSetScreenData.bind(null, "analyses3", {nastaveno: "jo"})}>nastav</a>
+        <a onClick={this.context.onSetScreenData("analyses3", {nastaveno: "jo"})}>nastav</a>
 				<div className="screen-setter"><div>
 					<h2>Analysis</h2>
 					<SelectorAnalysisSpatial id={this.state.idAnalysisSpatial} onChange={this.onChangeId.bind(this)} data={this.props.data} />

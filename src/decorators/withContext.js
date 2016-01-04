@@ -13,7 +13,7 @@ function withContext(ComposedComponent) {
         onSetMeta: PropTypes.func,
         onPageNotFound: PropTypes.func,
         setScreenPosition: PropTypes.func,
-        setScreenData: PropTypes.func,
+				onSetScreenData: PropTypes.func,
         activePageKey: PropTypes.func,
         page: PropTypes.object
       })
@@ -25,7 +25,7 @@ function withContext(ComposedComponent) {
       onSetMeta: PropTypes.func.isRequired,
       onPageNotFound: PropTypes.func.isRequired,
       setScreenPosition: PropTypes.func.isRequired,
-      setScreenData: PropTypes.func.isRequired,
+      onSetScreenData: PropTypes.func.isRequired,
       activePageKey: PropTypes.func.isRequired,
       page: PropTypes.object.isRequired
     };
@@ -38,7 +38,7 @@ function withContext(ComposedComponent) {
         onSetMeta: context.onSetMeta || emptyFunction,
         onPageNotFound: context.onPageNotFound || emptyFunction,
         setScreenPosition: context.setScreenPosition || emptyFunction,
-        setScreenData: context.setScreenData || emptyFunction,
+				onSetScreenData: context.onSetScreenData || emptyFunction,
         activePageKey: context.activePageKey || emptyFunction,
         page: {}
       };

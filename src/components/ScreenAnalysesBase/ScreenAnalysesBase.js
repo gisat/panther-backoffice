@@ -9,7 +9,7 @@ class ScreenAnalysesBase extends Component{
 
   static contextTypes = {
     onInteraction: PropTypes.func.isRequired,
-    setScreenData: PropTypes.func.isRequired
+		onSetScreenData: PropTypes.func.isRequired
   };
 
   constructor(props) {

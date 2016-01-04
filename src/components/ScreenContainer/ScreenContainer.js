@@ -45,13 +45,18 @@ class ScreenContainer extends Component{
 
   getChildContext(){
     return {
-      // returns the function wrapping
-      //  - move the screen in screenStack to the front
-      //  - call another function
-      // param funcToRunAfter: another function to be called after
-      // Example use: <a onClick={this.context.onInteraction( this.onChangeActive.bind(this,1) )}>
-      //  ...or without parameter <input onFocus={this.context.onInteraction()}>
-      onInteraction: function(funcToRunAfter){
+			/**
+			 * returns the function wrapping
+			 * - move the screen in screenStack to the front
+			 * - call another function
+			 * Use:
+			 * - callback: onClick={this.context.onInteraction( this.onChangeActive.bind(this,1) )}
+			 *   ...or without parameter onFocus={this.context.onInteraction()}
+			 * - directly: this.context.onInteraction()()
+			 * @param funcToRunAfter (function) another function to be called after
+			 * @returns function
+			 */
+			onInteraction: function(funcToRunAfter){
         return function() {
           var page = this.context.activePageKey();
           var removed = [];

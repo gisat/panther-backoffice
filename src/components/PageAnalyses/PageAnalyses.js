@@ -18,7 +18,7 @@ class PageAnalyses extends Component {
     onSetTitle: PropTypes.func.isRequired,
     activePageKey: PropTypes.func.isRequired,
     setScreenPosition: PropTypes.func.isRequired,
-    setScreenData: PropTypes.func.isRequired
+		onSetScreenData: PropTypes.func.isRequired
   };
 
   static childContextTypes = {
@@ -66,7 +66,7 @@ class PageAnalyses extends Component {
 
   getChildContext(){
     return {
-      onSetScreenData: this.context.setScreenData.bind(this)
+      onSetScreenData: this.context.onSetScreenData.bind(this)
     };
   }
 
@@ -84,7 +84,7 @@ class PageAnalyses extends Component {
           onClose={this.context.setScreenPosition.bind(this, screen.key, "closed")}
           onRetract={this.context.setScreenPosition.bind(this, screen.key, "retracted")}
           onOpen={this.context.setScreenPosition.bind(this, screen.key, "open")}
-          onSetScreenData={this.context.setScreenData.bind(this)}
+          onSetScreenData={this.context.onSetScreenData.bind(this)}
           refs={this.refs}
         />
       );
@@ -101,7 +101,7 @@ class PageAnalyses extends Component {
   }
 
   componentDidMount(){
-    console.log("~~~~~~~~ pageAnalyses.props.screenState: ", this.props.screenState);
+    //console.log("~~~~~~~~ pageAnalyses.props.screenState: ", this.props.screenState);
     //this.context.setScreenData.bind(this)("analyses2", {zkouska: "jo", necojineho: "neco uplne jineho"});
   }
 
