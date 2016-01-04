@@ -43,7 +43,7 @@ class PageAnalyses extends Component {
           //type: "constant",
           size: 40,
           position: "retracted",
-          component: <ScreenAnalysisSpatial/>,
+          component: <ScreenAnalysisSpatial parentUrl="/analyses/spatial"/>,
           data: {
             neco: 42,
             necojineho: 100

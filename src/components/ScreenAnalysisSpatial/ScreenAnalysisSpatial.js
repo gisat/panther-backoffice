@@ -16,8 +16,7 @@ class ScreenAnalysisSpatial extends Component{
 		super(props);
 
 		this.state = {
-			idAnalysisSpatial: 15,
-			parentUrl: ""
+			idAnalysisSpatial: 15
 		};
 	}
 
@@ -28,7 +27,7 @@ class ScreenAnalysisSpatial extends Component{
 	}
 
 	getUrl() {
-		return this.state.parentUrl + "/analysis-spatial-" + this.state.idAnalysisSpatial;
+		return this.props.parentUrl + "/analysis-spatial-" + this.state.idAnalysisSpatial;
 	}
 
   render() {
@@ -40,6 +39,7 @@ class ScreenAnalysisSpatial extends Component{
 					<SelectorAnalysisSpatial id={this.state.idAnalysisSpatial} onChange={this.onChangeId.bind(this)} data={this.props.data} />
 				</div></div>
 				<div className="screen-content"><div>
+					<p style={{backgroundColor: "yellow"}}>getUrl: {this.getUrl()}</p>
 					<ConfigAnalysisSpatial id={this.state.idAnalysisSpatial} data={this.props.data} />
 				</div></div>
       </div>
