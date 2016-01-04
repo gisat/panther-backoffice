@@ -27,6 +27,9 @@ class ScreenAnalysisSpatial extends Component{
 		});
 	}
 
+	getUrl() {
+		return this.state.parentUrl + "/analysis-spatial-" + this.state.idAnalysisSpatial;
+	}
 
   render() {
 		return (
