@@ -38,11 +38,18 @@ class ConfigAnalysisSpatial extends Component{
 		super(props);
 
 		this.state = {
+			idAnalysisSpatial: this.props.id,
 			valuesTopics: [12,22],
 			themesString: "",
       data: this.props.data
 		};
 
+	}
+
+	componentWillReceiveProps(newProps) {
+		if (newProps.id != this.state.idAnalysisSpatial) {
+			this.setState({idAnalysisSpatial: newProps.id});
+		}
 	}
 
 	resolveThemes(topics) {
@@ -130,7 +137,7 @@ class ConfigAnalysisSpatial extends Component{
 
 		return (
       <div>
-        <p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
+        <p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)} ID: {this.state.idAnalysisSpatial}</p>
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Name

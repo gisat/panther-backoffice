@@ -23,19 +23,27 @@ class SelectorAnalysisSpatial extends Component{
 		super(props);
 
 		this.state = {
-			valueAnalysisSpatial: 1,
+			idAnalysisSpatial: this.props.id,
       data: this.props.data
 		};
 
+		console.log("Selector constructor");
+
+	}
+
+	componentWillReceiveProps(newProps) {
+		if (newProps.id != this.state.idAnalysisSpatial) {
+			this.setState({idAnalysisSpatial: newProps.id});
+		}
 	}
 
 	onChangeAnalysisSpatial (value) {
-		this.state.valueAnalysisSpatial = value;
+		this.props.onChange(value);
 	}
 
 
 	render() {
-    var selectInputProps = {
+		var selectInputProps = {
 			className: "" //"ui input"
 		};
 		return (
@@ -50,7 +58,7 @@ class SelectorAnalysisSpatial extends Component{
 								valueKey="key"
 								labelKey="name"
 								inputProps={selectInputProps}
-								value={this.state.valueAnalysisSpatial}
+								value={this.state.idAnalysisSpatial}
 								clearable={false}
 							/>
 						</label>
