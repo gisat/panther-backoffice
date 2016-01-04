@@ -3,88 +3,88 @@ import { AccordionTitle, AccordionBody } from '../../modules'
 import classNames from 'classnames';
 
 export class Accordion extends Component {
-    static propTypes = {
-        children: React.PropTypes.node,
-        className: React.PropTypes.node,
-        defaultClasses: React.PropTypes.bool,
-        fluid: React.PropTypes.bool,
-        inverted: React.PropTypes.bool,
-        styled: React.PropTypes.bool
-    };
+		static propTypes = {
+				children: React.PropTypes.node,
+				className: React.PropTypes.node,
+				defaultClasses: React.PropTypes.bool,
+				fluid: React.PropTypes.bool,
+				inverted: React.PropTypes.bool,
+				styled: React.PropTypes.bool
+		};
 
-    static defaultProps = {
-        defaultClasses: true
-    };
+		static defaultProps = {
+				defaultClasses: true
+		};
 
-    constructor(props) {
-        super(props);
+		constructor(props) {
+				super(props);
 
-        this.state = {
-            currentActive: null
-        }
-    }
+				this.state = {
+						currentActive: null
+				}
+		}
 
-    _handleClick(key) {
-        let active;
+		_handleClick(key) {
+				let active;
 
-        if (key !== this.state.currentActive) {
-            active = key;
-        }
+				if (key !== this.state.currentActive) {
+						active = key;
+				}
 
-        this.setState({
-            currentActive: active
-        })
-    }
+				this.setState({
+						currentActive: active
+				})
+		}
 
-    renderChildren() {
-        let index = 0;
-        let element = null;
+		renderChildren() {
+				let index = 0;
+				let element = null;
 
-        return React.Children.map(this.props.children, function(child) {
-            if (child.type == AccordionTitle) {
-                const boundClick = this._handleClick.bind(this, index);
+				return React.Children.map(this.props.children, function(child) {
+						if (child.type == AccordionTitle) {
+								const boundClick = this._handleClick.bind(this, index);
 
-                element = React.cloneElement(child, {
-                    active: this.state.currentActive === index,
-                    onClick: boundClick
-                });
-            } else if (child.type == AccordionBody) {
-                element = React.cloneElement(child, {
-                    active: this.state.currentActive === index,
-                    event: this.state.event
-                });
-                index++;
-            } else {
-                return child;
-            }
+								element = React.cloneElement(child, {
+										active: this.state.currentActive === index,
+										onClick: boundClick
+								});
+						} else if (child.type == AccordionBody) {
+								element = React.cloneElement(child, {
+										active: this.state.currentActive === index,
+										event: this.state.event
+								});
+								index++;
+						} else {
+								return child;
+						}
 
-            return element;
-        }.bind(this));
-    }
+						return element;
+				}.bind(this));
+		}
 
-    render() {
-        let classes = {
-            // default
-            ui: this.props.defaultClasses,
+		render() {
+				let classes = {
+						// default
+						ui: this.props.defaultClasses,
 
-            // positioning
+						// positioning
 
-            // types
-            styled: this.props.styled,
+						// types
+						styled: this.props.styled,
 
-            // variations
-            fluid: this.props.fluid,
-            inverted: this.props.inverted,
+						// variations
+						fluid: this.props.fluid,
+						inverted: this.props.inverted,
 
-            // component
-            accordion: this.props.defaultClasses
-        };
+						// component
+						accordion: this.props.defaultClasses
+				};
 
 
-        return (
-            <div className={classNames(this.props.className, classes)}>
-                {this.renderChildren()}
-            </div>
-        )
-    }
+				return (
+						<div className={classNames(this.props.className, classes)}>
+								{this.renderChildren()}
+						</div>
+				)
+		}
 }

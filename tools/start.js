@@ -24,39 +24,39 @@ const bundler = webpack(webpackConfig);
  * synchronizing URLs, interactions and code changes across multiple devices.
  */
 export default task('start', async () => {
-  await require('./build')();
-  await require('./serve')();
+	await require('./build')();
+	await require('./serve')();
 
-  browserSync({
-    proxy: {
+	browserSync({
+		proxy: {
 
-      target: 'localhost:' + serverPort,
+			target: 'localhost:' + serverPort,
 
-      middleware: [
-        webpackDevMiddleware(bundler, {
-          // IMPORTANT: dev middleware can't access config, so we should
-          // provide publicPath by ourselves
-          publicPath: webpackConfig.output.publicPath,
+			middleware: [
+				webpackDevMiddleware(bundler, {
+					// IMPORTANT: dev middleware can't access config, so we should
+					// provide publicPath by ourselves
+					publicPath: webpackConfig.output.publicPath,
 
-          // Pretty colored output
-          stats: webpackConfig.stats,
+					// Pretty colored output
+					stats: webpackConfig.stats,
 
-          // For other settings see
-          // http://webpack.github.io/docs/webpack-dev-middleware.html
-        }),
+					// For other settings see
+					// http://webpack.github.io/docs/webpack-dev-middleware.html
+				}),
 
-        // bundler should be the same as above
-        webpackHotMiddleware(bundler),
-      ],
-    },
+				// bundler should be the same as above
+				webpackHotMiddleware(bundler),
+			],
+		},
 
-    // no need to watch '*.js' here, webpack will take care of it for us,
-    // including full page reloads if HMR won't work
-    files: [
-      'build/public/**/*.css',
-      'build/public/**/*.html',
-      'build/content/**/*.*',
-      'build/templates/**/*.*',
-    ],
-  });
+		// no need to watch '*.js' here, webpack will take care of it for us,
+		// including full page reloads if HMR won't work
+		files: [
+			'build/public/**/*.css',
+			'build/public/**/*.html',
+			'build/content/**/*.*',
+			'build/templates/**/*.*',
+		],
+	});
 });

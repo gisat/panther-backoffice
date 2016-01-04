@@ -4,55 +4,55 @@ import classNames from 'classnames';
 
 @Animate
 export class Dimmable extends Component {
-    static propTypes = {
-        children: React.PropTypes.node,
-        component: React.PropTypes.oneOfType([
-            React.PropTypes.element,
-            React.PropTypes.string
-        ]),
-        defaultClasses: React.PropTypes.bool,
-        page: React.PropTypes.bool,
-        style: React.PropTypes.object
-    };
+		static propTypes = {
+				children: React.PropTypes.node,
+				component: React.PropTypes.oneOfType([
+						React.PropTypes.element,
+						React.PropTypes.string
+				]),
+				defaultClasses: React.PropTypes.bool,
+				page: React.PropTypes.bool,
+				style: React.PropTypes.object
+		};
 
-    static defaultProps = {
-        component: 'div',
-        defaultClasses: true
-    };
+		static defaultProps = {
+				component: 'div',
+				defaultClasses: true
+		};
 
-    constructor(props) {
-        super(props);
-    }
+		constructor(props) {
+				super(props);
+		}
 
-    componentWillMount() {
-        if (this.props.page) {
-            document.body.classList.add('dimmed');
-        }
-    }
+		componentWillMount() {
+				if (this.props.page) {
+						document.body.classList.add('dimmed');
+				}
+		}
 
-    componentWillUnmount() {
-        if (this.props.page) {
-            document.body.classList.remove('dimmed');
-        }
-    }
+		componentWillUnmount() {
+				if (this.props.page) {
+						document.body.classList.remove('dimmed');
+				}
+		}
 
-    render() {
-        return React.createElement(
-            this.props.component,
-            {
-                className: classNames(this.getClasses()),
-                style: this.props.style
-            },
-            this.props.children
-        );
-    }
+		render() {
+				return React.createElement(
+						this.props.component,
+						{
+								className: classNames(this.getClasses()),
+								style: this.props.style
+						},
+						this.props.children
+				);
+		}
 
-    getClasses() {
-        return {
-            ui: this.props.defaultClasses,
-            active: this.props.defaultClasses,
-            dimmer: this.props.defaultClasses,
-            page: this.props.page
-        };
-    }
+		getClasses() {
+				return {
+						ui: this.props.defaultClasses,
+						active: this.props.defaultClasses,
+						dimmer: this.props.defaultClasses,
+						page: this.props.page
+				};
+		}
 }

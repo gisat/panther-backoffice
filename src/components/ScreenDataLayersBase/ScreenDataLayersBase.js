@@ -7,22 +7,22 @@ import ConfigDataLayer from '../ConfigDataLayer';
 
 @withStyles(styles)
 class ScreenDataLayersBase extends Component{
-  render() {
-    
+	render() {
+
 		return (
-      <div>
-        <div className="screen-setter"><div>
+			<div>
+				<div className="screen-setter"><div>
 					<SelectorDataLayer disabled={this.props.disabled}/>
 				</div></div>
 				<div className="screen-content"><div>
-					
-					<ConfigDataLayer disabled={this.props.disabled} />
-					
-				</div></div>
-      </div>
-    );
 
-  }
+					<ConfigDataLayer disabled={this.props.disabled} />
+
+				</div></div>
+			</div>
+		);
+
+	}
 }
 
 export default ScreenDataLayersBase;

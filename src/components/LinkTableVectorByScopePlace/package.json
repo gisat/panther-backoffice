@@ -1,6 +1,6 @@
 {
-  "name": "LinkTableVectorByScopePlace",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./LinkTableVectorByScopePlace.js"
+	"name": "LinkTableVectorByScopePlace",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./LinkTableVectorByScopePlace.js"
 }

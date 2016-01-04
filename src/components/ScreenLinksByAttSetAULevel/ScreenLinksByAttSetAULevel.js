@@ -7,20 +7,19 @@ import ConfigLinksByAttSetAULevel from '../ConfigLinksByAttSetAULevel';
 
 @withStyles(styles)
 class ScreenLinksByAttSetAULevel extends Component{
-  render() {
-    return (
-      <div>
-        <div className="screen-setter"><div>
+render() {
+		return (
+			<div>
+				<div className="screen-setter"><div>
 					<h2>Data source selection</h2>
 					<SelectorAttSetAULevel />
 				</div></div>
 				<div className="screen-content"><div>
 					<ConfigLinksByAttSetAULevel />
 				</div></div>
-      </div>
-    );
-
-  }
+			</div>
+		);
+	}
 }
 
 export default ScreenLinksByAttSetAULevel;

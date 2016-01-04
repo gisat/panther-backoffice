@@ -11,16 +11,16 @@ import { Form, Fields, Field, Table } from '../SEUI/collections';
 @withStyles(styles)
 class LinkTableVectorByScopePlace extends Component {
 
-  static contextTypes = {
-    onSetTitle: PropTypes.func.isRequired,
-  };
+	static contextTypes = {
+		onSetTitle: PropTypes.func.isRequired,
+	};
 
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			example: "Nothing is happening.",
- 			vectorLayers: [
+			vectorLayers: [
 			{
 				key: 16,
 				name: "Land cover",
@@ -128,25 +128,25 @@ class LinkTableVectorByScopePlace extends Component {
 		};
 	}
 
-  openScreenExample(idLayer,idAttSet) {
+	openScreenExample(idLayer,idAttSet) {
 		this.state.example = "Clicked on " + idLayer + ", " + idAttSet;
 	}
 
 	componentDidMount() {
 
-    $("#LinkTableVectorByScopePlace td.selectable").each(function() {
+		$("#LinkTableVectorByScopePlace td.selectable").each(function() {
 			$(this).focusin(function() {
-      	$(this).addClass("focus");
-    	});
-    	$(this).focusout(function() {
-      	$(this).removeClass("focus");
-    	});
+				$(this).addClass("focus");
+			});
+			$(this).focusout(function() {
+				$(this).removeClass("focus");
+			});
 		});
-  }
+	}
 
 	render() {
 
-  	var thisComponent = this;
+		var thisComponent = this;
 
 
 		/* how many max attsets under one layer? */
@@ -175,7 +175,7 @@ class LinkTableVectorByScopePlace extends Component {
 				}
 
 				return (
-					<span 
+					<span
 						className={periodClassName}
 						key={"period-" + period.key}
 					>
@@ -195,9 +195,9 @@ class LinkTableVectorByScopePlace extends Component {
 			else {
 				tdLayerClassName += " warning";
 			}
-			
+
 			var layerHeaderElement = (
-				<td 
+				<td
 					className="header"
 					key="header"
 				>
@@ -205,7 +205,7 @@ class LinkTableVectorByScopePlace extends Component {
 				</td>
 			);
 			var layerPeriodsElement = (
-				<td 
+				<td
 					className={tdLayerClassName}
 					key={"layer-" + vectorLayer.key + "-periods"}
 				>
@@ -221,11 +221,11 @@ class LinkTableVectorByScopePlace extends Component {
 					</a>
 				</td>
 			);
-			
+
 			layerRowChildren.push(layerHeaderElement,layerPeriodsElement);
-			
+
 			for (var layerAttSet of vectorLayer.attSets) {
-				
+
 				var attSetHeaderElement = React.createElement('td', {className: 'header', key: layerAttSet.key}, layerAttSet.name);
 
 					var dataNoneCount = 0;
@@ -242,7 +242,7 @@ class LinkTableVectorByScopePlace extends Component {
 						}
 
 						return (
-							<span 
+							<span
 								className={periodClassName}
 								key={"period-" + period.key}
 							>
@@ -262,9 +262,9 @@ class LinkTableVectorByScopePlace extends Component {
 					else {
 						tdClassName += " warning";
 					}
-					
+
 					var attSetPeriodsElement = (
-						<td 
+						<td
 							className={tdClassName}
 							key={"layer-" + vectorLayer.key + "-attset-" + layerAttSet.key + "-periods"}
 						>
@@ -280,7 +280,7 @@ class LinkTableVectorByScopePlace extends Component {
 							</a>
 						</td>
 					);
-										
+
 					layerRowChildren.push(attSetHeaderElement,attSetPeriodsElement);
 			}
 
@@ -289,12 +289,12 @@ class LinkTableVectorByScopePlace extends Component {
 			if(additionalColumns) {
 				additionalColumnsInsert = <td colSpan={additionalColumns} key="additionalcolumns"></td>;
 			}
-			
+
 			layerRowChildren.push(additionalColumnsInsert);
 
 			return React.createElement('tr', {key: "vectorlayer-" + vectorLayer.key}, layerRowChildren);
-			
-    });
+
+		});
 
 		return (
 
@@ -313,14 +313,14 @@ class LinkTableVectorByScopePlace extends Component {
 				{vectorLayersInsert}
 			</tbody>
 		</Table>
-		
+
 		<div className="note">
 			Set available layers in <UIScreenButton>scope settings</UIScreenButton>
 		</div>
-		
+
 		</div>
-    );
-  }
+		);
+	}
 
 }
 

@@ -56,7 +56,7 @@ class MetadataListLayerVector extends Component{
 		var thisComponent = this;
 
 		var itemsInsert = LAYERTEMPLATES.map(function (item) {
-      return (
+			return (
 				<a
 					className={thisComponent.state.selectedTemplate==item.key ? 'puma-item template screen-opener' : 'puma-item template'}
 					href="#"
@@ -65,15 +65,15 @@ class MetadataListLayerVector extends Component{
 							thisComponent.state.itemType,
 							item.key
 						)}
-          key={"vectorlayertemplate-" + item.key}
+					key={"vectorlayertemplate-" + item.key}
 				>
 					<span>{item.name}</span>
 				</a>
-      );
-    });
+			);
+		});
 
 		return (
-      <div>
+			<div>
 
 
 
@@ -92,9 +92,9 @@ class MetadataListLayerVector extends Component{
 				{itemsInsert}
 
 			</div>
-    );
+		);
 
-  }
+	}
 }
 
 export default MetadataListLayerVector;

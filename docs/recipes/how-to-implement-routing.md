@@ -25,20 +25,20 @@ import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
 const routes = {
-  '/':      <Layout><HomePage /></Layout>,
-  '/about': <Layout><AboutPage /></Layout>
+	'/':      <Layout><HomePage /></Layout>,
+	'/about': <Layout><AboutPage /></Layout>
 };
 
 const container = document.getElementById('app');
 
 function render() {
-  try {
-    const path = window.location.hash.substr(1) || '/';
-    const component = routes[path] || <NotFoundPage />;
-    React.render(component, container);
-  } catch (err) {
-    React.render(<ErrorPage {...err} />, container);
-  }
+	try {
+		const path = window.location.hash.substr(1) || '/';
+		const component = routes[path] || <NotFoundPage />;
+		React.render(component, container);
+	} catch (err) {
+		React.render(<ErrorPage {...err} />, container);
+	}
 }
 
 window.addEventListener('hashchange', () => render());
@@ -59,27 +59,27 @@ import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
 const routes = {
-  '/': async () => {
-    const data = await http.get('/api/data/home');
-    return <Layout><HomePage {...data} /></Layout>
-  },
-  '/about': async () => {
-    const data = await http.get('/api/data/about');
-    return <Layout><AboutPage {...data} /></Layout>;
-  }
+	'/': async () => {
+		const data = await http.get('/api/data/home');
+		return <Layout><HomePage {...data} /></Layout>
+	},
+	'/about': async () => {
+		const data = await http.get('/api/data/about');
+		return <Layout><AboutPage {...data} /></Layout>;
+	}
 };
 
 const container = document.getElementById('app');
 
 async function render() {
-  try {
-    const path = window.location.hash.substr(1) || '/';
-    const route = routes[path];
-    const component = route ? await route() : <NotFoundPage />;
-    React.render(component, container);
-  } catch (err) {
-    React.render(<ErrorPage {...err} />, container);
-  }
+	try {
+		const path = window.location.hash.substr(1) || '/';
+		const route = routes[path];
+		const component = route ? await route() : <NotFoundPage />;
+		React.render(component, container);
+	} catch (err) {
+		React.render(<ErrorPage {...err} />, container);
+	}
 }
 
 window.addEventListener('hashchange', () => render());
@@ -105,23 +105,23 @@ import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
 const router = new Router(on => {
-  on('/products', async () => {
-    const data = await http.get('/api/products');
-    return <Layout><ProductListing {...data} /></Layout>
-  });
-  on('/products/:id', async (req) => {
-    const data = await http.get(`/api/products/${req.params.id}`);
-    return <Layout><ProductInfo {...data} /></Layout>;
-  });
+	on('/products', async () => {
+		const data = await http.get('/api/products');
+		return <Layout><ProductListing {...data} /></Layout>
+	});
+	on('/products/:id', async (req) => {
+		const data = await http.get(`/api/products/${req.params.id}`);
+		return <Layout><ProductInfo {...data} /></Layout>;
+	});
 }]);
 
 const container = document.getElementById('app');
 
 async function render() {
-  const state = { path: window.location.hash.substr(1) || '/' };
-  await router.dispatch(state, component => {
-    React.render(component, container);
-  });
+	const state = { path: window.location.hash.substr(1) || '/' };
+	await router.dispatch(state, component => {
+		React.render(component, container);
+	});
 }
 
 window.addEventListener('hashchange', () => render());

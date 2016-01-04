@@ -5,22 +5,22 @@ import { Icon, Button } from '../SEUI/elements';
 
 
 class UIScreenButton extends Component{
-	
+
 	static propTypes = {
 		children: React.PropTypes.node,
 		className: React.PropTypes.string
 	};
-	
-  constructor(props) {
+
+	constructor(props) {
 		super(props);
 	}
-	
+
 	render() {
-    var { className, ...other } = this.props;
-    return (
-      <Button
+		var { className, ...other } = this.props;
+		return (
+			<Button
 				{...other}
-				basic 
+				basic
 				className={classNames("puma-screen-button",className)}
 			>
 				{this.props.children}
@@ -29,8 +29,8 @@ class UIScreenButton extends Component{
 					className="puma"
 				/>
 			</Button>
-    );
-  }
+		);
+	}
 
 }
 

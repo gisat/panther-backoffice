@@ -1,6 +1,6 @@
 {
-  "name": "ConfigDataLayer",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./ConfigDataLayer.js"
+	"name": "ConfigDataLayer",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ConfigDataLayer.js"
 }

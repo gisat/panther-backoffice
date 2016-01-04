@@ -1,6 +1,6 @@
 {
-  "name": "PageDashboard",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./PageDashboard.js"
+	"name": "PageDashboard",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./PageDashboard.js"
 }

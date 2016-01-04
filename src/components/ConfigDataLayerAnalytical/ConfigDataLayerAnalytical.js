@@ -45,7 +45,7 @@ const PERIODS = [
 
 @withStyles(styles)
 class ConfigDataLayerAnalytical extends Component{
-	
+
 	constructor(props) {
 		super(props);
 
@@ -54,7 +54,7 @@ class ConfigDataLayerAnalytical extends Component{
 			valuesPlaces: [2,3],
 			valueLevel: 2
 		};
-		
+
 	}
 
 
@@ -73,34 +73,34 @@ class ConfigDataLayerAnalytical extends Component{
 		}
 		return newValues;
 	}
-	
+
 	onChangeScope (value, values) {
 		values = this.handleNewObjects(values, SCOPES);
 		this.setState({
 			valueScope: values
 		});
 	}
-	
+
 	onChangePlaces (value, values) {
 		values = this.handleNewObjects(values, PLACES);
 		this.setState({
 			valuesPlaces: values
 		});
 	}
-	
+
 	onChangeLevel (value, values) {
 		values = this.handleNewObjects(values, AULEVELS);
 		this.setState({
 			valueLevel: values
 		});
-	}	
-	
-	
+	}
+
+
 	onObjectClick (value, event) {
 		console.log("yay! " + value["key"]);
 	}
-	
-	
+
+
 	scopeOptionFactory (inputValue) {
 		var newOption = {
 				key: inputValue,
@@ -131,26 +131,26 @@ class ConfigDataLayerAnalytical extends Component{
 			};
 		return newOption;
 	}
-	
+
 	componentDidMount() {
-		
-		
-		
+
+
+
 	}
-	
+
 	render() {
-		
+
 		var selectInputProps = {
 			className: "" //"ui input"
 		};
-		
+
 		return (
-      <div>
-				
+			<div>
+
 				<div className="frame-input-wrapper">
 						<label className="container">
 							Scope
-							<UIObjectSelect 
+							<UIObjectSelect
 								onChange={this.onChangeScope.bind(this)}
 								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
@@ -163,11 +163,11 @@ class ConfigDataLayerAnalytical extends Component{
 							/>
 						</label>
 				</div>
-					
+
 				<div className="frame-input-wrapper">
 						<label className="container">
 							Places
-							<UIObjectSelect 
+							<UIObjectSelect
 								multi
 								onChange={this.onChangePlaces.bind(this)}
 								onOptionLabelClick={this.onObjectClick.bind(this)}
@@ -181,11 +181,11 @@ class ConfigDataLayerAnalytical extends Component{
 							/>
 						</label>
 				</div>
-				
+
 				<div className="frame-input-wrapper">
 						<label className="container">
 							Level
-							<UIObjectSelect 
+							<UIObjectSelect
 								onChange={this.onChangeLevel.bind(this)}
 								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
@@ -198,7 +198,7 @@ class ConfigDataLayerAnalytical extends Component{
 							/>
 						</label>
 				</div>
-				
+
 				<h3>Tabular data</h3>
 				<Table celled className="fixed" id="ConfigDataLayerAnalyticalColumnTable">
 					<thead>
@@ -213,25 +213,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">C_L1_1</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -240,25 +240,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">C_L2_11</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -267,25 +267,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">C_L2_12</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -294,25 +294,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">C_L2_14</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -321,25 +321,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">ID_0</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value="P"
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -348,25 +348,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">ID_1_CC</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -375,25 +375,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">ID_2</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value="I"
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -402,25 +402,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">NAME_0</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -429,25 +429,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">NAME_1_CC</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -456,25 +456,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">NAME_2</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value="N"
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -483,25 +483,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">name</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -510,25 +510,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">Shape_Leng</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -537,25 +537,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">Shape_Area</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -564,25 +564,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">SUM_pop_00</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -591,25 +591,25 @@ class ConfigDataLayerAnalytical extends Component{
 						<tr>
 							<td className="header">SUM_pop_10</td>
 							<td className="allowOverflow resetui">
-								<Select 
+								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={DESTINATIONS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
-								<UIObjectSelect 
+								<UIObjectSelect
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									multi 
+									multi
 									options={PERIODS}
-									valueKey="key" 
-									labelKey="name" 
-									//inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="name"
+									//inputProps={selectInputProps}
 									value=""
 								/>
 							</td>
@@ -617,16 +617,16 @@ class ConfigDataLayerAnalytical extends Component{
 
 					</tbody>
 				</Table>
-				
-				
+
+
 				<IconButton name="check" basic color="blue">
 					Save
 				</IconButton>
-				
-			</div>
-    );
 
-  }
+			</div>
+		);
+
+	}
 }
 
 export default ConfigDataLayerAnalytical;

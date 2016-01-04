@@ -1,6 +1,6 @@
 {
-  "name": "ScreenContainer",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./ScreenContainer.js"
+	"name": "ScreenContainer",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenContainer.js"
 }

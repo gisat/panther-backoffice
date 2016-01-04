@@ -1,6 +1,6 @@
 {
-  "name": "ScreenMetadataBase",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./ScreenMetadataBase.js"
+	"name": "ScreenMetadataBase",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenMetadataBase.js"
 }

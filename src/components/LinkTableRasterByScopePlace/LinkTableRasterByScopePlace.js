@@ -10,17 +10,17 @@ import { Form, Fields, Field, Table } from '../SEUI/collections';
 
 @withStyles(styles)
 class LinkTableRasterByScopePlace extends Component {
-	
+
 	static contextTypes = {
-    onSetTitle: PropTypes.func.isRequired,
-  };
+		onSetTitle: PropTypes.func.isRequired,
+	};
 
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			example: "Nothing is happening.",
- 			rasterLayers: [
+			rasterLayers: [
 			{
 				key: 8,
 				name: "Population grid",
@@ -74,25 +74,25 @@ class LinkTableRasterByScopePlace extends Component {
 		};
 	}
 
-  openScreenExample(idLayer) {
+	openScreenExample(idLayer) {
 		this.state.example = "Clicked on " + idLayer;
 	}
 
 	componentDidMount() {
 
-    $("#LinkTableRasterByScopePlace td.selectable").each(function() {
+		$("#LinkTableRasterByScopePlace td.selectable").each(function() {
 			$(this).focusin(function() {
-      	$(this).addClass("focus");
-    	});
-    	$(this).focusout(function() {
-      	$(this).removeClass("focus");
-    	});
+				$(this).addClass("focus");
+			});
+			$(this).focusout(function() {
+				$(this).removeClass("focus");
+			});
 		});
-  }
+	}
 
 	render() {
 
-  	var thisComponent = this;
+		var thisComponent = this;
 
 		var rasterLayersInsert = this.state.rasterLayers.map(function (rasterLayer) {
 
@@ -110,7 +110,7 @@ class LinkTableRasterByScopePlace extends Component {
 				}
 
 				return (
-					<span 
+					<span
 						className={periodClassName}
 						key={"period-" + period.key}
 					>
@@ -151,8 +151,8 @@ class LinkTableRasterByScopePlace extends Component {
 						</a>
 					</td>
 				</tr>
-      );
-    });
+			);
+		});
 
 		return (
 
@@ -173,16 +173,16 @@ class LinkTableRasterByScopePlace extends Component {
 				{rasterLayersInsert}
 			</tbody>
 		</Table>
-		
+
 		<div className="note">
 			Set available layers in <UIScreenButton>scope settings</UIScreenButton>
 		</div>
-		
-		</div>
-    );
 
-  }
-	
+		</div>
+		);
+
+	}
+
 }
 
 export default LinkTableRasterByScopePlace;

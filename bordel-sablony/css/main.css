@@ -11,16 +11,16 @@ html {
 }
 
 .clearfix {
-  *zoom: 1;
+	*zoom: 1;
 }
 .clearfix:before,
 .clearfix:after {
-  display: table;
-  content: "";
-  line-height: 0;
+	display: table;
+	content: "";
+	line-height: 0;
 }
 .clearfix:after {
-  clear: both;
+	clear: both;
 }
 
 /* ===== base & typography ===== */
@@ -78,7 +78,7 @@ a, a:link, a i {
 
 
 h1, h2, h3, h4, h5 {
-	
+
 }
 h1 {
 	font-size:3rem;
@@ -162,7 +162,7 @@ h3 {
 	height: 100%;
 	overflow: auto;
 	position: absolute;
-	
+
 	background-color: #aaa;
 }
 .screen > div {
@@ -196,7 +196,7 @@ todo hex colours, button icons */
 	background: rgba(0,0,0,.1);
 }
 .screen::-webkit-scrollbar-thumb {
-	background: rgba(0,0,0,.15); 
+	background: rgba(0,0,0,.15);
 }
 .screen::-webkit-scrollbar-thumb:hover, .screen::-webkit-scrollbar-button:hover {
 	background: rgba(60,30,0,.2);
@@ -205,7 +205,7 @@ todo hex colours, button icons */
 	background: rgba(40,35,20,.5);
 }
 .screen::-webkit-scrollbar-thumb:window-inactive {
-	background: rgba(0,0,0,.075); 
+	background: rgba(0,0,0,.075);
 }
 
 .beside {
@@ -222,7 +222,7 @@ todo hex colours, button icons */
 	}
 }
 @media screen and (max-width:65.99999em) {
-	
+
 	#menu {
 		width: 100%;
 		height:3.75rem;
@@ -234,7 +234,7 @@ todo hex colours, button icons */
 		border-right: 1px solid #333;
 		/*padding: 0 .3125rem;*/
 	}
-	
+
 	#content {
 		position: relative;
 		height: calc(100% - 3.75rem);
@@ -251,11 +251,11 @@ todo hex colours, button icons */
 
 }
 @media screen and (min-width:66em) {
-	
+
 	body {
-		
+
 	}
-	
+
 	#menu {
 		position: relative;
 		z-index: 20;
@@ -263,7 +263,7 @@ todo hex colours, button icons */
 		height: 100%;
 		overflow: hidden;
 		box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.7);
-		
+
 		transition: width .3s .2s ease-in-out, height .3s .5s ease-in-out;
 		/* height added for responsive resizing */
 	}
@@ -282,7 +282,7 @@ todo hex colours, button icons */
 	#menu li {
 		border-bottom: 1px solid #333;
 	}
-	
+
 	#content {
 		position: absolute;
 		z-index: 10;
@@ -296,33 +296,33 @@ todo hex colours, button icons */
 		width: 100%;
 		/*height: 100%;*/
 	}
-	
+
 	.screen {
 		position: relative;
 		width: 5rem;
 		overflow: hidden;
-		
+
 		box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.7);
-		
+
 		transition: all .5s ease-in-out;
 		transition-property: flex-grow, background-color, width;
-		
+
 		flex-grow: 0.0000001;
 	}
 
 	.screen > div {
 		width: 50rem;
 	}
-	
-	
+
+
 	.screen.limited.lim30 {
 		max-width: 31rem;
 	}
 	.screen.limited.lim30 > div {
 		width: 30rem;
 	}
-	
-	
+
+
 	/* .screen behaviour */
 	.screen.open, .screen.opening {
 		flex-grow: 1;
@@ -330,7 +330,7 @@ todo hex colours, button icons */
 		/* move scrollbar from shadow - unused with custom scrollbars */
 	}
 	.screen.open {
-		overflow-y: auto; 
+		overflow-y: auto;
 		/* overflow-x blocked (only here, at large screen sizes), only hides elements that count on it (.beside) */
 	}
 	.screen:last-child {
@@ -361,11 +361,11 @@ todo hex colours, button icons */
 	}
 	.screen.retracted:hover > div::after {
 		background: rgba(0,0,0,.33);
-	}*/	
+	}*/
 	.screen.closed {
 		width:0;
 	}
-	
+
 }
 
 @media screen and (max-width:74.99999em) {

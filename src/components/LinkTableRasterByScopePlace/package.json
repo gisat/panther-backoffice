@@ -1,6 +1,6 @@
 {
-  "name": "LinkTableRasterByScopePlace",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./LinkTableRasterByScopePlace.js"
+	"name": "LinkTableRasterByScopePlace",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./LinkTableRasterByScopePlace.js"
 }

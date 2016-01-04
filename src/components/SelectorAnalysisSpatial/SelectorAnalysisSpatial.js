@@ -24,7 +24,7 @@ class SelectorAnalysisSpatial extends Component{
 
 		this.state = {
 			idAnalysisSpatial: this.props.id,
-      data: this.props.data
+			data: this.props.data
 		};
 
 		console.log("Selector constructor");
@@ -47,9 +47,9 @@ class SelectorAnalysisSpatial extends Component{
 			className: "" //"ui input"
 		};
 		return (
-      <div>
-        <p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
-        <div className="selector">
+			<div>
+				<p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
+				<div className="selector">
 					<div className="input">
 						<label className="container">
 							<Select
@@ -64,10 +64,10 @@ class SelectorAnalysisSpatial extends Component{
 						</label>
 					</div>
 				</div>
-      </div>
-    );
+			</div>
+		);
 
-  }
+	}
 }
 
 

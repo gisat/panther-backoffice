@@ -1,6 +1,6 @@
 {
-  "name": "ScreenMetadataLayerVector",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./ScreenMetadataLayerVector.js"
+	"name": "ScreenMetadataLayerVector",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenMetadataLayerVector.js"
 }

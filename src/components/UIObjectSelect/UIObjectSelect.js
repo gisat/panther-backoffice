@@ -1,5 +1,5 @@
 /* disable some rules until we refactor more completely; fixing them now would
-   cause conflicts with some open PRs unnecessarily. */
+	 cause conflicts with some open PRs unnecessarily. */
 /* eslint react/jsx-sort-prop-types: 0, react/sort-comp: 0, react/prop-types: 0 */
 
 var React = require('react');
@@ -391,7 +391,7 @@ var UIObjectSelect = React.createClass({
 		}
 		event.stopPropagation();
 		event.preventDefault();
-		
+
 		// UIObjectSelect: if single select with value and own click function, ignore it
 		if (!this.props.multi && !!this.props.onOptionLabelClick && !!this.state.values.length) {
 			return;
@@ -529,7 +529,7 @@ var UIObjectSelect = React.createClass({
 		}
 		event.preventDefault();
 	},
-	
+
 	// handle continuous key hold
 	handleKeyUp (event) {
 		this._lastKeyDown = null;
@@ -867,7 +867,7 @@ var UIObjectSelect = React.createClass({
 						key={0}
 						option={val}
 						renderer={this.props.valueRenderer}
-						disabled={this.props.disabled} 
+						disabled={this.props.disabled}
 					/>
 				);
 			} else if (!this.props.multi && !!this.props.onOptionLabelClick && !!this.state.values.length) {

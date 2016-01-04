@@ -9,8 +9,8 @@ import ConfigAnalysisSpatial from '../ConfigAnalysisSpatial';
 class ScreenAnalysisSpatial extends Component{
 
 	static contextTypes = {
-    onSetScreenData: PropTypes.func.isRequired
-  };
+		onSetScreenData: PropTypes.func.isRequired
+	};
 
 	constructor(props) {
 		super(props);
@@ -30,10 +30,10 @@ class ScreenAnalysisSpatial extends Component{
 		return this.props.parentUrl + "/analysis-spatial-" + this.state.idAnalysisSpatial;
 	}
 
-  render() {
+	render() {
 		return (
-      <div>
-        <a onClick={this.context.onSetScreenData("analyses3", {nastaveno: "jo"})}>nastav</a>
+			<div>
+				<a onClick={this.context.onSetScreenData("analyses3", {nastaveno: "jo"})}>nastav</a>
 				<div className="screen-setter"><div>
 					<h2>Analysis</h2>
 					<SelectorAnalysisSpatial id={this.state.idAnalysisSpatial} onChange={this.onChangeId.bind(this)} data={this.props.data} />
@@ -42,10 +42,10 @@ class ScreenAnalysisSpatial extends Component{
 					<p style={{backgroundColor: "yellow"}}>getUrl: {this.getUrl()}</p>
 					<ConfigAnalysisSpatial id={this.state.idAnalysisSpatial} data={this.props.data} />
 				</div></div>
-      </div>
-    );
+			</div>
+		);
 
-  }
+	}
 }
 
 export default ScreenAnalysisSpatial;

@@ -40,7 +40,7 @@ const PERIODS = [
 
 @withStyles(styles)
 class ConfigDataLayerRaster extends Component{
-	
+
 	constructor(props) {
 		super(props);
 
@@ -50,9 +50,9 @@ class ConfigDataLayerRaster extends Component{
 			valuesPlaces: [2,3],
 			valuesPeriods: [2]
 		};
-		
+
 	}
-	
+
 	handleNewObjects(values, store) {
 		var newValues = [];
 		for (var singleValue of values) {
@@ -68,41 +68,41 @@ class ConfigDataLayerRaster extends Component{
 		}
 		return newValues;
 	}
-	
+
 	onChangeTemplate (value, values) {
 		values = this.handleNewObjects(values, LAYERTEMPLATES);
 		this.setState({
 			valueTemplate: values
 		});
 	}
-	
+
 	onChangeScope (value, values) {
 		values = this.handleNewObjects(values, SCOPES);
 		this.setState({
 			valueScope: values
 		});
 	}
-	
+
 	onChangePlaces (value, values) {
 		values = this.handleNewObjects(values, PLACES);
 		this.setState({
 			valuesPlaces: values
 		});
 	}
-	
+
 	onChangePeriods (value, values) {
 		values = this.handleNewObjects(values, PERIODS);
 		this.setState({
 			valuesPeriods: values
 		});
-	}	
-	
-	
+	}
+
+
 	onObjectClick (value, event) {
 		console.log("yay! " + value["key"]);
 	}
-	
-	
+
+
 	scopeOptionFactory (inputValue) {
 		var newOption = {
 				key: inputValue,
@@ -133,28 +133,28 @@ class ConfigDataLayerRaster extends Component{
 			};
 		return newOption;
 	}
-	
-	
+
+
 	componentDidMount() {
-		
-		
-		
+
+
+
 	}
-	
+
 	render() {
-		
+
 		var selectInputProps = {
 			className: "" //"ui input"
 		};
-		
+
 		return (
-      <div>
-					
-				
+			<div>
+
+
 				<div className="frame-input-wrapper">
 						<label className="container">
 							Layer template (Name)
-							<UIObjectSelect 
+							<UIObjectSelect
 								onChange={this.onChangeTemplate.bind(this)}
 								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
@@ -168,11 +168,11 @@ class ConfigDataLayerRaster extends Component{
 							/>
 						</label>
 				</div>
-				
+
 				<div className="frame-input-wrapper">
 						<label className="container">
 							Scope
-							<UIObjectSelect 
+							<UIObjectSelect
 								onChange={this.onChangeScope.bind(this)}
 								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
@@ -185,11 +185,11 @@ class ConfigDataLayerRaster extends Component{
 							/>
 						</label>
 				</div>
-					
+
 				<div className="frame-input-wrapper">
 						<label className="container">
 							Places
-							<UIObjectSelect 
+							<UIObjectSelect
 								multi
 								onChange={this.onChangePlaces.bind(this)}
 								onOptionLabelClick={this.onObjectClick.bind(this)}
@@ -203,12 +203,12 @@ class ConfigDataLayerRaster extends Component{
 							/>
 						</label>
 				</div>
-				
-				
+
+
 				<div className="frame-input-wrapper">
 						<label className="container">
 							Imaging/reference periods
-							<UIObjectSelect 
+							<UIObjectSelect
 								multi
 								onChange={this.onChangePeriods.bind(this)}
 								onOptionLabelClick={this.onObjectClick.bind(this)}
@@ -222,15 +222,15 @@ class ConfigDataLayerRaster extends Component{
 							/>
 						</label>
 				</div>
-				
+
 				<IconButton name="check" basic color="blue">
 					Save
 				</IconButton>
-				
-			</div>
-    );
 
-  }
+			</div>
+		);
+
+	}
 }
 
 export default ConfigDataLayerRaster;

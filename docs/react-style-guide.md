@@ -36,14 +36,14 @@ Use [BEM](https://bem.info/) approach for naming CSS classes. See also [SUIT CSS
 ```jsx
 // JSX
 <nav className="Navigation">
-  <ul className="Navigation-items">
-    <li className="Navigation-item Navigation-item--selected">
-      <a className="Navigation-link" href="/products">Products</a>
-    </li>
-    <li className="Navigation-item">
-      <a className="Navigation-link" href="/services">Services</a>
-    </li>
-  </ul>
+	<ul className="Navigation-items">
+		<li className="Navigation-item Navigation-item--selected">
+			<a className="Navigation-link" href="/products">Products</a>
+		</li>
+		<li className="Navigation-item">
+			<a className="Navigation-link" href="/services">Services</a>
+		</li>
+	</ul>
 </nav>
 ```
 
@@ -52,38 +52,38 @@ Use [BEM](https://bem.info/) approach for naming CSS classes. See also [SUIT CSS
 @import '../variables.css';
 
 .Navigation {
-  &-items {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    text-align: center;
-  }
+	&-items {
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+		text-align: center;
+	}
 
-  &-item {
-    display: inline-block;
-    vertical-align: top;
-  }
+	&-item {
+		display: inline-block;
+		vertical-align: top;
+	}
 
-  &-link {
-    display: block;
-    padding: 0 25px;
-    outline: 0;
-    border: 0;
-    color: @default-color;
-    text-decoration: none;
-    line-height: 25px;
-    transition: background-color .3s ease;
+	&-link {
+		display: block;
+		padding: 0 25px;
+		outline: 0;
+		border: 0;
+		color: @default-color;
+		text-decoration: none;
+		line-height: 25px;
+		transition: background-color .3s ease;
 
-    &,
-    .Navigation-items:hover & {
-      background: var(--default-bg-color);
-    }
+		&,
+		.Navigation-items:hover & {
+			background: var(--default-bg-color);
+		}
 
-    &--selected,
-    .Navigation-items:hover &:hover {
-      background: var(--active-bg-color);
-    }
-  }
+		&--selected,
+		.Navigation-items:hover &:hover {
+			background: var(--active-bg-color);
+		}
+	}
 }
 ```
 
@@ -101,33 +101,33 @@ import React, { Component } from 'react';
 
 class SampleComponent extends Component {
 
-  static propTypes = { ... };
+	static propTypes = { ... };
 
-  static defaultProps = { ... };
+	static defaultProps = { ... };
 
-  constructor() {
-    super();
-    this.state = { ... };
-  }
+	constructor() {
+		super();
+		this.state = { ... };
+	}
 
-  componentDidMount() {
-    // ...
-  }
+	componentDidMount() {
+		// ...
+	}
 
-  componentWillUnmount() {
-    // ...
-  }
+	componentWillUnmount() {
+		// ...
+	}
 
-  shouldComponentUpdate() {
-    // ...
-  }
+	shouldComponentUpdate() {
+		// ...
+	}
 
-  render() {
-    return (
-      <div className="SampleComponent">
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className="SampleComponent">
+			</div>
+		);
+	}
 
 }
 
@@ -144,42 +144,42 @@ import React, { Component } from 'react';
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 
 function withViewport(ComposedComponent) {
-  return class WithViewport extends Component {
+	return class WithViewport extends Component {
 
-    constructor() {
-      super();
+		constructor() {
+			super();
 
-      this.state = {
-        viewport: canUseDOM ?
-          {width: window.innerWidth, height: window.innerHeight} :
-          {width: 1366, height: 768} // Default size for server-side rendering
-      };
-      this.handleResize = this.handleResize.bind(this);
-    }
+			this.state = {
+				viewport: canUseDOM ?
+					{width: window.innerWidth, height: window.innerHeight} :
+					{width: 1366, height: 768} // Default size for server-side rendering
+			};
+			this.handleResize = this.handleResize.bind(this);
+		}
 
-    componentDidMount() {
-      window.addEventListener('resize', this.handleResize);
-      window.addEventListener('orientationchange', this.handleResize);
-    }
+		componentDidMount() {
+			window.addEventListener('resize', this.handleResize);
+			window.addEventListener('orientationchange', this.handleResize);
+		}
 
-    componentWillUnmount() {
-      window.removeEventListener('resize', this.handleResize);
-      window.removeEventListener('orientationchange', this.handleResize);
-    }
+		componentWillUnmount() {
+			window.removeEventListener('resize', this.handleResize);
+			window.removeEventListener('orientationchange', this.handleResize);
+		}
 
-    render() {
-      return <ComposedComponent {...this.props} viewport={this.state.viewport}/>;
-    }
+		render() {
+			return <ComposedComponent {...this.props} viewport={this.state.viewport}/>;
+		}
 
-    handleResize() {
-      let viewport = {width: window.innerWidth, height: window.innerHeight};
-      if (this.state.viewport.width !== viewport.width ||
-        this.state.viewport.height !== viewport.height) {
-        this.setState({viewport: viewport});
-      }
-    }
+		handleResize() {
+			let viewport = {width: window.innerWidth, height: window.innerHeight};
+			if (this.state.viewport.width !== viewport.width ||
+				this.state.viewport.height !== viewport.height) {
+				this.setState({viewport: viewport});
+			}
+		}
 
-  };
+	};
 };
 
 export default withViewport;
@@ -192,10 +192,10 @@ import withViewport from './withViewport';
 
 @withViewport
 class MyComponent {
-  render() {
-    let { width, height } = this.props.viewport;
-    return <div>{'Viewport: ' + width + 'x' + height}</div>;
-  }
+	render() {
+		let { width, height } = this.props.viewport;
+		return <div>{'Viewport: ' + width + 'x' + height}</div>;
+	}
 }
 
 export default MyComponent;

@@ -94,7 +94,7 @@ class ScreenAnalysisSpatialRules extends Component{
 			valueResultAttSet: [352],
 			valueFilterAttSet: [28],
 			themesString: "",
-      data: this.props.data
+			data: this.props.data
 		};
 
 	}
@@ -148,11 +148,11 @@ class ScreenAnalysisSpatialRules extends Component{
 	}
 
 
-  render() {
-    return (
-      <div>
-        <p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
-        <div className="screen-content"><div>
+	render() {
+		return (
+			<div>
+				<p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
+				<div className="screen-content"><div>
 
 				<div className="frame-input-wrapper">
 						<label className="container">
@@ -360,10 +360,10 @@ class ScreenAnalysisSpatialRules extends Component{
 					Save
 				</IconButton>
 
-      </div></div></div>
-    );
+			</div></div></div>
+		);
 
-  }
+	}
 }
 
 export default ScreenAnalysisSpatialRules;

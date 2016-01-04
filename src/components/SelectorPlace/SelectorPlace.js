@@ -22,20 +22,20 @@ const PLACES = [
 
 @withStyles(styles)
 class SelectorPlace extends Component{
-  
+
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			value: 4
 		};
-		
+
 	}
-	
+
 	onChange (value) {
 		this.state.value = value;
 	}
-	
+
 //	getPlaces (input, callback) {
 //		alert("baf");
 //		input = input.toLowerCase();
@@ -50,26 +50,26 @@ class SelectorPlace extends Component{
 //			callback(null, data);
 //		}, ASYNC_DELAY);
 //	}
-	
+
 	render() {
-    var selectInputProps = {
+		var selectInputProps = {
 			className: "" //"ui input"
 		};
-		
+
 		return (
-      <div>
-        <div className="selector">
+			<div>
+				<div className="selector">
 					<div className="input-wrapper">
 						<div>
 							<label className="container">
 								Place
-								<Select 
+								<Select
 									onChange={this.onChange.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={PLACES}
-									valueKey="key" 
-									labelKey="place" 
-									inputProps={selectInputProps} 
+									valueKey="key"
+									labelKey="place"
+									inputProps={selectInputProps}
 									value={this.state.value}
 									clearable={false}
 								/>
@@ -83,10 +83,10 @@ class SelectorPlace extends Component{
 						</div>
 					</div>
 				</div>
-      </div>
-    );
+			</div>
+		);
 
-  }
+	}
 }
 
 export default SelectorPlace;

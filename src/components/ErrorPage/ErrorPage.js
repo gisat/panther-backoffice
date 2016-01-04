@@ -7,21 +7,21 @@ import styles from './ErrorPage.css';
 @withStyles(styles)
 class ErrorPage extends Component {
 
-  static contextTypes = {
-    onSetTitle: PropTypes.func.isRequired,
-    onPageNotFound: PropTypes.func.isRequired,
-  };
+	static contextTypes = {
+		onSetTitle: PropTypes.func.isRequired,
+		onPageNotFound: PropTypes.func.isRequired,
+	};
 
-  render() {
-    const title = 'Error';
-    this.context.onSetTitle(title);
-    return (
-      <div>
-        <h1>{title}</h1>
-        <p>Sorry, an critical error occurred on this page.</p>
-      </div>
-    );
-  }
+	render() {
+		const title = 'Error';
+		this.context.onSetTitle(title);
+		return (
+			<div>
+				<h1>{title}</h1>
+				<p>Sorry, an critical error occurred on this page.</p>
+			</div>
+		);
+	}
 
 }
 

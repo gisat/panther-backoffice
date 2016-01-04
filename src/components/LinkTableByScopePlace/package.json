@@ -1,6 +1,6 @@
 {
-  "name": "LinkTableByScopePlace",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./LinkTableByScopePlace.js"
+	"name": "LinkTableByScopePlace",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./LinkTableByScopePlace.js"
 }

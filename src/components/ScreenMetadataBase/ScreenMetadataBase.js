@@ -7,9 +7,9 @@ import MetadataListLayerVector from '../MetadataListLayerVector';
 @withStyles(styles)
 class ScreenMetadataBase extends Component{
 
-  static contextTypes = {
-    onInteraction: PropTypes.func.isRequired
-  };
+	static contextTypes = {
+		onInteraction: PropTypes.func.isRequired
+	};
 
 	constructor(props) {
 		super(props);
@@ -30,8 +30,8 @@ class ScreenMetadataBase extends Component{
 
 
 		return (
-      <div>
-        <div className="screen-content"><div>
+			<div>
+				<div className="screen-content"><div>
 					<h1>Metadata structures</h1>
 
 					<div className="metadata-grid">
@@ -140,11 +140,11 @@ class ScreenMetadataBase extends Component{
 						</div>
 					</div>
 
-        </div></div>
-      </div>
-    );
+				</div></div>
+			</div>
+		);
 
-  }
+	}
 }
 
 export default ScreenMetadataBase;

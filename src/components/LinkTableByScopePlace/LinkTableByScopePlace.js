@@ -11,16 +11,16 @@ import { Form, Fields, Field, Table } from '../SEUI/collections';
 @withStyles(styles)
 class LinkTableByScopePlace extends Component {
 
-  static contextTypes = {
-    onSetTitle: PropTypes.func.isRequired,
-  };
+	static contextTypes = {
+		onSetTitle: PropTypes.func.isRequired,
+	};
 
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			example: "Nothing is happening.",
- 			auLevels: [
+			auLevels: [
 				{
 					key: 1,
 					name: "AOI"
@@ -290,7 +290,7 @@ class LinkTableByScopePlace extends Component {
 		};
 	}
 
-  openScreenExample(idAttSet,idAULevel) {
+	openScreenExample(idAttSet,idAULevel) {
 		this.state.example = "Clicked on " + idAttSet + ", " + idAULevel;
 		/*this.forceUpdate();*/
 		/*alert("hey, " + idAttSet);*/
@@ -298,27 +298,27 @@ class LinkTableByScopePlace extends Component {
 
 	componentDidMount() {
 
-    $("#LinkTableByScopePlace td.selectable").each(function() {
+		$("#LinkTableByScopePlace td.selectable").each(function() {
 			$(this).focusin(function() {
-      	$(this).addClass("focus");
-    	});
-    	$(this).focusout(function() {
-      	$(this).removeClass("focus");
-    	});
+				$(this).addClass("focus");
+			});
+			$(this).focusout(function() {
+				$(this).removeClass("focus");
+			});
 		});
-  }
+	}
 
 	render() {
 
-  	var thisComponent = this;
+		var thisComponent = this;
 
 		var auLevelsInsert = this.state.auLevels.map(function (auLevel) {
-      return (
-				<td 
+			return (
+				<td
 					className="selectable heading"
 					key={"aulevel-" + auLevel.key}
 				>
-					<a 
+					<a
 						href="#"
 						onClick={thisComponent.openScreenExample.bind(
 								thisComponent,
@@ -329,8 +329,8 @@ class LinkTableByScopePlace extends Component {
 						{auLevel.name}
 					</a>
 				</td>
-      );
-    });
+			);
+		});
 
 
 		var auAttSetsInsert = this.state.auAttSets.map(function (auAttSet) {
@@ -350,7 +350,7 @@ class LinkTableByScopePlace extends Component {
 					}
 
 					return (
-						<span 
+						<span
 							className={periodClassName}
 							key={"period-" + period.key}
 						>
@@ -372,7 +372,7 @@ class LinkTableByScopePlace extends Component {
 				}
 
 				return (
-					<td 
+					<td
 						className={tdClassName}
 						key={"attset-" + auAttSet.key + "-aulevel-" + auASLevel.key + "-periods"}
 					>
@@ -395,7 +395,7 @@ class LinkTableByScopePlace extends Component {
 					key={"auattset-" + auAttSet.key}
 				>
 					<td className="selectable heading">
-						<a 
+						<a
 							href="#"
 							onClick={thisComponent.openScreenExample.bind(
 									thisComponent,
@@ -408,8 +408,8 @@ class LinkTableByScopePlace extends Component {
 					</td>
 					{auSingleAttSetInsert}
 				</tr>
-      );
-    });
+			);
+		});
 
 		return (
 
@@ -417,7 +417,7 @@ class LinkTableByScopePlace extends Component {
 		<div>
 			{/*
 			<br/>
-			<p>{this.state.example}</p> 
+			<p>{this.state.example}</p>
 			*/}
 
 		<Table celled className="LinkTable ByScopePlace fixed" id="LinkTableByScopePlace">
@@ -437,14 +437,14 @@ class LinkTableByScopePlace extends Component {
 				{auAttSetsInsert}
 			</tbody>
 		</Table>
-		
+
 		<div className="note">
 			Set available attribute sets & AU levels in <UIScreenButton>scope settings</UIScreenButton>
 		</div>
 
 		</div>
-    );
-  }
+		);
+	}
 
 }
 

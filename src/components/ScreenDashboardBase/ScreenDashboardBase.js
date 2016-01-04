@@ -6,17 +6,17 @@ import Dashboard from '../Dashboard';
 
 @withStyles(styles)
 class ScreenDashboardBase extends Component{
-  render() {
-    return (
-      <div>
-        <div className="screen-content"><div>
+	render() {
+		return (
+			<div>
+				<div className="screen-content"><div>
 					<h1>Dashboard</h1>
 					<Dashboard/>
 				</div></div>
-      </div>
-    );
+			</div>
+		);
 
-  }
+	}
 }
 
 export default ScreenDashboardBase;

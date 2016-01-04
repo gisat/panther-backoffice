@@ -16,30 +16,30 @@ import watch from './lib/watch';
  * Launches Node.js/Express web server in a separate (forked) process.
  */
 export default task('serve', () => new Promise((resolve, reject) => {
-  function start() {
-    const server = cp.fork(path.join(__dirname, '../build/server.js'), {
-      env: Object.assign({ NODE_ENV: 'development' }, process.env),
-      silent: false,
-    });
+	function start() {
+		const server = cp.fork(path.join(__dirname, '../build/server.js'), {
+			env: Object.assign({ NODE_ENV: 'development' }, process.env),
+			silent: false,
+		});
 
-    server.once('message', message => {
-      if (message.match(/^online$/)) {
-        resolve();
-      }
-    });
-    server.once('error', err => reject(err));
-    process.on('exit', () => server.kill('SIGTERM'));
-    return server;
-  }
+		server.once('message', message => {
+			if (message.match(/^online$/)) {
+				resolve();
+			}
+		});
+		server.once('error', err => reject(err));
+		process.on('exit', () => server.kill('SIGTERM'));
+		return server;
+	}
 
-  let server = start();
+	let server = start();
 
-  if (global.WATCH) {
-    watch('build/server.js').then(watcher => {
-      watcher.on('changed', () => {
-        server.kill('SIGTERM');
-        server = start();
-      });
-    });
-  }
+	if (global.WATCH) {
+		watch('build/server.js').then(watcher => {
+			watcher.on('changed', () => {
+				server.kill('SIGTERM');
+				server = start();
+			});
+		});
+	}
 }));

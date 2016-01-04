@@ -12,24 +12,24 @@ import SelectorPlace from '../SelectorPlace';
 
 @withStyles(styles)
 class ScreenPlacesBase extends Component{
-  
+
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			activeScreenOpener: null
 		};
-		
+
 	}
-	
+
 	openScreenScopeExample(openerKey,scopeKey,e) {
 		this.setState({
 			activeScreenOpener: openerKey
 		});
 	}
-	
+
 	render() {
-    
+
 		var isParentScreenDisabled = "NA";
 		if(this.props.disabled){
 			isParentScreenDisabled = "disabled"
@@ -37,10 +37,10 @@ class ScreenPlacesBase extends Component{
 		else {
 			isParentScreenDisabled = "enabled"
 		}
-		
+
 		return (
-      <div>
-        <div className="screen-setter"><div>
+			<div>
+				<div className="screen-setter"><div>
 					<SelectorPlace/>
 				</div></div>
 				<div className="screen-content"><div>
@@ -57,18 +57,18 @@ class ScreenPlacesBase extends Component{
 			{/* <p>disable pass test: <b>{isParentScreenDisabled}</b></p> */}
 					<h2>Attribute sets</h2>
 					<LinkTableByScopePlace/>
-					
+
 					<h2>Vector layers</h2>
 					<LinkTableVectorByScopePlace/>
-					
+
 					<h2>Raster layers</h2>
 					<LinkTableRasterByScopePlace/>
-					
-				</div></div>
-      </div>
-    );
 
-  }
+				</div></div>
+			</div>
+		);
+
+	}
 }
 
 export default ScreenPlacesBase;

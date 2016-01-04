@@ -1,6 +1,6 @@
 {
-  "name": "UIScreenButton",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./UIScreenButton.js"
+	"name": "UIScreenButton",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./UIScreenButton.js"
 }

@@ -1,6 +1,6 @@
 {
-  "name": "SelectorMetadataLayerVector",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./SelectorMetadataLayerVector.js"
+	"name": "SelectorMetadataLayerVector",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./SelectorMetadataLayerVector.js"
 }

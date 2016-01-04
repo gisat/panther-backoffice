@@ -7,9 +7,9 @@ import ConfigMetadataLayerVector from '../ConfigMetadataLayerVector';
 
 @withStyles(styles)
 class ScreenMetadataLayerVector extends Component{
-  render() {
-    return (
-      <div>
+	render() {
+		return (
+			<div>
 				<div className="screen-setter"><div>
 					<h2>Vector layer template</h2>
 					<SelectorMetadataLayerVector />
@@ -17,10 +17,10 @@ class ScreenMetadataLayerVector extends Component{
 				<div className="screen-content"><div>
 					<ConfigMetadataLayerVector />
 				</div></div>
-      </div>
-    );
+			</div>
+		);
 
-  }
+	}
 }
 
 export default ScreenMetadataLayerVector;

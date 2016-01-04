@@ -20,7 +20,7 @@ const ANALYSES = [
 
 @withStyles(styles)
 class AnalysesListSpatial extends Component{
-	
+
 	constructor(props) {
 		super(props);
 
@@ -28,15 +28,15 @@ class AnalysesListSpatial extends Component{
 			itemType: "analysisSpatial",
 			selectedTemplate: null
 		};
-		
-	}
-	
 
-	
+	}
+
+
+
 	onSelectTemplate (value) {
 		this.state.selectedTemplate = value;
 	}
-	
+
 	openScreenExample(itemType,itemKey) {
 		if(itemKey) {
 			this.state.selectedTemplate = itemKey;
@@ -44,21 +44,21 @@ class AnalysesListSpatial extends Component{
 			this.state.selectedTemplate = null;
 		}
 	}
-		
-	
+
+
 	componentDidMount() {
-		
-		
-		
+
+
+
 	}
-	
+
 	render() {
-		
+
 		var thisComponent = this;
-		
+
 		var itemsInsert = ANALYSES.map(function (item) {
-      return (
-				<a 
+			return (
+				<a
 					className={thisComponent.state.selectedTemplate==item.key ? 'puma-item template screen-opener' : 'puma-item template'}
 					href="#"
 					onClick={thisComponent.openScreenExample.bind(
@@ -66,19 +66,19 @@ class AnalysesListSpatial extends Component{
 							thisComponent.state.itemType,
 							item.key
 						)}
-          key={"spatialanalysis-" + item.key}
+					key={"spatialanalysis-" + item.key}
 				>
 					<span>{item.name}</span>
 				</a>
-      );
-    });
-		
+			);
+		});
+
 		return (
-      <div>
-				
-				
-					
-				<a 
+			<div>
+
+
+
+				<a
 					className="puma-item add"
 					href="#"
 					onClick={thisComponent.openScreenExample.bind(
@@ -89,13 +89,13 @@ class AnalysesListSpatial extends Component{
 				>
 					<span><Icon name="plus"/></span>
 				</a>
-				
-				{itemsInsert}
-				
-			</div>
-    );
 
-  }
+				{itemsInsert}
+
+			</div>
+		);
+
+	}
 }
 
 export default AnalysesListSpatial;

@@ -1,6 +1,6 @@
 {
-  "name": "PageAnalyses",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./PageAnalyses.js"
+	"name": "PageAnalyses",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./PageAnalyses.js"
 }

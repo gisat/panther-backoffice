@@ -41,7 +41,7 @@ class ConfigAnalysisSpatial extends Component{
 			idAnalysisSpatial: this.props.id,
 			valuesTopics: [12,22],
 			themesString: "",
-      data: this.props.data
+			data: this.props.data
 		};
 
 	}
@@ -125,9 +125,9 @@ class ConfigAnalysisSpatial extends Component{
 
 	}
 
-  onChangeName(){
-    console.log("name changed");
-  }
+	onChangeName(){
+		console.log("name changed");
+	}
 
 	render() {
 
@@ -136,8 +136,8 @@ class ConfigAnalysisSpatial extends Component{
 		};
 
 		return (
-      <div>
-        <p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)} ID: {this.state.idAnalysisSpatial}</p>
+			<div>
+				<p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)} ID: {this.state.idAnalysisSpatial}</p>
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Name
@@ -287,9 +287,9 @@ class ConfigAnalysisSpatial extends Component{
 				</Table>
 
 			</div>
-    );
+		);
 
-  }
+	}
 }
 
 export default ConfigAnalysisSpatial;

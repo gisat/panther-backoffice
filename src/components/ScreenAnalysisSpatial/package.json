@@ -1,6 +1,6 @@
 {
-  "name": "ScreenAnalysisSpatial",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./ScreenAnalysisSpatial.js"
+	"name": "ScreenAnalysisSpatial",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenAnalysisSpatial.js"
 }

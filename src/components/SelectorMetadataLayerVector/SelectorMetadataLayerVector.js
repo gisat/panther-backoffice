@@ -18,11 +18,11 @@ const LAYERTEMPLATES = [
 @withStyles(styles)
 class SelectorMetadataLayerVector extends Component{
 
-  static contextTypes = {
-    onInteraction: PropTypes.func.isRequired
-  };
+	static contextTypes = {
+		onInteraction: PropTypes.func.isRequired
+	};
 
-  constructor(props) {
+	constructor(props) {
 		super(props);
 
 		this.state = {
@@ -37,13 +37,13 @@ class SelectorMetadataLayerVector extends Component{
 
 
 	render() {
-    var selectInputProps = {
+		var selectInputProps = {
 			className: "" //"ui input"
 		};
 
 		return (
-      <div>
-        <div className="selector">
+			<div>
+				<div className="selector">
 					<div className="input">
 						<label className="container">
 							<Select
@@ -58,10 +58,10 @@ class SelectorMetadataLayerVector extends Component{
 						</label>
 					</div>
 				</div>
-      </div>
-    );
+			</div>
+		);
 
-  }
+	}
 }
 
 

@@ -1,6 +1,6 @@
 {
-  "name": "ScreenDataLayersBase",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./ScreenDataLayersBase.js"
+	"name": "ScreenDataLayersBase",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenDataLayersBase.js"
 }

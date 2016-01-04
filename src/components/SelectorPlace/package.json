@@ -1,6 +1,6 @@
 {
-  "name": "SelectorPlace",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./SelectorPlace.js"
+	"name": "SelectorPlace",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./SelectorPlace.js"
 }

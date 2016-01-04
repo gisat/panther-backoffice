@@ -25,27 +25,27 @@ server.use(publicPath+'/api/content', require('./api/content'));
 // Register server-side rendering middleware
 // -----------------------------------------------------------------------------
 server.get('*', async (req, res, next) => {
-  try {
-    let statusCode = 200;
-    const data = { title: '', description: '', css: '', body: '' };
-    const css = [];
-    const context = {
-      onInsertCss: value => css.push(value),
-      onSetTitle: value => data.title = value,
-      onSetMeta: (key, value) => data[key] = value,
-      onPageNotFound: () => statusCode = 404
-    };
-    let search = req.url.substr(req.url.indexOf("?"));
-    await Router.dispatch({ path: req.path, search: search, context }, (state, component) => {
-      data.body = ReactDOM.renderToString(component);
-      data.css = css.join('');
-    });
+	try {
+		let statusCode = 200;
+		const data = { title: '', description: '', css: '', body: '' };
+		const css = [];
+		const context = {
+			onInsertCss: value => css.push(value),
+			onSetTitle: value => data.title = value,
+			onSetMeta: (key, value) => data[key] = value,
+			onPageNotFound: () => statusCode = 404
+		};
+		let search = req.url.substr(req.url.indexOf("?"));
+		await Router.dispatch({ path: req.path, search: search, context }, (state, component) => {
+			data.body = ReactDOM.renderToString(component);
+			data.css = css.join('');
+		});
 
-    const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
-    res.status(statusCode).send('<!doctype html>\n' + html);
-  } catch (err) {
-    next(err);
-  }
+		const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
+		res.status(statusCode).send('<!doctype html>\n' + html);
+	} catch (err) {
+		next(err);
+	}
 });
 
 //
@@ -53,9 +53,9 @@ server.get('*', async (req, res, next) => {
 // -----------------------------------------------------------------------------
 
 server.listen(server.get('port'), () => {
-  /* eslint-disable no-console */
-  console.log('The server is running at http://localhost:' + server.get('port'));
-  if (process.send) {
-    process.send('online');
-  }
+	/* eslint-disable no-console */
+	console.log('The server is running at http://localhost:' + server.get('port'));
+	if (process.send) {
+		process.send('online');
+	}
 });

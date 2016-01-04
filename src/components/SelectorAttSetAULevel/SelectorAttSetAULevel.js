@@ -22,7 +22,7 @@ const AULEVELS = [
 
 @withStyles(styles)
 class SelectorAttSetAULevel extends Component{
-  
+
 	constructor(props) {
 		super(props);
 
@@ -30,16 +30,16 @@ class SelectorAttSetAULevel extends Component{
 			valueAttSet: 352,
 			valueAULevel: 2
 		};
-		
+
 	}
-	
+
 	onChangeAttSet (value) {
 		this.state.valueAttSet = value;
 	}
 	onChangeAULevel (value) {
 		this.state.valueAULevel = value;
 	}
-	
+
 //	getPlaces (input, callback) {
 //		alert("baf");
 //		input = input.toLowerCase();
@@ -54,51 +54,51 @@ class SelectorAttSetAULevel extends Component{
 //			callback(null, data);
 //		}, ASYNC_DELAY);
 //	}
-	
+
 	render() {
-    var selectInputProps = {
+		var selectInputProps = {
 			className: "" //"ui input"
 		};
-		
+
 		return (
-      <div>
-        <div className="selector double">
+			<div>
+				<div className="selector double">
 					<div className="input">
 						<label className="container">
 							Attribute set
-							<Select 
+							<Select
 								onChange={this.onChangeAttSet.bind(this)}
 								//loadOptions={this.getPlaces}
 								options={ATTSETS}
-								valueKey="key" 
-								labelKey="name" 
-								inputProps={selectInputProps} 
+								valueKey="key"
+								labelKey="name"
+								inputProps={selectInputProps}
 								value={this.state.valueAttSet}
 								clearable={false}
 							/>
 						</label>
 					</div>
-					
+
 					<div className="input">
 						<label className="container">
 							Analytical units level
-							<Select 
+							<Select
 								onChange={this.onChangeAULevel.bind(this)}
 								//loadOptions={this.getPlaces}
 								options={AULEVELS}
-								valueKey="key" 
-								labelKey="name" 
-								inputProps={selectInputProps} 
+								valueKey="key"
+								labelKey="name"
+								inputProps={selectInputProps}
 								value={this.state.valueAULevel}
 								clearable={false}
 							/>
 						</label>
-					</div>	
+					</div>
 				</div>
-      </div>
-    );
+			</div>
+		);
 
-  }
+	}
 }
 
 

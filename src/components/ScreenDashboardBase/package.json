@@ -1,6 +1,6 @@
 {
-  "name": "ScreenDashboardBase",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./ScreenDashboardBase.js"
+	"name": "ScreenDashboardBase",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenDashboardBase.js"
 }

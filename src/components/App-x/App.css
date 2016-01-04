@@ -9,11 +9,11 @@
  * ========================================================================== */
 
 html {
-  color: #222;
-  font-weight: 100;
-  font-size: 1em; /* ~16px; */
-  font-family: var(--font-family-base);
-  line-height: 1.375; /* ~22px */
+	color: #222;
+	font-weight: 100;
+	font-size: 1em; /* ~16px; */
+	font-family: var(--font-family-base);
+	line-height: 1.375; /* ~22px */
 }
 
 /*
@@ -25,13 +25,13 @@ html {
  */
 
 ::-moz-selection {
-  background: #b3d4fc;
-  text-shadow: none;
+	background: #b3d4fc;
+	text-shadow: none;
 }
 
 ::selection {
-  background: #b3d4fc;
-  text-shadow: none;
+	background: #b3d4fc;
+	text-shadow: none;
 }
 
 /*
@@ -39,12 +39,12 @@ html {
  */
 
 hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
-  padding: 0;
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #ccc;
+	margin: 1em 0;
+	padding: 0;
 }
 
 /*
@@ -59,7 +59,7 @@ iframe,
 img,
 svg,
 video {
-  vertical-align: middle;
+	vertical-align: middle;
 }
 
 /*
@@ -67,9 +67,9 @@ video {
  */
 
 fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
+	border: 0;
+	margin: 0;
+	padding: 0;
 }
 
 /*
@@ -77,7 +77,7 @@ fieldset {
  */
 
 textarea {
-  resize: vertical;
+	resize: vertical;
 }
 
 /*
@@ -85,10 +85,10 @@ textarea {
  * ========================================================================== */
 
 .browserupgrade {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
+	margin: 0.2em 0;
+	background: #ccc;
+	color: #000;
+	padding: 0.2em 0;
 }
 
 /*
@@ -98,164 +98,164 @@ textarea {
  * ========================================================================== */
 
 @media print {
-  *,
-  *:before,
-  *:after {
-    background: transparent !important;
-    color: #000 !important; /* Black prints faster: http://www.sanbeiji.com/archives/953 */
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
+	*,
+	*:before,
+	*:after {
+		background: transparent !important;
+		color: #000 !important; /* Black prints faster: http://www.sanbeiji.com/archives/953 */
+		box-shadow: none !important;
+		text-shadow: none !important;
+	}
 
-  a,
-  a:visited {
-    text-decoration: underline;
-  }
+	a,
+	a:visited {
+		text-decoration: underline;
+	}
 
-  a[href]:after {
-    content: " (" attr(href) ")";
-  }
+	a[href]:after {
+		content: " (" attr(href) ")";
+	}
 
-  abbr[title]:after {
-    content: " (" attr(title) ")";
-  }
+	abbr[title]:after {
+		content: " (" attr(title) ")";
+	}
 
-  /*
-   * Don't show links that are fragment identifiers,
-   * or use the `javascript:` pseudo protocol
-   */
+	/*
+	 * Don't show links that are fragment identifiers,
+	 * or use the `javascript:` pseudo protocol
+	 */
 
-  a[href^="#"]:after,
-  a[href^="javascript:"]:after {
-    content: "";
-  }
+	a[href^="#"]:after,
+	a[href^="javascript:"]:after {
+		content: "";
+	}
 
-  pre,
-  blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid;
-  }
+	pre,
+	blockquote {
+		border: 1px solid #999;
+		page-break-inside: avoid;
+	}
 
-  /*
-   * Printing Tables:
-   * http://css-discuss.incutio.com/wiki/Printing_Tables
-   */
+	/*
+	 * Printing Tables:
+	 * http://css-discuss.incutio.com/wiki/Printing_Tables
+	 */
 
-  thead {
-    display: table-header-group;
-  }
+	thead {
+		display: table-header-group;
+	}
 
-  tr,
-  img {
-    page-break-inside: avoid;
-  }
+	tr,
+	img {
+		page-break-inside: avoid;
+	}
 
-  img {
-    max-width: 100% !important;
-  }
+	img {
+		max-width: 100% !important;
+	}
 
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3;
-  }
+	p,
+	h2,
+	h3 {
+		orphans: 3;
+		widows: 3;
+	}
 
-  h2,
-  h3 {
-    page-break-after: avoid;
-  }
+	h2,
+	h3 {
+		page-break-after: avoid;
+	}
 }
 
 
 
 
 @font-face {
-  font-family: 'pticon';
-  src:url('../App/fonts/pticon.eot?qz5h9b');
-  src:url('../App/fonts/pticon.eot?qz5h9b#iefix') format('embedded-opentype'),
-  url('../App/fonts/pticon.ttf?qz5h9b') format('truetype'),
-  url('../App/fonts/pticon.woff?qz5h9b') format('woff'),
-  url('../App/fonts/pticon.svg?qz5h9b#pticon') format('svg');
-  font-weight: normal;
-  font-style: normal;
+	font-family: 'pticon';
+	src:url('../App/fonts/pticon.eot?qz5h9b');
+	src:url('../App/fonts/pticon.eot?qz5h9b#iefix') format('embedded-opentype'),
+	url('../App/fonts/pticon.ttf?qz5h9b') format('truetype'),
+	url('../App/fonts/pticon.woff?qz5h9b') format('woff'),
+	url('../App/fonts/pticon.svg?qz5h9b#pticon') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
 
 .pticon {
-  font-family: 'pticon';
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
+	font-family: 'pticon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
 
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .pticon-times:before {
-  content: "\e900";
+	content: "\e900";
 }
 .pticon-tick:before {
-  content: "\e901";
+	content: "\e901";
 }
 .pticon-plus:before {
-  content: "\e902";
+	content: "\e902";
 }
 .pticon-minus:before {
-  content: "\e903";
+	content: "\e903";
 }
 .pticon-equals:before {
-  content: "\e904";
+	content: "\e904";
 }
 .pticon-divide:before {
-  content: "\e905";
+	content: "\e905";
 }
 .pticon-chevron-right:before {
-  content: "\e911";
+	content: "\e911";
 }
 .pticon-chevron-left:before {
-  content: "\e912";
+	content: "\e912";
 }
 .pticon-arrow-right-thick:before {
-  content: "\e906";
+	content: "\e906";
 }
 .pticon-arrow-left-thick:before {
-  content: "\e907";
+	content: "\e907";
 }
 .pticon-arrow-forward:before {
-  content: "\e908";
+	content: "\e908";
 }
 .pticon-arrow-back:before {
-  content: "\e909";
+	content: "\e909";
 }
 .pticon-arrow-up-thick:before {
-  content: "\e913";
+	content: "\e913";
 }
 .pticon-arrow-down-thick:before {
-  content: "\e914";
+	content: "\e914";
 }
 .pticon-delete:before {
-  content: "\e90a";
+	content: "\e90a";
 }
 .pticon-cancel:before {
-  content: "\e90b";
+	content: "\e90b";
 }
 .pticon-refresh:before {
-  content: "\e90c";
+	content: "\e90c";
 }
 .pticon-input-checked:before {
-  content: "\e90d";
+	content: "\e90d";
 }
 .pticon-trash:before {
-  content: "\e90e";
+	content: "\e90e";
 }
 .pticon-duplicate:before {
-  content: "\e90f";
+	content: "\e90f";
 }
 .pticon-edit:before {
-  content: "\e910";
+	content: "\e910";
 }
 

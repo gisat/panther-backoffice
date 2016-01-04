@@ -4,44 +4,44 @@ import { Field } from './field';
 import classNames from 'classnames';
 
 function getClasses(props) {
-    let classes = {};
+		let classes = {};
 
-    if (props.fluid) {
-        let childCount = countChildren(props.children, Field)
+		if (props.fluid) {
+				let childCount = countChildren(props.children, Field)
 
-        if (childCount > 0  && childCount <= 12) {
-            classes[Numbers[childCount]] = true;
-        }
-    }
+				if (childCount > 0  && childCount <= 12) {
+						classes[Numbers[childCount]] = true;
+				}
+		}
 
-    classes.fields = props.defaultClasses;
+		classes.fields = props.defaultClasses;
 
-    return classes;
+		return classes;
 }
 
 let Fields = (props) => {
-    let { children, className, component, ...other } = props;
-    other.className = classNames(className, getClasses(props));
+		let { children, className, component, ...other } = props;
+		other.className = classNames(className, getClasses(props));
 
-    return React.createElement(
-        component,
-        other,
-        children
-    );
+		return React.createElement(
+				component,
+				other,
+				children
+		);
 };
 
 Fields.propTypes = {
-    children: React.PropTypes.node,
-    className: React.PropTypes.any,
-    component: React.PropTypes.oneOfType([
-        React.PropTypes.element,
-        React.PropTypes.string
-    ]),
-    fluid: React.PropTypes.bool
+		children: React.PropTypes.node,
+		className: React.PropTypes.any,
+		component: React.PropTypes.oneOfType([
+				React.PropTypes.element,
+				React.PropTypes.string
+		]),
+		fluid: React.PropTypes.bool
 }
 
 Fields.defaultProps = {
-    component: 'div'
+		component: 'div'
 }
 
 exports.Fields = Fields;

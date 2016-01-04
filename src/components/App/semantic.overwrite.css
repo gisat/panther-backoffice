@@ -32,7 +32,7 @@
 }
 .ui.table.LinkTable tbody tr td.selectable > a:not(.ui) {
 	margin: -2em 0;
-  padding: 2.71428571em .71428571em;
+	padding: 2.71428571em .71428571em;
 	padding-right: 1.3rem;
 }
 
@@ -74,7 +74,7 @@ td.selectable::after {
 	top:50%;
 	transform: translateY(-50%);
 	pointer-events: none;
-	
+
 	color: rgba(40,40,40,.2);
 }
 td.selectable.heading::after {
@@ -187,11 +187,11 @@ td.selectable.focus::after {
 	border-color:rgba(59, 59, 59, 0.29)!important;
 	background: transparent!important;
 }
-.ui.basic.button:focus, 
-.ui.basic.button:hover, 
-.ui.basic.buttons .button:focus, 
+.ui.basic.button:focus,
+.ui.basic.button:hover,
+.ui.basic.buttons .button:focus,
 .ui.basic.buttons .button:hover {
-    background: rgba(255, 255, 255, 0.1)!important;
+		background: rgba(255, 255, 255, 0.1)!important;
 }
 
 
@@ -200,16 +200,16 @@ td.selectable.focus::after {
 }
 
 /*
-.ui.basic.button:focus, 
-.ui.basic.button:hover, 
-.ui.basic.buttons .button:focus, 
+.ui.basic.button:focus,
+.ui.basic.button:hover,
+.ui.basic.buttons .button:focus,
 .ui.basic.buttons .button:hover {
 	background: #e0ecff;
 }
 */
-.ui.button:focus, 
-.ui.button:hover, 
-.ui.buttons .button:focus, 
+.ui.button:focus,
+.ui.button:hover,
+.ui.buttons .button:focus,
 .ui.buttons .button:hover {
 	background: #e0ecff;
 }
@@ -243,7 +243,7 @@ td.selectable.focus::after {
 }
 .ui.input, .ui.input input {
 	/*background: #f1f1f1;*/
-	
+
 	border-radius: 4px;
 }
 .ui.input input {
@@ -511,7 +511,7 @@ td.selectable.focus::after {
 	color: #fff;
 	border-color: #888;
 	font-weight: 400;
-	
+
 	/*margin-left: .3rem;
 	padding-left: .7rem;*/
 }

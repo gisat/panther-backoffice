@@ -9,20 +9,20 @@ const DATALAYERS = require('../../stores/tempDataLayers');
 
 @withStyles(styles)
 class SelectorDataLayer extends Component{
-  
+
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			value: "geonode:puma_srb_lulc_change_2000_2011"
 		};
-		
+
 	}
-	
+
 	onChange (value) {
 		this.state.value = value;
 	}
-	
+
 //	getPlaces (input, callback) {
 //		alert("baf");
 //		input = input.toLowerCase();
@@ -37,35 +37,35 @@ class SelectorDataLayer extends Component{
 //			callback(null, data);
 //		}, ASYNC_DELAY);
 //	}
-	
+
 	render() {
-    var selectInputProps = {
+		var selectInputProps = {
 			className: "" //"ui input"
 		};
-		
+
 		return (
-      <div>
+			<div>
 				<div className="selector">
 					<div className="input">
 						<label className="container">
 							Data layer
-							<Select 
+							<Select
 								onChange={this.onChange.bind(this)}
 								//loadOptions={this.getPlaces}
 								options={DATALAYERS}
-								valueKey="key" 
-								labelKey="key" 
-								inputProps={selectInputProps} 
+								valueKey="key"
+								labelKey="key"
+								inputProps={selectInputProps}
 								value={this.state.value}
 								clearable={false}
 							/>
 						</label>
 					</div>
 				</div>
-      </div>
-    );
+			</div>
+		);
 
-  }
+	}
 }
 
 export default SelectorDataLayer;

@@ -12,21 +12,21 @@ import Footer from '../Footer';
 @withStyles(styles)
 class App extends Component {
 
-  static propTypes = {
-    children: PropTypes.element.isRequired,
-    error: PropTypes.object,
-  };
+	static propTypes = {
+		children: PropTypes.element.isRequired,
+		error: PropTypes.object,
+	};
 
-  render() {
-    return !this.props.error ? (
-      <div>
-        <Header />
-        {this.props.children}
-        <Feedback />
-        <Footer />
-      </div>
-    ) : this.props.children;
-  }
+	render() {
+		return !this.props.error ? (
+			<div>
+				<Header />
+				{this.props.children}
+				<Feedback />
+				<Footer />
+			</div>
+		) : this.props.children;
+	}
 
 }
 

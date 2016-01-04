@@ -13,9 +13,9 @@ import LinkTableByScopePlace from '../LinkTableByScopePlace/LinkTableByScopePlac
 @withStyles(styles)
 class ContactPage extends Component {
 
-  static contextTypes = {
-    onSetTitle: PropTypes.func.isRequired,
-  };
+	static contextTypes = {
+		onSetTitle: PropTypes.func.isRequired,
+	};
 
 	constructor(props) {
 		super(props);
@@ -24,12 +24,12 @@ class ContactPage extends Component {
 			show: false
 		};
 	}
-	
+
 	onMouseEnterX() {
 		this.setState({
 				show: true
 		});
-  }
+	}
 
 	onMouseLeaveX() {
 		this.setState({
@@ -39,42 +39,42 @@ class ContactPage extends Component {
 
 
 
-  render() {
-    const title = 'Contact Us';
-    this.context.onSetTitle(title);
-   return (
-      <div className="ContactPage">
-        <div className="ContactPage-container">
+	render() {
+		const title = 'Contact Us';
+		this.context.onSetTitle(title);
+	 return (
+			<div className="ContactPage">
+				<div className="ContactPage-container">
 					<Header dividing tag="h1" key="popokatepetl">
 						Header
 					</Header>
-					<IconButton 
+					<IconButton
 						name="heart"
 						onMouseEnter={this.onMouseEnterX.bind(this)}
-            onMouseLeave={this.onMouseLeaveX.bind(this)}
+						onMouseLeave={this.onMouseLeaveX.bind(this)}
 					>
 						It's alive!
 						<Popup active={this.state.show}>Very much so.</Popup>
 					</IconButton>
-					<Button 
-						
+					<Button
+
 					>
 						<Icon name="idea"/>
 						I know!
 						<Popup>I am clever like that.</Popup>
 					</Button>
-					
-					
-					
+
+
+
 					<LinkTableByScopePlace/>
-					
-					
-					
-				
-        </div>
-      </div>
-    );
-  }
+
+
+
+
+				</div>
+			</div>
+		);
+	}
 
 }
 

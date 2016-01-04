@@ -14,8 +14,8 @@ import task from './lib/task';
  * format and copies it to the output (build) folder.
  */
 export default task('build', async () => {
-  await require('./clean')();
-  await require('./copy')();
-  await require('./bundle')();
+	await require('./clean')();
+	await require('./copy')();
+	await require('./bundle')();
 });
 

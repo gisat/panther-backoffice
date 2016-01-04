@@ -48,28 +48,28 @@ const THEMES = [
 
 @withStyles(styles)
 class ConfigDataLayer extends Component{
-	
+
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			layerType: -1
 		};
-		
+
 	}
-	
+
 	onChangeType (key) {
 		this.setState({
 			layerType: key
 		});
 	}
-	
+
 	componentDidMount() {
-		
+
 	}
-	
+
 	render() {
-		
+
 		// TODO overwrite to keep state in this component ?
 		var layerTypeConfig;
 		if(this.state.layerType==0){
@@ -84,16 +84,16 @@ class ConfigDataLayer extends Component{
 		else {
 			layerTypeConfig = <span>Select layer type</span>;
 		}
-		
+
 		return (
-      <div>
-				
+			<div>
+
 				<div className="dataLayerTypeSelect">
 				<span>Layer type</span>
-				<CheckboxFields 
-					type="grouped" 
-					radio 
-					name="dl-722" 
+				<CheckboxFields
+					type="grouped"
+					radio
+					name="dl-722"
 					onChange={this.onChangeType.bind(this)}
 				>
 					<Checkbox key="0">
@@ -107,14 +107,14 @@ class ConfigDataLayer extends Component{
 					</Checkbox>
 				</CheckboxFields>
 				</div>
-				
-				
-				{layerTypeConfig}
-				
-			</div>
-    );
 
-  }
+
+				{layerTypeConfig}
+
+			</div>
+		);
+
+	}
 }
 
 export default ConfigDataLayer;

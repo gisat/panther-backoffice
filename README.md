@@ -17,15 +17,15 @@ Join [#react-starter-kit](https://gitter.im/kriasoft/react-starter-kit) chatroom
 
 ### Documentation
 
-  * **General**
-    - [React Style Guide](./docs/react-style-guide.md)
-    - [How to configure text editors and IDEs](./docs/how-to-configure-text-editors.md)
-  * **Questions**
-    - [Which module bundler should I use?](https://github.com/kriasoft/react-starter-kit/issues/3)
-    - [Which Flux implementation should I use?](https://github.com/kriasoft/react-starter-kit/issues/22)
-  * **Recipes**
-    - [How to Implement Routing and Navigation](./docs/recipes/how-to-implement-routing.md)
-    - [How to Integrate Disqus](./docs/recipes/how-to-integrate-disqus.md)
+	* **General**
+		- [React Style Guide](./docs/react-style-guide.md)
+		- [How to configure text editors and IDEs](./docs/how-to-configure-text-editors.md)
+	* **Questions**
+		- [Which module bundler should I use?](https://github.com/kriasoft/react-starter-kit/issues/3)
+		- [Which Flux implementation should I use?](https://github.com/kriasoft/react-starter-kit/issues/22)
+	* **Recipes**
+		- [How to Implement Routing and Navigation](./docs/recipes/how-to-implement-routing.md)
+		- [How to Integrate Disqus](./docs/recipes/how-to-integrate-disqus.md)
 
 ### Directory Layout
 
@@ -69,7 +69,7 @@ Just clone the repo and start hacking:
 
 ```shell
 $ git clone -o react-starter-kit -b master --single-branch \
-      https://github.com/kriasoft/react-starter-kit.git MyApp
+			https://github.com/kriasoft/react-starter-kit.git MyApp
 $ cd MyApp
 $ npm install                   # Install Node.js components listed in ./package.json
 $ npm start                     # Compile and launch
@@ -129,27 +129,27 @@ the file is. Name the test by appending `-test.js` to the js file.
 
 ### Related Projects
 
-  * [React Static Boilerplate](https://github.com/koistya/react-static-boilerplate) — Generates a static website from React components
-  * [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit) — A boilerplate for authoring JavaScript/React.js libraries
-  * [React Decorators](https://github.com/kriasoft/react-decorators) — A collection of higher-order React components
+	* [React Static Boilerplate](https://github.com/koistya/react-static-boilerplate) — Generates a static website from React components
+	* [Babel Starter Kit](https://github.com/kriasoft/babel-starter-kit) — A boilerplate for authoring JavaScript/React.js libraries
+	* [React Decorators](https://github.com/kriasoft/react-decorators) — A collection of higher-order React components
 
 ### Learn More
 
-  * [Getting Started with React.js](http://facebook.github.io/react/)
-  * [Getting Started with GraphQL and Relay](https://quip.com/oLxzA1gTsJsE)
-  * [React.js Questions on StackOverflow](http://stackoverflow.com/questions/tagged/reactjs)
-  * [React.js Discussion Board](https://discuss.reactjs.org/)
-  * [Flux Architecture for Building User Interfaces](http://facebook.github.io/flux/)
-  * [Jest - Painless Unit Testing](http://facebook.github.io/jest/)
-  * [Flow - A static type checker for JavaScript](http://flowtype.org/)
-  * [The Future of React](https://github.com/reactjs/react-future)
-  * [Learn ES6](https://babeljs.io/docs/learn-es6/), [ES6 Features](https://github.com/lukehoban/es6features#readme)
+	* [Getting Started with React.js](http://facebook.github.io/react/)
+	* [Getting Started with GraphQL and Relay](https://quip.com/oLxzA1gTsJsE)
+	* [React.js Questions on StackOverflow](http://stackoverflow.com/questions/tagged/reactjs)
+	* [React.js Discussion Board](https://discuss.reactjs.org/)
+	* [Flux Architecture for Building User Interfaces](http://facebook.github.io/flux/)
+	* [Jest - Painless Unit Testing](http://facebook.github.io/jest/)
+	* [Flow - A static type checker for JavaScript](http://flowtype.org/)
+	* [The Future of React](https://github.com/reactjs/react-future)
+	* [Learn ES6](https://babeljs.io/docs/learn-es6/), [ES6 Features](https://github.com/lukehoban/es6features#readme)
 
 ### Support
 
-  * [#react-starter-kit](https://gitter.im/kriasoft/react-starter-kit) on Gitter — Feedback, feature requests, Q&A
-  * [@koistya](https://www.codementor.io/koistya) on Codementor — Mentorship, code reviews
-  * support@kriasoft.com — Customization requests, help with GraphQL/Relay back-ends etc.
+	* [#react-starter-kit](https://gitter.im/kriasoft/react-starter-kit) on Gitter — Feedback, feature requests, Q&A
+	* [@koistya](https://www.codementor.io/koistya) on Codementor — Mentorship, code reviews
+	* support@kriasoft.com — Customization requests, help with GraphQL/Relay back-ends etc.
 
 ### License
 

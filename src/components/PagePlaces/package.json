@@ -1,6 +1,6 @@
 {
-  "name": "PagePlaces",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./PagePlaces.js"
+	"name": "PagePlaces",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./PagePlaces.js"
 }

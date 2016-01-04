@@ -1,6 +1,6 @@
 {
-  "name": "ConfigDataLayerAnalytical",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./ConfigDataLayerAnalytical.js"
+	"name": "ConfigDataLayerAnalytical",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ConfigDataLayerAnalytical.js"
 }

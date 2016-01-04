@@ -41,9 +41,9 @@ const STYLES = [
 @withStyles(styles)
 class ConfigMetadataLayerVector extends Component{
 
-  static contextTypes = {
-    onInteraction: PropTypes.func.isRequired
-  };
+	static contextTypes = {
+		onInteraction: PropTypes.func.isRequired
+	};
 
 	constructor(props) {
 		super(props);
@@ -162,7 +162,7 @@ class ConfigMetadataLayerVector extends Component{
 	render() {
 
 		return (
-      <div>
+			<div>
 
 				<div className="frame-input-wrapper">
 					<label className="container">
@@ -238,9 +238,9 @@ class ConfigMetadataLayerVector extends Component{
 				</IconButton>
 
 			</div>
-    );
+		);
 
-  }
+	}
 }
 
 export default ConfigMetadataLayerVector;
