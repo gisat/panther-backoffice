@@ -17,6 +17,7 @@ import ScreenLinksByAttSetAULevel from '../components/ScreenLinksByAttSetAULevel
 module.exports = [
 	{
 		key: "analyses",
+		title: "Analyses",
 		screens: [
 			{
 				key: "analyses1",
@@ -52,6 +53,7 @@ module.exports = [
 
 	{
 		key: "dashboard",
+		title: "Dashboard",
 		screens: [
 			{
 				key: "screen1",
@@ -62,6 +64,7 @@ module.exports = [
 
 	{
 		key: "dataLayers",
+		title: "Data layers",
 		screens: [
 			{
 				key: "screen1",
@@ -72,6 +75,7 @@ module.exports = [
 
 	{
 		key: "metadata",
+		title: "Metadata structures",
 		screens: [
 			{
 				key: "screen1",
@@ -89,6 +93,7 @@ module.exports = [
 
 	{
 		key: "places",
+		title: "Places",
 		screens: [
 			{
 				key: "screenPlacesBase",

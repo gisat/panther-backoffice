@@ -56,6 +56,7 @@ class Page extends Component {
 
 		this.state = {
 			key: screenSet.key,
+			title: screenSet.title,
 			screens: screenSet.screens
 		};
 
@@ -78,6 +79,7 @@ class Page extends Component {
 			var screenSet = _.findWhere(SCREENSETS, {key: newProps.screenSet});
 			this.setState({
 				key: screenSet.key,
+				title: screenSet.title,
 				screens: screenSet.screens,
 				screenSetChanged: true
 			});
@@ -99,8 +101,7 @@ class Page extends Component {
 	}
 
 	render() {
-		const title = 'Analyses';
-		this.context.onSetTitle(title);
+		this.context.onSetTitle(this.state.title);
 		this.context.activePageKey(this.state.key);
 
 		//console.log("Page props.screenSet: ", this.props.screenSet);
