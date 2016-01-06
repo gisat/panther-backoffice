@@ -294,6 +294,7 @@ class LinkTableByScopePlace extends Component {
 		this.state.example = "Clicked on " + idAttSet + ", " + idAULevel;
 		/*this.forceUpdate();*/
 		/*alert("hey, " + idAttSet);*/
+		// todo setState
 	}
 
 	componentDidMount() {
@@ -394,21 +395,31 @@ class LinkTableByScopePlace extends Component {
 				<tr
 					key={"auattset-" + auAttSet.key}
 				>
-					<td className="selectable heading">
-						<a
-							href="#"
-							onClick={thisComponent.openScreenExample.bind(
-									thisComponent,
-									auAttSet.key,
-									null
-								)}
-						>
-							{auAttSet.name}
-						</a>
+					<td className="header">
+						{auAttSet.name}
 					</td>
 					{auSingleAttSetInsert}
 				</tr>
 			);
+			//return (
+			//	<tr
+			//		key={"auattset-" + auAttSet.key}
+			//	>
+			//		<td className="selectable heading">
+			//			<a
+			//				href="#"
+			//				onClick={thisComponent.openScreenExample.bind(
+			//						thisComponent,
+			//						auAttSet.key,
+			//						null
+			//					)}
+			//			>
+			//				{auAttSet.name}
+			//			</a>
+			//		</td>
+			//		{auSingleAttSetInsert}
+			//	</tr>
+			//);
 		});
 
 		return (
