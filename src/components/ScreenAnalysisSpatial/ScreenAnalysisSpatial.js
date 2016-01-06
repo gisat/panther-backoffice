@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import styles from './ScreenAnalysisSpatial.css';
 import withStyles from '../../decorators/withStyles';
+import path from "path";
 
 import SelectorAnalysisSpatial from '../SelectorAnalysisSpatial';
 import ConfigAnalysisSpatial from '../ConfigAnalysisSpatial';
@@ -27,7 +28,7 @@ class ScreenAnalysisSpatial extends Component{
 	}
 
 	getUrl() {
-		return this.props.parentUrl + "/analysis-spatial-" + this.state.idAnalysisSpatial;
+		return path.join(this.props.parentUrl, "analysis-spatial-" + this.state.idAnalysisSpatial);
 	}
 
 	render() {
