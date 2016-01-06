@@ -23,25 +23,10 @@ class ScreenContainer extends Component{
 		onInteraction: React.PropTypes.func
 	};
 
-	constructor(props) {
-		super(props);
-
-		//console.log("refs: ", this.props.refs);
-
-		//// nasty thing
-		// todo bez init, kdyz to neni ze statu
-		// prevest do page?
-		switch(this.props.screenState.position){
-			case "retracted":
-				this.props.onRetract({init: true});
-				break;
-			case "closed":
-				this.props.onClose({init: true});
-				break;
-			default:
-				this.props.onOpen({init: true});
-		}
-	}
+	//constructor(props) {
+	//	super(props);
+	//
+	//}
 
 	getChildContext(){
 		return {

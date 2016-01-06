@@ -34,12 +34,12 @@ class ScreenAnalysisSpatial extends Component{
 		return (
 			<div>
 				<a onClick={this.context.onSetScreenData("analyses3", {nastaveno: "jo"})}>nastav</a>
+				<p style={{backgroundColor: "yellow"}}>getUrl: {this.getUrl()}</p>
 				<div className="screen-setter"><div>
 					<h2>Analysis</h2>
 					<SelectorAnalysisSpatial id={this.state.idAnalysisSpatial} onChange={this.onChangeId.bind(this)} data={this.props.data} />
 				</div></div>
 				<div className="screen-content"><div>
-					<p style={{backgroundColor: "yellow"}}>getUrl: {this.getUrl()}</p>
 					<ConfigAnalysisSpatial id={this.state.idAnalysisSpatial} data={this.props.data} />
 				</div></div>
 			</div>
