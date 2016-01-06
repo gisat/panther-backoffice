@@ -1,6 +1,0 @@
-{
-	"name": "PageMetadata",
-	"version": "0.0.0",
-	"private": true,
-	"main": "./PageMetadata.js"
-}

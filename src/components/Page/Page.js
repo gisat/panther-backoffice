@@ -1,17 +1,15 @@
 import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
-import styles from './PageAnalyses.css';
+import styles from './Page.css';
 import _ from 'underscore';
 import classNames from 'classnames';
 
 import ScreenContainer from '../ScreenContainer';
-import ScreenAnalysesBase from '../ScreenAnalysesBase';
-import ScreenAnalysisSpatial from '../ScreenAnalysisSpatial';
-import ScreenAnalysisSpatialRules from '../ScreenAnalysisSpatialRules';
 
+const SCREENSETS = require('../../stores/tempScreenSets');
 
 @withStyles(styles)
-class PageAnalyses extends Component {
+class Page extends Component {
 
 
 	static contextTypes = {
@@ -28,40 +26,14 @@ class PageAnalyses extends Component {
 	constructor(props) {
 		super(props);
 
+		console.log("Page props.screenSet: ", this.props.screenSet);
+		var screenSet = _.findWhere(SCREENSETS, {key: this.props.screenSet});
+
 		this.state = {
-			key: "analysis",
-			screens: [
-				{
-					key: "analyses1",
-					component: <ScreenAnalysesBase/>,
-					data: {
-						x: 7
-					}
-				},
-				{
-					key: "analyses2",
-					//type: "constant",
-					size: 40,
-					position: "retracted",
-					component: <ScreenAnalysisSpatial parentUrl="/analyses/spatial"/>,
-					data: {
-						neco: 42,
-						necojineho: 100
-					}
-				},
-				{
-					key: "analyses3",
-					contentAlign: "fill",
-					//size: 80,
-					position: "retracted",
-					component: <ScreenAnalysisSpatialRules/>,
-					data: {
-						rule_id: 47,
-						title: "pumpa"
-					}
-				}
-			]
+			key: screenSet.key,
+			screens: screenSet.screens
 		};
+
 	}
 
 	getChildContext(){
@@ -70,11 +42,25 @@ class PageAnalyses extends Component {
 		};
 	}
 
+	componentWillReceiveProps(newProps) {
+		if (newProps.screenSet != this.state.key) {
+			var screenSet = _.findWhere(SCREENSETS, {key: newProps.screenSet});
+			this.setState({
+				key: screenSet.key,
+				screens: screenSet.screens
+			});
+		}
+	}
+
 	render() {
 		const title = 'Analyses';
 		this.context.onSetTitle(title);
 		this.context.activePageKey(this.state.key);
 
+		//console.log("Page props.screenSet: ", this.props.screenSet);
+		//var screenSet = _.findWhere(SCREENSETS, {key: this.props.screenSet});
+		//console.log("Page screenSet:", screenSet);
+		//var screenNodes = screenSet.screens.map(function(screen) {
 		var screenNodes = this.state.screens.map(function(screen) {
 			return (
 				<ScreenContainer
@@ -89,7 +75,6 @@ class PageAnalyses extends Component {
 				/>
 			);
 		}.bind(this));
-
 
 		return (
 			<div id="content">
@@ -107,4 +92,4 @@ class PageAnalyses extends Component {
 
 }
 
-export default PageAnalyses;
+export default Page;

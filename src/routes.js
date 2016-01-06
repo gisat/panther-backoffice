@@ -4,12 +4,13 @@ import React from 'react';
 import Router from 'react-routing/src/Router';
 import http from './core/HttpClient';
 import App from './components/App';
+import Page from './components/Page';
 import ContentPage from './components/ContentPage';
-import PageDashboard from './components/PageDashboard';
-import PagePlaces from './components/PagePlaces';
-import PageDataLayers from './components/PageDataLayers';
-import PageAnalyses from './components/PageAnalyses';
-import PageMetadata from './components/PageMetadata';
+//import PageDashboard from './components/PageDashboard';
+//import PagePlaces from './components/PagePlaces';
+//import PageDataLayers from './components/PageDataLayers';
+//import PageAnalyses from './components/PageAnalyses';
+//import PageMetadata from './components/PageMetadata';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
@@ -23,15 +24,15 @@ const router = new Router(on => {
 
 	hookRoute(on, '/login', async () => <LoginPage />);
 
-	hookRoute(on, '/', async () => <PageDashboard />);
+	hookRoute(on, '/', async () => <Page screenSet="dashboard" />);
 
-	hookRoute(on, '/places', async () => <PagePlaces />);
+	hookRoute(on, '/places', async () => <Page screenSet="places" />);
 
-	hookRoute(on, '/datalayers', async () => <PageDataLayers />);
+	hookRoute(on, '/datalayers', async () => <Page screenSet="dataLayers" />);
 
-	hookRoute(on, '/analyses', async () => <PageAnalyses />);
+	hookRoute(on, '/analyses', async () => <Page screenSet="analyses" />);
 
-	hookRoute(on, '/metadata', async () => <PageMetadata />);
+	hookRoute(on, '/metadata', async () => <Page screenSet="metadata" />);
 
 	on('*', async (state) => {
 		const content = await http.get(`${publicPath}/api/content?path=${state.path}`);
