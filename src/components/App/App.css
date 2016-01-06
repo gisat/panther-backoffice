@@ -1114,25 +1114,39 @@ todo hex colours, button icons */
 	border-style: solid;
 	border-color: #4d8aff;
 }
-
-.UIObjectSelect-option-place .option-id, .UIObjectSelect-option-place .option-parent {
+.UICustomSelect-place .Select-input {
+	margin-left: 2rem;
+}
+.UICustomSelect-place .Select-placeholder {
+	padding-right: 1.7rem;
+}
+.UICustomSelect-option-place .option-id,
+.UICustomSelect-option-place .option-parent,
+.UICustomSelect-value-place .option-id,
+.UICustomSelect-value-place .option-parent {
 	font-size: .95rem;
 	color:#ccc;
 	display: inline-block;
 	/*line-height: 1.6875rem;*/
 }
-.UIObjectSelect-option-place .option-id {
+.UICustomSelect-value-place .option-id,
+.UICustomSelect-value-place .option-parent {
+	color: #999;
+}
+.UICustomSelect-option-place .option-id,
+.UICustomSelect-value-place .option-id {
 	width: 2rem;
 	font-size: .75rem;
 	text-align: center;
 	padding-right: .3rem;
 }
-/*.UIObjectSelect-option-place .option-id {*/
+/*.UICustomSelect-option-place .option-id {*/
 	/*width: 2rem;*/
 	/*font-size: 1rem;*/
 	/*color:#ccc;*/
 /*}*/
-.UIObjectSelect-option-place .option-parent {
+.UICustomSelect-option-place .option-parent,
+.UICustomSelect-value-place .option-parent {
 	width: 4rem;
 	float: right;
 	text-align: right;
