@@ -6,6 +6,8 @@ import { Button, Input, Icon } from '../SEUI/elements';
 import Select from 'react-select';
 import UIScreenButton from '../UIScreenButton';
 
+import OptionPlace from '../UIObjectSelect/OptionPlace';
+
 //const MAX_ITEMS = 6;
 //const ASYNC_DELAY = 500;
 const PLACES = [
@@ -67,6 +69,7 @@ class SelectorPlace extends Component{
 									onChange={this.onChange.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={PLACES}
+									optionComponent={OptionPlace}
 									valueKey="key"
 									labelKey="place"
 									inputProps={selectInputProps}

@@ -1115,6 +1115,30 @@ todo hex colours, button icons */
 	border-color: #4d8aff;
 }
 
+.UIObjectSelect-option-place .option-id, .UIObjectSelect-option-place .option-parent {
+	font-size: .95rem;
+	color:#ccc;
+	display: inline-block;
+	/*line-height: 1.6875rem;*/
+}
+.UIObjectSelect-option-place .option-id {
+	width: 2rem;
+	font-size: .75rem;
+	text-align: center;
+	padding-right: .3rem;
+}
+/*.UIObjectSelect-option-place .option-id {*/
+	/*width: 2rem;*/
+	/*font-size: 1rem;*/
+	/*color:#ccc;*/
+/*}*/
+.UIObjectSelect-option-place .option-parent {
+	width: 4rem;
+	float: right;
+	text-align: right;
+	padding-right: .3rem;
+}
+
 .rsc-header {
 	height: 2.8125rem;
 	line-height: 2.8125rem;
