@@ -137,7 +137,7 @@ class ConfigAnalysisSpatial extends Component{
 
 		return (
 			<div>
-				<p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)} ID: {this.state.idAnalysisSpatial}</p>
+				<p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Name

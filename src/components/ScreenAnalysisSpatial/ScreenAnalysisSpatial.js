@@ -16,7 +16,7 @@ class ScreenAnalysisSpatial extends Component{
 		super(props);
 
 		this.state = {
-			idAnalysisSpatial: 15
+			idAnalysisSpatial: 1
 		};
 	}
 
