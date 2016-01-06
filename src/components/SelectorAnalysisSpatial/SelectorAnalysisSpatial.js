@@ -5,6 +5,8 @@ import withStyles from '../../decorators/withStyles';
 import { Button, Input, Icon } from '../SEUI/elements';
 import Select from 'react-select';
 
+import OptionKeyName from '../UICustomSelect/OptionKeyName';
+import SingleValueKeyName from '../UICustomSelect/SingleValueKeyName';
 
 const ANALYSES = [
 			{ key: 1, name: 'Land cover status' },
@@ -55,6 +57,9 @@ class SelectorAnalysisSpatial extends Component{
 							<Select
 								onChange={this.onChangeAnalysisSpatial.bind(this)}
 								options={ANALYSES}
+								optionComponent={OptionKeyName}
+								singleValueComponent={SingleValueKeyName}
+								className="UICustomSelect-keyname"
 								valueKey="key"
 								labelKey="name"
 								inputProps={selectInputProps}

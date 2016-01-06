@@ -1114,37 +1114,39 @@ todo hex colours, button icons */
 	border-style: solid;
 	border-color: #4d8aff;
 }
-.UICustomSelect-place .Select-input {
+.UICustomSelect-place .Select-input,
+.UICustomSelect-keyname .Select-input {
 	margin-left: 2rem;
 }
-.UICustomSelect-place .Select-placeholder {
+.UICustomSelect-place .Select-placeholder,
+.UICustomSelect-keyname .Select-placeholder {
 	padding-right: 1.7rem;
 }
 .UICustomSelect-option-place .option-id,
 .UICustomSelect-option-place .option-parent,
 .UICustomSelect-value-place .option-id,
-.UICustomSelect-value-place .option-parent {
+.UICustomSelect-value-place .option-parent,
+.UICustomSelect-option-keyname .option-id,
+.UICustomSelect-value-keyname .option-id {
 	font-size: .95rem;
 	color:#ccc;
 	display: inline-block;
 	/*line-height: 1.6875rem;*/
 }
 .UICustomSelect-value-place .option-id,
-.UICustomSelect-value-place .option-parent {
+.UICustomSelect-value-place .option-parent,
+.UICustomSelect-value-keyname .option-id {
 	color: #999;
 }
 .UICustomSelect-option-place .option-id,
-.UICustomSelect-value-place .option-id {
+.UICustomSelect-value-place .option-id,
+.UICustomSelect-option-keyname .option-id,
+.UICustomSelect-value-keyname .option-id {
 	width: 2rem;
 	font-size: .75rem;
 	text-align: center;
 	padding-right: .3rem;
 }
-/*.UICustomSelect-option-place .option-id {*/
-	/*width: 2rem;*/
-	/*font-size: 1rem;*/
-	/*color:#ccc;*/
-/*}*/
 .UICustomSelect-option-place .option-parent,
 .UICustomSelect-value-place .option-parent {
 	width: 4rem;
