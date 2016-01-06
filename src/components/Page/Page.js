@@ -62,6 +62,7 @@ class Page extends Component {
 	}
 
 	fitScreens(){
+		if(!screenStack[this.state.key] || !screenStack[this.state.key][0]) return;
 		var position = screenStack[this.state.key][0].position;
 		this.context.setScreenPosition.call(this, screen.key, position, {init: true});
 	}
