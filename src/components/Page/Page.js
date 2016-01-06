@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import ScreenContainer from '../ScreenContainer';
 
 const SCREENSETS = require('../../stores/tempScreenSets');
+const screenStack = require('../../stores/screenStack');
 
 @withStyles(styles)
 class Page extends Component {
@@ -26,14 +27,43 @@ class Page extends Component {
 	constructor(props) {
 		super(props);
 
-		console.log("Page props.screenSet: ", this.props.screenSet);
 		var screenSet = _.findWhere(SCREENSETS, {key: this.props.screenSet});
+
+		// create screenStack from screenSet
+		screenStack[screenSet.key] = screenStack[screenSet.key] || [];
+		screenSet.screens.map(function(screen){
+			screenStack[screenSet.key].unshift({
+				key: screen.key,
+				position: screen.position || "open",
+				userDidThat: true
+			});
+		});
+
+		// reorder screenStack to be open-first
+		screenStack[screenSet.key].sort(function(a, b){
+			if((a.position == "closed" || a.position == "retracted") && b.position == "open"){
+				return 1;
+			}
+			return 0;
+		});
+
+		// reindex screenStack orders
+		screenStack[screenSet.key].map(function(record){
+			screenSet.screens.map(function(stateRecord, stateIndex){
+				if(stateRecord.key == record.key) record.order = stateIndex;
+			});
+		});
 
 		this.state = {
 			key: screenSet.key,
 			screens: screenSet.screens
 		};
 
+	}
+
+	fitScreens(){
+		var position = screenStack[this.state.key][0].position;
+		this.context.setScreenPosition.call(this, screen.key, position, {init: true});
 	}
 
 	getChildContext(){
@@ -47,9 +77,24 @@ class Page extends Component {
 			var screenSet = _.findWhere(SCREENSETS, {key: newProps.screenSet});
 			this.setState({
 				key: screenSet.key,
-				screens: screenSet.screens
+				screens: screenSet.screens,
+				screenSetChanged: true
 			});
 		}
+	}
+
+	componentDidUpdate() {
+		// todo run screenPosition on first screen in screenStack
+		if(this.state.screenSetChanged) {
+			this.fitScreens();
+			this.state.screenSetChanged = false;
+		}
+
+	}
+
+	componentDidMount(){
+		//this.context.setScreenData.bind(this)("analyses2", {zkouska: "jo", necojineho: "neco uplne jineho"});
+		this.fitScreens();
 	}
 
 	render() {
@@ -83,11 +128,6 @@ class Page extends Component {
 				</div>
 			</div>
 		);
-	}
-
-	componentDidMount(){
-		//console.log("~~~~~~~~ pageAnalyses.props.screenState: ", this.props.screenState);
-		//this.context.setScreenData.bind(this)("analyses2", {zkouska: "jo", necojineho: "neco uplne jineho"});
 	}
 
 }
