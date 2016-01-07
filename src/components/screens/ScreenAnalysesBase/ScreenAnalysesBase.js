@@ -43,14 +43,23 @@ class ScreenAnalysesBase extends Component{
 		var tabsInsert = [];
 		var contentInsert = [];
 		for(var tab of TABS) {
-			var tabElement = (
-				<a
-					className={this.state.activeMenuItem==tab.key ? 'item active' : 'item'}
-					onClick={this.context.onInteraction( this.onChangeActive.bind(this,tab.key) )}
-				>
-					{tab.name}
-				</a>
-			);
+			var tabElement;
+			if(tab.header) {
+				tabElement = (
+					<a className="header item">
+						{tab.name}
+					</a>
+				);
+			} else {
+				tabElement = (
+					<a
+						className={this.state.activeMenuItem==tab.key ? 'item active' : 'item'}
+						onClick={this.context.onInteraction( this.onChangeActive.bind(this,tab.key) )}
+					>
+						{tab.name}
+					</a>
+				);
+			}
 			var contentElement = (
 				<div
 					className={this.state.activeMenuItem==tab.key ? 'items active' : 'items'}
