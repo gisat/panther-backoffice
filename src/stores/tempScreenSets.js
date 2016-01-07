@@ -1,18 +1,18 @@
 import React from 'react';
 
-import ScreenAnalysesBase from '../components/ScreenAnalysesBase';
-import ScreenAnalysisSpatial from '../components/ScreenAnalysisSpatial';
-import ScreenAnalysisSpatialRules from '../components/ScreenAnalysisSpatialRules';
+import ScreenAnalysesBase from '../components/screens/ScreenAnalysesBase';
+import ScreenAnalysisSpatial from '../components/screens/ScreenAnalysisSpatial';
+import ScreenAnalysisSpatialRules from '../components/screens/ScreenAnalysisSpatialRules';
 
-import ScreenDashboardBase from '../components/ScreenDashboardBase';
+import ScreenDashboardBase from '../components/screens/ScreenDashboardBase';
 
-import ScreenDataLayersBase from '../components/ScreenDataLayersBase';
+import ScreenDataLayersBase from '../components/screens/ScreenDataLayersBase';
 
-import ScreenMetadataBase from '../components/ScreenMetadataBase';
-import ScreenMetadataLayerVector from '../components/ScreenMetadataLayerVector';
+import ScreenMetadataBase from '../components/screens/ScreenMetadataBase';
+import ScreenMetadataLayerVector from '../components/screens/ScreenMetadataLayerVector';
 
-import ScreenPlacesBase from '../components/ScreenPlacesBase';
-import ScreenLinksByAttSetAULevel from '../components/ScreenLinksByAttSetAULevel';
+import ScreenPlacesBase from '../components/screens/ScreenPlacesBase';
+import ScreenLinksByAttSetAULevel from '../components/screens/ScreenLinksByAttSetAULevel';
 
 module.exports = [
 	{

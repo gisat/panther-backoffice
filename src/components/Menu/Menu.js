@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './Menu.css';
 import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
-import UISVG from '../UISVG';
+import UISVG from '../atoms/UISVG';
 
 import { publicPath } from '../../config';
 

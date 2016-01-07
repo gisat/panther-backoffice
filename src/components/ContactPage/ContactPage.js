@@ -8,7 +8,7 @@ import { Segment, Button, Input, Header, IconButton, Icon, PopupButton } from '.
 import { Popup, Modal } from '../SEUI/modules';
 import { Form, Fields, Field, Table } from '../SEUI/collections';
 
-import LinkTableByScopePlace from '../LinkTableByScopePlace/LinkTableByScopePlace';
+import LinkTableByScopePlace from '../elements/LinkTableByScopePlace/LinkTableByScopePlace';
 
 @withStyles(styles)
 class ContactPage extends Component {
