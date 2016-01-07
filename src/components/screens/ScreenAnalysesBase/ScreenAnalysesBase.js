@@ -5,6 +5,13 @@ import path from "path";
 
 import AnalysesListSpatial from '../../temp/AnalysesListSpatial';
 
+const TABS = [
+	{ key: "spatial", name: "Spatial" },
+	{ key: "level", name: "Level aggregation" },
+	{ key: "math", name: "Math" }
+];
+// todo add to TABS: what to display in ObjectList & what to do onClick
+
 @withStyles(styles)
 class ScreenAnalysesBase extends Component{
 
@@ -33,6 +40,31 @@ class ScreenAnalysesBase extends Component{
 	}
 
 	render() {
+		var tabsInsert = [];
+		var contentInsert = [];
+		for(var tab of TABS) {
+			var tabElement = (
+				<a
+					className={this.state.activeMenuItem==tab.key ? 'item active' : 'item'}
+					onClick={this.context.onInteraction( this.onChangeActive.bind(this,tab.key) )}
+				>
+					{tab.name}
+				</a>
+			);
+			var contentElement = (
+				<div
+					className={this.state.activeMenuItem==tab.key ? 'items active' : 'items'}
+					id={"analyses-items-"+tab.key}
+				>
+					<AnalysesListSpatial/>
+				</div>
+			);
+			// todo replace <AnalysesListSpatial/> with <ObjectList data={tab.data} /> or similar
+			tabsInsert.push(tabElement);
+			contentInsert.push(contentElement);
+		}
+
+
 		return (
 			<div>
 				<p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
@@ -42,53 +74,12 @@ class ScreenAnalysesBase extends Component{
 
 					<div className="analyses-grid">
 						<div className="analyses-grid-types">
-
 							<div className="ui smaller vertical tabular menu">
-								<a
-									className={this.state.activeMenuItem=="spatial" ? 'item active' : 'item'}
-									onClick={this.context.onInteraction( this.onChangeActive.bind(this,"spatial") )}
-								>
-									Spatial
-								</a>
-								<a
-									className={this.state.activeMenuItem=="level" ? 'item active' : 'item'}
-									onClick={this.context.onInteraction( this.onChangeActive.bind(this,"level") )}
-								>
-									Level aggregation
-								</a>
-								<a
-									className={this.state.activeMenuItem=="math" ? 'item active' : 'item'}
-									onClick={this.context.onInteraction( this.onChangeActive.bind(this,"math") )}
-								>
-									Math
-								</a>
+								{tabsInsert}
 							</div>
-
-
 						</div>
 						<div className="analyses-grid-items">
-
-							<div
-								className={this.state.activeMenuItem=="spatial" ? 'items active' : 'items'}
-								id="analyses-items-spatial"
-							>
-								<AnalysesListSpatial/>
-							</div>
-
-							<div
-								className={this.state.activeMenuItem=="level" ? 'items active' : 'items'}
-								id="analyses-items-level"
-							>
-								(level)
-							</div>
-
-							<div
-								className={this.state.activeMenuItem=="math" ? 'items active' : 'items'}
-								id="analyses-items-math"
-							>
-								(math)
-							</div>
-
+							{contentInsert}
 						</div>
 					</div>
 
