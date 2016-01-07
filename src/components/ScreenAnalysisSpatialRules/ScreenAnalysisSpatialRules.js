@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import styles from './ScreenAnalysisSpatialRules.css';
 import withStyles from '../../decorators/withStyles';
+import path from "path";
 
 import { Icon, IconButton, Buttons } from '../SEUI/elements';
 import { Table } from '../SEUI/collections';
@@ -99,6 +100,10 @@ class ScreenAnalysisSpatialRules extends Component{
 
 	}
 
+	getUrl() {
+		return path.join(this.props.parentUrl, "rules");
+	}
+
 
 	handleNewObjects(values, store) {
 		var newValues = [];
@@ -152,6 +157,7 @@ class ScreenAnalysisSpatialRules extends Component{
 		return (
 			<div>
 				<p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
+				<p style={{backgroundColor: "yellow"}}>getUrl: {this.getUrl()}</p>
 				<div className="screen-content"><div>
 
 				<div className="frame-input-wrapper">

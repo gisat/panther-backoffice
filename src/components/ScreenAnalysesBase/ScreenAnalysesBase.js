@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import styles from './ScreenAnalysesBase.css';
 import withStyles from '../../decorators/withStyles';
+import path from "path";
 
 import AnalysesListSpatial from '../AnalysesListSpatial';
 
@@ -27,10 +28,15 @@ class ScreenAnalysesBase extends Component{
 		});
 	}
 
+	getUrl() {
+		return path.join(this.props.parentUrl, "analyses");
+	}
+
 	render() {
 		return (
 			<div>
 				<p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
+				<p style={{backgroundColor: "yellow"}}>getUrl: {this.getUrl()}</p>
 				<div className="screen-content"><div>
 					<h1>Analyses</h1>
 

@@ -66,6 +66,33 @@ class ScreenContainer extends Component{
 		//console.log("CDM");
 	}
 
+	///**
+	// * setUrl combines parent URL an current screen URL
+	// * function is passed to Screen as prop
+	// * Use in getUrl:
+	// * getUrl(){
+	// *   return this.props.setUrl.call(this, "analyses");
+	// * }
+	// * @param screenUrl: URL to be appended to parentUrl
+	// * @returns string URL
+	// */
+	//setUrl(screenUrl){
+	//	var parentUrl = this.props.parentUrl || "";
+	//
+	//	//console.log("setUrl this.props: ", this.props);
+	//
+	//	//if(screenUrl[0] === "/"){
+	//	//	screenUrl = screenUrl.slice(1);
+	//	//}
+	//	//if(parentUrl[parentUrl.length - 1] === "/"){
+	//	//	parentUrl = parentUrl.slice(0, parentUrl.length - 1);
+	//	//}
+	//	//return parentUrl + "/" + screenUrl;
+	//
+	//	return path.join(parentUrl, screenUrl);
+	//}
+
+
 	render() {
 		var disabled = this.props.screenState.disabled || false;
 		//var typeClass = this.props.screenState.type || "";
@@ -86,7 +113,11 @@ class ScreenContainer extends Component{
 		return (
 			<div className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass, contentAlignClass)} style={screenStyles}>
 				<div className="screen-scroll"><div>
-					{React.cloneElement(this.props.screenState.component, { disabled: disabled, data: this.props.screenState.data || {} })}
+					{React.cloneElement(this.props.screenState.component, {
+						disabled: disabled,
+						data: this.props.screenState.data || {},
+						parentUrl: this.props.screenState.parentUrl || ""
+					} )}
 				</div></div>
 				<div className="screen-controls middle">
 					<Buttons basic icon vertical>

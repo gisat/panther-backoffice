@@ -31,7 +31,8 @@ module.exports = [
 				//type: "constant",
 				size: 40,
 				position: "retracted",
-				component: <ScreenAnalysisSpatial parentUrl="/analyses/spatial"/>,
+				component: <ScreenAnalysisSpatial/>,
+				parentUrl: "/analyses/spatial",
 				data: {
 					neco: 42,
 					necojineho: 100
