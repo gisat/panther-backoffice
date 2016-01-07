@@ -1,6 +1,0 @@
-{
-	"name": "TestScreen",
-	"version": "0.0.0",
-	"private": true,
-	"main": "./TestScreen.js"
-}

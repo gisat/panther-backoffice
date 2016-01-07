@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import TestC from '../../TestC';
+import TestC from '../TestC';
 
 class Dashboard extends Component{
 	render() {

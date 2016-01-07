@@ -5,14 +5,10 @@ import Router from 'react-routing/src/Router';
 import http from './core/HttpClient';
 import App from './components/App';
 import Page from './components/Page';
-import ContentPage from './components/ContentPage';
-//import PageDashboard from './components/PageDashboard';
-//import PagePlaces from './components/PagePlaces';
-//import PageDataLayers from './components/PageDataLayers';
-//import PageAnalyses from './components/PageAnalyses';
-//import PageMetadata from './components/PageMetadata';
-import NotFoundPage from './components/NotFoundPage';
-import ErrorPage from './components/ErrorPage';
+import ContentPage from './components/temp/ContentPage';
+import NotFoundPage from './components/temp/NotFoundPage';
+import ErrorPage from './components/temp/ErrorPage';
+import LoginPage from './components/temp/LoginPage';
 
 import { publicPath } from './config';
 
