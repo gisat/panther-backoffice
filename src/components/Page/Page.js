@@ -29,6 +29,17 @@ class Page extends Component {
 
 		var screenSet = _.findWhere(SCREENSETS, {key: this.props.screenSet});
 
+		this.buildScreenStack(screenSet);
+
+		this.state = {
+			key: screenSet.key,
+			title: screenSet.title,
+			screens: screenSet.screens
+		};
+
+	}
+
+	buildScreenStack(screenSet) {
 		// create screenStack from screenSet
 		screenStack[screenSet.key] = screenStack[screenSet.key] || [];
 		screenSet.screens.map(function(screen){
@@ -53,13 +64,6 @@ class Page extends Component {
 				if(stateRecord.key == record.key) record.order = stateIndex;
 			});
 		});
-
-		this.state = {
-			key: screenSet.key,
-			title: screenSet.title,
-			screens: screenSet.screens
-		};
-
 	}
 
 	fitScreens(){
@@ -77,6 +81,9 @@ class Page extends Component {
 	componentWillReceiveProps(newProps) {
 		if (newProps.screenSet != this.state.key) {
 			var screenSet = _.findWhere(SCREENSETS, {key: newProps.screenSet});
+			if(!screenStack[newProps.screenSet]) {
+				this.buildScreenStack(screenSet);
+			}
 			this.setState({
 				key: screenSet.key,
 				title: screenSet.title,
