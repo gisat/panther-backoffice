@@ -17,7 +17,7 @@ class ScreenAnalysesBase extends Component{
 		super(props);
 
 		this.state = {
-			activeMenuItem: 1,
+			activeMenuItem: "spatial",
 			data: this.props.data
 		};
 	}
@@ -29,7 +29,7 @@ class ScreenAnalysesBase extends Component{
 	}
 
 	getUrl() {
-		return path.join(this.props.parentUrl, "analyses");
+		return path.join(this.props.parentUrl, "analyses/" + this.state.activeMenuItem);
 	}
 
 	render() {
@@ -45,20 +45,20 @@ class ScreenAnalysesBase extends Component{
 
 							<div className="ui smaller vertical tabular menu">
 								<a
-									className={this.state.activeMenuItem==1 ? 'item active' : 'item'}
-									onClick={this.context.onInteraction( this.onChangeActive.bind(this,1) )}
+									className={this.state.activeMenuItem=="spatial" ? 'item active' : 'item'}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,"spatial") )}
 								>
 									Spatial
 								</a>
 								<a
-									className={this.state.activeMenuItem==2 ? 'item active' : 'item'}
-									onClick={this.context.onInteraction( this.onChangeActive.bind(this,2) )}
+									className={this.state.activeMenuItem=="level" ? 'item active' : 'item'}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,"level") )}
 								>
 									Level aggregation
 								</a>
 								<a
-									className={this.state.activeMenuItem==3 ? 'item active' : 'item'}
-									onClick={this.context.onInteraction( this.onChangeActive.bind(this,3) )}
+									className={this.state.activeMenuItem=="math" ? 'item active' : 'item'}
+									onClick={this.context.onInteraction( this.onChangeActive.bind(this,"math") )}
 								>
 									Math
 								</a>
@@ -69,21 +69,21 @@ class ScreenAnalysesBase extends Component{
 						<div className="analyses-grid-items">
 
 							<div
-								className={this.state.activeMenuItem==1 ? 'items active' : 'items'}
+								className={this.state.activeMenuItem=="spatial" ? 'items active' : 'items'}
 								id="analyses-items-spatial"
 							>
 								<AnalysesListSpatial/>
 							</div>
 
 							<div
-								className={this.state.activeMenuItem==2 ? 'items active' : 'items'}
+								className={this.state.activeMenuItem=="level" ? 'items active' : 'items'}
 								id="analyses-items-level"
 							>
 								(level)
 							</div>
 
 							<div
-								className={this.state.activeMenuItem==3 ? 'items active' : 'items'}
+								className={this.state.activeMenuItem=="math" ? 'items active' : 'items'}
 								id="analyses-items-math"
 							>
 								(math)
