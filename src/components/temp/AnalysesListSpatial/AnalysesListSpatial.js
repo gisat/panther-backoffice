@@ -68,6 +68,7 @@ class AnalysesListSpatial extends Component{
 						)}
 					key={"spatialanalysis-" + item.key}
 				>
+					<span className="item-id">{item.key}</span>
 					<span>{item.name}</span>
 				</a>
 			);

@@ -1127,25 +1127,30 @@ todo hex colours, button icons */
 .UICustomSelect-value-place .option-id,
 .UICustomSelect-value-place .option-parent,
 .UICustomSelect-option-keyname .option-id,
-.UICustomSelect-value-keyname .option-id {
+.UICustomSelect-value-keyname .option-id,
+.puma-item .item-id {
 	font-size: .95rem;
 	color:#ccc;
 	display: inline-block;
-	/*line-height: 1.6875rem;*/
+	/*line-height: 1;*/
 }
+
 .UICustomSelect-value-place .option-id,
 .UICustomSelect-value-place .option-parent,
-.UICustomSelect-value-keyname .option-id {
+.UICustomSelect-value-keyname .option-id,
+.puma-item .item-id {
 	color: #999;
 }
 .UICustomSelect-option-place .option-id,
 .UICustomSelect-value-place .option-id,
 .UICustomSelect-option-keyname .option-id,
-.UICustomSelect-value-keyname .option-id {
+.UICustomSelect-value-keyname .option-id,
+.puma-item .item-id {
 	width: 2rem;
 	font-size: .75rem;
 	text-align: center;
 	padding-right: .3rem;
+	line-height: 1;
 }
 .UICustomSelect-option-place .option-parent,
 .UICustomSelect-value-place .option-parent {
