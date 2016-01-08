@@ -3,14 +3,32 @@ import styles from './ScreenAnalysesBase.css';
 import withStyles from '../../../decorators/withStyles';
 import path from "path";
 
-import AnalysesListSpatial from '../../temp/AnalysesListSpatial';
+import ObjectList from '../../elements/ObjectList';
 
-const TABS = [
-	{ key: "spatial", name: "Spatial" },
-	{ key: "level", name: "Level aggregation" },
-	{ key: "math", name: "Math" }
+const SPATIALANALYSES = [
+	{ key: 1, name: 'Land cover status' },
+	{ key: 2, name: 'Land cover status aggregated' },
+	{ key: 3, name: 'Land cover change' },
+	{ key: 4, name: 'Land cover formation' },
+	{ key: 5, name: 'Land cover consumption' },
+	{ key: 8, name: 'Road type' },
+	{ key: 11, name: 'Road length' }
 ];
-// todo add to TABS: what to display in ObjectList & what to do onClick
+const LEVELANALYSES = [
+	{ key: 9, name: 'Road aggregated' },
+	{ key: 15, name: 'Status aggregated' },
+	{ key: 16, name: 'Change aggregated' },
+	{ key: 22, name: 'Road length aggregated' }
+];
+const MATHANALYSES = [
+	{ key: 13, name: 'Net Formation UF' },
+	{ key: 24, name: 'Net Formation' }
+];
+const TABS = [
+	{ key: "spatial", name: "Spatial", data: SPATIALANALYSES },
+	{ key: "level", name: "Level aggregation", data: LEVELANALYSES },
+	{ key: "math", name: "Math", data: MATHANALYSES }
+];
 
 @withStyles(styles)
 class ScreenAnalysesBase extends Component{
@@ -33,6 +51,18 @@ class ScreenAnalysesBase extends Component{
 		this.setState({
 			activeMenuItem: key
 		});
+	}
+
+	onObjectListItemClick(itemType, item, event) {
+		console.log("-- onObjectListItemClick");
+		console.log("itemType:",itemType);
+		console.log("item:",item);
+		console.log("event:",event);
+	}
+	onObjectListAddClick(itemType, event) {
+		console.log("-- onObjectListAddClick");
+		console.log("itemType:",itemType);
+		console.log("event:",event);
 	}
 
 	getUrl() {
@@ -70,10 +100,15 @@ class ScreenAnalysesBase extends Component{
 					id={"analyses-items-"+tab.key}
 					key={"analyses-items-"+tab.key}
 				>
-					<AnalysesListSpatial/>
+					<ObjectList
+						data={tab.data}
+						onItemClick={this.onObjectListItemClick.bind(this,tab.key+'Analysis')}
+						onAddClick={this.onObjectListAddClick.bind(this,tab.key+'Analysis')}
+						itemClasses="template"
+					/>
 				</div>
 			);
-			// todo replace <AnalysesListSpatial/> with <ObjectList data={tab.data} /> or similar
+			// todo replace tab.key+'Analysis' with better reference to type
 			tabsInsert.push(tabElement);
 			contentInsert.push(contentElement);
 		}
