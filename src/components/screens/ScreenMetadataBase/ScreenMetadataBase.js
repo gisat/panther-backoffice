@@ -2,25 +2,39 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenMetadataBase.css';
 import withStyles from '../../../decorators/withStyles';
 
-import MetadataListLayerVector from '../../temp/MetadataListLayerVector';
+import ObjectList from '../../elements/ObjectList';
+import classnames from 'classnames';
 
-const TABS = [
-	{ key: "spatial", name: "Scope" },
-	{ key: "header-templates", name: "Templates", header: true },
-	{ key: "vectorLayer", name: "Vector layer" },
-	{ key: "rasterLayer", name: "Raster layer" },
-	{ key: "attributeSet", name: "Attribute set" },
-	{ key: "attribute", name: "Attribute" },
-	{ key: "header-metadata", name: "Metadata", header: true },
-	{ key: "place", name: "Place" },
-	{ key: "period", name: "Imaging/reference period" },
-	{ key: "theme", name: "Theme" },
-	{ key: "topic", name: "Topic" },
-	{ key: "header-display", name: "Display", header: true  },
-	{ key: "layerGroup", name: "Layer group" },
-	{ key: "style", name: "Style" }
+const SCOPES = [
+	{ key: 1, name: 'Local' },
+	{ key: 2, name: 'National' },
+	{ key: 3, name: 'Regional' },
+	{ key: 4, name: 'Local (EOW2)' }
 ];
-// todo add to TABS: what to display in ObjectList & what to do onClick
+const VECTORLAYERTEMPLATES = [
+	{ key: 1, name: 'Road network' },
+	{ key: 2, name: 'Hospitals' },
+	{ key: 3, name: 'Land cover' },
+	{ key: 4, name: 'Land cover change' },
+	{ key: 5, name: 'Possible low-income settlements (areals)' },
+	{ key: 7, name: 'Possible low-income settlements (mid-points)' }
+];
+const TABS = [
+	{ key: "scope", name: "Scope", data: SCOPES },
+	{ key: "header-templates", name: "Templates", header: true },
+	{ key: "vector-layer", name: "Vector layer", data: VECTORLAYERTEMPLATES, isTemplate: true },
+	{ key: "raster-layer", name: "Raster layer", data: VECTORLAYERTEMPLATES, isTemplate: true },
+	{ key: "attribute-set", name: "Attribute set", data: VECTORLAYERTEMPLATES, isTemplate: true },
+	{ key: "attribute", name: "Attribute", data: VECTORLAYERTEMPLATES, isTemplate: true },
+	{ key: "header-metadata", name: "Metadata", header: true },
+	{ key: "place", name: "Place", data: VECTORLAYERTEMPLATES },
+	{ key: "period", name: "Imaging/reference period", data: VECTORLAYERTEMPLATES },
+	{ key: "theme", name: "Theme", data: VECTORLAYERTEMPLATES },
+	{ key: "topic", name: "Topic", data: VECTORLAYERTEMPLATES },
+	{ key: "header-display", name: "Display", header: true  },
+	{ key: "layer-group", name: "Layer group", data: VECTORLAYERTEMPLATES },
+	{ key: "style", name: "Style", data: VECTORLAYERTEMPLATES }
+];
 
 @withStyles(styles)
 class ScreenMetadataBase extends Component{
@@ -32,8 +46,14 @@ class ScreenMetadataBase extends Component{
 	constructor(props) {
 		super(props);
 
+		var initialActiveObjectListItems = {};
+		for (var tab in TABS) {
+			initialActiveObjectListItems[tab.key] = null;
+		}
+
 		this.state = {
-			activeMenuItem: "vectorLayer"
+			activeMenuItem: "vector-layer",
+			activeObjectListItems: initialActiveObjectListItems
 		};
 
 	}
@@ -44,11 +64,36 @@ class ScreenMetadataBase extends Component{
 		});
 	}
 
+	changeActiveObjectListItem(itemType, value){
+		var newActiveObjectListItems = this.state.activeObjectListItems;
+		newActiveObjectListItems[itemType] = value;
+		this.setState({
+			activeObjectListItems: newActiveObjectListItems
+		});
+		// todo replace selection with screen-opener logic
+	}
+
+	onObjectListItemClick(itemType, item, event) {
+		this.context.onInteraction().call();
+		// todo open screen with item
+		this.changeActiveObjectListItem(itemType,item.key);
+	}
+	onObjectListAddClick(itemType, event) {
+		this.context.onInteraction().call();
+		// todo create item + open screen
+		this.changeActiveObjectListItem(itemType,null);
+	}
+
+	getUrl() {
+		return path.join(this.props.parentUrl, "metadata/" + this.state.activeMenuItem);
+	}
+
 	render() {
 		var tabsInsert = [];
 		var contentInsert = [];
 		for(var tab of TABS) {
 			var tabElement;
+			var contentElement;
 			if(tab.header) {
 				tabElement = (
 					<a
@@ -58,6 +103,7 @@ class ScreenMetadataBase extends Component{
 						{tab.name}
 					</a>
 				);
+				contentElement = "";
 			} else {
 				tabElement = (
 					<a
@@ -68,16 +114,22 @@ class ScreenMetadataBase extends Component{
 						{tab.name}
 					</a>
 				);
+				contentElement = (
+					<div
+						className={this.state.activeMenuItem==tab.key ? 'items active' : 'items'}
+						id={"metadata-items-"+tab.key}
+						key={"metadata-items-"+tab.key}
+					>
+						<ObjectList
+							data={tab.data}
+							onItemClick={this.onObjectListItemClick.bind(this,tab.key)}
+							onAddClick={this.onObjectListAddClick.bind(this,tab.key)}
+							itemClasses={classnames({'template' : tab.isTemplate})}
+							selectedItemKey={this.state.activeObjectListItems[tab.key]}
+						/>
+					</div>
+				);
 			}
-			var contentElement = (
-				<div
-					className={this.state.activeMenuItem==tab.key ? 'items active' : 'items'}
-					id={"metadata-items-"+tab.key}
-					key={"metadata-items-"+tab.key}
-				>
-					<MetadataListLayerVector/>
-				</div>
-			);
 			// todo replace <MetadataListLayerVector/> with <ObjectList data={tab.data} /> or similar
 			tabsInsert.push(tabElement);
 			contentInsert.push(contentElement);
