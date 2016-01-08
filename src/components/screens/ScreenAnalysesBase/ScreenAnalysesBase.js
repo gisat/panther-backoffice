@@ -62,26 +62,20 @@ class ScreenAnalysesBase extends Component{
 	changeActiveObjectListItem(itemType, value){
 		var newActiveObjectListItems = this.state.activeObjectListItems;
 		newActiveObjectListItems[itemType] = value;
-		console.log("changeActiveObjectListItem:",itemType,value);
 		this.setState({
 			activeObjectListItems: newActiveObjectListItems
 		});
-		this.forceUpdate();
+		// todo replace selection with screen-opener logic
 	}
 
 	onObjectListItemClick(itemType, item, event) {
 		this.context.onInteraction().call();
-		console.log("-- onObjectListItemClick");
-		console.log("itemType:",itemType);
-		console.log("item:",item);
-		console.log("event:",event);
+		// todo open screen with item
 		this.changeActiveObjectListItem(itemType,item.key);
 	}
 	onObjectListAddClick(itemType, event) {
 		this.context.onInteraction().call();
-		console.log("-- onObjectListAddClick");
-		console.log("itemType:",itemType);
-		console.log("event:",event);
+		// todo create item + open screen
 		this.changeActiveObjectListItem(itemType,null);
 	}
 
