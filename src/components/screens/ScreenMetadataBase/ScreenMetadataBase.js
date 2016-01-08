@@ -51,7 +51,10 @@ class ScreenMetadataBase extends Component{
 			var tabElement;
 			if(tab.header) {
 				tabElement = (
-					<a className="header item">
+					<a
+						className="header item"
+						key={"metadata-tabs-"+tab.key}
+					>
 						{tab.name}
 					</a>
 				);
@@ -60,6 +63,7 @@ class ScreenMetadataBase extends Component{
 					<a
 						className={this.state.activeMenuItem==tab.key ? 'item active' : 'item'}
 						onClick={this.context.onInteraction( this.onChangeActive.bind(this,tab.key) )}
+						key={"metadata-tabs-"+tab.key}
 					>
 						{tab.name}
 					</a>
@@ -68,7 +72,8 @@ class ScreenMetadataBase extends Component{
 			var contentElement = (
 				<div
 					className={this.state.activeMenuItem==tab.key ? 'items active' : 'items'}
-					id={"analyses-items-"+tab.key}
+					id={"metadata-items-"+tab.key}
+					key={"metadata-items-"+tab.key}
 				>
 					<MetadataListLayerVector/>
 				</div>

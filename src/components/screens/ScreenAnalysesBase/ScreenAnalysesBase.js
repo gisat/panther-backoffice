@@ -46,7 +46,10 @@ class ScreenAnalysesBase extends Component{
 			var tabElement;
 			if(tab.header) {
 				tabElement = (
-					<a className="header item">
+					<a
+						className="header item"
+						key={"analyses-tabs-"+tab.key}
+					>
 						{tab.name}
 					</a>
 				);
@@ -55,6 +58,7 @@ class ScreenAnalysesBase extends Component{
 					<a
 						className={this.state.activeMenuItem==tab.key ? 'item active' : 'item'}
 						onClick={this.context.onInteraction( this.onChangeActive.bind(this,tab.key) )}
+						key={"analyses-tabs-"+tab.key}
 					>
 						{tab.name}
 					</a>
@@ -64,6 +68,7 @@ class ScreenAnalysesBase extends Component{
 				<div
 					className={this.state.activeMenuItem==tab.key ? 'items active' : 'items'}
 					id={"analyses-items-"+tab.key}
+					key={"analyses-items-"+tab.key}
 				>
 					<AnalysesListSpatial/>
 				</div>
