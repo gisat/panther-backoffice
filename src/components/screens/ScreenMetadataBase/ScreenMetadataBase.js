@@ -130,7 +130,6 @@ class ScreenMetadataBase extends Component{
 					</div>
 				);
 			}
-			// todo replace <MetadataListLayerVector/> with <ObjectList data={tab.data} /> or similar
 			tabsInsert.push(tabElement);
 			contentInsert.push(contentElement);
 		}
