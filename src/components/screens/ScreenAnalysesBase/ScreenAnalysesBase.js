@@ -41,8 +41,14 @@ class ScreenAnalysesBase extends Component{
 	constructor(props) {
 		super(props);
 
+		var initialActiveObjectListItems = {};
+		for (var tab in TABS) {
+			initialActiveObjectListItems[tab.key] = null;
+		}
+
 		this.state = {
 			activeMenuItem: "spatial",
+			activeObjectListItems: initialActiveObjectListItems,
 			data: this.props.data
 		};
 	}
@@ -53,18 +59,30 @@ class ScreenAnalysesBase extends Component{
 		});
 	}
 
+	changeActiveObjectListItem(itemType, value){
+		var newActiveObjectListItems = this.state.activeObjectListItems;
+		newActiveObjectListItems[itemType] = value;
+		console.log("changeActiveObjectListItem:",itemType,value);
+		this.setState({
+			activeObjectListItems: newActiveObjectListItems
+		});
+		this.forceUpdate();
+	}
+
 	onObjectListItemClick(itemType, item, event) {
 		this.context.onInteraction().call();
 		console.log("-- onObjectListItemClick");
 		console.log("itemType:",itemType);
 		console.log("item:",item);
 		console.log("event:",event);
+		this.changeActiveObjectListItem(itemType,item.key);
 	}
 	onObjectListAddClick(itemType, event) {
 		this.context.onInteraction().call();
 		console.log("-- onObjectListAddClick");
 		console.log("itemType:",itemType);
 		console.log("event:",event);
+		this.changeActiveObjectListItem(itemType,null);
 	}
 
 	getUrl() {
@@ -104,13 +122,14 @@ class ScreenAnalysesBase extends Component{
 				>
 					<ObjectList
 						data={tab.data}
-						onItemClick={this.onObjectListItemClick.bind(this,tab.key+'Analysis')}
-						onAddClick={this.onObjectListAddClick.bind(this,tab.key+'Analysis')}
+						onItemClick={this.onObjectListItemClick.bind(this,tab.key)}
+						onAddClick={this.onObjectListAddClick.bind(this,tab.key)}
 						itemClasses="template"
+						selectedItemKey={this.state.activeObjectListItems[tab.key]}
 					/>
 				</div>
 			);
-			// todo replace tab.key+'Analysis' with better reference to type
+			// todo replace tab.key with better reference to type ??
 			tabsInsert.push(tabElement);
 			contentInsert.push(contentElement);
 		}

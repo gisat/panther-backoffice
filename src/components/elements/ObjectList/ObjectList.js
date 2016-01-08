@@ -25,23 +25,6 @@ class ObjectList extends Component {
 		selectedItemKey: null
 	};
 
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			selectedItem: this.props.selectedItemKey
-		};
-
-	}
-
-	componentWillReceiveProps(newProps) {
-		if (newProps.selectedItemKey != this.state.selectedItem) {
-			this.setState({
-				selectedItem: this.props.selectedItemKey
-			});
-		}
-	}
-
 
 	handleItemClick  (key, event) {
 		if (this.props.onItemClick) {
@@ -50,9 +33,6 @@ class ObjectList extends Component {
 			var item = _.findWhere(this.props.data, {key: key});
 			this.props.onItemClick(item, event);
 		}
-		this.setState({
-			selectedItem: key
-		});
 	}
 
 	handleAddClick  (event) {
@@ -61,9 +41,6 @@ class ObjectList extends Component {
 			event.preventDefault();
 			this.props.onAddClick(event);
 		}
-		this.setState({
-			selectedItem: null
-		});
 	}
 
 
@@ -75,7 +52,7 @@ class ObjectList extends Component {
 			var className = classnames(
 				'puma-item',
 				thisComponent.props.itemClasses,
-				{	'screen-opener' : thisComponent.state.selectedItem==item.key }
+				{	'screen-opener' : thisComponent.props.selectedItemKey==item.key }
 			);
 			return (
 				<a
