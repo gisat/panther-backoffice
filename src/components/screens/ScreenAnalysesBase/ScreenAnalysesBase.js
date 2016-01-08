@@ -54,12 +54,14 @@ class ScreenAnalysesBase extends Component{
 	}
 
 	onObjectListItemClick(itemType, item, event) {
+		this.context.onInteraction().call();
 		console.log("-- onObjectListItemClick");
 		console.log("itemType:",itemType);
 		console.log("item:",item);
 		console.log("event:",event);
 	}
 	onObjectListAddClick(itemType, event) {
+		this.context.onInteraction().call();
 		console.log("-- onObjectListAddClick");
 		console.log("itemType:",itemType);
 		console.log("event:",event);
