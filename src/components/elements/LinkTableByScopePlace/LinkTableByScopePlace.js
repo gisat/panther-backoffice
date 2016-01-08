@@ -294,7 +294,6 @@ class LinkTableByScopePlace extends Component {
 		this.state.example = "Clicked on " + idAttSet + ", " + idAULevel;
 		/*this.forceUpdate();*/
 		/*alert("hey, " + idAttSet);*/
-		// todo setState
 	}
 
 	componentDidMount() {

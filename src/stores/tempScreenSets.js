@@ -40,8 +40,8 @@ module.exports = [
 			},
 			{
 				key: "analyses3",
-				contentAlign: "fill",
-				//size: 80,
+				//contentAlign: "fill",
+				size: 80,
 				position: "retracted",
 				component: <ScreenAnalysisSpatialRules/>,
 				data: {
