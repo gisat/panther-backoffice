@@ -8,9 +8,16 @@
 }
 #LinkTableVectorByScopePlace tbody tr:not(:first-child) td {
 /*	border-top:.4375rem solid #888;*/
-	border-top:.25rem solid #888;
+	/*border-top:.25rem solid #888;*/
+	border-top:.25rem solid #aaa;
 }
 
 #LinkTableVectorByScopePlace tbody tr td.header:not(:first-child) {
-	background: #b9b9b9;
+	/*background: #b9b9b9;*/
+	border-left: 1px solid #999;
+}
+
+#LinkTableVectorByScopePlace thead th:not(:first-child) {
+	/*background: #b9b9b9;*/
+	border-left: 1px solid #888;
 }

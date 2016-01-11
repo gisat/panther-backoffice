@@ -7,6 +7,9 @@
 	background: #a6a6a6;
 	font-weight: bold;
 }
+.ui.table td.header {
+	background: #ccc;
+}
 
 .ui.table.fixed td.allowOverflow {
 	overflow: visible;

@@ -9,5 +9,5 @@
 	border-left:0;
 }
 #LinkTableRasterByScopePlace tbody tr:not(:first-child) td {
-	border-top:.25rem solid #888;
+	border-top:.25rem solid #aaa;
 }
