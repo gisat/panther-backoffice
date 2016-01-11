@@ -8,6 +8,7 @@ import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
 import _ from 'underscore';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
+import SaveButton from '../../atoms/SaveButton';
 
 const SCOPES = [
 			{ key: 1, scope: 'Local' },
@@ -619,9 +620,7 @@ class ConfigDataLayerAnalytical extends Component{
 				</Table>
 
 
-				<IconButton name="check" basic color="blue">
-					Save
-				</IconButton>
+				<SaveButton saved />
 
 			</div>
 		);

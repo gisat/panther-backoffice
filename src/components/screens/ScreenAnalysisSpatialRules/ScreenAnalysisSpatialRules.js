@@ -7,6 +7,7 @@ import { Icon, IconButton, Buttons } from '../../SEUI/elements';
 import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
+import SaveButton from '../../atoms/SaveButton';
 
 const OPERATIONS = [
 			{ key: "COUNT", name: "COUNT"	},
@@ -362,9 +363,7 @@ class ScreenAnalysisSpatialRules extends Component{
 					</tbody>
 				</Table>
 
-				<IconButton name="check" basic color="blue">
-					Save
-				</IconButton>
+					<SaveButton saved />
 
 			</div></div></div>
 		);

@@ -8,6 +8,7 @@ import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
 import _ from 'underscore';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
+import SaveButton from '../../atoms/SaveButton';
 
 const LAYERTEMPLATES = [
 			{ key: 1, name: 'Population grid' },
@@ -223,9 +224,7 @@ class ConfigDataLayerRaster extends Component{
 						</label>
 				</div>
 
-				<IconButton name="check" basic color="blue">
-					Save
-				</IconButton>
+				<SaveButton saved />
 
 			</div>
 		);

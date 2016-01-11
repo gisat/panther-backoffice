@@ -4,6 +4,7 @@ import withStyles from '../../../decorators/withStyles';
 
 import UISVG from '../../atoms/UISVG';
 import UIScreenButton from '../../atoms/UIScreenButton';
+import SaveButton from '../../atoms/SaveButton';
 
 import { Icon, IconButton } from '../../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
@@ -182,9 +183,7 @@ class ConfigLinksByAttSetAULevel extends Component{
 						<Icon name="plus" />
 						New analysis
 					</UIScreenButton>
-					<IconButton name="check" basic color="blue">
-						Save
-					</IconButton>
+					<SaveButton />
 				</div>
 
 
@@ -339,9 +338,7 @@ class ConfigLinksByAttSetAULevel extends Component{
 						<Icon name="plus" />
 						New analysis
 					</UIScreenButton>
-					<IconButton name="check" basic color="blue">
-						Save
-					</IconButton>
+					<SaveButton saved />
 				</div>
 
 

@@ -7,6 +7,7 @@ import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import Select from 'react-select';
 import _ from 'underscore';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
+import SaveButton from '../../atoms/SaveButton';
 
 
 const TOPICS = [
@@ -233,9 +234,7 @@ class ConfigMetadataLayerVector extends Component{
 				</div>
 
 
-				<IconButton name="check" basic color="blue">
-					Save
-				</IconButton>
+				<SaveButton saved />
 
 			</div>
 		);

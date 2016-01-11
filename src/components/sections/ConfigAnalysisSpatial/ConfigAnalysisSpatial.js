@@ -3,6 +3,7 @@ import styles from './ConfigAnalysisSpatial.css';
 import withStyles from '../../../decorators/withStyles';
 
 import UIScreenButton from '../../atoms/UIScreenButton';
+import SaveButton from '../../atoms/SaveButton';
 
 import { Input, Icon, IconButton, Buttons } from '../../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
@@ -164,9 +165,7 @@ class ConfigAnalysisSpatial extends Component{
 						<div className="frame-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
 				</div>
 
-				<IconButton name="check" basic color="blue" disabled>
-					Saved
-				</IconButton>
+				<SaveButton saved />
 
 
 				<div className="section-header">
