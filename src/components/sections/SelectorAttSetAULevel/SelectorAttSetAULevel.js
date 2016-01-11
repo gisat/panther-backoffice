@@ -5,6 +5,9 @@ import withStyles from '../../../decorators/withStyles';
 import { Button, Input, Icon } from '../../SEUI/elements';
 import Select from 'react-select';
 
+import OptionKeyName from '../../atoms/UICustomSelect/OptionKeyName';
+import SingleValueKeyName from '../../atoms/UICustomSelect/SingleValueKeyName';
+
 //const MAX_ITEMS = 6;
 //const ASYNC_DELAY = 500;
 const ATTSETS = [
@@ -70,6 +73,9 @@ class SelectorAttSetAULevel extends Component{
 								onChange={this.onChangeAttSet.bind(this)}
 								//loadOptions={this.getPlaces}
 								options={ATTSETS}
+								optionComponent={OptionKeyName}
+								singleValueComponent={SingleValueKeyName}
+								className="UICustomSelect-keyname"
 								valueKey="key"
 								labelKey="name"
 								inputProps={selectInputProps}
@@ -86,6 +92,9 @@ class SelectorAttSetAULevel extends Component{
 								onChange={this.onChangeAULevel.bind(this)}
 								//loadOptions={this.getPlaces}
 								options={AULEVELS}
+								optionComponent={OptionKeyName}
+								singleValueComponent={SingleValueKeyName}
+								className="UICustomSelect-keyname"
 								valueKey="key"
 								labelKey="name"
 								inputProps={selectInputProps}

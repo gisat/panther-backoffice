@@ -168,6 +168,7 @@ class ConfigLinksByAttSetAULevel extends Component{
 						</div>
 						<Checkbox key="asaul-data-841" className="rsc-row">
 							<UISVG src='icon-analyses.isvg' className="positive" />
+							<span className="option-id">237</span>
 							Status aggregated
 						</Checkbox>
 					</CheckboxFields>
@@ -319,10 +320,12 @@ class ConfigLinksByAttSetAULevel extends Component{
 						</div>
 						<Checkbox key="asaul-data-841" className="rsc-row active">
 							<UISVG src='icon-analyses.isvg' className="positive" />
+							<span className="option-id">237</span>
 							Status aggregated
 						</Checkbox>
 						<Checkbox key="asaul-data-1250" className="rsc-row">
 							<UISVG src='icon-analyses.isvg' className="positive" />
+							<span className="option-id">301</span>
 							Status aggregated V2
 						</Checkbox>
 					</CheckboxFields>

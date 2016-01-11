@@ -5,6 +5,8 @@ import withStyles from '../../../decorators/withStyles';
 import { Button, Input, Icon } from '../../SEUI/elements';
 import Select from 'react-select';
 
+import OptionKeyName from '../../atoms/UICustomSelect/OptionKeyName';
+import SingleValueKeyName from '../../atoms/UICustomSelect/SingleValueKeyName';
 
 const LAYERTEMPLATES = [
 			{ key: 1, name: 'Road network' },
@@ -49,6 +51,9 @@ class SelectorMetadataLayerVector extends Component{
 							<Select
 								onChange={this.context.onInteraction( this.onChangeLayerVector.bind(this) )}
 								options={LAYERTEMPLATES}
+								optionComponent={OptionKeyName}
+								singleValueComponent={SingleValueKeyName}
+								className="UICustomSelect-keyname"
 								valueKey="key"
 								labelKey="name"
 								inputProps={selectInputProps}
