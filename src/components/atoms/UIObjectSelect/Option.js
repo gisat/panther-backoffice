@@ -32,9 +32,17 @@ var Option = React.createClass({
 	handleMouseLeave (e) {
 		this.props.mouseLeave(this.props.option, e);
 	},
+	renderOption (option) {
+		return (
+			<div>
+				<span className="option-id">{option.key || option[this.props.valueKey]}</span>
+				<span>{option.name || option[this.props.labelKey]}</span>
+			</div>
+		);
+	},
 	render () {
 		var option = this.props.option;
-		var label = option.create ? this.props.addLabelText.replace('{label}', option.label) : this.props.renderFunc(option);
+		var label = option.create ? this.props.addLabelText.replace('{label}', option.label) : this.renderOption(option);
 		var optionClasses = classes(this.props.className, option.className);
 
 		return option.disabled ? (

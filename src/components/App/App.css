@@ -1171,17 +1171,18 @@ todo hex colours, button icons */
 }
 .UIObjectSelect-item-a,
 .UIObjectSelect-item-a:hover,
-.UIObjectSelect-item span:not(.UIObjectSelect-item-icon) {
+/*.UIObjectSelect-item span:not(.UIObjectSelect-item-icon) {*/
+.UIObjectSelect-item span.label {
 	font-size: 1.125rem;
 	line-height: 1.875rem;
 	display: block;
-	padding-left: .5rem;
 	color: #1452A2;
 	border-radius: 0 .25rem .25rem 0;
 }
 .UIObjectSelect-item-a,
 .UIObjectSelect-item-a:hover {
 	cursor: pointer;
+	padding-left: .5rem;
 }
 .UIObjectSelect-item-a:after,
 .Select.has-value:not(.Select--multi) .UIObjectSelect-control > .Select-placeholder::after {
@@ -1270,6 +1271,10 @@ todo hex colours, button icons */
 .UICustomSelect-keyname .Select-placeholder {
 	padding-right: 1.7rem;
 }
+.UIObjectSelect .option-id,
+.UIObjectSelect .option-parent,
+.UIObjectSelect-item .option-id,
+.UIObjectSelect-item .option-parent,
 .UICustomSelect-option-place .option-id,
 .UICustomSelect-option-place .option-parent,
 .UICustomSelect-value-place .option-id,
@@ -1283,13 +1288,13 @@ todo hex colours, button icons */
 	display: inline-block;
 	/*line-height: 1;*/
 }
-
 .UICustomSelect-value-place .option-id,
 .UICustomSelect-value-place .option-parent,
 .UICustomSelect-value-keyname .option-id,
 .puma-item .item-id {
 	color: #999;
 }
+.UIObjectSelect .option-id,
 .UICustomSelect-option-place .option-id,
 .UICustomSelect-value-place .option-id,
 .UICustomSelect-option-keyname .option-id,
@@ -1302,10 +1307,15 @@ todo hex colours, button icons */
 	padding-right: .3rem;
 	line-height: 1;
 }
+.UIObjectSelect-item-a .option-id,
+.UIObjectSelect-item-a .option-parent,
 .rsc-row.ui.radio.checkbox label span.option-id {
 	font-size: .75rem;
 	color: #888;
 }
+
+.UIObjectSelect .option-parent,
+.UIObjectSelect-item .option-parent,
 .UICustomSelect-option-place .option-parent,
 .UICustomSelect-value-place .option-parent {
 	width: 4rem;

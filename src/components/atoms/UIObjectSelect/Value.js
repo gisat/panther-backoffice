@@ -47,8 +47,9 @@ var Value = React.createClass({
 					onTouchEnd={this.props.onOptionLabelClick}
 					onClick={this.props.onOptionLabelClick}
 					style={this.props.option.style}
-					title={this.props.option.title}>
-					{label}
+					title={this.props.option.title}
+				>
+					<span className="label"><span className="option-id">{this.props.option.key}</span>{label}</span>
 				</a>
 			);
 		}

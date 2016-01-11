@@ -786,6 +786,8 @@ var UIObjectSelect = React.createClass({
 				mouseLeave: this.unfocusOption,
 				addLabelText: this.props.addLabelText,
 				option: op,
+				valueKey: this.props.valueKey,
+				labelKey: this.props.labelKey,
 				ref: ref
 			});
 			return optionResult;
@@ -881,7 +883,10 @@ var UIObjectSelect = React.createClass({
 						title={val.title}
 						key="value"
 					>
-						{val[this.props.labelKey]}
+						<span className="label">
+							<span className="option-id">{val[this.props.valueKey]}</span>
+							{val[this.props.labelKey]}
+						</span>
 					</a>
 				);
 			} else {
