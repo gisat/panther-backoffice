@@ -1,6 +1,8 @@
 import Model from './Model';
 import UserStore from '../stores/UserStore';
-import AULevelStore from '../stores/AULevelStore';
+import LayerGroupStore from '../stores/LayerGroupStore';
+import StyleStore from '../stores/StyleStore';
+import TopicStore from '../stores/TopicStore';
 
 
 class ScopeModel extends Model {
@@ -8,6 +10,14 @@ class ScopeModel extends Model {
 	constructor(options) {
 		super(options);
 
+	}
+
+	// areaTemplates on server with "justVisualization": true are RasterLayers on local
+	// todo is this needed? What do we get from server?
+	resolveForLocal(data) {
+		if (data.justVisualization) {
+			super.resolveForLocal(data);
+		}
 	}
 
 	data() {
@@ -47,13 +57,27 @@ class ScopeModel extends Model {
 				},
 				isPromise: true
 			},
-			levels: {
-				serverName: 'featureLayers', //ids
+			layerGroup: {
+				serverName: 'layerGroup', //id
 				transformForLocal: function (options) {
-					return AULevelStore.filter(options)
+					return LayerGroupStore.byId(options)
+				},
+				isPromise: true
+			},
+			levels: {
+				serverName: 'symbologies', //ids
+				transformForLocal: function (options) {
+					return StyleStore.filter(options)
 				},
 				isPromise: true,
 				isArray: true
+			},
+			topic: {
+				serverName: 'topic', //id
+				transformForLocal: function (options) {
+					return TopicStore.byId(options)
+				},
+				isPromise: true
 			}
 		};
 	}
