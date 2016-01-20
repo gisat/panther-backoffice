@@ -1,18 +1,16 @@
-define([], function () {
+class Model {
 	/**
-	 * It returns promise of this model.
-	 * @constructor
+	 * returns promise of this model.
 	 */
-	var Model = function (options) {
-		return this.resolve(options.data);
-	};
+	constructor(options) {
+		return this.resolveForLocal(options.data);
+	}
 
-	// todo rename
 	/**
 	 * Prepare promise for all the properties, which are actual domain objects.
 	 * @param data Object with data from the API.
 	 */
-	Model.prototype.resolve = function (data) {
+	resolveForLocal(data) {
 		var self = this;
 		var promises = [];
 		_.each(self.data(), function (value, key) {
@@ -35,7 +33,12 @@ define([], function () {
 		});
 
 		return Promise.all(promises);
-	};
+	}
 
-	return Model;
-});
+	transformDate(dateString) {
+		return Date(dateString);
+	}
+
+}
+
+export default Model;
