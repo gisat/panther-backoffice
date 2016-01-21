@@ -5,43 +5,27 @@ import withStyles from '../../../decorators/withStyles';
 import { Button, Input, Icon } from '../../SEUI/elements';
 import Select from 'react-select';
 
-const DATALAYERS = require('../../../stores/tempDataLayers');
 
 @withStyles(styles)
-class SelectorDataLayer extends Component{
+class SelectorDataLayer extends Component {
 
-	constructor(props) {
-		super(props);
+	static propTypes = {
+		disabled: React.PropTypes.bool,
+		data: React.PropTypes.array.isRequired,		// layers object. Expects "key"
+		onChange: React.PropTypes.func.isRequired,
+		value: React.PropTypes.any
+	};
 
-		this.state = {
-			value: "geonode:puma_srb_lulc_change_2000_2011"
-		};
-
-	}
+	static defaultProps = {
+		disabled: false,
+		value: null
+	};
 
 	onChange (value) {
-		this.state.value = value;
+		this.props.onChange(value);
 	}
 
-//	getPlaces (input, callback) {
-//		alert("baf");
-//		input = input.toLowerCase();
-//		var options = PLACES.filter(i => {
-//			return i.place.substr(0, input.length) === input;
-//		});
-//		var data = {
-//			options: options.slice(0, MAX_ITEMS),
-//			complete: options.length <= MAX_ITEMS,
-//		};
-//		setTimeout(function() {
-//			callback(null, data);
-//		}, ASYNC_DELAY);
-//	}
-
 	render() {
-		var selectInputProps = {
-			className: "" //"ui input"
-		};
 
 		return (
 			<div>
@@ -51,12 +35,10 @@ class SelectorDataLayer extends Component{
 							Data layer
 							<Select
 								onChange={this.onChange.bind(this)}
-								//loadOptions={this.getPlaces}
-								options={DATALAYERS}
+								options={this.props.data}
 								valueKey="key"
 								labelKey="key"
-								inputProps={selectInputProps}
-								value={this.state.value}
+								value={this.props.value}
 								clearable={false}
 							/>
 						</label>
