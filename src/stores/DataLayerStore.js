@@ -2,17 +2,13 @@ import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
-var apiUrl = "";
+var apiUrl = "api/layers/getLayers";
 
 class DataLayerStore extends Store {
 
-	constructor() {
-		super();
-	}
-
-	load(){ // is it safe to override (without params)?
-		return super.load(apiUrl);
-	}
+	//constructor() {
+	//	super();
+	//}
 
 }
 

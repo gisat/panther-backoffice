@@ -1,8 +1,11 @@
 //import React from 'react';
 import EventEmitter from 'events';
 import DataLayerModel from '../models/DataLayerModel';
+import request from 'superagent';
+import path from 'path';
 
 var CHANGE_EVENT = 'change';
+var apiUrl = "";
 
 class Store extends EventEmitter {
 
@@ -18,8 +21,15 @@ class Store extends EventEmitter {
 	/**
 	 * To be overridden
 	 */
-	load(apiUrl){
+	load(){
 		// todo ajax s parametrem
+		var url = path.resolve("/tool", apiUrl);
+		request
+			.get(url)
+			.end(function(err, res){
+				console.log("jQuery result: ", res);
+			});
+
 		var fakeLayers = require('./tempDataLayersJinej.js');
 		var ret = [];
 		for(let obj of fakeLayers.data){
