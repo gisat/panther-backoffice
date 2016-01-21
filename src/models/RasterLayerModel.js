@@ -5,7 +5,7 @@ import StyleStore from '../stores/StyleStore';
 import TopicStore from '../stores/TopicStore';
 
 
-class ScopeModel extends Model {
+class RasterLayerModel extends Model {
 
 	constructor(options) {
 		super(options);
@@ -84,4 +84,4 @@ class ScopeModel extends Model {
 
 }
 
-export default ScopeModel;
+export default RasterLayerModel;
