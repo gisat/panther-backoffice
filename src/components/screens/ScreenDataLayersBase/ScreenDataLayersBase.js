@@ -9,28 +9,26 @@ import ConfigDataLayer from '../../sections/ConfigDataLayer';
 
 const TEMPDATALAYERS = require('../../../stores/tempDataLayers');
 
-//function getStateFromStores() {
-//	return {
-//		dataLayers: DataLayerStore.all();
-//	}
-//}
-//var initialState = {
-//	selectorValue: "geonode:puma_srb_lulc_change_2000_2011"
-//};
+function getStateFromStores() {
+	return {
+		//dataLayers: DataLayerStore.all();
+		dataLayers: TEMPDATALAYERS //temp
+	}
+}
+var initialState = {
+	selectorValue: null
+};
 
 @withStyles(styles)
 class ScreenDataLayersBase extends Component{
 
 	constructor(props) {
 		super(props);
+		this.state = _.extend({},initialState,getStateFromStores());
+	}
 
-		// temp
-		this.state = {
-			selectorValue: null,
-			dataLayers: TEMPDATALAYERS
-		};
-
-		//this.state = _.extend({},initialState,getStateFromStores());
+	_onStoreChange() {
+		this.setState(getStateFromStores());
 	}
 
 	onSelectorChange (value) {
