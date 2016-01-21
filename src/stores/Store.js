@@ -29,17 +29,24 @@ class Store extends EventEmitter {
 	 */
 	load(){
 		// todo ajax s parametrem
+		var me = this;
 		return new Promise(function (resolve, reject) {
-			var url = path.resolve("/tool", this.getApiUrl());
+			var url = path.resolve("/tool", me.getApiUrl());
 			request
 				.post(url)
 				.end(function(err, res){
 					//var fakeLayers = require('./tempDataLayersJinej.js');
-					if(err){
+					if(err || typeof res == 'undefined'){
 						reject(err);
+						return;
 					}
 					var ret = [];
-					for(let obj of JSON.parse(res.text).data){
+					var responseJson = JSON.parse(res.text);
+					if(typeof responseJson.data == 'undefined'){
+						reject("no data");
+						return;
+					}
+					for(let obj of responseJson.data){
 						ret.push(new DataLayerModel(obj));
 					}
 					resolve(ret);
