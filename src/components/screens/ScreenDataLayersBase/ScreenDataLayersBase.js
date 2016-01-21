@@ -4,16 +4,13 @@ import withStyles from '../../../decorators/withStyles';
 
 import _ from 'underscore';
 
-//import DataLayerStore from '../../../stores/DataLayerStore'
+import DataLayerStore from '../../../stores/DataLayerStore';
 import SelectorDataLayer from '../../sections/SelectorDataLayer';
 import ConfigDataLayer from '../../sections/ConfigDataLayer';
 
-const TEMPDATALAYERS = require('../../../stores/tempDataLayers');
-
 function getStateFromStores() {
 	return {
-		//dataLayers: DataLayerStore.all();
-		dataLayers: TEMPDATALAYERS //temp
+		dataLayers: DataLayerStore.all()
 	}
 }
 var initialState = {
@@ -32,13 +29,13 @@ class ScreenDataLayersBase extends Component{
 		this.setState(getStateFromStores());
 	}
 
-	//componentDidMount() {
-	//	DataLayerStore.addChangeListener(this._onStoreChange);
-	//}
-	//
-	//componentWillUnmount() {
-	//	DataLayerStore.removeChangeListener(this._onStoreChange);
-	//}
+	componentDidMount() {
+		DataLayerStore.addChangeListener(this._onStoreChange);
+	}
+
+	componentWillUnmount() {
+		DataLayerStore.removeChangeListener(this._onStoreChange);
+	}
 
 	onSelectorChange (value) {
 		this.setState({

@@ -7,7 +7,7 @@ class Store extends EventEmitter {
 
 	constructor() {
 		super();
-		this._models = this.load(); //mozna ne tady ale primo do filtru atd. lazy load
+		//this._models = this.load(); //mozna ne tady ale primo do filtru atd. lazy load
 	}
 
 	emitChange() {
@@ -17,8 +17,10 @@ class Store extends EventEmitter {
 	/**
 	 * To be overridden
 	 */
-	load(){
-		console.error("Store.load not overridden");
+	load(apiUrl){
+		// todo ajax s parametrem
+		var fakeLayers = require('./tempDataLayersJinej.js');
+		return fakeLayers.data;
 	}
 
 	addChangeListener(callback) {
@@ -29,8 +31,8 @@ class Store extends EventEmitter {
 		this.removeListener(CHANGE_EVENT, callback);
 	}
 
-	// todo filter
 	filter(options){
+		this._models = this.load();
 		var self = this;
 		return new Promise(function (resolve, reject) {
 			self._models.then(function (models) {
@@ -64,12 +66,11 @@ class Store extends EventEmitter {
 		});
 	}
 
-	// todo all
 	all(){
+		this._models = this.load();
 		return this._models;
 	}
 
-	// todo byId
 	byId(id){
 		return this.filter({id: id});
 	}

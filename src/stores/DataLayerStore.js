@@ -4,7 +4,7 @@ import ActionTypes from '../constants/ActionTypes';
 
 var apiUrl = "";
 
-class PeriodStore extends Store {
+class DataLayerStore extends Store {
 
 	constructor() {
 		super();
@@ -16,7 +16,7 @@ class PeriodStore extends Store {
 
 }
 
-let storeInstance = new PeriodStore();
+let storeInstance = new DataLayerStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 

@@ -36,8 +36,8 @@ class SelectorDataLayer extends Component {
 							<Select
 								onChange={this.onChange.bind(this)}
 								options={this.props.data}
-								valueKey="key"
-								labelKey="key"
+								valueKey="name"
+								labelKey="name"
 								value={this.props.value}
 								clearable={false}
 							/>
