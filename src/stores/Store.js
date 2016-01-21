@@ -5,9 +5,15 @@ import request from 'superagent';
 import path from 'path';
 
 var CHANGE_EVENT = 'change';
-var apiUrl = "";
 
 class Store extends EventEmitter {
+
+	/**
+	 * To be overridden
+	 */
+	getApiUrl(){
+		console.err("getApiUrl not overridden");
+	}
 
 	constructor() {
 		super();
@@ -23,11 +29,11 @@ class Store extends EventEmitter {
 	 */
 	load(){
 		// todo ajax s parametrem
-		var url = path.resolve("/tool", apiUrl);
+		var url = path.resolve("/tool", this.getApiUrl());
 		request
 			.get(url)
 			.end(function(err, res){
-				console.log("jQuery result: ", res);
+				console.log("Superagent result: ", res);
 			});
 
 		var fakeLayers = require('./tempDataLayersJinej.js');

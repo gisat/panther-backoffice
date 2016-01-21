@@ -2,14 +2,16 @@ import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
-var apiUrl = "api/layers/getLayers";
 
 class DataLayerStore extends Store {
+
+	getApiUrl(){
+		return "api/layers/getLayers";
+	}
 
 	//constructor() {
 	//	super();
 	//}
-
 }
 
 let storeInstance = new DataLayerStore();
