@@ -29,19 +29,22 @@ class Store extends EventEmitter {
 	 */
 	load(){
 		// todo ajax s parametrem
-		var url = path.resolve("/tool", this.getApiUrl());
-		request
-			.get(url)
-			.end(function(err, res){
-				console.log("Superagent result: ", res);
-			});
-
-		var fakeLayers = require('./tempDataLayersJinej.js');
-		var ret = [];
-		for(let obj of fakeLayers.data){
-			ret.push(new DataLayerModel(obj));
-		}
-		return Promise.resolve(ret);
+		return new Promise(function (resolve, reject) {
+			var url = path.resolve("/tool", this.getApiUrl());
+			request
+				.post(url)
+				.end(function(err, res){
+					//var fakeLayers = require('./tempDataLayersJinej.js');
+					if(err){
+						reject(err);
+					}
+					var ret = [];
+					for(let obj of JSON.parse(res.text).data){
+						ret.push(new DataLayerModel(obj));
+					}
+					resolve(ret);
+				});
+		});
 	}
 
 	addChangeListener(callback) {
