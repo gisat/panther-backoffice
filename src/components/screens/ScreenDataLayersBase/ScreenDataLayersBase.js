@@ -4,6 +4,7 @@ import withStyles from '../../../decorators/withStyles';
 
 import _ from 'underscore';
 
+//import DataLayerStore from '../../../stores/DataLayerStore'
 import SelectorDataLayer from '../../sections/SelectorDataLayer';
 import ConfigDataLayer from '../../sections/ConfigDataLayer';
 
@@ -30,6 +31,14 @@ class ScreenDataLayersBase extends Component{
 	_onStoreChange() {
 		this.setState(getStateFromStores());
 	}
+
+	//componentDidMount() {
+	//	DataLayerStore.addChangeListener(this._onStoreChange);
+	//}
+	//
+	//componentWillUnmount() {
+	//	DataLayerStore.removeChangeListener(this._onStoreChange);
+	//}
 
 	onSelectorChange (value) {
 		this.setState({
