@@ -30,7 +30,7 @@ class ScopeModel extends Model {
 			changedBy: {
 				serverName: 'changedBy', //id
 				transformForLocal: function (options) {
-					return UserStore.byId(options)
+					return UserStore.getById(options)
 				},
 				isPromise: true
 			},
@@ -43,14 +43,14 @@ class ScopeModel extends Model {
 			createdBy: {
 				serverName: 'createdBy', //id
 				transformForLocal: function (options) {
-					return UserStore.byId(options)
+					return UserStore.getById(options)
 				},
 				isPromise: true
 			},
 			levels: {
 				serverName: 'featureLayers', //ids
 				transformForLocal: function (options) {
-					return AULevelStore.filter(options)
+					return AULevelStore.getFiltered(options)
 				},
 				isPromise: true,
 				isArray: true

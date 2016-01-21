@@ -40,7 +40,7 @@ class RasterLayerModel extends Model {
 			changedBy: {
 				serverName: 'changedBy', //id
 				transformForLocal: function (options) {
-					return UserStore.byId(options)
+					return UserStore.getById(options)
 				},
 				isPromise: true
 			},
@@ -53,21 +53,21 @@ class RasterLayerModel extends Model {
 			createdBy: {
 				serverName: 'createdBy', //id
 				transformForLocal: function (options) {
-					return UserStore.byId(options)
+					return UserStore.getById(options)
 				},
 				isPromise: true
 			},
 			layerGroup: {
 				serverName: 'layerGroup', //id
 				transformForLocal: function (options) {
-					return LayerGroupStore.byId(options)
+					return LayerGroupStore.getById(options)
 				},
 				isPromise: true
 			},
 			levels: {
 				serverName: 'symbologies', //ids
 				transformForLocal: function (options) {
-					return StyleStore.filter(options)
+					return StyleStore.getFiltered(options)
 				},
 				isPromise: true,
 				isArray: true
@@ -75,7 +75,7 @@ class RasterLayerModel extends Model {
 			topic: {
 				serverName: 'topic', //id
 				transformForLocal: function (options) {
-					return TopicStore.byId(options)
+					return TopicStore.getById(options)
 				},
 				isPromise: true
 			}

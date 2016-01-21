@@ -5,7 +5,6 @@ class DataLayerModel extends Model {
 
 	constructor(options) {
 		super(options);
-
 	}
 
 	data() {
@@ -16,6 +15,7 @@ class DataLayerModel extends Model {
 			referenced: {
 				serverName: 'referenced' //boolean
 			}
+			// todo ? WMS ?
 			// todo ? layerref data ?
 		};
 	}

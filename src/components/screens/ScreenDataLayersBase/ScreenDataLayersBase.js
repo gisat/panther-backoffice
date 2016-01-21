@@ -2,35 +2,39 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenDataLayersBase.css';
 import withStyles from '../../../decorators/withStyles';
 
-import _ from 'underscore';
-
 import DataLayerStore from '../../../stores/DataLayerStore';
 import SelectorDataLayer from '../../sections/SelectorDataLayer';
 import ConfigDataLayer from '../../sections/ConfigDataLayer';
 
-function getStateFromStores() {
-	return {
-		dataLayers: DataLayerStore.all()
-	}
-}
 var initialState = {
+	dataLayers: [],
 	selectorValue: null
+};
+
+var store2state = {
+	dataLayers: DataLayerStore.getAll(),
+	jiny: DataLayerStore.getAll()
 };
 
 @withStyles(styles)
 class ScreenDataLayersBase extends Component{
 
+	static contextTypes = {
+		setStateFromStores: PropTypes.func.isRequired
+	};
+
 	constructor(props) {
 		super(props);
-		this.state = _.extend({},initialState,getStateFromStores());
+		this.state = initialState;
 	}
 
 	_onStoreChange() {
-		this.setState(getStateFromStores());
+		this.context.setStateFromStores.call(this, store2state);
 	}
 
 	componentDidMount() {
 		DataLayerStore.addChangeListener(this._onStoreChange);
+		this.context.setStateFromStores.call(this, store2state);
 	}
 
 	componentWillUnmount() {
@@ -44,7 +48,6 @@ class ScreenDataLayersBase extends Component{
 	}
 
 	render() {
-
 		return (
 			<div>
 				<div className="screen-setter"><div>
@@ -58,7 +61,7 @@ class ScreenDataLayersBase extends Component{
 				<div className="screen-content"><div>
 					<ConfigDataLayer
 						disabled={this.props.disabled}
-
+						// todo pass selected dataLayer
 					/>
 				</div></div>
 			</div>

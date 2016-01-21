@@ -1,9 +1,11 @@
+import _ from 'underscore';
+
 class Model {
 	/**
 	 * returns promise of this model.
 	 */
 	constructor(options) {
-		return this.resolveForLocal(options.data);
+		return this.resolveForLocal(options);
 	}
 
 	/**
@@ -35,6 +37,7 @@ class Model {
 		return Promise.all(promises);
 	}
 
+	// todo static?
 	transformDate(dateString) {
 		return Date(dateString);
 	}

@@ -26,7 +26,6 @@ class SelectorDataLayer extends Component {
 	}
 
 	render() {
-
 		return (
 			<div>
 				<div className="selector">
@@ -36,8 +35,8 @@ class SelectorDataLayer extends Component {
 							<Select
 								onChange={this.onChange.bind(this)}
 								options={this.props.data}
-								valueKey="name"
-								labelKey="name"
+								valueKey="key"
+								labelKey="key"
 								value={this.props.value}
 								clearable={false}
 							/>

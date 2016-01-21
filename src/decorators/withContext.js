@@ -15,7 +15,8 @@ function withContext(ComposedComponent) {
         setScreenPosition: PropTypes.func,
 				onSetScreenData: PropTypes.func,
         activePageKey: PropTypes.func,
-        page: PropTypes.object
+        page: PropTypes.object,
+				setStateFromStores: PropTypes.func
       })
     };
 
@@ -26,6 +27,7 @@ function withContext(ComposedComponent) {
       onPageNotFound: PropTypes.func.isRequired,
       setScreenPosition: PropTypes.func.isRequired,
       onSetScreenData: PropTypes.func.isRequired,
+			setStateFromStores: PropTypes.func.isRequired,
       activePageKey: PropTypes.func.isRequired,
       page: PropTypes.object.isRequired
     };
@@ -39,6 +41,7 @@ function withContext(ComposedComponent) {
         onPageNotFound: context.onPageNotFound || emptyFunction,
         setScreenPosition: context.setScreenPosition || emptyFunction,
 				onSetScreenData: context.onSetScreenData || emptyFunction,
+				setStateFromStores: context.setStateFromStores || emptyFunction,
         activePageKey: context.activePageKey || emptyFunction,
         page: {}
       };

@@ -1,5 +1,6 @@
 //import React from 'react';
 import EventEmitter from 'events';
+import DataLayerModel from '../models/DataLayerModel';
 
 var CHANGE_EVENT = 'change';
 
@@ -20,7 +21,11 @@ class Store extends EventEmitter {
 	load(apiUrl){
 		// todo ajax s parametrem
 		var fakeLayers = require('./tempDataLayersJinej.js');
-		return fakeLayers.data;
+		var ret = [];
+		for(let obj of fakeLayers.data){
+			ret.push(new DataLayerModel(obj));
+		}
+		return Promise.resolve(ret);
 	}
 
 	addChangeListener(callback) {
@@ -31,7 +36,7 @@ class Store extends EventEmitter {
 		this.removeListener(CHANGE_EVENT, callback);
 	}
 
-	filter(options){
+	getFiltered(options){
 		this._models = this.load();
 		var self = this;
 		return new Promise(function (resolve, reject) {
@@ -66,13 +71,13 @@ class Store extends EventEmitter {
 		});
 	}
 
-	all(){
+	getAll(){
 		this._models = this.load();
 		return this._models;
 	}
 
-	byId(id){
-		return this.filter({id: id});
+	getById(id){
+		return this.getFiltered({id: id});
 	}
 }
 
