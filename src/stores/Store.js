@@ -1,8 +1,10 @@
 //import React from 'react';
 import EventEmitter from 'events';
 import DataLayerModel from '../models/DataLayerModel';
-import request from 'superagent';
+import superagent from 'superagent';
 import path from 'path';
+
+import { publicPath } from '../config';
 
 var CHANGE_EVENT = 'change';
 
@@ -31,11 +33,16 @@ class Store extends EventEmitter {
 		// todo ajax s parametrem
 		var me = this;
 		return new Promise(function (resolve, reject) {
-			var url = path.resolve("/tool", me.getApiUrl());
-			request
+			var url = path.resolve(publicPath, "api-proxy");
+			console.log("super URL: ", url);
+			superagent
 				.post(url)
+				.send({apiUrl: me.getApiUrl()})
+				.send({ssid: "5oymzxv5yigf4n6dp2nda2vgu6ernils"})
+				.send({sessionid: "kzgfcqe0a26jefi5c942hm7azef5od90"})
+				.send({csrftoken: "VNsl5vgDXeEDRl3J4NgNt8BjBfmHgD9b"})
+				//.send({necoDalsiho: "dmewidoiwjefowng"})
 				.end(function(err, res){
-					//var fakeLayers = require('./tempDataLayersJinej.js');
 					if(err || typeof res == 'undefined'){
 						reject(err);
 						return;
@@ -43,7 +50,7 @@ class Store extends EventEmitter {
 					var ret = [];
 					var responseJson = JSON.parse(res.text);
 					if(typeof responseJson.data == 'undefined'){
-						reject("no data");
+						reject("no data attribute");
 						return;
 					}
 					for(let obj of responseJson.data){
