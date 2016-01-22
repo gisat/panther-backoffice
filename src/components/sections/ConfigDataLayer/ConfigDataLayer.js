@@ -193,7 +193,7 @@ class ConfigDataLayer extends Component{
 					className={this.state.layerType==null ? 'variant active' : 'variant'}
 					id="config-data-layer-none"
 				>
-					<span>Select layer type</span>
+					<div className="data-layers-no-type">Select layer type</div>
 				</div>
 				<div
 					className={this.state.layerType==1 ? 'variant active' : 'variant'}
