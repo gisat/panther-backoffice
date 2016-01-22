@@ -2,202 +2,87 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ConfigDataLayerAnalytical.css';
 import withStyles from '../../../decorators/withStyles';
 
-import { Icon, IconButton, Buttons } from '../../SEUI/elements';
-import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
-import _ from 'underscore';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
-import SaveButton from '../../atoms/SaveButton';
 
-const SCOPES = [
-			{ key: 1, scope: 'Local' },
-			{ key: 2, scope: 'National' },
-			{ key: 3, scope: 'Regional' }
-		];
-const PLACES = [
-			{ key: 1, scope: 1, place: 'Cebu City' },
-			{ key: 2, scope: 1, place: 'Hai Phong' },
-			{ key: 3, scope: 1, place: 'Ho Chi Minh City' },
-			{ key: 4, scope: 1, place: 'Surabaya' },
-			{ key: 52, scope: 2, place: 'Brunei' },
-			{ key: 74, scope: 2, place: 'Japan' },
-			{ key: 82, scope: 2, place: 'Laos' },
-			{ key: 135, scope: 2, place: 'Vietnam' },
-			{ key: 625, scope: 3, place: 'East Asia and Pacific' },
-		];
-const AULEVELS = [
-			{ key: 1, name: "AOI" },
-			{ key: 2, name: "Core City x Outer Urban Zone" },
-			{ key: 3, name: "GADM2" },
-			{ key: 4, name: "GADM3" },
-			{ key: 5, name: "GADM4" }
-		];
-const DESTINATIONS = [
-			{ key: "I", isAttribute: false, name: 'FID (feature identifier)' },
-			{ key: "N", isAttribute: false, name: 'Feature name' },
-			{ key: "P", isAttribute: false, name: 'Parent feature identifier' }
-		];
-const PERIODS = [
-			{ key: 1, name: '1990' },
-			{ key: 2, name: '2000' },
-			{ key: 3, name: '2010' }
-		];
+
 
 @withStyles(styles)
 class ConfigDataLayerAnalytical extends Component{
 
-	constructor(props) {
-		super(props);
+	static propTypes = {
+		disabled: React.PropTypes.bool,
+		levels: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+		scopes: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+		places: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+		periods: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+		destinations: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+		valueLevel: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+		valueScope: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+		valuesPlaces: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+		onChangeLevel: React.PropTypes.func.isRequired,
+		onChangeScope: React.PropTypes.func.isRequired,
+		onChangePlaces: React.PropTypes.func.isRequired,
+		onObjectClick: React.PropTypes.func.isRequired,
+		keyNameOptionFactory: React.PropTypes.func.isRequired
+	};
 
-		this.state = {
-			valueScope: 1,
-			valuesPlaces: [2,3],
-			valueLevel: 2
-		};
-
-	}
-
-
-	handleNewObjects(values, store) {
-		var newValues = [];
-		for (var singleValue of values) {
-			if(singleValue.create){
-				// replace with actual object creation and config screen opening
-				delete singleValue.create;
-				delete singleValue.label;
-				delete singleValue.value;
-				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				store.push(singleValue);
-			}
-			newValues.push(singleValue.key);
-		}
-		return newValues;
-	}
-
-	onChangeScope (value, values) {
-		values = this.handleNewObjects(values, SCOPES);
-		this.setState({
-			valueScope: values
-		});
-	}
-
-	onChangePlaces (value, values) {
-		values = this.handleNewObjects(values, PLACES);
-		this.setState({
-			valuesPlaces: values
-		});
-	}
-
-	onChangeLevel (value, values) {
-		values = this.handleNewObjects(values, AULEVELS);
-		this.setState({
-			valueLevel: values
-		});
-	}
-
-
-	onObjectClick (value, event) {
-		console.log("yay! " + value["key"]);
-	}
-
-
-	scopeOptionFactory (inputValue) {
-		var newOption = {
-				key: inputValue,
-				scope: inputValue,
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-		return newOption;
-	}
-	placeOptionFactory (inputValue) {
-		var newOption = {
-				key: inputValue,
-				place: inputValue,
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-		return newOption;
-	}
-	keyNameOptionFactory (inputValue) {
-		var newOption = {
-				key: inputValue,
-				name: inputValue,
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-		return newOption;
-	}
-
-	componentDidMount() {
-
-
-
-	}
+	static defaultProps = {
+		disabled: false
+	};
 
 	render() {
-
-		var selectInputProps = {
-			className: "" //"ui input"
-		};
-
 		return (
 			<div>
 
 				<div className="frame-input-wrapper">
-						<label className="container">
-							Scope
-							<UIObjectSelect
-								onChange={this.onChangeScope.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								options={SCOPES}
-								allowCreate
-								newOptionCreator={this.scopeOptionFactory.bind(this)}
-								valueKey="key"
-								labelKey="scope"
-								value={this.state.valueScope}
-							/>
-						</label>
+					<label className="container">
+						Scope
+						<UIObjectSelect
+							onChange={this.props.onChangeScope}
+							onOptionLabelClick={this.props.onObjectClick}
+							options={this.props.scopes}
+							allowCreate
+							newOptionCreator={this.props.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.props.valueScope}
+						/>
+					</label>
 				</div>
 
 				<div className="frame-input-wrapper">
-						<label className="container">
-							Places
-							<UIObjectSelect
-								multi
-								onChange={this.onChangePlaces.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								options={PLACES}
-								allowCreate
-								newOptionCreator={this.placeOptionFactory.bind(this)}
-								valueKey="key"
-								labelKey="place"
-								value={this.state.valuesPlaces}
-							/>
-						</label>
+					<label className="container">
+						Places
+						<UIObjectSelect
+							multi
+							onChange={this.props.onChangePlaces}
+							onOptionLabelClick={this.props.onObjectClick}
+							options={this.props.places}
+							allowCreate
+							newOptionCreator={this.props.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.props.valuesPlaces}
+						/>
+					</label>
 				</div>
 
 				<div className="frame-input-wrapper">
-						<label className="container">
-							Level
-							<UIObjectSelect
-								onChange={this.onChangeLevel.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								options={AULEVELS}
-								allowCreate
-								newOptionCreator={this.keyNameOptionFactory.bind(this)}
-								valueKey="key"
-								labelKey="name"
-								value={this.state.valueLevel}
-							/>
-						</label>
+					<label className="container">
+						Level
+						<UIObjectSelect
+							onChange={this.props.onChangeLevel}
+							onOptionLabelClick={this.props.onObjectClick}
+							options={this.props.levels}
+							allowCreate
+							newOptionCreator={this.props.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.props.valueLevel}
+						/>
+					</label>
 				</div>
 
 				<h3>Tabular data</h3>
@@ -217,7 +102,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -229,7 +114,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -244,7 +129,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -256,7 +141,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -271,7 +156,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -283,7 +168,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -298,7 +183,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -310,7 +195,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -325,7 +210,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -337,7 +222,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -352,7 +237,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -364,7 +249,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -379,7 +264,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -391,7 +276,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -406,7 +291,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -418,7 +303,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -433,7 +318,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -445,7 +330,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -460,7 +345,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -472,7 +357,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -487,7 +372,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -499,7 +384,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -514,7 +399,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -526,7 +411,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -541,7 +426,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -553,7 +438,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -568,7 +453,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -580,7 +465,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -595,7 +480,7 @@ class ConfigDataLayerAnalytical extends Component{
 								<Select
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
-									options={DESTINATIONS}
+									options={this.props.destinations}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -607,7 +492,7 @@ class ConfigDataLayerAnalytical extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									multi
-									options={PERIODS}
+									options={this.props.periods}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -618,9 +503,6 @@ class ConfigDataLayerAnalytical extends Component{
 
 					</tbody>
 				</Table>
-
-
-				<SaveButton saved />
 
 			</div>
 		);
