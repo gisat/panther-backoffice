@@ -1,11 +1,11 @@
 class FauxStore {
 
 	getById(id) {
-		return Promise.resolve(id);
+		return Promise.resolve([]);
 	}
 
 	getFiltered(options) {
-		return Promise.resolve(options);
+		return Promise.resolve([]);
 	}
 
 }
