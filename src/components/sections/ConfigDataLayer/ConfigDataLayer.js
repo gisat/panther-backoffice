@@ -15,6 +15,11 @@ import ConfigDataLayerRaster from '../ConfigDataLayerRaster';
 import ConfigDataLayerAnalytical from '../ConfigDataLayerAnalytical';
 
 
+const LAYERTYPES = [
+	{ key: 1, name: "Vector layer"},
+	{ key: 2, name: "Raster layer"},
+	{ key: 3, name: "Analytical units layer"}
+];
 const SCOPES = [
 			{ key: 1, scope: 'Local' },
 			{ key: 2, scope: 'National' },
@@ -55,12 +60,12 @@ class ConfigDataLayer extends Component{
 		super(props);
 
 		this.state = {
-			layerType: -1
+			layerType: null
 		};
 
 	}
 
-	onChangeType (key) {
+	onChangeLayerType (key) {
 		this.setState({
 			layerType: key
 		});
@@ -73,7 +78,7 @@ class ConfigDataLayer extends Component{
 	render() {
 
 		var saveButton = " ";
-		if (this.state.layerType >= 0) {
+		if (this.state.layerType > 0) {
 			saveButton = (
 				<SaveButton
 					saved
@@ -85,47 +90,40 @@ class ConfigDataLayer extends Component{
 		return (
 			<div>
 
-				<div className="dataLayerTypeSelect">
-				<span>Layer type</span>
-				<CheckboxFields
-					type="grouped"
-					radio
-					name="dl-722"
-					onChange={this.onChangeType.bind(this)}
-				>
-					<Checkbox key="0">
-						Vector layer
-					</Checkbox>
-					<Checkbox key="1">
-						Raster layer
-					</Checkbox>
-					<Checkbox key="2">
-						Analytical units layer
-					</Checkbox>
-				</CheckboxFields>
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Layer type
+						<Select
+							onChange={this.onChangeLayerType.bind(this)}
+							options={LAYERTYPES}
+							valueKey="key"
+							labelKey="name"
+							value={this.state.layerType}
+							clearable={false}
+						/>
+					</label>
 				</div>
 
-
 				<div
-					className={this.state.layerType==-1 ? 'variant active' : 'variant'}
+					className={this.state.layerType==null ? 'variant active' : 'variant'}
 					id="config-data-layer-vector"
 				>
 					<span>Select layer type</span>
 				</div>
 				<div
-					className={this.state.layerType==0 ? 'variant active' : 'variant'}
+					className={this.state.layerType==1 ? 'variant active' : 'variant'}
 					id="config-data-layer-vector"
 				>
 					<ConfigDataLayerVector/>
 				</div>
 				<div
-					className={this.state.layerType==1 ? 'variant active' : 'variant'}
+					className={this.state.layerType==2 ? 'variant active' : 'variant'}
 					id="config-data-layer-vector"
 				>
 					<ConfigDataLayerRaster/>
 				</div>
 				<div
-					className={this.state.layerType==2 ? 'variant active' : 'variant'}
+					className={this.state.layerType==3 ? 'variant active' : 'variant'}
 					id="config-data-layer-vector"
 				>
 					<ConfigDataLayerAnalytical/>
