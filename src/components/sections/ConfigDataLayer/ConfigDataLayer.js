@@ -229,6 +229,8 @@ class ConfigDataLayer extends Component{
 
 	render() {
 
+		console.log("scopes:",this.state.scopes);
+
 		var saveButton = " ";
 		if (this.state.layerType > 0) {
 			saveButton = (

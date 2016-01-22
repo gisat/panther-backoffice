@@ -1,15 +1,15 @@
 import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
-import Model from '../models/RasterLayerModel';
+import RasterLayerModel from '../models/RasterLayerModel';
 
 class RasterLayerStore extends Store {
 
 	getApiUrl(){
 		return "/rest/areatemplate";
 	}
-	getModel(){
-		return Model;
+	getInstance(data){
+		return new RasterLayerModel(data);
 	}
 }
 

@@ -12,8 +12,8 @@ class DataLayerStore extends Store {
 	getApiLoadMethod(){
 		return "POST";
 	}
-	getInstance(obj){
-		return new DataLayerModel(obj);
+	getInstance(data){
+		return new DataLayerModel(data);
 	}
 
 }
