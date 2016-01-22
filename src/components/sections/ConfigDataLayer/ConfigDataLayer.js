@@ -131,29 +131,29 @@ class ConfigDataLayer extends Component{
 		setStateFromStores: PropTypes.func.isRequired
 	};
 
-	//constructor(props) {
-	//	super(props);
-	//	this.state = initialState;
-	//}
-
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			layerType: null,
-			valueVLTemplate: [4],
-			valueVLScope: [1],
-			valuesVLPlaces: [2,3],
-			valuesVLPeriods: [3],
-			valueRLTemplate: [2],
-			valueRLScope: [1],
-			valuesRLPlaces: [2,3],
-			valuesRLPeriods: [2],
-			valueAUScope: [1],
-			valuesAUPlaces: [2,3],
-			valueAULevel: [2]
-		};
+		this.state = initialState;
 	}
+
+	//constructor(props) {
+	//	super(props);
+	//
+	//	this.state = {
+	//		layerType: null,
+	//		valueVLTemplate: [4],
+	//		valueVLScope: [1],
+	//		valuesVLPlaces: [2,3],
+	//		valuesVLPeriods: [3],
+	//		valueRLTemplate: [2],
+	//		valueRLScope: [1],
+	//		valuesRLPlaces: [2,3],
+	//		valuesRLPeriods: [2],
+	//		valueAUScope: [1],
+	//		valuesAUPlaces: [2,3],
+	//		valueAULevel: [2]
+	//	};
+	//}
 
 	_onStoreChange() {
 		this.context.setStateFromStores.call(this, store2state);
@@ -289,10 +289,10 @@ class ConfigDataLayer extends Component{
 					id="config-data-layer-raster"
 				>
 					<ConfigDataLayerRaster
-						layerTemplates={VECTORLAYERTEMPLATES}
-						scopes={SCOPES}
-						places={PLACES}
-						periods={PERIODS}
+						layerTemplates={this.state.rasterLayerTemplates}
+						scopes={this.state.scopes}
+						places={this.state.places}
+						periods={this.state.periods}
 						valueTemplate={this.state.valueRLTemplate}
 						valueScope={this.state.valueRLScope}
 						valuesPlaces={this.state.valuesRLPlaces}
