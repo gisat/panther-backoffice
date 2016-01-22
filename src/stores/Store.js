@@ -17,6 +17,10 @@ class Store extends EventEmitter {
 		console.err("getApiUrl not overridden");
 	}
 
+	getApiLoadMethod(){
+		return "GET";
+	}
+
 	constructor() {
 		super();
 		//this._models = this.load(); //mozna ne tady ale primo do filtru atd. lazy load
@@ -37,6 +41,7 @@ class Store extends EventEmitter {
 			superagent
 				.post(url)
 				.send({apiUrl: me.getApiUrl()})
+				.send({method: me.getApiLoadMethod()})
 				.send({ssid: "5oymzxv5yigf4n6dp2nda2vgu6ernils"})
 				.send({sessionid: "kzgfcqe0a26jefi5c942hm7azef5od90"})
 				.send({csrftoken: "VNsl5vgDXeEDRl3J4NgNt8BjBfmHgD9b"})

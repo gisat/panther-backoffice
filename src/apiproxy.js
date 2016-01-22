@@ -7,6 +7,7 @@ import {apiProtocol, apiHost, apiPath} from './config';
 export default function(proxyRequest, proxyResponse){
 
 	var url = apiProtocol + apiHost + path.join(apiPath, proxyRequest.body.apiUrl).replace(/\\/g, "/");
+	var method = proxyRequest.body.method;
 
 	var cookies = [];
 	cookies.push("ssid="+proxyRequest.body.ssid);
@@ -15,6 +16,7 @@ export default function(proxyRequest, proxyResponse){
 
 	var formData = proxyRequest.body;
 	delete formData["apiUrl"];
+	delete formData["method"];
 	delete formData["ssid"];
 	delete formData["sessionid"];
 	delete formData["csrftoken"];
@@ -23,5 +25,18 @@ export default function(proxyRequest, proxyResponse){
 	//console.log("Piping to POST", url);
 	//console.log("...with data:", formData);
 
-	request.post({url: url, formData: formData, headers: {'Cookie': cookies.join("; ")}}).pipe(proxyResponse);
+	var options = {
+		url: url,
+		formData: formData,
+		headers: {
+			'Cookie': cookies.join("; ")
+		}
+	};
+	switch(method.toLowerCase()) {
+		case "post":
+			request.post(options).pipe(proxyResponse);
+			break;
+		default:
+			request.get(options).pipe(proxyResponse);
+	}
 }

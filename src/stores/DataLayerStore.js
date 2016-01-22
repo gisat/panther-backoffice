@@ -8,6 +8,9 @@ class DataLayerStore extends Store {
 	getApiUrl(){
 		return "api/layers/getLayers";
 	}
+	getApiLoadMethod(){
+		return "POST";
+	}
 
 }
 
