@@ -87,10 +87,14 @@ class ConfigDataLayer extends Component{
 
 		this.state = {
 			layerType: null,
-			valueVLTemplate: 4,
-			valueVLScope: 1,
+			valueVLTemplate: [4],
+			valueVLScope: [1],
 			valuesVLPlaces: [2,3],
-			valuesVLPeriods: [3]
+			valuesVLPeriods: [3],
+			valueRLTemplate: [2],
+			valueRLScope: [1],
+			valuesRLPlaces: [2,3],
+			valuesRLPeriods: [2]
 		};
 
 	}
@@ -207,7 +211,23 @@ class ConfigDataLayer extends Component{
 					className={this.state.layerType==2 ? 'variant active' : 'variant'}
 					id="config-data-layer-vector"
 				>
-					<ConfigDataLayerRaster/>
+					<ConfigDataLayerRaster
+						layerTemplates={VECTORLAYERTEMPLATES}
+						scopes={SCOPES}
+						places={PLACES}
+						periods={PERIODS}
+						destinations={DESTINATIONS}
+						valueTemplate={this.state.valueRLTemplate}
+						valueScope={this.state.valueRLScope}
+						valuesPlaces={this.state.valuesRLPlaces}
+						valuesPeriods={this.state.valuesRLPeriods}
+						onChangeTemplate={this.onChangeObjectSelect.bind(this, "valueRLTemplate", VECTORLAYERTEMPLATES)}
+						onChangeScope={this.onChangeObjectSelect.bind(this, "valueRLScope", SCOPES)}
+						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesRLPlaces", PLACES)}
+						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuesRLPeriods", PERIODS)}
+						onObjectClick={this.onObjectClick.bind(this)}
+						keyNameOptionFactory={this.keyNameOptionFactory.bind(this)}
+					/>
 				</div>
 				<div
 					className={this.state.layerType==3 ? 'variant active' : 'variant'}

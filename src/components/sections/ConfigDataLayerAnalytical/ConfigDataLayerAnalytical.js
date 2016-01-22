@@ -2,11 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ConfigDataLayerAnalytical.css';
 import withStyles from '../../../decorators/withStyles';
 
-import { Icon, IconButton, Buttons } from '../../SEUI/elements';
-import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
-import _ from 'underscore';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 
 const SCOPES = [
