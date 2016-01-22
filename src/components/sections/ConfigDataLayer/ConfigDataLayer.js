@@ -9,6 +9,13 @@ import ConfigDataLayerVector from '../ConfigDataLayerVector';
 import ConfigDataLayerRaster from '../ConfigDataLayerRaster';
 import ConfigDataLayerAnalytical from '../ConfigDataLayerAnalytical';
 
+import ScopeStore from '../../../stores/ScopeStore';
+import PlaceStore from '../../../stores/PlaceStore';
+//import VectorLayerStore from '../../../stores/VectorLayerStore';
+import RasterLayerStore from '../../../stores/RasterLayerStore';
+//import AULevelStore from '../../../stores/AULevelStore';
+//import AttributeStore from '../../../stores/AttributeStore';
+import PeriodStore from '../../../stores/PeriodStore';
 
 const LAYERTYPES = [
 	{key: 1, name: "Vector layer"},
@@ -86,8 +93,48 @@ const THEMES = [
 	{key: 32, theme: 'Land cover'}
 ];
 
+var initialState = {
+	layerType: null,
+	scopes: [],
+	places: [],
+	vectorLayerTemplates: [],
+	rasterLayerTemplates: [],
+	attributes: [],
+	periods: [],
+	valueVLTemplate: [],
+	valueVLScope: [],
+	valuesVLPlaces: [],
+	valuesVLPeriods: [],
+	valueRLTemplate: [],
+	valueRLScope: [],
+	valuesRLPlaces: [],
+	valuesRLPeriods: [],
+	valueAUScope: [],
+	valuesAUPlaces: [],
+	valueAULevel: []
+};
+
+var store2state = {
+	scopes: ScopeStore.getAll(),
+	places: PlaceStore.getAll(),
+	//vectorLayerTemplates: VectorLayerStore.getAll(),
+	rasterLayerTemplates: RasterLayerStore.getAll(),
+	//auLevels: AULevelStore.getAll(),
+	//attributes: AttributeStore.getAll(),
+	periods: PeriodStore.getAll()
+};
+
 @withStyles(styles)
 class ConfigDataLayer extends Component{
+
+	static contextTypes = {
+		setStateFromStores: PropTypes.func.isRequired
+	};
+
+	//constructor(props) {
+	//	super(props);
+	//	this.state = initialState;
+	//}
 
 	constructor(props) {
 		super(props);
@@ -106,11 +153,31 @@ class ConfigDataLayer extends Component{
 			valuesAUPlaces: [2,3],
 			valueAULevel: [2]
 		};
+	}
 
+	_onStoreChange() {
+		this.context.setStateFromStores.call(this, store2state);
 	}
 
 	componentDidMount() {
+		ScopeStore.addChangeListener(this._onStoreChange);
+		PlaceStore.addChangeListener(this._onStoreChange);
+		//VectorLayerStore.addChangeListener(this._onStoreChange);
+		RasterLayerStore.addChangeListener(this._onStoreChange);
+		//AULevelStore.addChangeListener(this._onStoreChange);
+		//AttributeStore.addChangeListener(this._onStoreChange);
+		PeriodStore.addChangeListener(this._onStoreChange);
+		this.context.setStateFromStores.call(this, store2state);
+	}
 
+	componentWillUnmount() {
+		ScopeStore.removeChangeListener(this._onStoreChange);
+		PlaceStore.removeChangeListener(this._onStoreChange);
+		//VectorLayerStore.removeChangeListener(this._onStoreChange);
+		RasterLayerStore.removeChangeListener(this._onStoreChange);
+		//AULevelStore.removeChangeListener(this._onStoreChange);
+		//AttributeStore.removeChangeListener(this._onStoreChange);
+		PeriodStore.removeChangeListener(this._onStoreChange);
 	}
 
 
