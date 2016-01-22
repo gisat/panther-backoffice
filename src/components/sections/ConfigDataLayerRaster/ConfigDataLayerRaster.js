@@ -15,7 +15,6 @@ class ConfigDataLayerRaster extends Component{
 		scopes: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 		places: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 		periods: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-		destinations: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 		valueTemplate: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valueScope: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valuesPlaces: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
