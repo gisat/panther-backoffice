@@ -1,12 +1,16 @@
 import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
+import Model from '../models/PeriodModel';
 
 
 class PeriodStore extends Store {
 
 	getApiUrl(){
 		return "/rest/year";
+	}
+	getModel(){
+		return Model;
 	}
 
 }

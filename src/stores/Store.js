@@ -1,8 +1,8 @@
 //import React from 'react';
 import EventEmitter from 'events';
-import DataLayerModel from '../models/DataLayerModel';
 import superagent from 'superagent';
 import path from 'path';
+import DataLayerModel from '../models/DataLayerModel';
 
 import { publicPath } from '../config';
 
@@ -19,6 +19,11 @@ class Store extends EventEmitter {
 
 	getApiLoadMethod(){
 		return "GET";
+	}
+
+	getInstance(obj){
+		//console.err("getModel not overridden");
+		return {};
 	}
 
 	constructor() {
@@ -58,7 +63,7 @@ class Store extends EventEmitter {
 						return;
 					}
 					for(let obj of responseJson.data){
-						ret.push(new DataLayerModel(obj));
+						ret.push(me.getInstance(obj));
 					}
 					resolve(ret);
 				});

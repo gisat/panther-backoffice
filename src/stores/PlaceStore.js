@@ -1,14 +1,16 @@
 import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
-
+import Model from '../models/PlaceModel';
 
 class PlaceStore extends Store {
 
 	getApiUrl(){
 		return "/rest/location";
 	}
-
+	getModel(){
+		return Model;
+	}
 }
 
 let storeInstance = new PlaceStore();

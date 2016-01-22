@@ -1,6 +1,7 @@
 import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
+import DataLayerModel from '../models/DataLayerModel';
 
 
 class DataLayerStore extends Store {
@@ -10,6 +11,9 @@ class DataLayerStore extends Store {
 	}
 	getApiLoadMethod(){
 		return "POST";
+	}
+	getInstance(obj){
+		return new DataLayerModel(obj);
 	}
 
 }

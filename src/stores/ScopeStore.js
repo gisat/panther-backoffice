@@ -1,14 +1,16 @@
 import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
-
+import Model from '../models/ScopeModel';
 
 class ScopeStore extends Store {
 
 	getApiUrl(){
 		return "/rest/dataset";
 	}
-
+	getModel(){
+		return Model;
+	}
 }
 
 let storeInstance = new ScopeStore();

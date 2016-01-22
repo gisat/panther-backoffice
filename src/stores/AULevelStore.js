@@ -1,3 +1,5 @@
+import FauxStore from './FauxStore';
+
 class AULevelStore extends FauxStore {
 
 }
