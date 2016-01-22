@@ -129,6 +129,13 @@ h3, h3 span {
 
 /* ===== atoms ===== */
 
+.variant {
+	display: none;
+}
+.variant.active {
+	display: inherit;
+}
+
 label.container {
 		display: block;
 		margin-bottom: .9315rem;

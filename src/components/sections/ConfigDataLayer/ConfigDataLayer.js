@@ -70,21 +70,6 @@ class ConfigDataLayer extends Component{
 
 	render() {
 
-		// TODO overwrite to keep state in this component ?
-		var layerTypeConfig;
-		if(this.state.layerType==0){
-			layerTypeConfig = <ConfigDataLayerVector/>;
-		}
-		else if(this.state.layerType==1){
-			layerTypeConfig = <ConfigDataLayerRaster/>;
-		}
-		else if(this.state.layerType==2){
-			layerTypeConfig = <ConfigDataLayerAnalytical/>;
-		}
-		else {
-			layerTypeConfig = <span>Select layer type</span>;
-		}
-
 		return (
 			<div>
 
@@ -109,7 +94,30 @@ class ConfigDataLayer extends Component{
 				</div>
 
 
-				{layerTypeConfig}
+				<div
+					className={this.state.layerType==-1 ? 'variant active' : 'variant'}
+					id="config-data-layer-vector"
+				>
+					<span>Select layer type</span>
+				</div>
+				<div
+					className={this.state.layerType==0 ? 'variant active' : 'variant'}
+					id="config-data-layer-vector"
+				>
+					<ConfigDataLayerVector/>
+				</div>
+				<div
+					className={this.state.layerType==1 ? 'variant active' : 'variant'}
+					id="config-data-layer-vector"
+				>
+					<ConfigDataLayerRaster/>
+				</div>
+				<div
+					className={this.state.layerType==2 ? 'variant active' : 'variant'}
+					id="config-data-layer-vector"
+				>
+					<ConfigDataLayerAnalytical/>
+				</div>
 
 			</div>
 		);
