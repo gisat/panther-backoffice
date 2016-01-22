@@ -95,18 +95,16 @@ class ConfigDataLayer extends Component{
 
 	}
 
-	onChangeLayerType (key) {
-		this.setState({
-			layerType: key
-		});
-	}
-
 	componentDidMount() {
 
 	}
 
 
-
+	onChangeLayerType (key) {
+		this.setState({
+			layerType: key
+		});
+	}
 
 	handleNewObjects(values, store) {
 		var newValues = [];
@@ -124,39 +122,16 @@ class ConfigDataLayer extends Component{
 		return newValues;
 	}
 
-	onChangeVLTemplate (value, values) {
-		values = this.handleNewObjects(values, VECTORLAYERTEMPLATES);
-		this.setState({
-			valueVLTemplate: value
-		});
+	onChangeObjectSelect (stateKey, store, value, values) {
+		values = this.handleNewObjects(values, store);
+		var newState = {};
+		newState[stateKey] = values;
+		this.setState(newState);
 	}
-
-	onChangeVLScope (value, values) {
-		values = this.handleNewObjects(values, SCOPES);
-		this.setState({
-			valueVLScope: value
-		});
-	}
-
-	onChangeVLPlaces (value, values) {
-		values = this.handleNewObjects(values, PLACES);
-		this.setState({
-			valuesVLPlaces: values
-		});
-	}
-
-	onChangeVLPeriods (value, values) {
-		values = this.handleNewObjects(values, PERIODS);
-		this.setState({
-			valuesVLPeriods: values
-		});
-	}
-
 
 	onObjectClick (value, event) {
 		console.log("yay! " + value["key"]);
 	}
-
 
 	keyNameOptionFactory (inputValue) {
 		var newOption = {
@@ -168,8 +143,6 @@ class ConfigDataLayer extends Component{
 		};
 		return newOption;
 	}
-
-
 
 
 
@@ -222,10 +195,10 @@ class ConfigDataLayer extends Component{
 						valueScope={this.state.valueVLScope}
 						valuesPlaces={this.state.valuesVLPlaces}
 						valuesPeriods={this.state.valuesVLPeriods}
-						onChangeTemplate={this.onChangeVLTemplate.bind(this)}
-						onChangeScope={this.onChangeVLScope.bind(this)}
-						onChangePlaces={this.onChangeVLPlaces.bind(this)}
-						onChangePeriods={this.onChangeVLPeriods.bind(this)}
+						onChangeTemplate={this.onChangeObjectSelect.bind(this, "valueVLTemplate", VECTORLAYERTEMPLATES)}
+						onChangeScope={this.onChangeObjectSelect.bind(this, "valueVLScope", SCOPES)}
+						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesVLPlaces", PLACES)}
+						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuesVLPeriods", PERIODS)}
 						onObjectClick={this.onObjectClick.bind(this)}
 						keyNameOptionFactory={this.keyNameOptionFactory.bind(this)}
 					/>

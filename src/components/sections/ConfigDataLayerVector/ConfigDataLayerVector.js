@@ -21,14 +21,8 @@ class ConfigDataLayerVector extends Component{
 		places: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 		periods: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 		destinations: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-		valueTemplate: React.PropTypes.oneOfType([
-			React.PropTypes.string,
-			React.PropTypes.number
-		]).isRequired,
-		valueScope: React.PropTypes.oneOfType([
-			React.PropTypes.string,
-			React.PropTypes.number
-		]).isRequired,
+		valueTemplate: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+		valueScope: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valuesPlaces: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valuesPeriods: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		onChangeTemplate: React.PropTypes.func.isRequired,
@@ -44,8 +38,6 @@ class ConfigDataLayerVector extends Component{
 	};
 
 	render() {
-
-		console.log("ConfigDataLayerVector render() valueTemplate:",this.props.valueTemplate);
 		return (
 			<div>
 
