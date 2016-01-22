@@ -25,7 +25,7 @@ server.use(express.static(path.join(__dirname, 'public')));
 // -----------------------------------------------------------------------------
 server.use(bodyParser());
 server.post('/api-proxy/', function(req, res){
-	console.log("°°°°°°°°°°°° PUMA proxy API server.post °°°°°°°°°°°°");
+	//console.log("°°°°°°°°°°°° PUMA proxy API server.post °°°°°°°°°°°°");
 	apiproxy(req, res);
 });
 
