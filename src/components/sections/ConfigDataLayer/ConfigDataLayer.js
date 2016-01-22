@@ -21,21 +21,47 @@ const LAYERTYPES = [
 	{ key: 3, name: "Analytical units layer"}
 ];
 const SCOPES = [
-			{ key: 1, scope: 'Local' },
-			{ key: 2, scope: 'National' },
-			{ key: 3, scope: 'Regional' }
+			{ key: 1, name: 'Local' },
+			{ key: 2, name: 'National' },
+			{ key: 3, name: 'Regional' }
 		];
 const PLACES = [
-			{ key: 1, scope: 1, place: 'Cebu City' },
-			{ key: 2, scope: 1, place: 'Hai Phong' },
-			{ key: 3, scope: 1, place: 'Ho Chi Minh City' },
-			{ key: 4, scope: 1, place: 'Surabaya' },
-			{ key: 52, scope: 2, place: 'Brunei' },
-			{ key: 74, scope: 2, place: 'Japan' },
-			{ key: 82, scope: 2, place: 'Laos' },
-			{ key: 135, scope: 2, place: 'Vietnam' },
-			{ key: 625, scope: 3, place: 'East Asia and Pacific' },
+			{ key: 1, scope: 1, name: 'Cebu City' },
+			{ key: 2, scope: 1, name: 'Hai Phong' },
+			{ key: 3, scope: 1, name: 'Ho Chi Minh City' },
+			{ key: 4, scope: 1, name: 'Surabaya' },
+			{ key: 52, scope: 2, name: 'Brunei' },
+			{ key: 74, scope: 2, name: 'Japan' },
+			{ key: 82, scope: 2, name: 'Laos' },
+			{ key: 135, scope: 2, name: 'Vietnam' },
+			{ key: 625, scope: 3, name: 'East Asia and Pacific' },
 		];
+const VECTORLAYERTEMPLATES = [
+	{ key: 1, name: 'Road network' },
+	{ key: 2, name: 'Hospitals' },
+	{ key: 3, name: 'Land cover' },
+	{ key: 4, name: 'Land cover change' },
+	{ key: 5, name: 'Possible low-income settlements (areals)' },
+	{ key: 7, name: 'Possible low-income settlements (mid-points)' }
+];
+const DESTINATIONS = [
+	{ key: "I", isAttribute: false, name: 'FID (feature identifier)' },
+	{ key: "N", isAttribute: false, name: 'Feature name' },
+	{ key: 220, isAttribute: true, attset: "Change code", name: 'LCF code' },
+	{ key: 221, isAttribute: true, attset: "Change code", name: 'Current code' },
+	{ key: 222, isAttribute: true, attset: "Change code", name: 'Previous code' },
+	{ key: 223, isAttribute: true, attset: "Change code", name: 'UF code' },
+	{ key: 287, isAttribute: true, attset: "Status code", name: 'Code' },
+	{ key: 315, isAttribute: true, attset: "Aggregated LC Classes", name: 'Urban fabric' },
+	{ key: 316, isAttribute: true, attset: "Aggregated LC Classes", name: 'Artificial areas' },
+	{ key: 317, isAttribute: true, attset: "Aggregated LC Classes", name: 'Natural and semi-natural areas' },
+	{ key: 318, isAttribute: true, attset: "Aggregated LC Classes", name: 'Water' }
+];
+const PERIODS = [
+	{ key: 1, name: '1990' },
+	{ key: 2, name: '2000' },
+	{ key: 3, name: '2010' }
+];
 const TOPICS = [
 			{ key: 7, topic: 'Land cover structure', themes: [18,23,32] },
 			{ key: 12, topic: 'Land cover development', themes: [18,23,32] },
@@ -60,7 +86,11 @@ class ConfigDataLayer extends Component{
 		super(props);
 
 		this.state = {
-			layerType: null
+			layerType: null,
+			valueVLTemplate: 4,
+			valueVLScope: 1,
+			valuesVLPlaces: [2,3],
+			valuesVLPeriods: [3]
 		};
 
 	}
@@ -74,6 +104,74 @@ class ConfigDataLayer extends Component{
 	componentDidMount() {
 
 	}
+
+
+
+
+	handleNewObjects(values, store) {
+		var newValues = [];
+		for (var singleValue of values) {
+			if(singleValue.create){
+				// replace with actual object creation and config screen opening
+				delete singleValue.create;
+				delete singleValue.label;
+				delete singleValue.value;
+				singleValue.key = Math.floor((Math.random() * 10000) + 1);
+				store.push(singleValue);
+			}
+			newValues.push(singleValue.key);
+		}
+		return newValues;
+	}
+
+	onChangeVLTemplate (value, values) {
+		values = this.handleNewObjects(values, VECTORLAYERTEMPLATES);
+		this.setState({
+			valueVLTemplate: value
+		});
+	}
+
+	onChangeVLScope (value, values) {
+		values = this.handleNewObjects(values, SCOPES);
+		this.setState({
+			valueVLScope: value
+		});
+	}
+
+	onChangeVLPlaces (value, values) {
+		values = this.handleNewObjects(values, PLACES);
+		this.setState({
+			valuesVLPlaces: values
+		});
+	}
+
+	onChangeVLPeriods (value, values) {
+		values = this.handleNewObjects(values, PERIODS);
+		this.setState({
+			valuesVLPeriods: values
+		});
+	}
+
+
+	onObjectClick (value, event) {
+		console.log("yay! " + value["key"]);
+	}
+
+
+	keyNameOptionFactory (inputValue) {
+		var newOption = {
+			key: inputValue,
+			name: inputValue,
+			value: inputValue,
+			label: inputValue,
+			create: true
+		};
+		return newOption;
+	}
+
+
+
+
 
 	render() {
 
@@ -114,7 +212,23 @@ class ConfigDataLayer extends Component{
 					className={this.state.layerType==1 ? 'variant active' : 'variant'}
 					id="config-data-layer-vector"
 				>
-					<ConfigDataLayerVector/>
+					<ConfigDataLayerVector
+						layerTemplates={VECTORLAYERTEMPLATES}
+						scopes={SCOPES}
+						places={PLACES}
+						periods={PERIODS}
+						destinations={DESTINATIONS}
+						valueTemplate={this.state.valueVLTemplate}
+						valueScope={this.state.valueVLScope}
+						valuesPlaces={this.state.valuesVLPlaces}
+						valuesPeriods={this.state.valuesVLPeriods}
+						onChangeTemplate={this.onChangeVLTemplate.bind(this)}
+						onChangeScope={this.onChangeVLScope.bind(this)}
+						onChangePlaces={this.onChangeVLPlaces.bind(this)}
+						onChangePeriods={this.onChangeVLPeriods.bind(this)}
+						onObjectClick={this.onObjectClick.bind(this)}
+						keyNameOptionFactory={this.keyNameOptionFactory.bind(this)}
+					/>
 				</div>
 				<div
 					className={this.state.layerType==2 ? 'variant active' : 'variant'}
