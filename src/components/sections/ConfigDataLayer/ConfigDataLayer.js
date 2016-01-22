@@ -2,11 +2,13 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ConfigDataLayer.css';
 import withStyles from '../../../decorators/withStyles';
 
+import _ from 'underscore';
+
 import { Icon, IconButton, Buttons } from '../../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
-import _ from 'underscore';
+import SaveButton from '../../atoms/SaveButton';
 
 import ConfigDataLayerVector from '../ConfigDataLayerVector';
 import ConfigDataLayerRaster from '../ConfigDataLayerRaster';
@@ -70,6 +72,16 @@ class ConfigDataLayer extends Component{
 
 	render() {
 
+		var saveButton = " ";
+		if (this.state.layerType >= 0) {
+			saveButton = (
+				<SaveButton
+					saved
+					className="save-button"
+				/>
+			);
+		}
+
 		return (
 			<div>
 
@@ -118,6 +130,8 @@ class ConfigDataLayer extends Component{
 				>
 					<ConfigDataLayerAnalytical/>
 				</div>
+
+				{saveButton}
 
 			</div>
 		);

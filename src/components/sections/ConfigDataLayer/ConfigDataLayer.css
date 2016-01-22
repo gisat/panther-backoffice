@@ -1,3 +1,6 @@
 .dataLayerTypeSelect {
 	margin: 0 0 1.875rem 0;
 }
+.ui.button.save-button {
+	margin-top: 2rem;
+}
