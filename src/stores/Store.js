@@ -34,7 +34,6 @@ class Store extends EventEmitter {
 		var me = this;
 		return new Promise(function (resolve, reject) {
 			var url = path.resolve(publicPath, "api-proxy");
-			console.log("super URL: ", url);
 			superagent
 				.post(url)
 				.send({apiUrl: me.getApiUrl()})

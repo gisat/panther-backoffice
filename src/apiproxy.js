@@ -20,8 +20,8 @@ export default function(proxyRequest, proxyResponse){
 	delete formData["csrftoken"];
 	if(Object.keys(formData).length == 0) formData = null;
 
-	console.log("Piping to POST", url);
-	console.log("...with data:", formData);
+	//console.log("Piping to POST", url);
+	//console.log("...with data:", formData);
 
 	request.post({url: url, formData: formData, headers: {'Cookie': cookies.join("; ")}}).pipe(proxyResponse);
 }
