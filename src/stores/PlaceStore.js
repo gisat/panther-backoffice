@@ -3,15 +3,15 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
 
-class ScopeStore extends Store {
+class PlaceStore extends Store {
 
 	getApiUrl(){
-		return "/rest/dataset";
+		return "/rest/location";
 	}
 
 }
 
-let storeInstance = new ScopeStore();
+let storeInstance = new PlaceStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 

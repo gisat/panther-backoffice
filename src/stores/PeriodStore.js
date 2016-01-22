@@ -2,16 +2,11 @@ import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
-var apiUrl = "";
 
 class PeriodStore extends Store {
 
-	constructor() {
-		super();
-	}
-
-	load(){ // is it safe to override (without params)?
-		return super.load(apiUrl);
+	getApiUrl(){
+		return "/rest/year";
 	}
 
 }
@@ -24,20 +19,11 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 		//case ActionTypes.APP_INITIALIZED:
 		//	reset();
 		//	break;
-		case ActionTypes.LAYER_ADD: //todo
-			//appState.page = action.page;
-			//appState.path = action.path;
-			console.log("Action: LAYER_ADD");
-			break;
-
-		// case ActionTypes.APP_RESET:
-		//   reset();
-		//   break;
-
-		// case ActionTypes.POUCH_ERROR:
-		//   appState.message = 'Local database error: ' + action.error.message;
-		//   break;
-
+		//case ActionTypes.LAYER_ADD:
+		//	//appState.page = action.page;
+		//	//appState.path = action.path;
+		//	console.log("Action: LAYER_ADD");
+		//	break;
 		default:
 			return;
 	}

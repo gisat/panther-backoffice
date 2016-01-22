@@ -3,15 +3,15 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
 
-class ScopeStore extends Store {
+class RasterLayerStore extends Store {
 
 	getApiUrl(){
-		return "/rest/dataset";
+		return "/rest/areatemplate";
 	}
 
 }
 
-let storeInstance = new ScopeStore();
+let storeInstance = new RasterLayerStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 

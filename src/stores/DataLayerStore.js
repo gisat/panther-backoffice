@@ -9,9 +9,6 @@ class DataLayerStore extends Store {
 		return "api/layers/getLayers";
 	}
 
-	//constructor() {
-	//	super();
-	//}
 }
 
 let storeInstance = new DataLayerStore();
