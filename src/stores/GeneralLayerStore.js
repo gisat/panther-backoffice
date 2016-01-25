@@ -33,6 +33,8 @@ class GeneralLayerStore extends Store {
 		});
 	}
 
+	// todo getFiltered()
+
 }
 
 let storeInstance = new GeneralLayerStore();

@@ -11,13 +11,9 @@ var initialState = {
 	selectorValue: null
 };
 
-var store2state = {
-	dataLayers: DataLayerStore.getAll(),
-	jiny: DataLayerStore.getAll()
-};
 
 @withStyles(styles)
-class ScreenDataLayersBase extends Component{
+class ScreenDataLayersBase extends Component {
 
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired
@@ -28,17 +24,31 @@ class ScreenDataLayersBase extends Component{
 		this.state = initialState;
 	}
 
+	store2state(props) {
+		//if(!props){
+		//	props = this.props;
+		//}
+		return {
+			dataLayers: DataLayerStore.getAll(),
+			jiny: DataLayerStore.getAll()
+		};
+	}
+
 	_onStoreChange() {
-		this.context.setStateFromStores.call(this, store2state);
+		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentDidMount() {
 		DataLayerStore.addChangeListener(this._onStoreChange);
-		this.context.setStateFromStores.call(this, store2state);
+		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentWillUnmount() {
 		DataLayerStore.removeChangeListener(this._onStoreChange);
+	}
+
+	componentWillReceiveProps(newProps) {
+		this.context.setStateFromStores.call(this, this.store2state(newProps));
 	}
 
 	onSelectorChange (value) {
@@ -61,6 +71,7 @@ class ScreenDataLayersBase extends Component{
 				<div className="screen-content"><div>
 					<ConfigDataLayer
 						disabled={this.props.disabled}
+						selectorValue={this.state.selectorValue}
 						// todo pass selected dataLayer
 					/>
 				</div></div>

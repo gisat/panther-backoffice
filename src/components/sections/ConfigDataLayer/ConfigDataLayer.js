@@ -9,6 +9,7 @@ import ConfigDataLayerVector from '../ConfigDataLayerVector';
 import ConfigDataLayerRaster from '../ConfigDataLayerRaster';
 import ConfigDataLayerAnalytical from '../ConfigDataLayerAnalytical';
 
+import DataLayerStore from '../../../stores/DataLayerStore';
 import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
 //import VectorLayerStore from '../../../stores/VectorLayerStore';
@@ -114,18 +115,9 @@ var initialState = {
 	valueAULevel: []
 };
 
-var store2state = {
-	scopes: ScopeStore.getAll(),
-	places: PlaceStore.getAll(),
-	//vectorLayerTemplates: VectorLayerStore.getAll(),
-	rasterLayerTemplates: RasterLayerStore.getAll(),
-	//auLevels: AULevelStore.getAll(),
-	//attributes: AttributeStore.getAll(),
-	periods: PeriodStore.getAll()
-};
 
 @withStyles(styles)
-class ConfigDataLayer extends Component{
+class ConfigDataLayer extends Component {
 
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired
@@ -159,8 +151,24 @@ class ConfigDataLayer extends Component{
 	//	};
 	//}
 
+	store2state(props) {
+		if(!props){
+			props = this.props;
+		}
+		return {
+			scopes: ScopeStore.getAll(),
+			places: PlaceStore.getAll(),
+			//vectorLayerTemplates: VectorLayerStore.getAll(),
+			rasterLayerTemplates: RasterLayerStore.getAll(),
+			//auLevels: AULevelStore.getAll(),
+			//attributes: AttributeStore.getAll(),
+			periods: PeriodStore.getAll(),
+			layer: DataLayerStore.getById(props.selectorValue)
+		};
+	}
+
 	_onStoreChange() {
-		this.context.setStateFromStores.call(this, store2state);
+		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentDidMount() {
@@ -171,7 +179,7 @@ class ConfigDataLayer extends Component{
 		//AULevelStore.addChangeListener(this._onStoreChange);
 		//AttributeStore.addChangeListener(this._onStoreChange);
 		PeriodStore.addChangeListener(this._onStoreChange);
-		this.context.setStateFromStores.call(this, store2state);
+		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentWillUnmount() {
@@ -182,6 +190,10 @@ class ConfigDataLayer extends Component{
 		//AULevelStore.removeChangeListener(this._onStoreChange);
 		//AttributeStore.removeChangeListener(this._onStoreChange);
 		PeriodStore.removeChangeListener(this._onStoreChange);
+	}
+
+	componentWillReceiveProps(newProps) {
+		this.context.setStateFromStores.call(this, this.store2state(newProps));
 	}
 
 
@@ -232,8 +244,6 @@ class ConfigDataLayer extends Component{
 
 
 	render() {
-
-		console.log("scopes:",this.state.scopes);
 
 		var saveButton = " ";
 		if (this.state.layerType > 0) {
