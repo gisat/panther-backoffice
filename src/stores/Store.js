@@ -125,7 +125,7 @@ class Store extends EventEmitter {
 	}
 
 	getById(id){
-		return this.getFiltered({id: id});
+		return this.getFiltered({key: id});
 	}
 }
 
