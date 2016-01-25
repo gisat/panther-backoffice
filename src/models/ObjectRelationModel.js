@@ -74,6 +74,9 @@ class ObjectRelationModel extends Model {
 				},
 				isPromise: true
 			},
+			dataSourceString: {
+				serverName: 'layer' //id
+			},
 			place: {
 				serverName: 'location', //id
 				transformForLocal: function (data) {
@@ -103,10 +106,12 @@ class ObjectRelationModel extends Model {
 			columnMap: {
 				serverName: 'columnMap', //object {column: string, attribute: id}
 				transformForLocal: function (data) {
-					return {
-						column: data.column,
-						attribute: AttributeStore.getById(data.attribute)
-					}
+					return data.id.map(function(obj){
+						return {
+							column: obj.column,
+							attribute: AttributeStore.getById(obj.attribute)
+						};
+					});
 				},
 				isPromise: true,
 				isArray: true

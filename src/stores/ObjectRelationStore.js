@@ -11,6 +11,11 @@ class ObjectRelationStore extends Store {
 	getInstance(data){
 		return new ObjectRelationModel(data);
 	}
+
+	getByDataSource(dataSourceKey){
+		// cannot search in isPromise fields
+		return this.getFiltered({dataSourceString: dataSourceKey});
+	}
 }
 
 let storeInstance = new ObjectRelationStore();

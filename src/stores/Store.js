@@ -30,7 +30,10 @@ class Store extends EventEmitter {
 
 	constructor() {
 		super();
-		//this._models = this.load(); //mozna ne tady ale primo do filtru atd. lazy load
+		this._models = this.load(); //mozna ne tady ale primo do filtru atd. lazy load
+		this._models.then(function(models){
+			console.log("Store > constructor > _models",models);
+		});
 	}
 
 	emitChange() {
@@ -85,7 +88,7 @@ class Store extends EventEmitter {
 	}
 
 	getFiltered(options){
-		this._models = this.load();
+		//this._models = this.load();
 		var self = this;
 		return new Promise(function (resolve, reject) {
 			self._models.then(function (models) {
@@ -120,7 +123,7 @@ class Store extends EventEmitter {
 	}
 
 	getAll(){
-		this._models = this.load();
+		//this._models = this.load();
 		return this._models;
 	}
 

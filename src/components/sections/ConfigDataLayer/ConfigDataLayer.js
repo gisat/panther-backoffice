@@ -10,6 +10,7 @@ import ConfigDataLayerRaster from '../ConfigDataLayerRaster';
 import ConfigDataLayerAnalytical from '../ConfigDataLayerAnalytical';
 
 import DataLayerStore from '../../../stores/DataLayerStore';
+import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
 //import VectorLayerStore from '../../../stores/VectorLayerStore';
@@ -163,7 +164,8 @@ class ConfigDataLayer extends Component {
 			//auLevels: AULevelStore.getAll(),
 			//attributes: AttributeStore.getAll(),
 			periods: PeriodStore.getAll(),
-			layer: DataLayerStore.getById(props.selectorValue)
+			layer: DataLayerStore.getById(props.selectorValue),
+			layerRelation: ObjectRelationStore.getByDataSource(props.selectorValue)
 		};
 	}
 
