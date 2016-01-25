@@ -25,27 +25,27 @@ class RasterLayerModel extends Model {
 			},
 			changed: {
 				serverName: 'changed', //date
-				transformForLocal: function () {
-					this.transformDate.apply(this, arguments)
+				transformForLocal: function (data) {
+					return this.transformDate(data)
 				}.bind(this)
 			},
 			changedBy: {
 				serverName: 'changedBy', //id
-				transformForLocal: function (options) {
-					return UserStore.getById(options)
+				transformForLocal: function (data) {
+					return UserStore.getById(data)
 				},
 				isPromise: true
 			},
 			created: {
 				serverName: 'created', //date
-				transformForLocal: function () {
-					this.transformDate.apply(this, arguments)
+				transformForLocal: function (data) {
+					return this.transformDate(data)
 				}.bind(this)
 			},
 			createdBy: {
 				serverName: 'createdBy', //id
-				transformForLocal: function (options) {
-					return UserStore.getById(options)
+				transformForLocal: function (data) {
+					return UserStore.getById(data)
 				},
 				isPromise: true
 			},
@@ -54,23 +54,23 @@ class RasterLayerModel extends Model {
 			},
 			layerGroup: {
 				serverName: 'layerGroup', //id
-				transformForLocal: function (options) {
-					return LayerGroupStore.getById(options)
+				transformForLocal: function (data) {
+					return LayerGroupStore.getById(data)
 				},
 				isPromise: true
 			},
 			styles: {
 				serverName: 'symbologies', //ids
-				transformForLocal: function (options) {
-					return StyleStore.getFiltered(options)
+				transformForLocal: function (data) {
+					return StyleStore.getFiltered(data)
 				},
 				isPromise: true,
 				isArray: true
 			},
 			topic: {
 				serverName: 'topic', //id
-				transformForLocal: function (options) {
-					return TopicStore.getById(options)
+				transformForLocal: function (data) {
+					return TopicStore.getById(data)
 				},
 				isPromise: true
 			}

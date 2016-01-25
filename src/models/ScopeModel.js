@@ -23,34 +23,34 @@ class ScopeModel extends Model {
 			},
 			changed: {
 				serverName: 'changed', //date
-				transformForLocal: function () {
-					this.transformDate.apply(this, arguments)
+				transformForLocal: function (data) {
+					return this.transformDate(data)
 				}.bind(this)
 			},
 			changedBy: {
 				serverName: 'changedBy', //id
-				transformForLocal: function (options) {
-					return UserStore.getById(options)
+				transformForLocal: function (data) {
+					return UserStore.getById(data)
 				},
 				isPromise: true
 			},
 			created: {
 				serverName: 'created', //date
-				transformForLocal: function () {
-					this.transformDate.apply(this, arguments)
+				transformForLocal: function (data) {
+					return this.transformDate(data)
 				}.bind(this)
 			},
 			createdBy: {
 				serverName: 'createdBy', //id
-				transformForLocal: function (options) {
-					return UserStore.getById(options)
+				transformForLocal: function (data) {
+					return UserStore.getById(data)
 				},
 				isPromise: true
 			},
 			levels: {
 				serverName: 'featureLayers', //ids
-				transformForLocal: function (options) {
-					return AULevelStore.getFiltered(options)
+				transformForLocal: function (data) {
+					return AULevelStore.getFiltered(data)
 				},
 				isPromise: true,
 				isArray: true
