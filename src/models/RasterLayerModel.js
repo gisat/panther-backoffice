@@ -49,6 +49,9 @@ class RasterLayerModel extends Model {
 				},
 				isPromise: true
 			},
+			layerType: {
+				serverName: 'layerType' // raster / vector / au ?unnecessary in this direction?
+			},
 			layerGroup: {
 				serverName: 'layerGroup', //id
 				transformForLocal: function (options) {
@@ -56,7 +59,7 @@ class RasterLayerModel extends Model {
 				},
 				isPromise: true
 			},
-			levels: {
+			styles: {
 				serverName: 'symbologies', //ids
 				transformForLocal: function (options) {
 					return StyleStore.getFiltered(options)
