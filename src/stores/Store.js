@@ -4,6 +4,8 @@ import superagent from 'superagent';
 import path from 'path';
 import DataLayerModel from '../models/DataLayerModel';
 
+import _ from 'underscore';
+
 import { publicPath } from '../config';
 
 var CHANGE_EVENT = 'change';
