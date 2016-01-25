@@ -7,6 +7,8 @@ var ReactDOM = require('react-dom');
 var Input = require('react-input-autosize');
 var classes = require('classnames');
 
+var _ = require('underscore');
+
 var Value = require('./Value');
 var SingleValue = require('./SingleValue');
 var Option = require('./Option');
@@ -172,7 +174,7 @@ var UIObjectSelect = React.createClass({
 
 	componentWillReceiveProps (newProps) {
 		var optionsChanged = false;
-		if (JSON.stringify(newProps.options) !== JSON.stringify(this.props.options)) {
+		if (_.isEqual(newProps.options,this.props.options)) {
 			optionsChanged = true;
 			this.setState({
 				options: newProps.options,
