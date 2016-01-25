@@ -12,14 +12,6 @@ class RasterLayerModel extends Model {
 
 	}
 
-	// areaTemplates on server with "justVisualization": true are RasterLayers on local
-	// todo is this needed? What do we get from server?
-	resolveForLocal(data) {
-		if (data.justVisualization) {
-			super.resolveForLocal(data);
-		}
-	}
-
 	data() {
 		return {
 			key: {

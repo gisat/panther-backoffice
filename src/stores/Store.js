@@ -65,7 +65,10 @@ class Store extends EventEmitter {
 						return;
 					}
 					for(let obj of responseJson.data){
-						ret.push(me.getInstance(obj));
+						let instance = me.getInstance(obj);
+						if(instance){
+							ret.push(instance);
+						}
 						//ret.push(new DataLayerModel(obj));
 					}
 					resolve(ret);
