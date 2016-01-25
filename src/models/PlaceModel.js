@@ -5,11 +5,6 @@ import ScopeStore from '../stores/ScopeStore';
 
 class PlaceModel extends Model {
 
-	constructor(options) {
-		super(options);
-
-	}
-
 	data() {
 		return {
 			key: {

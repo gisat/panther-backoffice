@@ -7,11 +7,6 @@ import TopicStore from '../stores/TopicStore';
 
 class VectorLayerModel extends Model {
 
-	constructor(options) {
-		super(options);
-
-	}
-
 	data() {
 		return {
 			key: {

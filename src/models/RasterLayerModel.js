@@ -7,11 +7,6 @@ import TopicStore from '../stores/TopicStore';
 
 class RasterLayerModel extends Model {
 
-	constructor(options) {
-		super(options);
-
-	}
-
 	data() {
 		return {
 			key: {

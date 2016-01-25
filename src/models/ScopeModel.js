@@ -5,11 +5,6 @@ import AULevelStore from '../stores/AULevelStore';
 
 class ScopeModel extends Model {
 
-	constructor(options) {
-		super(options);
-
-	}
-
 	data() {
 		return {
 			key: {

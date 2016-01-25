@@ -5,11 +5,6 @@ import UserStore from '../stores/UserStore';
 
 class PeriodModel extends Model {
 
-	constructor(options) {
-		super(options);
-
-	}
-
 	data() {
 		return {
 			key: {
