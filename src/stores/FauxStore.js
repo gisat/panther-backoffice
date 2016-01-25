@@ -8,6 +8,10 @@ class FauxStore {
 		return Promise.resolve([]);
 	}
 
+	getAll() {
+		return Promise.resolve([]);
+	}
+
 }
 
 export default FauxStore;

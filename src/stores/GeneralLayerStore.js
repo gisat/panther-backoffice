@@ -1,0 +1,59 @@
+import Store from './Store';
+//import AppDispatcher from '../dispatcher/AppDispatcher';
+//import ActionTypes from '../constants/ActionTypes';
+
+import VectorLayerStore from './VectorLayerStore';
+import RasterLayerStore from './RasterLayerStore';
+import AULevelStore from './AULevelStore';
+
+class GeneralLayerStore extends Store {
+
+	load() {
+		return new Promise(function(resolve,reject) {
+			var vectorLayers = VectorLayerStore.getAll();
+			var rasterLayers = RasterLayerStore.getAll();
+			var auLayers = AULevelStore.getAll();
+			Promise.all([vectorLayers,rasterLayers,auLayers]).then(function(values){
+				var allLayers = values[0].concat(values[1],values[2]);
+				resolve(allLayers);
+			});
+		});
+	}
+
+	getById(id) {
+		return new Promise(function(resolve,reject) {
+			var vectorPromise = VectorLayerStore.getById(id);
+			var rasterPromise = RasterLayerStore.getById(id);
+			var auPromise = AULevelStore.getById(id);
+			Promise.all([vectorPromise,rasterPromise,auPromise]).then(function([vector,raster,au]){
+				if(vector[0]) resolve(vector);
+				if(raster[0]) resolve(raster);
+				if(au[0]) resolve(au);
+			});
+		});
+	}
+
+}
+
+let storeInstance = new GeneralLayerStore();
+
+//storeInstance.dispatchToken = AppDispatcher.register(action => {
+//
+//	switch(action.type) {
+//		//case ActionTypes.APP_INITIALIZED:
+//		//	reset();
+//		//	break;
+//		//case ActionTypes.LAYER_ADD:
+//		//	//appState.page = action.page;
+//		//	//appState.path = action.path;
+//		//	console.log("Action: LAYER_ADD");
+//		//	break;
+//		default:
+//			return;
+//	}
+//
+//	storeInstance.emitChange();
+//
+//});
+
+export default storeInstance;
