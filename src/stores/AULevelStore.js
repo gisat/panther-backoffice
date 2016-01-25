@@ -3,4 +3,6 @@ import FauxStore from './FauxStore';
 class AULevelStore extends FauxStore {
 
 }
-export default AULevelStore;
+let storeInstance = new AULevelStore();
+
+export default storeInstance;

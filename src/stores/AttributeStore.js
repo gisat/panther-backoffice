@@ -3,4 +3,6 @@ import FauxStore from './FauxStore';
 class AttributeStore extends FauxStore {
 
 }
-export default AttributeStore;
+let storeInstance = new AttributeStore();
+
+export default storeInstance;

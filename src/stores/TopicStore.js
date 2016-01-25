@@ -3,4 +3,6 @@ import FauxStore from './FauxStore';
 class TopicStore extends FauxStore {
 
 }
-export default TopicStore;
+let storeInstance = new TopicStore();
+
+export default storeInstance;
