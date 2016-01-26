@@ -1,6 +1,7 @@
 import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
+import EventTypes from '../constants/EventTypes';
 import PeriodModel from '../models/PeriodModel';
 
 
@@ -13,6 +14,10 @@ class PeriodStore extends Store {
 		return new PeriodModel(data);
 	}
 
+	wrapCallback(callback) {
+		return callback.bind(null,"Hello this is PeriodStore");
+	}
+
 }
 
 let storeInstance = new PeriodStore();
@@ -20,6 +25,9 @@ let storeInstance = new PeriodStore();
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 
 	switch(action.type) {
+		case ActionTypes.PERIOD_CREATE:
+			console.log("PeriodStore PERIOD_CREATE event");
+			storeInstance.emit(EventTypes.OBJECT_CREATED);
 		//case ActionTypes.APP_INITIALIZED:
 		//	reset();
 		//	break;

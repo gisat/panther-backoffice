@@ -3,12 +3,12 @@ import EventEmitter from 'events';
 import superagent from 'superagent';
 import path from 'path';
 import DataLayerModel from '../models/DataLayerModel';
+import EventTypes from '../constants/EventTypes';
 
 import _ from 'underscore';
 
 import { publicPath } from '../config';
 
-var CHANGE_EVENT = 'change';
 
 class Store extends EventEmitter {
 
@@ -37,7 +37,7 @@ class Store extends EventEmitter {
 	}
 
 	emitChange() {
-		this.emit(CHANGE_EVENT);
+		this.emit(EventTypes.STORE_CHANGE);
 	}
 
 	/**
@@ -79,12 +79,24 @@ class Store extends EventEmitter {
 		});
 	}
 
+	wrapCallback(callback) {
+		return callback.bind(null,"Hello this is Store");
+	}
+
 	addChangeListener(callback) {
-		this.on(CHANGE_EVENT, callback);
+		this.on(EventTypes.STORE_CHANGE, callback);
 	}
 
 	removeChangeListener(callback) {
-		this.removeListener(CHANGE_EVENT, callback);
+		this.removeListener(EventTypes.STORE_CHANGE, callback);
+	}
+
+	addResponseListener(callback) {
+		this.on(EventTypes.OBJECT_CREATED, this.wrapCallback(callback));
+	}
+
+	removeResponseListener(callback) {
+		this.removeListener(EventTypes.OBJECT_CREATED, this.wrapCallback(callback));
 	}
 
 	getFiltered(options){

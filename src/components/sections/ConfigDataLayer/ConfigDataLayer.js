@@ -11,6 +11,8 @@ import ConfigDataLayerVector from '../ConfigDataLayerVector';
 import ConfigDataLayerRaster from '../ConfigDataLayerRaster';
 import ConfigDataLayerAnalytical from '../ConfigDataLayerAnalytical';
 
+import ObjectTypes from '../../../constants/ObjectTypes';
+import ActionCreator from '../../../actions/ActionCreator';
 import DataLayerStore from '../../../stores/DataLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 import ScopeStore from '../../../stores/ScopeStore';
@@ -183,10 +185,18 @@ class ConfigDataLayer extends Component {
 					thenRet.valuesVLPlaces = [];
 					thenRet.valuesVLPeriods = [];
 					relations.map(function(relation){
-						thenRet.valueVLTemplate = [relation.layerObject[0].key];
-						thenRet.valueVLScope = [relation.place[0].scope[0].key];
-						thenRet.valuesVLPlaces = _.union(thenRet.valuesRLPlaces,[relation.place[0].key]);
-						thenRet.valuesVLPeriods = _.union(thenRet.valuesRLPeriods,[relation.period[0].key]);
+						if (relation.layerObject.length > 0){
+							thenRet.valueVLTemplate = [relation.layerObject[0].key];
+						}
+						if (relation.place.length > 0){
+							if (relation.place[0].scope.length > 0){
+								thenRet.valueVLScope = [relation.place[0].scope[0].key];
+							}
+							thenRet.valuesVLPlaces = _.union(thenRet.valuesVLPlaces,[relation.place[0].key]);
+						}
+						if (relation.period.length > 0){
+							thenRet.valuesVLPeriods = _.union(thenRet.valuesVLPeriods,[relation.period[0].key]);
+						}
 					});
 				}
 				else if(layerType=="raster"){
@@ -219,29 +229,33 @@ class ConfigDataLayer extends Component {
 	}
 
 	_onStoreChange() {
+		console.log("_onStoreChange() args",arguments);
 		// todo updates from all stores every time - should it?
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentDidMount() {
-		ScopeStore.addChangeListener(this._onStoreChange);
-		PlaceStore.addChangeListener(this._onStoreChange);
-		VectorLayerStore.addChangeListener(this._onStoreChange);
-		RasterLayerStore.addChangeListener(this._onStoreChange);
+		ScopeStore.addChangeListener(this._onStoreChange.bind(this));
+		PlaceStore.addChangeListener(this._onStoreChange.bind(this));
+		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this));
+		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this));
 		//AULevelStore.addChangeListener(this._onStoreChange);
 		//AttributeStore.addChangeListener(this._onStoreChange);
-		PeriodStore.addChangeListener(this._onStoreChange);
+		PeriodStore.addChangeListener(this._onStoreChange.bind(this));
+		PeriodStore.addResponseListener(this._onStoreChange.bind(this));
+		//PeriodStore.addObjectCreateListener(this._onStoreObjectCreate.bind(this));
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentWillUnmount() {
-		ScopeStore.removeChangeListener(this._onStoreChange);
-		PlaceStore.removeChangeListener(this._onStoreChange);
-		VectorLayerStore.removeChangeListener(this._onStoreChange);
-		RasterLayerStore.removeChangeListener(this._onStoreChange);
+		ScopeStore.removeChangeListener(this._onStoreChange.bind(this));
+		PlaceStore.removeChangeListener(this._onStoreChange.bind(this));
+		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this));
+		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this));
 		//AULevelStore.removeChangeListener(this._onStoreChange);
 		//AttributeStore.removeChangeListener(this._onStoreChange);
-		PeriodStore.removeChangeListener(this._onStoreChange);
+		PeriodStore.removeChangeListener(this._onStoreChange.bind(this));
+		PeriodStore.removeResponseListener(this._onStoreChange.bind(this));
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -255,7 +269,7 @@ class ConfigDataLayer extends Component {
 		});
 	}
 
-	handleNewObjects(values, store) {
+	handleNewObjects(values, objectType, stateKey) {
 		var newValues = [];
 		for (var singleValue of values) {
 			if(singleValue.create){
@@ -263,16 +277,29 @@ class ConfigDataLayer extends Component {
 				delete singleValue.create;
 				delete singleValue.label;
 				delete singleValue.value;
-				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				store.push(singleValue);
+				//singleValue.key = Math.floor((Math.random() * 10000) + 1);
+				//store.push(singleValue);
+				// todo switch here or in ActionCreator?
+				// todo move function to utils? (common and static)
+				switch (objectType) {
+					case ObjectTypes.PERIOD:
+						ActionCreator.createPeriodAndSetState(singleValue,stateKey);
+						break;
+					default:
+						return;
+				}
+
 			}
-			newValues.push(singleValue.key);
+			else {
+				newValues.push(singleValue.key);
+			}
+
 		}
 		return newValues;
 	}
 
-	onChangeObjectSelect (stateKey, store, value, values) {
-		values = this.handleNewObjects(values, store);
+	onChangeObjectSelect (stateKey, objectType, value, values) {
+		values = this.handleNewObjects(values, objectType, stateKey); // todo store -> object type
 		var newState = {};
 		newState[stateKey] = values;
 		this.setState(newState);
@@ -365,10 +392,10 @@ class ConfigDataLayer extends Component {
 						valueScope={this.state.valueRLScope}
 						valuesPlaces={this.state.valuesRLPlaces}
 						valuesPeriods={this.state.valuesRLPeriods}
-						onChangeTemplate={this.onChangeObjectSelect.bind(this, "valueRLTemplate", VECTORLAYERTEMPLATES)}
-						onChangeScope={this.onChangeObjectSelect.bind(this, "valueRLScope", SCOPES)}
-						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesRLPlaces", PLACES)}
-						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuesRLPeriods", PERIODS)}
+						onChangeTemplate={this.onChangeObjectSelect.bind(this, "valueRLTemplate", ObjectTypes.RASTER_LAYER_TEMPLATE)}
+						onChangeScope={this.onChangeObjectSelect.bind(this, "valueRLScope", ObjectTypes.SCOPE)}
+						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesRLPlaces", ObjectTypes.PLACE)}
+						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuesRLPeriods", ObjectTypes.PERIOD)}
 						onObjectClick={this.onObjectClick.bind(this)}
 						keyNameOptionFactory={this.keyNameOptionFactory.bind(this)}
 					/>
