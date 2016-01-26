@@ -45,7 +45,11 @@ class RasterLayerModel extends Model {
 				isPromise: true
 			},
 			layerType: {
-				serverName: 'layerType' // raster / vector / au ?unnecessary in this direction?
+				serverName: 'layerType', // raster / vector / au
+				transformForLocal: function (data) {
+					if(!data) { data = "raster"; }
+					return data;
+				}
 			},
 			layerGroup: {
 				serverName: 'layerGroup', //id
