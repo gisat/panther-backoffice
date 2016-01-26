@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ConfigDataLayer.css';
 import withStyles from '../../../decorators/withStyles';
 
+import _ from 'underscore';
+
 import Select from 'react-select';
 import SaveButton from '../../atoms/SaveButton';
 
@@ -13,16 +15,16 @@ import DataLayerStore from '../../../stores/DataLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
-//import VectorLayerStore from '../../../stores/VectorLayerStore';
+import VectorLayerStore from '../../../stores/VectorLayerStore';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
 //import AULevelStore from '../../../stores/AULevelStore';
 //import AttributeStore from '../../../stores/AttributeStore';
 import PeriodStore from '../../../stores/PeriodStore';
 
 const LAYERTYPES = [
-	{key: 1, name: "Vector layer"},
-	{key: 2, name: "Raster layer"},
-	{key: 3, name: "Analytical units layer"}
+	{key: "vector", name: "Vector layer"},
+	{key: "raster", name: "Raster layer"},
+	{key: "au", name: "Analytical units layer"}
 ];
 const SCOPES = [
 	{key: 1, name: 'Local'},
@@ -156,10 +158,11 @@ class ConfigDataLayer extends Component {
 		if(!props){
 			props = this.props;
 		}
-		return {
+		var thisComponent = this;
+		var ret = {
 			scopes: ScopeStore.getAll(),
 			places: PlaceStore.getAll(),
-			//vectorLayerTemplates: VectorLayerStore.getAll(),
+			vectorLayerTemplates: VectorLayerStore.getAll(),
 			rasterLayerTemplates: RasterLayerStore.getAll(),
 			//auLevels: AULevelStore.getAll(),
 			//attributes: AttributeStore.getAll(),
@@ -167,16 +170,63 @@ class ConfigDataLayer extends Component {
 			layer: DataLayerStore.getById(props.selectorValue),
 			layerRelation: ObjectRelationStore.getByDataSource(props.selectorValue)
 		};
+		ret.layerRelation.then(function(relations){
+			console.log("store2state layerRelation then()");
+			console.log(relations);
+			if(relations.length > 0) {
+				console.log("some relations");
+				var layerType = relations[0].layerObject[0].layerType;
+				var thenRet = {
+					layerType: layerType
+				};
+				if(layerType=="vector"){
+					thenRet.valuesVLPlaces = [];
+					thenRet.valuesVLPeriods = [];
+					relations.map(function(relation){
+						thenRet.valueVLTemplate = [relation.layerObject[0].key];
+						thenRet.valueVLScope = [relation.place[0].scope[0].key];
+						thenRet.valuesVLPlaces = _.union(thenRet.valuesRLPlaces,[relation.place[0].key]);
+						thenRet.valuesVLPeriods = _.union(thenRet.valuesRLPeriods,[relation.period[0].key]);
+					});
+				}
+				else if(layerType=="raster"){
+					thenRet.valuesRLPlaces = [];
+					thenRet.valuesRLPeriods = [];
+					relations.map(function(relation){
+						if (relation.layerObject.length > 0){
+							thenRet.valueRLTemplate = [relation.layerObject[0].key];
+						}
+						if (relation.place.length > 0){
+							if (relation.place[0].scope.length > 0){
+								thenRet.valueRLScope = [relation.place[0].scope[0].key];
+							}
+							thenRet.valuesRLPlaces = _.union(thenRet.valuesRLPlaces,[relation.place[0].key]);
+						}
+						if (relation.period.length > 0){
+							thenRet.valuesRLPeriods = _.union(thenRet.valuesRLPeriods,[relation.period[0].key]);
+						}
+					});
+				}
+				else if(layerType=="au"){
+
+				}
+
+				thisComponent.setState(thenRet);
+			}
+
+		});
+		return ret;
 	}
 
 	_onStoreChange() {
+		// todo updates from all stores every time - should it?
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentDidMount() {
 		ScopeStore.addChangeListener(this._onStoreChange);
 		PlaceStore.addChangeListener(this._onStoreChange);
-		//VectorLayerStore.addChangeListener(this._onStoreChange);
+		VectorLayerStore.addChangeListener(this._onStoreChange);
 		RasterLayerStore.addChangeListener(this._onStoreChange);
 		//AULevelStore.addChangeListener(this._onStoreChange);
 		//AttributeStore.addChangeListener(this._onStoreChange);
@@ -187,7 +237,7 @@ class ConfigDataLayer extends Component {
 	componentWillUnmount() {
 		ScopeStore.removeChangeListener(this._onStoreChange);
 		PlaceStore.removeChangeListener(this._onStoreChange);
-		//VectorLayerStore.removeChangeListener(this._onStoreChange);
+		VectorLayerStore.removeChangeListener(this._onStoreChange);
 		RasterLayerStore.removeChangeListener(this._onStoreChange);
 		//AULevelStore.removeChangeListener(this._onStoreChange);
 		//AttributeStore.removeChangeListener(this._onStoreChange);
@@ -281,14 +331,14 @@ class ConfigDataLayer extends Component {
 					<div className="data-layers-no-type">Select layer type</div>
 				</div>
 				<div
-					className={this.state.layerType==1 ? 'variant active' : 'variant'}
+					className={this.state.layerType=="vector" ? 'variant active' : 'variant'}
 					id="config-data-layer-vector"
 				>
 					<ConfigDataLayerVector
-						layerTemplates={VECTORLAYERTEMPLATES}
-						scopes={SCOPES}
-						places={PLACES}
-						periods={PERIODS}
+						layerTemplates={this.state.vectorLayerTemplates}
+						scopes={this.state.scopes}
+						places={this.state.places}
+						periods={this.state.periods}
 						destinations={VLDESTINATIONS}
 						valueTemplate={this.state.valueVLTemplate}
 						valueScope={this.state.valueVLScope}
@@ -303,7 +353,7 @@ class ConfigDataLayer extends Component {
 					/>
 				</div>
 				<div
-					className={this.state.layerType==2 ? 'variant active' : 'variant'}
+					className={this.state.layerType=="raster" ? 'variant active' : 'variant'}
 					id="config-data-layer-raster"
 				>
 					<ConfigDataLayerRaster
@@ -324,14 +374,14 @@ class ConfigDataLayer extends Component {
 					/>
 				</div>
 				<div
-					className={this.state.layerType==3 ? 'variant active' : 'variant'}
+					className={this.state.layerType=="au" ? 'variant active' : 'variant'}
 					id="config-data-layer-au"
 				>
 					<ConfigDataLayerAnalytical
 						levels={AULEVELS}
-						scopes={SCOPES}
-						places={PLACES}
-						periods={PERIODS}
+						scopes={this.state.scopes}
+						places={this.state.places}
+						periods={this.state.periods}
 						destinations={AUDESTINATIONS}
 						valueLevel={this.state.valueAULevel}
 						valueScope={this.state.valueAUScope}
