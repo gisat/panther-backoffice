@@ -14,10 +14,6 @@ class PeriodStore extends Store {
 		return new PeriodModel(data);
 	}
 
-	wrapCallback(callback) {
-		return callback.bind(null,"Hello this is PeriodStore");
-	}
-
 }
 
 let storeInstance = new PeriodStore();
@@ -27,7 +23,8 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 	switch(action.type) {
 		case ActionTypes.PERIOD_CREATE:
 			console.log("PeriodStore PERIOD_CREATE event");
-			storeInstance.emit(EventTypes.OBJECT_CREATED);
+			storeInstance.emit(EventTypes.OBJECT_CREATED,action);
+			break;
 		//case ActionTypes.APP_INITIALIZED:
 		//	reset();
 		//	break;
@@ -40,7 +37,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			return;
 	}
 
-	storeInstance.emitChange();
+	//storeInstance.emitChange();
 
 });
 

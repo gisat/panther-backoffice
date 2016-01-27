@@ -3,6 +3,7 @@ import styles from './ConfigDataLayer.css';
 import withStyles from '../../../decorators/withStyles';
 
 import _ from 'underscore';
+import utils from '../../../utils/utils'
 
 import Select from 'react-select';
 import SaveButton from '../../atoms/SaveButton';
@@ -173,10 +174,9 @@ class ConfigDataLayer extends Component {
 			layerRelation: ObjectRelationStore.getByDataSource(props.selectorValue)
 		};
 		ret.layerRelation.then(function(relations){
-			console.log("store2state layerRelation then()");
-			console.log(relations);
 			if(relations.length > 0) {
-				console.log("some relations");
+				console.log("store2state layerRelation then():");
+				console.log(relations);
 				var layerType = relations[0].layerObject[0].layerType;
 				var thenRet = {
 					layerType: layerType
@@ -229,9 +229,14 @@ class ConfigDataLayer extends Component {
 	}
 
 	_onStoreChange() {
-		console.log("_onStoreChange() args",arguments);
 		// todo updates from all stores every time - should it?
 		this.context.setStateFromStores.call(this, this.store2state());
+	}
+
+	_onStoreResponse(action) {
+		if (action.stateHash === this.getStateHash()) {
+			console.info("oh yes I done dat");
+		}
 	}
 
 	componentDidMount() {
@@ -242,7 +247,7 @@ class ConfigDataLayer extends Component {
 		//AULevelStore.addChangeListener(this._onStoreChange);
 		//AttributeStore.addChangeListener(this._onStoreChange);
 		PeriodStore.addChangeListener(this._onStoreChange.bind(this));
-		PeriodStore.addResponseListener(this._onStoreChange.bind(this));
+		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
 		//PeriodStore.addObjectCreateListener(this._onStoreObjectCreate.bind(this));
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
@@ -255,20 +260,45 @@ class ConfigDataLayer extends Component {
 		//AULevelStore.removeChangeListener(this._onStoreChange);
 		//AttributeStore.removeChangeListener(this._onStoreChange);
 		PeriodStore.removeChangeListener(this._onStoreChange.bind(this));
-		PeriodStore.removeResponseListener(this._onStoreChange.bind(this));
+		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
 	}
 
 	componentWillReceiveProps(newProps) {
 		this.context.setStateFromStores.call(this, this.store2state(newProps));
+		this.updateStateHash(newProps);
 	}
 
-
-	onChangeLayerType (key) {
+	onChangeLayerType (value) {
 		this.setState({
-			layerType: key
+			layerType: value
 		});
 	}
 
+	/**
+	 * Differentiate between states
+	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
+	 */
+	updateStateHash(props) {
+		if(!props){
+			props = this.props;
+		}
+		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
+		this._stateHash = utils.stringHash(props.selectorValue);
+	}
+	getStateHash() {
+		if(!this._stateHash) {
+			this.updateStateHash();
+		}
+		return this._stateHash;
+	}
+
+	/**
+	 * Find objects to create among selected in (Object)Select
+	 * @param values - selected objects
+	 * @param objectType - data type for Action
+	 * @param stateKey - state variable to store created object in
+	 * @returns {Array} - values without new (those are added when handling action response)
+	 */
 	handleNewObjects(values, objectType, stateKey) {
 		var newValues = [];
 		for (var singleValue of values) {
@@ -279,16 +309,9 @@ class ConfigDataLayer extends Component {
 				delete singleValue.value;
 				//singleValue.key = Math.floor((Math.random() * 10000) + 1);
 				//store.push(singleValue);
-				// todo switch here or in ActionCreator?
 				// todo move function to utils? (common and static)
-				switch (objectType) {
-					case ObjectTypes.PERIOD:
-						ActionCreator.createPeriodAndSetState(singleValue,stateKey);
-						break;
-					default:
-						return;
-				}
-
+				let stateHash = this.getStateHash();
+				ActionCreator.createObjectAndSetState(singleValue,objectType,stateKey,stateHash);
 			}
 			else {
 				newValues.push(singleValue.key);

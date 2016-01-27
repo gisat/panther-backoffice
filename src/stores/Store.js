@@ -79,10 +79,6 @@ class Store extends EventEmitter {
 		});
 	}
 
-	wrapCallback(callback) {
-		return callback.bind(null,"Hello this is Store");
-	}
-
 	addChangeListener(callback) {
 		this.on(EventTypes.STORE_CHANGE, callback);
 	}
@@ -92,11 +88,11 @@ class Store extends EventEmitter {
 	}
 
 	addResponseListener(callback) {
-		this.on(EventTypes.OBJECT_CREATED, this.wrapCallback(callback));
+		this.on(EventTypes.OBJECT_CREATED, callback);
 	}
 
 	removeResponseListener(callback) {
-		this.removeListener(EventTypes.OBJECT_CREATED, this.wrapCallback(callback));
+		this.removeListener(EventTypes.OBJECT_CREATED, callback);
 	}
 
 	getFiltered(options){
