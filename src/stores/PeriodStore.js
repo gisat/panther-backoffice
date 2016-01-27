@@ -22,8 +22,9 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 
 	switch(action.type) {
 		case ActionTypes.PERIOD_CREATE:
-			console.log("PeriodStore PERIOD_CREATE event");
+			console.log("PeriodStore PERIOD_CREATE action");
 			storeInstance.emit(EventTypes.OBJECT_CREATED,action);
+			//storeInstance.createObject(action.objectData, action.stateKey, action.stateHash);
 			break;
 		//case ActionTypes.APP_INITIALIZED:
 		//	reset();
