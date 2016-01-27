@@ -120,7 +120,7 @@ class Store extends EventEmitter {
 				.send({ssid: "5oymzxv5yigf4n6dp2nda2vgu6ernils"})
 				.send({sessionid: "kzgfcqe0a26jefi5c942hm7azef5od90"})
 				.send({csrftoken: "VNsl5vgDXeEDRl3J4NgNt8BjBfmHgD9b"})
-				//.send({data: object})
+				.send({data: object})
 				.end(function(err, res){
 					if(err || typeof res == 'undefined'){
 						reject(err);
