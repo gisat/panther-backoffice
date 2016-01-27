@@ -7,7 +7,7 @@ import {apiProtocol, apiHost, apiPath} from './config';
 export default function(proxyRequest, proxyResponse){
 
 	var url = apiProtocol + apiHost + path.join(apiPath, proxyRequest.body.apiUrl).replace(/\\/g, "/");
-	var method = proxyRequest.body.method;
+	var method = proxyRequest.body.method.toLowerCase();
 
 	var cookies = [];
 	cookies.push("ssid="+proxyRequest.body.ssid);
@@ -27,12 +27,14 @@ export default function(proxyRequest, proxyResponse){
 
 	var options = {
 		url: url,
-		formData: formData,
 		headers: {
 			'Cookie': cookies.join("; ")
 		}
 	};
-	switch(method.toLowerCase()) {
+	if(Object.keys(formData).length){
+		options.formData = formData;
+	}
+	switch(method) {
 		case "post":
 			request.post(options).pipe(proxyResponse);
 			break;
