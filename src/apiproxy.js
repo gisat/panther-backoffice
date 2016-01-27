@@ -15,11 +15,6 @@ export default function(proxyRequest, proxyResponse){
 	cookies.push("csrftoken="+proxyRequest.body.csrftoken);
 
 	var formData = proxyRequest.body;
-	delete formData["apiUrl"];
-	delete formData["method"];
-	delete formData["ssid"];
-	delete formData["sessionid"];
-	delete formData["csrftoken"];
 
 	var options = {
 		url: url,
@@ -27,8 +22,10 @@ export default function(proxyRequest, proxyResponse){
 			'Cookie': cookies.join("; ")
 		}
 	};
-	if(Object.keys(formData).length){
-		options.formData = formData;
+	if(formData.hasOwnProperty("data") && Object.keys(formData.data).length){
+		options.formData = {
+			data: formData.data
+		};
 	}
 	switch(method) {
 		case "post":
