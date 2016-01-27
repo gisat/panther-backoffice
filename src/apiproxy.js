@@ -20,10 +20,6 @@ export default function(proxyRequest, proxyResponse){
 	delete formData["ssid"];
 	delete formData["sessionid"];
 	delete formData["csrftoken"];
-	if(Object.keys(formData).length == 0) formData = null;
-
-	//console.log("Piping to POST", url);
-	//console.log("...with data:", formData);
 
 	var options = {
 		url: url,
