@@ -357,8 +357,30 @@ class ConfigDataLayer extends Component {
 			);
 		}
 
+		var mapFrame = "";
+		if(this.props.selectorValue) {
+
+			var mapFrameStyle = {
+				border: 'none',
+				width: '350px',
+				height: '600px'
+			};
+			var mapFrameSrc = "http://geonode.gisat.cz/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
+
+			// todo not an iframe
+			mapFrame = (
+				<div className="beside">
+					<iframe src={mapFrameSrc} style={mapFrameStyle}></iframe>
+				</div>
+			);
+
+		}
+
+
 		return (
 			<div>
+
+				{mapFrame}
 
 				<div className="frame-input-wrapper">
 					<label className="container">
