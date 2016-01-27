@@ -15,7 +15,7 @@ class PeriodStore extends Store {
 	}
 
 	createObject(objectData,responseStateKey,responseStateHash) {
-		//console.log("PeriodStore createObject objectData",objectData);
+		console.log("PeriodStore createObject objectData",objectData);
 		// todo Model.resolveForServer
 		var object = {
 			name: objectData.name,

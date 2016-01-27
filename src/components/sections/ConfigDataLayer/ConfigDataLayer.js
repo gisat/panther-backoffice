@@ -233,8 +233,8 @@ class ConfigDataLayer extends Component {
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
-	_onStoreResponse(action) {
-		if (action.stateHash === this.getStateHash()) {
+	_onStoreResponse(stateKey,stateHash) {
+		if (stateHash === this.getStateHash()) {
 			console.info("oh yes I done dat");
 		}
 	}
