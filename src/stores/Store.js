@@ -132,6 +132,9 @@ class Store extends EventEmitter {
 						reject("no data attribute");
 						return;
 					}
+					if(responseJson.data.hasOwnProperty("_id")) {
+						responseJson.data = [responseJson.data];
+					}
 					for(let obj of responseJson.data){
 						let instance = me.getInstance(obj);
 						if(instance){
