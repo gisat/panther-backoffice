@@ -24,7 +24,7 @@ export default function(proxyRequest, proxyResponse){
 	};
 	if(formData.hasOwnProperty("data") && Object.keys(formData.data).length){
 		options.formData = {
-			data: formData.data
+			data: JSON.stringify(formData.data)
 		};
 	}
 	switch(method) {
