@@ -174,54 +174,12 @@ class ConfigDataLayer extends Component {
 			layerRelation: ObjectRelationStore.getByDataSource(props.selectorValue)
 		};
 		ret.layerRelation.then(function(relations){
-			if(relations.length > 0) {
-				console.log("store2state layerRelation then():");
-				console.log(relations);
-				var layerType = relations[0].layerObject[0].layerType;
-				var thenRet = {
-					layerType: layerType
-				};
-				if(layerType=="vector"){
-					thenRet.valuesVLPlaces = [];
-					thenRet.valuesVLPeriods = [];
-					relations.map(function(relation){
-						if (relation.layerObject.length > 0){
-							thenRet.valueVLTemplate = [relation.layerObject[0].key];
-						}
-						if (relation.place.length > 0){
-							if (relation.place[0].scope.length > 0){
-								thenRet.valueVLScope = [relation.place[0].scope[0].key];
-							}
-							thenRet.valuesVLPlaces = _.union(thenRet.valuesVLPlaces,[relation.place[0].key]);
-						}
-						if (relation.period.length > 0){
-							thenRet.valuesVLPeriods = _.union(thenRet.valuesVLPeriods,[relation.period[0].key]);
-						}
-					});
-				}
-				else if(layerType=="raster"){
-					thenRet.valuesRLPlaces = [];
-					thenRet.valuesRLPeriods = [];
-					relations.map(function(relation){
-						if (relation.layerObject.length > 0){
-							thenRet.valueRLTemplate = [relation.layerObject[0].key];
-						}
-						if (relation.place.length > 0){
-							if (relation.place[0].scope.length > 0){
-								thenRet.valueRLScope = [relation.place[0].scope[0].key];
-							}
-							thenRet.valuesRLPlaces = _.union(thenRet.valuesRLPlaces,[relation.place[0].key]);
-						}
-						if (relation.period.length > 0){
-							thenRet.valuesRLPeriods = _.union(thenRet.valuesRLPeriods,[relation.period[0].key]);
-						}
-					});
-				}
-				else if(layerType=="au"){
-
-				}
-
-				thisComponent.setState(thenRet);
+			//console.log("store2state layerRelation then():");
+			//console.log(relations);
+			var relationsState = thisComponent.relations2state(relations);
+			if(relationsState) {
+				relationsState.relationsState = relationsState; // save store state for comparison with changed local
+				thisComponent.setState(relationsState);
 			}
 
 		});
@@ -268,10 +226,56 @@ class ConfigDataLayer extends Component {
 		this.updateStateHash(newProps);
 	}
 
-	onChangeLayerType (value) {
-		this.setState({
-			layerType: value
-		});
+	relations2state(relations) {
+		if(relations.length > 0) {
+			//console.log("store2state relations2state():");
+			//console.log(relations);
+			var layerType = relations[0].layerObject[0].layerType;
+			var ret = {
+				layerType: layerType
+			};
+			if(layerType=="vector"){
+				ret.valuesVLPlaces = [];
+				ret.valuesVLPeriods = [];
+				relations.map(function(relation){
+					if (relation.layerObject.length > 0){
+						ret.valueVLTemplate = [relation.layerObject[0].key];
+					}
+					if (relation.place.length > 0){
+						if (relation.place[0].scope.length > 0){
+							ret.valueVLScope = [relation.place[0].scope[0].key];
+						}
+						ret.valuesVLPlaces = _.union(ret.valuesVLPlaces,[relation.place[0].key]);
+					}
+					if (relation.period.length > 0){
+						ret.valuesVLPeriods = _.union(ret.valuesVLPeriods,[relation.period[0].key]);
+					}
+				});
+			}
+			else if(layerType=="raster"){
+				ret.valuesRLPlaces = [];
+				ret.valuesRLPeriods = [];
+				relations.map(function(relation){
+					if (relation.layerObject.length > 0){
+						ret.valueRLTemplate = [relation.layerObject[0].key];
+					}
+					if (relation.place.length > 0){
+						if (relation.place[0].scope.length > 0){
+							ret.valueRLScope = [relation.place[0].scope[0].key];
+						}
+						ret.valuesRLPlaces = _.union(ret.valuesRLPlaces,[relation.place[0].key]);
+					}
+					if (relation.period.length > 0){
+						ret.valuesRLPeriods = _.union(ret.valuesRLPeriods,[relation.period[0].key]);
+					}
+				});
+			}
+			else if(layerType=="au"){
+
+			}
+
+			return ret;
+		}
 	}
 
 	/**
@@ -290,6 +294,13 @@ class ConfigDataLayer extends Component {
 			this.updateStateHash();
 		}
 		return this._stateHash;
+	}
+
+
+	onChangeLayerType (value) {
+		this.setState({
+			layerType: value
+		});
 	}
 
 	/**
