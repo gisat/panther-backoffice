@@ -20,7 +20,7 @@ import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
-//import AULevelStore from '../../../stores/AULevelStore';
+import AULevelStore from '../../../stores/AULevelStore';
 //import AttributeStore from '../../../stores/AttributeStore';
 import PeriodStore from '../../../stores/PeriodStore';
 
@@ -171,10 +171,10 @@ class ConfigDataLayer extends Component {
 			//attributes: AttributeStore.getAll(),
 			periods: PeriodStore.getAll(),
 			layer: DataLayerStore.getById(props.selectorValue),
-			layerRelation: ObjectRelationStore.getByDataSource(props.selectorValue)
+			layerRelations: ObjectRelationStore.getByDataSource(props.selectorValue)
 		};
-		ret.layerRelation.then(function(relations){
-			//console.log("store2state layerRelation then():");
+		ret.layerRelations.then(function(relations){
+			//console.log("store2state layerRelations then():");
 			//console.log(relations);
 			var relationsState = thisComponent.relations2state(relations);
 			if(relationsState) {
@@ -278,8 +278,8 @@ class ConfigDataLayer extends Component {
 	 */
 	relations2state(relations) {
 		if(relations.length > 0) {
-			//console.log("store2state relations2state():");
-			//console.log(relations);
+			console.log("store2state relations2state():");
+			console.log(relations);
 			var layerType = relations[0].layerObject[0].layerType;
 			var ret = {
 				layerType: layerType
@@ -344,6 +344,35 @@ class ConfigDataLayer extends Component {
 			this.updateStateHash();
 		}
 		return this._stateHash;
+	}
+
+
+
+	saveForm() {
+		// only raster layers for now
+		if(this.state.layerType!="raster") {
+			console.info("Only raster layers saved for now. Aborted.");
+			return;
+		}
+
+		//do not even for now
+		console.info("Saving not working yet.");
+		return;
+
+		// create common structure for layerrefs
+		// (areaTemplate)
+		// (later: active, ?attributeSet + isData + columnMap + xColumns?,
+		// changed, changedBy done by server
+		for (let placeValue of this.state.valuesRLPlaces) {
+			for (let periodValue of this.state.valuesRLPeriods) {
+				// create OR EDIT one layerref here (find among state.relations, mark)
+				// with place + period
+			}
+		}
+		// delete layerrefs which are not represented above anymore (eg. a place was removed, or even type changed)
+		// = not marked
+
+		// remove marks and call action creator
 	}
 
 
@@ -418,6 +447,7 @@ class ConfigDataLayer extends Component {
 				<SaveButton
 					saved={this.isStateUnchanged()}
 					className="save-button"
+					onClick={this.saveForm.bind(this)}
 				/>
 			);
 		}
