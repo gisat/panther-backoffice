@@ -226,6 +226,56 @@ class ConfigDataLayer extends Component {
 		this.updateStateHash(newProps);
 	}
 
+	/**
+	 * Check if state is the same as it was when loaded from stores
+	 * @returns {boolean}
+	 */
+	isStateUnchanged() {
+		var isIt = true;
+		if(this.state.hasOwnProperty("relationsState")){
+			if(this.state.layerType==this.state.relationsState.layerType) {
+				// todo could be universal? compare whatever properties relationsState has?
+				console.log("isStateUnchanged layerType");
+				if(this.state.layerType=="vector") {
+					console.log("isStateUnchanged vector");
+					isIt = (
+						this.state.valueVLTemplate==this.state.relationsState.valueVLTemplate &&
+						this.state.valueVLScope==this.state.relationsState.valueVLScope &&
+						this.state.valuesVLPlaces==this.state.relationsState.valuesVLPlaces &&
+						this.state.valuesVLPeriods==this.state.relationsState.valuesVLPeriods
+						// todo data table
+					);
+				} else if(this.state.layerType=="raster") {
+					console.log("isStateUnchanged raster");
+					isIt = (
+						this.state.valueRLTemplate==this.state.relationsState.valueRLTemplate &&
+						this.state.valueRLScope==this.state.relationsState.valueRLScope &&
+						this.state.valuesRLPlaces==this.state.relationsState.valuesRLPlaces &&
+						this.state.valuesRLPeriods==this.state.relationsState.valuesRLPeriods
+					);
+				} else if(this.state.layerType=="au") {
+					console.log("isStateUnchanged au");
+					isIt = (
+						this.state.valueAULevel==this.state.relationsState.valueAULevel &&
+						this.state.valueAUScope==this.state.relationsState.valueAUScope &&
+						this.state.valuesAUPlaces==this.state.relationsState.valuesAUPlaces
+						// todo data table
+					);
+				}
+			} else {
+				isIt = false;
+			}
+		}
+		console.log(isIt);
+		return isIt;
+	}
+
+	/**
+	 * Read relations from corresponding ObjectRelation objects.
+	 * Called in store2state().
+	 * @param relations
+	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
+	 */
 	relations2state(relations) {
 		if(relations.length > 0) {
 			//console.log("store2state relations2state():");
@@ -358,11 +408,15 @@ class ConfigDataLayer extends Component {
 
 	render() {
 
+		console.log("render() ----------");
+		console.log("this.state", this.state);
+		console.log("this.state.relationsState", this.state.relationsState);
+
 		var saveButton = " ";
 		if (this.state.layerType) {
 			saveButton = (
 				<SaveButton
-					saved
+					saved={this.isStateUnchanged()}
 					className="save-button"
 				/>
 			);
