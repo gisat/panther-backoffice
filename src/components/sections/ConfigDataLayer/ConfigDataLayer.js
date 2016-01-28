@@ -359,12 +359,41 @@ class ConfigDataLayer extends Component {
 		console.info("Saving not working yet.");
 		return;
 
-		// create common structure for layerrefs
-		// (areaTemplate)
-		// (later: active, ?attributeSet + isData + columnMap + xColumns?,
+		var simplifiedRelationObjects = [];
+		this.state.layerRelations.map(function(relationObject){
+			let simplifiedRelationObject = {
+				key: relationObject.key,
+				place: relationObject.place[0],
+				period: relationObject.period[0]
+			};
+			simplifiedRelationObjects.push(simplifiedRelationObject);
+		});
+		// resolveForServer
+		// create common structure for newly created layerrefs
+		var baseObject = {
+			layer: this.props.selectorValue,
+			active: true,
+			areaTemplate: this.state.valueRLTemplate[0]
+		};
+		// (areaTemplate, layer, active)
+		// (later: ?attributeSet + isData + columnMap + xColumns?)
 		// changed, changedBy done by server
 		for (let placeValue of this.state.valuesRLPlaces) {
 			for (let periodValue of this.state.valuesRLPeriods) {
+				let existingObject = _.find(simplifiedRelationObjects, function(obj) {
+					return ((obj.place == placeValue) && (obj.period == periodValue)); // todo first: not working!
+				});
+				console.log("existingObject",existingObject);
+				if (existingObject) {
+					console.log("exists!");
+				}
+				// if not among existing
+				let object = {
+					location: placeValue,
+					year: periodValue
+				};
+				object = _.assign(object,baseObject);
+				console.log(object);
 				// create OR EDIT one layerref here (find among state.relations, mark)
 				// with place + period
 			}
