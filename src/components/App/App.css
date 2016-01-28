@@ -98,6 +98,10 @@ a, a:link, a i {
 	transition:  all .3s ease-out;
 }
 
+.hidden {
+	display: none;
+}
+
 
 h1, h2, h3, h4, h5 {
 

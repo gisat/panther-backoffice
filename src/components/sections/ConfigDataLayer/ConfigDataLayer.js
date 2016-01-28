@@ -357,6 +357,11 @@ class ConfigDataLayer extends Component {
 			);
 		}
 
+		var prod = "Select layer type";
+		if (!this.props.selectorValue) {
+			prod = "Select data layer";
+		}
+
 		var mapFrame = "";
 		if(this.props.selectorValue) {
 
@@ -382,7 +387,10 @@ class ConfigDataLayer extends Component {
 
 				{mapFrame}
 
-				<div className="frame-input-wrapper">
+				<div
+					//className="frame-input-wrapper"
+					className={this.state.layerType ? 'frame-input-wrapper' : 'frame-input-wrapper hidden'}
+				>
 					<label className="container">
 						Layer type
 						<Select
@@ -400,7 +408,9 @@ class ConfigDataLayer extends Component {
 					className={this.state.layerType==null ? 'variant active' : 'variant'}
 					id="config-data-layer-none"
 				>
-					<div className="data-layers-no-type">Select layer type</div>
+					<div className="data-layers-no-type">
+						{prod}
+					</div>
 				</div>
 				<div
 					className={this.state.layerType=="vector" ? 'variant active' : 'variant'}
