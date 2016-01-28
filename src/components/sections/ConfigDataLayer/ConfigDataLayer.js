@@ -348,7 +348,7 @@ class ConfigDataLayer extends Component {
 	render() {
 
 		var saveButton = " ";
-		if (this.state.layerType > 0) {
+		if (this.state.layerType) {
 			saveButton = (
 				<SaveButton
 					saved
