@@ -397,6 +397,7 @@ class ConfigDataLayer extends Component {
 						// todo active
 					};
 					// ACTION UPDATE LAYERREF (object)
+					//ActionCreator.createObjectAndSetState(singleValue,objectType,stateKey,stateHash);
 					console.log("update object:",object);
 				} else {
 					// does not exist -> create
@@ -406,6 +407,7 @@ class ConfigDataLayer extends Component {
 					};
 					object = _.assign(object,baseObject);
 					// ACTION CREATE LAYERREF (object)
+					ActionCreator.createObject(object,ObjectTypes.OBJECT_RELATION);
 					console.log("create object:",object);
 				}
 			}
@@ -418,6 +420,7 @@ class ConfigDataLayer extends Component {
 				year: unusedObject.period.key
 			};
 			// ACTION DELETE LAYERREF (object)
+			//ActionCreator.createObjectAndSetState(singleValue,objectType,stateKey,stateHash);
 			console.log("delete object:",object);
 		});
 	}

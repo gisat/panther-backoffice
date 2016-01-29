@@ -12,5 +12,6 @@ export default keyMirror({
 	TOPIC: null,
 	THEME: null,
 	LAYER_GROUP: null,
-	STYLE: null
+	STYLE: null,
+	OBJECT_RELATION: null
 });

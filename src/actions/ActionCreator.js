@@ -19,6 +19,21 @@ export default {
 				return;
 		}
 		AppDispatcher.dispatch(action);
+	},
+
+	createObject: function(objectData,objectType) {
+		var action = {
+			type: null,
+			objectData: objectData
+		};
+		switch (objectType) {
+			case ObjectTypes.OBJECT_RELATION:
+				action.type = ActionTypes.OBJECT_RELATION_CREATE;
+				break;
+			default:
+				return;
+		}
+		AppDispatcher.dispatch(action);
 	}
 
 };
