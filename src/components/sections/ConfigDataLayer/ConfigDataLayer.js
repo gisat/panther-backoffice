@@ -349,15 +349,15 @@ class ConfigDataLayer extends Component {
 
 
 	saveForm() {
-		// only raster layers for now
+		// only raster layers for now - todo the rest
 		if(this.state.layerType!="raster") {
 			console.info("Only raster layers saved for now. Aborted.");
 			return;
 		}
 
 		//do not even for now
-		console.info("Saving not working yet.");
-		return;
+		//console.info("Saving not working yet.");
+		//return;
 
 		var simplifiedRelationObjects = [];
 		this.state.layerRelations.map(function(relationObject){
@@ -368,40 +368,58 @@ class ConfigDataLayer extends Component {
 			};
 			simplifiedRelationObjects.push(simplifiedRelationObject);
 		});
-		// resolveForServer
+		//console.log("simplifiedRelationObjects", simplifiedRelationObjects);
+
 		// create common structure for newly created layerrefs
+		var layerTemplateValue = this.state.valueRLTemplate[0];
 		var baseObject = {
 			layer: this.props.selectorValue,
-			active: true,
-			areaTemplate: this.state.valueRLTemplate[0]
+			active: true, //todo active setting
+			areaTemplate: layerTemplateValue
 		};
-		// (areaTemplate, layer, active)
-		// (later: ?attributeSet + isData + columnMap + xColumns?)
+		// (later: ?attributeSet + isData + columnMap + xColumns? - for vector & au)
 		// changed, changedBy done by server
+
+		// save updated or new relations
 		for (let placeValue of this.state.valuesRLPlaces) {
 			for (let periodValue of this.state.valuesRLPeriods) {
 				let existingObject = _.find(simplifiedRelationObjects, function(obj) {
-					return ((obj.place == placeValue) && (obj.period == periodValue)); // todo first: not working!
+					return ((obj.place.key == placeValue) && (obj.period.key == periodValue));
 				});
-				console.log("existingObject",existingObject);
 				if (existingObject) {
-					console.log("exists!");
+					// exists -> update
+					simplifiedRelationObjects = _.reject(simplifiedRelationObjects, function(item) { return item.key === existingObject.key; });
+					let object = {
+						_id: existingObject.key,
+						areaTemplate: layerTemplateValue,
+						location: placeValue,
+						year: periodValue
+						// todo active
+					};
+					// ACTION UPDATE LAYERREF (object)
+					console.log("update object:",object);
+				} else {
+					// does not exist -> create
+					let object = {
+						location: placeValue,
+						year: periodValue
+					};
+					object = _.assign(object,baseObject);
+					// ACTION CREATE LAYERREF (object)
+					console.log("create object:",object);
 				}
-				// if not among existing
-				let object = {
-					location: placeValue,
-					year: periodValue
-				};
-				object = _.assign(object,baseObject);
-				console.log(object);
-				// create OR EDIT one layerref here (find among state.relations, mark)
-				// with place + period
 			}
 		}
-		// delete layerrefs which are not represented above anymore (eg. a place was removed, or even type changed)
-		// = not marked
-
-		// remove marks and call action creator
+		// remove removed relations
+		simplifiedRelationObjects.map(function(unusedObject){
+			let object = {
+				_id: unusedObject.key,
+				location: unusedObject.place.key,
+				year: unusedObject.period.key
+			};
+			// ACTION DELETE LAYERREF (object)
+			console.log("delete object:",object);
+		});
 	}
 
 
