@@ -106,13 +106,16 @@ class ObjectRelationModel extends Model {
 			columnMap: {
 				serverName: 'columnMap', //object {column: string, attribute: id}
 				transformForLocal: function (data) {
-					let ret = data.map(function(obj){
-						return {
-							column: obj.column,
-							attribute: AttributeStore.getById(obj.attribute)
-						};
-					});
-					return Promise.resolve(ret);
+					if(data) {
+						let ret = data.map(function(obj){
+							return {
+								column: obj.column,
+								attribute: AttributeStore.getById(obj.attribute)
+							};
+						});
+						return Promise.resolve(ret);
+					}
+					return Promise.resolve({});
 				},
 				isPromise: true,
 				isArray: true
