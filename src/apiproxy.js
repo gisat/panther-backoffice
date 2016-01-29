@@ -31,6 +31,9 @@ export default function(proxyRequest, proxyResponse){
 		case "post":
 			request.post(options).pipe(proxyResponse);
 			break;
+		case "put":
+			request.put(options).pipe(proxyResponse);
+			break;
 		default:
 			request.get(options).pipe(proxyResponse);
 	}
