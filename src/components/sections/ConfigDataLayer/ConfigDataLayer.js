@@ -373,9 +373,9 @@ class ConfigDataLayer extends Component {
 		// create common structure for newly created layerrefs
 		var layerTemplateValue = this.state.valueRLTemplate[0];
 		var baseObject = {
-			layer: this.props.selectorValue,
 			active: true, //todo active setting
-			areaTemplate: layerTemplateValue
+			areaTemplate: layerTemplateValue,
+			columnMap: []
 		};
 		// (later: ?attributeSet + isData + columnMap + xColumns? - for vector & au)
 		// changed, changedBy done by server
@@ -397,11 +397,12 @@ class ConfigDataLayer extends Component {
 						// todo active
 					};
 					// ACTION UPDATE LAYERREF (object)
-					//ActionCreator.createObjectAndSetState(singleValue,objectType,stateKey,stateHash);
+					ActionCreator.updateObject(object,ObjectTypes.OBJECT_RELATION);
 					console.log("update object:",object);
 				} else {
 					// does not exist -> create
 					let object = {
+						layer: this.props.selectorValue,
 						location: placeValue,
 						year: periodValue
 					};
@@ -416,11 +417,11 @@ class ConfigDataLayer extends Component {
 		simplifiedRelationObjects.map(function(unusedObject){
 			let object = {
 				_id: unusedObject.key,
-				location: unusedObject.place.key,
-				year: unusedObject.period.key
+				//location: unusedObject.place.key,
+				//year: unusedObject.period.key
 			};
 			// ACTION DELETE LAYERREF (object)
-			//ActionCreator.createObjectAndSetState(singleValue,objectType,stateKey,stateHash);
+			ActionCreator.deleteObject(object,ObjectTypes.OBJECT_RELATION);
 			console.log("delete object:",object);
 		});
 	}

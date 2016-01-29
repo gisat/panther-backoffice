@@ -106,6 +106,11 @@ class Store extends EventEmitter {
 		return this.request(method, object);
 	}
 
+	update(object) {
+		var method = "PUT";
+		return this.request(method, object);
+	}
+
 	request(method,object){
 		if (!object) {
 			object = {};
