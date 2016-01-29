@@ -567,7 +567,9 @@ var UIObjectSelect = React.createClass({
 		} else {
 			var filteredOptions = this.filterOptions(this.state.options);
 			// UIObjectSelect: need state.options AND current input
-			if(this.props.allowCreate && !(event.target.value=="")) {
+			let thisComponent = this;
+			let hasValue = !!filteredOptions.filter(function(e) { return e[thisComponent.props.labelKey] == event.target.value; }).length;
+			if(this.props.allowCreate && !(event.target.value=="") && !hasValue) {
 				var newOption = this.props.newOptionCreator ? this.props.newOptionCreator(event.target.value) : {
 					value: event.target.value,
 					label: event.target.value,
