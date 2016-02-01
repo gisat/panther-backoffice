@@ -25,6 +25,13 @@ class Page extends Component {
 		openScreen: PropTypes.func.isRequired
 	};
 
+	getChildContext(){
+		return {
+			onSetScreenData: this.context.onSetScreenData.bind(this),
+			openScreen: this.openScreen.bind(this)
+		};
+	}
+
 	constructor(props) {
 		super(props);
 
@@ -37,6 +44,34 @@ class Page extends Component {
 			title: screenSet.title,
 			screens: screenSet.screens
 		};
+	}
+
+	componentDidMount(){
+		//this.context.setScreenData.bind(this)("analyses2", {zkouska: "jo", necojineho: "neco uplne jineho"});
+		this.fitScreens();
+	}
+
+	componentWillReceiveProps(newProps) {
+		if (newProps.screenSet != this.state.key) {
+			var screenSet = _.findWhere(SCREENSETS, {key: newProps.screenSet});
+			if(!screenStack[newProps.screenSet]) {
+				this.buildScreenStack(screenSet);
+			}
+			this.setState({
+				key: screenSet.key,
+				title: screenSet.title,
+				screens: screenSet.screens,
+				screenSetChanged: true
+			});
+		}
+	}
+
+	componentDidUpdate() {
+		// todo run screenPosition on first screen in screenStack
+		if(this.state.screenSetChanged) {
+			this.fitScreens();
+			this.state.screenSetChanged = false;
+		}
 
 	}
 
@@ -71,42 +106,6 @@ class Page extends Component {
 		if(!screenStack[this.state.key] || !screenStack[this.state.key][0]) return;
 		var position = screenStack[this.state.key][0].position;
 		this.context.setScreenPosition.call(this, screen.key, position, {init: true});
-	}
-
-	getChildContext(){
-		return {
-			onSetScreenData: this.context.onSetScreenData.bind(this),
-			openScreen: this.openScreen.bind(this)
-		};
-	}
-
-	componentWillReceiveProps(newProps) {
-		if (newProps.screenSet != this.state.key) {
-			var screenSet = _.findWhere(SCREENSETS, {key: newProps.screenSet});
-			if(!screenStack[newProps.screenSet]) {
-				this.buildScreenStack(screenSet);
-			}
-			this.setState({
-				key: screenSet.key,
-				title: screenSet.title,
-				screens: screenSet.screens,
-				screenSetChanged: true
-			});
-		}
-	}
-
-	componentDidUpdate() {
-		// todo run screenPosition on first screen in screenStack
-		if(this.state.screenSetChanged) {
-			this.fitScreens();
-			this.state.screenSetChanged = false;
-		}
-
-	}
-
-	componentDidMount(){
-		//this.context.setScreenData.bind(this)("analyses2", {zkouska: "jo", necojineho: "neco uplne jineho"});
-		this.fitScreens();
 	}
 
 	openScreen(key,component,parentUrl,options,data,openerCallback) {
