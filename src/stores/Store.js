@@ -111,6 +111,11 @@ class Store extends EventEmitter {
 		return this.request(method, object);
 	}
 
+	delete(object) {
+		var method = "DELETE";
+		return this.request(method, object);
+	}
+
 	request(method,object){
 		if (!object) {
 			object = {};
