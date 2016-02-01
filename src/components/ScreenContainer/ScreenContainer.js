@@ -63,7 +63,8 @@ class ScreenContainer extends Component{
 	}
 
 	componentDidMount() {
-		//console.log("CDM");
+		console.log("CDM");
+		// todo ! only first mount on opening (now runs every time page is switched
 		if(this.props.screenState.isDynamic){
 			var thisComponent = this;
 			setTimeout(function () {

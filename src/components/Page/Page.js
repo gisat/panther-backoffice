@@ -35,14 +35,16 @@ class Page extends Component {
 	constructor(props) {
 		super(props);
 
-		var screenSet = _.findWhere(SCREENSETS, {key: this.props.screenSet});
+		var screenSets = [];
+		screenSets[this.props.screenSet] = _.findWhere(SCREENSETS, {key: this.props.screenSet});
 
-		this.buildScreenStack(screenSet);
+		this.buildScreenStack(screenSets[this.props.screenSet]);
 
 		this.state = {
-			key: screenSet.key,
-			title: screenSet.title,
-			screens: screenSet.screens
+			key: screenSets[this.props.screenSet].key,
+			title: screenSets[this.props.screenSet].title,
+			screens: screenSets[this.props.screenSet].screens,
+			screenSets: screenSets
 		};
 	}
 
@@ -52,15 +54,21 @@ class Page extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
+		console.log("pageWillReceiveProps",newProps.screenSet,this.state.key);
+		console.log(this.state.screenSets);
 		if (newProps.screenSet != this.state.key) {
-			var screenSet = _.findWhere(SCREENSETS, {key: newProps.screenSet});
+			var screenSets = this.state.screenSets;
+			if(!this.state.screenSets[newProps.screenSet]) {
+				screenSets[newProps.screenSet] = _.findWhere(SCREENSETS, {key: newProps.screenSet});
+			}
 			if(!screenStack[newProps.screenSet]) {
-				this.buildScreenStack(screenSet);
+				this.buildScreenStack(screenSets[newProps.screenSet]);
 			}
 			this.setState({
-				key: screenSet.key,
-				title: screenSet.title,
-				screens: screenSet.screens,
+				key: this.state.screenSets[newProps.screenSet].key,
+				title: this.state.screenSets[newProps.screenSet].title,
+				screens: this.state.screenSets[newProps.screenSet].screens,
+				screenSets: screenSets,
 				screenSetChanged: true
 			});
 		}
@@ -109,6 +117,7 @@ class Page extends Component {
 	}
 
 	openScreen(key,component,parentUrl,options,data,openerCallback) {
+		var screenSets = this.state.screenSets;
 		var screenSet = {
 			key: this.state.key,
 			title: this.state.title,
@@ -129,13 +138,15 @@ class Page extends Component {
 			screen.size = options.size;
 		}
 		screenSet.screens.push(screen);
+		screenSets[this.state.key].screens.push(screen);
 		screenStack[screenSet.key].unshift({
 			key: screen.key,
 			position: screen.position,
 			userDidThat: true
 		});
 		this.setState({
-			screens: screenSet.screens
+			screens: screenSet.screens,
+			screenSets: screenSets
 		});
 	}
 
