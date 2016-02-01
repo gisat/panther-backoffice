@@ -21,7 +21,8 @@ class Page extends Component {
 	};
 
 	static childContextTypes = {
-		onSetScreenData: PropTypes.func.isRequired
+		onSetScreenData: PropTypes.func.isRequired,
+		openScreen: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
@@ -74,7 +75,8 @@ class Page extends Component {
 
 	getChildContext(){
 		return {
-			onSetScreenData: this.context.onSetScreenData.bind(this)
+			onSetScreenData: this.context.onSetScreenData.bind(this),
+			openScreen: this.openScreen.bind(this)
 		};
 	}
 
@@ -105,6 +107,37 @@ class Page extends Component {
 	componentDidMount(){
 		//this.context.setScreenData.bind(this)("analyses2", {zkouska: "jo", necojineho: "neco uplne jineho"});
 		this.fitScreens();
+	}
+
+	openScreen(key,component,parentUrl,options,data,openerCallback) {
+		var screenSet = {
+			key: this.state.key,
+			title: this.state.title,
+			screens: this.state.screens
+		};
+		var screen = {
+			key: key,
+			isDynamic: true,
+			position: "closed",
+			component: component,
+			parentUrl: parentUrl,
+			data: data
+		};
+		if(options.type) {
+			screen.type = options.type;
+		}
+		if(options.size) {
+			screen.size = options.size;
+		}
+		screenSet.screens.push(screen);
+		screenStack[screenSet.key].unshift({
+			key: screen.key,
+			position: screen.position,
+			userDidThat: true
+		});
+		this.setState({
+			screens: screenSet.screens
+		});
 	}
 
 	render() {

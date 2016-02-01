@@ -64,6 +64,12 @@ class ScreenContainer extends Component{
 
 	componentDidMount() {
 		//console.log("CDM");
+		if(this.props.screenState.isDynamic){
+			var thisComponent = this;
+			setTimeout(function () {
+				thisComponent.props.onOpen();
+			}, 100);
+		}
 	}
 
 	///**

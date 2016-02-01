@@ -1,7 +1,20 @@
 import React, { PropTypes, Component } from 'react';
 import TestC from '../TestC';
+import FabulousNewScreen from '../FabulousNewScreen';
 
 class Dashboard extends Component{
+
+	static contextTypes = {
+		onInteraction: PropTypes.func.isRequired,
+		onSetScreenData: PropTypes.func.isRequired,
+		openScreen: PropTypes.func.isRequired
+	};
+
+	onAnchorClick() {
+		console.log("clickity");
+		this.context.openScreen("FabulousNewScreenNo1",<FabulousNewScreen/>,"dashboard",{size:40},{message:"Hello this is Dashobard"});
+	}
+
 	render() {
 
 		var prvni = (
@@ -24,6 +37,12 @@ class Dashboard extends Component{
 					druha,
 					treti
 				]*/}
+				<a
+					href="#"
+					onClick={this.onAnchorClick.bind(this)}
+				>
+					CLICK ME
+				</a>
 			</div>
 		);
 
