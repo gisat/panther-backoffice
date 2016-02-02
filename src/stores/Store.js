@@ -184,7 +184,7 @@ class Store extends EventEmitter {
 
 
 			// todo Temporary use of API proxy
-			var url = path.resolve(publicPath, "api-proxy");
+			var url = path.resolve(publicPath, "api-proxy") + "?" + me.getApiUrl().split("/").pop(); // append last API directory, just for better debugging
 			superagent
 			.post(url)
 			.send({apiUrl: me.getApiUrl()})
