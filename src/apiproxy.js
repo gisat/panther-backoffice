@@ -6,15 +6,15 @@ import {apiProtocol, apiHost, apiPath} from './config';
 
 export default function(proxyRequest, proxyResponse){
 
-	//console.log('');
-	//console.log('           (   (       (   (       )    )     )  ');
-	//console.log('     (     )\\ ))\\ )    )\\ ))\\ ) ( /( ( /(  ( /(  ');
+	console.log('');
+	console.log('           (   (       (   (       )    )     )  ');
+	console.log('     (     )\\ ))\\ )    )\\ ))\\ ) ( /( ( /(  ( /(  ');
 	//console.log('     )\\   (()/(()/(   (()/(()/( )\\()))\\()) )\\()) ');
-	//console.log('  ((((_)(  /(_))(_))__ /(_))(_)|(_)\\((_)\\ ((_)\\  ');
-	//console.log('   )\\ _ )\\(_))(_))|___(_))(_))   ((_)_((_)_ ((_) ');
-	//console.log('   (_)_\\(_) _ \\_ _|   | _ \\ _ \\ / _ \\ \\/ | \\ / / ');
-	//console.log('    / _ \\ |  _/| |    |  _/   /| (_) >  < \\ V /  ');
-	//console.log('   /_/ \\_\\|_| |___|   |_| |_|_\\ \\___/_/\\_\\ |_|   ');
+	//console.log('  ((((_)(  /(_))(_))   /(_))(_)|(_)\\((_)\\ ((_)\\  ');
+	console.log('   )\\ _ )\\(_))(_))|   (_))(_))   ((_)_((_)_ ((_) ');
+	console.log('   (_)_\\(_) _ \\_ _|___| _ \\ _ \\ / _ \\ \\/ | \\ / / ');
+	console.log('    / _ \\ |  _/| | ___|  _/   /| (_) >  < \\ V /  ');
+	console.log('   /_/ \\_\\|_| |___|   |_| |_|_\\ \\___/_/\\_\\ |_|   ');
 	//console.log('      If You see this, something is wrong.');
 	//console.log('');
 
@@ -39,6 +39,9 @@ export default function(proxyRequest, proxyResponse){
 			data: JSON.stringify(formData.data)
 		};
 	}
+
+	console.log("  ", method.toUpperCase(), url, "\n-----------\n", options, "\n\n");
+
 	switch(method) {
 		case "post":
 			request.post(options).pipe(proxyResponse);
