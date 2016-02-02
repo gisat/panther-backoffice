@@ -144,14 +144,14 @@ class Store extends EventEmitter {
 		});
 	}
 
-	request(method,object){
-		if (!object) {
-			object = {};
-		}
+	request(method, object){
+		object = object || {};
+
+		//shouldReturnData parameter removed. Respectively never commited.
+		//It just returns data if there are some.
+
 		var me = this;
 		return new Promise(function (resolve, reject) {
-
-
 
 
 			// todo: Request API directly. Need to solve CORS credentials problem
@@ -207,7 +207,9 @@ class Store extends EventEmitter {
 
 
 			// todo Temporary use of API proxy
-			var url = path.resolve(publicPath, "api-proxy") + "?" + me.getApiUrl().split("/").pop(); // append last API directory, just for better debugging
+			var url = path.resolve(publicPath, "api-proxy")
+					// append METHOD and last API directory, just for better debugging
+					+ "?" + method.toUpperCase() + "-" + me.getApiUrl().split("/").pop();
 			superagent
 			.post(url)
 			.send({apiUrl: me.getApiUrl()})
@@ -221,21 +223,26 @@ class Store extends EventEmitter {
 					reject(err);
 					return;
 				}
-				var ret = [];
+
 				var responseJson = JSON.parse(res.text);
-				if(typeof responseJson.data == 'undefined'){
-					reject("no data attribute");
-					return;
+
+				// if there is no data attribute in the response
+				if (!responseJson.hasOwnProperty('data')) {
+					return resolve();
 				}
-				if(responseJson.data.hasOwnProperty("_id")) {
+
+				// if only one record in the response
+				if (responseJson.data.hasOwnProperty("_id")) {
 					responseJson.data = [responseJson.data];
 				}
-				for(let obj of responseJson.data){
+
+				// instantiate objects with models
+				var ret = [];
+				for (let obj of responseJson.data) {
 					let instance = me.getInstance(obj);
-					if(instance){
+					if (instance) {
 						ret.push(instance);
 					}
-					//ret.push(new DataLayerModel(obj));
 				}
 				resolve(ret);
 			});
