@@ -384,6 +384,8 @@ class ConfigDataLayer extends Component {
 		//console.info("Saving not working yet.");
 		//return;
 
+		var actionData = [];
+
 		var simplifiedRelationObjects = [];
 		this.state.layerRelations.map(function(relationObject){
 			let simplifiedRelationObject = {
@@ -422,7 +424,8 @@ class ConfigDataLayer extends Component {
 						// todo active
 					};
 					// ACTION UPDATE LAYERREF (object)
-					ActionCreator.updateObject(object,ObjectTypes.OBJECT_RELATION);
+					//ActionCreator.updateObject(object,ObjectTypes.OBJECT_RELATION);
+					actionData.push({type:"update",object:object});
 					console.log("update object:",object);
 				} else {
 					// does not exist -> create
@@ -433,7 +436,8 @@ class ConfigDataLayer extends Component {
 					};
 					object = _.assign(object,baseObject);
 					// ACTION CREATE LAYERREF (object)
-					ActionCreator.createObject(object,ObjectTypes.OBJECT_RELATION);
+					//ActionCreator.createObject(object,ObjectTypes.OBJECT_RELATION);
+					actionData.push({type:"create",object:object});
 					console.log("create object:",object);
 				}
 			}
@@ -446,9 +450,12 @@ class ConfigDataLayer extends Component {
 				//year: unusedObject.period.key
 			};
 			// ACTION DELETE LAYERREF (object)
-			ActionCreator.deleteObject(object,ObjectTypes.OBJECT_RELATION);
+			//ActionCreator.deleteObject(object,ObjectTypes.OBJECT_RELATION);
+			actionData.push({type:"delete",object:object});
 			console.log("delete object:",object);
 		});
+
+		ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
 	}
 
 

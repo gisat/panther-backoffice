@@ -121,6 +121,29 @@ class Store extends EventEmitter {
 		return this.request(method, object);
 	}
 
+	handle(actionData) {
+		var promises = [];
+		var thisStore = this;
+		actionData.forEach(function(action){
+			switch (action.type) {
+				case "create":
+					promises.push(thisStore.create(action.object));
+					break;
+				case "update":
+					promises.push(thisStore.update(action.object));
+					break;
+				case "delete":
+					promises.push(thisStore.delete(action.object));
+					break;
+			}
+		});
+		Promise.all(promises).then(function(){
+			thisStore.reload().then(function(){
+				thisStore.emitChange();
+			});
+		});
+	}
+
 	request(method,object){
 		if (!object) {
 			object = {};

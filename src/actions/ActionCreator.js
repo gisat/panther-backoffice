@@ -70,6 +70,23 @@ export default {
 				return;
 		}
 		AppDispatcher.dispatch(action);
+	},
+
+	handleObjects: function(actionData,objectType) {
+		var action = {
+			type: null,
+			actionData: actionData
+		};
+		console.log("ActionCreator handleObjects()");
+		switch (objectType) {
+			case ObjectTypes.OBJECT_RELATION:
+				action.type = ActionTypes.OBJECT_RELATION_HANDLE;
+				console.log("action type",action.type);
+				break;
+			default:
+				return;
+		}
+		AppDispatcher.dispatch(action);
 	}
 
 };

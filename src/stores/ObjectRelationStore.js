@@ -41,6 +41,10 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			console.log("ObjectRelationStore OBJECT_RELATION_DELETE action");
 			storeInstance.delete(action.objectData);
 			break;
+		case ActionTypes.OBJECT_RELATION_HANDLE:
+			console.log("ObjectRelationStore OBJECT_RELATION_HANDLE action");
+			storeInstance.handle(action.actionData);
+			break;
 		default:
 			return;
 	}
