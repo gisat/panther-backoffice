@@ -125,7 +125,6 @@ class Page extends Component {
 		};
 		var screen = {
 			key: key,
-			isDynamic: true,
 			position: "closed",
 			component: component,
 			parentUrl: parentUrl,
@@ -147,6 +146,9 @@ class Page extends Component {
 		this.setState({
 			screens: screenSet.screens,
 			screenSets: screenSets
+		},
+		function(){
+			this.refs[key].onDynamicOpen();
 		});
 	}
 

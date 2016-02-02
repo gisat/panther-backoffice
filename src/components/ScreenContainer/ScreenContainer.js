@@ -1,13 +1,13 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ScreenContainer.css';
-import withStyles from '../../decorators/withStyles';
+//import styles from './ScreenContainer.css';
+//import withStyles from '../../decorators/withStyles';
 import classNames from 'classnames';
 
 import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
 const screenStack = require('../../stores/screenStack');
 
-@withStyles(styles)
+//@withStyles(styles)
 class ScreenContainer extends Component{
 
 	//static propTypes = {
@@ -63,14 +63,20 @@ class ScreenContainer extends Component{
 	}
 
 	componentDidMount() {
-		console.log("CDM");
-		// todo ! only first mount on opening (now runs every time page is switched
-		if(this.props.screenState.isDynamic){
-			var thisComponent = this;
-			setTimeout(function () {
-				thisComponent.props.onOpen();
-			}, 100);
-		}
+		//console.log("CDM");
+		//if(this.props.screenState.isDynamic){
+		//	var thisComponent = this;
+		//	setTimeout(function () {
+		//		thisComponent.props.onOpen();
+		//	}, 100);
+		//}
+	}
+
+	onDynamicOpen() {
+		var thisComponent = this;
+		setTimeout(function () {
+			thisComponent.props.onOpen();
+		}, 100);
 	}
 
 	///**
