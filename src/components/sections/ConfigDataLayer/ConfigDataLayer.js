@@ -3,6 +3,7 @@ import styles from './ConfigDataLayer.css';
 import withStyles from '../../../decorators/withStyles';
 
 import _ from 'underscore';
+import path from "path";
 import utils from '../../../utils/utils'
 
 import Select from 'react-select';
@@ -11,6 +12,8 @@ import SaveButton from '../../atoms/SaveButton';
 import ConfigDataLayerVector from '../ConfigDataLayerVector';
 import ConfigDataLayerRaster from '../ConfigDataLayerRaster';
 import ConfigDataLayerAnalytical from '../ConfigDataLayerAnalytical';
+
+import ScreenMetadataPeriod from '../../screens/ScreenMetadataPeriod';
 
 import ObjectTypes from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
@@ -126,7 +129,10 @@ var initialState = {
 class ConfigDataLayer extends Component {
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired
+		setStateFromStores: PropTypes.func.isRequired,
+		onInteraction: PropTypes.func.isRequired,
+		onSetScreenData: PropTypes.func.isRequired,
+		openScreen: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
@@ -200,21 +206,26 @@ class ConfigDataLayer extends Component {
 			console.log("result",result);
 			console.log("stateKey",stateKey);
 			console.log("stateHash",stateHash);
-			if(stateKey){
-				//PeriodStore.load().then(function(){
-				//	let updateStatePromise = thisComponent.context.setStateFromStores.call(thisComponent, {periods: PeriodStore.getAll()});
-				//	updateStatePromise.then(function(){
-						console.log("_onStoreResponse set state: periods:",thisComponent.state.periods);
-						let values = thisComponent.state[stateKey];
-						values.push(result[0].key);
-						thisComponent.setState({
-							[stateKey]: values
-						},
-						function(){
-							console.log("_onStoreResponse updated state:",thisComponent.state);
-						});
-					//});
-				//});
+			if (stateKey) {
+				console.log("_onStoreResponse set state: periods:", thisComponent.state.periods);
+				let values = thisComponent.state[stateKey];
+				values.push(result[0].key);
+				thisComponent.setState({
+					[stateKey]: values
+				},
+				function () {
+					console.log("_onStoreResponse updated state:", thisComponent.state);
+				});
+				var screenComponent,screenName;
+				switch(stateKey){
+					case "valuesVLPeriods":
+					case "valuesRLPeriods":
+						console.log("heyaheayehey");
+						screenComponent = <ScreenMetadataPeriod/>;
+						screenName = "ScreenDataLayersBase-ScreenMetadataPeriod";
+						break;
+				}
+				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{initialKey:result[0].key});
 			}
 		}
 	}

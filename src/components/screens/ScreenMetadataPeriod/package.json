@@ -1,0 +1,6 @@
+{
+	"name": "ScreenMetadataPeriod",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenMetadataPeriod.js"
+}

@@ -1,21 +1,21 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ScreenDataLayersBase.css';
+import styles from './ScreenMetadataPeriod.css';
 import withStyles from '../../../decorators/withStyles';
 
 import path from "path";
 
-import DataLayerStore from '../../../stores/DataLayerStore';
-import SelectorDataLayer from '../../sections/SelectorDataLayer';
-import ConfigDataLayer from '../../sections/ConfigDataLayer';
+import PeriodStore from '../../../stores/PeriodStore';
+import SelectorMetadataPeriod from '../../sections/SelectorMetadataPeriod'; // todo universal selector
+import ConfigMetadataPeriod from '../../sections/ConfigMetadataPeriod';
 
 var initialState = {
-	dataLayers: [],
+	periods: [],
 	selectorValue: null
 };
 
 
 @withStyles(styles)
-class ScreenDataLayersBase extends Component {
+class ScreenMetadataPeriod extends Component{
 
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired
@@ -27,7 +27,7 @@ class ScreenDataLayersBase extends Component {
 	}
 
 	getUrl() {
-		return path.join(this.props.parentUrl, "datalayers/" + this.state.selectorValue);
+		return path.join(this.props.parentUrl, "analysis/" + this.state.selectorValue);
 	}
 
 	store2state(props) {
@@ -35,7 +35,7 @@ class ScreenDataLayersBase extends Component {
 		//	props = this.props;
 		//}
 		return {
-			dataLayers: DataLayerStore.getAll()
+			periods: PeriodStore.getAll()
 		};
 	}
 
@@ -44,12 +44,12 @@ class ScreenDataLayersBase extends Component {
 	}
 
 	componentDidMount() {
-		DataLayerStore.addChangeListener(this._onStoreChange.bind(this));
+		PeriodStore.addChangeListener(this._onStoreChange.bind(this));
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentWillUnmount() {
-		DataLayerStore.removeChangeListener(this._onStoreChange.bind(this));
+		PeriodStore.removeChangeListener(this._onStoreChange.bind(this));
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -66,15 +66,16 @@ class ScreenDataLayersBase extends Component {
 		return (
 			<div>
 				<div className="screen-setter"><div>
-					<SelectorDataLayer
+					<h2>Period</h2>
+					<SelectorMetadataPeriod
 						disabled={this.props.disabled}
-						data={this.state.dataLayers}
+						data={this.state.periods}
 						value={this.state.selectorValue}
 						onChange={this.onSelectorChange.bind(this)}
 					/>
 				</div></div>
 				<div className="screen-content"><div>
-					<ConfigDataLayer
+					<ConfigMetadataPeriod
 						disabled={this.props.disabled}
 						selectorValue={this.state.selectorValue}
 						parentUrl={this.getUrl()}
@@ -86,4 +87,4 @@ class ScreenDataLayersBase extends Component {
 	}
 }
 
-export default ScreenDataLayersBase;
+export default ScreenMetadataPeriod;
