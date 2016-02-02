@@ -560,7 +560,7 @@ class ConfigDataLayer extends Component {
 
 				<div
 					//className="frame-input-wrapper"
-					className={this.state.layerType ? 'frame-input-wrapper' : 'frame-input-wrapper hidden'}
+					className={this.props.selectorValue ? 'frame-input-wrapper' : 'frame-input-wrapper hidden'}
 				>
 					<label className="container">
 						Layer type
