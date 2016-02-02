@@ -21,15 +21,14 @@ class PeriodStore extends Store {
 			name: objectData.name,
 			active: false
 		};
-
+		var thisStore = this;
 		var resultPromise = this.create(object);
 
 		resultPromise.then(function(result){
-			storeInstance.reload().then(function(){
-				storeInstance.emitChange();
-				storeInstance.emit(EventTypes.OBJECT_CREATED,result,responseStateKey,responseStateHash);
+			thisStore.reload().then(function(){
+				thisStore.emitChange();
+				thisStore.emit(EventTypes.OBJECT_CREATED,result,responseStateKey,responseStateHash);
 			});
-
 		});
 	}
 
