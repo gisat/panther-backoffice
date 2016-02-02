@@ -68,20 +68,34 @@ const context = {
 		}.bind(this)
 	},
 
-	setStateFromStores: function(store2state){
-		var me = this;
+	setStateFromStores: function(store2state,keys){
+		console.log("88888888888888888888888888888888888888");
+		console.log("setStateFromStores()");
+		var setAll = false;
+		console.log("keys:",keys);
+		if(!keys){
+			keys = [];
+			setAll = true;
+		}
+		console.log("keys:",keys);
+		var component = this;
 		var storeLoads = [];
 		var storeNames = [];
 		for(var name in store2state){
-			storeLoads.push(store2state[name]);
-			storeNames.push(name);
+			if(setAll || (keys.indexOf(name)!=-1)) {
+				console.log("name:",name);
+				console.log(keys.indexOf(name));
+				storeLoads.push(store2state[name]);
+				storeNames.push(name);
+			}
 		}
-		Promise.all(storeLoads).then(function(data){
+		console.log("88888888888888888888888888888888888888");
+		return Promise.all(storeLoads).then(function(data){
 			var storeObject = {};
 			for(var i in storeNames){
 				storeObject[storeNames[i]] = data[i];
 			}
-			me.setState(storeObject);
+			component.setState(storeObject);
 		});
 	},
 

@@ -22,9 +22,15 @@ class PeriodStore extends Store {
 			active: false
 		};
 
-		this.create(object);
+		var resultPromise = this.create(object);
 
-		storeInstance.emit(EventTypes.OBJECT_CREATED,responseStateKey,responseStateHash);
+		resultPromise.then(function(result){
+			storeInstance.reload().then(function(){
+				storeInstance.emitChange();
+				storeInstance.emit(EventTypes.OBJECT_CREATED,result,responseStateKey,responseStateHash);
+			});
+
+		});
 	}
 
 }

@@ -161,7 +161,6 @@ class ConfigDataLayer extends Component {
 		if(!props){
 			props = this.props;
 		}
-		var thisComponent = this;
 		var ret = {
 			scopes: ScopeStore.getAll(),
 			places: PlaceStore.getAll(),
@@ -173,57 +172,83 @@ class ConfigDataLayer extends Component {
 			layer: DataLayerStore.getById(props.selectorValue),
 			layerRelations: ObjectRelationStore.getByDataSource(props.selectorValue)
 		};
-		ret.layerRelations.then(function(relations){
-			//console.log("store2state layerRelations then():");
-			//console.log(relations);
-			var relationsState = thisComponent.relations2state(relations);
-			if(relationsState) {
-				relationsState.relationsState = relationsState; // save store state for comparison with changed local
-				thisComponent.setState(relationsState);
-			}
-
-		});
 		return ret;
 	}
 
-	_onStoreChange() {
-		// todo updates from all stores every time - should it?
-		this.context.setStateFromStores.call(this, this.store2state());
+	setStateFromStores(props,keys) {
+		if(!props){
+			props = this.props;
+		}
+		var thisComponent = this;
+		let store2state = this.store2state(props);
+		this.context.setStateFromStores.call(this, store2state, keys);
+		store2state.layerRelations.then(function(relations) {
+			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations),keys);
+		});
 	}
 
-	_onStoreResponse(stateKey,stateHash) {
+	_onStoreChange(keys) {
+		console.log("_onStoreChange()");
+		// todo updates from all stores every time - should it?
+		this.setStateFromStores(this.props,keys);
+	}
+
+	_onStoreResponse(result,stateKey,stateHash) {
+		var thisComponent = this;
 		if (stateHash === this.getStateHash()) {
-			console.info("oh yes I done dat");
+			console.info("_onStoreResponse()");
+			console.log("result",result);
+			console.log("stateKey",stateKey);
+			console.log("stateHash",stateHash);
+			if(stateKey){
+				//PeriodStore.load().then(function(){
+				//	let updateStatePromise = thisComponent.context.setStateFromStores.call(thisComponent, {periods: PeriodStore.getAll()});
+				//	updateStatePromise.then(function(){
+						console.log("_onStoreResponse set state: periods:",thisComponent.state.periods);
+						let values = thisComponent.state[stateKey];
+						values.push(result[0].key);
+						thisComponent.setState({
+							[stateKey]: values
+						},
+						function(){
+							console.log("_onStoreResponse updated state:",thisComponent.state);
+						});
+					//});
+				//});
+			}
 		}
 	}
 
 	componentDidMount() {
-		ScopeStore.addChangeListener(this._onStoreChange.bind(this));
-		PlaceStore.addChangeListener(this._onStoreChange.bind(this));
-		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this));
-		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this));
+		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
+		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
+		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
 		//AULevelStore.addChangeListener(this._onStoreChange);
 		//AttributeStore.addChangeListener(this._onStoreChange);
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this));
+		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
 		//PeriodStore.addObjectCreateListener(this._onStoreObjectCreate.bind(this));
-		this.context.setStateFromStores.call(this, this.store2state());
+		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		ScopeStore.removeChangeListener(this._onStoreChange.bind(this));
-		PlaceStore.removeChangeListener(this._onStoreChange.bind(this));
-		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this));
-		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this));
+		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
+		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
+		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
 		//AULevelStore.removeChangeListener(this._onStoreChange);
 		//AttributeStore.removeChangeListener(this._onStoreChange);
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this));
+		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
 	}
 
 	componentWillReceiveProps(newProps) {
-		this.context.setStateFromStores.call(this, this.store2state(newProps));
-		this.updateStateHash(newProps);
+		if(newProps.selectorValue!=this.props.selectorValue) {
+			this.setStateFromStores(newProps);
+			//this.context.setStateFromStores.call(this, this.store2state(newProps));
+			this.updateStateHash(newProps);
+		}
 	}
 
 	/**
@@ -323,7 +348,7 @@ class ConfigDataLayer extends Component {
 			else if(layerType=="au"){
 
 			}
-
+			ret.relationsState = ret; // save store state for comparison with changed local
 			return ret;
 		}
 	}

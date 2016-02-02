@@ -58,6 +58,11 @@ class Store extends EventEmitter {
 		this.removeListener(EventTypes.OBJECT_CREATED, callback);
 	}
 
+	reload() {
+		this._models = this.load();
+		return this._models;
+	}
+
 
 	///**
 	// * To be overridden
