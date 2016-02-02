@@ -189,8 +189,8 @@ class Store extends EventEmitter {
 			.post(url)
 			.send({apiUrl: me.getApiUrl()})
 			.send({method: method})
-			.send({ssid: "5oymzxv5yigf4n6dp2nda2vgu6ernils"})
-			.send({sessionid: "kzgfcqe0a26jefi5c942hm7azef5od90"})
+			.send({ssid: "3ja43byvd8uafb11uglakyuclpgscig6"})
+			.send({sessionid: "hflfhdxabpcjjryd7vu0mqr6ms0arm6t"})
 			.send({csrftoken: "VNsl5vgDXeEDRl3J4NgNt8BjBfmHgD9b"})
 			.send({data: object})
 			.end(function(err, res){
