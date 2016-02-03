@@ -57,7 +57,7 @@ export class Input extends React.Component {
 				this.processChildren();
 
 				let { children, className, defaultClasses, icon, labeled, loading, name,
-							placeholder, tag, type, defaultValue, onChange, ...other } = this.props;
+							placeholder, tag, type, defaultValue, value, onChange, ...other } = this.props;
 
 				other.className = classNames(
 						this.props.className,
@@ -74,7 +74,7 @@ export class Input extends React.Component {
 		}
 
 		render() {
-				if (this.props.type == 'checkbox') {
+			if (this.props.type == 'checkbox') {
 						return this.renderCheckbox();
 				} else {
 						return this.renderText();
@@ -159,6 +159,7 @@ export class Input extends React.Component {
 																placeholder={this.props.placeholder}
 																type={this.props.type}
 																defaultValue={this.props.defaultValue}
+																value={this.props.value}
 																onChange={this.props.onChange}
 														/>
 												);
