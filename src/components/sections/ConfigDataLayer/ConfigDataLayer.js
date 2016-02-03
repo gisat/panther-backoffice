@@ -140,29 +140,6 @@ class ConfigDataLayer extends Component {
 		this.state = initialState;
 	}
 
-	//constructor(props) {
-	//	super(props);
-	//
-	//	this.state = {
-	//		layerType: null,
-	//		valueVLTemplate: [4],
-	//		valueVLScope: [1],
-	//		valuesVLPlaces: [2,3],
-	//		valuesVLPeriods: [3],
-	//		valueRLTemplate: [2],
-	//		valueRLScope: [1],
-	//		valuesRLPlaces: [2,3],
-	//		valuesRLPeriods: [2],
-	//		valueAUScope: [1],
-	//		valuesAUPlaces: [2,3],
-	//		valueAULevel: [2],
-	//		rasterLayerTemplates: VECTORLAYERTEMPLATES,
-	//		scopes: SCOPES,
-	//		places: PLACES,
-	//		periods: PERIODS
-	//	};
-	//}
-
 	store2state(props) {
 		if(!props){
 			props = this.props;
@@ -194,7 +171,7 @@ class ConfigDataLayer extends Component {
 	}
 
 	_onStoreChange(keys) {
-		console.log("_onStoreChange()");
+		console.log("_onStoreChange() ===============");
 		// todo updates from all stores every time - should it?
 		this.setStateFromStores(this.props,keys);
 	}
@@ -202,25 +179,24 @@ class ConfigDataLayer extends Component {
 	_onStoreResponse(result,stateKey,stateHash) {
 		var thisComponent = this;
 		if (stateHash === this.getStateHash()) {
-			console.info("_onStoreResponse()");
-			console.log("result",result);
-			console.log("stateKey",stateKey);
-			console.log("stateHash",stateHash);
+			//console.info("_onStoreResponse()");
+			//console.log("result",result);
+			//console.log("stateKey",stateKey);
+			//console.log("stateHash",stateHash);
 			if (stateKey) {
-				console.log("_onStoreResponse set state: periods:", thisComponent.state.periods);
+				//console.log("_onStoreResponse set state: periods:", thisComponent.state.periods);
 				let values = thisComponent.state[stateKey];
 				values.push(result[0].key);
 				thisComponent.setState({
 					[stateKey]: values
 				},
 				function () {
-					console.log("_onStoreResponse updated state:", thisComponent.state);
+					//console.log("_onStoreResponse updated state:", thisComponent.state);
 				});
 				var screenComponent,screenName;
 				switch(stateKey){
 					case "valuesVLPeriods":
 					case "valuesRLPeriods":
-						console.log("heyaheayehey");
 						screenComponent = <ScreenMetadataPeriod/>;
 						screenName = "ScreenDataLayersBase-ScreenMetadataPeriod";
 						break;
@@ -271,9 +247,9 @@ class ConfigDataLayer extends Component {
 		if(this.state.hasOwnProperty("relationsState")){
 			if(this.state.layerType==this.state.relationsState.layerType) {
 				// todo could be universal? compare whatever properties relationsState has?
-				console.log("isStateUnchanged layerType");
+				//console.log("isStateUnchanged layerType");
 				if(this.state.layerType=="vector") {
-					console.log("isStateUnchanged vector");
+					//console.log("isStateUnchanged vector");
 					isIt = (
 						this.state.valueVLTemplate==this.state.relationsState.valueVLTemplate &&
 						this.state.valueVLScope==this.state.relationsState.valueVLScope &&
@@ -282,7 +258,7 @@ class ConfigDataLayer extends Component {
 						// todo data table
 					);
 				} else if(this.state.layerType=="raster") {
-					console.log("isStateUnchanged raster");
+					//console.log("isStateUnchanged raster");
 					isIt = (
 						this.state.valueRLTemplate==this.state.relationsState.valueRLTemplate &&
 						this.state.valueRLScope==this.state.relationsState.valueRLScope &&
@@ -290,7 +266,7 @@ class ConfigDataLayer extends Component {
 						this.state.valuesRLPeriods==this.state.relationsState.valuesRLPeriods
 					);
 				} else if(this.state.layerType=="au") {
-					console.log("isStateUnchanged au");
+					//console.log("isStateUnchanged au");
 					isIt = (
 						this.state.valueAULevel==this.state.relationsState.valueAULevel &&
 						this.state.valueAUScope==this.state.relationsState.valueAUScope &&
@@ -302,7 +278,7 @@ class ConfigDataLayer extends Component {
 				isIt = false;
 			}
 		}
-		console.log(isIt);
+		//console.log(isIt);
 		return isIt;
 	}
 
@@ -314,8 +290,8 @@ class ConfigDataLayer extends Component {
 	 */
 	relations2state(relations) {
 		if(relations.length > 0) {
-			console.log("store2state relations2state():");
-			console.log(relations);
+			//console.log("store2state relations2state():");
+			//console.log(relations);
 			var layerType = relations[0].layerObject[0].layerType;
 			var ret = {
 				layerType: layerType
@@ -465,7 +441,7 @@ class ConfigDataLayer extends Component {
 			actionData.push({type:"delete",object:object});
 			console.log("delete object:",object);
 		});
-
+		console.log("handleObjects() actionData", actionData);
 		ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
 	}
 
@@ -531,9 +507,9 @@ class ConfigDataLayer extends Component {
 
 	render() {
 
-		console.log("render() ----------");
-		console.log("this.state", this.state);
-		console.log("this.state.relationsState", this.state.relationsState);
+		//console.log("render() ----------");
+		//console.log("this.state", this.state);
+		//console.log("this.state.relationsState", this.state.relationsState);
 
 		var saveButton = " ";
 		if (this.state.layerType) {

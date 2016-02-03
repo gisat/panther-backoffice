@@ -54,8 +54,8 @@ class Page extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		console.log("pageWillReceiveProps",newProps.screenSet,this.state.key);
-		console.log(this.state.screenSets);
+		//console.log("pageWillReceiveProps",newProps.screenSet,this.state.key);
+		//console.log(this.state.screenSets);
 		if (newProps.screenSet != this.state.key) {
 			var screenSets = this.state.screenSets;
 			if(!this.state.screenSets[newProps.screenSet]) {

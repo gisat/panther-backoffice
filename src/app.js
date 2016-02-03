@@ -69,27 +69,27 @@ const context = {
 	},
 
 	setStateFromStores: function(store2state,keys){
-		console.log("88888888888888888888888888888888888888");
-		console.log("setStateFromStores()");
+		//console.log("88888888888888888888888888888888888888");
+		//console.log("setStateFromStores()");
 		var setAll = false;
-		console.log("keys:",keys);
+		//console.log("keys:",keys);
 		if(!keys){
 			keys = [];
 			setAll = true;
 		}
-		console.log("keys:",keys);
+		//console.log("keys:",keys);
 		var component = this;
 		var storeLoads = [];
 		var storeNames = [];
 		for(var name in store2state){
 			if(setAll || (keys.indexOf(name)!=-1)) {
-				console.log("name:",name);
-				console.log(keys.indexOf(name));
+				//console.log("name:",name);
+				//console.log(keys.indexOf(name));
 				storeLoads.push(store2state[name]);
 				storeNames.push(name);
 			}
 		}
-		console.log("88888888888888888888888888888888888888");
+		//console.log("88888888888888888888888888888888888888");
 		return Promise.all(storeLoads).then(function(data){
 			var storeObject = {};
 			for(var i in storeNames){
@@ -109,22 +109,22 @@ const context = {
 
 
 		//////////////// log
-		console.log("");
-		console.log("###sSP  ["+screenKey+" » "+positionClass+"]  options:", options);
-		//console.log("this class: "+this.constructor.name);
-		var log = " /Stack: ";
-		screenStack[page.state.key].map(function(screen, i){
-			log += " [" + i + "]" + screen.key + " " + screen.position;
-			//if(!screen.allowRetract) log += "/xR";
-			if(screen.userDidThat) log += "/U";
-			log += "{"+screen.order+"}";
-		});
-		console.log(log);
-		log = "/ STATE: ";
-		newScreens.map(function(screen){
-			log += screen.key + " " + screen.position + "(" + (screen.disabled ? "DIS":"en") + ") | ";
-		});
-		console.log(log);
+		//console.log("");
+		//console.log("###sSP  ["+screenKey+" » "+positionClass+"]  options:", options);
+		////console.log("this class: "+this.constructor.name);
+		//var log = " /Stack: ";
+		//screenStack[page.state.key].map(function(screen, i){
+		//	log += " [" + i + "]" + screen.key + " " + screen.position;
+		//	//if(!screen.allowRetract) log += "/xR";
+		//	if(screen.userDidThat) log += "/U";
+		//	log += "{"+screen.order+"}";
+		//});
+		//console.log(log);
+		//log = "/ STATE: ";
+		//newScreens.map(function(screen){
+		//	log += screen.key + " " + screen.position + "(" + (screen.disabled ? "DIS":"en") + ") | ";
+		//});
+		//console.log(log);
 		//////////////// log
 
 		if(typeof screenKey != 'undefined') {
@@ -195,7 +195,7 @@ const context = {
 		var normalWidth = 50;
 		var remSize = 16;
 		var availableWidth = window.innerWidth / remSize - menuWidth - screenStack[page.state.key].length * retractedWidth;
-		console.log("        =init innerWidth:" + window.innerWidth / remSize + " availableWidth:"+availableWidth);
+		//console.log("        =init innerWidth:" + window.innerWidth / remSize + " availableWidth:"+availableWidth);
 
 		var retractAllFurther = false;
 		var retractAllLeftFrom = 0;
@@ -210,7 +210,7 @@ const context = {
 
 			var screenSize = screenState.size || normalWidth;
 			var realScreenSize = screenSize + constPlus - retractedWidth;
-			console.log("        =record "+record.key+"-"+record.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
+			//console.log("        =record "+record.key+"-"+record.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
 			switch (positionClass) {
 				case "open":
 					if (record.position == "open") {
@@ -300,7 +300,7 @@ const context = {
 
 			if (current) record.userDidThat = true;
 			if (record.position == "open") availableWidth -= realScreenSize;
-			console.log("         ======= availableWidth:"+availableWidth);
+			//console.log("         ======= availableWidth:"+availableWidth);
 			current = false;
 		});
 
@@ -319,19 +319,19 @@ const context = {
 
 
 		//////////////// log
-		log = "\\ Stack: ";
-		screenStack[page.state.key].map(function(screen, i){
-			log += " [" + i + "]" + screen.key + " " + screen.position;
-			//if(!screen.allowRetract) log += "/xR";
-			if(screen.userDidThat) log += "/U";
-			log += "{"+screen.order+"}";
-		});
-		console.log(log);
-		log = " \\STATE: ";
-		newScreens.map(function(screen){
-			log += screen.key + " " + screen.position + "(" + (screen.disabled ? "DIS":"enb") + ") | ";
-		});
-		console.log(log);
+		//log = "\\ Stack: ";
+		//screenStack[page.state.key].map(function(screen, i){
+		//	log += " [" + i + "]" + screen.key + " " + screen.position;
+		//	//if(!screen.allowRetract) log += "/xR";
+		//	if(screen.userDidThat) log += "/U";
+		//	log += "{"+screen.order+"}";
+		//});
+		//console.log(log);
+		//log = " \\STATE: ";
+		//newScreens.map(function(screen){
+		//	log += screen.key + " " + screen.position + "(" + (screen.disabled ? "DIS":"enb") + ") | ";
+		//});
+		//console.log(log);
 		//console.log("  ----------------------------");
 		//////////////// log
 
@@ -404,7 +404,7 @@ function update2DArray(theArray, testKey, testValue, setKey, setValue){
 
 function render(state) {
 	Router.dispatch(state, (newState, component) => {
-		console.log("newState: ", newState);
+		//console.log("newState: ", newState);
 		ReactDOM.render(component, appContainer, () => {
 			// Restore the scroll position if it was saved into the state
 			if (state.scrollY !== undefined) {
@@ -443,7 +443,7 @@ function run() {
 			search: location.search,
 			context
 		});
-		console.log("currentState: ", currentState);
+		//console.log("currentState: ", currentState);
 		render(currentState);
 	});
 
