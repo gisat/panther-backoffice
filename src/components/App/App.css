@@ -1112,6 +1112,47 @@ todo hex colours, button icons */
 	border-top: 1px solid rgba(0,0,0,.08);
 	padding: .5rem 1rem;
 }
+.frame-input-wrapper > div.container {
+	position: relative;
+	margin: .875rem;
+}
+.frame-input-wrapper > .container.activeness {
+	padding-right: 9rem;
+	padding-top: .25rem;
+}
+.frame-input-pull-right {
+	position: absolute;
+	right:0;
+	top:0;
+	text-align: right;
+}
+.frame-input-wrapper > .container.activeness .frame-input-pull-right {
+	width: 10rem;
+	line-height: 1.5rem;
+	color: #666;
+}
+
+.activeness-indicator {
+	display: inline-block;
+	width: 2rem;
+	height: 1.4rem;
+	vertical-align: middle;
+}
+.activeness-indicator::before {
+	display: inline-block;
+	content: "";
+	width: 1rem;
+	height: 1rem;
+	border-radius: 99999px;
+	background: #800;
+}
+.activeness-indicator.active::before {
+	background: #00b114;
+}
+.activeness-indicator.incomplete::before {
+	background: #f60;
+}
+
 
 .UIObjectSelect-control {
 	display: block;

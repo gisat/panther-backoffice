@@ -4,7 +4,7 @@ import withStyles from '../../../decorators/withStyles';
 
 import _ from 'underscore';
 import path from "path";
-import utils from '../../../utils/utils'
+import utils from '../../../utils/utils';
 
 import Select from 'react-select';
 import SaveButton from '../../atoms/SaveButton';
@@ -128,6 +128,16 @@ var initialState = {
 @withStyles(styles)
 class ConfigDataLayer extends Component {
 
+	static propTypes = {
+		disabled: React.PropTypes.bool,
+		selectorValue: React.PropTypes.any
+	};
+
+	static defaultProps = {
+		disabled: false,
+		selectorValue: null
+	};
+
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
@@ -144,7 +154,7 @@ class ConfigDataLayer extends Component {
 		if(!props){
 			props = this.props;
 		}
-		var ret = {
+		return {
 			scopes: ScopeStore.getAll(),
 			places: PlaceStore.getAll(),
 			vectorLayerTemplates: VectorLayerStore.getAll(),
@@ -155,7 +165,6 @@ class ConfigDataLayer extends Component {
 			layer: DataLayerStore.getById(props.selectorValue),
 			layerRelations: ObjectRelationStore.getByDataSource(props.selectorValue)
 		};
-		return ret;
 	}
 
 	setStateFromStores(props,keys) {
@@ -165,6 +174,7 @@ class ConfigDataLayer extends Component {
 		var thisComponent = this;
 		let store2state = this.store2state(props);
 		this.context.setStateFromStores.call(this, store2state, keys);
+		// if stores changed, overrides user input - todo fix
 		store2state.layerRelations.then(function(relations) {
 			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations),keys);
 		});

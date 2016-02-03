@@ -2,168 +2,189 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ConfigMetadataPeriod.css';
 import withStyles from '../../../decorators/withStyles';
 
-import { Input, Icon, IconButton, Buttons } from '../../SEUI/elements';
+import utils from '../../../utils/utils';
+
+import { Input, Button } from '../../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
-import Select from 'react-select';
 import _ from 'underscore';
-import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
 
+import ObjectTypes from '../../../constants/ObjectTypes';
+import ActionCreator from '../../../actions/ActionCreator';
+import PeriodStore from '../../../stores/PeriodStore';
 
-const TOPICS = [
-			{ key: 7, topic: 'Land cover structure', themes: [18,23,32] },
-			{ key: 12, topic: 'Land cover development', themes: [18,23,32] },
-			{ key: 16, topic: 'Urban population', themes: [30] },
-			{ key: 19, topic: 'Urban expansions', themes: [30] },
-			{ key: 22, topic: 'Total populations', themes: [25] },
-			{ key: 23, topic: 'Population density grid', themes: [18,23,25,30,32] },
-			{ key: 33, topic: 'Roads', themes: [18,23,32] }
-		];
-const THEMES = [
-			{ key: 18, theme: 'Population' },
-			{ key: 23, theme: 'Transportation' },
-			{ key: 25, theme: 'Total population' },
-			{ key: 30, theme: 'Urban expansion' },
-			{ key: 32, theme: 'Land cover' }
-		];
-var LAYERGROUPS = [
-			{ key: 1, name: 'Information layers' },
-			{ key: 2, name: 'Reference satellite images' }
-		];
-const STYLES = [
-			{ key: 10, name: 'detailed' },
-			{ key: 18, name: 'aggregated' },
-			{ key: 23, name: 'urban fabric' },
-			{ key: 30, name: 'flows' }
-		];
 
+var initialState = {
+	period: null,
+	valueActive: false,
+	valueName: ""
+};
 
 
 @withStyles(styles)
 class ConfigMetadataPeriod extends Component{
 
+	static propTypes = {
+		disabled: React.PropTypes.bool,
+		selectorValue: React.PropTypes.any
+	};
+
+	static defaultProps = {
+		disabled: false,
+		selectorValue: null
+	};
+
 	static contextTypes = {
-		onInteraction: PropTypes.func.isRequired
+		setStateFromStores: PropTypes.func.isRequired,
+		onInteraction: PropTypes.func.isRequired,
+		onSetScreenData: PropTypes.func.isRequired,
+		openScreen: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
 		super(props);
+		this.state = initialState;
+	}
 
-		this.state = {
-			valuesTopics: [12,22],
-			valueGroup: [],
-			valuesStyles: [30],
-			themesString: ""
+	store2state(props) {
+		return {
+			period: PeriodStore.getById(props.selectorValue)
 		};
-
 	}
 
-	resolveThemes(topics) {
-		var stringThemes = "";
-		if(topics) {
-			var themes = [];
-			if (!Array.isArray(topics)) {
-				topics = topics.split(",");
-			}
-			for(var topicKey of topics) {
-				var topic = _.findWhere(TOPICS, {key: Number(topicKey)});
-				themes = _.union(themes, topic.themes);
-			}
-			themes = themes.sort(function (a, b) {return a - b});
-			for(var themeKey of themes) {
-				var theme = _.findWhere(THEMES, {key: themeKey});
-				if(stringThemes) {
-					stringThemes += ", ";
-				}
-				stringThemes += theme.theme;
-			}
+	setStateFromStores(props,keys) {
+		console.log("ConfigMetadataPeriod setStateFromStores() this.state",this.state);
+		if(!props){
+			props = this.props;
 		}
-		this.setState({
-			themesString: stringThemes
-		});
-	}
+		if(props.selectorValue) {
+			var thisComponent = this;
+			let store2state = this.store2state(props);
+			this.context.setStateFromStores.call(this, store2state, keys);
+			// if stores changed, overrides user input - todo fix
 
-	onChangeName (e) {
-		console.log(e.target.value);
-	}
-
-	handleNewObjects(values, store) {
-		var newValues = [];
-		for (var singleValue of values) {
-			if(singleValue.create){
-				// replace with actual object creation and config screen opening
-				delete singleValue.create;
-				delete singleValue.label;
-				delete singleValue.value;
-				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				store.push(singleValue);
-			}
-			newValues.push(singleValue.key);
+			store2state.period.then(function(period) {
+				console.log("period.then",period);
+				thisComponent.setState({
+					valueActive: period[0].active,
+					valueName: period[0].name
+				},
+				function(){
+					console.log("I set dat state, look:",thisComponent.state);
+				});
+			});
 		}
-		return newValues;
+
 	}
 
-	onChangeTopics (value, values) {
-		values = this.handleNewObjects(values, TOPICS);
-		this.setState({
-			valuesTopics: values
-		});
-		this.resolveThemes(values);
+	_onStoreChange(keys) {
+		this.setStateFromStores(this.props,keys);
 	}
-
-	onChangeGroup (value, values) {
-		values = this.handleNewObjects(values, LAYERGROUPS);
-		this.setState({
-			valueGroup: values
-		});
-	}
-
-	onChangeStyles (value, values) {
-		values = this.handleNewObjects(values, STYLES);
-		this.setState({
-			valuesStyles: values
-		});
-	}
-
-
-	onObjectClick (value, event) {
-		console.log("yay! " + value["key"]);
-	}
-
-
-	topicOptionFactory (inputValue) {
-		var newOption = {
-				key: inputValue,
-				topic: inputValue,
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-		return newOption;
-	}
-	keyNameOptionFactory (inputValue) {
-		var newOption = {
-				key: inputValue,
-				name: inputValue,
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-		return newOption;
-	}
-
-
 
 	componentDidMount() {
-
-		this.resolveThemes(this.state.valuesTopics);
-
+		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["period"]));
+		this.setStateFromStores();
 	}
+
+	componentWillUnmount() {
+		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["period"]));
+	}
+
+	componentWillReceiveProps(newProps) {
+		if(newProps.selectorValue!=this.props.selectorValue) {
+			this.setStateFromStores(newProps);
+			this.updateStateHash(newProps);
+		}
+	}
+
+
+	/**
+	 * Check if state is the same as it was when loaded from stores
+	 * @returns {boolean}
+	 */
+	isStateUnchanged() {
+		var isIt = true;
+		if(this.state.period[0]) {
+			isIt = (
+				this.state.valueActive == this.state.period[0].active &&
+				this.state.valueName == this.state.period[0].name
+			);
+		}
+		return isIt;
+	}
+
+	/**
+	 * Differentiate between states
+	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
+	 */
+	updateStateHash(props) {
+		if(!props){
+			props = this.props;
+		}
+		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
+		this._stateHash = utils.stringHash(props.selectorValue);
+	}
+	getStateHash() {
+		if(!this._stateHash) {
+			this.updateStateHash();
+		}
+		return this._stateHash;
+	}
+
+	saveForm() {
+
+		//ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
+	}
+
+	onChangeActive(value) {
+		this.setState({
+			valueActive: value
+		});
+	}
+
+	onChangeName(e) {
+		this.setState({
+			valueName: e.target.value
+		});
+	}
+
 
 	render() {
 
+		var saveButton = " ";
+		if (this.state.period && this.state.period[0]) {
+			saveButton = (
+				<SaveButton
+					saved={this.isStateUnchanged()}
+					className="save-button"
+					onClick={this.saveForm.bind(this)}
+				/>
+			);
+		}
+
+		var isActiveText = "inactive";
+		var isActiveClasses = "activeness-indicator";
+		if(this.state.period && this.state.period[0]){
+			if(this.state.period[0].active) {
+				isActiveText = "active";
+				isActiveClasses = "activeness-indicator active";
+			}
+		}
+
 		return (
 			<div>
+
+				<div className="frame-input-wrapper">
+					<div className="container activeness">
+						<Checkbox>
+							<span>Active</span>
+						</Checkbox>
+						<div className="frame-input-pull-right">
+							{isActiveText}
+							<div className={isActiveClasses}></div>
+						</div>
+					</div>
+				</div>
 
 				<div className="frame-input-wrapper">
 					<label className="container">
@@ -172,69 +193,13 @@ class ConfigMetadataPeriod extends Component{
 							type="text"
 							name="name"
 							placeholder=" "
-							defaultValue="Land cover"
+							value={this.state.valueName}
 							onChange={this.onChangeName.bind(this)}
 						/>
 					</label>
 				</div>
 
-				<div className="frame-input-wrapper">
-						<label className="container">
-							Topics
-							<UIObjectSelect
-								multi
-								onChange={this.onChangeTopics.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								options={TOPICS}
-								allowCreate
-								newOptionCreator={this.topicOptionFactory.bind(this)}
-								valueKey="key"
-								labelKey="topic"
-								value={this.state.valuesTopics}
-							/>
-						</label>
-						<div className="frame-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
-				</div>
-
-
-				<div className="frame-input-wrapper">
-					<label className="container">
-						Layer group
-						<UIObjectSelect
-							onChange={this.onChangeGroup.bind(this)}
-							onOptionLabelClick={this.onObjectClick.bind(this)}
-							//loadOptions={this.getScopes}
-							options={LAYERGROUPS}
-							allowCreate
-							newOptionCreator={this.keyNameOptionFactory.bind(this)}
-							valueKey="key"
-							labelKey="name"
-							value={this.state.valueGroup}
-						/>
-					</label>
-				</div>
-
-				<div className="frame-input-wrapper">
-					<label className="container">
-						Styles
-						<UIObjectSelect
-							multi
-							onChange={this.onChangeStyles.bind(this)}
-							onOptionLabelClick={this.onObjectClick.bind(this)}
-							//loadOptions={this.getScopes}
-							options={STYLES}
-							allowCreate
-							newOptionCreator={this.keyNameOptionFactory.bind(this)}
-							valueKey="key"
-							labelKey="name"
-							value={this.state.valuesStyles}
-						/>
-					</label>
-				</div>
-
-
-				<SaveButton saved />
+				{saveButton}
 
 			</div>
 		);
