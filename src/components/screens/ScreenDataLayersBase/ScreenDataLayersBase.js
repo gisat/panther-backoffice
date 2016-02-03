@@ -56,6 +56,10 @@ class ScreenDataLayersBase extends Component {
 		this.context.setStateFromStores.call(this, this.store2state(newProps));
 	}
 
+	onSelectorFocus(){
+		DataLayerStore.reload();
+	}
+
 	onSelectorChange (value) {
 		this.setState({
 			selectorValue: value
@@ -71,6 +75,7 @@ class ScreenDataLayersBase extends Component {
 						data={this.state.dataLayers}
 						value={this.state.selectorValue}
 						onChange={this.onSelectorChange.bind(this)}
+						onFocus={this.onSelectorFocus.bind(this)}
 					/>
 				</div></div>
 				<div className="screen-content"><div>

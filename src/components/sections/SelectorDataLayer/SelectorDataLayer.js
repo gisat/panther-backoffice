@@ -13,7 +13,8 @@ class SelectorDataLayer extends Component {
 		disabled: React.PropTypes.bool,
 		data: React.PropTypes.array.isRequired,		// layers object. Expects "key"
 		onChange: React.PropTypes.func.isRequired,
-		value: React.PropTypes.any
+		value: React.PropTypes.any,
+		onFocus: React.PropTypes.func.isRequired
 	};
 
 	static defaultProps = {
@@ -25,6 +26,10 @@ class SelectorDataLayer extends Component {
 		this.props.onChange(value);
 	}
 
+	onFocus(){
+		this.props.onFocus();
+	}
+
 	render() {
 		return (
 			<div>
@@ -34,6 +39,7 @@ class SelectorDataLayer extends Component {
 							Data layer
 							<Select
 								onChange={this.onChange.bind(this)}
+								onFocus={this.onFocus.bind(this)}
 								options={this.props.data}
 								valueKey="key"
 								labelKey="key"

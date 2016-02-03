@@ -59,7 +59,11 @@ class Store extends EventEmitter {
 	}
 
 	reload() {
+		var thisStore = this;
 		this._models = this.load();
+		this._models.then(function(){
+			thisStore.emitChange();
+		});
 		return this._models;
 	}
 
