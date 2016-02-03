@@ -4,7 +4,9 @@ import withStyles from '../../../decorators/withStyles';
 
 import _ from 'underscore';
 import path from "path";
+
 import utils from '../../../utils/utils';
+import {apiProtocol,apiHost} from '../../../config';
 
 import Select from 'react-select';
 import SaveButton from '../../atoms/SaveButton';
@@ -287,6 +289,8 @@ class ConfigDataLayer extends Component {
 			} else {
 				isIt = false;
 			}
+		} else {
+			isIt = false;
 		}
 		//console.log(isIt);
 		return isIt;
@@ -399,7 +403,8 @@ class ConfigDataLayer extends Component {
 		var baseObject = {
 			active: true, //todo active setting
 			areaTemplate: layerTemplateValue,
-			columnMap: []
+			columnMap: [],
+			isData: false
 		};
 		// (later: ?attributeSet + isData + columnMap + xColumns? - for vector & au)
 		// changed, changedBy done by server
@@ -545,7 +550,7 @@ class ConfigDataLayer extends Component {
 				width: '350px',
 				height: '600px'
 			};
-			var mapFrameSrc = "http://geonode.gisat.cz/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
+			var mapFrameSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
 
 			// todo not an iframe
 			mapFrame = (
