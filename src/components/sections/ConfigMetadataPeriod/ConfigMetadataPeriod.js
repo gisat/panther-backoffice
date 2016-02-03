@@ -136,9 +136,9 @@ class ConfigMetadataPeriod extends Component{
 		//ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
 	}
 
-	onChangeActive(value) {
+	onChangeActive() {
 		this.setState({
-			valueActive: value
+			valueActive: !this.state.valueActive
 		});
 	}
 
@@ -176,7 +176,10 @@ class ConfigMetadataPeriod extends Component{
 
 				<div className="frame-input-wrapper">
 					<div className="container activeness">
-						<Checkbox>
+						<Checkbox
+							checked={this.state.valueActive}
+							onClick={this.onChangeActive.bind(this)}
+						>
 							<span>Active</span>
 						</Checkbox>
 						<div className="frame-input-pull-right">
