@@ -24,6 +24,10 @@ class ScreenMetadataPeriod extends Component{
 	constructor(props) {
 		super(props);
 		this.state = initialState;
+
+		if(this.props.data && this.props.data.initialKey) {
+			this.state.selectorValue = this.props.data.initialKey;
+		}
 	}
 
 	getUrl() {
@@ -66,7 +70,7 @@ class ScreenMetadataPeriod extends Component{
 		return (
 			<div>
 				<div className="screen-setter"><div>
-					<h2>Period</h2>
+					<h2>Imaging/reference period</h2>
 					<SelectorMetadataPeriod
 						disabled={this.props.disabled}
 						data={this.state.periods}
