@@ -66,8 +66,8 @@ class ConfigMetadataPeriod extends Component{
 			store2state.period.then(function(period) {
 				console.log("period.then",period);
 				thisComponent.setState({
-					valueActive: period[0].active,
-					valueName: period[0].name
+					valueActive: period.active,
+					valueName: period.name
 				},
 				function(){
 					console.log("I set dat state, look:",thisComponent.state);
@@ -104,10 +104,10 @@ class ConfigMetadataPeriod extends Component{
 	 */
 	isStateUnchanged() {
 		var isIt = true;
-		if(this.state.period[0]) {
+		if(this.state.period) {
 			isIt = (
-				this.state.valueActive == this.state.period[0].active &&
-				this.state.valueName == this.state.period[0].name
+				this.state.valueActive == this.state.period.active &&
+				this.state.valueName == this.state.period.name
 			);
 		}
 		return isIt;
@@ -152,7 +152,7 @@ class ConfigMetadataPeriod extends Component{
 	render() {
 
 		var saveButton = " ";
-		if (this.state.period && this.state.period[0]) {
+		if (this.state.period) {
 			saveButton = (
 				<SaveButton
 					saved={this.isStateUnchanged()}
@@ -164,11 +164,9 @@ class ConfigMetadataPeriod extends Component{
 
 		var isActiveText = "inactive";
 		var isActiveClasses = "activeness-indicator";
-		if(this.state.period && this.state.period[0]){
-			if(this.state.period[0].active) {
-				isActiveText = "active";
-				isActiveClasses = "activeness-indicator active";
-			}
+		if(this.state.period && this.state.period.active){
+			isActiveText = "active";
+			isActiveClasses = "activeness-indicator active";
 		}
 
 		return (

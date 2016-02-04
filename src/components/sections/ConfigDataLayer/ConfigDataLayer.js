@@ -306,7 +306,7 @@ class ConfigDataLayer extends Component {
 		if(relations.length > 0) {
 			//console.log("store2state relations2state():");
 			//console.log(relations);
-			var layerType = relations[0].layerObject[0].layerType;
+			var layerType = relations[0].layerObject.layerType;
 			var ret = {
 				layerType: layerType
 			};
@@ -314,17 +314,17 @@ class ConfigDataLayer extends Component {
 				ret.valuesVLPlaces = [];
 				ret.valuesVLPeriods = [];
 				relations.map(function(relation){
-					if (relation.layerObject.length > 0){
-						ret.valueVLTemplate = [relation.layerObject[0].key];
+					if (relation.layerObject){
+						ret.valueVLTemplate = [relation.layerObject.key];
 					}
-					if (relation.place.length > 0){
-						if (relation.place[0].scope.length > 0){
-							ret.valueVLScope = [relation.place[0].scope[0].key];
+					if (relation.place){
+						if (relation.place.scope){
+							ret.valueVLScope = [relation.place.scope.key];
 						}
-						ret.valuesVLPlaces = _.union(ret.valuesVLPlaces,[relation.place[0].key]);
+						ret.valuesVLPlaces = _.union(ret.valuesVLPlaces,[relation.place.key]);
 					}
-					if (relation.period.length > 0){
-						ret.valuesVLPeriods = _.union(ret.valuesVLPeriods,[relation.period[0].key]);
+					if (relation.period){
+						ret.valuesVLPeriods = _.union(ret.valuesVLPeriods,[relation.period.key]);
 					}
 				});
 			}
@@ -332,17 +332,17 @@ class ConfigDataLayer extends Component {
 				ret.valuesRLPlaces = [];
 				ret.valuesRLPeriods = [];
 				relations.map(function(relation){
-					if (relation.layerObject.length > 0){
-						ret.valueRLTemplate = [relation.layerObject[0].key];
+					if (relation.layerObject){
+						ret.valueRLTemplate = [relation.layerObject.key];
 					}
-					if (relation.place.length > 0){
-						if (relation.place[0].scope.length > 0){
-							ret.valueRLScope = [relation.place[0].scope[0].key];
+					if (relation.place){
+						if (relation.place.scope){
+							ret.valueRLScope = [relation.place.scope.key];
 						}
-						ret.valuesRLPlaces = _.union(ret.valuesRLPlaces,[relation.place[0].key]);
+						ret.valuesRLPlaces = _.union(ret.valuesRLPlaces,[relation.place.key]);
 					}
-					if (relation.period.length > 0){
-						ret.valuesRLPeriods = _.union(ret.valuesRLPeriods,[relation.period[0].key]);
+					if (relation.period){
+						ret.valuesRLPeriods = _.union(ret.valuesRLPeriods,[relation.period.key]);
 					}
 				});
 			}

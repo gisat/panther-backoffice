@@ -26,9 +26,9 @@ class GeneralLayerStore extends Store {
 			var rasterPromise = RasterLayerStore.getById(id);
 			var auPromise = AULevelStore.getById(id);
 			Promise.all([vectorPromise,rasterPromise,auPromise]).then(function([vector,raster,au]){
-				if(vector[0]) resolve(vector);
-				if(raster[0]) resolve(raster);
-				if(au[0]) resolve(au);
+				if(vector) resolve(vector);
+				if(raster) resolve(raster);
+				if(au) resolve(au);
 			});
 		});
 	}

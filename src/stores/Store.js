@@ -299,8 +299,20 @@ class Store extends EventEmitter {
 	}
 
 	getById(id){
-		return this.getFiltered({key: id});
+		var resultPromise = this.getFiltered({key: id});
+		return new Promise(function (resolve, reject) {
+			resultPromise.then(function(result){
+				if(result.length){
+					resolve(result[0]);
+				} else {
+					resolve(null);
+				}
+			}, function (err) {
+				reject(err);
+			});
+		});
 	}
+
 }
 
 Store.dispatchToken = null;
