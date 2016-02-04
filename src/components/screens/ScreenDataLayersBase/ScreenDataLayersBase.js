@@ -69,13 +69,11 @@ class ScreenDataLayersBase extends Component {
 	render() {
 		var selectorData = this.state.dataLayers;
 		selectorData.sort(function(a, b) {
-			if(a.referenced==b.referenced){
-				return 0;
-			} else if(a.referenced && !b.referenced) {
-				return 1;
-			} else if(!a.referenced && b.referenced) {
-				return -1;
-			}
+			if(a.referenced && !b.referenced) return 1;
+			if(!a.referenced && b.referenced) return -1;
+			if(a.key > b.key) return 1;
+			if(a.key < b.key) return -1;
+			return 0;
 		});
 
 		return (
