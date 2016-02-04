@@ -8,22 +8,27 @@ class PlaceModel extends Model {
 	data() {
 		return {
 			key: {
-				serverName: '_id' //number
+				serverName: '_id', //number
+				sendToServer: true
 			},
 			name: {
-				serverName: 'name' //string
+				serverName: 'name', //string
+				sendToServer: true
 			},
 			active: {
-				serverName: 'active' //boolean
+				serverName: 'active', //boolean
+				sendToServer: true
 			},
 			changed: {
 				serverName: 'changed', //date
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return this.transformDate(data)
 				}.bind(this)
 			},
 			changedBy: {
 				serverName: 'changedBy', //id
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return UserStore.getById(data)
 				},
@@ -31,12 +36,14 @@ class PlaceModel extends Model {
 			},
 			created: {
 				serverName: 'created', //date
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return this.transformDate(data)
 				}.bind(this)
 			},
 			createdBy: {
 				serverName: 'createdBy', //id
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return UserStore.getById(data)
 				},
@@ -44,16 +51,19 @@ class PlaceModel extends Model {
 			},
 			scope: {
 				serverName: 'dataset', //id
+				sendToServer: true,
 				transformForLocal: function (data) {
 					return ScopeStore.getById(data)
 				},
 				isPromise: true
 			},
 			boundingBox: {
-				serverName: 'bbox'
+				serverName: 'bbox',
+				sendToServer: false //for now
 			},
 			center: {
-				serverName: 'center'
+				serverName: 'center',
+				sendToServer: false //for now
 			}
 		};
 	}

@@ -13,22 +13,27 @@ class ObjectRelationModel extends Model {
 	data() {
 		return {
 			key: {
-				serverName: '_id' //number
+				serverName: '_id', //number
+				sendToServer: true
 			},
 			name: {
-				serverName: 'name' //string
+				serverName: 'name', //string
+				sendToServer: true
 			},
 			active: {
-				serverName: 'active' //boolean
+				serverName: 'active', //boolean
+				sendToServer: true
 			},
 			changed: {
 				serverName: 'changed', //date
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return this.transformDate(data)
 				}.bind(this)
 			},
 			changedBy: {
 				serverName: 'changedBy', //id
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return UserStore.getById(data)
 				},
@@ -36,12 +41,14 @@ class ObjectRelationModel extends Model {
 			},
 			created: {
 				serverName: 'created', //date
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return this.transformDate(data)
 				}.bind(this)
 			},
 			createdBy: {
 				serverName: 'createdBy', //id
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return UserStore.getById(data)
 				},
@@ -52,6 +59,7 @@ class ObjectRelationModel extends Model {
 			},
 			layerObject: {
 				serverName: 'areaTemplate', //id
+				sendToServer: true,
 				transformForLocal: function (data) {
 					return GeneralLayerStore.getById(data)
 				},
@@ -59,26 +67,31 @@ class ObjectRelationModel extends Model {
 			},
 			attributeSet: {
 				serverName: 'attributeSet', //id
+				sendToServer: false, //for now
 				transformForLocal: function (data) {
 					return AttributeSetStore.getById(data)
 				},
 				isPromise: true
 			},
 			isOfAttributeSet: { // indicates relations of attribute set
-				serverName: 'isData' //boolean
+				serverName: 'isData', //boolean
+				sendToServer: true
 			},
 			dataSource: {
 				serverName: 'layer', //id
+				sendToServer: true,
 				transformForLocal: function (data) {
 					return DataLayerStore.getById(data)
 				},
 				isPromise: true
 			},
 			dataSourceString: {
-				serverName: 'layer' //id
+				serverName: 'layer', //id
+				sendToServer: false //temp local value only, until we can filter by nested key/value
 			},
 			place: {
 				serverName: 'location', //id
+				sendToServer: true,
 				transformForLocal: function (data) {
 					return PlaceStore.getById(data)
 				},
@@ -86,25 +99,31 @@ class ObjectRelationModel extends Model {
 			},
 			period: {
 				serverName: 'year', //id
+				sendToServer: true,
 				transformForLocal: function (data) {
 					return PeriodStore.getById(data)
 				},
 				isPromise: true
 			},
 			implicit: {
-				serverName: 'implicit' //no idea - todo idea
+				serverName: 'implicit', //no idea - todo idea
+				sendToServer: false
 			},
 			fidColumn: { // feature identifier column
-				serverName: 'fidColumn' //string
+				serverName: 'fidColumn', //string
+				sendToServer: false //for now
 			},
 			nameColumn: { // feature name column
-				serverName: 'nameColumn' //string
+				serverName: 'nameColumn', //string
+				sendToServer: false //for now
 			},
 			parentColumn: { // parent feature id column
-				serverName: 'parentColumn' //string
+				serverName: 'parentColumn', //string
+				sendToServer: false //for now
 			},
 			columnMap: {
 				serverName: 'columnMap', //object {column: string, attribute: id}
+				sendToServer: false, // for now
 				transformForLocal: function (data) {
 					if(data) {
 						let ret = data.map(function(obj){

@@ -40,6 +40,24 @@ class Model {
 		return Promise.all(promises);
 	}
 
+	/**
+	 * Transform self for server
+	 */
+	serialize() {
+		var serializedObject = {};
+		var model = this.data();
+		_.each(this, function (value, key) {
+			if(model[key].sendToServer) {
+				if(model[key].hasOwnProperty("transformForServer")){
+					value = model[key].transformForServer(value);
+				}
+				key = model[key].serverName;
+				serializedObject[key] = value;
+			}
+		});
+		return serializedObject;
+	}
+
 	// todo static?
 	transformDate(dateString) {
 		return Date(dateString);
