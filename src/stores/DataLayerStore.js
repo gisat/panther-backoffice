@@ -13,7 +13,12 @@ class DataLayerStore extends Store {
 		return "POST";
 	}
 	getInstance(data){
-		return new DataLayerModel(data);
+		if(data.isWms) {
+			return null;
+		}
+		else {
+			return new DataLayerModel(data);
+		}
 	}
 
 }
