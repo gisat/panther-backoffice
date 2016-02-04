@@ -67,12 +67,23 @@ class ScreenDataLayersBase extends Component {
 	}
 
 	render() {
+		var selectorData = this.state.dataLayers;
+		selectorData.sort(function(a, b) {
+			if(a.referenced==b.referenced){
+				return 0;
+			} else if(a.referenced && !b.referenced) {
+				return 1;
+			} else if(!a.referenced && b.referenced) {
+				return -1;
+			}
+		});
+
 		return (
 			<div>
 				<div className="screen-setter"><div>
 					<SelectorDataLayer
 						disabled={this.props.disabled}
-						data={this.state.dataLayers}
+						data={selectorData}
 						value={this.state.selectorValue}
 						onChange={this.onSelectorChange.bind(this)}
 						onFocus={this.onSelectorFocus.bind(this)}
