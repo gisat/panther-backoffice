@@ -12,15 +12,15 @@ import SingleValuePlace from '../../atoms/UICustomSelect/SingleValuePlace';
 //const MAX_ITEMS = 6;
 //const ASYNC_DELAY = 500;
 const PLACES = [
-			{ key: 1, scope: 'Local', place: 'Cebu City' },
-			{ key: 2, scope: 'Local', place: 'Hai Phong' },
-			{ key: 3, scope: 'Local', place: 'Ho Chi Minh City' },
-			{ key: 4, scope: 'Local', place: 'Surabaya' },
-			{ key: 52, scope: 'National', place: 'Brunei' },
-			{ key: 74, scope: 'National', place: 'Japan' },
-			{ key: 82, scope: 'National', place: 'Laos' },
-			{ key: 135, scope: 'National', place: 'Vietnam' },
-			{ key: 625, scope: 'Regional', place: 'East Asia and Pacific' },
+			{ key: 1, scope: 'Local', name: 'Cebu City' },
+			{ key: 2, scope: 'Local', name: 'Hai Phong' },
+			{ key: 3, scope: 'Local', name: 'Ho Chi Minh City' },
+			{ key: 4, scope: 'Local', name: 'Surabaya' },
+			{ key: 52, scope: 'National', name: 'Brunei' },
+			{ key: 74, scope: 'National', name: 'Japan' },
+			{ key: 82, scope: 'National', name: 'Laos' },
+			{ key: 135, scope: 'National', name: 'Vietnam' },
+			{ key: 625, scope: 'Regional', name: 'East Asia and Pacific' },
 		];
 
 @withStyles(styles)
