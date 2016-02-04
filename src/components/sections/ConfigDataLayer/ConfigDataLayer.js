@@ -391,8 +391,8 @@ class ConfigDataLayer extends Component {
 		this.state.layerRelations.map(function(relationObject){
 			let simplifiedRelationObject = {
 				key: relationObject.key,
-				place: relationObject.place[0],
-				period: relationObject.period[0]
+				place: relationObject.place,
+				period: relationObject.period
 			};
 			simplifiedRelationObjects.push(simplifiedRelationObject);
 		});
