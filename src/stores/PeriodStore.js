@@ -10,8 +10,8 @@ class PeriodStore extends Store {
 	getApiUrl(){
 		return "/rest/year";
 	}
-	getInstance(data){
-		return new PeriodModel(data);
+	getInstance(options,data){
+		return new PeriodModel(options,data);
 	}
 
 	createObject(objectData,responseStateKey,responseStateHash) {

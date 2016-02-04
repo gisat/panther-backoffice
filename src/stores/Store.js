@@ -31,7 +31,7 @@ class Store extends EventEmitter {
 		return "GET";
 	}
 
-	getInstance(obj){
+	getInstance(options,data){
 		//console.err("getInstance not overridden");
 		return {};
 	}
@@ -68,43 +68,6 @@ class Store extends EventEmitter {
 	}
 
 
-	///**
-	// * To be overridden
-	// */
-	//load(){
-	//	var me = this;
-	//	return new Promise(function (resolve, reject) {
-	//		var url = path.resolve(publicPath, "api-proxy");
-	//		superagent
-	//			.post(url)
-	//			.send({apiUrl: me.getApiUrl()})
-	//			.send({method: me.getApiLoadMethod()})
-	//			.send({ssid: "5oymzxv5yigf4n6dp2nda2vgu6ernils"})
-	//			.send({sessionid: "kzgfcqe0a26jefi5c942hm7azef5od90"})
-	//			.send({csrftoken: "VNsl5vgDXeEDRl3J4NgNt8BjBfmHgD9b"})
-	//			//.send({necoDalsiho: "dmewidoiwjefowng"})
-	//			.end(function(err, res){
-	//				if(err || typeof res == 'undefined'){
-	//					reject(err);
-	//					return;
-	//				}
-	//				var ret = [];
-	//				var responseJson = JSON.parse(res.text);
-	//				if(typeof responseJson.data == 'undefined'){
-	//					reject("no data attribute");
-	//					return;
-	//				}
-	//				for(let obj of responseJson.data){
-	//					let instance = me.getInstance(obj);
-	//					if(instance){
-	//						ret.push(instance);
-	//					}
-	//					//ret.push(new DataLayerModel(obj));
-	//				}
-	//				resolve(ret);
-	//			});
-	//	});
-	//}
 	load() {
 		var method = this.getApiLoadMethod();
 		return this.request(method);
@@ -196,7 +159,7 @@ class Store extends EventEmitter {
 			//			responseJson.data = [responseJson.data];
 			//		}
 			//		for(let obj of responseJson.data){
-			//			let instance = me.getInstance(obj);
+			//			let instance = me.getInstance(null,obj);
 			//			if(instance){
 			//				ret.push(instance);
 			//			}
@@ -243,7 +206,7 @@ class Store extends EventEmitter {
 				// instantiate objects with models
 				var ret = [];
 				for (let obj of responseJson.data) {
-					let instance = me.getInstance(obj);
+					let instance = me.getInstance(null,obj);
 					if (instance) {
 						ret.push(instance);
 					}

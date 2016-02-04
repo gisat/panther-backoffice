@@ -4,8 +4,11 @@ class Model {
 	/**
 	 * returns promise of this model.
 	 */
-	constructor(options) {
-		return this.resolveForLocal(options);
+	constructor(options,data) {
+		if(data){
+			return this.resolveForLocal(data);
+		}
+		_.assign(this,options);
 	}
 
 	/**

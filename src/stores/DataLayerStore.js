@@ -12,12 +12,12 @@ class DataLayerStore extends Store {
 	getApiLoadMethod(){
 		return "POST";
 	}
-	getInstance(data){
-		if(data.isWms) {
+	getInstance(options,data){
+		if(data && data.isWms) {
 			return null;
 		}
 		else {
-			return new DataLayerModel(data);
+			return new DataLayerModel(options,data);
 		}
 	}
 

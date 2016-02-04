@@ -8,8 +8,8 @@ class ObjectRelationStore extends Store {
 	getApiUrl(){
 		return "/rest/layerref";
 	}
-	getInstance(data){
-		return new ObjectRelationModel(data);
+	getInstance(options,data){
+		return new ObjectRelationModel(options,data);
 	}
 
 	getByDataSource(dataSourceKey){

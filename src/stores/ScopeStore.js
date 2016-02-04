@@ -8,8 +8,8 @@ class ScopeStore extends Store {
 	getApiUrl(){
 		return "/rest/dataset";
 	}
-	getInstance(data){
-		return new ScopeModel(data);
+	getInstance(options,data){
+		return new ScopeModel(options,data);
 	}
 }
 

@@ -8,10 +8,10 @@ class VectorLayerStore extends Store {
 	getApiUrl(){
 		return "/rest/areatemplate";
 	}
-	getInstance(data){
+	getInstance(options,data){
 		// for now we have non-raster layers (vector + AU levels)
-		if(!data.justVisualization) {
-			return new VectorLayerModel(data);
+		if(data && !data.justVisualization) {
+			return new VectorLayerModel(options,data);
 		}
 		else {
 			return null;

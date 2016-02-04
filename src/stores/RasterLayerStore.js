@@ -8,10 +8,10 @@ class RasterLayerStore extends Store {
 	getApiUrl(){
 		return "/rest/areatemplate";
 	}
-	getInstance(data){
+	getInstance(options,data){
 		// areaTemplates on server with "justVisualization": true are RasterLayers on local
-		if(data.justVisualization) {
-			return new RasterLayerModel(data);
+		if(data && data.justVisualization) {
+			return new RasterLayerModel(options,data);
 		}
 		else {
 			return null;

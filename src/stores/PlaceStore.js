@@ -8,8 +8,8 @@ class PlaceStore extends Store {
 	getApiUrl(){
 		return "/rest/location";
 	}
-	getInstance(data){
-		return new PlaceModel(data);
+	getInstance(options,data){
+		return new PlaceModel(options,data);
 	}
 }
 
