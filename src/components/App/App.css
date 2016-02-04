@@ -1379,6 +1379,10 @@ todo hex colours, button icons */
 	padding-right: .3rem;
 }
 
+.UICustomSelect-option-place.not-referenced {
+	background: #fcf3e7;
+}
+
 
 /* ==== development === */
 

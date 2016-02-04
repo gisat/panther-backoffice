@@ -5,6 +5,9 @@ import withStyles from '../../../decorators/withStyles';
 import { Button, Input, Icon } from '../../SEUI/elements';
 import Select from 'react-select';
 
+import OptionDataLayer from '../../atoms/UICustomSelect/OptionDataLayer';
+import SingleValueDataLayer from '../../atoms/UICustomSelect/SingleValueDataLayer';
+
 
 @withStyles(styles)
 class SelectorDataLayer extends Component {
@@ -41,6 +44,8 @@ class SelectorDataLayer extends Component {
 								onChange={this.onChange.bind(this)}
 								onFocus={this.onFocus.bind(this)}
 								options={this.props.data}
+								optionComponent={OptionDataLayer}
+								singleValueComponent={SingleValueDataLayer}
 								valueKey="key"
 								labelKey="key"
 								value={this.props.value}
