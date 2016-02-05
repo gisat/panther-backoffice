@@ -2,9 +2,19 @@ import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import DataLayerModel from '../models/DataLayerModel';
+import ObjectRelationStore from '../stores/ObjectRelationStore';
 
 
 class DataLayerStore extends Store {
+
+	constructor(props){
+		super(props);
+		ObjectRelationStore.addChangeListener(this._onObjectRelationStoreChange.bind(this));
+	}
+
+	_onObjectRelationStoreChange(){
+		this.reload();
+	}
 
 	getApiUrl(){
 		return "api/layers/getLayers";

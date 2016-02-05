@@ -108,9 +108,7 @@ class Store extends EventEmitter {
 			}
 		});
 		Promise.all(promises).then(function(){
-			thisStore.reload().then(function(){
-				thisStore.emitChange();
-			});
+			thisStore.reload();
 		});
 	}
 
