@@ -157,8 +157,6 @@ class ScreenAnalysisSpatialRules extends Component{
 	render() {
 		return (
 			<div>
-				<p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
-				<p style={{backgroundColor: "yellow"}}>getUrl: {this.getUrl()}</p>
 				<div className="screen-content"><div>
 
 				<div className="frame-input-wrapper">

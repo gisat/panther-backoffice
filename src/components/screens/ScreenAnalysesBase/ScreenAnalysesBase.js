@@ -131,8 +131,6 @@ class ScreenAnalysesBase extends Component{
 
 		return (
 			<div>
-				<p style={{backgroundColor: "yellow"}}>DATA: {JSON.stringify(this.state.data)}</p>
-				<p style={{backgroundColor: "yellow"}}>getUrl: {this.getUrl()}</p>
 				<div className="screen-content"><div>
 					<h1>Analyses</h1>
 
