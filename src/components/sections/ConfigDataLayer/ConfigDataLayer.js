@@ -325,44 +325,38 @@ class ConfigDataLayer extends Component {
 			//console.log(relations);
 			var layerType = relations[0].layerObject.layerType;
 			ret.layerType = layerType;
-			if(layerType=="vector"){
-				ret.valuesVLPlaces = [];
-				ret.valuesVLPeriods = [];
-				relations.map(function(relation){
-					if (relation.layerObject){
-						ret.valueVLTemplate = [relation.layerObject.key];
+			var values = {};
+			relations.map(function(relation){
+				if (relation.layerObject){
+					values.template = [relation.layerObject.key];
+				}
+				if (relation.place){
+					if (relation.place.scope){
+						values.scope = [relation.place.scope.key];
 					}
-					if (relation.place){
-						if (relation.place.scope){
-							ret.valueVLScope = [relation.place.scope.key];
-						}
-						ret.valuesVLPlaces = _.union(ret.valuesVLPlaces,[relation.place.key]);
-					}
-					if (relation.period){
-						ret.valuesVLPeriods = _.union(ret.valuesVLPeriods,[relation.period.key]);
-					}
-				});
-			}
-			else if(layerType=="raster"){
-				ret.valuesRLPlaces = [];
-				ret.valuesRLPeriods = [];
-				relations.map(function(relation){
-					if (relation.layerObject){
-						ret.valueRLTemplate = [relation.layerObject.key];
-					}
-					if (relation.place){
-						if (relation.place.scope){
-							ret.valueRLScope = [relation.place.scope.key];
-						}
-						ret.valuesRLPlaces = _.union(ret.valuesRLPlaces,[relation.place.key]);
-					}
-					if (relation.period){
-						ret.valuesRLPeriods = _.union(ret.valuesRLPeriods,[relation.period.key]);
-					}
-				});
-			}
-			else if(layerType=="au"){
-
+					values.places = _.union(values.places,[relation.place.key]);
+				}
+				if (relation.period){
+					values.periods = _.union(values.periods,[relation.period.key]);
+				}
+			});
+			switch (layerType) {
+				case "vector":
+					ret.valueVLTemplate = values.template;
+					ret.valueVLScope = values.scope;
+					ret.valuesVLPlaces = values.places;
+					ret.valuesVLPeriods = values.periods;
+					break;
+				case "raster":
+					ret.valueRLTemplate = values.template;
+					ret.valueRLScope = values.scope;
+					ret.valuesRLPlaces = values.places;
+					ret.valuesRLPeriods = values.periods;
+					break;
+				case "au":
+					ret.valueAULevel = values.template;
+					ret.valueAUScope = values.scope;
+					ret.valuesAUPlaces = values.places;
 			}
 			ret.relationsState = ret; // save store state for comparison with changed local
 		}
