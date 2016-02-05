@@ -6,17 +6,22 @@ import {apiProtocol, apiHost, apiPath} from './config';
 
 export default function(proxyRequest, proxyResponse){
 
-	console.log('');
-	console.log('           (   (       (   (       )    )     )  ');
-	console.log('     (     )\\ ))\\ )    )\\ ))\\ ) ( /( ( /(  ( /(  ');
-	//console.log('     )\\   (()/(()/(   (()/(()/( )\\()))\\()) )\\()) ');
-	//console.log('  ((((_)(  /(_))(_))   /(_))(_)|(_)\\((_)\\ ((_)\\  ');
-	console.log('   )\\ _ )\\(_))(_))|   (_))(_))   ((_)_((_)_ ((_) ');
-	console.log('   (_)_\\(_) _ \\_ _|___| _ \\ _ \\ / _ \\ \\/ | \\ / / ');
-	console.log('    / _ \\ |  _/| | ___|  _/   /| (_) >  < \\ V /  ');
-	console.log('   /_/ \\_\\|_| |___|   |_| |_|_\\ \\___/_/\\_\\ |_|   ');
-	//console.log('      If You see this, something is wrong.');
-	//console.log('');
+	var logLikeCrazy = false;
+
+	if(logLikeCrazy) {
+		console.log('');
+		console.log('           (   (       (   (       )    )     )  ');
+		console.log('     (     )\\ ))\\ )    )\\ ))\\ ) ( /( ( /(  ( /(  ');
+		//console.log('     )\\   (()/(()/(   (()/(()/( )\\()))\\()) )\\()) ');
+		//console.log('  ((((_)(  /(_))(_))   /(_))(_)|(_)\\((_)\\ ((_)\\  ');
+		console.log('   )\\ _ )\\(_))(_))|   (_))(_))   ((_)_((_)_ ((_) ');
+		console.log('   (_)_\\(_) _ \\_ _|___| _ \\ _ \\ / _ \\ \\/ | \\ / / ');
+		console.log('    / _ \\ |  _/| | ___|  _/   /| (_) >  < \\ V /  ');
+		console.log('   /_/ \\_\\|_| |___|   |_| |_|_\\ \\___/_/\\_\\ |_|   ');
+		//console.log('      If You see this, something is wrong.');
+		//console.log('');
+	}
+
 
 	var url = apiProtocol + apiHost + path.join(apiPath, proxyRequest.body.apiUrl).replace(/\\/g, "/");
 	var method = proxyRequest.body.method.toLowerCase();
@@ -40,7 +45,7 @@ export default function(proxyRequest, proxyResponse){
 		};
 	}
 
-	console.log("  ", method.toUpperCase(), url, "\n-----------\n", options, "\n\n");
+	if(logLikeCrazy) console.log("  ", method.toUpperCase(), url, "\n-----------\n", options, "\n\n");
 
 	switch(method) {
 		case "post":
