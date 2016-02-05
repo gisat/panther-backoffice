@@ -229,7 +229,7 @@ class ConfigDataLayer extends Component {
 		//AttributeStore.addChangeListener(this._onStoreChange);
 		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
-		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
+		//PeriodStore.addObjectCreateListener(this._onStoreObjectCreate.bind(this));
 		this.setStateFromStores();
 	}
 
@@ -242,7 +242,6 @@ class ConfigDataLayer extends Component {
 		//AttributeStore.removeChangeListener(this._onStoreChange);
 		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
-		ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -306,25 +305,13 @@ class ConfigDataLayer extends Component {
 	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
 	 */
 	relations2state(relations) {
-		var ret = {
-			layerType: null,
-			valueVLTemplate: [],
-			valueVLScope: [],
-			valuesVLPlaces: [],
-			valuesVLPeriods: [],
-			valueRLTemplate: [],
-			valueRLScope: [],
-			valuesRLPlaces: [],
-			valuesRLPeriods: [],
-			valueAUScope: [],
-			valuesAUPlaces: [],
-			valueAULevel: []
-		};
 		if(relations.length > 0) {
 			//console.log("store2state relations2state():");
 			//console.log(relations);
 			var layerType = relations[0].layerObject.layerType;
-			ret.layerType = layerType;
+			var ret = {
+				layerType: layerType
+			};
 			if(layerType=="vector"){
 				ret.valuesVLPlaces = [];
 				ret.valuesVLPeriods = [];
@@ -365,8 +352,8 @@ class ConfigDataLayer extends Component {
 
 			}
 			ret.relationsState = ret; // save store state for comparison with changed local
+			return ret;
 		}
-		return ret;
 	}
 
 	/**
@@ -401,74 +388,46 @@ class ConfigDataLayer extends Component {
 		//return;
 
 		var relations = this.state.layerRelations;
-		var actionData = [];
-
-		//var simplifiedRelationObjects = [];
-		//this.state.layerRelations.map(function(relationObject){
-		//	let simplifiedRelationObject = {
-		//		key: relationObject.key,
-		//		place: relationObject.place,
-		//		period: relationObject.period
-		//	};
-		//	simplifiedRelationObjects.push(simplifiedRelationObject);
-		//});
-		//console.log("simplifiedRelationObjects", simplifiedRelationObjects);
+		var actionData = [], layerTemplates = [], values = {};
+		switch (this.state.layerType) {
+			case "raster":
+				layerTemplates = this.state.rasterLayerTemplates;
+				values.template = this.state.valueRLTemplate[0];
+				values.places = this.state.valuesRLPlaces;
+				values.periods = this.state.valuesRLPeriods;
+				break;
+		}
+		var layerTemplate = _.findWhere(layerTemplates,{key:values.template});
 
 		// create common structure for newly created layerrefs
-		var layerTemplate = _.findWhere(this.state.rasterLayerTemplates,{key:this.state.valueRLTemplate[0]});
-		//var baseObject = {
-		//	active: true, //todo active setting
-		//	areaTemplate: layerTemplateValue,
-		//	columnMap: [],
-		//	isData: false
-		//};
 		var baseObject = {
 			active: true, //todo active setting
 			layerObject: layerTemplate,
 			columnMap: [],
 			isOfAttributeSet: false
 		};
-		console.log(baseObject.layerObject);
 		// (later: ?attributeSet + isData + columnMap + xColumns? - for vector & au)
 		// changed, changedBy done by server
 
 		// save updated or new relations
-		for (let placeValue of this.state.valuesRLPlaces) {
-			for (let periodValue of this.state.valuesRLPeriods) {
-				//let existingModel = _.find(simplifiedRelationObjects, function(obj) {
+		for (let placeValue of values.places) {
+			for (let periodValue of values.periods) {
 				let existingModel = _.find(relations, function(obj) {
 					return ((obj.place.key == placeValue) && (obj.period.key == periodValue));
 				});
 				if (existingModel) {
 					// exists -> update
-					//simplifiedRelationObjects = _.reject(simplifiedRelationObjects, function(item) { return item.key === existingModel.key; });
 					relations = _.reject(relations, function(item) { return item.key === existingModel.key; });
-					//let object = {
-					//	_id: existingModel.key,
-					//	areaTemplate: layerTemplateValue,
-					//	location: placeValue,
-					//	year: periodValue
-					//	// todo active
-					//};
 					let update = false;
 					if(existingModel.layerObject.key!=layerTemplate.key){
 						update = true;
 						existingModel.layerObject = layerTemplate;
 					}
-					// ACTION UPDATE LAYERREF (object)
-					//ActionCreator.updateObject(object,ObjectTypes.OBJECT_RELATION);
-					//actionData.push({type:"update",object:object});
-					if(update) actionData.push({type:"update",model:existingModel});
-					//console.log("update object:",object);
+					if(update) {
+						actionData.push({type:"update",model:existingModel});
+					}
 				} else {
 					// does not exist -> create
-					//let object = {
-					//	layer: this.props.selectorValue,
-					//	location: placeValue,
-					//	year: periodValue
-					//};
-
-
 					let object = {
 						dataSource: _.findWhere(this.props.dataLayers,{key:this.props.selectorValue}),
 						place: _.findWhere(this.state.places,{key:placeValue}),
@@ -476,29 +435,13 @@ class ConfigDataLayer extends Component {
 					};
 					object = _.assign(object,baseObject);
 					let newModel = new model[ObjectTypes.OBJECT_RELATION](object);
-					// ACTION CREATE LAYERREF (object)
-					//ActionCreator.createObject(object,ObjectTypes.OBJECT_RELATION);
 					actionData.push({type:"create",model:newModel});
-					//console.log("create object:",object);
 				}
 			}
 		}
-		// remove removed relations
-		//simplifiedRelationObjects.map(function(unusedObject){
-		//	let object = {
-		//		_id: unusedObject.key,
-		//		//location: unusedObject.place.key,
-		//		//year: unusedObject.period.key
-		//	};
-		//	// ACTION DELETE LAYERREF (object)
-		//	//ActionCreator.deleteObject(object,ObjectTypes.OBJECT_RELATION);
-		//	actionData.push({type:"delete",object:object});
-		//	console.log("delete object:",object);
-		//});
+		// was not in valuesRLPlaces × valuesRLPeriods, thus was removed -> delete
 		relations.map(function(unusedModel){
-			// todo clear unnecessary keys? We only need key for delete
 			actionData.push({type:"delete",model:unusedModel});
-			//console.log("delete object:",object);
 		});
 		console.log("handleObjects() actionData", actionData);
 		ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
