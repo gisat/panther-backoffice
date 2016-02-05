@@ -229,7 +229,7 @@ class ConfigDataLayer extends Component {
 		//AttributeStore.addChangeListener(this._onStoreChange);
 		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
-		//PeriodStore.addObjectCreateListener(this._onStoreObjectCreate.bind(this));
+		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
 		this.setStateFromStores();
 	}
 
@@ -242,6 +242,7 @@ class ConfigDataLayer extends Component {
 		//AttributeStore.removeChangeListener(this._onStoreChange);
 		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
+		ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -305,13 +306,25 @@ class ConfigDataLayer extends Component {
 	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
 	 */
 	relations2state(relations) {
+		var ret = {
+			layerType: null,
+			valueVLTemplate: [],
+			valueVLScope: [],
+			valuesVLPlaces: [],
+			valuesVLPeriods: [],
+			valueRLTemplate: [],
+			valueRLScope: [],
+			valuesRLPlaces: [],
+			valuesRLPeriods: [],
+			valueAUScope: [],
+			valuesAUPlaces: [],
+			valueAULevel: []
+		};
 		if(relations.length > 0) {
 			//console.log("store2state relations2state():");
 			//console.log(relations);
 			var layerType = relations[0].layerObject.layerType;
-			var ret = {
-				layerType: layerType
-			};
+			ret.layerType = layerType;
 			if(layerType=="vector"){
 				ret.valuesVLPlaces = [];
 				ret.valuesVLPeriods = [];
@@ -352,8 +365,8 @@ class ConfigDataLayer extends Component {
 
 			}
 			ret.relationsState = ret; // save store state for comparison with changed local
-			return ret;
 		}
+		return ret;
 	}
 
 	/**
