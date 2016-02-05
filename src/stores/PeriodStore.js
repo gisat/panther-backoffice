@@ -14,15 +14,15 @@ class PeriodStore extends Store {
 		return new PeriodModel(options,data);
 	}
 
-	createObject(objectData,responseStateKey,responseStateHash) {
+	createObject(model,responseStateKey,responseStateHash) {
 		//console.log("PeriodStore createObject objectData",objectData);
 		// todo ? Model.resolveForServer ?
-		var object = {
-			name: objectData.name,
-			active: false
-		};
+		//var object = {
+		//	name: objectData.name,
+		//	active: false
+		//};
 		var thisStore = this;
-		var resultPromise = this.create(object);
+		var resultPromise = this.create(model);
 
 		resultPromise.then(function(result){
 			thisStore.reload().then(function(){
@@ -41,7 +41,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 	switch(action.type) {
 		case ActionTypes.PERIOD_CREATE:
 			//console.log("PeriodStore PERIOD_CREATE action");
-			storeInstance.createObject(action.objectData, action.stateKey, action.stateHash);
+			storeInstance.createObject(action.model, action.stateKey, action.stateHash);
 			break;
 		default:
 			return;

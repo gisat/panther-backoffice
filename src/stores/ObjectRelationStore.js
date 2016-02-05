@@ -25,7 +25,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 	switch(action.type) {
 		case ActionTypes.OBJECT_RELATION_CREATE:
 			console.log("ObjectRelationStore OBJECT_RELATION_CREATE action");
-			storeInstance.create(action.objectData);
+			storeInstance.create(action.model);
 			// todo something like this:
 			// let req = storeInstance.create(action.objectData);
 			//req.then(function(whateverRequestReturns){
@@ -35,15 +35,15 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			break;
 		case ActionTypes.OBJECT_RELATION_UPDATE:
 			console.log("ObjectRelationStore OBJECT_RELATION_UPDATE action");
-			storeInstance.update(action.objectData);
+			storeInstance.update(action.model);
 			break;
 		case ActionTypes.OBJECT_RELATION_DELETE:
 			console.log("ObjectRelationStore OBJECT_RELATION_DELETE action");
-			storeInstance.delete(action.objectData);
+			storeInstance.delete(action.model);
 			break;
 		case ActionTypes.OBJECT_RELATION_HANDLE:
 			console.log("ObjectRelationStore OBJECT_RELATION_HANDLE action");
-			storeInstance.handle(action.actionData);
+			storeInstance.handle(action.data);
 			break;
 		default:
 			return;

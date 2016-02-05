@@ -17,7 +17,7 @@ import ConfigDataLayerAnalytical from '../ConfigDataLayerAnalytical';
 
 import ScreenMetadataPeriod from '../../screens/ScreenMetadataPeriod';
 
-import ObjectTypes from '../../../constants/ObjectTypes';
+import ObjectTypes, {model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 import DataLayerStore from '../../../stores/DataLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
@@ -132,12 +132,14 @@ class ConfigDataLayer extends Component {
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
-		selectorValue: React.PropTypes.any
+		selectorValue: React.PropTypes.any,
+		dataLayers: React.PropTypes.array
 	};
 
 	static defaultProps = {
 		disabled: false,
-		selectorValue: null
+		selectorValue: null,
+		dataLayers: []
 	};
 
 	static contextTypes = {
@@ -385,76 +387,105 @@ class ConfigDataLayer extends Component {
 		//console.info("Saving not working yet.");
 		//return;
 
+		var relations = this.state.layerRelations;
 		var actionData = [];
 
-		var simplifiedRelationObjects = [];
-		this.state.layerRelations.map(function(relationObject){
-			let simplifiedRelationObject = {
-				key: relationObject.key,
-				place: relationObject.place,
-				period: relationObject.period
-			};
-			simplifiedRelationObjects.push(simplifiedRelationObject);
-		});
+		//var simplifiedRelationObjects = [];
+		//this.state.layerRelations.map(function(relationObject){
+		//	let simplifiedRelationObject = {
+		//		key: relationObject.key,
+		//		place: relationObject.place,
+		//		period: relationObject.period
+		//	};
+		//	simplifiedRelationObjects.push(simplifiedRelationObject);
+		//});
 		//console.log("simplifiedRelationObjects", simplifiedRelationObjects);
 
 		// create common structure for newly created layerrefs
-		var layerTemplateValue = this.state.valueRLTemplate[0];
+		var layerTemplate = _.findWhere(this.state.rasterLayerTemplates,{key:this.state.valueRLTemplate[0]});
+		//var baseObject = {
+		//	active: true, //todo active setting
+		//	areaTemplate: layerTemplateValue,
+		//	columnMap: [],
+		//	isData: false
+		//};
 		var baseObject = {
 			active: true, //todo active setting
-			areaTemplate: layerTemplateValue,
+			layerObject: layerTemplate,
 			columnMap: [],
-			isData: false
+			isOfAttributeSet: false
 		};
+		console.log(baseObject.layerObject);
 		// (later: ?attributeSet + isData + columnMap + xColumns? - for vector & au)
 		// changed, changedBy done by server
 
 		// save updated or new relations
 		for (let placeValue of this.state.valuesRLPlaces) {
 			for (let periodValue of this.state.valuesRLPeriods) {
-				let existingObject = _.find(simplifiedRelationObjects, function(obj) {
+				//let existingModel = _.find(simplifiedRelationObjects, function(obj) {
+				let existingModel = _.find(relations, function(obj) {
 					return ((obj.place.key == placeValue) && (obj.period.key == periodValue));
 				});
-				if (existingObject) {
+				if (existingModel) {
 					// exists -> update
-					simplifiedRelationObjects = _.reject(simplifiedRelationObjects, function(item) { return item.key === existingObject.key; });
-					let object = {
-						_id: existingObject.key,
-						areaTemplate: layerTemplateValue,
-						location: placeValue,
-						year: periodValue
-						// todo active
-					};
+					//simplifiedRelationObjects = _.reject(simplifiedRelationObjects, function(item) { return item.key === existingModel.key; });
+					relations = _.reject(relations, function(item) { return item.key === existingModel.key; });
+					//let object = {
+					//	_id: existingModel.key,
+					//	areaTemplate: layerTemplateValue,
+					//	location: placeValue,
+					//	year: periodValue
+					//	// todo active
+					//};
+					let update = false;
+					if(existingModel.layerObject.key!=layerTemplate.key){
+						update = true;
+						existingModel.layerObject = layerTemplate;
+					}
 					// ACTION UPDATE LAYERREF (object)
 					//ActionCreator.updateObject(object,ObjectTypes.OBJECT_RELATION);
-					actionData.push({type:"update",object:object});
-					console.log("update object:",object);
+					//actionData.push({type:"update",object:object});
+					if(update) actionData.push({type:"update",model:existingModel});
+					//console.log("update object:",object);
 				} else {
 					// does not exist -> create
+					//let object = {
+					//	layer: this.props.selectorValue,
+					//	location: placeValue,
+					//	year: periodValue
+					//};
+
+
 					let object = {
-						layer: this.props.selectorValue,
-						location: placeValue,
-						year: periodValue
+						dataSource: _.findWhere(this.props.dataLayers,{key:this.props.selectorValue}),
+						place: _.findWhere(this.state.places,{key:placeValue}),
+						period: _.findWhere(this.state.periods,{key:periodValue})
 					};
 					object = _.assign(object,baseObject);
+					let newModel = new model[ObjectTypes.OBJECT_RELATION](object);
 					// ACTION CREATE LAYERREF (object)
 					//ActionCreator.createObject(object,ObjectTypes.OBJECT_RELATION);
-					actionData.push({type:"create",object:object});
-					console.log("create object:",object);
+					actionData.push({type:"create",model:newModel});
+					//console.log("create object:",object);
 				}
 			}
 		}
 		// remove removed relations
-		simplifiedRelationObjects.map(function(unusedObject){
-			let object = {
-				_id: unusedObject.key,
-				//location: unusedObject.place.key,
-				//year: unusedObject.period.key
-			};
-			// ACTION DELETE LAYERREF (object)
-			//ActionCreator.deleteObject(object,ObjectTypes.OBJECT_RELATION);
-			actionData.push({type:"delete",object:object});
-			console.log("delete object:",object);
+		//simplifiedRelationObjects.map(function(unusedObject){
+		//	let object = {
+		//		_id: unusedObject.key,
+		//		//location: unusedObject.place.key,
+		//		//year: unusedObject.period.key
+		//	};
+		//	// ACTION DELETE LAYERREF (object)
+		//	//ActionCreator.deleteObject(object,ObjectTypes.OBJECT_RELATION);
+		//	actionData.push({type:"delete",object:object});
+		//	console.log("delete object:",object);
+		//});
+		relations.map(function(unusedModel){
+			// todo clear unnecessary keys? We only need key for delete
+			actionData.push({type:"delete",model:unusedModel});
+			//console.log("delete object:",object);
 		});
 		console.log("handleObjects() actionData", actionData);
 		ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
@@ -472,21 +503,20 @@ class ConfigDataLayer extends Component {
 	 * @param values - selected objects
 	 * @param objectType - data type for Action
 	 * @param stateKey - state variable to store created object in
+	 * @param stateHash - state hash to send along with action for later pairing
 	 * @returns {Array} - values without new (those are added when handling action response)
 	 */
-	handleNewObjects(values, objectType, stateKey) {
+	handleNewObjects(values, objectType, stateKey, stateHash) {
+		// todo move function to utils? (common and static)
 		var newValues = [];
 		for (var singleValue of values) {
 			if(singleValue.create){
-				// replace with actual object creation and config screen opening
-				delete singleValue.create;
-				delete singleValue.label;
-				delete singleValue.value;
-				//singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				//store.push(singleValue);
-				// todo move function to utils? (common and static)
-				let stateHash = this.getStateHash();
-				ActionCreator.createObjectAndSetState(singleValue,objectType,stateKey,stateHash);
+				delete singleValue.create; // discard new object bit
+				delete singleValue.label; // discard temp compatibility key
+				delete singleValue.value; // discard temp compatibility key
+				delete singleValue.key; // discard temp key = name
+				let valueModel = new model[objectType](singleValue);
+				ActionCreator.createObjectAndSetState(valueModel,objectType,stateKey,stateHash);
 			}
 			else {
 				newValues.push(singleValue.key);
@@ -497,7 +527,7 @@ class ConfigDataLayer extends Component {
 	}
 
 	onChangeObjectSelect (stateKey, objectType, value, values) {
-		values = this.handleNewObjects(values, objectType, stateKey); // todo store -> object type
+		values = this.handleNewObjects(values, objectType, stateKey, this.getStateHash()); // todo store -> object type
 		var newState = {};
 		newState[stateKey] = values;
 		this.setState(newState);

@@ -73,17 +73,20 @@ class Store extends EventEmitter {
 		return this.request(method);
 	}
 
-	create(object) {
+	create(model) {
+		var object = model.serialize();
 		var method = "POST";
 		return this.request(method, object);
 	}
 
-	update(object) {
+	update(model) {
+		var object = model.serialize();
 		var method = "PUT";
 		return this.request(method, object);
 	}
 
-	delete(object) {
+	delete(model) {
+		var object = model.serialize();
 		var method = "DELETE";
 		return this.request(method, object);
 	}
@@ -94,13 +97,13 @@ class Store extends EventEmitter {
 		actionData.forEach(function(action){
 			switch (action.type) {
 				case "create":
-					promises.push(thisStore.create(action.object));
+					promises.push(thisStore.create(action.model));
 					break;
 				case "update":
-					promises.push(thisStore.update(action.object));
+					promises.push(thisStore.update(action.model));
 					break;
 				case "delete":
-					promises.push(thisStore.delete(action.object));
+					promises.push(thisStore.delete(action.model));
 					break;
 			}
 		});

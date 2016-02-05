@@ -27,7 +27,7 @@ class ObjectRelationModel extends Model {
 			changed: {
 				serverName: 'changed', //date
 				sendToServer: false,
-				transformForLocal: function (data) {
+				transformForLocal: function (data) { // todo just transformForLocal: this.transformDate ?
 					return this.transformDate(data)
 				}.bind(this)
 			},
@@ -63,6 +63,9 @@ class ObjectRelationModel extends Model {
 				transformForLocal: function (data) {
 					return GeneralLayerStore.getById(data)
 				},
+				transformForServer: function (model) {
+					return model.key;
+				},
 				isPromise: true
 			},
 			attributeSet: {
@@ -70,6 +73,9 @@ class ObjectRelationModel extends Model {
 				sendToServer: false, //for now
 				transformForLocal: function (data) {
 					return AttributeSetStore.getById(data)
+				},
+				transformForServer: function (model) {
+					return model.key;
 				},
 				isPromise: true
 			},
@@ -83,6 +89,9 @@ class ObjectRelationModel extends Model {
 				transformForLocal: function (data) {
 					return DataLayerStore.getById(data)
 				},
+				transformForServer: function (model) {
+					return model.key;
+				},
 				isPromise: true
 			},
 			dataSourceString: {
@@ -95,6 +104,9 @@ class ObjectRelationModel extends Model {
 				transformForLocal: function (data) {
 					return PlaceStore.getById(data)
 				},
+				transformForServer: function (model) {
+					return model.key;
+				},
 				isPromise: true
 			},
 			period: {
@@ -102,6 +114,9 @@ class ObjectRelationModel extends Model {
 				sendToServer: true,
 				transformForLocal: function (data) {
 					return PeriodStore.getById(data)
+				},
+				transformForServer: function (model) {
+					return model.key;
 				},
 				isPromise: true
 			},
@@ -123,7 +138,7 @@ class ObjectRelationModel extends Model {
 			},
 			columnMap: {
 				serverName: 'columnMap', //object {column: string, attribute: id}
-				sendToServer: false, // for now
+				sendToServer: true,
 				transformForLocal: function (data) {
 					if(data) {
 						let ret = data.map(function(obj){
@@ -135,6 +150,9 @@ class ObjectRelationModel extends Model {
 						return Promise.resolve(ret);
 					}
 					return Promise.resolve({});
+				},
+				transformForServer: function (model) {
+					return []; // todo
 				},
 				isPromise: true,
 				isArray: true

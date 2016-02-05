@@ -4,10 +4,10 @@ import ObjectTypes from '../constants/ObjectTypes'
 
 export default {
 
-	createObjectAndSetState: function(objectData,objectType,stateKey,stateHash) {
+	createObjectAndSetState: function(model,objectType,stateKey,stateHash) {
 		var action = {
 			type: null,
-			objectData: objectData,
+			model: model,
 			stateKey: stateKey,
 			stateHash: stateHash
 		};
@@ -21,10 +21,10 @@ export default {
 		AppDispatcher.dispatch(action);
 	},
 
-	createObject: function(objectData,objectType) {
+	createObject: function(model,objectType) {
 		var action = {
 			type: null,
-			objectData: objectData
+			model: model
 		};
 		console.log("ActionCreator createObject()");
 		switch (objectType) {
@@ -38,10 +38,10 @@ export default {
 		AppDispatcher.dispatch(action);
 	},
 
-	updateObject: function(objectData,objectType) {
+	updateObject: function(model,objectType) {
 		var action = {
 			type: null,
-			objectData: objectData
+			model: model
 		};
 		console.log("ActionCreator updateObject()");
 		switch (objectType) {
@@ -55,10 +55,10 @@ export default {
 		AppDispatcher.dispatch(action);
 	},
 
-	deleteObject: function(objectData,objectType) {
+	deleteObject: function(model,objectType) {
 		var action = {
 			type: null,
-			objectData: objectData
+			model: model
 		};
 		console.log("ActionCreator deleteObject()");
 		switch (objectType) {
@@ -72,10 +72,10 @@ export default {
 		AppDispatcher.dispatch(action);
 	},
 
-	handleObjects: function(actionData,objectType) {
+	handleObjects: function(data,objectType) {
 		var action = {
 			type: null,
-			actionData: actionData
+			data: data
 		};
 		console.log("ActionCreator handleObjects()");
 		switch (objectType) {
