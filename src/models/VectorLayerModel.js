@@ -10,22 +10,27 @@ class VectorLayerModel extends Model {
 	data() {
 		return {
 			key: {
-				serverName: '_id' //number
+				serverName: '_id', //number
+				sendToServer: true
 			},
 			name: {
-				serverName: 'name' //string
+				serverName: 'name', //string
+				sendToServer: true
 			},
 			active: {
-				serverName: 'active' //boolean
+				serverName: 'active', //boolean
+				sendToServer: true
 			},
 			changed: {
 				serverName: 'changed', //date
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return this.transformDate(data)
 				}.bind(this)
 			},
 			changedBy: {
 				serverName: 'changedBy', //id
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return UserStore.getById(data)
 				},
@@ -33,12 +38,14 @@ class VectorLayerModel extends Model {
 			},
 			created: {
 				serverName: 'created', //date
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return this.transformDate(data)
 				}.bind(this)
 			},
 			createdBy: {
 				serverName: 'createdBy', //id
+				sendToServer: false,
 				transformForLocal: function (data) {
 					return UserStore.getById(data)
 				},
@@ -46,6 +53,7 @@ class VectorLayerModel extends Model {
 			},
 			layerType: {
 				serverName: 'layerType', // raster / vector / au
+				sendToServer: true,
 				transformForLocal: function (data) {
 					if(!data) { data = "vector"; }
 					return data;
@@ -53,24 +61,30 @@ class VectorLayerModel extends Model {
 			},
 			layerGroup: {
 				serverName: 'layerGroup', //id
+				sendToServer: true,
 				transformForLocal: function (data) {
 					return LayerGroupStore.getById(data)
 				},
+				transformForServer: this.getKey,
 				isPromise: true
 			},
 			styles: {
 				serverName: 'symbologies', //ids
+				sendToServer: true,
 				transformForLocal: function (data) {
 					return StyleStore.getFiltered(data)
 				},
+				transformForServer: this.getKeys,
 				isPromise: true,
 				isArray: true
 			},
 			topic: {
 				serverName: 'topic', //id
+				sendToServer: true,
 				transformForLocal: function (data) {
 					return TopicStore.getById(data)
 				},
+				transformForServer: this.getKey,
 				isPromise: true
 			}
 		};

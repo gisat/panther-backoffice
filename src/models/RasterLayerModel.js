@@ -24,9 +24,7 @@ class RasterLayerModel extends Model {
 			changed: {
 				serverName: 'changed', //date
 				sendToServer: false,
-				transformForLocal: function (data) {
-					return this.transformDate(data)
-				}.bind(this)
+				transformForLocal: this.transformDate
 			},
 			changedBy: {
 				serverName: 'changedBy', //id
@@ -39,9 +37,7 @@ class RasterLayerModel extends Model {
 			created: {
 				serverName: 'created', //date
 				sendToServer: false,
-				transformForLocal: function (data) {
-					return this.transformDate(data)
-				}.bind(this)
+				transformForLocal: this.transformDate
 			},
 			createdBy: {
 				serverName: 'createdBy', //id
@@ -65,6 +61,7 @@ class RasterLayerModel extends Model {
 				transformForLocal: function (data) {
 					return LayerGroupStore.getById(data)
 				},
+				transformForServer: this.getKey,
 				isPromise: true
 			},
 			styles: {
@@ -73,6 +70,7 @@ class RasterLayerModel extends Model {
 				transformForLocal: function (data) {
 					return StyleStore.getFiltered(data)
 				},
+				transformForServer: this.getKeys,
 				isPromise: true,
 				isArray: true
 			},
@@ -82,6 +80,7 @@ class RasterLayerModel extends Model {
 				transformForLocal: function (data) {
 					return TopicStore.getById(data)
 				},
+				transformForServer: this.getKey,
 				isPromise: true
 			}
 		};

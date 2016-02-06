@@ -66,6 +66,18 @@ class Model {
 		return Date(dateString);
 	}
 
+	getKey(model) {
+		return model.key;
+	}
+
+	getKeys(models) {
+		let keys = [];
+		for (model of models) {
+			keys.push(model.key);
+		}
+		return keys;
+	}
+
 }
 
 export default Model;

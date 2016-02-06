@@ -22,9 +22,7 @@ class PeriodModel extends Model {
 			changed: {
 				serverName: 'changed', //date
 				sendToServer: false,
-				transformForLocal: function (data) {
-					return this.transformDate(data)
-				}.bind(this)
+				transformForLocal: this.transformDate
 			},
 			changedBy: {
 				serverName: 'changedBy', //id
@@ -37,9 +35,7 @@ class PeriodModel extends Model {
 			created: {
 				serverName: 'created', //date
 				sendToServer: false,
-				transformForLocal: function (data) {
-					return this.transformDate(data)
-				}.bind(this)
+				transformForLocal: this.transformDate
 			},
 			createdBy: {
 				serverName: 'createdBy', //id

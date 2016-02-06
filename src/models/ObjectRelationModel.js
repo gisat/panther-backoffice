@@ -27,9 +27,7 @@ class ObjectRelationModel extends Model {
 			changed: {
 				serverName: 'changed', //date
 				sendToServer: false,
-				transformForLocal: function (data) { // todo just transformForLocal: this.transformDate ?
-					return this.transformDate(data)
-				}.bind(this)
+				transformForLocal: this.transformDate
 			},
 			changedBy: {
 				serverName: 'changedBy', //id
@@ -42,9 +40,7 @@ class ObjectRelationModel extends Model {
 			created: {
 				serverName: 'created', //date
 				sendToServer: false,
-				transformForLocal: function (data) {
-					return this.transformDate(data)
-				}.bind(this)
+				transformForLocal: this.transformDate
 			},
 			createdBy: {
 				serverName: 'createdBy', //id
@@ -63,9 +59,7 @@ class ObjectRelationModel extends Model {
 				transformForLocal: function (data) {
 					return GeneralLayerStore.getById(data)
 				},
-				transformForServer: function (model) {
-					return model.key;
-				},
+				transformForServer: this.getKey,
 				isPromise: true
 			},
 			attributeSet: {
@@ -74,9 +68,7 @@ class ObjectRelationModel extends Model {
 				transformForLocal: function (data) {
 					return AttributeSetStore.getById(data)
 				},
-				transformForServer: function (model) {
-					return model.key;
-				},
+				transformForServer: this.getKey,
 				isPromise: true
 			},
 			isOfAttributeSet: { // indicates relations of attribute set
@@ -89,9 +81,7 @@ class ObjectRelationModel extends Model {
 				transformForLocal: function (data) {
 					return DataLayerStore.getById(data)
 				},
-				transformForServer: function (model) {
-					return model.key;
-				},
+				transformForServer: this.getKey,
 				isPromise: true
 			},
 			dataSourceString: {
@@ -104,9 +94,7 @@ class ObjectRelationModel extends Model {
 				transformForLocal: function (data) {
 					return PlaceStore.getById(data)
 				},
-				transformForServer: function (model) {
-					return model.key;
-				},
+				transformForServer: this.getKey,
 				isPromise: true
 			},
 			period: {
@@ -115,9 +103,7 @@ class ObjectRelationModel extends Model {
 				transformForLocal: function (data) {
 					return PeriodStore.getById(data)
 				},
-				transformForServer: function (model) {
-					return model.key;
-				},
+				transformForServer: this.getKey,
 				isPromise: true
 			},
 			implicit: {

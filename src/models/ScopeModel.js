@@ -22,9 +22,7 @@ class ScopeModel extends Model {
 			changed: {
 				serverName: 'changed', //date
 				sendToServer: false,
-				transformForLocal: function (data) {
-					return this.transformDate(data)
-				}.bind(this)
+				transformForLocal: this.transformDate
 			},
 			changedBy: {
 				serverName: 'changedBy', //id
@@ -37,9 +35,7 @@ class ScopeModel extends Model {
 			created: {
 				serverName: 'created', //date
 				sendToServer: false,
-				transformForLocal: function (data) {
-					return this.transformDate(data)
-				}.bind(this)
+				transformForLocal: this.transformDate
 			},
 			createdBy: {
 				serverName: 'createdBy', //id
@@ -55,6 +51,7 @@ class ScopeModel extends Model {
 				transformForLocal: function (data) {
 					return AULevelStore.getFiltered(data)
 				},
+				transformForServer: this.getKeys,
 				isPromise: true,
 				isArray: true
 			}
