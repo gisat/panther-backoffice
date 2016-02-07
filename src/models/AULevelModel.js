@@ -5,7 +5,7 @@ import StyleStore from '../stores/StyleStore';
 import TopicStore from '../stores/TopicStore';
 
 
-class VectorLayerModel extends Model {
+class AULevelModel extends Model {
 
 	data() {
 		return {
@@ -51,7 +51,7 @@ class VectorLayerModel extends Model {
 				serverName: 'layerType', // raster / vector / au
 				sendToServer: true,
 				transformForLocal: function (data) {
-					if(!data) { data = "vector"; }
+					if(!data) { data = "au"; }
 					return data;
 				}
 			},
@@ -88,4 +88,4 @@ class VectorLayerModel extends Model {
 
 }
 
-export default VectorLayerModel;
+export default AULevelModel;

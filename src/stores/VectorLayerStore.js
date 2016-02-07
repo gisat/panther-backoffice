@@ -10,12 +10,19 @@ class VectorLayerStore extends Store {
 	}
 	getInstance(options,data){
 		// for now we have non-raster layers (vector + AU levels)
-		if(data && !data.justVisualization) {
-			return new VectorLayerModel(options,data);
+		//if(data && !data.justVisualization) {
+		if(data) {
+			if (data.layerType=="vector") {
+				return new VectorLayerModel(options,data);
+			}
 		}
 		else {
-			return null;
+			if(options) {
+				options.layerType = "vector";
+				return new VectorLayerModel(options);
+			}
 		}
+		return null;
 	}
 }
 

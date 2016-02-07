@@ -6,7 +6,7 @@ class Model {
 	 */
 	constructor(options,data) {
 		if(data){
-			return this.resolveForLocal(data);
+			return this.resolveForLocal(data); // todo do we ever need both options and data?
 		}
 		_.assign(this,options);
 	}

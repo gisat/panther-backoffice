@@ -10,12 +10,19 @@ class RasterLayerStore extends Store {
 	}
 	getInstance(options,data){
 		// areaTemplates on server with "justVisualization": true are RasterLayers on local
-		if(data && data.justVisualization) {
-			return new RasterLayerModel(options,data);
+		//if(data && data.justVisualization) {
+		if(data) {
+			if (data.layerType=="raster") {
+				return new RasterLayerModel(options,data);
+			}
 		}
 		else {
-			return null;
+			if(options) {
+				options.layerType = "raster";
+				return new RasterLayerModel(options);
+			}
 		}
+		return null;
 	}
 }
 

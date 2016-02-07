@@ -33,6 +33,17 @@ class GeneralLayerStore extends Store {
 		});
 	}
 
+	getFiltered(options) {
+		return new Promise(function(resolve,reject) {
+			var vectorPromise = VectorLayerStore.getFiltered(options);
+			var rasterPromise = RasterLayerStore.getFiltered(options);
+			var auPromise = AULevelStore.getFiltered(options);
+			Promise.all([vectorPromise,rasterPromise,auPromise]).then(function([vector,raster,au]){
+				resolve(vector.concat(raster,au));
+			});
+		});
+	}
+
 	// todo getFiltered()
 
 }
