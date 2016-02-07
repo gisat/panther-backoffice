@@ -1,11 +1,11 @@
 import Model from './Model';
 import UserStore from '../stores/UserStore';
-import LayerGroupStore from '../stores/LayerGroupStore';
-import StyleStore from '../stores/StyleStore';
+import AttributeStore from '../stores/AttributeStore';
+import VectorLayerStore from '../stores/VectorLayerStore';
 import TopicStore from '../stores/TopicStore';
 
 
-class VectorLayerModel extends Model {
+class AttributeSetModel extends Model {
 
 	data() {
 		return {
@@ -47,28 +47,25 @@ class VectorLayerModel extends Model {
 				},
 				isPromise: true
 			},
-			layerType: {
-				serverName: 'layerType', // raster / vector / au
-				sendToServer: true,
-				transformForLocal: function (data) {
-					if(!data) { data = "vector"; }
-					return data;
-				}
+			description: {
+				serverName: 'description', //string?
+				sendToServer: true
 			},
-			layerGroup: {
-				serverName: 'layerGroup', //id
+			attributes: {
+				serverName: 'attributes', //ids
 				sendToServer: true,
 				transformForLocal: function (data) {
-					return LayerGroupStore.getById(data)
+					return AttributeStore.getFiltered({key: data})
 				},
-				transformForServer: this.getKey,
-				isPromise: true
+				transformForServer: this.getKeys,
+				isPromise: true,
+				isArray: true
 			},
-			styles: {
-				serverName: 'symbologies', //ids
+			vectorLayers: {
+				serverName: 'featureLayers', //ids
 				sendToServer: true,
 				transformForLocal: function (data) {
-					return StyleStore.getFiltered({key: data})
+					return VectorLayerStore.getFiltered({key: data})
 				},
 				transformForServer: this.getKeys,
 				isPromise: true,
@@ -88,4 +85,4 @@ class VectorLayerModel extends Model {
 
 }
 
-export default VectorLayerModel;
+export default AttributeSetModel;

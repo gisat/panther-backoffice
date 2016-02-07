@@ -21,11 +21,6 @@ class Model {
 		_.each(self.data(), function (value, key) {
 			var internalKey = key;
 			if (value.isPromise) {
-				//if (value.isArray) {
-				//	self[internalKey] = value.transformForLocal({id: data[value.serverName]});
-				//} else {
-				//	self[internalKey] = value.transformForLocal(data[value.serverName]);
-				//}
 				let promise = value.transformForLocal(data[value.serverName]);
 				promise.then(function(transformedData){
 					self[internalKey] = transformedData;

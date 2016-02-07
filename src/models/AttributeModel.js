@@ -1,9 +1,8 @@
 import Model from './Model';
 import UserStore from '../stores/UserStore';
-import AULevelStore from '../stores/AULevelStore';
 
 
-class ScopeModel extends Model {
+class AttributeModel extends Model {
 
 	data() {
 		return {
@@ -45,19 +44,33 @@ class ScopeModel extends Model {
 				},
 				isPromise: true
 			},
-			levels: {
-				serverName: 'featureLayers', //ids
-				sendToServer: true,
-				transformForLocal: function (data) {
-					return AULevelStore.getFiltered({key: data})
-				},
-				transformForServer: this.getKeys,
-				isPromise: true,
-				isArray: true
+			type: {
+				serverName: 'type', // text / numeric
+				sendToServer: true
+			},
+			code: {
+				serverName: 'code', // string
+				sendToServer: true
+			},
+			standardUnits: {
+				serverName: 'standardUnits', // text / numeric
+				sendToServer: true
+			},
+			customUnits: {
+				serverName: 'units', // string
+				sendToServer: true
+			},
+			color: {
+				serverName: 'color', // string - hex code
+				sendToServer: true
+			},
+			description: {
+				serverName: 'description', //string?
+				sendToServer: true
 			}
 		};
 	}
 
 }
 
-export default ScopeModel;
+export default AttributeModel;

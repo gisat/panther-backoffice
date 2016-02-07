@@ -68,7 +68,7 @@ class AULevelModel extends Model {
 				serverName: 'symbologies', //ids
 				sendToServer: true,
 				transformForLocal: function (data) {
-					return StyleStore.getFiltered(data)
+					return StyleStore.getFiltered({key: data})
 				},
 				transformForServer: this.getKeys,
 				isPromise: true,
