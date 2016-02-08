@@ -14,7 +14,6 @@ var SingleValue = React.createClass({
 		if(option.special) {
 			return (
 				<div>
-					<span className="option-id">{option.key}</span>
 					<span>{option.name}</span>
 				</div>
 			);

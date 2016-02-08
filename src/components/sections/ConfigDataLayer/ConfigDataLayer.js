@@ -26,7 +26,8 @@ import PlaceStore from '../../../stores/PlaceStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
 import AULevelStore from '../../../stores/AULevelStore';
-//import AttributeStore from '../../../stores/AttributeStore';
+import AttributeStore from '../../../stores/AttributeStore';
+import AttributeSetStore from '../../../stores/AttributeSetStore';
 import PeriodStore from '../../../stores/PeriodStore';
 import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
@@ -116,7 +117,9 @@ var initialState = {
 	valueAUScope: [],
 	valuesAUPlaces: [],
 	valueAULevel: [],
-	dataLayerColumns: null
+	dataLayerColumns: null,
+	destinationsVL: null,
+	destinationsAU: null
 };
 
 
@@ -157,7 +160,7 @@ class ConfigDataLayer extends Component {
 			vectorLayerTemplates: VectorLayerStore.getAll(),
 			rasterLayerTemplates: RasterLayerStore.getAll(),
 			auLevels: AULevelStore.getAll(),
-			//attributes: AttributeStore.getAll(),
+			attributeSets: AttributeSetStore.getAll(),
 			periods: PeriodStore.getAll(),
 			layer: DataLayerStore.getById(props.selectorValue),
 			layerRelations: ObjectRelationStore.getByDataSource(props.selectorValue),
@@ -176,6 +179,9 @@ class ConfigDataLayer extends Component {
 		store2state.layerRelations.then(function(relations) {
 			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations),keys);
 		});
+		store2state.attributeSets.then(function(attributeSets) {
+			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets),keys);
+		});
 		Promise.all([store2state.layerRelations, store2state.dataLayerColumns]).then(function([relations, columns]) {
 			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.columns2state(columns, relations),keys);
 		});
@@ -183,7 +189,6 @@ class ConfigDataLayer extends Component {
 
 	_onStoreChange(keys) {
 		console.log("_onStoreChange() ===============");
-		// todo updates from all stores every time - should it?
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -223,7 +228,7 @@ class ConfigDataLayer extends Component {
 		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
 		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
 		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		//AttributeStore.addChangeListener(this._onStoreChange);
+		AttributeSetStore.addChangeListener(this._onStoreChange);
 		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
 		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
@@ -237,7 +242,7 @@ class ConfigDataLayer extends Component {
 		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
 		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
 		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		//AttributeStore.removeChangeListener(this._onStoreChange);
+		AttributeSetStore.removeChangeListener(this._onStoreChange);
 		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
 		ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
@@ -296,6 +301,40 @@ class ConfigDataLayer extends Component {
 		}
 		//console.log(isIt);
 		return isIt;
+	}
+
+
+	/**
+	 * Read relations from corresponding ObjectRelation objects.
+	 * Called in store2state().
+	 * @param relations
+	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
+	 */
+	atts2state(attributeSets) {
+		var ret = {
+			destinationsVL: null,
+			destinationsAU: null
+		};
+		let attsetatts = [];
+		if (attributeSets) {
+			for (let attset of attributeSets) {
+				if(attset.attributes) {
+					for (let att of attset.attributes) {
+						let object = {
+							key: attset.key + "-" + att.key,
+							name: attset.name + " " + att.name,
+							attributeName: att.name,
+							attributeSetName: attset.name
+						};
+						attsetatts.push(object);
+					}
+				}
+			}
+		}
+		console.log("attsetatts",attsetatts); // todo does not actually work, eh
+		ret.destinationsVL = _.union(VLDESTINATIONS,attsetatts);
+		ret.destinationsAU = _.union(AUDESTINATIONS,attsetatts);
+		return ret;
 	}
 
 	/**
@@ -733,7 +772,7 @@ class ConfigDataLayer extends Component {
 						scopes={this.state.scopes}
 						places={this.state.places}
 						periods={this.state.periods}
-						destinations={VLDESTINATIONS}
+						destinations={this.state.destinationsVL}
 						valueTemplate={this.state.valueVLTemplate}
 						valueScope={this.state.valueVLScope}
 						valuesPlaces={this.state.valuesVLPlaces}
@@ -776,7 +815,7 @@ class ConfigDataLayer extends Component {
 						scopes={this.state.scopes}
 						places={this.state.places}
 						periods={this.state.periods}
-						destinations={AUDESTINATIONS}
+						destinations={this.state.destinationsAU}
 						valueLevel={this.state.valueAULevel}
 						valueScope={this.state.valueAUScope}
 						valuesPlaces={this.state.valuesAUPlaces}
