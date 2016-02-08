@@ -4,6 +4,9 @@ import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 
+import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
+import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
+
 
 
 class ConfigDataLayerVector extends Component{
@@ -122,6 +125,8 @@ class ConfigDataLayerVector extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={this.props.destinations}
+									optionComponent={OptionDestination}
+									singleValueComponent={SingleValueDestination}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -149,6 +154,8 @@ class ConfigDataLayerVector extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={this.props.destinations}
+									optionComponent={OptionDestination}
+									singleValueComponent={SingleValueDestination}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -176,6 +183,8 @@ class ConfigDataLayerVector extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={this.props.destinations}
+									optionComponent={OptionDestination}
+									singleValueComponent={SingleValueDestination}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
@@ -203,6 +212,8 @@ class ConfigDataLayerVector extends Component{
 									//onChange={this.onChangeAttSet.bind(this)}
 									//loadOptions={this.getPlaces}
 									options={this.props.destinations}
+									optionComponent={OptionDestination}
+									singleValueComponent={SingleValueDestination}
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
