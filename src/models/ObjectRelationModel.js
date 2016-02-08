@@ -50,9 +50,9 @@ class ObjectRelationModel extends Model {
 				},
 				isPromise: true
 			},
-			layerType: {
-				serverName: 'layerType' // raster / vector / au ?unnecessary in this direction?
-			},
+			//layerType: {
+			//	serverName: 'layerType' // raster / vector / au ?unnecessary in this direction?
+			//},
 			layerObject: {
 				serverName: 'areaTemplate', //id
 				sendToServer: true,
@@ -122,26 +122,46 @@ class ObjectRelationModel extends Model {
 				serverName: 'parentColumn', //string
 				sendToServer: false //for now
 			},
+			//columnMap: {
+			//	serverName: 'columnMap', //object {column: string, attribute: id}
+			//	sendToServer: true,
+			//	transformForLocal: function (data) {
+			//		if(data) {
+			//			let ret = data.map(function(obj){
+			//				return {
+			//					column: obj.column,
+			//					attribute: AttributeStore.getById(obj.attribute)
+			//				};
+			//			});
+			//			return Promise.resolve(ret);
+			//		}
+			//		return Promise.resolve({});
+			//	},
+			//	transformForServer: function (model) {
+			//		return []; // todo
+			//	},
+			//	isPromise: true,
+			//	isArray: true
+			//}
 			columnMap: {
 				serverName: 'columnMap', //object {column: string, attribute: id}
 				sendToServer: true,
-				transformForLocal: function (data) {
-					if(data) {
-						let ret = data.map(function(obj){
-							return {
-								column: obj.column,
-								attribute: AttributeStore.getById(obj.attribute)
-							};
-						});
-						return Promise.resolve(ret);
+				isArrayOfNested: true,
+				model: {
+					column: {
+						serverName: 'column',
+						sendToServer: true
+					},
+					attribute: {
+						serverName: 'attribute',
+						sendToServer: true,
+						transformForLocal: function (data) {
+							return AttributeStore.getById(data)
+						},
+						transformForServer: this.getKey,
+						isPromise: true
 					}
-					return Promise.resolve({});
-				},
-				transformForServer: function (model) {
-					return []; // todo
-				},
-				isPromise: true,
-				isArray: true
+				}
 			}
 		};
 	}
