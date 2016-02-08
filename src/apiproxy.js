@@ -39,10 +39,8 @@ export default function(proxyRequest, proxyResponse){
 			'Cookie': cookies.join("; ")
 		}
 	};
-	if(formData.hasOwnProperty("data") && Object.keys(formData.data).length){
-		options.formData = {
-			data: JSON.stringify(formData.data)
-		};
+	if(formData.hasOwnProperty("formData") && Object.keys(formData.formData).length){
+		options.formData = formData.formData;
 	}
 
 	if(logLikeCrazy) console.log("  ", method.toUpperCase(), url, "\n-----------\n", options, "\n\n");

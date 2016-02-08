@@ -1,6 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ConfigDataLayerVector.css';
-import withStyles from '../../../decorators/withStyles';
 
 import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
@@ -8,7 +6,6 @@ import UIObjectSelect from '../../atoms/UIObjectSelect';
 
 
 
-@withStyles(styles)
 class ConfigDataLayerVector extends Component{
 
 	static propTypes = {

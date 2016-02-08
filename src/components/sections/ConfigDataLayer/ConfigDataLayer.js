@@ -28,6 +28,7 @@ import RasterLayerStore from '../../../stores/RasterLayerStore';
 import AULevelStore from '../../../stores/AULevelStore';
 //import AttributeStore from '../../../stores/AttributeStore';
 import PeriodStore from '../../../stores/PeriodStore';
+import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
 const LAYERTYPES = [
 	{key: "vector", name: "Vector layer"},
@@ -123,7 +124,8 @@ var initialState = {
 	valuesRLPeriods: [],
 	valueAUScope: [],
 	valuesAUPlaces: [],
-	valueAULevel: []
+	valueAULevel: [],
+	dataLayerColumns: null
 };
 
 
@@ -167,7 +169,8 @@ class ConfigDataLayer extends Component {
 			//attributes: AttributeStore.getAll(),
 			periods: PeriodStore.getAll(),
 			layer: DataLayerStore.getById(props.selectorValue),
-			layerRelations: ObjectRelationStore.getByDataSource(props.selectorValue)
+			layerRelations: ObjectRelationStore.getByDataSource(props.selectorValue),
+			dataLayerColumns: DataLayerColumnsStore.getByDataSource(props.selectorValue)
 		};
 	}
 
@@ -230,6 +233,7 @@ class ConfigDataLayer extends Component {
 		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
 		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
+		DataLayerColumnsStore.addChangeListener(this._onStoreChange.bind(this,["dataLayerColumns"]));
 		this.setStateFromStores();
 	}
 
@@ -243,6 +247,7 @@ class ConfigDataLayer extends Component {
 		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
 		ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
+		DataLayerColumnsStore.removeChangeListener(this._onStoreChange.bind(this,["dataLayerColumns"]));
 	}
 
 	componentWillReceiveProps(newProps) {

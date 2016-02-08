@@ -24,7 +24,7 @@ class Store extends EventEmitter {
 	 * To be overridden
 	 */
 	getApiUrl(){
-		console.err("getApiUrl not overridden");
+		console.error("getApiUrl not overridden");
 	}
 
 	getApiLoadMethod(){
@@ -32,7 +32,7 @@ class Store extends EventEmitter {
 	}
 
 	getInstance(options,data){
-		//console.err("getInstance not overridden");
+		console.error("getInstance not overridden");
 		return {};
 	}
 
@@ -76,19 +76,19 @@ class Store extends EventEmitter {
 	create(model) {
 		var object = model.serialize();
 		var method = "POST";
-		return this.request(method, object);
+		return this.request(method, {data: object});
 	}
 
 	update(model) {
 		var object = model.serialize();
 		var method = "PUT";
-		return this.request(method, object);
+		return this.request(method, {data: object});
 	}
 
 	delete(model) {
 		var object = model.serialize();
 		var method = "DELETE";
-		return this.request(method, object);
+		return this.request(method, {data: object});
 	}
 
 	handle(actionData) {
@@ -118,74 +118,73 @@ class Store extends EventEmitter {
 		//shouldReturnData parameter removed. Respectively never commited.
 		//It just returns data if there are some.
 
-		var me = this;
+		var thisStore = this;
 		return new Promise(function (resolve, reject) {
 
 
 			// todo: Request API directly. Need to solve CORS credentials problem
-			//var url = apiProtocol + apiHost + path.join(apiPath, me.getApiUrl()).replace(/\\/g, "/");
-			//var method = "GET";
-			//
-			//superagent(method.toUpperCase(), url)
-			//	.send({data: object})
-			//	.withCredentials()
-			//	.set('Access-Control-Allow-Origin', 'true')
-			//	.set('Accept', 'application/json')
-			//	.set('Access-Control-Allow-Credentials', 'true')
-			//	.end(function(err, res){
-			//
-			//		if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers") {
-			//			console.log("RES1: ", res);
-			//			console.log("RES1 REQ METHOD: " + res.req.method);
-			//		}
-			//
-			//
-			//		if(err || typeof res == 'undefined'){
-			//			reject(err);
-			//			return;
-			//		}
-			//		var ret = [];
-			//		var responseJson = JSON.parse(res.text);
-			//		//console.log("Response JSON: ", responseJson, "%%%%%%%%%%%%%%%%%%%%%%%%%%");
-			//		if(typeof responseJson.data == 'undefined'){
-			//			if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers")
-			//				console.log("((((((((((((((((( LAYERS no data )))))))))))))))))");
-			//			//reject("no data attribute");
-			//			return;
-			//		}else{
-			//			if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers")
-			//				console.log("<<<<<<<<<<<<<<<<<< LAYERS OK >>>>>>>>>>>>>>>>>>>>>");
-			//		}
-			//		if(responseJson.data.hasOwnProperty("_id")) {
-			//			responseJson.data = [responseJson.data];
-			//		}
-			//		for(let obj of responseJson.data){
-			//			let instance = me.getInstance(null,obj);
-			//			if(instance){
-			//				ret.push(instance);
-			//			}
-			//			//ret.push(new DataLayerModel(obj));
-			//		}
-			//		if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers")
-			//			console.log("RETURNING: ", ret);
-			//		resolve(ret);
-			//	});
-			///////////////////////////////////
+			/*var url = apiProtocol + apiHost + path.join(apiPath, me.getApiUrl()).replace(/\\/g, "/");
+			var method = "GET";
 
+			superagent(method.toUpperCase(), url)
+				.send({data: object})
+				.withCredentials()
+				.set('Access-Control-Allow-Origin', 'true')
+				.set('Accept', 'application/json')
+				.set('Access-Control-Allow-Credentials', 'true')
+				.end(function(err, res){
+
+					if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers") {
+						console.log("RES1: ", res);
+						console.log("RES1 REQ METHOD: " + res.req.method);
+					}
+
+
+					if(err || typeof res == 'undefined'){
+						reject(err);
+						return;
+					}
+					var ret = [];
+					var responseJson = JSON.parse(res.text);
+					//console.log("Response JSON: ", responseJson, "%%%%%%%%%%%%%%%%%%%%%%%%%%");
+					if(typeof responseJson.data == 'undefined'){
+						if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers")
+							console.log("((((((((((((((((( LAYERS no data )))))))))))))))))");
+						//reject("no data attribute");
+						return;
+					}else{
+						if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers")
+							console.log("<<<<<<<<<<<<<<<<<< LAYERS OK >>>>>>>>>>>>>>>>>>>>>");
+					}
+					if(responseJson.data.hasOwnProperty("_id")) {
+						responseJson.data = [responseJson.data];
+					}
+					for(let obj of responseJson.data){
+						let instance = me.getInstance(null,obj);
+						if(instance){
+							ret.push(instance);
+						}
+						//ret.push(new DataLayerModel(obj));
+					}
+					if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers")
+						console.log("RETURNING: ", ret);
+					resolve(ret);
+				});
+			/////////////////////////////////// */
 
 
 			// todo Temporary use of API proxy
 			var url = path.resolve(publicPath, "api-proxy")
 					// append METHOD and last API directory, just for better debugging
-					+ "?" + method.toUpperCase() + "-" + me.getApiUrl().split("/").pop();
+					+ "?" + method.toUpperCase() + "-" + thisStore.getApiUrl().split("/").pop();
 			superagent
 			.post(url)
-			.send({apiUrl: me.getApiUrl()})
+			.send({apiUrl: thisStore.getApiUrl()})
 			.send({method: method})
 			.send({ssid: "3ja43byvd8uafb11uglakyuclpgscig6"})
 			.send({sessionid: "hflfhdxabpcjjryd7vu0mqr6ms0arm6t"})
 			.send({csrftoken: "VNsl5vgDXeEDRl3J4NgNt8BjBfmHgD9b"})
-			.send({data: object})
+			.send({formData: object})
 			.end(function(err, res){
 				if(err || typeof res == 'undefined'){
 					reject(err);
@@ -205,17 +204,24 @@ class Store extends EventEmitter {
 				}
 
 				// instantiate objects with models
-				var ret = [];
-				for (let obj of responseJson.data) {
-					let instance = me.getInstance(null,obj);
-					if (instance) {
-						ret.push(instance);
-					}
-				}
-				resolve(ret);
-			});
-			///////////////////////////////////
+				if(typeof responseJson.data == "string") {
 
+					let instance = thisStore.getInstance(null, responseJson.data);
+					resolve(instance);
+
+				} else {
+
+					var ret = [];
+					for (let obj of responseJson.data) {
+						let instance = thisStore.getInstance(null, obj);
+						if (instance) {
+							ret.push(instance);
+						}
+					}
+					resolve(ret);
+
+				}
+			});
 
 
 
