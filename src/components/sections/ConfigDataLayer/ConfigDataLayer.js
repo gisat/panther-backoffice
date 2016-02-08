@@ -176,6 +176,9 @@ class ConfigDataLayer extends Component {
 		store2state.layerRelations.then(function(relations) {
 			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations),keys);
 		});
+		Promise.all([store2state.layerRelations, store2state.dataLayerColumns]).then(function([relations, columns]) {
+			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.columns2state(columns, relations),keys);
+		});
 	}
 
 	_onStoreChange(keys) {
@@ -293,6 +296,134 @@ class ConfigDataLayer extends Component {
 		}
 		//console.log(isIt);
 		return isIt;
+	}
+
+	/**
+	 * Prepare columns and selects relations.
+	 * Called in store2state().
+	 * @param columns
+	 * @param relations
+	 * @returns {{layerType: null, valueVLTemplate: Array, valueVLScope: Array, valuesVLPlaces: Array, valuesVLPeriods: Array, valueRLTemplate: Array, valueRLScope: Array, valuesRLPlaces: Array, valuesRLPeriods: Array, valueAUScope: Array, valuesAUPlaces: Array, valueAULevel: Array}}
+	 */
+	columns2state(columns, relations) {
+		var ret = {
+			vectorColumnMap: {
+				"code_00": {
+					valueUseAs: ["I"],
+					valuesPeriods: []
+				},
+				"Shape_Leng": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"DIDI": {
+					valueUseAs: ["P"],
+					valuesPeriods: []
+				},
+				"LIDI": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"ahoj": {
+					valueUseAs: [874],
+					valuesPeriods: [277]
+				},
+				"-o-": {
+					valueUseAs: [147],
+					valuesPeriods: [277, 375, 278, 5079]
+				},
+				"XYZ": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"Area": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"78784": {
+					valueUseAs: [147],
+					valuesPeriods: []
+				},
+				"UFO": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"Area-51": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"asi-nic": {
+					valueUseAs: [147],
+					valuesPeriods: [5079, 375]
+				},
+				"tady-nic": {
+					valueUseAs: [],
+					valuesPeriods: []
+				}
+			},
+
+			auColumnMap: {
+				"777": {
+					valueUseAs: ["I"],
+					valuesPeriods: []
+				},
+				"x-faktor": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"AC_00": {
+					valueUseAs: ["P"],
+					valuesPeriods: []
+				},
+				"pp-faktor": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"UF": {
+					valueUseAs: ["N"],
+					valuesPeriods: []
+				},
+				"Urban": {
+					valueUseAs: [87],
+					valuesPeriods: [5080]
+				},
+				"LLL": {
+					valueUseAs: [87],
+					valuesPeriods: []
+				},
+				"OP-faktor": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"K-NICEMU!": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"K-NECENMU": {
+					valueUseAs: [87],
+					valuesPeriods: [375, 5079]
+				},
+				"asiapop": {
+					valueUseAs: [87],
+					valuesPeriods: [5080]
+				},
+				"koreapop": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"europop": {
+					valueUseAs: [],
+					valuesPeriods: []
+				},
+				"afropop": {
+					valueUseAs: [],
+					valuesPeriods: []
+				}
+			}
+		};
+
+		ret.savedColumnsState = ret; // save store state for comparison with changed local
+		return ret;
 	}
 
 	/**

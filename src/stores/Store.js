@@ -15,9 +15,9 @@ class Store extends EventEmitter {
 	constructor() {
 		super();
 		this._models = this.load(); //mozna ne tady ale primo do filtru atd. lazy load
-		//this._models.then(function(models){
-		//	console.log("Store > constructor > _models",models);
-		//});
+		Promise.resolve(this._models).then(function(models){
+			console.log("Store > constructor > _models",models);
+		});
 	}
 
 	/**
