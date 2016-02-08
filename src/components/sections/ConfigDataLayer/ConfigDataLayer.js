@@ -165,7 +165,7 @@ class ConfigDataLayer extends Component {
 			places: PlaceStore.getAll(),
 			vectorLayerTemplates: VectorLayerStore.getAll(),
 			rasterLayerTemplates: RasterLayerStore.getAll(),
-			//auLevels: AULevelStore.getAll(),
+			auLevels: AULevelStore.getAll(),
 			//attributes: AttributeStore.getAll(),
 			periods: PeriodStore.getAll(),
 			layer: DataLayerStore.getById(props.selectorValue),
@@ -228,7 +228,7 @@ class ConfigDataLayer extends Component {
 		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
 		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
 		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
-		//AULevelStore.addChangeListener(this._onStoreChange);
+		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevels"]));
 		//AttributeStore.addChangeListener(this._onStoreChange);
 		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
@@ -242,7 +242,7 @@ class ConfigDataLayer extends Component {
 		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
 		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
 		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
-		//AULevelStore.removeChangeListener(this._onStoreChange);
+		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
 		//AttributeStore.removeChangeListener(this._onStoreChange);
 		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
@@ -407,6 +407,18 @@ class ConfigDataLayer extends Component {
 				values.template = this.state.valueRLTemplate[0];
 				values.places = this.state.valuesRLPlaces;
 				values.periods = this.state.valuesRLPeriods;
+				break;
+			case "vector":
+				layerTemplates = this.state.vectorLayerTemplates;
+				values.template = this.state.valueVLTemplate[0];
+				values.places = this.state.valuesVLPlaces;
+				values.periods = this.state.valuesVLPeriods;
+				break;
+			case "au":
+				layerTemplates = this.state.auLevels;
+				values.template = this.state.valueAULevel[0];
+				values.places = this.state.valuesAUPlaces;
+				values.periods = [null];
 				break;
 		}
 		var layerTemplate = _.findWhere(layerTemplates,{key:values.template});
