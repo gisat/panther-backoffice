@@ -317,7 +317,7 @@ class ConfigDataLayer extends Component {
 					valuesPeriods: []
 				},
 				"DIDI": {
-					valueUseAs: ["P"],
+					valueUseAs: ["N"],
 					valuesPeriods: []
 				},
 				"LIDI": {
