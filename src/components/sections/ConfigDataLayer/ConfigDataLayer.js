@@ -67,22 +67,13 @@ const AULEVELS = [
 	{key: 5, name: "GADM4"}
 ];
 const VLDESTINATIONS = [
-	{key: "I", isAttribute: false, name: 'FID (feature identifier)'},
-	{key: "N", isAttribute: false, name: 'Feature name'},
-	{key: 220, isAttribute: true, attset: "Change code", name: 'LCF code'},
-	{key: 221, isAttribute: true, attset: "Change code", name: 'Current code'},
-	{key: 222, isAttribute: true, attset: "Change code", name: 'Previous code'},
-	{key: 223, isAttribute: true, attset: "Change code", name: 'UF code'},
-	{key: 287, isAttribute: true, attset: "Status code", name: 'Code'},
-	{key: 315, isAttribute: true, attset: "Aggregated LC Classes", name: 'Urban fabric'},
-	{key: 316, isAttribute: true, attset: "Aggregated LC Classes", name: 'Artificial areas'},
-	{key: 317, isAttribute: true, attset: "Aggregated LC Classes", name: 'Natural and semi-natural areas'},
-	{key: 318, isAttribute: true, attset: "Aggregated LC Classes", name: 'Water'}
+	{key: "I", special: true, name: 'FID (feature identifier)'},
+	{key: "N", special: true, name: 'Feature name'}
 ];
 const AUDESTINATIONS = [
-	{key: "I", isAttribute: false, name: 'FID (feature identifier)'},
-	{key: "N", isAttribute: false, name: 'Feature name'},
-	{key: "P", isAttribute: false, name: 'Parent feature identifier'}
+	{key: "I", special: true, name: 'FID (feature identifier)'},
+	{key: "N", special: true, name: 'Feature name'},
+	{key: "P", special: true, name: 'Parent feature identifier'}
 ];
 const PERIODS = [
 	{key: 1, name: '1990'},
