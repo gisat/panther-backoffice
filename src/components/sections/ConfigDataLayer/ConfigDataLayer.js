@@ -342,10 +342,11 @@ class ConfigDataLayer extends Component {
 	 * Called in store2state().
 	 * @param columns
 	 * @param relations
-	 * @returns {{layerType: null, valueVLTemplate: Array, valueVLScope: Array, valuesVLPlaces: Array, valuesVLPeriods: Array, valueRLTemplate: Array, valueRLScope: Array, valuesRLPlaces: Array, valuesRLPeriods: Array, valueAUScope: Array, valuesAUPlaces: Array, valueAULevel: Array}}
+	 * @returns {{auColumnMap: {}, vectorColumnMap: {}}}
 	 */
 	columns2state(columns, relations) {
-		var ret = {
+		//console.log("RELATIONS:", relations);
+		var mock = {
 			vectorColumnMap: {
 				"code_00": {
 					valueUseAs: ["I"],
@@ -460,9 +461,60 @@ class ConfigDataLayer extends Component {
 				}
 			}
 		};
+		mock.savedColumnsState = mock;
 
+
+		var ret = {
+			auColumnMap: {},
+			vectorColumnMap: {}
+		};
+
+		// create empty columns structure
+		_.each(columns, function(value){
+			//console.log("..........", value.name);
+			let columnRelation = {
+				valueUseAs: [],
+				valuesPeriods: []
+			};
+			ret.auColumnMap[value.name] = columnRelation;
+			ret.vectorColumnMap[value.name] = columnRelation;
+		});
+
+		// fill it with relations (valueUseAs's and valuesPeriods')
+		_.each(relations, function(relation){
+			if(relation.hasOwnProperty("fidColumn") && relation.fidColumn!==null && relation.fidColumn.length){
+				this.addRelationToColumnMap(ret, relation.fidColumn, "I", relation.period.key);
+			}
+			if(relation.hasOwnProperty("nameColumn") && relation.nameColumn!==null && relation.nameColumn.length){
+				this.addRelationToColumnMap(ret, relation.nameColumn, "N", relation.period.key);
+			}
+			if(relation.hasOwnProperty("parentColumn") && relation.parentColumn!==null && relation.parentColumn.length){
+				this.addRelationToColumnMap(ret, relation.parentColumn, "P", relation.period.key, true);
+			}
+
+			if(relation.hasOwnProperty("columnMap")){
+				_.each(relation.columnMap, function(column){
+					this.addRelationToColumnMap(ret, column.column, column.attribute.key, relation.period.key);
+				}, this);
+			}
+		}, this);
+
+		//console.log("_________ columns2state returns _________:\n", ret);
 		ret.savedColumnsState = ret; // save store state for comparison with changed local
 		return ret;
+		//return mock;
+	}
+	addRelationToColumnMap(columnMap, column, value, period, withoutParentColumn){
+		columnMap.auColumnMap[column].valueUseAs =
+			_.union(columnMap.auColumnMap[column].valueUseAs, [value]);
+		columnMap.auColumnMap[column].valuesPeriods =
+			_.union(columnMap.auColumnMap[column].valuesPeriods, [period]);
+		if(!withoutParentColumn) {
+			columnMap.vectorColumnMap[column].valueUseAs =
+				_.union(columnMap.vectorColumnMap[column].valueUseAs, [value]);
+			columnMap.vectorColumnMap[column].valuesPeriods =
+				_.union(columnMap.vectorColumnMap[column].valuesPeriods, [period]);
+		}
 	}
 
 	/**
