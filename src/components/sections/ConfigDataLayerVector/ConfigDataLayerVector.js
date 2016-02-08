@@ -130,7 +130,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
-									value="222"
+									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">
@@ -159,7 +159,7 @@ class ConfigDataLayerVector extends Component{
 									valueKey="key"
 									labelKey="name"
 									//inputProps={selectInputProps}
-									value="221"
+									value=""
 								/>
 							</td>
 							<td className="allowOverflow resetui">

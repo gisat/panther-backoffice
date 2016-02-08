@@ -29,7 +29,7 @@ var SingleValue = React.createClass({
 		}
 	},
 	render: function render() {
-		var specialClass = option.special ? "special-option" : "";
+		var specialClass = this.props.value.special ? "special-option" : "";
 		var classNames = classes('Select-placeholder', "UICustomSelect-value-place", this.props.value && this.props.value.className, specialClass);
 		var label = this.props.value ? this.renderValue(this.props.value) : this.props.placeholder;
 		return React.createElement(
