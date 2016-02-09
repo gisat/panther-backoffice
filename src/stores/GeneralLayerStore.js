@@ -29,6 +29,7 @@ class GeneralLayerStore extends Store {
 				if(vector) resolve(vector);
 				if(raster) resolve(raster);
 				if(au) resolve(au);
+				if(!vector && !raster && !au) resolve(null);
 			});
 		});
 	}

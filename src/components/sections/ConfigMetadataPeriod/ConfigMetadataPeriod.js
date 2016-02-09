@@ -9,7 +9,7 @@ import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
 import SaveButton from '../../atoms/SaveButton';
 
-import ObjectTypes from '../../../constants/ObjectTypes';
+import ObjectTypes, {model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 import PeriodStore from '../../../stores/PeriodStore';
 
@@ -131,9 +131,18 @@ class ConfigMetadataPeriod extends Component{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	createNew() {
+		let newModel = new model[ObjectTypes.PERIOD](object);
+		var actionData = [], layerTemplates = [], values = {};
+		actionData.push({type:"create",model:newModel});
+		ActionCreator.handleObjects(actionData,ObjectTypes.PERIOD);
+	}
 
-		//ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
+	saveForm() {
+		var model = this.state.period;
+		var actionData = [], layerTemplates = [], values = {};
+		actionData.push({type:"update",model:model});
+		ActionCreator.handleObjects(actionData,ObjectTypes.PERIOD);
 	}
 
 	onChangeActive() {

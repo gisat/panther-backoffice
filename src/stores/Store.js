@@ -211,14 +211,17 @@ class Store extends EventEmitter {
 
 				} else {
 
-					var ret = [];
+					var ret = [], promises = [];
 					for (let obj of responseJson.data) {
 						let instance = thisStore.getInstance(null, obj);
 						if (instance) {
 							ret.push(instance);
+							promises.push(instance.ready);
 						}
 					}
-					resolve(ret);
+					Promise.all(promises).then(function(){
+						resolve(ret);
+					});
 
 				}
 			});

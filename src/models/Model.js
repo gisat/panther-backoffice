@@ -8,13 +8,15 @@ class Model {
 		if(data){
 			var self = this;
 			var resolvePromise = this.resolveForLocal(data); // todo do we ever need both options and data?
-			return new Promise(function(resolve,reject){
+			this.ready = new Promise(function(resolve,reject){
 				resolvePromise.then(function(opts){
 					_.assign(self,opts);
+					resolve();
 				});
 			});
 		} else {
 			_.assign(this,options);
+			this.ready = Promise.resolve();
 		}
 	}
 
