@@ -21,7 +21,7 @@ class DataLayerColumnsStore extends Store {
 	}
 
 	getByDataSource(dataLayerName){
-		if(!dataLayerName) return null;
+		if(!dataLayerName) return [];
 		this._models[dataLayerName] = this._models[dataLayerName] || null;
 		this.load();
 		return this._models[dataLayerName];

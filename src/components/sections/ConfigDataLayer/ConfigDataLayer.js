@@ -117,7 +117,9 @@ var initialState = {
 	valueAUScope: [],
 	valuesAUPlaces: [],
 	valueAULevel: [],
-	dataLayerColumns: null,
+	dataLayerColumns: [],
+	auColumnMap: {},
+	vectorColumnMap: {},
 	destinationsVL: [],
 	destinationsAU: []
 };
@@ -465,7 +467,7 @@ class ConfigDataLayer extends Component {
 		mock.savedColumnsState = mock;
 
 
-		var ret = {
+		let ret = {
 			auColumnMap: {},
 			vectorColumnMap: {}
 		};
@@ -500,8 +502,10 @@ class ConfigDataLayer extends Component {
 			}
 		}, this);
 
-		//console.log("_________ columns2state returns _________:\n", ret);
-		ret.savedColumnsState = ret; // save store state for comparison with changed local
+		console.log("_________ columns2state returns _________:\n", ret);
+		let savedColumnsState = {};
+		_.assign(savedColumnsState, ret);
+		ret.savedColumnsState = savedColumnsState; // save store state for comparison with changed local
 		return ret;
 		//return mock;
 	}
@@ -539,7 +543,7 @@ class ConfigDataLayer extends Component {
 	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
 	 */
 	relations2state(relations) {
-		var ret = {
+		let ret = {
 			layerType: null,
 			valueVLTemplate: [],
 			valueVLScope: [],
@@ -591,7 +595,9 @@ class ConfigDataLayer extends Component {
 					ret.valueAUScope = values.scope;
 					ret.valuesAUPlaces = values.places;
 			}
-			ret.relationsState = ret; // save store state for comparison with changed local
+			let relationsState = {};
+			_.assign(relationsState, ret);
+			ret.relationsState = relationsState; // save store state for comparison with changed local
 		}
 		return ret;
 	}
@@ -760,7 +766,7 @@ class ConfigDataLayer extends Component {
 
 	render() {
 
-		//console.log("render() ----------");
+		console.log("------------ CONFIG-DATA-LAYER RENDER -----------");
 		//console.log("this.state", this.state);
 		//console.log("this.state.relationsState", this.state.relationsState);
 
@@ -799,6 +805,9 @@ class ConfigDataLayer extends Component {
 
 		}
 
+		console.log("state DLC", this.state.dataLayerColumns);
+		console.log("state vecCM", this.state.vectorColumnMap);
+		console.log("state auCM", this.state.auColumnMap);
 
 		return (
 			<div>
@@ -844,6 +853,8 @@ class ConfigDataLayer extends Component {
 						valueScope={this.state.valueVLScope}
 						valuesPlaces={this.state.valuesVLPlaces}
 						valuesPeriods={this.state.valuesVLPeriods}
+						dataLayerColumns={this.state.dataLayerColumns}
+						vectorColumnMap={this.state.vectorColumnMap}
 						onChangeTemplate={this.onChangeObjectSelect.bind(this, "valueVLTemplate", VECTORLAYERTEMPLATES)}
 						onChangeScope={this.onChangeObjectSelect.bind(this, "valueVLScope", SCOPES)}
 						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesVLPlaces", PLACES)}
@@ -886,6 +897,8 @@ class ConfigDataLayer extends Component {
 						valueLevel={this.state.valueAULevel}
 						valueScope={this.state.valueAUScope}
 						valuesPlaces={this.state.valuesAUPlaces}
+						dataLayerColumns={this.state.dataLayerColumns}
+						auColumnMap={this.state.auColumnMap}
 						onChangeLevel={this.onChangeObjectSelect.bind(this, "valueAULevel", ObjectTypes.AU_LEVEL)}
 						onChangeScope={this.onChangeObjectSelect.bind(this, "valueAUScope", ObjectTypes.SCOPE)}
 						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesAUPlaces", ObjectTypes.PLACE)}

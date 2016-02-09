@@ -23,6 +23,8 @@ class ConfigDataLayerAnalytical extends Component{
 		valueLevel: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valueScope: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valuesPlaces: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+		dataLayerColumns: React.PropTypes.array.isRequired,
+		auColumnMap: React.PropTypes.object.isRequired,
 		onChangeLevel: React.PropTypes.func.isRequired,
 		onChangeScope: React.PropTypes.func.isRequired,
 		onChangePlaces: React.PropTypes.func.isRequired,

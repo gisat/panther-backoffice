@@ -22,6 +22,8 @@ class ConfigDataLayerVector extends Component{
 		valueScope: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valuesPlaces: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valuesPeriods: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+		dataLayerColumns: React.PropTypes.array.isRequired,
+		vectorColumnMap: React.PropTypes.object.isRequired,
 		onChangeTemplate: React.PropTypes.func.isRequired,
 		onChangeScope: React.PropTypes.func.isRequired,
 		onChangePlaces: React.PropTypes.func.isRequired,
