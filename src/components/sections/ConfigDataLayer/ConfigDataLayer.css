@@ -10,3 +10,12 @@
 	font-size: 1rem;
 	color: #999;
 }
+
+#ConfigDataLayerAnalyticalColumnTable thead tr th:first-child,
+#ConfigDataLayerVectorColumnTable thead tr th:first-child {
+	width:10rem;
+}
+#ConfigDataLayerAnalyticalColumnTable thead tr th:nth-child(3),
+#ConfigDataLayerVectorColumnTable thead tr th:nth-child(3) {
+	width:11rem;
+}

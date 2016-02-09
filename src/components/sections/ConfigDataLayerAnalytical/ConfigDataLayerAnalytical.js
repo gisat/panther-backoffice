@@ -1,14 +1,16 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ConfigDataLayerAnalytical.css';
-import withStyles from '../../../decorators/withStyles';
+//import styles from './ConfigDataLayerAnalytical.css';
+//import withStyles from '../../../decorators/withStyles';
 
 import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 
+import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
+import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
 
 
-@withStyles(styles)
+//@withStyles(styles)
 class ConfigDataLayerAnalytical extends Component{
 
 	static propTypes = {
