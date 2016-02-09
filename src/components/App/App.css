@@ -1318,24 +1318,45 @@ todo hex colours, button icons */
 	border-style: solid;
 	border-color: #4d8aff;
 }
-.UICustomSelect-place .Select-input,
-.UICustomSelect-keyname .Select-input {
+
+.UICustomSelect .Select-input {
 	margin-left: 2rem;
 }
-.UICustomSelect-place .Select-placeholder,
-.UICustomSelect-keyname .Select-placeholder {
+
+.UICustomSelect .Select-placeholder {
 	padding-right: 1.7rem;
 }
+
+.UICustomSelect-option.option-multiline {
+	border-bottom: 1px solid rgba(0,0,0,.07);
+}
+
+.UICustomSelect-option.special-option > div > span {
+	font-weight: bold;
+}
+
+.UICustomSelect-option .option-secondary,
+.ui td.resetui .UICustomSelect-option .option-secondary {
+	color: #bbb;
+	font-size: .95rem;
+}
+
 .UIObjectSelect .option-id,
+.ui td.resetui .UIObjectSelect .option-id,
 .UIObjectSelect .option-parent,
+.ui td.resetui .UIObjectSelect .option-parent,
 .UIObjectSelect-item .option-id,
+.ui td.resetui .UIObjectSelect-item .option-id,
 .UIObjectSelect-item .option-parent,
-.UICustomSelect-option-place .option-id,
-.UICustomSelect-option-place .option-parent,
-.UICustomSelect-value-place .option-id,
-.UICustomSelect-value-place .option-parent,
-.UICustomSelect-option-keyname .option-id,
-.UICustomSelect-value-keyname .option-id,
+.ui td.resetui .UIObjectSelect-item .option-parent,
+.UICustomSelect-option .option-id,
+.ui td.resetui .UICustomSelect-option .option-id,
+.UICustomSelect-option .option-parent,
+.ui td.resetui .UICustomSelect-option .option-parent,
+.UICustomSelect-value .option-id,
+.ui td.resetui .UICustomSelect-value .option-id,
+.UICustomSelect-value .option-parent,
+.ui td.resetui .UICustomSelect-value .option-parent,
 .puma-item .item-id,
 .row-select-config .option-id {
 	font-size: .95rem;
@@ -1343,17 +1364,19 @@ todo hex colours, button icons */
 	display: inline-block;
 	/*line-height: 1;*/
 }
-.UICustomSelect-value-place .option-id,
-.UICustomSelect-value-place .option-parent,
-.UICustomSelect-value-keyname .option-id,
+.UICustomSelect-value .option-id,
+.ui td.resetui .UICustomSelect-value .option-id,
+.UICustomSelect-value .option-parent,
+.ui td.resetui .UICustomSelect-value .option-parent,
 .puma-item .item-id {
 	color: #999;
 }
 .UIObjectSelect .option-id,
-.UICustomSelect-option-place .option-id,
-.UICustomSelect-value-place .option-id,
-.UICustomSelect-option-keyname .option-id,
-.UICustomSelect-value-keyname .option-id,
+.ui td.resetui .UIObjectSelect .option-id,
+.UICustomSelect-option .option-id,
+.ui td.resetui .UICustomSelect-option .option-id,
+.UICustomSelect-value .option-id,
+.ui td.resetui .UICustomSelect-value .option-id,
 .puma-item .item-id,
 .row-select-config .option-id  {
 	width: 2rem;
@@ -1363,23 +1386,29 @@ todo hex colours, button icons */
 	line-height: 1;
 }
 .UIObjectSelect-item-a .option-id,
+.ui td.resetui .UIObjectSelect-item-a .option-id,
 .UIObjectSelect-item-a .option-parent,
+.ui td.resetui .UIObjectSelect-item-a .option-parent,
 .rsc-row.ui.radio.checkbox label span.option-id {
 	font-size: .75rem;
 	color: #888;
 }
 
 .UIObjectSelect .option-parent,
+.ui td.resetui .UIObjectSelect .option-parent,
 .UIObjectSelect-item .option-parent,
-.UICustomSelect-option-place .option-parent,
-.UICustomSelect-value-place .option-parent {
+.ui td.resetui .UIObjectSelect-item .option-parent,
+.UICustomSelect-option .option-parent,
+.ui td.resetui .UICustomSelect-option .option-parent,
+.UICustomSelect-value .option-parent,
+.ui td.resetui .UICustomSelect-value .option-parent {
 	width: 4rem;
 	float: right;
 	text-align: right;
 	padding-right: .3rem;
 }
 
-.UICustomSelect-option-place.not-referenced:not(.is-focused) {
+.UICustomSelect-option.not-referenced:not(.is-focused) {
 	background: #fcf3e7;
 }
 
