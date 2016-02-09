@@ -504,6 +504,15 @@ class ConfigDataLayer extends Component {
 		return ret;
 		//return mock;
 	}
+
+	/**
+	 * Adds column / attribute relation to columnMap
+	 * @param columnMap
+	 * @param column
+	 * @param value
+	 * @param relation
+	 * @param notToVector
+	 */
 	addRelationToColumnMap(columnMap, column, value, relation, notToVector){
 		var period = null;
 		if(relation.hasOwnProperty("period") && relation.period!==null) {
