@@ -22,8 +22,7 @@ class ConfigDataLayerVector extends Component{
 		valueScope: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valuesPlaces: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valuesPeriods: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
-		dataLayerColumns: React.PropTypes.array.isRequired,
-		vectorColumnMap: React.PropTypes.object.isRequired,
+		columnMap: React.PropTypes.object.isRequired,
 		onChangeTemplate: React.PropTypes.func.isRequired,
 		onChangeScope: React.PropTypes.func.isRequired,
 		onChangePlaces: React.PropTypes.func.isRequired,
@@ -109,7 +108,7 @@ class ConfigDataLayerVector extends Component{
 
 
 
-				<h3>Tabular data</h3>
+				<h3>Tabular data</h3>{/* todo: Rename? */}
 				<Table celled className="fixed" id="ConfigDataLayerVectorColumnTable">
 					<thead>
 						<tr>

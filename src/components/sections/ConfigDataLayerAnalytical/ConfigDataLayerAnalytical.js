@@ -8,6 +8,7 @@ import UIObjectSelect from '../../atoms/UIObjectSelect';
 
 import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
 import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
+import ColumnTableRow from '../../elements/ColumnTableRow/ColumnTableRow';
 
 
 //@withStyles(styles)
@@ -23,8 +24,7 @@ class ConfigDataLayerAnalytical extends Component{
 		valueLevel: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valueScope: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valuesPlaces: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
-		dataLayerColumns: React.PropTypes.array.isRequired,
-		auColumnMap: React.PropTypes.object.isRequired,
+		columnMap: React.PropTypes.object.isRequired,
 		onChangeLevel: React.PropTypes.func.isRequired,
 		onChangeScope: React.PropTypes.func.isRequired,
 		onChangePlaces: React.PropTypes.func.isRequired,
@@ -100,7 +100,22 @@ class ConfigDataLayerAnalytical extends Component{
 					</thead>
 					<tbody>
 
-						<tr>
+
+					<ColumnTableRow
+						columnName="TEST2"
+						destinations={this.props.destinations}
+						destinationValue="P"
+						periods={this.props.periods}
+						selectedPeriods={[278]}
+					/>
+					<ColumnTableRow
+						columnName="TEST3"
+						destinations={this.props.destinations}
+						periods={this.props.periods}
+					/>
+
+
+					{/*<tr>
 							<td className="header">C_L1_1</td>
 							<td className="allowOverflow resetui">
 								<Select
@@ -503,7 +518,7 @@ class ConfigDataLayerAnalytical extends Component{
 									value=""
 								/>
 							</td>
-						</tr>
+						</tr>*/}
 
 					</tbody>
 				</Table>
