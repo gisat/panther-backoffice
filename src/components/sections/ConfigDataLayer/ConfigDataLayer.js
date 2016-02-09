@@ -118,8 +118,8 @@ var initialState = {
 	valuesAUPlaces: [],
 	valueAULevel: [],
 	dataLayerColumns: null,
-	destinationsVL: null,
-	destinationsAU: null
+	destinationsVL: [],
+	destinationsAU: []
 };
 
 
@@ -305,9 +305,9 @@ class ConfigDataLayer extends Component {
 
 
 	/**
-	 * Read relations from corresponding ObjectRelation objects.
+	 * Prepare options for data table selects
 	 * Called in store2state().
-	 * @param relations
+	 * @param attributeSets
 	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
 	 */
 	atts2state(attributeSets) {
@@ -324,14 +324,15 @@ class ConfigDataLayer extends Component {
 							key: attset.key + "-" + att.key,
 							name: attset.name + " " + att.name,
 							attributeName: att.name,
-							attributeSetName: attset.name
+							attributeSetName: attset.name,
+							attributeKey: att.key,
+							attributeSetKey: attset.key
 						};
 						attsetatts.push(object);
 					}
 				}
 			}
 		}
-		console.log("attsetatts",attsetatts); // todo does not actually work, eh
 		ret.destinationsVL = _.union(VLDESTINATIONS,attsetatts);
 		ret.destinationsAU = _.union(AUDESTINATIONS,attsetatts);
 		return ret;
@@ -885,9 +886,9 @@ class ConfigDataLayer extends Component {
 						valueLevel={this.state.valueAULevel}
 						valueScope={this.state.valueAUScope}
 						valuesPlaces={this.state.valuesAUPlaces}
-						onChangeLevel={this.onChangeObjectSelect.bind(this, "valueAULevel", AULEVELS)}
-						onChangeScope={this.onChangeObjectSelect.bind(this, "valueAUScope", SCOPES)}
-						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesAUPlaces", PLACES)}
+						onChangeLevel={this.onChangeObjectSelect.bind(this, "valueAULevel", ObjectTypes.AU_LEVEL)}
+						onChangeScope={this.onChangeObjectSelect.bind(this, "valueAUScope", ObjectTypes.SCOPE)}
+						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesAUPlaces", ObjectTypes.PLACE)}
 						onObjectClick={this.onObjectClick.bind(this)}
 						keyNameOptionFactory={this.keyNameOptionFactory.bind(this)}
 					/>
