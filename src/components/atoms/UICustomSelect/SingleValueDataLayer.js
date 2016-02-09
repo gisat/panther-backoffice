@@ -19,7 +19,7 @@ var SingleValue = React.createClass({
 		);
 	},
 	render: function render() {
-		var classNames = classes('Select-placeholder', "UICustomSelect-value-place", this.props.value && this.props.value.className);
+		var classNames = classes('Select-placeholder', "UICustomSelect-value", this.props.value && this.props.value.className);
 		var label = this.props.value ? this.renderValue(this.props.value) : this.props.placeholder;
 		return React.createElement(
 			'div',

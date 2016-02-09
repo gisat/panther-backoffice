@@ -58,7 +58,7 @@ class SelectorAnalysisSpatial extends Component{
 								options={ANALYSES}
 								optionComponent={OptionKeyName}
 								singleValueComponent={SingleValueKeyName}
-								className="UICustomSelect-keyname"
+								className="UICustomSelect"
 								valueKey="key"
 								labelKey="name"
 								inputProps={selectInputProps}

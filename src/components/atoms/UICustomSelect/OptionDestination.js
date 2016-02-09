@@ -42,9 +42,14 @@ var OptionDestination = React.createClass({
 		} else {
 			return (
 				<div>
-					<span className="option-id">{option.key}</span>
-					<span>{option.attributeSet}</span>
-					<span>{option.attribute}</span>
+					<div className="option-top">
+						<span className="option-id">{option.attributeSetKey}</span>
+						<span className="option-secondary">{option.attributeSetName}</span>
+					</div>
+					<div className="option-bottom">
+						<span className="option-id">{option.attributeKey}</span>
+						<span>{option.attributeName}</span>
+					</div>
 				</div>
 			);
 		}
@@ -53,7 +58,7 @@ var OptionDestination = React.createClass({
 		var option = this.props.option;
 		var label = option.create ? this.props.addLabelText.replace('{label}', option.label) : this.renderOption(option);
 		var specialClass = option.special ? "special-option" : "";
-		var optionClasses = classes(this.props.className, "UICustomSelect-option-place", option.className, specialClass);
+		var optionClasses = classes(this.props.className, "UICustomSelect-option", "option-multiline", option.className, specialClass);
 
 		return option.disabled ? (
 			<div className={optionClasses}

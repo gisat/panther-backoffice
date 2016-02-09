@@ -72,7 +72,7 @@ class SelectorPlace extends Component{
 									options={PLACES}
 									optionComponent={OptionPlace}
 									singleValueComponent={SingleValuePlace}
-									className="UICustomSelect-place"
+									className="UICustomSelect"
 									valueKey="key"
 									labelKey="place"
 									inputProps={selectInputProps}

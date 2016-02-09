@@ -44,7 +44,7 @@ var OptionPlace = React.createClass({
 	render () {
 		var option = this.props.option;
 		var label = option.create ? this.props.addLabelText.replace('{label}', option.label) : this.renderOption(option);
-		var optionClasses = classes(this.props.className, "UICustomSelect-option-place", option.className);
+		var optionClasses = classes(this.props.className, "UICustomSelect-option", option.className);
 
 		return option.disabled ? (
 			<div className={optionClasses}

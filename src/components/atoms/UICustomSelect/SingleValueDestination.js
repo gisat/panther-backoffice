@@ -21,15 +21,14 @@ var SingleValue = React.createClass({
 			return (
 				<div>
 					<span className="option-id">{option.key}</span>
-					<span>{option.attributeSet}</span>
-					<span>{option.attribute}</span>
+					<span>{option.attributeName}</span>
 				</div>
 			);
 		}
 	},
 	render: function render() {
 		var specialClass = (this.props.value && this.props.value.special) ? "special-option" : "";
-		var classNames = classes('Select-placeholder', "UICustomSelect-value-place", this.props.value && this.props.value.className, specialClass);
+		var classNames = classes('Select-placeholder', "UICustomSelect-value", this.props.value && this.props.value.className, specialClass);
 		var label = this.props.value ? this.renderValue(this.props.value) : this.props.placeholder;
 		return React.createElement(
 			'div',

@@ -39,7 +39,7 @@ class SelectorMetadataPeriod extends Component{
 								options={this.props.data}
 								optionComponent={OptionKeyName}
 								singleValueComponent={SingleValueKeyName}
-								className="UICustomSelect-keyname"
+								className="UICustomSelect"
 								valueKey="key"
 								labelKey="name"
 								value={this.props.value}

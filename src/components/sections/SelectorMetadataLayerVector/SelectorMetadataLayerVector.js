@@ -53,7 +53,7 @@ class SelectorMetadataLayerVector extends Component{
 								options={LAYERTEMPLATES}
 								optionComponent={OptionKeyName}
 								singleValueComponent={SingleValueKeyName}
-								className="UICustomSelect-keyname"
+								className="UICustomSelect"
 								valueKey="key"
 								labelKey="name"
 								inputProps={selectInputProps}
