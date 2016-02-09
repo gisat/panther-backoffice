@@ -42,7 +42,7 @@ class ConfigLinksByAttSetAULevel extends Component{
 				<h3 className="rsc-header">2000</h3>
 				{/* todo -> component */}
 				<div className="row-select-config">
-					<CheckboxFields type="grouped" radio name="rsc-asaul-623-2-1">
+					<CheckboxFields type="grouped" radio name="rsc-asaul-623-2-1" onChange={function(){}}>
 						<Checkbox key="asaul-data-42" className="rsc-row active expandable">
 							<UISVG src='icon-datalayers.isvg' className="positive" />
 							puma_hcmc_lulc_status_2000
@@ -192,7 +192,7 @@ class ConfigLinksByAttSetAULevel extends Component{
 				<h3 className="rsc-header">2010</h3>
 				{/* todo -> component */}
 				<div className="row-select-config">
-					<CheckboxFields type="grouped" radio name="rsc-asaul-623-2-1">
+					<CheckboxFields type="grouped" radio name="rsc-asaul-623-2-1" onChange={function(){}}>
 						<Checkbox key="asaul-data-42" className="rsc-row  expandable">
 							<UISVG src='icon-datalayers.isvg' className="positive" />
 							puma_hcmc_lulc_status_2010
