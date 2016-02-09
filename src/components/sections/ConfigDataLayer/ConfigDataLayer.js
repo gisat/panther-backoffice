@@ -483,18 +483,18 @@ class ConfigDataLayer extends Component {
 		// fill it with relations (valueUseAs's and valuesPeriods')
 		_.each(relations, function(relation){
 			if(relation.hasOwnProperty("fidColumn") && relation.fidColumn!==null && relation.fidColumn.length){
-				this.addRelationToColumnMap(ret, relation.fidColumn, "I", relation.period.key);
+				this.addRelationToColumnMap(ret, relation.fidColumn, "I", relation);
 			}
 			if(relation.hasOwnProperty("nameColumn") && relation.nameColumn!==null && relation.nameColumn.length){
-				this.addRelationToColumnMap(ret, relation.nameColumn, "N", relation.period.key);
+				this.addRelationToColumnMap(ret, relation.nameColumn, "N", relation);
 			}
 			if(relation.hasOwnProperty("parentColumn") && relation.parentColumn!==null && relation.parentColumn.length){
-				this.addRelationToColumnMap(ret, relation.parentColumn, "P", relation.period.key, true);
+				this.addRelationToColumnMap(ret, relation.parentColumn, "P", relation, true);
 			}
 
 			if(relation.hasOwnProperty("columnMap")){
 				_.each(relation.columnMap, function(column){
-					this.addRelationToColumnMap(ret, column.column, column.attribute.key, relation.period.key);
+					this.addRelationToColumnMap(ret, column.column, column.attribute.key, relation);
 				}, this);
 			}
 		}, this);
@@ -504,15 +504,20 @@ class ConfigDataLayer extends Component {
 		return ret;
 		//return mock;
 	}
-	addRelationToColumnMap(columnMap, column, value, period, withoutParentColumn){
+	addRelationToColumnMap(columnMap, column, value, relation, notToVector){
+		var period = null;
+		if(relation.hasOwnProperty("period") && relation.period!==null) {
+			period = relation.period.key;
+		}
 		columnMap.auColumnMap[column].valueUseAs =
 			_.union(columnMap.auColumnMap[column].valueUseAs, [value]);
-		columnMap.auColumnMap[column].valuesPeriods =
+		if(period) columnMap.auColumnMap[column].valuesPeriods =
 			_.union(columnMap.auColumnMap[column].valuesPeriods, [period]);
-		if(!withoutParentColumn) {
+
+		if(!notToVector) {
 			columnMap.vectorColumnMap[column].valueUseAs =
 				_.union(columnMap.vectorColumnMap[column].valueUseAs, [value]);
-			columnMap.vectorColumnMap[column].valuesPeriods =
+			if(period) columnMap.vectorColumnMap[column].valuesPeriods =
 				_.union(columnMap.vectorColumnMap[column].valuesPeriods, [period]);
 		}
 	}
