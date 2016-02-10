@@ -99,9 +99,7 @@ const THEMES = [
 ];
 
 var initialState = {
-	savedState: {
-		test: "something important"
-	},
+	savedState: {},
 	layerType: null,
 	scopes: [],
 	places: [],
