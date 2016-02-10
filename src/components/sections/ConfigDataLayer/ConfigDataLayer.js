@@ -36,37 +36,6 @@ const LAYERTYPES = [
 	{key: "raster", name: "Raster layer"},
 	{key: "au", name: "Analytical units layer"}
 ];
-const SCOPES = [
-	{key: 1, name: 'Local'},
-	{key: 2, name: 'National'},
-	{key: 3, name: 'Regional'}
-];
-const PLACES = [
-	{key: 1, scope: 1, name: 'Cebu City'},
-	{key: 2, scope: 1, name: 'Hai Phong'},
-	{key: 3, scope: 1, name: 'Ho Chi Minh City'},
-	{key: 4, scope: 1, name: 'Surabaya'},
-	{key: 52, scope: 2, name: 'Brunei'},
-	{key: 74, scope: 2, name: 'Japan'},
-	{key: 82, scope: 2, name: 'Laos'},
-	{key: 135, scope: 2, name: 'Vietnam'},
-	{key: 625, scope: 3, name: 'East Asia and Pacific'},
-];
-const VECTORLAYERTEMPLATES = [
-	{key: 1, name: 'Road network'},
-	{key: 2, name: 'Hospitals'},
-	{key: 3, name: 'Land cover'},
-	{key: 4, name: 'Land cover change'},
-	{key: 5, name: 'Possible low-income settlements (areals)'},
-	{key: 7, name: 'Possible low-income settlements (mid-points)'}
-];
-const AULEVELS = [
-	{key: 1, name: "AOI"},
-	{key: 2, name: "Core City x Outer Urban Zone"},
-	{key: 3, name: "GADM2"},
-	{key: 4, name: "GADM3"},
-	{key: 5, name: "GADM4"}
-];
 const VLDESTINATIONS = [
 	{key: "I", special: true, name: 'FID (feature identifier)'},
 	{key: "N", special: true, name: 'Feature name'}
@@ -76,27 +45,6 @@ const AUDESTINATIONS = [
 	{key: "N", special: true, name: 'Feature name'},
 	{key: "P", special: true, name: 'Parent feature identifier'}
 ];
-const PERIODS = [
-	{key: 1, name: '1990'},
-	{key: 2, name: '2000'},
-	{key: 3, name: '2010'}
-];
-const TOPICS = [
-	{key: 7, topic: 'Land cover structure', themes: [18, 23, 32]},
-	{key: 12, topic: 'Land cover development', themes: [18, 23, 32]},
-	{key: 16, topic: 'Urban population', themes: [30]},
-	{key: 19, topic: 'Urban expansions', themes: [30]},
-	{key: 22, topic: 'Total populations', themes: [25]},
-	{key: 23, topic: 'Population density grid', themes: [18, 23, 25, 30, 32]},
-	{key: 33, topic: 'Roads', themes: [18, 23, 32]}
-];
-const THEMES = [
-	{key: 18, theme: 'Population'},
-	{key: 23, theme: 'Transportation'},
-	{key: 25, theme: 'Total population'},
-	{key: 30, theme: 'Urban expansion'},
-	{key: 32, theme: 'Land cover'}
-];
 
 var initialState = {
 	savedState: {},
@@ -105,6 +53,7 @@ var initialState = {
 	places: [],
 	vectorLayerTemplates: [],
 	rasterLayerTemplates: [],
+	auLevels: [],
 	attributes: [],
 	periods: [],
 	valueVLTemplate: [],
@@ -766,10 +715,10 @@ class ConfigDataLayer extends Component {
 						valuesPlaces={this.state.valuesVLPlaces}
 						valuesPeriods={this.state.valuesVLPeriods}
 						columnMap={this.state.columnMaps.vector}
-						onChangeTemplate={this.onChangeObjectSelect.bind(this, "valueVLTemplate", VECTORLAYERTEMPLATES)}
-						onChangeScope={this.onChangeObjectSelect.bind(this, "valueVLScope", SCOPES)}
-						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesVLPlaces", PLACES)}
-						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuesVLPeriods", PERIODS)}
+						onChangeTemplate={this.onChangeObjectSelect.bind(this, "valueVLTemplate", ObjectTypes.VECTOR_LAYER_TEMPLATE)}
+						onChangeScope={this.onChangeObjectSelect.bind(this, "valueVLScope", ObjectTypes.SCOPE)}
+						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesVLPlaces", ObjectTypes.PLACE)}
+						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuesVLPeriods", ObjectTypes.PERIOD)}
 						onObjectClick={this.onObjectClick.bind(this)}
 						keyNameOptionFactory={this.keyNameOptionFactory.bind(this)}
 						onChangeColumnTableDestination={this.onChangeColumnTableDestination.bind(this)}
@@ -802,7 +751,7 @@ class ConfigDataLayer extends Component {
 					id="config-data-layer-au"
 				>
 					<ConfigDataLayerAnalytical
-						levels={AULEVELS}
+						levels={this.state.auLevels}
 						scopes={this.state.scopes}
 						places={this.state.places}
 						periods={this.state.periods}
