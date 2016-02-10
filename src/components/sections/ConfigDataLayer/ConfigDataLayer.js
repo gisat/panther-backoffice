@@ -229,8 +229,8 @@ class ConfigDataLayer extends Component {
 						this.state.valueVLTemplate==this.state.relationsState.valueVLTemplate &&
 						this.state.valueVLScope==this.state.relationsState.valueVLScope &&
 						this.state.valuesVLPlaces==this.state.relationsState.valuesVLPlaces &&
-						this.state.valuesVLPeriods==this.state.relationsState.valuesVLPeriods
-						// todo data table
+						this.state.valuesVLPeriods==this.state.relationsState.valuesVLPeriods &&
+						this.state.columnMaps.vector==this.state.savedState.columnMaps.vector
 					);
 				} else if(this.state.layerType=="raster") {
 					//console.log("isStateUnchanged raster");
@@ -245,8 +245,8 @@ class ConfigDataLayer extends Component {
 					isIt = (
 						this.state.valueAULevel==this.state.relationsState.valueAULevel &&
 						this.state.valueAUScope==this.state.relationsState.valueAUScope &&
-						this.state.valuesAUPlaces==this.state.relationsState.valuesAUPlaces
-						// todo data table
+						this.state.valuesAUPlaces==this.state.relationsState.valuesAUPlaces &&
+						this.state.columnMaps.au==this.state.savedState.columnMaps.au
 					);
 				}
 			} else {
@@ -567,23 +567,21 @@ class ConfigDataLayer extends Component {
 		console.log("yay! " + value["key"]);
 	}
 
-	onChangeColumnTableDestination (layerType, column, value, values) {
-		console.log("layerType",layerType);
-		console.log("column",column);
-		console.log("value",value);
-		//let stateUpdate = {};
-		//stateUpdate.columnMaps[layerType][column].valueUseAs = value;
-		//this.setState({columnMaps: {[layerType]: {[column]: {valueUseAs: value}}}});
+	onChangeColumnTableSelect (stateKey, layerType, column, value, values) {
+		let valueForState = [];
+		for(let o of values) {
+			valueForState.push(o.key);
+		}
+		this.context.setStateDeep.call(this, {
+			columnMaps: {
+				[layerType]: {
+					[column]: {
+						[stateKey]: {$set: valueForState}
+					}
+				}
+			}
+		});
 	}
-	onChangeColumnTablePeriods (layerType, column, value, values) {
-		console.log("layerType",layerType);
-		console.log("column",column);
-		console.log("value",value);
-		//let stateUpdate = {};
-		//stateUpdate.columnMaps[layerType][column].valuePeriods = value;
-		//this.setState(stateUpdate);
-	}
-
 
 
 	render() {
@@ -681,8 +679,8 @@ class ConfigDataLayer extends Component {
 						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesVLPlaces", ObjectTypes.PLACE)}
 						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuesVLPeriods", ObjectTypes.PERIOD)}
 						onObjectClick={this.onObjectClick.bind(this)}
-						onChangeColumnTableDestination={this.onChangeColumnTableDestination.bind(this)}
-						onChangeColumnTablePeriods={this.onChangeColumnTablePeriods.bind(this)}
+						onChangeColumnTableDestination={this.onChangeColumnTableSelect.bind(this, "valueUseAs")}
+						onChangeColumnTablePeriods={this.onChangeColumnTableSelect.bind(this, "valuesPeriods")}
 					/>
 				</div>
 				<div
@@ -723,8 +721,8 @@ class ConfigDataLayer extends Component {
 						onChangeScope={this.onChangeObjectSelect.bind(this, "valueAUScope", ObjectTypes.SCOPE)}
 						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesAUPlaces", ObjectTypes.PLACE)}
 						onObjectClick={this.onObjectClick.bind(this)}
-						onChangeColumnTableDestination={this.onChangeColumnTableDestination.bind(this)}
-						onChangeColumnTablePeriods={this.onChangeColumnTablePeriods.bind(this)}
+						onChangeColumnTableDestination={this.onChangeColumnTableSelect.bind(this, "valueUseAs")}
+						onChangeColumnTablePeriods={this.onChangeColumnTableSelect.bind(this, "valuesPeriods")}
 					/>
 				</div>
 

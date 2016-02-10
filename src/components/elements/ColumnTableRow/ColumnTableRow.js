@@ -33,7 +33,7 @@ class ColumnTableRow extends Component {
 		if(!this.props.destinationValue || (this.props.destinationValue[0]!="I" && this.props.destinationValue[0]!="N" && this.props.destinationValue[0]!="P")) {
 			periodSelect = (
 				<UIObjectSelect
-					//onChange={this.props.onChangePeriods.bind(this,this.props.columnName)}
+					onChange={this.props.onChangePeriods.bind(this,this.props.columnName)}
 					//loadOptions={this.getPlaces}
 					multi
 					options={this.props.periods}

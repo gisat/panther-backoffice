@@ -23,7 +23,6 @@ export default {
 	 * @returns {Array} - values without new (those are added when handling action response)
 	 */
 	handleNewObjects: function(values, objectType, stateKey, stateHash) {
-		// todo move function to utils? (common and static)
 		var newValues = [];
 		for (var singleValue of values) {
 			if(singleValue.create){
