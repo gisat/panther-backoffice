@@ -185,6 +185,7 @@ class ConfigDataLayer extends Component {
 		this.context.setStateFromStores.call(this, store2state, keys);
 		// if stores changed, overrides user input - todo fix
 		store2state.layerRelations.then(function(relations) {
+			// todo we work with relations (attsets,columns) with .ready not removed
 			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations),keys);
 		});
 		store2state.attributeSets.then(function(attributeSets) {
@@ -374,13 +375,13 @@ class ConfigDataLayer extends Component {
 
 		// fill it with relations (valueUseAs's and valuesPeriods')
 		_.each(relations, function(relation){
-			if(relation.hasOwnProperty("fidColumn") && relation.fidColumn!==null && relation.fidColumn.length){
+			if(relation.hasOwnProperty("fidColumn") && relation.fidColumn && relation.fidColumn.length){
 				this.addRelationToColumnMap(ret, relation.fidColumn, "I", relation);
 			}
-			if(relation.hasOwnProperty("nameColumn") && relation.nameColumn!==null && relation.nameColumn.length){
+			if(relation.hasOwnProperty("nameColumn") && relation.nameColumn && relation.nameColumn.length){
 				this.addRelationToColumnMap(ret, relation.nameColumn, "N", relation);
 			}
-			if(relation.hasOwnProperty("parentColumn") && relation.parentColumn!==null && relation.parentColumn.length){
+			if(relation.hasOwnProperty("parentColumn") && relation.parentColumn && relation.parentColumn.length){
 				this.addRelationToColumnMap(ret, relation.parentColumn, "P", relation, true);
 			}
 
