@@ -323,13 +323,13 @@ class ConfigDataLayer extends Component {
 		// fill it with relations (valueUseAs's and valuesPeriods')
 		_.each(relations, function(relation){
 			if(relation.hasOwnProperty("fidColumn") && relation.fidColumn && relation.fidColumn.length){
-				this.addRelationToColumnMap(ret, relation.fidColumn, "I", relation);
+				this.addRelationToColumnMap(ret, relation.fidColumn, "I");
 			}
 			if(relation.hasOwnProperty("nameColumn") && relation.nameColumn && relation.nameColumn.length){
-				this.addRelationToColumnMap(ret, relation.nameColumn, "N", relation);
+				this.addRelationToColumnMap(ret, relation.nameColumn, "N");
 			}
 			if(relation.hasOwnProperty("parentColumn") && relation.parentColumn && relation.parentColumn.length){
-				this.addRelationToColumnMap(ret, relation.parentColumn, "P", relation, true);
+				this.addRelationToColumnMap(ret, relation.parentColumn, "P");
 			}
 
 			if(relation.hasOwnProperty("columnMap")){
@@ -354,19 +354,20 @@ class ConfigDataLayer extends Component {
 	 * @param column
 	 * @param value
 	 * @param relation
-	 * @param notToVector
 	 */
-	addRelationToColumnMap(columnMap, column, value, relation, notToVector){
+	addRelationToColumnMap(columnMap, column, value, relation){
 		var period = null;
-		if(relation.hasOwnProperty("period") && relation.period!==null) {
+		if(relation && relation.hasOwnProperty("period") && relation.period!==null) {
 			period = relation.period.key;
+		}else if(relation){
+			console.log("======================================\n====== RELATION.period IS MISSING ======\n======================================");
 		}
 		columnMap.columnMaps.au[column].valueUseAs =
 			_.union(columnMap.columnMaps.au[column].valueUseAs, [value]);
 		if(period) columnMap.columnMaps.au[column].valuesPeriods =
 			_.union(columnMap.columnMaps.au[column].valuesPeriods, [period]);
 
-		if(!notToVector) {
+		if(value != "P") {
 			columnMap.columnMaps.vector[column].valueUseAs =
 				_.union(columnMap.columnMaps.vector[column].valueUseAs, [value]);
 			if(period) columnMap.columnMaps.vector[column].valuesPeriods =
