@@ -40,8 +40,10 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 
 	switch(action.type) {
 		case ActionTypes.PERIOD_CREATE:
-			//console.log("PeriodStore PERIOD_CREATE action");
 			storeInstance.createObject(action.model, action.stateKey, action.stateHash);
+			break;
+		case ActionTypes.PERIOD_HANDLE:
+			storeInstance.handle(action.data);
 			break;
 		default:
 			return;
