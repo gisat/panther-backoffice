@@ -6,6 +6,7 @@ import Select from 'react-select';
 
 import { Table } from '../../SEUI/collections';
 
+import utils from '../../../utils/utils';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
 import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
@@ -30,7 +31,6 @@ class ConfigDataLayerAnalytical extends Component{
 		onChangeScope: React.PropTypes.func.isRequired,
 		onChangePlaces: React.PropTypes.func.isRequired,
 		onObjectClick: React.PropTypes.func.isRequired,
-		keyNameOptionFactory: React.PropTypes.func.isRequired,
 		onChangeColumnTableDestination: React.PropTypes.func,
 		onChangeColumnTablePeriods: React.PropTypes.func
 	};
@@ -82,7 +82,7 @@ class ConfigDataLayerAnalytical extends Component{
 							onOptionLabelClick={this.props.onObjectClick}
 							options={this.props.scopes}
 							allowCreate
-							newOptionCreator={this.props.keyNameOptionFactory}
+							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valueScope}
@@ -99,7 +99,7 @@ class ConfigDataLayerAnalytical extends Component{
 							onOptionLabelClick={this.props.onObjectClick}
 							options={this.props.places}
 							allowCreate
-							newOptionCreator={this.props.keyNameOptionFactory}
+							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valuesPlaces}
@@ -115,7 +115,7 @@ class ConfigDataLayerAnalytical extends Component{
 							onOptionLabelClick={this.props.onObjectClick}
 							options={this.props.levels}
 							allowCreate
-							newOptionCreator={this.props.keyNameOptionFactory}
+							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valueLevel}

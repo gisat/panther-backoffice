@@ -38,6 +38,8 @@ class ColumnTableRow extends Component {
 					options={this.props.periods}
 					valueKey="key"
 					labelKey="name"
+					allowCreate
+					newOptionCreator={this.props.keyNameOptionFactory}
 					//inputProps={selectInputProps}
 					value={this.props.selectedPeriods}
 				/>

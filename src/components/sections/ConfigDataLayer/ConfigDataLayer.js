@@ -339,7 +339,7 @@ class ConfigDataLayer extends Component {
 			}
 		}, this);
 
-		console.log("_________ columns2state returns _________:\n", ret);
+		//console.log("_________ columns2state returns _________:\n", ret);
 
 		let savedState = {};
 		_.assign(savedState, ret);
@@ -437,10 +437,10 @@ class ConfigDataLayer extends Component {
 			_.assign(relationsState, ret);
 			ret.relationsState = relationsState; // save store state for comparison with changed local
 
-			//todo: Should be something like this
+			//todo, Tom: Should be something like this
 			//let savedState = {};
 			//_.assign(savedState, ret);
-			//ret.savedState = {relations: savedState}; // save store state for comparison with changed local
+			//this.context.setStateDeep.call(this, {savedState: {$set: savedState}}); // save store state for comparison with changed local
 		}
 		//todo 2: Shouldn't it be here?
 		return ret;
@@ -556,36 +556,8 @@ class ConfigDataLayer extends Component {
 		});
 	}
 
-	/**
-	 * Find objects to create among selected in (Object)Select
-	 * @param values - selected objects
-	 * @param objectType - data type for Action
-	 * @param stateKey - state variable to store created object in
-	 * @param stateHash - state hash to send along with action for later pairing
-	 * @returns {Array} - values without new (those are added when handling action response)
-	 */
-	handleNewObjects(values, objectType, stateKey, stateHash) {
-		// todo move function to utils? (common and static)
-		var newValues = [];
-		for (var singleValue of values) {
-			if(singleValue.create){
-				delete singleValue.create; // discard new object bit
-				delete singleValue.label; // discard temp compatibility key
-				delete singleValue.value; // discard temp compatibility key
-				delete singleValue.key; // discard temp key = name
-				let valueModel = new model[objectType](singleValue);
-				ActionCreator.createObjectAndSetState(valueModel,objectType,stateKey,stateHash);
-			}
-			else {
-				newValues.push(singleValue.key);
-			}
-
-		}
-		return newValues;
-	}
-
 	onChangeObjectSelect (stateKey, objectType, value, values) {
-		values = this.handleNewObjects(values, objectType, stateKey, this.getStateHash()); // todo store -> object type
+		values = utils.handleNewObjects(values, objectType, stateKey, this.getStateHash()); // todo store -> object type
 		var newState = {};
 		newState[stateKey] = values;
 		this.setState(newState);
@@ -593,17 +565,6 @@ class ConfigDataLayer extends Component {
 
 	onObjectClick (value, event) {
 		console.log("yay! " + value["key"]);
-	}
-
-	keyNameOptionFactory (inputValue) {
-		var newOption = {
-			key: inputValue,
-			name: inputValue,
-			value: inputValue,
-			label: inputValue,
-			create: true
-		};
-		return newOption;
 	}
 
 	onChangeColumnTableDestination (layerType, column, value, values) {
@@ -720,7 +681,6 @@ class ConfigDataLayer extends Component {
 						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesVLPlaces", ObjectTypes.PLACE)}
 						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuesVLPeriods", ObjectTypes.PERIOD)}
 						onObjectClick={this.onObjectClick.bind(this)}
-						keyNameOptionFactory={this.keyNameOptionFactory.bind(this)}
 						onChangeColumnTableDestination={this.onChangeColumnTableDestination.bind(this)}
 						onChangeColumnTablePeriods={this.onChangeColumnTablePeriods.bind(this)}
 					/>
@@ -743,7 +703,6 @@ class ConfigDataLayer extends Component {
 						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesRLPlaces", ObjectTypes.PLACE)}
 						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuesRLPeriods", ObjectTypes.PERIOD)}
 						onObjectClick={this.onObjectClick.bind(this)}
-						keyNameOptionFactory={this.keyNameOptionFactory.bind(this)}
 					/>
 				</div>
 				<div
@@ -764,7 +723,6 @@ class ConfigDataLayer extends Component {
 						onChangeScope={this.onChangeObjectSelect.bind(this, "valueAUScope", ObjectTypes.SCOPE)}
 						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesAUPlaces", ObjectTypes.PLACE)}
 						onObjectClick={this.onObjectClick.bind(this)}
-						keyNameOptionFactory={this.keyNameOptionFactory.bind(this)}
 						onChangeColumnTableDestination={this.onChangeColumnTableDestination.bind(this)}
 						onChangeColumnTablePeriods={this.onChangeColumnTablePeriods.bind(this)}
 					/>

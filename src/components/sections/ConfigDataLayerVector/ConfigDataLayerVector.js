@@ -4,6 +4,7 @@ import Select from 'react-select';
 
 import { Table } from '../../SEUI/collections';
 
+import utils from '../../../utils/utils';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
 import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
@@ -30,7 +31,6 @@ class ConfigDataLayerVector extends Component{
 		onChangePlaces: React.PropTypes.func.isRequired,
 		onChangePeriods: React.PropTypes.func.isRequired,
 		onObjectClick: React.PropTypes.func.isRequired,
-		keyNameOptionFactory: React.PropTypes.func.isRequired,
 		onChangeColumnTableDestination: React.PropTypes.func,
 		onChangeColumnTablePeriods: React.PropTypes.func
 	};
@@ -42,6 +42,8 @@ class ConfigDataLayerVector extends Component{
 	render() {
 
 		let tableRows = [];
+		//console.log("COLUMN MPA:", this.props.columnMap);
+		//console.log("this.props.destinations:", this.props.destinations);
 		_.each(this.props.columnMap, function(column, columnName){
 			let destinationValue = null;
 			if(column.valueUseAs.length) {
@@ -51,7 +53,7 @@ class ConfigDataLayerVector extends Component{
 				}
 				if(destination && destination.hasOwnProperty("key")) {
 					destinationValue = [destination.key];
-				}else{
+				}else if(column.valueUseAs[0] != "P"){
 					destinationValue = "[" + (column.valueUseAs[0]) + "]";
 					console.error("Attribute "+ column.valueUseAs[0] +" doesn't exist in destinations!");
 				}
@@ -82,7 +84,7 @@ class ConfigDataLayerVector extends Component{
 								onOptionLabelClick={this.props.onObjectClick}
 								options={this.props.layerTemplates}
 								allowCreate
-								newOptionCreator={this.props.keyNameOptionFactory}
+								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
 								labelKey="name"
 								value={this.props.valueTemplate}
@@ -99,7 +101,7 @@ class ConfigDataLayerVector extends Component{
 								onOptionLabelClick={this.props.onObjectClick}
 								options={this.props.scopes}
 								allowCreate
-								newOptionCreator={this.props.keyNameOptionFactory}
+								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
 								labelKey="name"
 								value={this.props.valueScope}
@@ -116,7 +118,7 @@ class ConfigDataLayerVector extends Component{
 								onOptionLabelClick={this.props.onObjectClick}
 								options={this.props.places}
 								allowCreate
-								newOptionCreator={this.props.keyNameOptionFactory}
+								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
 								labelKey="name"
 								value={this.props.valuesPlaces}
@@ -133,7 +135,7 @@ class ConfigDataLayerVector extends Component{
 								onOptionLabelClick={this.props.onObjectClick}
 								options={this.props.periods}
 								allowCreate
-								newOptionCreator={this.props.keyNameOptionFactory}
+								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
 								labelKey="name"
 								value={this.props.valuesPeriods}

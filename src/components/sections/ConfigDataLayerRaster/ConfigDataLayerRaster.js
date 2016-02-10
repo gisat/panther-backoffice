@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ConfigDataLayerRaster.css';
 import withStyles from '../../../decorators/withStyles';
 
+import utils from '../../../utils/utils';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 
 
@@ -23,8 +24,7 @@ class ConfigDataLayerRaster extends Component{
 		onChangeScope: React.PropTypes.func.isRequired,
 		onChangePlaces: React.PropTypes.func.isRequired,
 		onChangePeriods: React.PropTypes.func.isRequired,
-		onObjectClick: React.PropTypes.func.isRequired,
-		keyNameOptionFactory: React.PropTypes.func.isRequired
+		onObjectClick: React.PropTypes.func.isRequired
 	};
 
 	static defaultProps = {
@@ -43,7 +43,7 @@ class ConfigDataLayerRaster extends Component{
 							onOptionLabelClick={this.props.onObjectClick}
 							options={this.props.layerTemplates}
 							allowCreate
-							newOptionCreator={this.props.keyNameOptionFactory}
+							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valueTemplate}
@@ -60,7 +60,7 @@ class ConfigDataLayerRaster extends Component{
 							onOptionLabelClick={this.props.onObjectClick}
 							options={this.props.scopes}
 							allowCreate
-							newOptionCreator={this.props.keyNameOptionFactory}
+							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valueScope}
@@ -77,7 +77,7 @@ class ConfigDataLayerRaster extends Component{
 							onOptionLabelClick={this.props.onObjectClick}
 							options={this.props.places}
 							allowCreate
-							newOptionCreator={this.props.keyNameOptionFactory}
+							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valuesPlaces}
@@ -94,7 +94,7 @@ class ConfigDataLayerRaster extends Component{
 							onOptionLabelClick={this.props.onObjectClick}
 							options={this.props.periods}
 							allowCreate
-							newOptionCreator={this.props.keyNameOptionFactory}
+							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valuesPeriods}
