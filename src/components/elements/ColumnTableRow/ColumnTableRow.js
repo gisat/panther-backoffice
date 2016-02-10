@@ -16,6 +16,8 @@ class ColumnTableRow extends Component {
 		columnName: React.PropTypes.string.isRequired,
 		destinations: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 		periods: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+		onChangeDestination: React.PropTypes.func,
+		onChangePeriods: React.PropTypes.func,
 		destinationValue: React.PropTypes.arrayOf(React.PropTypes.oneOfType([
 			React.PropTypes.string,
 			React.PropTypes.number
@@ -30,7 +32,7 @@ class ColumnTableRow extends Component {
 		if(!this.props.destinationValue || (this.props.destinationValue[0]!="I" && this.props.destinationValue[0]!="N" && this.props.destinationValue[0]!="P")) {
 			periodSelect = (
 				<UIObjectSelect
-					//onChange={this.props.onChangePeriod.bind(this,this.props.columnName)}
+					//onChange={this.props.onChangePeriods.bind(this,this.props.columnName)}
 					//loadOptions={this.getPlaces}
 					multi
 					options={this.props.periods}
@@ -47,7 +49,7 @@ class ColumnTableRow extends Component {
 				<td className="header">{this.props.columnName}</td>
 				<td className="allowOverflow resetui">
 					<Select
-						//onChange={this.onChangeDestination.bind(this,this.props.columnName)}
+						onChange={this.props.onChangeDestination.bind(null,this.props.columnName)}
 						//loadOptions={this.getPlaces}
 						options={this.props.destinations}
 						optionComponent={OptionDestination}

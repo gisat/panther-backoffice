@@ -30,7 +30,9 @@ class ConfigDataLayerAnalytical extends Component{
 		onChangeScope: React.PropTypes.func.isRequired,
 		onChangePlaces: React.PropTypes.func.isRequired,
 		onObjectClick: React.PropTypes.func.isRequired,
-		keyNameOptionFactory: React.PropTypes.func.isRequired
+		keyNameOptionFactory: React.PropTypes.func.isRequired,
+		onChangeColumnTableDestination: React.PropTypes.func,
+		onChangeColumnTablePeriods: React.PropTypes.func
 	};
 
 	static defaultProps = {
@@ -63,6 +65,8 @@ class ConfigDataLayerAnalytical extends Component{
 					destinationValue={destinationValue}
 					periods={this.props.periods}
 					selectedPeriods={column.valuesPeriods}
+					onChangeDestination={this.props.onChangeColumnTableDestination.bind(null,"au")}
+					onChangePeriods={this.props.onChangeColumnTablePeriods.bind(null,"au")}
 				/>
 			));
 		}, this);

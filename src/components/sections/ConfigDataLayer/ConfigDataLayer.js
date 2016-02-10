@@ -774,6 +774,23 @@ class ConfigDataLayer extends Component {
 		return newOption;
 	}
 
+	onChangeColumnTableDestination (layerType, column, value, values) {
+		console.log("layerType",layerType);
+		console.log("column",column);
+		console.log("value",value);
+		//let stateUpdate = {};
+		//stateUpdate.columnMaps[layerType][column].valueUseAs = value;
+		//this.setState({columnMaps: {[layerType]: {[column]: {valueUseAs: value}}}});
+	}
+	onChangeColumnTablePeriods (layerType, column, value, values) {
+		console.log("layerType",layerType);
+		console.log("column",column);
+		console.log("value",value);
+		//let stateUpdate = {};
+		//stateUpdate.columnMaps[layerType][column].valuePeriods = value;
+		//this.setState(stateUpdate);
+	}
+
 
 
 	render() {
@@ -872,6 +889,8 @@ class ConfigDataLayer extends Component {
 						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuesVLPeriods", PERIODS)}
 						onObjectClick={this.onObjectClick.bind(this)}
 						keyNameOptionFactory={this.keyNameOptionFactory.bind(this)}
+						onChangeColumnTableDestination={this.onChangeColumnTableDestination.bind(this)}
+						onChangeColumnTablePeriods={this.onChangeColumnTablePeriods.bind(this)}
 					/>
 				</div>
 				<div
@@ -914,6 +933,8 @@ class ConfigDataLayer extends Component {
 						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuesAUPlaces", ObjectTypes.PLACE)}
 						onObjectClick={this.onObjectClick.bind(this)}
 						keyNameOptionFactory={this.keyNameOptionFactory.bind(this)}
+						onChangeColumnTableDestination={this.onChangeColumnTableDestination.bind(this)}
+						onChangeColumnTablePeriods={this.onChangeColumnTablePeriods.bind(this)}
 					/>
 				</div>
 
