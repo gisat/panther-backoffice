@@ -31,7 +31,7 @@ export default function(proxyRequest, proxyResponse){
 	cookies.push("sessionid="+proxyRequest.body.sessionid);
 	cookies.push("csrftoken="+proxyRequest.body.csrftoken);
 
-	var formData = proxyRequest.body;
+	var body = proxyRequest.body;
 
 	var options = {
 		url: url,
@@ -39,8 +39,12 @@ export default function(proxyRequest, proxyResponse){
 			'Cookie': cookies.join("; ")
 		}
 	};
-	if(formData.hasOwnProperty("formData") && Object.keys(formData.formData).length){
-		options.formData = formData.formData;
+	if(body.hasOwnProperty("formData") && Object.keys(body.formData).length){
+		if(logLikeCrazy) console.log("body.formData (", typeof body.formData, ")", body.formData);
+		options.formData = body.formData;
+		if(options.formData.hasOwnProperty("data") && typeof options.formData.data == "object"){
+			options.formData.data = JSON.stringify(options.formData.data);
+		}
 	}
 
 	if(logLikeCrazy) console.log("  ", method.toUpperCase(), url, "\n-----------\n", options, "\n\n");
