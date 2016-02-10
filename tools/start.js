@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import browserSync from 'browser-sync';
+//import browserSync from 'browser-sync';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
@@ -27,36 +27,36 @@ export default task('start', async () => {
 	await require('./build')();
 	await require('./serve')();
 
-	browserSync({
-		proxy: {
-
-			target: 'localhost:' + serverPort,
-
-			middleware: [
-				webpackDevMiddleware(bundler, {
-					// IMPORTANT: dev middleware can't access config, so we should
-					// provide publicPath by ourselves
-					publicPath: webpackConfig.output.publicPath,
-
-					// Pretty colored output
-					stats: webpackConfig.stats,
-
-					// For other settings see
-					// http://webpack.github.io/docs/webpack-dev-middleware.html
-				}),
-
-				// bundler should be the same as above
-				webpackHotMiddleware(bundler),
-			],
-		},
-
-		// no need to watch '*.js' here, webpack will take care of it for us,
-		// including full page reloads if HMR won't work
-		files: [
-			'build/public/**/*.css',
-			'build/public/**/*.html',
-			'build/content/**/*.*',
-			'build/templates/**/*.*',
-		],
-	});
+	//browserSync({
+	//	proxy: {
+	//
+	//		target: 'localhost:' + serverPort,
+	//
+	//		middleware: [
+	//			webpackDevMiddleware(bundler, {
+	//				// IMPORTANT: dev middleware can't access config, so we should
+	//				// provide publicPath by ourselves
+	//				publicPath: webpackConfig.output.publicPath,
+	//
+	//				// Pretty colored output
+	//				stats: webpackConfig.stats,
+	//
+	//				// For other settings see
+	//				// http://webpack.github.io/docs/webpack-dev-middleware.html
+	//			}),
+	//
+	//			// bundler should be the same as above
+	//			webpackHotMiddleware(bundler),
+	//		],
+	//	},
+	//
+	//	// no need to watch '*.js' here, webpack will take care of it for us,
+	//	// including full page reloads if HMR won't work
+	//	files: [
+	//		'build/public/**/*.css',
+	//		'build/public/**/*.html',
+	//		'build/content/**/*.*',
+	//		'build/templates/**/*.*',
+	//	],
+	//});
 });
