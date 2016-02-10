@@ -17,18 +17,21 @@ class Page extends Component {
 		onSetTitle: PropTypes.func.isRequired,
 		activePageKey: PropTypes.func.isRequired,
 		setScreenPosition: PropTypes.func.isRequired,
-		onSetScreenData: PropTypes.func.isRequired
+		onSetScreenData: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired
 	};
 
 	static childContextTypes = {
 		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired
+		openScreen: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired
 	};
 
 	getChildContext(){
 		return {
 			onSetScreenData: this.context.onSetScreenData.bind(this),
-			openScreen: this.openScreen.bind(this)
+			openScreen: this.openScreen.bind(this),
+			setStateDeep: this.context.setStateDeep
 		};
 	}
 

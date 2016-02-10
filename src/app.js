@@ -7,6 +7,7 @@ import Router from './routes';
 import Location from './core/Location';
 import { addEventListener, removeEventListener } from './utils/DOMUtils';
 import ga from 'react-ga';
+import update from 'react-addons-update';
 import { googleAnalyticsId } from './config';
 
 const screenStack = require('./stores/screenStack');
@@ -16,6 +17,10 @@ const appContainer = document.getElementById('app');
 
 var activePageKey = null;
 const context = {
+	setStateDeep: function(updatePath){
+		//console.log("@ setStateDeep this", this);
+		this.setState(update(this.state, updatePath));
+	},
 	onSetTitle: value => document.title = value,
 	activePageKey: function(newKey){
 		if(typeof newKey != "undefined") activePageKey = newKey;

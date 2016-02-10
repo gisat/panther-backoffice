@@ -99,7 +99,9 @@ const THEMES = [
 ];
 
 var initialState = {
-	savedState: {},
+	savedState: {
+		test: "something important"
+	},
 	layerType: null,
 	scopes: [],
 	places: [],
@@ -147,7 +149,8 @@ class ConfigDataLayer extends Component {
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired
+		openScreen: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
@@ -348,127 +351,9 @@ class ConfigDataLayer extends Component {
 	 * Called in store2state().
 	 * @param columns
 	 * @param relations
-	 * @returns {{columnMaps: {auColumnMap: {}, vectorColumnMap: {}}}}
+	 * @returns {{columnMaps: {au: {}, vector: {}}}}
 	 */
 	columns2state(columns, relations) {
-		//console.log("RELATIONS:", relations);
-		var mock = {
-			vectorColumnMap: {
-				"code_00": {
-					valueUseAs: ["I"],
-					valuesPeriods: []
-				},
-				"Shape_Leng": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"DIDI": {
-					valueUseAs: ["N"],
-					valuesPeriods: []
-				},
-				"LIDI": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"ahoj": {
-					valueUseAs: [874],
-					valuesPeriods: [277]
-				},
-				"-o-": {
-					valueUseAs: [147],
-					valuesPeriods: [277, 375, 278, 5079]
-				},
-				"XYZ": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"Area": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"78784": {
-					valueUseAs: [147],
-					valuesPeriods: []
-				},
-				"UFO": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"Area-51": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"asi-nic": {
-					valueUseAs: [147],
-					valuesPeriods: [5079, 375]
-				},
-				"tady-nic": {
-					valueUseAs: [],
-					valuesPeriods: []
-				}
-			},
-
-			auColumnMap: {
-				"777": {
-					valueUseAs: ["I"],
-					valuesPeriods: []
-				},
-				"x-faktor": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"AC_00": {
-					valueUseAs: ["P"],
-					valuesPeriods: []
-				},
-				"pp-faktor": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"UF": {
-					valueUseAs: ["N"],
-					valuesPeriods: []
-				},
-				"Urban": {
-					valueUseAs: [87],
-					valuesPeriods: [5080]
-				},
-				"LLL": {
-					valueUseAs: [87],
-					valuesPeriods: []
-				},
-				"OP-faktor": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"K-NICEMU!": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"K-NECENMU": {
-					valueUseAs: [87],
-					valuesPeriods: [375, 5079]
-				},
-				"asiapop": {
-					valueUseAs: [87],
-					valuesPeriods: [5080]
-				},
-				"koreapop": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"europop": {
-					valueUseAs: [],
-					valuesPeriods: []
-				},
-				"afropop": {
-					valueUseAs: [],
-					valuesPeriods: []
-				}
-			}
-		};
-		mock.savedColumnsState = mock;
-
 		let ret = {
 			columnMaps: {
 				au: {},
@@ -479,7 +364,6 @@ class ConfigDataLayer extends Component {
 		// create empty columns structure
 		delete columns.ready;
 		_.each(columns, function(value){
-			//console.log("..........", value.name);
 			let columnRelation = {
 				valueUseAs: [],
 				valuesPeriods: []
@@ -511,7 +395,7 @@ class ConfigDataLayer extends Component {
 
 		let savedState = {};
 		_.assign(savedState, ret);
-		ret.savedState = {columnMaps: savedState}; // save store state for comparison with changed local
+		this.context.setStateDeep.call(this, {savedState: {$set: savedState}}); // save store state for comparison with changed local
 		return ret;
 		//return mock;
 	}

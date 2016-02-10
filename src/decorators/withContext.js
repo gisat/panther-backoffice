@@ -16,7 +16,8 @@ function withContext(ComposedComponent) {
 				onSetScreenData: PropTypes.func,
         activePageKey: PropTypes.func,
         page: PropTypes.object,
-				setStateFromStores: PropTypes.func
+				setStateFromStores: PropTypes.func,
+				setStateDeep: PropTypes.func
       })
     };
 
@@ -29,7 +30,8 @@ function withContext(ComposedComponent) {
       onSetScreenData: PropTypes.func.isRequired,
 			setStateFromStores: PropTypes.func.isRequired,
       activePageKey: PropTypes.func.isRequired,
-      page: PropTypes.object.isRequired
+      page: PropTypes.object.isRequired,
+			setStateDeep: PropTypes.func.isRequired
     };
 
     getChildContext() {
@@ -43,8 +45,9 @@ function withContext(ComposedComponent) {
 				onSetScreenData: context.onSetScreenData || emptyFunction,
 				setStateFromStores: context.setStateFromStores || emptyFunction,
         activePageKey: context.activePageKey || emptyFunction,
-        page: {}
-      };
+        page: {},
+				setStateDeep: context.setStateDeep || emptyFunction
+			};
     }
 
     render() {
