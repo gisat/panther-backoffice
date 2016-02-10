@@ -1,11 +1,13 @@
 import React, { PropTypes, Component } from 'react';
+import _ from 'underscore';
+import Select from 'react-select';
 
 import { Table } from '../../SEUI/collections';
-import Select from 'react-select';
-import UIObjectSelect from '../../atoms/UIObjectSelect';
 
+import UIObjectSelect from '../../atoms/UIObjectSelect';
 import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
 import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
+import ColumnTableRow from '../../elements/ColumnTableRow/ColumnTableRow';
 
 
 
@@ -36,6 +38,35 @@ class ConfigDataLayerVector extends Component{
 	};
 
 	render() {
+
+		let tableRows = [];
+		_.each(this.props.columnMap, function(column, columnName){
+			let destinationValue = null;
+			if(column.valueUseAs.length) {
+				let destination = _.findWhere(this.props.destinations, {attributeKey: column.valueUseAs[0]});
+				if(!destination){ // Probably I, P or N. (todo) This is really no pretty code.
+					destination = _.findWhere(this.props.destinations, {key: column.valueUseAs[0]});
+				}
+				if(destination && destination.hasOwnProperty("key")) {
+					destinationValue = [destination.key];
+				}else{
+					destinationValue = "[" + (column.valueUseAs[0]) + "]";
+					console.error("Attribute "+ column.valueUseAs[0] +" doesn't exist in destinations!");
+				}
+			}
+
+			tableRows.push((
+				<ColumnTableRow
+					key={columnName}
+					columnName={columnName}
+					destinations={this.props.destinations}
+					destinationValue={destinationValue}
+					periods={this.props.periods}
+					selectedPeriods={column.valuesPeriods}
+				/>
+			));
+		}, this);
+
 		return (
 			<div>
 
@@ -118,367 +149,7 @@ class ConfigDataLayerVector extends Component{
 						</tr>
 					</thead>
 					<tbody>
-
-						<tr>
-							<td className="header">code_00</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									optionComponent={OptionDestination}
-									singleValueComponent={SingleValueDestination}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">code_10</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									optionComponent={OptionDestination}
-									singleValueComponent={SingleValueDestination}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">poly_ID</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									optionComponent={OptionDestination}
-									singleValueComponent={SingleValueDestination}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value="I"
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">CO</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									optionComponent={OptionDestination}
-									singleValueComponent={SingleValueDestination}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">FO</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">LCF</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">LCF_N</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">Shape_Leng</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">Shape_Area</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">AC_00</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">AC_10</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">UF</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-						<tr>
-							<td className="header">name</td>
-							<td className="allowOverflow resetui">
-								<Select
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									options={this.props.destinations}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value="N"
-								/>
-							</td>
-							<td className="allowOverflow resetui">
-								<UIObjectSelect
-									//onChange={this.onChangeAttSet.bind(this)}
-									//loadOptions={this.getPlaces}
-									multi
-									options={this.props.periods}
-									valueKey="key"
-									labelKey="name"
-									//inputProps={selectInputProps}
-									value=""
-								/>
-							</td>
-						</tr>
-
-
+						{tableRows}
 					</tbody>
 				</Table>
 

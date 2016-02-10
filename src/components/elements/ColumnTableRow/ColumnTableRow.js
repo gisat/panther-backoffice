@@ -12,10 +12,10 @@ class ColumnTableRow extends Component {
 		columnName: React.PropTypes.string.isRequired,
 		destinations: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 		periods: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-		destinationValue: React.PropTypes.oneOfType([
+		destinationValue: React.PropTypes.arrayOf(React.PropTypes.oneOfType([
 			React.PropTypes.string,
 			React.PropTypes.number
-		]),
+		])),
 		selectedPeriods: React.PropTypes.arrayOf(React.PropTypes.number)
 	};
 
