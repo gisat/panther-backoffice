@@ -89,7 +89,7 @@ class Model {
 		var serializedObject = {};
 		var model = this.data();
 		_.each(this, function (value, key) {
-			if(model[key].sendToServer) {
+			if(key!=="ready" && model[key].sendToServer) {
 				if(model[key].hasOwnProperty("transformForServer")){
 					value = model[key].transformForServer(value);
 				}
@@ -97,6 +97,7 @@ class Model {
 				serializedObject[key] = value;
 			}
 		});
+		console.log("serializedObject",serializedObject);
 		return serializedObject;
 	}
 
