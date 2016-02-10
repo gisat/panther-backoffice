@@ -46,8 +46,9 @@ class ConfigDataLayerVector extends Component{
 		//console.log("this.props.destinations:", this.props.destinations);
 		_.each(this.props.columnMap, function(column, columnName){
 			let destinationValue = null;
+			let destination = null;
 			if(column.valueUseAs.length) {
-				let destination = _.findWhere(this.props.destinations, {attributeKey: column.valueUseAs[0]});
+				destination = _.findWhere(this.props.destinations, {attributeKey: column.valueUseAs[0]});
 				if(!destination){ // Probably I, P or N. (todo) This is really no pretty code.
 					destination = _.findWhere(this.props.destinations, {key: column.valueUseAs[0]});
 				}
@@ -65,10 +66,12 @@ class ConfigDataLayerVector extends Component{
 					columnName={columnName}
 					destinations={this.props.destinations}
 					destinationValue={destinationValue}
+					destinationObject={destination}
 					periods={this.props.periods}
 					selectedPeriods={column.valuesPeriods}
 					onChangeDestination={this.props.onChangeColumnTableDestination.bind(null,"vector")}
 					onChangePeriods={this.props.onChangeColumnTablePeriods.bind(null,"vector")}
+					onObjectClick={this.props.onObjectClick}
 				/>
 			));
 		}, this);

@@ -1277,6 +1277,10 @@ todo hex colours, button icons */
 	left: 2rem;
 }
 
+.Select.multiline .Select-control {
+	height: 72px;
+}
+
 .UIObjectSelect .Select-placeholder,
 .UIObjectSelect:not(.Select--multi) .UIObjectSelect-item-a {
 	left: 2rem;
@@ -1331,13 +1335,20 @@ todo hex colours, button icons */
 	border-bottom: 1px solid rgba(0,0,0,.07);
 }
 
-.UICustomSelect-option.special-option > div > span {
+.UICustomSelect-option.special-option > div > span,
+.UICustomSelect-value.special-option > div > span {
 	font-weight: bold;
 }
 
 .UICustomSelect-option .option-secondary,
 .ui td.resetui .UICustomSelect-option .option-secondary {
 	color: #bbb;
+	font-size: .95rem;
+}
+
+.UICustomSelect-value .option-secondary,
+.ui td.resetui .UICustomSelect-value .option-secondary {
+	color: #6b7899;
 	font-size: .95rem;
 }
 

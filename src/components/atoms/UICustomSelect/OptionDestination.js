@@ -40,11 +40,12 @@ var OptionDestination = React.createClass({
 				</div>
 			);
 		} else {
+			let attributeSetValue = option.attributeSetName + ":"
 			return (
 				<div>
 					<div className="option-top">
 						<span className="option-id">{option.attributeSetKey}</span>
-						<span className="option-secondary">{option.attributeSetName}</span>
+						<span className="option-secondary">{attributeSetValue}</span>
 					</div>
 					<div className="option-bottom">
 						<span className="option-id">{option.attributeKey}</span>

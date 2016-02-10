@@ -18,6 +18,7 @@ class ColumnTableRow extends Component {
 		periods: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 		onChangeDestination: React.PropTypes.func,
 		onChangePeriods: React.PropTypes.func,
+		onObjectClick: React.PropTypes.func,
 		destinationValue: React.PropTypes.arrayOf(React.PropTypes.oneOfType([
 			React.PropTypes.string,
 			React.PropTypes.number
@@ -36,6 +37,7 @@ class ColumnTableRow extends Component {
 					//loadOptions={this.getPlaces}
 					multi
 					options={this.props.periods}
+					onOptionLabelClick={this.props.onObjectClick}
 					valueKey="key"
 					labelKey="name"
 					allowCreate
@@ -44,6 +46,11 @@ class ColumnTableRow extends Component {
 					value={this.props.selectedPeriods}
 				/>
 			);
+		}
+
+		var destinationSelectClassName = "";
+		if(this.props.destinationObject && !this.props.destinationObject.hasOwnProperty("special")){
+			destinationSelectClassName = "multiline";
 		}
 
 		return(
@@ -58,6 +65,7 @@ class ColumnTableRow extends Component {
 						singleValueComponent={SingleValueDestination}
 						valueKey="key"
 						labelKey="name"
+						className={destinationSelectClassName}
 						//inputProps={selectInputProps}
 						value={this.props.destinationValue}
 					/>

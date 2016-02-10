@@ -18,16 +18,29 @@ var SingleValue = React.createClass({
 				</div>
 			);
 		} else {
+			//return (
+			//	<div>
+			//		<span className="option-id">{option.key}</span>
+			//		<span>{option.attributeName}</span>
+			//	</div>
+			//);
+			let attributeSetValue = option.attributeSetName + ":"
 			return (
 				<div>
-					<span className="option-id">{option.key}</span>
-					<span>{option.attributeName}</span>
+					<div className="option-top">
+						<span className="option-id">{option.attributeSetKey}</span>
+						<span className="option-secondary">{attributeSetValue}</span>
+					</div>
+					<div className="option-bottom">
+						<span className="option-id">{option.attributeKey}</span>
+						<span>{option.attributeName}</span>
+					</div>
 				</div>
 			);
 		}
 	},
 	render: function render() {
-		var specialClass = (this.props.value && this.props.value.special) ? "special-option" : "";
+		var specialClass = (this.props.value && this.props.value.special) ? "special-option" : "value-multiline";
 		var classNames = classes('Select-placeholder', "UICustomSelect-value", this.props.value && this.props.value.className, specialClass);
 		var label = this.props.value ? this.renderValue(this.props.value) : this.props.placeholder;
 		return React.createElement(
