@@ -83,6 +83,10 @@ export default {
 				action.type = ActionTypes.OBJECT_RELATION_HANDLE;
 				console.log("action type",action.type);
 				break;
+			case ObjectTypes.PERIOD:
+				action.type = ActionTypes.PERIOD_HANDLE;
+				console.log("action type",action.type);
+				break;
 			default:
 				return;
 		}
