@@ -132,16 +132,19 @@ class ConfigMetadataPeriod extends Component{
 	}
 
 	createNew() {
-		let newModel = new model[ObjectTypes.PERIOD](object);
-		var actionData = [], layerTemplates = [], values = {};
-		actionData.push({type:"create",model:newModel});
-		ActionCreator.handleObjects(actionData,ObjectTypes.PERIOD);
+		//let newModel = new model[ObjectTypes.PERIOD](object);
+		//var actionData = [], layerTemplates = [], values = {};
+		//actionData.push({type:"create",model:newModel});
+		//ActionCreator.handleObjects(actionData,ObjectTypes.PERIOD);
 	}
 
 	saveForm() {
-		var model = this.state.period;
-		var actionData = [], layerTemplates = [], values = {};
-		actionData.push({type:"update",model:model});
+		var actionData = [], modelData = {};
+		_.assign(modelData, this.state.period);
+		modelData.active = this.state.valueActive;
+		modelData.name = this.state.valueName;
+		let modelObj = new model[ObjectTypes.PERIOD](modelData);
+		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.PERIOD);
 	}
 
