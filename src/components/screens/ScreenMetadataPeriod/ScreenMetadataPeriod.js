@@ -57,7 +57,11 @@ class ScreenMetadataPeriod extends Component{
 	}
 
 	componentWillReceiveProps(newProps) {
-		this.context.setStateFromStores.call(this, this.store2state(newProps));
+		//console.log("SMP cWRP newProps",newProps);
+		if(this.props.data.initialKey != newProps.data.initialKey) {
+			this.state.selectorValue = newProps.data.initialKey;
+		}
+		//this.context.setStateFromStores.call(this, this.store2state(newProps));
 	}
 
 	onSelectorChange (value) {

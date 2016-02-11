@@ -126,33 +126,42 @@ class Page extends Component {
 			title: this.state.title,
 			screens: this.state.screens
 		};
-		var screen = {
-			key: key,
-			position: "closed",
-			component: component,
-			parentUrl: parentUrl,
-			data: data
-		};
-		if(options.type) {
-			screen.type = options.type;
-		}
-		if(options.size) {
-			screen.size = options.size;
-		}
-		screenSet.screens.push(screen);
-		screenSets[this.state.key].screens.push(screen);
-		screenStack[screenSet.key].unshift({
-			key: screen.key,
-			position: screen.position,
-			userDidThat: true
-		});
-		this.setState({
-			screens: screenSet.screens,
-			screenSets: screenSets
-		},
-		function(){
+		var existingScreen = _.findWhere(screenSet.screens, {key: key});
+		if(existingScreen) {
+			// todo send data
+			console.log("Screen already exists:",existingScreen);
+			this.context.onSetScreenData(existingScreen.key, data)();
 			this.refs[key].onDynamicOpen();
-		});
+		} else {
+			var screen = {
+				key: key,
+				position: "closed",
+				component: component,
+				parentUrl: parentUrl,
+				data: data
+			};
+			if(options.type) {
+				screen.type = options.type;
+			}
+			if(options.size) {
+				screen.size = options.size;
+			}
+			screenSet.screens.push(screen);
+			screenSets[this.state.key].screens.push(screen);
+			screenStack[screenSet.key].unshift({
+				key: screen.key,
+				position: screen.position,
+				userDidThat: true
+			});
+			this.setState({
+					screens: screenSet.screens,
+					screenSets: screenSets
+				},
+				function(){
+					this.refs[key].onDynamicOpen();
+				});
+		}
+
 	}
 
 	render() {
