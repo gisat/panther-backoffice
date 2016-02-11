@@ -26,11 +26,11 @@ export default {
 			type: null,
 			model: model
 		};
-		console.log("ActionCreator createObject()");
+		//console.log("ActionCreator createObject()");
 		switch (objectType) {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_CREATE;
-				console.log("action type",action.type);
+				//console.log("action type",action.type);
 				break;
 			default:
 				return;
@@ -43,11 +43,11 @@ export default {
 			type: null,
 			model: model
 		};
-		console.log("ActionCreator updateObject()");
+		//console.log("ActionCreator updateObject()");
 		switch (objectType) {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_UPDATE;
-				console.log("action type",action.type);
+				//console.log("action type",action.type);
 				break;
 			default:
 				return;
@@ -60,11 +60,11 @@ export default {
 			type: null,
 			model: model
 		};
-		console.log("ActionCreator deleteObject()");
+		//console.log("ActionCreator deleteObject()");
 		switch (objectType) {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_DELETE;
-				console.log("action type",action.type);
+				//console.log("action type",action.type);
 				break;
 			default:
 				return;
@@ -77,15 +77,15 @@ export default {
 			type: null,
 			data: data
 		};
-		console.log("ActionCreator handleObjects()");
+		//console.log("ActionCreator handleObjects()");
 		switch (objectType) {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_HANDLE;
-				console.log("action type",action.type);
+				//console.log("action type",action.type);
 				break;
 			case ObjectTypes.PERIOD:
 				action.type = ActionTypes.PERIOD_HANDLE;
-				console.log("action type",action.type);
+				//console.log("action type",action.type);
 				break;
 			default:
 				return;

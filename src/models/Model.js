@@ -102,7 +102,7 @@ class Model {
 				serializedObject[key] = value;
 			}
 		});
-		console.log("serializedObject",serializedObject);
+		//console.log("serializedObject",serializedObject);
 		return serializedObject;
 	}
 

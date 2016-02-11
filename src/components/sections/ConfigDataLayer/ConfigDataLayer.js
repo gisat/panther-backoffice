@@ -145,7 +145,7 @@ class ConfigDataLayer extends Component {
 	}
 
 	_onStoreChange(keys) {
-		console.log("_onStoreChange() ===============");
+		//console.log("_onStoreChange() ===============");
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -573,8 +573,8 @@ class ConfigDataLayer extends Component {
 		}, this);
 		columnMapPeriods = _.uniq(columnMapPeriods);
 		columnMapAttSets = _.uniq(columnMapAttSets);
-		console.log("columnMapPeriods", columnMapPeriods);
-		console.log("columnMapAttSets", columnMapAttSets);
+		//console.log("columnMapPeriods", columnMapPeriods);
+		//console.log("columnMapAttSets", columnMapAttSets);
 		// get all columnMaps attributeSets
 
 		// columnMap
@@ -606,7 +606,7 @@ class ConfigDataLayer extends Component {
 							}
 						}
 					}, this);
-					console.log("ColumnMap: ", columnMap);
+					//console.log("ColumnMap: ", columnMap);
 
 					if (columnMap.length) {
 						let existingModel = _.find(relations, function (obj) {
@@ -643,7 +643,7 @@ class ConfigDataLayer extends Component {
 		relations.map(function(unusedModel){
 			actionData.push({type:"delete",model:unusedModel});
 		});
-		console.log("handleObjects() actionData", actionData);
+		//console.log("handleObjects() actionData", actionData);
 		ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
 	}
 
@@ -684,7 +684,7 @@ class ConfigDataLayer extends Component {
 
 	render() {
 
-		console.log("------------ CONFIG-DATA-LAYER RENDER -----------");
+		//console.log("------------ CONFIG-DATA-LAYER RENDER -----------");
 		//console.log("this.state", this.state);
 		//console.log("this.state.relationsState", this.state.relationsState);
 

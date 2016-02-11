@@ -53,7 +53,7 @@ class ConfigMetadataPeriod extends Component{
 	}
 
 	setStateFromStores(props,keys) {
-		console.log("ConfigMetadataPeriod setStateFromStores() this.state",this.state);
+		//console.log("ConfigMetadataPeriod setStateFromStores() this.state",this.state);
 		if(!props){
 			props = this.props;
 		}
@@ -64,13 +64,13 @@ class ConfigMetadataPeriod extends Component{
 			// if stores changed, overrides user input - todo fix
 
 			store2state.period.then(function(period) {
-				console.log("period.then",period);
+				//console.log("period.then",period);
 				thisComponent.setState({
 					valueActive: period.active,
 					valueName: period.name
 				},
 				function(){
-					console.log("I set dat state, look:",thisComponent.state);
+					//console.log("I set dat state, look:",thisComponent.state);
 				});
 			});
 		}
