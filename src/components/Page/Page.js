@@ -86,6 +86,10 @@ class Page extends Component {
 
 	}
 
+	onSetScreenData(screenKey, data){
+		return this.context.onSetScreenData.bind(this, screenKey, data)();
+	}
+
 	buildScreenStack(screenSet) {
 		// create screenStack from screenSet
 		screenStack[screenSet.key] = screenStack[screenSet.key] || [];
@@ -130,7 +134,7 @@ class Page extends Component {
 		if(existingScreen) {
 			// todo send data
 			console.log("Screen already exists:",existingScreen);
-			this.context.onSetScreenData(existingScreen.key, data)();
+			this.onSetScreenData(existingScreen.key, data)();
 			this.refs[key].onDynamicOpen();
 		} else {
 			var screen = {

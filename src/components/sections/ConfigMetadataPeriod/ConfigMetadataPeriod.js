@@ -95,6 +95,8 @@ class ConfigMetadataPeriod extends Component{
 			this.setStateFromStores(newProps);
 			this.updateStateHash(newProps);
 		}
+		console.log("ConfigMetadataPeriod newProps", newProps);
+		console.log("ConfigMetadataPeriod this.props", this.props);
 	}
 
 
