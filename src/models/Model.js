@@ -82,20 +82,50 @@ class Model {
 		});
 	}
 
+	///**
+	// * Transform self for server
+	// */
+	//serialize() {
+	//	var serializedObject = {};
+	//	var model = this.data();
+	//	_.each(this, function (value, key) {
+	//		if(key!=="ready" && model[key].sendToServer) {
+	//			if(model[key].hasOwnProperty("isArrayOfNested") && model[key].isArrayOfNested){
+	//				//value = value.serialize();
+	//				for(var modelIndex in value){
+	//					value[modelIndex].attribute = value[modelIndex].attribute.key;
+	//				}
+	//			}else if(model[key].hasOwnProperty("transformForServer")){
+	//				value = model[key].transformForServer(value);
+	//			}
+	//			key = model[key].serverName;
+	//			serializedObject[key] = value;
+	//		}
+	//	});
+	//	//console.log("serializedObject",serializedObject);
+	//	return serializedObject;
+	//}
+
 	/**
 	 * Transform self for server
 	 */
 	serialize() {
+		return this.serializeModel(this,this.data());
+	}
+
+	/**
+	 * Transform model for server
+	 */
+	serializeModel(object, model) {
+		var self = this;
 		var serializedObject = {};
-		var model = this.data();
-		_.each(this, function (value, key) {
+		_.each(object, function (value, key) {
 			if(key!=="ready" && model[key].sendToServer) {
 				if(model[key].hasOwnProperty("isArrayOfNested") && model[key].isArrayOfNested){
-					//value = value.serialize();
-					for(var modelIndex in value){
-						value[modelIndex].attribute = value[modelIndex].attribute.key;
+					for(var i in value){
+						value[i] = self.serializeModel(value[i],model[key].model);
 					}
-				}else if(model[key].hasOwnProperty("transformForServer")){
+				} else if (model[key].hasOwnProperty("transformForServer")){
 					value = model[key].transformForServer(value);
 				}
 				key = model[key].serverName;
