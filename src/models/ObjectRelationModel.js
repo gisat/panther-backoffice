@@ -64,7 +64,7 @@ class ObjectRelationModel extends Model {
 			},
 			attributeSet: {
 				serverName: 'attributeSet', //id
-				sendToServer: false, //for now
+				sendToServer: true,
 				transformForLocal: function (data) {
 					return AttributeSetStore.getById(data)
 				},
@@ -112,15 +112,15 @@ class ObjectRelationModel extends Model {
 			},
 			fidColumn: { // feature identifier column
 				serverName: 'fidColumn', //string
-				sendToServer: false //for now
+				sendToServer: true
 			},
 			nameColumn: { // feature name column
 				serverName: 'nameColumn', //string
-				sendToServer: false //for now
+				sendToServer: true
 			},
 			parentColumn: { // parent feature id column
 				serverName: 'parentColumn', //string
-				sendToServer: false //for now
+				sendToServer: true
 			},
 			//columnMap: {
 			//	serverName: 'columnMap', //object {column: string, attribute: id}

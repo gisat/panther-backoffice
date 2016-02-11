@@ -116,6 +116,7 @@ class ConfigDataLayer extends Component {
 			rasterLayerTemplates: RasterLayerStore.getAll(),
 			auLevels: AULevelStore.getAll(),
 			attributeSets: AttributeSetStore.getAll(),
+			attributes: AttributeStore.getAll(),
 			periods: PeriodStore.getAll(),
 			layer: DataLayerStore.getById(props.selectorValue),
 			layerRelations: ObjectRelationStore.getByDataSource(props.selectorValue),
@@ -223,7 +224,7 @@ class ConfigDataLayer extends Component {
 			if(this.state.layerType==this.state.relationsState.layerType) {
 				// todo could be universal? compare whatever properties relationsState has?
 				//console.log("isStateUnchanged layerType");
-				if(this.state.layerType=="vector") {
+				if(this.state.layerType=="vector" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("vector")) {
 					//console.log("isStateUnchanged vector");
 					isIt = (
 						this.state.valueVLTemplate==this.state.relationsState.valueVLTemplate &&
@@ -240,7 +241,7 @@ class ConfigDataLayer extends Component {
 						this.state.valuesRLPlaces==this.state.relationsState.valuesRLPlaces &&
 						this.state.valuesRLPeriods==this.state.relationsState.valuesRLPeriods
 					);
-				} else if(this.state.layerType=="au") {
+				} else if(this.state.layerType=="au" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("au")) {
 					//console.log("isStateUnchanged au");
 					isIt = (
 						this.state.valueAULevel==this.state.relationsState.valueAULevel &&
@@ -332,9 +333,10 @@ class ConfigDataLayer extends Component {
 				this.addRelationToColumnMap(ret, relation.parentColumn, "P");
 			}
 
-			if(relation.hasOwnProperty("columnMap")){
+			if(relation.hasOwnProperty("columnMap") && relation.isOfAttributeSet){
 				_.each(relation.columnMap, function(column){
-					this.addRelationToColumnMap(ret, column.column, column.attribute.key, relation);
+					let keyString = relation.attributeSet.key + "-" + column.attribute.key;
+					this.addRelationToColumnMap(ret, column.column, keyString, relation);
 				}, this);
 			}
 		}, this);
@@ -396,6 +398,9 @@ class ConfigDataLayer extends Component {
 			valuesAUPlaces: [],
 			valueAULevel: []
 		};
+		relations = _.reject(relations, function (item) {
+			return item.isOfAttributeSet;
+		});
 		if(relations.length > 0) {
 			//console.log("store2state relations2state():");
 			//console.log(relations);
@@ -469,16 +474,17 @@ class ConfigDataLayer extends Component {
 
 	saveForm() {
 		// only raster layers for now - todo the rest
-		if(this.state.layerType!="raster") {
-			console.info("Only raster layers saved for now. Aborted.");
-			return;
-		}
+		//if(this.state.layerType!="raster") {
+		//	console.info("Only raster layers saved for now. Aborted.");
+		//	return;
+		//}
 
 		//do not even for now
 		//console.info("Saving not working yet.");
 		//return;
 
-		var relations = this.state.layerRelations;
+		var relations = [];
+		_.assign(relations, this.state.layerRelations);
 		var actionData = [], layerTemplates = [], values = {};
 		switch (this.state.layerType) {
 			case "raster":
@@ -497,10 +503,19 @@ class ConfigDataLayer extends Component {
 				layerTemplates = this.state.auLevels;
 				values.template = this.state.valueAULevel[0];
 				values.places = this.state.valuesAUPlaces;
-				values.periods = [null];
+				values.periods = utils.getPeriodsForScope(this.state.valueAUScope[0]);
 				break;
 		}
 		var layerTemplate = _.findWhere(layerTemplates,{key:values.template});
+
+		if(this.state.layerType != "raster"){
+			let map = this.state.columnMaps[this.state.layerType];
+			for(let columnName in map){
+				if(map[columnName].valueUseAs[0] == "I") values.fidColumn = columnName;
+				if(map[columnName].valueUseAs[0] == "N") values.nameColumn = columnName;
+				if(map[columnName].valueUseAs[0] == "P") values.parentColumn = columnName;
+			}
+		}
 
 		// create common structure for newly created layerrefs
 		var baseObject = {
@@ -509,6 +524,10 @@ class ConfigDataLayer extends Component {
 			columnMap: [],
 			isOfAttributeSet: false
 		};
+
+		if(values.fidColumn) baseObject.fidColumn = values.fidColumn;
+		if(values.nameColumn) baseObject.nameColumn = values.nameColumn;
+		if(values.parentColumn) baseObject.parentColumn = values.parentColumn;
 		// (later: ?attributeSet + isData + columnMap + xColumns? - for vector & au)
 		// changed, changedBy done by server
 
@@ -516,17 +535,16 @@ class ConfigDataLayer extends Component {
 		for (let placeValue of values.places) {
 			for (let periodValue of values.periods) {
 				let existingModel = _.find(relations, function(obj) {
-					return ((obj.place.key == placeValue) && (obj.period.key == periodValue));
+					return ((obj.place.key == placeValue) && (obj.period.key == periodValue) && !obj.isOfAttributeSet);
 				});
 				if (existingModel) {
 					// exists -> update
 					relations = _.reject(relations, function(item) { return item.key === existingModel.key; });
-					let update = false;
 					if(existingModel.layerObject.key!=layerTemplate.key){
-						update = true;
 						existingModel.layerObject = layerTemplate;
-					}
-					if(update) {
+						if(values.fidColumn) existingModel.fidColumn = values.fidColumn;
+						if(values.nameColumn) existingModel.nameColumn = values.nameColumn;
+						if(values.parentColumn) existingModel.parentColumn = values.parentColumn;
 						actionData.push({type:"update",model:existingModel});
 					}
 				} else {
@@ -539,6 +557,85 @@ class ConfigDataLayer extends Component {
 					object = _.assign(object,baseObject);
 					let newModel = new model[ObjectTypes.OBJECT_RELATION](object);
 					actionData.push({type:"create",model:newModel});
+				}
+			}
+		}
+		// get all columnMaps periods
+		let columnMapPeriods = [];
+		let columnMapAttSets = [];
+		_.each(this.state.columnMaps[this.state.layerType], function(column){
+			columnMapPeriods = _.union(columnMapPeriods, column.valuesPeriods);
+			if(column.valueUseAs.length) {
+				let destination = null;
+				if(!_.contains(["I","P","N"], column.valueUseAs[0])) destination = _.findWhere(this.state.destinationsVL, {key: column.valueUseAs[0]});
+				if(destination) columnMapAttSets.push(destination.attributeSetKey);
+			}
+		}, this);
+		columnMapPeriods = _.uniq(columnMapPeriods);
+		columnMapAttSets = _.uniq(columnMapAttSets);
+		console.log("columnMapPeriods", columnMapPeriods);
+		console.log("columnMapAttSets", columnMapAttSets);
+		// get all columnMaps attributeSets
+
+		// columnMap
+		// create common structure for newly created layerrefs
+		var baseObjectForColumnMap = {
+			active: true, //todo active setting
+			layerObject: layerTemplate,
+			isOfAttributeSet: true
+		};
+		if(values.fidColumn) baseObjectForColumnMap.fidColumn = values.fidColumn;
+		if(values.nameColumn) baseObjectForColumnMap.nameColumn = values.nameColumn;
+		if(values.parentColumn) baseObjectForColumnMap.parentColumn = values.parentColumn;
+		for (let placeValue of values.places) {
+			for (let periodValue of columnMapPeriods) {
+				for (let attSet of columnMapAttSets) {
+
+					var columnMap = [];
+					_.each(this.state.columnMaps[this.state.layerType], function (column, columnName) {
+						if (_.contains(column.valuesPeriods, periodValue)) {
+							if (column.valueUseAs.length && !_.contains(["I", "P", "N"], column.valueUseAs[0])) {
+								let destination = _.findWhere(this.state.destinationsVL, {key: column.valueUseAs[0]});
+								if(destination.attributeSetKey == attSet) {
+									let attributeModel = _.findWhere(this.state.attributes, {key: destination.attributeKey});
+									columnMap.push({
+										attribute: attributeModel,
+										column: columnName
+									});
+								}
+							}
+						}
+					}, this);
+					console.log("ColumnMap: ", columnMap);
+
+					if (columnMap.length) {
+						let existingModel = _.find(relations, function (obj) {
+							return ((obj.place.key == placeValue) && (obj.period.key == periodValue) && obj.isOfAttributeSet && (obj.attributeSet.key == attSet));
+						});
+						if (existingModel) {
+							// exists -> update
+							existingModel.columnMap = columnMap;
+							if(values.fidColumn) existingModel.fidColumn = values.fidColumn;
+							if(values.nameColumn) existingModel.nameColumn = values.nameColumn;
+							if(values.parentColumn) existingModel.parentColumn = values.parentColumn;
+							relations = _.reject(relations, function (item) {
+								return item.key === existingModel.key;
+							});
+							actionData.push({type: "update", model: existingModel});
+						} else {
+							// does not exist -> create
+							let object = {
+								dataSource: _.findWhere(this.props.dataLayers, {key: this.props.selectorValue}),
+								place: _.findWhere(this.state.places, {key: placeValue}),
+								period: _.findWhere(this.state.periods, {key: periodValue}),
+								columnMap: columnMap,
+								attributeSet: _.findWhere(this.state.attributeSets, {key: attSet})
+							};
+							object = _.assign(object, baseObjectForColumnMap);
+							let newModel = new model[ObjectTypes.OBJECT_RELATION](object);
+							actionData.push({type: "create", model: newModel});
+						}
+					}
 				}
 			}
 		}

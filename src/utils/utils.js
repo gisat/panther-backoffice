@@ -1,5 +1,7 @@
 import ActionCreator from '../actions/ActionCreator';
 import {model} from '../constants/ObjectTypes';
+import ScopeStore from '../stores/ScopeStore';
+import ThemeStore from '../stores/ThemeStore';
 
 export default {
 	stringHash: function(str) {
@@ -49,6 +51,10 @@ export default {
 			label: inputValue,
 			create: true
 		};
+	},
+
+	getPeriodsForScope: function(scopeKey){
+
 	}
 
 }

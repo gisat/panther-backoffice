@@ -48,10 +48,7 @@ class ConfigDataLayerVector extends Component{
 			let destinationValue = null;
 			let destination = null;
 			if(column.valueUseAs.length) {
-				destination = _.findWhere(this.props.destinations, {attributeKey: column.valueUseAs[0]});
-				if(!destination){ // Probably I, P or N. (todo) This is really no pretty code.
-					destination = _.findWhere(this.props.destinations, {key: column.valueUseAs[0]});
-				}
+				destination = _.findWhere(this.props.destinations, {key: column.valueUseAs[0]});
 				if(destination && destination.hasOwnProperty("key")) {
 					destinationValue = [destination.key];
 				}else if(column.valueUseAs[0] != "P"){

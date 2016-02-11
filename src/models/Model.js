@@ -90,7 +90,12 @@ class Model {
 		var model = this.data();
 		_.each(this, function (value, key) {
 			if(key!=="ready" && model[key].sendToServer) {
-				if(model[key].hasOwnProperty("transformForServer")){
+				if(model[key].hasOwnProperty("isArrayOfNested") && model[key].isArrayOfNested){
+					//value = value.serialize();
+					for(var modelIndex in value){
+						value[modelIndex].attribute = value[modelIndex].attribute.key;
+					}
+				}else if(model[key].hasOwnProperty("transformForServer")){
 					value = model[key].transformForServer(value);
 				}
 				key = model[key].serverName;
@@ -107,7 +112,7 @@ class Model {
 	}
 
 	getKey(model) {
-		return model.key;
+		return (model) ? model.key : null;
 	}
 
 	getKeys(models) {
