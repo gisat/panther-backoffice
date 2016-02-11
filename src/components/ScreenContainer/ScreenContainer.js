@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 //import styles from './ScreenContainer.css';
 //import withStyles from '../../decorators/withStyles';
 import classNames from 'classnames';
+import _ from 'underscore';
 
 import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
@@ -123,12 +124,15 @@ class ScreenContainer extends Component{
 			screenStyles.width = forceWidth + "rem";
 		}
 
+		var totallyLocalData = {};
+		_.assign(totallyLocalData,this.props.screenState.data);
+
 		return (
 			<div className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass, contentAlignClass)} style={screenStyles}>
 				<div className="screen-scroll"><div>
 					{React.cloneElement(this.props.screenState.component, {
 						disabled: disabled,
-						data: this.props.screenState.data || {},
+						data: totallyLocalData,
 						parentUrl: this.props.screenState.parentUrl || ""
 					} )}
 				</div></div>
