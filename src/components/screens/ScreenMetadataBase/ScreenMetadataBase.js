@@ -5,58 +5,145 @@ import withStyles from '../../../decorators/withStyles';
 import ObjectList from '../../elements/ObjectList';
 import classnames from 'classnames';
 
-const SCOPES = [
-	{ key: 1, name: 'Local' },
-	{ key: 2, name: 'National' },
-	{ key: 3, name: 'Regional' },
-	{ key: 4, name: 'Local (EOW2)' }
-];
-const VECTORLAYERTEMPLATES = [
-	{ key: 1, name: 'Road network' },
-	{ key: 2, name: 'Hospitals' },
-	{ key: 3, name: 'Land cover' },
-	{ key: 4, name: 'Land cover change' },
-	{ key: 5, name: 'Possible low-income settlements (areals)' },
-	{ key: 7, name: 'Possible low-income settlements (mid-points)' }
-];
-const TABS = [
-	{ key: "scope", name: "Scope", data: SCOPES },
-	{ key: "header-templates", name: "Templates", header: true },
-	{ key: "vector-layer", name: "Vector layer", data: VECTORLAYERTEMPLATES, isTemplate: true },
-	{ key: "raster-layer", name: "Raster layer", data: VECTORLAYERTEMPLATES, isTemplate: true },
-	{ key: "attribute-set", name: "Attribute set", data: VECTORLAYERTEMPLATES, isTemplate: true },
-	{ key: "attribute", name: "Attribute", data: VECTORLAYERTEMPLATES, isTemplate: true },
-	{ key: "header-metadata", name: "Metadata", header: true },
-	{ key: "place", name: "Place", data: VECTORLAYERTEMPLATES },
-	{ key: "period", name: "Imaging/reference period", data: VECTORLAYERTEMPLATES },
-	{ key: "theme", name: "Theme", data: VECTORLAYERTEMPLATES },
-	{ key: "topic", name: "Topic", data: VECTORLAYERTEMPLATES },
-	{ key: "header-display", name: "Display", header: true  },
-	{ key: "layer-group", name: "Layer group", data: VECTORLAYERTEMPLATES },
-	{ key: "style", name: "Style", data: VECTORLAYERTEMPLATES }
-];
+import ObjectTypes, {model} from '../../../constants/ObjectTypes';
+import ActionCreator from '../../../actions/ActionCreator';
+import ScopeStore from '../../../stores/ScopeStore';
+import VectorLayerStore from '../../../stores/VectorLayerStore';
+import RasterLayerStore from '../../../stores/RasterLayerStore';
+import AULevelStore from '../../../stores/AULevelStore';
+import AttributeStore from '../../../stores/AttributeStore';
+import AttributeSetStore from '../../../stores/AttributeSetStore';
+import PlaceStore from '../../../stores/PlaceStore';
+import PeriodStore from '../../../stores/PeriodStore';
+import ThemeStore from '../../../stores/ThemeStore';
+import TopicStore from '../../../stores/TopicStore';
+import LayerGroupStore from '../../../stores/LayerGroupStore';
+import StyleStore from '../../../stores/StyleStore';
+
+
+var initialState = {
+	scopes: [],
+	vectorLayerTemplates: [],
+	rasterLayerTemplates: [],
+	auLevels: [],
+	attributeSets: [],
+	attributes: [],
+	places: [],
+	periods: [],
+	themes: [],
+	topics: [],
+	layerGroups: [],
+	styles: [],
+	activeMenuItem: "vector-layer",
+	activeObjectListItems: {}
+};
+
 
 @withStyles(styles)
 class ScreenMetadataBase extends Component{
 
+	static propTypes = {
+		disabled: React.PropTypes.bool
+	};
+
+	static defaultProps = {
+		disabled: false
+	};
+
 	static contextTypes = {
-		onInteraction: PropTypes.func.isRequired
+		setStateFromStores: PropTypes.func.isRequired,
+		onInteraction: PropTypes.func.isRequired,
+		onSetScreenData: PropTypes.func.isRequired,
+		openScreen: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
 		super(props);
 
-		var initialActiveObjectListItems = {};
-		for (var tab in TABS) {
-			initialActiveObjectListItems[tab.key] = null;
-		}
+		this.state = initialState;
 
-		this.state = {
-			activeMenuItem: "vector-layer",
-			activeObjectListItems: initialActiveObjectListItems
-		};
+		this._tabs = [
+			{ key: "scope", name: "Scope", data: "scopes" },
+			{ key: "header-templates", name: "Templates", header: true },
+			{ key: "vector-layer", name: "Vector layer", data: "vectorLayerTemplates", isTemplate: true },
+			{ key: "raster-layer", name: "Raster layer", data: "rasterLayerTemplates", isTemplate: true },
+			{ key: "au-level", name: "Analytical units level", data: "auLevels", isTemplate: true },
+			{ key: "attribute-set", name: "Attribute set", data: "attributeSets", isTemplate: true },
+			{ key: "attribute", name: "Attribute", data: "attributes", isTemplate: true },
+			{ key: "header-metadata", name: "Metadata", header: true },
+			{ key: "place", name: "Place", data: "places" },
+			{ key: "period", name: "Imaging/reference period", data: "periods"},
+			{ key: "theme", name: "Theme", data: "themes" },
+			{ key: "topic", name: "Topic", data: "topics" },
+			{ key: "header-display", name: "Display", header: true  },
+			{ key: "layer-group", name: "Layer group", data: "layerGroups" },
+			{ key: "style", name: "Style", data: "styles" }
+		];
 
 	}
+
+	store2state() {
+		return {
+			scopes: ScopeStore.getAll(),
+			vectorLayerTemplates: VectorLayerStore.getAll(),
+			rasterLayerTemplates: RasterLayerStore.getAll(),
+			auLevels: AULevelStore.getAll(),
+			attributeSets: AttributeSetStore.getAll(),
+			attributes: AttributeStore.getAll(),
+			places: PlaceStore.getAll(),
+			periods: PeriodStore.getAll(),
+			//themes: ThemeStore.getAll(),
+			//topics: TopicStore.getAll(),
+			//layerGroups: LayerGroupStore.getAll(),
+			//styles: StyleStore.getAll()
+		};
+	}
+
+	_onStoreChange(keys) {
+		this.context.setStateFromStores.call(this, this.store2state(), keys);
+	}
+
+	componentDidMount() {
+		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
+		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
+		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevels"]));
+		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
+		AttributeStore.addChangeListener(this._onStoreChange.bind(this,["attributes"]));
+		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
+		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
+		//ThemeStore.addChangeListener(this._onStoreChange.bind(this,["themes"]));
+		//TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
+		//LayerGroupStore.addChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
+		//StyleStore.addChangeListener(this._onStoreChange.bind(this,["styles"]));
+		this.context.setStateFromStores.call(this, this.store2state());
+	}
+
+	componentWillUnmount() {
+		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
+		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
+		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
+		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
+		AttributeStore.removeChangeListener(this._onStoreChange.bind(this,["attributes"]));
+		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
+		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
+		//ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["themes"]));
+		//TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
+		//LayerGroupStore.removeChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
+		//StyleStore.removeChangeListener(this._onStoreChange.bind(this,["styles"]));
+	}
+
+	componentWillReceiveProps(newProps) {
+		// no props we need to react to
+	}
+
+	//shouldComponentUpdate() {
+	//	return false; // can we only rerender children?
+	//}
+
+
 
 	onChangeActive(key) {
 		this.setState({
@@ -91,7 +178,7 @@ class ScreenMetadataBase extends Component{
 	render() {
 		var tabsInsert = [];
 		var contentInsert = [];
-		for(var tab of TABS) {
+		for(var tab of this._tabs) {
 			var tabElement;
 			var contentElement;
 			if(tab.header) {
@@ -121,7 +208,7 @@ class ScreenMetadataBase extends Component{
 						key={"metadata-items-"+tab.key}
 					>
 						<ObjectList
-							data={tab.data}
+							data={this.state[tab.data]}
 							onItemClick={this.onObjectListItemClick.bind(this,tab.key)}
 							onAddClick={this.onObjectListAddClick.bind(this,tab.key)}
 							itemClasses={classnames({'template' : tab.isTemplate})}
@@ -133,6 +220,8 @@ class ScreenMetadataBase extends Component{
 			tabsInsert.push(tabElement);
 			contentInsert.push(contentElement);
 		}
+
+		console.log("SMB render()");
 
 		return (
 			<div>

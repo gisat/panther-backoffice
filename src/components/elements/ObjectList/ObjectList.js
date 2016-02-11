@@ -25,6 +25,10 @@ class ObjectList extends Component {
 		selectedItemKey: null
 	};
 
+	//componentWillReceiveProps(newProps) {
+	//
+	//}
+
 
 	handleItemClick  (key, event) {
 		if (this.props.onItemClick) {
