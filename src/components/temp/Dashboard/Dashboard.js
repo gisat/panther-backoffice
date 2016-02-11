@@ -36,13 +36,13 @@ class Dashboard extends Component{
 					prvni,
 					druha,
 					treti
-				]*/}
+				]
 				<a
 					href="#"
 					onClick={this.onAnchorClick.bind(this)}
 				>
 					CLICK ME
-				</a>
+				</a>*/}
 			</div>
 		);
 
