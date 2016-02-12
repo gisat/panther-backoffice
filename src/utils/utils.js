@@ -2,6 +2,8 @@ import ActionCreator from '../actions/ActionCreator';
 import {model} from '../constants/ObjectTypes';
 import ScopeStore from '../stores/ScopeStore';
 import ThemeStore from '../stores/ThemeStore';
+import ScopeModel from '../models/ScopeModel';
+import _ from 'underscore';
 
 export default {
 	stringHash: function(str) {
@@ -53,8 +55,48 @@ export default {
 		};
 	},
 
-	getPeriodsForScope: function(scopeKey){
+	getPeriodsForScope: function(scope) {
+		return new Promise(function(resolve, reject){
 
+			var scopePromise = null;
+			if(scope instanceof ScopeModel) {
+				scopePromise = Promise.resolve(scope);
+			}else{
+				scopePromise = ScopeStore.getById(scope);
+			}
+
+			scopePromise.then(function(scopeModel){
+				ThemeStore.getFiltered({scope: scopeModel}).then(function(themeModels){
+
+					if(!themeModels.length){
+						return reject("getPeriodsForScope: themes with filter {scope: "+scope+"} not find.");
+					}
+
+					var periodKeys = [];
+					var periodModels = [];
+
+					for(let theme of themeModels){
+						if(!theme.hasOwnProperty("periods")){
+							return reject("getPeriodsForScope: no periods property in theme!");
+						}
+						for(let period of theme.periods){
+							ret.keys.push(period.key);
+							ret.models.push(period);
+						}
+					}
+
+					resolve({
+						keys: _.uniq(periodKeys),
+						models: _.uniq(periodModels)
+					});
+
+				}, function(){
+
+					reject("getPeriodsForScope: theme with filter {scope: " + scope + "} not resolved.");
+
+				});
+			});
+		});
 	}
 
 }
