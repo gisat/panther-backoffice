@@ -138,7 +138,7 @@ class Model {
 
 	// todo static?
 	transformDate(dateString) {
-		return Date(dateString);
+		return new Date(dateString);
 	}
 
 	getKey(model) {
