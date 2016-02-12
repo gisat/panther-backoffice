@@ -473,178 +473,181 @@ class ConfigDataLayer extends Component {
 
 
 	saveForm() {
-		// only raster layers for now - todo the rest
-		//if(this.state.layerType!="raster") {
-		//	console.info("Only raster layers saved for now. Aborted.");
-		//	return;
-		//}
 
-		//do not even for now
-		//console.info("Saving not working yet.");
-		//return;
-
-		var relations = [];
-		_.assign(relations, this.state.layerRelations);
-		var actionData = [], layerTemplates = [], values = {};
-		switch (this.state.layerType) {
-			case "raster":
-				layerTemplates = this.state.rasterLayerTemplates;
-				values.template = this.state.valueRLTemplate[0];
-				values.places = this.state.valuesRLPlaces;
-				values.periods = this.state.valuesRLPeriods;
-				break;
-			case "vector":
-				layerTemplates = this.state.vectorLayerTemplates;
-				values.template = this.state.valueVLTemplate[0];
-				values.places = this.state.valuesVLPlaces;
-				values.periods = this.state.valuesVLPeriods;
-				break;
-			case "au":
-				layerTemplates = this.state.auLevels;
-				values.template = this.state.valueAULevel[0];
-				values.places = this.state.valuesAUPlaces;
-				values.periods = utils.getPeriodsForScope(this.state.valueAUScope[0]);
-				break;
+		var periodsPromise = null;
+		if(this.state.layerType == "au"){
+			periodsPromise = utils.getPeriodsForScope(this.state.valueAUScope[0]);
+		}else{
+			periodsPromise = Promise.resolve();
 		}
-		var layerTemplate = _.findWhere(layerTemplates,{key:values.template});
 
-		if(this.state.layerType != "raster"){
-			let map = this.state.columnMaps[this.state.layerType];
-			for(let columnName in map){
-				if(map[columnName].valueUseAs[0] == "I") values.fidColumn = columnName;
-				if(map[columnName].valueUseAs[0] == "N") values.nameColumn = columnName;
-				if(map[columnName].valueUseAs[0] == "P") values.parentColumn = columnName;
+		periodsPromise.then(function(AUPeriods){
+
+			var relations = [];
+			_.assign(relations, this.state.layerRelations);
+			var actionData = [], layerTemplates = [], values = {};
+			switch (this.state.layerType) {
+				case "raster":
+					layerTemplates = this.state.rasterLayerTemplates;
+					values.template = this.state.valueRLTemplate[0];
+					values.places = this.state.valuesRLPlaces;
+					values.periods = this.state.valuesRLPeriods;
+					break;
+				case "vector":
+					layerTemplates = this.state.vectorLayerTemplates;
+					values.template = this.state.valueVLTemplate[0];
+					values.places = this.state.valuesVLPlaces;
+					values.periods = this.state.valuesVLPeriods;
+					break;
+				case "au":
+					layerTemplates = this.state.auLevels;
+					values.template = this.state.valueAULevel[0];
+					values.places = this.state.valuesAUPlaces;
+					values.periods = AUPeriods;
+					break;
 			}
-		}
 
-		// create common structure for newly created layerrefs
-		var baseObject = {
-			active: true, //todo active setting
-			layerObject: layerTemplate,
-			columnMap: [],
-			isOfAttributeSet: false
-		};
+			var layerTemplate = _.findWhere(layerTemplates,{key:values.template});
 
-		if(values.fidColumn) baseObject.fidColumn = values.fidColumn;
-		if(values.nameColumn) baseObject.nameColumn = values.nameColumn;
-		if(values.parentColumn) baseObject.parentColumn = values.parentColumn;
-		// (later: ?attributeSet + isData + columnMap + xColumns? - for vector & au)
-		// changed, changedBy done by server
-
-		// save updated or new relations
-		for (let placeValue of values.places) {
-			for (let periodValue of values.periods) {
-				let existingModel = _.find(relations, function(obj) {
-					return ((obj.place.key == placeValue) && (obj.period.key == periodValue) && !obj.isOfAttributeSet);
-				});
-				if (existingModel) {
-					// exists -> update
-					relations = _.reject(relations, function(item) { return item.key === existingModel.key; });
-					if(existingModel.layerObject.key!=layerTemplate.key){
-						existingModel.layerObject = layerTemplate;
-						if(values.fidColumn) existingModel.fidColumn = values.fidColumn;
-						if(values.nameColumn) existingModel.nameColumn = values.nameColumn;
-						if(values.parentColumn) existingModel.parentColumn = values.parentColumn;
-						actionData.push({type:"update",model:existingModel});
-					}
-				} else {
-					// does not exist -> create
-					let object = {
-						dataSource: _.findWhere(this.props.dataLayers,{key:this.props.selectorValue}),
-						place: _.findWhere(this.state.places,{key:placeValue}),
-						period: _.findWhere(this.state.periods,{key:periodValue})
-					};
-					object = _.assign(object,baseObject);
-					let newModel = new model[ObjectTypes.OBJECT_RELATION](object);
-					actionData.push({type:"create",model:newModel});
+			if(this.state.layerType != "raster"){
+				let map = this.state.columnMaps[this.state.layerType];
+				for(let columnName in map){
+					if(map[columnName].valueUseAs[0] == "I") values.fidColumn = columnName;
+					if(map[columnName].valueUseAs[0] == "N") values.nameColumn = columnName;
+					if(map[columnName].valueUseAs[0] == "P") values.parentColumn = columnName;
 				}
 			}
-		}
-		// get all columnMaps periods
-		let columnMapPeriods = [];
-		let columnMapAttSets = [];
-		_.each(this.state.columnMaps[this.state.layerType], function(column){
-			columnMapPeriods = _.union(columnMapPeriods, column.valuesPeriods);
-			if(column.valueUseAs.length) {
-				let destination = null;
-				if(!_.contains(["I","P","N"], column.valueUseAs[0])) destination = _.findWhere(this.state.destinationsVL, {key: column.valueUseAs[0]});
-				if(destination) columnMapAttSets.push(destination.attributeSetKey);
-			}
-		}, this);
-		columnMapPeriods = _.uniq(columnMapPeriods);
-		columnMapAttSets = _.uniq(columnMapAttSets);
-		//console.log("columnMapPeriods", columnMapPeriods);
-		//console.log("columnMapAttSets", columnMapAttSets);
-		// get all columnMaps attributeSets
 
-		// columnMap
-		// create common structure for newly created layerrefs
-		var baseObjectForColumnMap = {
-			active: true, //todo active setting
-			layerObject: layerTemplate,
-			isOfAttributeSet: true
-		};
-		if(values.fidColumn) baseObjectForColumnMap.fidColumn = values.fidColumn;
-		if(values.nameColumn) baseObjectForColumnMap.nameColumn = values.nameColumn;
-		if(values.parentColumn) baseObjectForColumnMap.parentColumn = values.parentColumn;
-		for (let placeValue of values.places) {
-			for (let periodValue of columnMapPeriods) {
-				for (let attSet of columnMapAttSets) {
+			// create common structure for newly created layerrefs
+			var baseObject = {
+				active: true, //todo active setting
+				layerObject: layerTemplate,
+				columnMap: [],
+				isOfAttributeSet: false
+			};
 
-					var columnMap = [];
-					_.each(this.state.columnMaps[this.state.layerType], function (column, columnName) {
-						if (_.contains(column.valuesPeriods, periodValue)) {
-							if (column.valueUseAs.length && !_.contains(["I", "P", "N"], column.valueUseAs[0])) {
-								let destination = _.findWhere(this.state.destinationsVL, {key: column.valueUseAs[0]});
-								if(destination.attributeSetKey == attSet) {
-									let attributeModel = _.findWhere(this.state.attributes, {key: destination.attributeKey});
-									columnMap.push({
-										attribute: attributeModel,
-										column: columnName
-									});
-								}
-							}
-						}
-					}, this);
-					//console.log("ColumnMap: ", columnMap);
+			if(values.fidColumn) baseObject.fidColumn = values.fidColumn;
+			if(values.nameColumn) baseObject.nameColumn = values.nameColumn;
+			if(values.parentColumn) baseObject.parentColumn = values.parentColumn;
+			// (later: ?attributeSet + isData + columnMap + xColumns? - for vector & au)
+			// changed, changedBy done by server
 
-					if (columnMap.length) {
-						let existingModel = _.find(relations, function (obj) {
-							return ((obj.place.key == placeValue) && (obj.period.key == periodValue) && obj.isOfAttributeSet && (obj.attributeSet.key == attSet));
-						});
-						if (existingModel) {
-							// exists -> update
-							existingModel.columnMap = columnMap;
+			// save updated or new relations
+			for (let placeValue of values.places) {
+				for (let periodValue of values.periods) {
+					let existingModel = _.find(relations, function(obj) {
+						return ((obj.place.key == placeValue) && (obj.period.key == periodValue) && !obj.isOfAttributeSet);
+					});
+					if (existingModel) {
+						// exists -> update
+						relations = _.reject(relations, function(item) { return item.key === existingModel.key; });
+						if(existingModel.layerObject.key!=layerTemplate.key){
+							existingModel.layerObject = layerTemplate;
 							if(values.fidColumn) existingModel.fidColumn = values.fidColumn;
 							if(values.nameColumn) existingModel.nameColumn = values.nameColumn;
 							if(values.parentColumn) existingModel.parentColumn = values.parentColumn;
-							relations = _.reject(relations, function (item) {
-								return item.key === existingModel.key;
+							actionData.push({type:"update",model:existingModel});
+						}
+					} else {
+						// does not exist -> create
+						let object = {
+							dataSource: _.findWhere(this.props.dataLayers,{key:this.props.selectorValue}),
+							place: _.findWhere(this.state.places,{key:placeValue}),
+							period: _.findWhere(this.state.periods,{key:periodValue})
+						};
+						object = _.assign(object,baseObject);
+						let newModel = new model[ObjectTypes.OBJECT_RELATION](object);
+						actionData.push({type:"create",model:newModel});
+					}
+				}
+			}
+			// get all columnMaps periods
+			let columnMapPeriods = [];
+			let columnMapAttSets = [];
+			_.each(this.state.columnMaps[this.state.layerType], function(column){
+				columnMapPeriods = _.union(columnMapPeriods, column.valuesPeriods);
+				if(column.valueUseAs.length) {
+					let destination = null;
+					if(!_.contains(["I","P","N"], column.valueUseAs[0])) destination = _.findWhere(this.state.destinationsVL, {key: column.valueUseAs[0]});
+					if(destination) columnMapAttSets.push(destination.attributeSetKey);
+				}
+			}, this);
+			columnMapPeriods = _.uniq(columnMapPeriods);
+			columnMapAttSets = _.uniq(columnMapAttSets);
+			//console.log("columnMapPeriods", columnMapPeriods);
+			//console.log("columnMapAttSets", columnMapAttSets);
+			// get all columnMaps attributeSets
+
+			// columnMap
+			// create common structure for newly created layerrefs
+			var baseObjectForColumnMap = {
+				active: true, //todo active setting
+				layerObject: layerTemplate,
+				isOfAttributeSet: true
+			};
+			if(values.fidColumn) baseObjectForColumnMap.fidColumn = values.fidColumn;
+			if(values.nameColumn) baseObjectForColumnMap.nameColumn = values.nameColumn;
+			if(values.parentColumn) baseObjectForColumnMap.parentColumn = values.parentColumn;
+			for (let placeValue of values.places) {
+				for (let periodValue of columnMapPeriods) {
+					for (let attSet of columnMapAttSets) {
+
+						var columnMap = [];
+						_.each(this.state.columnMaps[this.state.layerType], function (column, columnName) {
+							if (_.contains(column.valuesPeriods, periodValue)) {
+								if (column.valueUseAs.length && !_.contains(["I", "P", "N"], column.valueUseAs[0])) {
+									let destination = _.findWhere(this.state.destinationsVL, {key: column.valueUseAs[0]});
+									if(destination.attributeSetKey == attSet) {
+										let attributeModel = _.findWhere(this.state.attributes, {key: destination.attributeKey});
+										columnMap.push({
+											attribute: attributeModel,
+											column: columnName
+										});
+									}
+								}
+							}
+						}, this);
+						//console.log("ColumnMap: ", columnMap);
+
+						if (columnMap.length) {
+							let existingModel = _.find(relations, function (obj) {
+								return ((obj.place.key == placeValue) && (obj.period.key == periodValue) && obj.isOfAttributeSet && (obj.attributeSet.key == attSet));
 							});
-							actionData.push({type: "update", model: existingModel});
-						} else {
-							// does not exist -> create
-							let object = {
-								dataSource: _.findWhere(this.props.dataLayers, {key: this.props.selectorValue}),
-								place: _.findWhere(this.state.places, {key: placeValue}),
-								period: _.findWhere(this.state.periods, {key: periodValue}),
-								columnMap: columnMap,
-								attributeSet: _.findWhere(this.state.attributeSets, {key: attSet})
-							};
-							object = _.assign(object, baseObjectForColumnMap);
-							let newModel = new model[ObjectTypes.OBJECT_RELATION](object);
-							actionData.push({type: "create", model: newModel});
+							if (existingModel) {
+								// exists -> update
+								existingModel.columnMap = columnMap;
+								if(values.fidColumn) existingModel.fidColumn = values.fidColumn;
+								if(values.nameColumn) existingModel.nameColumn = values.nameColumn;
+								if(values.parentColumn) existingModel.parentColumn = values.parentColumn;
+								relations = _.reject(relations, function (item) {
+									return item.key === existingModel.key;
+								});
+								actionData.push({type: "update", model: existingModel});
+							} else {
+								// does not exist -> create
+								let object = {
+									dataSource: _.findWhere(this.props.dataLayers, {key: this.props.selectorValue}),
+									place: _.findWhere(this.state.places, {key: placeValue}),
+									period: _.findWhere(this.state.periods, {key: periodValue}),
+									columnMap: columnMap,
+									attributeSet: _.findWhere(this.state.attributeSets, {key: attSet})
+								};
+								object = _.assign(object, baseObjectForColumnMap);
+								let newModel = new model[ObjectTypes.OBJECT_RELATION](object);
+								actionData.push({type: "create", model: newModel});
+							}
 						}
 					}
 				}
 			}
-		}
-		// was not in valuesRLPlaces × valuesRLPeriods, thus was removed -> delete
-		relations.map(function(unusedModel){
-			actionData.push({type:"delete",model:unusedModel});
+			// was not in valuesRLPlaces × valuesRLPeriods, thus was removed -> delete
+			relations.map(function(unusedModel){
+				actionData.push({type:"delete",model:unusedModel});
+			});
+			//console.log("handleObjects() actionData", actionData);
+			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
 		});
-		//console.log("handleObjects() actionData", actionData);
-		ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
+
 	}
 
 
