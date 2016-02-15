@@ -42,8 +42,6 @@ class ConfigDataLayerVector extends Component{
 	render() {
 
 		let tableRows = [];
-		//console.log("COLUMN MPA:", this.props.columnMap);
-		//console.log("this.props.destinations:", this.props.destinations);
 		_.each(this.props.columnMap, function(column, columnName){
 			let destinationValue = null;
 			let destination = null;
@@ -53,7 +51,7 @@ class ConfigDataLayerVector extends Component{
 					destinationValue = [destination.key];
 				}else if(column.valueUseAs[0] != "P"){
 					destinationValue = "[" + (column.valueUseAs[0]) + "]";
-					console.error("Attribute "+ column.valueUseAs[0] +" doesn't exist in destinations!");
+					console.error("Attribute "+ column.valueUseAs[0] +" doesn't exist in Vector destinations!");
 				}
 			}
 
