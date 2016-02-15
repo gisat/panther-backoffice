@@ -15,9 +15,9 @@ import ConfigDataLayerVector from '../ConfigDataLayerVector';
 import ConfigDataLayerRaster from '../ConfigDataLayerRaster';
 import ConfigDataLayerAnalytical from '../ConfigDataLayerAnalytical';
 
-import ScreenMetadataPeriod from '../../screens/ScreenMetadataPeriod';
+import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
-import ObjectTypes, {model} from '../../../constants/ObjectTypes';
+import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 import DataLayerStore from '../../../stores/DataLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
@@ -132,6 +132,7 @@ class ConfigDataLayer extends Component {
 		let store2state = this.store2state(props);
 		this.context.setStateFromStores.call(this, store2state, keys);
 		// if stores changed, overrides user input - todo fix
+		// todo determine from keys, if the following needs to be done
 		store2state.layerRelations.then(function(relations) {
 			// todo we work with relations (attsets,columns) with .ready not removed
 			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations),keys);
@@ -166,15 +167,18 @@ class ConfigDataLayer extends Component {
 				function () {
 					//console.log("_onStoreResponse updated state:", thisComponent.state);
 				});
-				var screenComponent,screenName;
+				var screenComponent,screenName,screenObjectType;
 				switch(stateKey){
 					case "valuesVLPeriods":
 					case "valuesRLPeriods":
-						screenComponent = <ScreenMetadataPeriod/>;
+						//screenComponent = <ScreenMetadataPeriod/>;
+						screenComponent = <ScreenMetadataObject/>;
+						screenObjectType = ObjectTypes.PERIOD;
 						screenName = "ScreenDataLayersBase-ScreenMetadataPeriod";
 						break;
 				}
-				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{initialKey:result[0].key});
+				//this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{initialKey:result[0].key});
+				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
 			}
 		}
 	}
@@ -556,7 +560,7 @@ class ConfigDataLayer extends Component {
 							period: _.findWhere(this.state.periods,{key:periodValue})
 						};
 						object = _.assign(object,baseObject);
-						let newModel = new model[ObjectTypes.OBJECT_RELATION](object);
+						let newModel = new Model[ObjectTypes.OBJECT_RELATION](object);
 						actionData.push({type:"create",model:newModel});
 					}
 				}
@@ -633,7 +637,7 @@ class ConfigDataLayer extends Component {
 									attributeSet: _.findWhere(this.state.attributeSets, {key: attSet})
 								};
 								object = _.assign(object, baseObjectForColumnMap);
-								let newModel = new model[ObjectTypes.OBJECT_RELATION](object);
+								let newModel = new Model[ObjectTypes.OBJECT_RELATION](object);
 								actionData.push({type: "create", model: newModel});
 							}
 						}
@@ -658,7 +662,7 @@ class ConfigDataLayer extends Component {
 	}
 
 	onChangeObjectSelect (stateKey, objectType, value, values) {
-		values = utils.handleNewObjects(values, objectType, stateKey, this.getStateHash()); // todo store -> object type
+		values = utils.handleNewObjects(values, objectType, stateKey, this.getStateHash());
 		var newState = {};
 		newState[stateKey] = values;
 		this.setState(newState);
@@ -687,9 +691,9 @@ class ConfigDataLayer extends Component {
 
 	render() {
 
-		//console.log("------------ CONFIG-DATA-LAYER RENDER -----------");
-		//console.log("this.state", this.state);
-		//console.log("this.state.relationsState", this.state.relationsState);
+		console.log("------------ CONFIG-DATA-LAYER RENDER -----------");
+		console.log("this.state", this.state);
+		console.log("this.state.relationsState", this.state.relationsState);
 
 		var saveButton = " ";
 		if (this.state.layerType) {

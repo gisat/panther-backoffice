@@ -1,5 +1,5 @@
 import ActionCreator from '../actions/ActionCreator';
-import {model} from '../constants/ObjectTypes';
+import {Model} from '../constants/ObjectTypes';
 import ScopeStore from '../stores/ScopeStore';
 import ThemeStore from '../stores/ThemeStore';
 import ScopeModel from '../models/ScopeModel';
@@ -34,7 +34,7 @@ export default {
 				delete singleValue.label; // discard temp compatibility key
 				delete singleValue.value; // discard temp compatibility key
 				delete singleValue.key; // discard temp key = name
-				let valueModel = new model[objectType](singleValue);
+				let valueModel = new Model[objectType](singleValue);
 				ActionCreator.createObjectAndSetState(valueModel,objectType,stateKey,stateHash);
 			}
 			else {

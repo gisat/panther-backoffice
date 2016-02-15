@@ -14,13 +14,46 @@ import AttributeSetModel from '../models/AttributeSetModel';
 //import StyleModel from '../models/StyleModel';
 import ObjectRelationModel from '../models/ObjectRelationModel';
 
-export const model = {
+import ScopeStore from '../stores/ScopeStore';
+import PlaceStore from '../stores/PlaceStore';
+import PeriodStore from '../stores/PeriodStore';
+import VectorLayerStore from '../stores/VectorLayerStore';
+import RasterLayerStore from '../stores/RasterLayerStore';
+import AULevelStore from '../stores/AULevelStore';
+import GeneralLayerStore from '../stores/GeneralLayerStore';
+import AttributeStore from '../stores/AttributeStore';
+import AttributeSetStore from '../stores/AttributeSetStore';
+//import TopicStore from '../stores/TopicStore';
+//import ThemeStore from '../stores/ThemeStore';
+//import LayerGroupStore from '../stores/LayerGroupStore';
+//import StyleStore from '../stores/StyleStore';
+import ObjectRelationStore from '../stores/ObjectRelationStore';
+
+export const Store = {
+	SCOPE: ScopeStore,
+	PLACE: PlaceStore,
+	PERIOD: PeriodStore,
+	VECTOR_LAYER_TEMPLATE: VectorLayerStore,
+	RASTER_LAYER_TEMPLATE: RasterLayerStore,
+	AU_LEVEL: AULevelStore,
+	GENERAL_LAYER: GeneralLayerStore,
+	ATTRIBUTE: AttributeStore,
+	ATTRIBUTE_SET: AttributeSetStore,
+	//TOPIC: TopicStore,
+	//THEME: ThemeStore,
+	//LAYER_GROUP: LayerGroupStore,
+	//STYLE: StyleStore,
+	OBJECT_RELATION: ObjectRelationStore
+};
+
+export const Model = {
 	SCOPE: ScopeModel,
 	PLACE: PlaceModel,
 	PERIOD: PeriodModel,
 	VECTOR_LAYER_TEMPLATE: VectorLayerModel,
 	RASTER_LAYER_TEMPLATE: RasterLayerModel,
 	AU_LEVEL: AULevelModel,
+	GENERAL_LAYER: null,
 	ATTRIBUTE: AttributeModel,
 	ATTRIBUTE_SET: AttributeSetModel,
 	//TOPIC: TopicModel,
@@ -30,7 +63,7 @@ export const model = {
 	OBJECT_RELATION: ObjectRelationModel
 };
 
-export default keyMirror(model);
+export default keyMirror(Model);
 
 //export default keyMirror({
 //	SCOPE: null,

@@ -1,0 +1,6 @@
+{
+	"name": "SelectorMetadataObject",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./SelectorMetadataObject.js"
+}

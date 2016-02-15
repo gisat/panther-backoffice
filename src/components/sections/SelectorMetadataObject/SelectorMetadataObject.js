@@ -1,20 +1,20 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './SelectorMetadataPeriod.css';
-import withStyles from '../../../decorators/withStyles';
+//import styles from './SelectorMetadataObject.css';
+//import withStyles from '../../../decorators/withStyles';
 
-import { Button, Input, Icon } from '../../SEUI/elements';
+//import { Button, Input, Icon } from '../../SEUI/elements';
 import Select from 'react-select';
 
 import OptionKeyName from '../../atoms/UICustomSelect/OptionKeyName';
 import SingleValueKeyName from '../../atoms/UICustomSelect/SingleValueKeyName';
 
 
-@withStyles(styles)
-class SelectorMetadataPeriod extends Component{
+//@withStyles(styles)
+class SelectorMetadataObject extends Component{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
-		data: React.PropTypes.array.isRequired,		// layers object. Expects "key"
+		data: React.PropTypes.array.isRequired,		// Expects "key","name"
 		onChange: React.PropTypes.func.isRequired,
 		value: React.PropTypes.any
 	};
@@ -55,4 +55,4 @@ class SelectorMetadataPeriod extends Component{
 }
 
 
-export default SelectorMetadataPeriod;
+export default SelectorMetadataObject;

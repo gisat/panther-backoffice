@@ -5,7 +5,7 @@ import withStyles from '../../../decorators/withStyles';
 import ObjectList from '../../elements/ObjectList';
 import classnames from 'classnames';
 
-import ObjectTypes, {model} from '../../../constants/ObjectTypes';
+import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 import ScopeStore from '../../../stores/ScopeStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
