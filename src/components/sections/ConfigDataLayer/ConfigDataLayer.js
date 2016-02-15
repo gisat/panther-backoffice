@@ -133,16 +133,22 @@ class ConfigDataLayer extends Component {
 		this.context.setStateFromStores.call(this, store2state, keys);
 		// if stores changed, overrides user input - todo fix
 		// todo determine from keys, if the following needs to be done
-		store2state.layerRelations.then(function(relations) {
-			// todo we work with relations (attsets,columns) with .ready not removed
-			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations),keys);
-		});
-		store2state.attributeSets.then(function(attributeSets) {
-			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets),keys);
-		});
-		Promise.all([store2state.layerRelations, store2state.dataLayerColumns]).then(function([relations, columns]) {
-			thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.columns2state(columns, relations),keys);
-		});
+		if(!keys || keys.indexOf("layerRelations")!=-1) {
+			store2state.layerRelations.then(function(relations) {
+				// todo we work with relations (attsets,columns) with .ready not removed
+				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations));
+			});
+		}
+		if(!keys || keys.indexOf("attributeSets")!=-1) {
+			store2state.attributeSets.then(function(attributeSets) {
+				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
+			});
+		}
+		if(!keys || keys.indexOf("layerRelations")!=-1 || keys.indexOf("dataLayerColumns")!=-1) {
+			Promise.all([store2state.layerRelations, store2state.dataLayerColumns]).then(function([relations, columns]) {
+				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.columns2state(columns, relations));
+			});
+		}
 	}
 
 	_onStoreChange(keys) {
