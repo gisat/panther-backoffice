@@ -1,11 +1,8 @@
 import Model from './Model';
 import UserStore from '../stores/UserStore';
-import ScopeStore from '../stores/ScopeStore';
-import PeriodStore from '../stores/PeriodStore';
-import TopicStore from '../stores/TopicStore';
 
 
-class ThemeModel extends Model {
+class LayerGroupModel extends Model {
 
 	data() {
 		return {
@@ -47,39 +44,12 @@ class ThemeModel extends Model {
 				},
 				isPromise: true
 			},
-			scope: {
-				serverName: 'dataset', //id
-				sendToServer: true,
-				transformForLocal: function (data) {
-					return ScopeStore.getById(data)
-				},
-				transformForServer: this.getKey,
-				isPromise: true
-			},
-			periods: {
-				serverName: 'years', //ids
-				sendToServer: true,
-				transformForLocal: function (data) {
-					return PeriodStore.getFiltered({key: data})
-				},
-				transformForServer: this.getKeys,
-				isPromise: true,
-				isArray: true
-			},
-			topics: {
-				serverName: 'topics', //ids
-				sendToServer: true,
-				transformForLocal: function (data) {
-					return TopicStore.getFiltered({key: data})
-				},
-				transformForServer: this.getKeys,
-				isPromise: true,
-				isArray: true
+			orderWeight: {
+				serverName: 'priority' //number - weight (higher is first)
 			}
-			// todo the rest
 		};
 	}
 
 }
 
-export default ThemeModel;
+export default LayerGroupModel;

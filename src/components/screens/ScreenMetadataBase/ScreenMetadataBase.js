@@ -93,10 +93,10 @@ class ScreenMetadataBase extends Component{
 			attributes: AttributeStore.getAll(),
 			places: PlaceStore.getAll(),
 			periods: PeriodStore.getAll(),
-			//themes: ThemeStore.getAll(),
-			//topics: TopicStore.getAll(),
-			//layerGroups: LayerGroupStore.getAll(),
-			//styles: StyleStore.getAll()
+			themes: ThemeStore.getAll(),
+			topics: TopicStore.getAll(),
+			layerGroups: LayerGroupStore.getAll(),
+			styles: StyleStore.getAll()
 		};
 	}
 
@@ -113,10 +113,10 @@ class ScreenMetadataBase extends Component{
 		AttributeStore.addChangeListener(this._onStoreChange.bind(this,["attributes"]));
 		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
 		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
-		//ThemeStore.addChangeListener(this._onStoreChange.bind(this,["themes"]));
-		//TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
-		//LayerGroupStore.addChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
-		//StyleStore.addChangeListener(this._onStoreChange.bind(this,["styles"]));
+		ThemeStore.addChangeListener(this._onStoreChange.bind(this,["themes"]));
+		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
+		LayerGroupStore.addChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
+		StyleStore.addChangeListener(this._onStoreChange.bind(this,["styles"]));
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
@@ -129,10 +129,10 @@ class ScreenMetadataBase extends Component{
 		AttributeStore.removeChangeListener(this._onStoreChange.bind(this,["attributes"]));
 		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
 		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
-		//ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["themes"]));
-		//TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
-		//LayerGroupStore.removeChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
-		//StyleStore.removeChangeListener(this._onStoreChange.bind(this,["styles"]));
+		ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["themes"]));
+		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
+		LayerGroupStore.removeChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
+		StyleStore.removeChangeListener(this._onStoreChange.bind(this,["styles"]));
 	}
 
 	componentWillReceiveProps(newProps) {
