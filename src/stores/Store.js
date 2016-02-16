@@ -7,8 +7,7 @@ import EventTypes from '../constants/EventTypes';
 
 import _ from 'underscore';
 
-import { publicPath, apiProtocol, apiHost, apiPath } from '../config';
-
+import { publicPath, apiProtocol, apiHost, apiPath, tempSsid, tempSessionid, tempCsrftoken } from '../config';
 
 class Store extends EventEmitter {
 
@@ -181,9 +180,9 @@ class Store extends EventEmitter {
 			.post(url)
 			.send({apiUrl: thisStore.getApiUrl()})
 			.send({method: method})
-			.send({ssid: "usuhtto69t2xhyg32v6ffwc5psboyn2h"})
-			.send({sessionid: "3nbg1bhc6ticj1kkkwyx1j5kg4njiz50"})
-			.send({csrftoken: "FNtZT1UL4EpxiJn6BlM2cLeXzMrta4zp"})
+			.send({ssid: tempSsid})
+			.send({sessionid: tempSessionid})
+			.send({csrftoken: tempCsrftoken})
 			.send({formData: object})
 			.end(function(err, res){
 				if(err || typeof res == 'undefined'){
