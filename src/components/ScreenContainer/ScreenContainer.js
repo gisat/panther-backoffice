@@ -77,6 +77,10 @@ class ScreenContainer extends Component{
 		var thisComponent = this;
 		setTimeout(function () {
 			thisComponent.props.onOpen();
+
+			setTimeout(function () {
+				thisComponent._domSelf.focus();
+			}, 800);
 		}, 100);
 	}
 
@@ -128,7 +132,12 @@ class ScreenContainer extends Component{
 		_.assign(totallyLocalData,this.props.screenState.data);
 
 		return (
-			<div className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass, contentAlignClass)} style={screenStyles}>
+			<div
+				className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass, contentAlignClass)}
+				style={screenStyles}
+				tabIndex="-1"
+				ref={(el) => this._domSelf = el}
+			>
 				<div className="screen-scroll"><div>
 					{React.cloneElement(this.props.screenState.component, {
 						disabled: disabled,
