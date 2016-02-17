@@ -8,6 +8,11 @@ import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
 const screenStack = require('../../stores/screenStack');
 
+var initialState = {
+	isFocused: false
+};
+
+
 //@withStyles(styles)
 class ScreenContainer extends Component{
 
@@ -24,10 +29,10 @@ class ScreenContainer extends Component{
 		onInteraction: React.PropTypes.func
 	};
 
-	//constructor(props) {
-	//	super(props);
-	//
-	//}
+	constructor(props) {
+		super(props);
+		this.state = initialState;
+	}
 
 	getChildContext(){
 		return {
@@ -84,6 +89,18 @@ class ScreenContainer extends Component{
 		}, 100);
 	}
 
+	onPanelFocus() {
+		this.setState({
+			isFocused: true
+		});
+	}
+
+	onPanelBlur() {
+		this.setState({
+			isFocused: false
+		});
+	}
+
 	///**
 	// * setUrl combines parent URL an current screen URL
 	// * function is passed to Screen as prop
@@ -119,6 +136,7 @@ class ScreenContainer extends Component{
 		var contentAlignClass = this.props.screenState.contentAlign || "";
 		var positionClass = this.props.screenState.position || "open";
 		var disabledClass = (disabled || positionClass == "retracted" || positionClass == "closed") ? "disabled":"";
+		var focusedClass = (this.state && this.state.isFocused) ? "focused" : "";
 		var classes = this.props.screenState.classes || "";
 
 		var screenStyles = {};
@@ -133,10 +151,12 @@ class ScreenContainer extends Component{
 
 		return (
 			<div
-				className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass, contentAlignClass)}
+				className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass, contentAlignClass, focusedClass)}
 				style={screenStyles}
 				tabIndex="-1"
 				ref={(el) => this._domSelf = el}
+				onFocus={this.onPanelFocus.bind(this)}
+				onBlur={this.onPanelBlur.bind(this)}
 			>
 				<div className="screen-scroll"><div>
 					{React.cloneElement(this.props.screenState.component, {
