@@ -114,24 +114,17 @@ class ScreenMetadataObject extends Component{
 				headline = headline + " (template)";
 			}
 
+			var props = {
+				disabled: this.props.disabled,
+				selectorValue: this.state.selectorValue,
+				parentUrl: this.getUrl()
+			};
 			switch (this.props.data.objectType) {
 				case ObjectTypes.SCOPE:
-					//configComponent = (
-					//	<ConfigMetadataScope
-					//		disabled={this.props.disabled}
-					//		selectorValue={this.state.selectorValue}
-					//		parentUrl={this.getUrl()}
-					//	/>
-					//);
+					//configComponent = <ConfigMetadataScope {...props} />;
 					break;
 				case ObjectTypes.PERIOD:
-					configComponent = (
-						<ConfigMetadataPeriod
-							disabled={this.props.disabled}
-							selectorValue={this.state.selectorValue}
-							parentUrl={this.getUrl()}
-						/>
-					);
+					configComponent = <ConfigMetadataPeriod {...props} />;
 					break;
 			}
 		}
