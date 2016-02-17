@@ -697,9 +697,9 @@ class ConfigDataLayer extends Component {
 
 	render() {
 
-		console.log("------------ CONFIG-DATA-LAYER RENDER -----------");
-		console.log("this.state", this.state);
-		console.log("this.state.relationsState", this.state.relationsState);
+		//console.log("------------ CONFIG-DATA-LAYER RENDER -----------");
+		//console.log("this.state", this.state);
+		//console.log("this.state.relationsState", this.state.relationsState);
 
 		var saveButton = " ";
 		if (this.state.layerType) {

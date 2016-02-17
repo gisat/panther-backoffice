@@ -132,8 +132,6 @@ class Page extends Component {
 		};
 		var existingScreen = _.findWhere(screenSet.screens, {key: key});
 		if(existingScreen) {
-			// todo send data
-			console.log("Screen already exists:",existingScreen);
 			this.onSetScreenData(existingScreen.key, data)();
 			this.refs[key].onDynamicOpen();
 		} else {

@@ -226,8 +226,6 @@ class ScreenMetadataBase extends Component{
 			contentInsert.push(contentElement);
 		}
 
-		console.log("SMB render()");
-
 		return (
 			<div>
 				<div className="screen-content"><div>
