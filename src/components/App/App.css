@@ -410,6 +410,15 @@ todo hex colours, button icons */
 
 	}
 
+	.screen.focused {
+		outline: none;
+	}
+
+	.screen.focused .screen-overlay {
+		outline: none;
+		box-shadow: inset 0 15px 0px -5px rgba(120,180,255,.8);
+	}
+
 	.screen-scroll {
 		overflow: hidden;
 		overflow-y: auto;
