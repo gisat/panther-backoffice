@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 //import styles from './SelectorMetadataObject.css';
 //import withStyles from '../../../decorators/withStyles';
 
-//import { Button, Input, Icon } from '../../SEUI/elements';
+import { Button, Input, Icon } from '../../SEUI/elements';
 import Select from 'react-select';
 
 import OptionKeyName from '../../atoms/UICustomSelect/OptionKeyName';
@@ -16,6 +16,7 @@ class SelectorMetadataObject extends Component{
 		disabled: React.PropTypes.bool,
 		data: React.PropTypes.array.isRequired,		// Expects "key","name"
 		onChange: React.PropTypes.func.isRequired,
+		onNew: React.PropTypes.func,
 		value: React.PropTypes.any
 	};
 
@@ -32,20 +33,30 @@ class SelectorMetadataObject extends Component{
 		return (
 			<div>
 				<div className="selector">
-					<div className="input">
-						<label className="container">
-							<Select
-								onChange={this.onChange.bind(this)}
-								options={this.props.data}
-								optionComponent={OptionKeyName}
-								singleValueComponent={SingleValueKeyName}
-								className="UICustomSelect"
-								valueKey="key"
-								labelKey="name"
-								value={this.props.value}
-								clearable={false}
-							/>
-						</label>
+					<div className="input-wrapper basic">
+						<div>
+							<label className="container">
+								<Select
+									onChange={this.onChange.bind(this)}
+									options={this.props.data}
+									optionComponent={OptionKeyName}
+									singleValueComponent={SingleValueKeyName}
+									className="UICustomSelect"
+									valueKey="key"
+									labelKey="name"
+									value={this.props.value}
+									clearable={false}
+								/>
+							</label>
+						</div>
+						<div>
+							<Button
+								basic
+								onClick={this.props.onNew.bind(this)}
+							>
+								<Icon name="plus" />
+							</Button>
+						</div>
 					</div>
 				</div>
 			</div>

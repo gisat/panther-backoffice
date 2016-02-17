@@ -1096,6 +1096,9 @@ todo hex colours, button icons */
 
 	width: 11rem;
 }
+.input-wrapper.basic > div:nth-child(2) {
+	width: 3.125rem;
+}
 .input-wrapper > div:nth-child(2) .button,
 .input-wrapper > div:nth-child(2) .buttons {
 	position: absolute;

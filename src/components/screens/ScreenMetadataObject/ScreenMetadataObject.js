@@ -6,6 +6,8 @@ import path from "path";
 
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
 
+import ActionCreator from '../../../actions/ActionCreator';
+
 //import PeriodStore from '../../../stores/PeriodStore';
 import SelectorMetadataObject from '../../sections/SelectorMetadataObject';
 import ConfigMetadataPeriod from '../../sections/ConfigMetadataPeriod';
@@ -104,6 +106,14 @@ class ScreenMetadataObject extends Component{
 		});
 	}
 
+	onNewEmptyObject () {
+		console.log("onNewEmptyObject");
+		let objectType = ObjectTypes.PERIOD;
+		let model = new Model[objectType]({active:false});
+		console.log(model);
+		ActionCreator.createObjectAndSetState(model, objectType, "", "");
+	}
+
 	render() {
 
 		var configComponent = "";
@@ -139,6 +149,7 @@ class ScreenMetadataObject extends Component{
 						data={this.state.selectorData}
 						value={this.state.selectorValue}
 						onChange={this.onSelectorChange.bind(this)}
+						onNew={this.onNewEmptyObject.bind(this)}
 					/>
 				</div></div>
 				<div className="screen-content"><div>
