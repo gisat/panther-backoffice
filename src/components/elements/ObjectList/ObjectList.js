@@ -15,14 +15,14 @@ class ObjectList extends Component {
 		onItemClick: React.PropTypes.func,				// function to call on list item click. Sends item object in argument
 		onAddClick: React.PropTypes.func,					// function to call on add item click.
 		itemClasses: React.PropTypes.string,			// css classes for items
-		selectedItemKey: React.PropTypes.any			// selected item key
+		//selectedItemKey: React.PropTypes.any			// selected item key
 	};
 
 	static defaultProps = {
 		onItemClick: undefined,
 		onAddClick: undefined,
 		itemClasses: "",
-		selectedItemKey: null
+		//selectedItemKey: null
 	};
 
 	//componentWillReceiveProps(newProps) {
@@ -55,8 +55,8 @@ class ObjectList extends Component {
 		var itemsInsert = this.props.data.map(function (item) {
 			var className = classnames(
 				'puma-item',
-				thisComponent.props.itemClasses,
-				{	'screen-opener' : thisComponent.props.selectedItemKey==item.key }
+				thisComponent.props.itemClasses//,
+				//{	'screen-opener' : thisComponent.props.selectedItemKey==item.key }
 			);
 			return (
 				<a

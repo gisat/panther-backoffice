@@ -82,7 +82,8 @@ class ScreenContainer extends Component{
 		var thisComponent = this;
 		setTimeout(function () {
 			thisComponent.props.onOpen();
-
+			thisComponent._domSelf.focus();
+			// battle selects stealing focus:
 			setTimeout(function () {
 				thisComponent._domSelf.focus();
 			}, 800);

@@ -162,14 +162,14 @@ class ScreenMetadataBase extends Component{
 		});
 	}
 
-	changeActiveObjectListItem(itemType, value){
-		var newActiveObjectListItems = this.state.activeObjectListItems;
-		newActiveObjectListItems[itemType] = value;
-		this.setState({
-			activeObjectListItems: newActiveObjectListItems
-		});
-		// todo replace selection with screen-opener logic
-	}
+	//changeActiveObjectListItem(itemType, value){
+	//	var newActiveObjectListItems = this.state.activeObjectListItems;
+	//	newActiveObjectListItems[itemType] = value;
+	//	this.setState({
+	//		activeObjectListItems: newActiveObjectListItems
+	//	});
+	//	// todo replace selection with screen-opener logic
+	//}
 
 	onObjectListItemClick(itemType, item, event) {
 		this.context.onInteraction().call();
@@ -177,12 +177,12 @@ class ScreenMetadataBase extends Component{
 		var screenName = "ScreenMetadataBase-ScreenMetadata" + itemType;
 		this.context.openScreen(screenName,<ScreenMetadataObject/>,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
 
-		this.changeActiveObjectListItem(itemType,item.key);
+		//this.changeActiveObjectListItem(itemType,item.key);
 	}
 	onObjectListAddClick(itemType, event) {
 		this.context.onInteraction().call();
 		// todo create item + open screen
-		this.changeActiveObjectListItem(itemType,null);
+		//this.changeActiveObjectListItem(itemType,null);
 	}
 
 	getUrl() {
@@ -226,7 +226,7 @@ class ScreenMetadataBase extends Component{
 							onItemClick={this.onObjectListItemClick.bind(this,tab.dataType)}
 							onAddClick={this.onObjectListAddClick.bind(this,tab.dataType)}
 							itemClasses={classnames({'template' : tab.isTemplate})}
-							selectedItemKey={this.state.activeObjectListItems[tab.dataType]}
+							//selectedItemKey={this.state.activeObjectListItems[tab.dataType]}
 						/>
 					</div>
 				);
