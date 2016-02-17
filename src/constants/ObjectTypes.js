@@ -65,18 +65,66 @@ export const Model = {
 
 export default keyMirror(Model);
 
-//export default keyMirror({
-//	SCOPE: null,
-//	PLACE: null,
-//	PERIOD: null,
-//	VECTOR_LAYER_TEMPLATE: null,
-//	RASTER_LAYER_TEMPLATE: null,
-//	AU_LEVEL: null,
-//	ATTRIBUTE: null,
-//	ATTRIBUTE_SET: null,
-//	TOPIC: null,
-//	THEME: null,
-//	LAYER_GROUP: null,
-//	STYLE: null,
-//	OBJECT_RELATION: null
-//});
+export const objectTypesMetadata = {
+	SCOPE: {
+		name: "Scope",
+		url: "scope"
+	},
+	PLACE: {
+		name: "Place",
+		url: "place"
+	},
+	PERIOD: {
+		name: "Imaging/reference period",
+		url: "period"
+	},
+	VECTOR_LAYER_TEMPLATE: {
+		name: "Vector layer",
+		url: "vector-layer",
+		isTemplate: true
+	},
+	RASTER_LAYER_TEMPLATE: {
+		name: "Raster layer",
+		url: "raster-layer",
+		isTemplate: true
+	},
+	AU_LEVEL: {
+		name: "Analytical units level",
+		url: "au-level",
+		isTemplate: true
+	},
+	GENERAL_LAYER: {
+		name: null,
+		url: null
+	},
+	ATTRIBUTE: {
+		name: "Attribute",
+		url: "attribute",
+		isTemplate: true
+	},
+	ATTRIBUTE_SET: {
+		name: "Attribute set",
+		url: "attribute-set",
+		isTemplate: true
+	},
+	TOPIC: {
+		name: "Topic",
+		url: "topic"
+	},
+	THEME: {
+		name: "Theme",
+		url: "theme"
+	},
+	LAYER_GROUP: {
+		name: "Layer group",
+		url: "layer-group"
+	},
+	STYLE: {
+		name: "Style",
+		url: "style"
+	},
+	OBJECT_RELATION: {
+		name: null,
+		url: null
+	}
+};

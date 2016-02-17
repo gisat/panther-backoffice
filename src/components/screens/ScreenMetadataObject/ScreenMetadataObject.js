@@ -4,7 +4,7 @@ import withStyles from '../../../decorators/withStyles';
 
 import path from "path";
 
-import ObjectTypes, {Model, Store} from '../../../constants/ObjectTypes';
+import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
 
 //import PeriodStore from '../../../stores/PeriodStore';
 import SelectorMetadataObject from '../../sections/SelectorMetadataObject';
@@ -107,7 +107,13 @@ class ScreenMetadataObject extends Component{
 	render() {
 
 		var configComponent = "";
+		var headline = "";
 		if (this.props.data.objectType) {
+			headline = objectTypesMetadata[this.props.data.objectType].name;
+			if(objectTypesMetadata[this.props.data.objectType].isTemplate) {
+				headline = headline + " (template)";
+			}
+
 			switch (this.props.data.objectType) {
 				case ObjectTypes.SCOPE:
 					//configComponent = (
@@ -134,7 +140,7 @@ class ScreenMetadataObject extends Component{
 		return (
 			<div>
 				<div className="screen-setter"><div>
-					<h2>Imaging/reference period</h2>
+					<h2>{headline}</h2>
 					<SelectorMetadataObject
 						disabled={this.props.disabled}
 						data={this.state.selectorData}

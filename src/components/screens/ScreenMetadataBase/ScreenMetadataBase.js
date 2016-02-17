@@ -7,7 +7,7 @@ import classnames from 'classnames';
 
 import ScreenMetadataObject from '../ScreenMetadataObject'
 
-import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
+import ObjectTypes, {Model, objectTypesMetadata} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 import ScopeStore from '../../../stores/ScopeStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
@@ -66,22 +66,31 @@ class ScreenMetadataBase extends Component{
 		this.state = initialState;
 
 		this._tabs = [
-			{ key: "scope", name: "Scope", data: "scopes", dataType: ObjectTypes.SCOPE },
-			{ key: "header-templates", name: "Templates", header: true },
-			{ key: "vector-layer", name: "Vector layer", data: "vectorLayerTemplates", dataType: ObjectTypes.VECTOR_LAYER_TEMPLATE, isTemplate: true },
-			{ key: "raster-layer", name: "Raster layer", data: "rasterLayerTemplates", dataType: ObjectTypes.RASTER_LAYER_TEMPLATE, isTemplate: true },
-			{ key: "au-level", name: "Analytical units level", data: "auLevels", dataType: ObjectTypes.AU_LEVEL, isTemplate: true },
-			{ key: "attribute-set", name: "Attribute set", data: "attributeSets", dataType: ObjectTypes.ATTRIBUTE_SET, isTemplate: true },
-			{ key: "attribute", name: "Attribute", data: "attributes", dataType: ObjectTypes.ATTRIBUTE, isTemplate: true },
-			{ key: "header-metadata", name: "Metadata", header: true },
-			{ key: "place", name: "Place", data: "places", dataType: ObjectTypes.PLACE },
-			{ key: "period", name: "Imaging/reference period", data: "periods", dataType: ObjectTypes.PERIOD},
-			{ key: "theme", name: "Theme", data: "themes", dataType: ObjectTypes.THEME },
-			{ key: "topic", name: "Topic", data: "topics", dataType: ObjectTypes.TOPIC },
-			{ key: "header-display", name: "Display", header: true  },
-			{ key: "layer-group", name: "Layer group", data: "layerGroups", dataType: ObjectTypes.LAYER_GROUP },
-			{ key: "style", name: "Style", data: "styles", dataType: ObjectTypes.STYLE }
+			{ data: "scopes", dataType: ObjectTypes.SCOPE },
+			{ header: true, key: "header-templates", name: "Templates" },
+			{ data: "vectorLayerTemplates", dataType: ObjectTypes.VECTOR_LAYER_TEMPLATE },
+			{ data: "rasterLayerTemplates", dataType: ObjectTypes.RASTER_LAYER_TEMPLATE },
+			{ data: "auLevels", dataType: ObjectTypes.AU_LEVEL },
+			{ data: "attributeSets", dataType: ObjectTypes.ATTRIBUTE_SET },
+			{ data: "attributes", dataType: ObjectTypes.ATTRIBUTE },
+			{ header: true, key: "header-metadata", name: "Metadata" },
+			{ data: "places", dataType: ObjectTypes.PLACE },
+			{ data: "periods", dataType: ObjectTypes.PERIOD},
+			{ data: "themes", dataType: ObjectTypes.THEME },
+			{ data: "topics", dataType: ObjectTypes.TOPIC },
+			{ header: true, key: "header-display", name: "Display"  },
+			{ data: "layerGroups", dataType: ObjectTypes.LAYER_GROUP },
+			{ data: "styles", dataType: ObjectTypes.STYLE }
 		];
+		for (var tab of this._tabs) {
+			if(!tab.header) {
+				tab.key = objectTypesMetadata[tab.dataType].url;
+				tab.name = objectTypesMetadata[tab.dataType].name;
+				if(objectTypesMetadata[tab.dataType].isTemplate) {
+					tab.isTemplate = true;
+				}
+			}
+		}
 
 	}
 
