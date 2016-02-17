@@ -20,14 +20,14 @@ module.exports = [
 		title: "Analyses",
 		screens: [
 			{
-				key: "analyses1",
+				key: "ScreenAnalysesBase",
 				component: <ScreenAnalysesBase/>,
 				data: {
 					x: 7
 				}
 			},
 			{
-				key: "analyses2",
+				key: "ScreenAnalysisSpatial",
 				//type: "constant",
 				size: 40,
 				position: "retracted",
@@ -39,7 +39,7 @@ module.exports = [
 				}
 			},
 			{
-				key: "analyses3",
+				key: "ScreenAnalysisSpatialRules",
 				//contentAlign: "fill",
 				size: 80,
 				position: "retracted",
@@ -57,7 +57,7 @@ module.exports = [
 		title: "Dashboard",
 		screens: [
 			{
-				key: "screen1",
+				key: "ScreenDashboardBase",
 				component: <ScreenDashboardBase/>
 			}
 		]
@@ -68,7 +68,7 @@ module.exports = [
 		title: "Data layers",
 		screens: [
 			{
-				key: "screen1",
+				key: "ScreenDataLayersBase",
 				component: <ScreenDataLayersBase/>
 			}
 		]
@@ -79,15 +79,8 @@ module.exports = [
 		title: "Metadata structures",
 		screens: [
 			{
-				key: "screen1",
+				key: "ScreenMetadataBase",
 				component: <ScreenMetadataBase/>
-			},
-			{
-				key: "screen2",
-				//type: "constant",
-				size: 40,
-				//position: "retracted",
-				component: <ScreenMetadataLayerVector/>
 			}
 		]
 	},

@@ -8,10 +8,10 @@ import RasterLayerModel from '../models/RasterLayerModel';
 import AULevelModel from '../models/AULevelModel';
 import AttributeModel from '../models/AttributeModel';
 import AttributeSetModel from '../models/AttributeSetModel';
-//import TopicModel from '../models/TopicModel';
-//import ThemeModel from '../models/ThemeModel';
-//import LayerGroupModel from '../models/LayerGroupModel';
-//import StyleModel from '../models/StyleModel';
+import TopicModel from '../models/TopicModel';
+import ThemeModel from '../models/ThemeModel';
+import LayerGroupModel from '../models/LayerGroupModel';
+import StyleModel from '../models/StyleModel';
 import ObjectRelationModel from '../models/ObjectRelationModel';
 
 import ScopeStore from '../stores/ScopeStore';
@@ -23,10 +23,10 @@ import AULevelStore from '../stores/AULevelStore';
 import GeneralLayerStore from '../stores/GeneralLayerStore';
 import AttributeStore from '../stores/AttributeStore';
 import AttributeSetStore from '../stores/AttributeSetStore';
-//import TopicStore from '../stores/TopicStore';
-//import ThemeStore from '../stores/ThemeStore';
-//import LayerGroupStore from '../stores/LayerGroupStore';
-//import StyleStore from '../stores/StyleStore';
+import TopicStore from '../stores/TopicStore';
+import ThemeStore from '../stores/ThemeStore';
+import LayerGroupStore from '../stores/LayerGroupStore';
+import StyleStore from '../stores/StyleStore';
 import ObjectRelationStore from '../stores/ObjectRelationStore';
 
 export const Store = {
@@ -39,10 +39,10 @@ export const Store = {
 	GENERAL_LAYER: GeneralLayerStore,
 	ATTRIBUTE: AttributeStore,
 	ATTRIBUTE_SET: AttributeSetStore,
-	//TOPIC: TopicStore,
-	//THEME: ThemeStore,
-	//LAYER_GROUP: LayerGroupStore,
-	//STYLE: StyleStore,
+	TOPIC: TopicStore,
+	THEME: ThemeStore,
+	LAYER_GROUP: LayerGroupStore,
+	STYLE: StyleStore,
 	OBJECT_RELATION: ObjectRelationStore
 };
 
@@ -56,10 +56,10 @@ export const Model = {
 	GENERAL_LAYER: null,
 	ATTRIBUTE: AttributeModel,
 	ATTRIBUTE_SET: AttributeSetModel,
-	//TOPIC: TopicModel,
-	//THEME: ThemeModel,
-	//LAYER_GROUP: LayerGroupModel,
-	//STYLE: StyleModel,
+	TOPIC: TopicModel,
+	THEME: ThemeModel,
+	LAYER_GROUP: LayerGroupModel,
+	STYLE: StyleModel,
 	OBJECT_RELATION: ObjectRelationModel
 };
 

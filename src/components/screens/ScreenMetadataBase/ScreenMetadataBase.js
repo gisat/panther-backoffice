@@ -5,6 +5,8 @@ import withStyles from '../../../decorators/withStyles';
 import ObjectList from '../../elements/ObjectList';
 import classnames from 'classnames';
 
+import ScreenMetadataObject from '../ScreenMetadataObject'
+
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 import ScopeStore from '../../../stores/ScopeStore';
@@ -64,21 +66,21 @@ class ScreenMetadataBase extends Component{
 		this.state = initialState;
 
 		this._tabs = [
-			{ key: "scope", name: "Scope", data: "scopes" },
+			{ key: "scope", name: "Scope", data: "scopes", dataType: ObjectTypes.SCOPE },
 			{ key: "header-templates", name: "Templates", header: true },
-			{ key: "vector-layer", name: "Vector layer", data: "vectorLayerTemplates", isTemplate: true },
-			{ key: "raster-layer", name: "Raster layer", data: "rasterLayerTemplates", isTemplate: true },
-			{ key: "au-level", name: "Analytical units level", data: "auLevels", isTemplate: true },
-			{ key: "attribute-set", name: "Attribute set", data: "attributeSets", isTemplate: true },
-			{ key: "attribute", name: "Attribute", data: "attributes", isTemplate: true },
+			{ key: "vector-layer", name: "Vector layer", data: "vectorLayerTemplates", dataType: ObjectTypes.VECTOR_LAYER_TEMPLATE, isTemplate: true },
+			{ key: "raster-layer", name: "Raster layer", data: "rasterLayerTemplates", dataType: ObjectTypes.RASTER_LAYER_TEMPLATE, isTemplate: true },
+			{ key: "au-level", name: "Analytical units level", data: "auLevels", dataType: ObjectTypes.AU_LEVEL, isTemplate: true },
+			{ key: "attribute-set", name: "Attribute set", data: "attributeSets", dataType: ObjectTypes.ATTRIBUTE_SET, isTemplate: true },
+			{ key: "attribute", name: "Attribute", data: "attributes", dataType: ObjectTypes.ATTRIBUTE, isTemplate: true },
 			{ key: "header-metadata", name: "Metadata", header: true },
-			{ key: "place", name: "Place", data: "places" },
-			{ key: "period", name: "Imaging/reference period", data: "periods"},
-			{ key: "theme", name: "Theme", data: "themes" },
-			{ key: "topic", name: "Topic", data: "topics" },
+			{ key: "place", name: "Place", data: "places", dataType: ObjectTypes.PLACE },
+			{ key: "period", name: "Imaging/reference period", data: "periods", dataType: ObjectTypes.PERIOD},
+			{ key: "theme", name: "Theme", data: "themes", dataType: ObjectTypes.THEME },
+			{ key: "topic", name: "Topic", data: "topics", dataType: ObjectTypes.TOPIC },
 			{ key: "header-display", name: "Display", header: true  },
-			{ key: "layer-group", name: "Layer group", data: "layerGroups" },
-			{ key: "style", name: "Style", data: "styles" }
+			{ key: "layer-group", name: "Layer group", data: "layerGroups", dataType: ObjectTypes.LAYER_GROUP },
+			{ key: "style", name: "Style", data: "styles", dataType: ObjectTypes.STYLE }
 		];
 
 	}
@@ -163,6 +165,9 @@ class ScreenMetadataBase extends Component{
 	onObjectListItemClick(itemType, item, event) {
 		this.context.onInteraction().call();
 		// todo open screen with item
+		var screenName = "ScreenMetadataBase-ScreenMetadata" + itemType;
+		this.context.openScreen(screenName,<ScreenMetadataObject/>,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
+
 		this.changeActiveObjectListItem(itemType,item.key);
 	}
 	onObjectListAddClick(itemType, event) {
@@ -209,10 +214,10 @@ class ScreenMetadataBase extends Component{
 					>
 						<ObjectList
 							data={this.state[tab.data]}
-							onItemClick={this.onObjectListItemClick.bind(this,tab.key)}
-							onAddClick={this.onObjectListAddClick.bind(this,tab.key)}
+							onItemClick={this.onObjectListItemClick.bind(this,tab.dataType)}
+							onAddClick={this.onObjectListAddClick.bind(this,tab.dataType)}
 							itemClasses={classnames({'template' : tab.isTemplate})}
-							selectedItemKey={this.state.activeObjectListItems[tab.key]}
+							selectedItemKey={this.state.activeObjectListItems[tab.dataType]}
 						/>
 					</div>
 				);
