@@ -75,8 +75,11 @@ class ThemeModel extends Model {
 				transformForServer: this.getKeys,
 				isPromise: true,
 				isArray: true
+			},
+			visualizations: { // ordered array of ids, not using in backoffice
+				serverName: 'visOrder',
+				sendToServer: false
 			}
-			// todo the rest
 		};
 	}
 
