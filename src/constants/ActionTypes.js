@@ -4,6 +4,7 @@ import keyMirror from 'fbjs/lib/keyMirror';
 
 export default keyMirror({
 	PERIOD_CREATE: null,
+	PERIOD_CREATE_RESPOND: null,
 	PERIOD_HANDLE: null,
 	OBJECT_RELATION_CREATE: null,
 	OBJECT_RELATION_UPDATE: null,

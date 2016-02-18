@@ -156,15 +156,16 @@ class ConfigDataLayer extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	_onStoreResponse(result,stateKey,stateHash) {
+	_onStoreResponse(result,responseData,stateHash) {
 		var thisComponent = this;
 		if (stateHash === this.getStateHash()) {
 			//console.info("_onStoreResponse()");
 			//console.log("result",result);
-			//console.log("stateKey",stateKey);
+			//console.log("responseData",responseData);
 			//console.log("stateHash",stateHash);
-			if (stateKey) {
+			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
 				//console.log("_onStoreResponse set state: periods:", thisComponent.state.periods);
+				let stateKey = responseData.stateKey;
 				let values = thisComponent.state[stateKey];
 				values.push(result[0].key);
 				thisComponent.setState({
@@ -668,7 +669,7 @@ class ConfigDataLayer extends Component {
 	}
 
 	onChangeObjectSelect (stateKey, objectType, value, values) {
-		values = utils.handleNewObjects(values, objectType, stateKey, this.getStateHash());
+		values = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
 		newState[stateKey] = values;
 		this.setState(newState);
