@@ -80,8 +80,8 @@ export default {
 							return reject("getPeriodsForScope: no periods property in theme!");
 						}
 						for(let period of theme.periods){
-							ret.keys.push(period.key);
-							ret.models.push(period);
+							periodKeys.push(period.key);
+							periodModels.push(period);
 						}
 					}
 
