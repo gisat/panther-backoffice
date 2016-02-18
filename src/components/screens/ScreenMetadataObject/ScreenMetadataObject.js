@@ -4,6 +4,7 @@ import withStyles from '../../../decorators/withStyles';
 
 import path from "path";
 
+import utils from '../../../utils/utils';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
 
 import ActionCreator from '../../../actions/ActionCreator';
@@ -65,16 +66,26 @@ class ScreenMetadataObject extends Component{
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
+	_onStoreResponse(result,responseData,stateHash) {
+		if (stateHash === this.getStateHash()) {
+			if (result) {
+				this.setState({
+					selectorValue: result[0].key
+				});
+			}
+		}
+	}
+
 	componentDidMount() {
 		if(this.props.data.objectType) {
-			this.addChangeListener();
+			this.addListeners();
 			this.context.setStateFromStores.call(this, this.store2state());
 		}
 	}
 
 	componentWillUnmount() {
 		if(this.props.data.objectType) {
-			this.removeChangeListener();
+			this.removeListeners();
 		}
 	}
 
@@ -94,18 +105,39 @@ class ScreenMetadataObject extends Component{
 		}
 	}
 
-	addChangeListener(props) {
+	addListeners(props) {
 		if(!props) {
 			props = this.props;
 		}
 		Store[props.data.objectType].addChangeListener(this._onStoreChange.bind(this));
+		Store[props.data.objectType].addResponseListener(this._onStoreResponse.bind(this));
 	}
-	removeChangeListener(props) {
+	removeListeners(props) {
 		if(!props) {
 			props = this.props;
 		}
 		Store[props.data.objectType].removeChangeListener(this._onStoreChange.bind(this));
+		Store[props.data.objectType].removeResponseListener(this._onStoreResponse.bind(this));
 	}
+
+	/**
+	 * Differentiate between states
+	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
+	 */
+	updateStateHash(state) {
+		if(!state){
+			state = this.state;
+		}
+		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
+		this._stateHash = utils.stringHash(state.selectorValue);
+	}
+	getStateHash() {
+		if(!this._stateHash) {
+			this.updateStateHash();
+		}
+		return this._stateHash;
+	}
+
 
 	onSelectorChange (value) {
 		this.setState({
@@ -118,7 +150,7 @@ class ScreenMetadataObject extends Component{
 		let objectType = ObjectTypes.PERIOD;
 		let model = new Model[objectType]({active:false});
 		console.log(model);
-		ActionCreator.createObjectAndSetState(model, objectType, "", "");
+		ActionCreator.createObjectAndRespond(model, objectType, {}, this.getStateHash());
 	}
 
 	render() {
