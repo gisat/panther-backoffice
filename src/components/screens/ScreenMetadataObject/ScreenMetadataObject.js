@@ -86,6 +86,7 @@ class ScreenMetadataObject extends Component{
 		}
 		if(this.props.data.objectType != newProps.data.objectType) {
 			this.removeChangeListener();
+			this.addChangeListener(newProps);
 			this.setState({
 				objectType: newProps.data.objectType
 			});
@@ -93,11 +94,17 @@ class ScreenMetadataObject extends Component{
 		}
 	}
 
-	addChangeListener() {
-		Store[this.props.data.objectType].addChangeListener(this._onStoreChange.bind(this));
+	addChangeListener(props) {
+		if(!props) {
+			props = this.props;
+		}
+		Store[props.data.objectType].addChangeListener(this._onStoreChange.bind(this));
 	}
-	removeChangeListener() {
-		Store[this.props.data.objectType].removeChangeListener(this._onStoreChange.bind(this));
+	removeChangeListener(props) {
+		if(!props) {
+			props = this.props;
+		}
+		Store[props.data.objectType].removeChangeListener(this._onStoreChange.bind(this));
 	}
 
 	onSelectorChange (value) {
