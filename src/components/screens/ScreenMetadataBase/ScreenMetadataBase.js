@@ -5,6 +5,8 @@ import withStyles from '../../../decorators/withStyles';
 import ObjectList from '../../elements/ObjectList';
 import classnames from 'classnames';
 
+import utils from '../../../utils/utils';
+
 import ScreenMetadataObject from '../ScreenMetadataObject'
 
 import ObjectTypes, {Model, objectTypesMetadata} from '../../../constants/ObjectTypes';
@@ -115,35 +117,76 @@ class ScreenMetadataBase extends Component{
 		this.context.setStateFromStores.call(this, this.store2state(), keys);
 	}
 
+	_onStoreResponse(result,responseData,stateHash) {
+		//var thisComponent = this;
+		if (stateHash === this.getStateHash()) {
+			//console.info("_onStoreResponse()");
+			//console.log("result",result);
+			//console.log("responseData",responseData);
+			//console.log("stateHash",stateHash);
+			if (result) {
+				var screenComponent,screenName,screenObjectType;
+				screenComponent = <ScreenMetadataObject/>;
+				screenObjectType = responseData.objectType;
+				screenName = "ScreenDataLayersBase-ScreenMetadata" + screenObjectType;
+				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
+			}
+		}
+	}
+
 	componentDidMount() {
 		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		ScopeStore.addResponseListener(this._onStoreResponse.bind(this));
 		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
+		VectorLayerStore.addResponseListener(this._onStoreResponse.bind(this));
 		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
+		RasterLayerStore.addResponseListener(this._onStoreResponse.bind(this));
 		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevels"]));
+		AULevelStore.addResponseListener(this._onStoreResponse.bind(this));
 		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
+		AttributeSetStore.addResponseListener(this._onStoreResponse.bind(this));
 		AttributeStore.addChangeListener(this._onStoreChange.bind(this,["attributes"]));
+		AttributeStore.addResponseListener(this._onStoreResponse.bind(this));
 		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
+		PlaceStore.addResponseListener(this._onStoreResponse.bind(this));
 		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
+		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
 		ThemeStore.addChangeListener(this._onStoreChange.bind(this,["themes"]));
+		ThemeStore.addResponseListener(this._onStoreResponse.bind(this));
 		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
+		TopicStore.addResponseListener(this._onStoreResponse.bind(this));
 		LayerGroupStore.addChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
+		LayerGroupStore.addResponseListener(this._onStoreResponse.bind(this));
 		StyleStore.addChangeListener(this._onStoreChange.bind(this,["styles"]));
+		StyleStore.addResponseListener(this._onStoreResponse.bind(this));
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentWillUnmount() {
 		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		ScopeStore.removeResponseListener(this._onStoreResponse.bind(this));
 		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
+		VectorLayerStore.addResponseListener(this._onStoreResponse.bind(this));
 		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
+		RasterLayerStore.addResponseListener(this._onStoreResponse.bind(this));
 		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
+		AULevelStore.addResponseListener(this._onStoreResponse.bind(this));
 		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
+		AttributeSetStore.addResponseListener(this._onStoreResponse.bind(this));
 		AttributeStore.removeChangeListener(this._onStoreChange.bind(this,["attributes"]));
+		AttributeStore.addResponseListener(this._onStoreResponse.bind(this));
 		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
+		PlaceStore.addResponseListener(this._onStoreResponse.bind(this));
 		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
+		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
 		ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["themes"]));
+		ThemeStore.addResponseListener(this._onStoreResponse.bind(this));
 		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
+		TopicStore.addResponseListener(this._onStoreResponse.bind(this));
 		LayerGroupStore.removeChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
+		LayerGroupStore.addResponseListener(this._onStoreResponse.bind(this));
 		StyleStore.removeChangeListener(this._onStoreChange.bind(this,["styles"]));
+		StyleStore.addResponseListener(this._onStoreResponse.bind(this));
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -153,6 +196,31 @@ class ScreenMetadataBase extends Component{
 	//shouldComponentUpdate() {
 	//	return false; // can we only rerender children?
 	//}
+
+
+	componentWillUpdate(newProps, newState) {
+		if(newState.activeMenuItem!=this.state.activeMenuItem) {
+			this.updateStateHash(newState);
+		}
+	}
+
+	/**
+	 * Differentiate between states
+	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
+	 */
+	updateStateHash(state) {
+		if(!state){
+			state = this.state;
+		}
+		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
+		this._stateHash = utils.stringHash(state.activeMenuItem);
+	}
+	getStateHash() {
+		if(!this._stateHash) {
+			this.updateStateHash();
+		}
+		return this._stateHash;
+	}
 
 
 
@@ -182,6 +250,11 @@ class ScreenMetadataBase extends Component{
 	onObjectListAddClick(itemType, event) {
 		this.context.onInteraction().call();
 		// todo create item + open screen
+		let model = new Model[itemType]({active:false});
+		let responseData = {
+			objectType: itemType
+		};
+		ActionCreator.createObjectAndRespond(model,itemType,responseData,this.getStateHash());
 		//this.changeActiveObjectListItem(itemType,null);
 	}
 
