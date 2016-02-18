@@ -22,11 +22,11 @@ export default {
 	 * Find objects to create among selected in (Object)Select
 	 * @param values - selected objects
 	 * @param objectType - data type for Action
-	 * @param stateKey - state variable to store created object in
+	 * @param responseData - data to send back with response - e.g. state variable to store created object in
 	 * @param stateHash - state hash to send along with action for later pairing
 	 * @returns {Array} - values without new (those are added when handling action response)
 	 */
-	handleNewObjects: function(values, objectType, stateKey, stateHash) {
+	handleNewObjects: function(values, objectType, responseData, stateHash) {
 		var newValues = [];
 		for (var singleValue of values) {
 			if(singleValue.create){
@@ -35,7 +35,7 @@ export default {
 				delete singleValue.value; // discard temp compatibility key
 				delete singleValue.key; // discard temp key = name
 				let valueModel = new Model[objectType](singleValue);
-				ActionCreator.createObjectAndSetState(valueModel,objectType,stateKey,stateHash);
+				ActionCreator.createObjectAndRespond(valueModel,objectType,responseData,stateHash);
 			}
 			else {
 				newValues.push(singleValue.key);

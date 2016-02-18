@@ -156,15 +156,16 @@ class ConfigDataLayer extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	_onStoreResponse(result,stateKey,stateHash) {
+	_onStoreResponse(result,responseData,stateHash) {
 		var thisComponent = this;
 		if (stateHash === this.getStateHash()) {
 			//console.info("_onStoreResponse()");
 			//console.log("result",result);
-			//console.log("stateKey",stateKey);
+			//console.log("responseData",responseData);
 			//console.log("stateHash",stateHash);
-			if (stateKey) {
+			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
 				//console.log("_onStoreResponse set state: periods:", thisComponent.state.periods);
+				let stateKey = responseData.stateKey;
 				let values = thisComponent.state[stateKey];
 				values.push(result[0].key);
 				thisComponent.setState({
@@ -490,37 +491,37 @@ class ConfigDataLayer extends Component {
 		}else{
 			periodsPromise = Promise.resolve();
 		}
-
+		var thisComponent = this;
 		periodsPromise.then(function(AUPeriods){
 
 			var relations = [];
-			_.assign(relations, this.state.layerRelations);
+			_.assign(relations, thisComponent.state.layerRelations);
 			var actionData = [], layerTemplates = [], values = {};
-			switch (this.state.layerType) {
+			switch (thisComponent.state.layerType) {
 				case "raster":
-					layerTemplates = this.state.rasterLayerTemplates;
-					values.template = this.state.valueRLTemplate[0];
-					values.places = this.state.valuesRLPlaces;
-					values.periods = this.state.valuesRLPeriods;
+					layerTemplates = thisComponent.state.rasterLayerTemplates;
+					values.template = thisComponent.state.valueRLTemplate[0];
+					values.places = thisComponent.state.valuesRLPlaces;
+					values.periods = thisComponent.state.valuesRLPeriods;
 					break;
 				case "vector":
-					layerTemplates = this.state.vectorLayerTemplates;
-					values.template = this.state.valueVLTemplate[0];
-					values.places = this.state.valuesVLPlaces;
-					values.periods = this.state.valuesVLPeriods;
+					layerTemplates = thisComponent.state.vectorLayerTemplates;
+					values.template = thisComponent.state.valueVLTemplate[0];
+					values.places = thisComponent.state.valuesVLPlaces;
+					values.periods = thisComponent.state.valuesVLPeriods;
 					break;
 				case "au":
-					layerTemplates = this.state.auLevels;
-					values.template = this.state.valueAULevel[0];
-					values.places = this.state.valuesAUPlaces;
+					layerTemplates = thisComponent.state.auLevels;
+					values.template = thisComponent.state.valueAULevel[0];
+					values.places = thisComponent.state.valuesAUPlaces;
 					values.periods = AUPeriods;
 					break;
 			}
 
 			var layerTemplate = _.findWhere(layerTemplates,{key:values.template});
 
-			if(this.state.layerType != "raster"){
-				let map = this.state.columnMaps[this.state.layerType];
+			if(thisComponent.state.layerType != "raster"){
+				let map = thisComponent.state.columnMaps[thisComponent.state.layerType];
 				for(let columnName in map){
 					if(map[columnName].valueUseAs[0] == "I") values.fidColumn = columnName;
 					if(map[columnName].valueUseAs[0] == "N") values.nameColumn = columnName;
@@ -561,9 +562,9 @@ class ConfigDataLayer extends Component {
 					} else {
 						// does not exist -> create
 						let object = {
-							dataSource: _.findWhere(this.props.dataLayers,{key:this.props.selectorValue}),
-							place: _.findWhere(this.state.places,{key:placeValue}),
-							period: _.findWhere(this.state.periods,{key:periodValue})
+							dataSource: _.findWhere(thisComponent.props.dataLayers,{key:thisComponent.props.selectorValue}),
+							place: _.findWhere(thisComponent.state.places,{key:placeValue}),
+							period: _.findWhere(thisComponent.state.periods,{key:periodValue})
 						};
 						object = _.assign(object,baseObject);
 						let newModel = new Model[ObjectTypes.OBJECT_RELATION](object);
@@ -574,14 +575,14 @@ class ConfigDataLayer extends Component {
 			// get all columnMaps periods
 			let columnMapPeriods = [];
 			let columnMapAttSets = [];
-			_.each(this.state.columnMaps[this.state.layerType], function(column){
+			_.each(thisComponent.state.columnMaps[thisComponent.state.layerType], function(column){
 				columnMapPeriods = _.union(columnMapPeriods, column.valuesPeriods);
 				if(column.valueUseAs.length) {
 					let destination = null;
 					if(!_.contains(["I","P","N"], column.valueUseAs[0])) destination = _.findWhere(this.state.destinationsVL, {key: column.valueUseAs[0]});
 					if(destination) columnMapAttSets.push(destination.attributeSetKey);
 				}
-			}, this);
+			}, thisComponent);
 			columnMapPeriods = _.uniq(columnMapPeriods);
 			columnMapAttSets = _.uniq(columnMapAttSets);
 			//console.log("columnMapPeriods", columnMapPeriods);
@@ -603,7 +604,7 @@ class ConfigDataLayer extends Component {
 					for (let attSet of columnMapAttSets) {
 
 						var columnMap = [];
-						_.each(this.state.columnMaps[this.state.layerType], function (column, columnName) {
+						_.each(thisComponent.state.columnMaps[thisComponent.state.layerType], function (column, columnName) {
 							if (_.contains(column.valuesPeriods, periodValue)) {
 								if (column.valueUseAs.length && !_.contains(["I", "P", "N"], column.valueUseAs[0])) {
 									let destination = _.findWhere(this.state.destinationsVL, {key: column.valueUseAs[0]});
@@ -616,7 +617,7 @@ class ConfigDataLayer extends Component {
 									}
 								}
 							}
-						}, this);
+						}, thisComponent);
 						//console.log("ColumnMap: ", columnMap);
 
 						if (columnMap.length) {
@@ -636,11 +637,11 @@ class ConfigDataLayer extends Component {
 							} else {
 								// does not exist -> create
 								let object = {
-									dataSource: _.findWhere(this.props.dataLayers, {key: this.props.selectorValue}),
-									place: _.findWhere(this.state.places, {key: placeValue}),
-									period: _.findWhere(this.state.periods, {key: periodValue}),
+									dataSource: _.findWhere(thisComponent.props.dataLayers, {key: thisComponent.props.selectorValue}),
+									place: _.findWhere(thisComponent.state.places, {key: placeValue}),
+									period: _.findWhere(thisComponent.state.periods, {key: periodValue}),
 									columnMap: columnMap,
-									attributeSet: _.findWhere(this.state.attributeSets, {key: attSet})
+									attributeSet: _.findWhere(thisComponent.state.attributeSets, {key: attSet})
 								};
 								object = _.assign(object, baseObjectForColumnMap);
 								let newModel = new Model[ObjectTypes.OBJECT_RELATION](object);
@@ -668,7 +669,7 @@ class ConfigDataLayer extends Component {
 	}
 
 	onChangeObjectSelect (stateKey, objectType, value, values) {
-		values = utils.handleNewObjects(values, objectType, stateKey, this.getStateHash());
+		values = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
 		newState[stateKey] = values;
 		this.setState(newState);

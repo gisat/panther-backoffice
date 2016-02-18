@@ -4,16 +4,16 @@ import ObjectTypes from '../constants/ObjectTypes'
 
 export default {
 
-	createObjectAndSetState: function(model,objectType,stateKey,stateHash) {
+	createObjectAndRespond: function(model,objectType,responseData,stateHash) {
 		var action = {
 			type: null,
 			model: model,
-			stateKey: stateKey,
+			responseData: responseData,
 			stateHash: stateHash
 		};
 		switch (objectType) {
 			case ObjectTypes.PERIOD:
-				action.type = ActionTypes.PERIOD_CREATE;
+				action.type = ActionTypes.PERIOD_CREATE_RESPOND;
 				break;
 			default:
 				return;
