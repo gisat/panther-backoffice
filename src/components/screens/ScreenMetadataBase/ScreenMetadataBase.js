@@ -126,7 +126,8 @@ class ScreenMetadataBase extends Component{
 			//console.log("stateHash",stateHash);
 			if (result) {
 				var screenComponent,screenName,screenObjectType;
-				screenComponent = <ScreenMetadataObject/>;
+				screenComponent = ScreenMetadataObject;
+				//screenComponent = <ScreenMetadataObject/>;
 				screenObjectType = responseData.objectType;
 				screenName = "ScreenDataLayersBase-ScreenMetadata" + screenObjectType;
 				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
@@ -243,7 +244,8 @@ class ScreenMetadataBase extends Component{
 		this.context.onInteraction().call();
 		// todo open screen with item
 		var screenName = "ScreenMetadataBase-ScreenMetadata" + itemType;
-		this.context.openScreen(screenName,<ScreenMetadataObject/>,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
+		this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
+		//this.context.openScreen(screenName,<ScreenMetadataObject/>,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
 
 		//this.changeActiveObjectListItem(itemType,item.key);
 	}

@@ -178,13 +178,12 @@ class ConfigDataLayer extends Component {
 				switch(stateKey){
 					case "valuesVLPeriods":
 					case "valuesRLPeriods":
-						//screenComponent = <ScreenMetadataPeriod/>;
-						screenComponent = <ScreenMetadataObject/>;
+						screenComponent = ScreenMetadataObject;
+						//screenComponent = <ScreenMetadataObject/>;
 						screenObjectType = ObjectTypes.PERIOD;
 						screenName = "ScreenDataLayersBase-ScreenMetadataPeriod";
 						break;
 				}
-				//this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{initialKey:result[0].key});
 				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
 			}
 		}

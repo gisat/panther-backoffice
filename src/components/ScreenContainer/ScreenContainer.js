@@ -149,6 +149,14 @@ class ScreenContainer extends Component{
 
 		var totallyLocalData = {};
 		_.assign(totallyLocalData,this.props.screenState.data);
+		var screen = React.createElement(
+			this.props.screenState.component,
+			{
+				disabled: disabled,
+				data: totallyLocalData,
+				parentUrl: this.props.screenState.parentUrl || ""
+			}
+		);
 
 		return (
 			<div
@@ -160,11 +168,12 @@ class ScreenContainer extends Component{
 				onBlur={this.onPanelBlur.bind(this)}
 			>
 				<div className="screen-scroll"><div>
-					{React.cloneElement(this.props.screenState.component, {
+					{/*React.cloneElement(this.props.screenState.component, {
 						disabled: disabled,
 						data: totallyLocalData,
 						parentUrl: this.props.screenState.parentUrl || ""
-					} )}
+					} )*/}
+					{screen}
 				</div></div>
 				<div className="screen-controls middle">
 					<Buttons basic icon vertical>
