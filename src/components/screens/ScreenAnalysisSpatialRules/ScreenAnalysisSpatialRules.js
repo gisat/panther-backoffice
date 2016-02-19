@@ -3,7 +3,7 @@ import styles from './ScreenAnalysisSpatialRules.css';
 import withStyles from '../../../decorators/withStyles';
 import path from "path";
 
-import { Icon, IconButton, Buttons } from '../../SEUI/elements';
+import { Input, Icon, IconButton, Buttons } from '../../SEUI/elements';
 import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
@@ -122,17 +122,24 @@ class ScreenAnalysisSpatialRules extends Component{
 		return newValues;
 	}
 
-	onChangeResultAttSet (value, values) {
-		values = this.handleNewObjects(values, ATTSETS);
+	onChangeFeatureLayer (value, values) {
+		//values = this.handleNewObjects(values, ATTSETS);
 		this.setState({
-			valueResultAttSet: values
+			valueFeatureLayer: value
+		});
+	}
+
+	onChangeResultAttSet (value, values) {
+		//values = this.handleNewObjects(values, ATTSETS);
+		this.setState({
+			valueResultAttSet: value
 		});
 	}
 
 	onChangeFilterAttSet (value, values) {
-		values = this.handleNewObjects(values, ATTSETS);
+		//values = this.handleNewObjects(values, ATTSETS);
 		this.setState({
-			valueFilterAttSet: values
+			valueFilterAttSet: value
 		});
 	}
 
@@ -159,7 +166,23 @@ class ScreenAnalysisSpatialRules extends Component{
 			<div>
 				<div className="screen-content"><div>
 
-				<div className="frame-input-wrapper">
+					<div className="frame-input-wrapper">
+						<label className="container">
+							Feature layer (vector layer template)
+							<UIObjectSelect
+								onChange={this.onChangeFeatureLayer.bind(this)}
+								onOptionLabelClick={this.onObjectClick.bind(this)}
+								//loadOptions={this.getScopes}
+								//options={this.state.vectorLayerTemplates}
+								valueKey="key"
+								labelKey="name"
+								//value={this.state.valueFeatureLayer}
+								className="template"
+							/>
+						</label>
+					</div>
+
+					<div className="frame-input-wrapper">
 						<label className="container">
 							Result attribute set
 							<UIObjectSelect
@@ -167,15 +190,13 @@ class ScreenAnalysisSpatialRules extends Component{
 								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={ATTSETS}
-								allowCreate
-								newOptionCreator={this.keyNameOptionFactory.bind(this)}
 								valueKey="key"
 								labelKey="name"
 								value={this.state.valueResultAttSet}
 								className="template"
 							/>
 						</label>
-				</div>
+					</div>
 
 				<div className="frame-input-wrapper">
 						<label className="container">
@@ -185,8 +206,6 @@ class ScreenAnalysisSpatialRules extends Component{
 								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={ATTSETS}
-								allowCreate
-								newOptionCreator={this.keyNameOptionFactory.bind(this)}
 								valueKey="key"
 								labelKey="name"
 								value={this.state.valueFilterAttSet}
@@ -227,14 +246,13 @@ class ScreenAnalysisSpatialRules extends Component{
 							<td className="allowOverflow resetui">
 								<label className="container">
 									Status code:
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={STATUSCODES}
-										valueKey="key"
-										labelKey="key"
-										//inputProps={selectInputProps}
-										value="111"
+									<Input
+										type="text"
+										name="name"
+										placeholder=" "
+										defaultValue="111" // remove
+										//value={this.state.valueWhatever}
+										//onChange={this.onChangeWhatever.bind(this)}
 									/>
 								</label>
 							</td>
@@ -292,14 +310,13 @@ class ScreenAnalysisSpatialRules extends Component{
 							<td className="allowOverflow resetui">
 								<label className="container">
 									Status code:
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={STATUSCODES}
-										valueKey="key"
-										labelKey="key"
-										//inputProps={selectInputProps}
-										value="112"
+									<Input
+										type="text"
+										name="name"
+										placeholder=" "
+										defaultValue="112" // remove
+										//value={this.state.valueWhatever}
+										//onChange={this.onChangeWhatever.bind(this)}
 									/>
 								</label>
 							</td>
@@ -344,14 +361,13 @@ class ScreenAnalysisSpatialRules extends Component{
 							<td className="allowOverflow resetui">
 								<label className="container">
 									Status code:
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={STATUSCODES}
-										valueKey="key"
-										labelKey="key"
-										//inputProps={selectInputProps}
-										value="113"
+									<Input
+										type="text"
+										name="name"
+										placeholder=" "
+										defaultValue="113" // remove
+										//value={this.state.valueWhatever}
+										//onChange={this.onChangeWhatever.bind(this)}
 									/>
 								</label>
 							</td>
