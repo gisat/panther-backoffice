@@ -243,11 +243,10 @@ class ScreenMetadataBase extends Component{
 
 	onObjectListItemClick(itemType, item, event) {
 		this.context.onInteraction().call();
-		// todo open screen with item
 		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
 		this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
-		//this.context.openScreen(screenName,<ScreenMetadataObject/>,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
 
+		//todo highlighting screen opener.
 		//this.changeActiveObjectListItem(itemType,item.key);
 	}
 	onObjectListAddClick(itemType, event) {
