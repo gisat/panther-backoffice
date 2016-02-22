@@ -4,6 +4,8 @@ import styles from './Page.css';
 import _ from 'underscore';
 import classNames from 'classnames';
 
+import utils from '../../utils/utils';
+
 import ScreenContainer from '../ScreenContainer';
 
 const SCREENSETS = require('../../stores/tempScreenSets');
@@ -38,7 +40,7 @@ class Page extends Component {
 	constructor(props) {
 		super(props);
 
-		var screenSets = [];
+		var screenSets = {};
 		screenSets[this.props.screenSet] = _.findWhere(SCREENSETS, {key: this.props.screenSet});
 
 		this.buildScreenStack(screenSets[this.props.screenSet]);
@@ -124,11 +126,11 @@ class Page extends Component {
 	}
 
 	openScreen(key,component,parentUrl,options,data,openerCallback) {
-		var screenSets = this.state.screenSets;
+		var screenSets = utils.deepClone(this.state.screenSets);
 		var screenSet = {
 			key: this.state.key,
 			title: this.state.title,
-			screens: this.state.screens
+			screens: utils.deepClone(this.state.screens)
 		};
 		var existingScreen = _.findWhere(screenSet.screens, {key: key});
 		if(existingScreen) {
