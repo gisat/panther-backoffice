@@ -154,6 +154,7 @@ class ScreenContainer extends Component{
 			{
 				disabled: disabled,
 				data: totallyLocalData,
+				screenKey: this.props.screenState.key,
 				parentUrl: this.props.screenState.parentUrl || ""
 			}
 		);

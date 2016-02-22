@@ -47,7 +47,8 @@ var initialState = {
 class ScreenMetadataBase extends Component{
 
 	static propTypes = {
-		disabled: React.PropTypes.bool
+		disabled: PropTypes.bool,
+		screenKey: PropTypes.string.isRequired
 	};
 
 	static defaultProps = {
@@ -243,7 +244,7 @@ class ScreenMetadataBase extends Component{
 	onObjectListItemClick(itemType, item, event) {
 		this.context.onInteraction().call();
 		// todo open screen with item
-		var screenName = "ScreenMetadataBase-ScreenMetadata" + itemType;
+		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
 		this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
 		//this.context.openScreen(screenName,<ScreenMetadataObject/>,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
 
