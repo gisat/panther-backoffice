@@ -251,7 +251,6 @@ class ScreenMetadataBase extends Component{
 	}
 	onObjectListAddClick(itemType, event) {
 		this.context.onInteraction().call();
-		// todo create item + open screen
 		let model = new Model[itemType]({active:false});
 		let responseData = {
 			objectType: itemType
