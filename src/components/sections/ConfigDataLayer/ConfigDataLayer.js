@@ -218,7 +218,7 @@ class ConfigDataLayer extends Component {
 
 	componentWillReceiveProps(newProps) {
 		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.setStateFromStores(newProps);
+			this.setStateFromStores(newProps,["layer","layerRelations","dataLayerColumns"]);
 			//this.context.setStateFromStores.call(this, this.store2state(newProps));
 			this.updateStateHash(newProps);
 		}
