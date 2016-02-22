@@ -1,3 +1,4 @@
+import React from 'react';
 import ActionCreator from '../actions/ActionCreator';
 import {Model} from '../constants/ObjectTypes';
 import ScopeStore from '../stores/ScopeStore';
@@ -97,6 +98,21 @@ export default {
 				});
 			});
 		});
+	},
+
+	deepClone: function(data) {
+		var clone = data;
+		if(_.isObject(data) && !React.Component.isPrototypeOf(data)) {
+
+			clone = _.clone(data);
+
+			_.each(clone, function (value, key) {
+				clone[key] = this.deepClone(value);
+			}, this);
+
+		}
+
+		return clone;
 	}
 
 }
