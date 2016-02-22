@@ -156,7 +156,9 @@ const context = {
 				case "closed":
 					// when closing, delete screen from state after a while
 					setTimeout(function () {
-						delete newScreens[index];
+						if(index != -1){
+							newScreens.splice(index, 1);
+						}
 						page.setState({
 							screens: newScreens
 						});
