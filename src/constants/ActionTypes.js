@@ -3,6 +3,7 @@
 import keyMirror from 'fbjs/lib/keyMirror';
 
 export default keyMirror({
+	SCOPE_CREATE_RESPOND: null,
 	PERIOD_CREATE: null,
 	PERIOD_CREATE_RESPOND: null,
 	PERIOD_HANDLE: null,

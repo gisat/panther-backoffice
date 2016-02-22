@@ -92,6 +92,7 @@ class ScreenDataLayersBase extends Component {
 						disabled={this.props.disabled}
 						selectorValue={this.state.selectorValue}
 						dataLayers={this.state.dataLayers}
+						screenKey={this.props.screenKey}
 						parentUrl={this.getUrl()}
 					/>
 				</div></div>
