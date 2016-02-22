@@ -8,7 +8,10 @@ import Location from './core/Location';
 import { addEventListener, removeEventListener } from './utils/DOMUtils';
 import ga from 'react-ga';
 import update from 'react-addons-update';
+
 import { googleAnalyticsId } from './config';
+
+import utils from './utils/utils';
 
 const screenStack = require('./stores/screenStack');
 
@@ -62,7 +65,7 @@ const context = {
 			});
 			//console.log("SET-SCREEN-DATA index", index);
 			if (index == -1) return false;
-			var newScreens = page.state.screens.slice(0);
+			var newScreens = utils.deepClone(page.state.screens);
 			for (var key in data) {
 				newScreens[index].data[key] = data[key];
 			}
@@ -113,7 +116,10 @@ const context = {
 		options = options || {};
 		var page = this;
 		// clone state screen array
-		var newScreens = page.state.screens.slice(0);
+		var newScreens = utils.deepClone(page.state.screens);
+		var screenSetKey = page.state.key;
+		var newScreenSets = utils.deepClone(page.state.screenSets);
+
 		var index = -1;
 		screenStack[page.state.key] = screenStack[page.state.key] || [];
 
@@ -237,7 +243,7 @@ const context = {
 
 							if(current){
 								maximiseScreen(record.key, newScreens);
-								page.state.hasMaximised = true;
+								page.setState({hasMaximised: true});
 							}else{
 
 								disableScreen(record.key, newScreens);
@@ -266,7 +272,7 @@ const context = {
 				case "closed":
 					current = false; // Beacause when screen has been closed, it's no more in the screenStack
 				case "retracted":
-					page.state.hasMaximised = false;
+					page.setState({hasMaximised: false});
 
 					if (record.position == "open") {
 						foundOpen = true;
@@ -295,7 +301,7 @@ const context = {
 								enableScreen(record.key, newScreens);
 								// maximise
 								maximiseScreen(record.key, newScreens);
-								page.state.hasMaximised = true;
+								page.setState({hasMaximised: true});
 								retractAllFurther = true;
 							}else{
 								// disable
@@ -350,8 +356,10 @@ const context = {
 
 
 		// apply changes of state
+		newScreenSets[screenSetKey].screens = utils.deepClone(newScreens);
 		page.setState({
-			screens: newScreens
+			screens: newScreens,
+			screenSets: newScreenSets
 		});
 
 	}
