@@ -39,7 +39,7 @@ class ScreenMetadataObject extends Component{
 
 	constructor(props) {
 		super(props);
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 
 		if(this.props.data && this.props.data.objectType) {
 			this.state.objectType = this.props.data.objectType;
