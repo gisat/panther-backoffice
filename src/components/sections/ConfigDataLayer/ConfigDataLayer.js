@@ -174,16 +174,22 @@ class ConfigDataLayer extends Component {
 				function () {
 					//console.log("_onStoreResponse updated state:", thisComponent.state);
 				});
-				var screenComponent,screenName,screenObjectType;
+				var screenComponent,screenObjectType;
 				switch(stateKey){
 					case "valuesVLPeriods":
 					case "valuesRLPeriods":
 						screenComponent = ScreenMetadataObject;
 						//screenComponent = <ScreenMetadataObject/>;
 						screenObjectType = ObjectTypes.PERIOD;
-						screenName = "ScreenDataLayersBase-ScreenMetadataPeriod";
+						break;
+					case "valueVLScope":
+					case "valueRLScope":
+					case "valueAUScope":
+						screenComponent = ScreenMetadataObject;
+						screenObjectType = ObjectTypes.SCOPE;
 						break;
 				}
+				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
 				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
 			}
 		}
@@ -191,11 +197,17 @@ class ConfigDataLayer extends Component {
 
 	componentDidMount() {
 		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		ScopeStore.addResponseListener(this._onStoreResponse.bind(this));
 		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
+		PlaceStore.addResponseListener(this._onStoreResponse.bind(this));
 		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
+		VectorLayerStore.addResponseListener(this._onStoreResponse.bind(this));
 		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
+		RasterLayerStore.addResponseListener(this._onStoreResponse.bind(this));
 		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		AttributeSetStore.addChangeListener(this._onStoreChange);
+		AULevelStore.addResponseListener(this._onStoreResponse.bind(this));
+		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
+		AttributeStore.addChangeListener(this._onStoreChange.bind(this,["attributes"]));
 		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
 		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
@@ -209,7 +221,8 @@ class ConfigDataLayer extends Component {
 		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
 		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
 		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		AttributeSetStore.removeChangeListener(this._onStoreChange);
+		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
+		AttributeStore.removeChangeListener(this._onStoreChange.bind(this,["attributes"]));
 		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
 		ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
@@ -674,8 +687,11 @@ class ConfigDataLayer extends Component {
 		this.setState(newState);
 	}
 
-	onObjectClick (value, event) {
-		console.log("yay! " + value["key"]);
+	onObjectClick (itemType, value, event) {
+		console.log("yay! " + value.key);
+		this.context.onInteraction().call();
+		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
+		this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:value.key});
 	}
 
 	onChangeColumnTableSelect (stateKey, layerType, column, value, values) {

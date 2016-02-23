@@ -11,12 +11,14 @@ export default {
 			responseData: responseData,
 			stateHash: stateHash
 		};
+		console.log("ActionCreator createObjectAndRespond()");
 		switch (objectType) {
+			case ObjectTypes.SCOPE:
+				action.type = ActionTypes.SCOPE_CREATE_RESPOND;
+				break;
 			case ObjectTypes.PERIOD:
 				action.type = ActionTypes.PERIOD_CREATE_RESPOND;
 				break;
-			default:
-				return;
 		}
 		AppDispatcher.dispatch(action);
 	},

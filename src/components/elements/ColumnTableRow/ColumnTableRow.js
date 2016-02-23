@@ -5,6 +5,8 @@ import React, { PropTypes, Component } from 'react';
 import Select from 'react-select';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 
+import ObjectTypes from '../../../constants/ObjectTypes';
+
 import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
 import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
 
@@ -37,7 +39,7 @@ class ColumnTableRow extends Component {
 					//loadOptions={this.getPlaces}
 					multi
 					options={this.props.periods}
-					onOptionLabelClick={this.props.onObjectClick}
+					onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PERIOD)}
 					valueKey="key"
 					labelKey="name"
 					allowCreate

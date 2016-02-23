@@ -101,11 +101,6 @@ const context = {
 		return Promise.all(storeLoads).then(function(data){
 			var storeObject = {};
 			for(var i in storeNames){
-				if(data[i] && data[i].length) {
-					for(let model of data[i]) {
-						delete model.ready; // clear unneeded promises
-					}
-				}
 				storeObject[storeNames[i]] = data[i];
 			}
 			component.setState(storeObject);
