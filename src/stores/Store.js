@@ -237,6 +237,9 @@ class Store extends EventEmitter {
 						}
 					}
 					Promise.all(promises).then(function(){
+						_.each(ret, function(instance){
+							delete instance.ready;
+						}, this);
 						resolve(ret);
 					});
 
