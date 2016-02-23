@@ -217,10 +217,15 @@ class ConfigDataLayer extends Component {
 
 	componentWillUnmount() {
 		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		ScopeStore.removeResponseListener(this._onStoreResponse.bind(this));
 		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
+		PlaceStore.removeResponseListener(this._onStoreResponse.bind(this));
 		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
+		VectorLayerStore.removeResponseListener(this._onStoreResponse.bind(this));
 		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
+		RasterLayerStore.removeResponseListener(this._onStoreResponse.bind(this));
 		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
+		AULevelStore.removeResponseListener(this._onStoreResponse.bind(this));
 		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
 		AttributeStore.removeChangeListener(this._onStoreChange.bind(this,["attributes"]));
 		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
