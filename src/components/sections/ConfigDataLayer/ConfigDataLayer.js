@@ -135,7 +135,6 @@ class ConfigDataLayer extends Component {
 		// todo determine from keys, if the following needs to be done
 		if(!keys || keys.indexOf("layerRelations")!=-1) {
 			store2state.layerRelations.then(function(relations) {
-				// todo we work with relations (attsets,columns) with .ready not removed
 				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations));
 			});
 		}
@@ -248,33 +247,33 @@ class ConfigDataLayer extends Component {
 	 */
 	isStateUnchanged() {
 		var isIt = true;
-		if(this.state.hasOwnProperty("relationsState")){
-			if(this.state.layerType==this.state.relationsState.layerType) {
-				// todo could be universal? compare whatever properties relationsState has?
+		if(this.state.hasOwnProperty("savedState")){
+			if(this.state.layerType==this.state.savedState.layerType) {
+				// todo could be universal? compare whatever properties savedState has?
 				//console.log("isStateUnchanged layerType");
 				if(this.state.layerType=="vector" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("vector")) {
 					//console.log("isStateUnchanged vector");
 					isIt = (
-						this.state.valueVLTemplate==this.state.relationsState.valueVLTemplate &&
-						this.state.valueVLScope==this.state.relationsState.valueVLScope &&
-						this.state.valuesVLPlaces==this.state.relationsState.valuesVLPlaces &&
-						this.state.valuesVLPeriods==this.state.relationsState.valuesVLPeriods &&
+						this.state.valueVLTemplate==this.state.savedState.valueVLTemplate &&
+						this.state.valueVLScope==this.state.savedState.valueVLScope &&
+						this.state.valuesVLPlaces==this.state.savedState.valuesVLPlaces &&
+						this.state.valuesVLPeriods==this.state.savedState.valuesVLPeriods &&
 						this.state.columnMaps.vector==this.state.savedState.columnMaps.vector
 					);
 				} else if(this.state.layerType=="raster") {
 					//console.log("isStateUnchanged raster");
 					isIt = (
-						this.state.valueRLTemplate==this.state.relationsState.valueRLTemplate &&
-						this.state.valueRLScope==this.state.relationsState.valueRLScope &&
-						this.state.valuesRLPlaces==this.state.relationsState.valuesRLPlaces &&
-						this.state.valuesRLPeriods==this.state.relationsState.valuesRLPeriods
+						this.state.valueRLTemplate==this.state.savedState.valueRLTemplate &&
+						this.state.valueRLScope==this.state.savedState.valueRLScope &&
+						this.state.valuesRLPlaces==this.state.savedState.valuesRLPlaces &&
+						this.state.valuesRLPeriods==this.state.savedState.valuesRLPeriods
 					);
 				} else if(this.state.layerType=="au" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("au")) {
 					//console.log("isStateUnchanged au");
 					isIt = (
-						this.state.valueAULevel==this.state.relationsState.valueAULevel &&
-						this.state.valueAUScope==this.state.relationsState.valueAUScope &&
-						this.state.valuesAUPlaces==this.state.relationsState.valuesAUPlaces &&
+						this.state.valueAULevel==this.state.savedState.valueAULevel &&
+						this.state.valueAUScope==this.state.savedState.valueAUScope &&
+						this.state.valuesAUPlaces==this.state.savedState.valuesAUPlaces &&
 						this.state.columnMaps.au==this.state.savedState.columnMaps.au
 					);
 				}
@@ -373,7 +372,7 @@ class ConfigDataLayer extends Component {
 
 		let savedState = {};
 		_.assign(savedState, ret);
-		this.context.setStateDeep.call(this, {savedState: {$set: savedState}}); // save store state for comparison with changed local
+		this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
 		return ret;
 		//return mock;
 	}
@@ -467,16 +466,11 @@ class ConfigDataLayer extends Component {
 					ret.valueAUScope = values.scope;
 					ret.valuesAUPlaces = values.places;
 			}
-			let relationsState = {};
-			_.assign(relationsState, ret);
-			ret.relationsState = relationsState; // save store state for comparison with changed local
-
-			//todo, Tom: Should be something like this
-			//let savedState = {};
-			//_.assign(savedState, ret);
-			//this.context.setStateDeep.call(this, {savedState: {$set: savedState}}); // save store state for comparison with changed local
 		}
-		//todo 2: Shouldn't it be here?
+		let savedState = {};
+		_.assign(savedState, ret);
+		console.log("relations2state savedState",savedState);
+		this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
 		return ret;
 	}
 
