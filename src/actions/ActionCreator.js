@@ -11,7 +11,6 @@ export default {
 			responseData: responseData,
 			stateHash: stateHash
 		};
-		console.log("ActionCreator createObjectAndRespond()");
 		switch (objectType) {
 			case ObjectTypes.SCOPE:
 				action.type = ActionTypes.SCOPE_CREATE_RESPOND;

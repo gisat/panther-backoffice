@@ -19,7 +19,6 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 
 	switch(action.type) {
 		case ActionTypes.SCOPE_CREATE_RESPOND:
-			console.log("ScopeStore SCOPE_CREATE_RESPOND");
 			storeInstance.createObjectAndRespond(action.model, action.responseData, action.stateHash);
 			break;
 		default:
