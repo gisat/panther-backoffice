@@ -94,6 +94,8 @@ const context = {
 				//console.log("name:",name);
 				//console.log(keys.indexOf(name));
 				storeLoads.push(store2state[name]);
+				// todo to clone or not to clone, that is the question
+				//storeLoads.push(utils.deepClone(store2state[name]));
 				storeNames.push(name);
 			}
 		}
