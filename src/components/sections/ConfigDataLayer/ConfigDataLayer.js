@@ -250,31 +250,31 @@ class ConfigDataLayer extends Component {
 		if(this.state.hasOwnProperty("savedState")){
 			if(this.state.layerType==this.state.savedState.layerType) {
 				// todo could be universal? compare whatever properties savedState has?
-				//console.log("isStateUnchanged layerType");
+				console.log("isStateUnchanged layerType");
 				if(this.state.layerType=="vector" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("vector")) {
 					//console.log("isStateUnchanged vector");
 					isIt = (
-						this.state.valueVLTemplate==this.state.savedState.valueVLTemplate &&
-						this.state.valueVLScope==this.state.savedState.valueVLScope &&
-						this.state.valuesVLPlaces==this.state.savedState.valuesVLPlaces &&
-						this.state.valuesVLPeriods==this.state.savedState.valuesVLPeriods &&
-						this.state.columnMaps.vector==this.state.savedState.columnMaps.vector
+						_.isEqual(this.state.valueVLTemplate,this.state.savedState.valueVLTemplate) &&
+						_.isEqual(this.state.valueVLScope,this.state.savedState.valueVLScope) &&
+						_.isEqual(this.state.valuesVLPlaces,this.state.savedState.valuesVLPlaces) &&
+						_.isEqual(this.state.valuesVLPeriods,this.state.savedState.valuesVLPeriods) &&
+						_.isEqual(this.state.columnMaps.vector,this.state.savedState.columnMaps.vector)
 					);
 				} else if(this.state.layerType=="raster") {
 					//console.log("isStateUnchanged raster");
 					isIt = (
-						this.state.valueRLTemplate==this.state.savedState.valueRLTemplate &&
-						this.state.valueRLScope==this.state.savedState.valueRLScope &&
-						this.state.valuesRLPlaces==this.state.savedState.valuesRLPlaces &&
-						this.state.valuesRLPeriods==this.state.savedState.valuesRLPeriods
+						_.isEqual(this.state.valueRLTemplate,this.state.savedState.valueRLTemplate) &&
+						_.isEqual(this.state.valueRLScope,this.state.savedState.valueRLScope) &&
+						_.isEqual(this.state.valuesRLPlaces,this.state.savedState.valuesRLPlaces) &&
+						_.isEqual(this.state.valuesRLPeriods,this.state.savedState.valuesRLPeriods)
 					);
 				} else if(this.state.layerType=="au" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("au")) {
 					//console.log("isStateUnchanged au");
 					isIt = (
-						this.state.valueAULevel==this.state.savedState.valueAULevel &&
-						this.state.valueAUScope==this.state.savedState.valueAUScope &&
-						this.state.valuesAUPlaces==this.state.savedState.valuesAUPlaces &&
-						this.state.columnMaps.au==this.state.savedState.columnMaps.au
+						_.isEqual(this.state.valueAULevel,this.state.savedState.valueAULevel) &&
+						_.isEqual(this.state.valueAUScope,this.state.savedState.valueAUScope) &&
+						_.isEqual(this.state.valuesAUPlaces,this.state.savedState.valuesAUPlaces) &&
+						_.isEqual(this.state.columnMaps.au,this.state.savedState.columnMaps.au)
 					);
 				}
 			} else {
@@ -283,7 +283,7 @@ class ConfigDataLayer extends Component {
 		} else {
 			isIt = false;
 		}
-		//console.log(isIt);
+		console.log("isIt",isIt);
 		return isIt;
 	}
 
