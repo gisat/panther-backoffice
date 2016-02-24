@@ -36,6 +36,7 @@ export default {
 				delete singleValue.value; // discard temp compatibility key
 				delete singleValue.key; // discard temp key = name
 				let valueModel = new Model[objectType](singleValue);
+				valueModel.active = false;
 				ActionCreator.createObjectAndRespond(valueModel,objectType,responseData,stateHash);
 			}
 			else {
