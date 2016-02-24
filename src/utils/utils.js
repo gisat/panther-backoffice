@@ -113,6 +113,14 @@ export default {
 		}
 
 		return clone;
+	},
+
+	getModelsKeys(modelArray) {
+		var keyArray = [];
+		_.each(modelArray, function(model, key) {
+			keyArray.push(model.key);
+		});
+		return keyArray;
 	}
 
 }
