@@ -378,7 +378,6 @@ var UIObjectSelect = React.createClass({
 
 	moveValue(valueToMove,direction) {
 		var values = this.props.value.slice(0);
-		console.log("moveValue before",values);
 		var value = valueToMove[this.props.valueKey];
 		var index = values.indexOf(value);
 		switch(direction) {
@@ -393,7 +392,6 @@ var UIObjectSelect = React.createClass({
 				}
 				break;
 		}
-		console.log("moveValue after",values);
 		this.setValue(values,this.state.isFocused);
 	},
 
