@@ -264,6 +264,7 @@ class Store extends EventEmitter {
 					_.each(options, function (value, key) {
 						if(_.isArray(value)) {
 							if(_.isEmpty(value)) {
+								shouldRemain = false;
 								return;
 							}
 							if(!_.contains(value, model[key])) {
