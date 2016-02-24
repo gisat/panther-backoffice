@@ -250,7 +250,7 @@ class ConfigDataLayer extends Component {
 		if(this.state.hasOwnProperty("savedState")){
 			if(this.state.layerType==this.state.savedState.layerType) {
 				// todo could be universal? compare whatever properties savedState has?
-				console.log("isStateUnchanged layerType");
+				//console.log("isStateUnchanged layerType");
 				if(this.state.layerType=="vector" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("vector")) {
 					//console.log("isStateUnchanged vector");
 					isIt = (
@@ -283,7 +283,7 @@ class ConfigDataLayer extends Component {
 		} else {
 			isIt = false;
 		}
-		console.log("isIt",isIt);
+		//console.log("isIt",isIt);
 		return isIt;
 	}
 
@@ -469,7 +469,6 @@ class ConfigDataLayer extends Component {
 		}
 		let savedState = {};
 		_.assign(savedState, ret);
-		console.log("relations2state savedState",savedState);
 		this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
 		return ret;
 	}
