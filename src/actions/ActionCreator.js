@@ -87,13 +87,14 @@ export default {
 		};
 		//console.log("ActionCreator handleObjects()");
 		switch (objectType) {
-			case ObjectTypes.OBJECT_RELATION:
-				action.type = ActionTypes.OBJECT_RELATION_HANDLE;
-				//console.log("action type",action.type);
+			case ObjectTypes.SCOPE:
+				action.type = ActionTypes.SCOPE_HANDLE;
 				break;
 			case ObjectTypes.PERIOD:
 				action.type = ActionTypes.PERIOD_HANDLE;
-				//console.log("action type",action.type);
+				break;
+			case ObjectTypes.OBJECT_RELATION:
+				action.type = ActionTypes.OBJECT_RELATION_HANDLE;
 				break;
 			default:
 				return;

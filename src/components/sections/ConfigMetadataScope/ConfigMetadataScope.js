@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ConfigMetadataPeriod.css';
+import styles from './ConfigMetadataScope.css';
 import withStyles from '../../../decorators/withStyles';
 
 import utils from '../../../utils/utils';
@@ -7,22 +7,29 @@ import utils from '../../../utils/utils';
 import { Input, Button } from '../../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
+import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
-import PeriodStore from '../../../stores/PeriodStore';
+import ScopeStore from '../../../stores/ScopeStore';
+import AULevelStore from '../../../stores/AULevelStore';
+//import PeriodStore from '../../../stores/PeriodStore';
+
+import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 
 var initialState = {
-	period: null,
+	scope: null,
 	valueActive: false,
-	valueName: ""
+	valueName: "",
+	valuesAULevels: []
+	//valuesPeriods: [] //periods are to move from theme to scope, but cannot without changes in FO
 };
 
 
 @withStyles(styles)
-class ConfigMetadataPeriod extends Component{
+class ConfigMetadataScope extends Component{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -43,12 +50,14 @@ class ConfigMetadataPeriod extends Component{
 
 	constructor(props) {
 		super(props);
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 	}
 
 	store2state(props) {
 		return {
-			period: PeriodStore.getById(props.selectorValue)
+			scope: ScopeStore.getById(props.selectorValue),
+			auLevels: AULevelStore.getAll()
+			//periods: PeriodStore.getAll()
 		};
 	}
 
@@ -62,11 +71,15 @@ class ConfigMetadataPeriod extends Component{
 			this.context.setStateFromStores.call(this, store2state, keys);
 			// if stores changed, overrides user input - todo fix
 
-			store2state.period.then(function(period) {
-				thisComponent.setState({
-					valueActive: period.active,
-					valueName: period.name
-				});
+			store2state.scope.then(function(scope) {
+				let newState = {
+					valueActive: scope.active,
+					valueName: scope.name,
+					valuesAULevels: utils.getModelsKeys(scope.levels)
+					//valuesPeriods: utils.getModelsKeys(scope.periods)
+				};
+				newState.savedState = utils.deepClone(newState);
+				thisComponent.setState(newState);
 			});
 		}
 
@@ -77,12 +90,12 @@ class ConfigMetadataPeriod extends Component{
 	}
 
 	componentDidMount() {
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["period"]));
+		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scope"]));
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["period"]));
+		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scope"]));
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -99,10 +112,12 @@ class ConfigMetadataPeriod extends Component{
 	 */
 	isStateUnchanged() {
 		var isIt = true;
-		if(this.state.period) {
+		if(this.state.scope) {
 			isIt = (
-				this.state.valueActive == this.state.period.active &&
-				this.state.valueName == this.state.period.name
+					this.state.valueActive == this.state.scope.active &&
+					this.state.valueName == this.state.scope.name &&
+					_.isEqual(this.state.valuesAULevels,this.state.savedState.valuesAULevels)
+					//_.isEqual(this.state.valuesPeriods,this.state.savedState.valuesPeriods)
 			);
 		}
 		return isIt;
@@ -128,12 +143,13 @@ class ConfigMetadataPeriod extends Component{
 
 	saveForm() {
 		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.period);
+		_.assign(modelData, this.state.scope);
 		modelData.active = this.state.valueActive;
 		modelData.name = this.state.valueName;
-		let modelObj = new Model[ObjectTypes.PERIOD](modelData);
+		//todo the rest
+		let modelObj = new Model[ObjectTypes.SCOPE](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.PERIOD);
+		ActionCreator.handleObjects(actionData,ObjectTypes.SCOPE);
 	}
 
 	onChangeActive() {
@@ -148,11 +164,24 @@ class ConfigMetadataPeriod extends Component{
 		});
 	}
 
+	onChangeObjectSelect (stateKey, objectType, value, values) {
+		values = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
+		var newState = {};
+		newState[stateKey] = values;
+		this.setState(newState);
+	}
+
+	onObjectClick (itemType, value, event) {
+		this.context.onInteraction().call();
+		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
+		this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:value.key});
+	}
+
 
 	render() {
 
 		var saveButton = " ";
-		if (this.state.period) {
+		if (this.state.scope) {
 			saveButton = (
 				<SaveButton
 					saved={this.isStateUnchanged()}
@@ -164,7 +193,7 @@ class ConfigMetadataPeriod extends Component{
 
 		var isActiveText = "inactive";
 		var isActiveClasses = "activeness-indicator";
-		if(this.state.period && this.state.period.active){
+		if(this.state.scope && this.state.scope.active){
 			isActiveText = "active";
 			isActiveClasses = "activeness-indicator active";
 		}
@@ -200,6 +229,40 @@ class ConfigMetadataPeriod extends Component{
 					</label>
 				</div>
 
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Analytical units Levels
+						<UIObjectSelect
+							multi
+							onChange={this.onChangeObjectSelect.bind(this, "valuesAULevels", ObjectTypes.AU_LEVEL)}
+							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.AU_LEVEL)}
+							options={this.state.auLevels}
+							allowCreate
+							newOptionCreator={utils.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.state.valuesAULevels}
+						/>
+					</label>
+				</div>
+
+				{/*<div className="frame-input-wrapper">
+					<label className="container">
+						Imaging/reference periods
+						<UIObjectSelect
+							multi
+							onChange={this.onChangeObjectSelect.bind(this, "valuesPeriods", ObjectTypes.PERIOD)}
+							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.PERIOD)}
+							options={this.state.periods}
+							allowCreate
+							newOptionCreator={utils.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.state.valuesPeriods}
+						/>
+					</label>
+				</div>*/}
+
 				{saveButton}
 
 			</div>
@@ -208,4 +271,4 @@ class ConfigMetadataPeriod extends Component{
 	}
 }
 
-export default ConfigMetadataPeriod;
+export default ConfigMetadataScope;

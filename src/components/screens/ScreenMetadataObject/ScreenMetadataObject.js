@@ -11,6 +11,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 
 //import PeriodStore from '../../../stores/PeriodStore';
 import SelectorMetadataObject from '../../sections/SelectorMetadataObject';
+import ConfigMetadataScope from '../../sections/ConfigMetadataScope';
 import ConfigMetadataPeriod from '../../sections/ConfigMetadataPeriod';
 
 var initialState = {
@@ -170,7 +171,7 @@ class ScreenMetadataObject extends Component{
 			};
 			switch (this.props.data.objectType) {
 				case ObjectTypes.SCOPE:
-					//configComponent = <ConfigMetadataScope {...props} />;
+					configComponent = <ConfigMetadataScope {...props} />;
 					break;
 				case ObjectTypes.PERIOD:
 					configComponent = <ConfigMetadataPeriod {...props} />;

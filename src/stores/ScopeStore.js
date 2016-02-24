@@ -21,6 +21,9 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 		case ActionTypes.SCOPE_CREATE_RESPOND:
 			storeInstance.createObjectAndRespond(action.model, action.responseData, action.stateHash);
 			break;
+		case ActionTypes.SCOPE_HANDLE:
+			storeInstance.handle(action.data);
+			break;
 		default:
 			return;
 	}
