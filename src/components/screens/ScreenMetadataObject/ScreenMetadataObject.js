@@ -147,7 +147,7 @@ class ScreenMetadataObject extends Component{
 
 	onNewEmptyObject () {
 		console.log("onNewEmptyObject");
-		let objectType = ObjectTypes.PERIOD;
+		let objectType = this.props.data.objectType;
 		let model = new Model[objectType]({active:false});
 		console.log(model);
 		ActionCreator.createObjectAndRespond(model, objectType, {}, this.getStateHash());

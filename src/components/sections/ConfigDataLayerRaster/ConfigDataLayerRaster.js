@@ -3,6 +3,8 @@ import styles from './ConfigDataLayerRaster.css';
 import withStyles from '../../../decorators/withStyles';
 
 import utils from '../../../utils/utils';
+import ObjectTypes from '../../../constants/ObjectTypes';
+
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 
 
@@ -40,7 +42,7 @@ class ConfigDataLayerRaster extends Component{
 						Layer template (Name)
 						<UIObjectSelect
 							onChange={this.props.onChangeTemplate}
-							onOptionLabelClick={this.props.onObjectClick}
+							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.RASTER_LAYER_TEMPLATE)}
 							options={this.props.layerTemplates}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
@@ -57,7 +59,7 @@ class ConfigDataLayerRaster extends Component{
 						Scope
 						<UIObjectSelect
 							onChange={this.props.onChangeScope}
-							onOptionLabelClick={this.props.onObjectClick}
+							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.SCOPE)}
 							options={this.props.scopes}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
@@ -74,7 +76,7 @@ class ConfigDataLayerRaster extends Component{
 						<UIObjectSelect
 							multi
 							onChange={this.props.onChangePlaces}
-							onOptionLabelClick={this.props.onObjectClick}
+							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PLACE)}
 							options={this.props.places}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
@@ -91,7 +93,7 @@ class ConfigDataLayerRaster extends Component{
 						<UIObjectSelect
 							multi
 							onChange={this.props.onChangePeriods.bind(this)}
-							onOptionLabelClick={this.props.onObjectClick}
+							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PERIOD)}
 							options={this.props.periods}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}

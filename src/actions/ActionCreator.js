@@ -11,15 +11,22 @@ export default {
 			responseData: responseData,
 			stateHash: stateHash
 		};
-		switch (objectType) {
-			case ObjectTypes.SCOPE:
-				action.type = ActionTypes.SCOPE_CREATE_RESPOND;
-				break;
-			case ObjectTypes.PERIOD:
-				action.type = ActionTypes.PERIOD_CREATE_RESPOND;
-				break;
+		let actionType = objectType+"_CREATE_RESPOND";
+		if(ActionTypes[actionType]) {
+			action.type = ActionTypes[actionType];
+			AppDispatcher.dispatch(action);
+		} else {
+			console.error("UNKNOWN ACTION TYPE",actionType);
 		}
-		AppDispatcher.dispatch(action);
+		//switch (objectType) {
+		//	case ObjectTypes.SCOPE:
+		//		action.type = ActionTypes.SCOPE_CREATE_RESPOND;
+		//		break;
+		//	case ObjectTypes.PERIOD:
+		//		action.type = ActionTypes.PERIOD_CREATE_RESPOND;
+		//		break;
+		//}
+		//AppDispatcher.dispatch(action);
 	},
 
 	createObject: function(model,objectType) {
