@@ -52,6 +52,7 @@ var UIObjectSelect = React.createClass({
 		optionComponent: React.PropTypes.func,     // option component to render in dropdown
 		optionRenderer: React.PropTypes.func,      // optionRenderer: function (option) {}
 		options: React.PropTypes.array,            // array of options
+		ordered: React.PropTypes.bool,             // ordered values
 		placeholder: React.PropTypes.string,       // field placeholder, displayed when there's no value
 		searchable: React.PropTypes.bool,          // whether to enable searching feature or not
 		searchingText: React.PropTypes.string,     // message to display whilst options are loading via asyncOptions
@@ -91,6 +92,7 @@ var UIObjectSelect = React.createClass({
 			onOptionLabelClick: undefined,
 			optionComponent: Option,
 			options: undefined,
+			ordered: false,
 			placeholder: 'Select...',
 			searchable: true,
 			searchingText: 'Searching...',
@@ -372,6 +374,27 @@ var UIObjectSelect = React.createClass({
 
 	resetValue () {
 		this.setValue(this.state.value === '' ? null : this.state.value);
+	},
+
+	moveValue(valueToMove,direction) {
+		var values = this.props.value.slice(0);
+		console.log("moveValue before",values);
+		var value = valueToMove[this.props.valueKey];
+		var index = values.indexOf(value);
+		switch(direction) {
+			case "up":
+				if(index>0) {
+					values.splice((index-1), 0, values.splice(index, 1)[0]);
+				}
+				break;
+			case "down":
+				if(index<(values.length-1)) {
+					values.splice((index+1), 0, values.splice(index, 1)[0]);
+				}
+				break;
+		}
+		console.log("moveValue after",values);
+		this.setValue(values,this.state.isFocused);
 	},
 
 	getInputNode  () {
@@ -837,6 +860,7 @@ var UIObjectSelect = React.createClass({
 	render () {
 		var selectClass = classes('Select UIObjectSelect', this.props.className, {
 			'Select--multi': this.props.multi,
+			'is-ordered': this.props.ordered,
 			'is-searchable': this.props.searchable,
 			'is-open': this.state.isOpen,
 			'is-focused': this.state.isFocused,
@@ -859,6 +883,9 @@ var UIObjectSelect = React.createClass({
 					optionLabelClick: !!this.props.onOptionLabelClick,
 					onOptionLabelClick: onOptionLabelClick,
 					onRemove: onRemove,
+					onMoveUp: this.moveValue.bind(this, val, "up"),
+					onMoveDown: this.moveValue.bind(this, val, "down"),
+					ordered: this.props.ordered,
 					disabled: this.props.disabled
 				});
 				objectOuterValues.push(valueComponent);

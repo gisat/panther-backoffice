@@ -234,6 +234,7 @@ class ConfigMetadataScope extends Component{
 						Analytical units Levels
 						<UIObjectSelect
 							multi
+							ordered
 							onChange={this.onChangeObjectSelect.bind(this, "valuesAULevels", ObjectTypes.AU_LEVEL)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.AU_LEVEL)}
 							options={this.state.auLevels}

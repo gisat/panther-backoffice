@@ -9,6 +9,9 @@ var Value = React.createClass({
 		disabled: React.PropTypes.bool,                   // disabled prop passed to ReactSelect
 		onOptionLabelClick: React.PropTypes.func,         // method to handle click on value label
 		onRemove: React.PropTypes.func,                   // method to handle remove of that value
+		ordered: React.PropTypes.bool,                   // indicates if ordered values
+		onMoveUp: React.PropTypes.func,                   // method to handle ordering
+		onMoveDown: React.PropTypes.func,                   // method to handle ordering
 		option: React.PropTypes.object.isRequired,        // option passed to component
 		optionLabelClick: React.PropTypes.bool,           // indicates if onOptionLabelClick should be handled
 		renderer: React.PropTypes.func                    // method to render option label passed to ReactSelect
@@ -54,6 +57,32 @@ var Value = React.createClass({
 			);
 		}
 
+		var orderedControls = "";
+		if (this.props.ordered && this.props.onMoveUp && this.props.onMoveDown) {
+			orderedControls = (
+				<span
+					className="UIObjectSelect-ordering-controls"
+				>
+					<span
+						className="UIObjectSelect-item-icon"
+						onMouseDown={this.blockEvent}
+						onClick={this.props.onMoveUp}
+						onTouchEnd={this.props.onMoveUp}
+					>
+						&#9652;
+					</span>
+					<span
+						className="UIObjectSelect-item-icon"
+						onMouseDown={this.blockEvent}
+						onClick={this.props.onMoveDown}
+						onTouchEnd={this.props.onMoveDown}
+					>
+						&#9662;
+					</span>
+				</span>
+			);
+		}
+
 		return (
 			<div className={classes('UIObjectSelect-item', this.props.option.className)}
 				style={this.props.option.style}
@@ -64,6 +93,7 @@ var Value = React.createClass({
 					onClick={this.handleOnRemove}
 					onTouchEnd={this.handleOnRemove}
 				>&times;</span>
+				{orderedControls}
 				{label}
 			</div>
 		);

@@ -1201,6 +1201,9 @@ todo hex colours, button icons */
 
 	padding-left: 2rem;
 }
+.UIObjectSelect.is-ordered .UIObjectSelect-item {
+	padding-left: 6rem;
+}
 .UIObjectSelect.template .UIObjectSelect-item,
 .Select.template.has-value:not(.Select--multi) > .UIObjectSelect-control{
 /*	background: transparent;*/
@@ -1232,6 +1235,15 @@ todo hex colours, button icons */
 	border-right: 1px solid #95A6C7;
 	padding: 0;
 	text-align: center;
+}
+.UIObjectSelect-ordering-controls {
+	position: absolute;
+	top: 0;
+	left: 2rem;
+	width: 4rem;
+}
+.UIObjectSelect-ordering-controls .UIObjectSelect-item-icon:nth-child(2) {
+	left: 2rem;
 }
 .UIObjectSelect-item-icon:hover {
 	background: rgba(255,255,255,.3);
