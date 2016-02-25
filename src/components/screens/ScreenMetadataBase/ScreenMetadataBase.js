@@ -38,7 +38,7 @@ var initialState = {
 	topics: [],
 	layerGroups: [],
 	styles: [],
-	activeMenuItem: "vector-layer",
+	activeMenuItem: "scope",
 	activeObjectListItems: {}
 };
 
