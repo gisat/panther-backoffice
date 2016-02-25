@@ -1,6 +1,7 @@
 import Model from './Model';
 import UserStore from '../stores/UserStore';
 import AULevelStore from '../stores/AULevelStore';
+import PeriodStore from '../stores/PeriodStore';
 
 
 class ScopeModel extends Model {
@@ -50,6 +51,16 @@ class ScopeModel extends Model {
 				sendToServer: true,
 				transformForLocal: function (data) {
 					return AULevelStore.getByKeyArray(data)
+				},
+				transformForServer: this.getKeys,
+				isPromise: true,
+				isArray: true
+			},
+			periods: {
+				serverName: 'years', //ids
+				sendToServer: true,
+				transformForLocal: function (data) {
+					return PeriodStore.getFiltered({key: data})
 				},
 				transformForServer: this.getKeys,
 				isPromise: true,

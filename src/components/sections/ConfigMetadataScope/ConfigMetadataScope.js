@@ -14,7 +14,7 @@ import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 import ScopeStore from '../../../stores/ScopeStore';
 import AULevelStore from '../../../stores/AULevelStore';
-//import PeriodStore from '../../../stores/PeriodStore';
+import PeriodStore from '../../../stores/PeriodStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
@@ -23,8 +23,8 @@ var initialState = {
 	scope: null,
 	valueActive: false,
 	valueName: "",
-	valuesAULevels: []
-	//valuesPeriods: [] //periods are to move from theme to scope, but cannot without changes in FO
+	valuesAULevels: [],
+	valuesPeriods: [] //periods are to move from theme to scope, but cannot without changes in FO
 };
 
 
@@ -56,8 +56,8 @@ class ConfigMetadataScope extends Component{
 	store2state(props) {
 		return {
 			scope: ScopeStore.getById(props.selectorValue),
-			auLevels: AULevelStore.getAll()
-			//periods: PeriodStore.getAll()
+			auLevels: AULevelStore.getAll(),
+			periods: PeriodStore.getAll()
 		};
 	}
 
@@ -75,8 +75,8 @@ class ConfigMetadataScope extends Component{
 				let newState = {
 					valueActive: scope.active,
 					valueName: scope.name,
-					valuesAULevels: utils.getModelsKeys(scope.levels)
-					//valuesPeriods: utils.getModelsKeys(scope.periods)
+					valuesAULevels: utils.getModelsKeys(scope.levels),
+					valuesPeriods: utils.getModelsKeys(scope.periods)
 				};
 				newState.savedState = utils.deepClone(newState);
 				thisComponent.setState(newState);
@@ -116,8 +116,8 @@ class ConfigMetadataScope extends Component{
 			isIt = (
 					this.state.valueActive == this.state.scope.active &&
 					this.state.valueName == this.state.scope.name &&
-					_.isEqual(this.state.valuesAULevels,this.state.savedState.valuesAULevels)
-					//_.isEqual(this.state.valuesPeriods,this.state.savedState.valuesPeriods)
+					_.isEqual(this.state.valuesAULevels,this.state.savedState.valuesAULevels) &&
+					_.isEqual(this.state.valuesPeriods,this.state.savedState.valuesPeriods)
 			);
 		}
 		return isIt;
@@ -150,6 +150,11 @@ class ConfigMetadataScope extends Component{
 		for (let key of this.state.valuesAULevels) {
 			let level = _.findWhere(this.state.auLevels, {key: key});
 			modelData.levels.push(level);
+		}
+		modelData.periods = [];
+		for (let key of this.state.valuesPeriods) {
+			let period = _.findWhere(this.state.periods, {key: key});
+			modelData.periods.push(period);
 		}
 		let modelObj = new Model[ObjectTypes.SCOPE](modelData);
 		actionData.push({type:"update",model:modelObj});
@@ -251,7 +256,7 @@ class ConfigMetadataScope extends Component{
 					</label>
 				</div>
 
-				{/*<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper">
 					<label className="container">
 						Imaging/reference periods
 						<UIObjectSelect
@@ -266,7 +271,7 @@ class ConfigMetadataScope extends Component{
 							value={this.state.valuesPeriods}
 						/>
 					</label>
-				</div>*/}
+				</div>
 
 				{saveButton}
 
