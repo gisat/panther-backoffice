@@ -173,23 +173,36 @@ class ConfigDataLayer extends Component {
 				function () {
 					//console.log("_onStoreResponse updated state:", thisComponent.state);
 				});
-				var screenComponent,screenObjectType;
+				var screenObjectType;
 				switch(stateKey){
-					case "valuesVLPeriods":
-					case "valuesRLPeriods":
-						screenComponent = ScreenMetadataObject;
-						//screenComponent = <ScreenMetadataObject/>;
-						screenObjectType = ObjectTypes.PERIOD;
+					case "valueVLTemplate":
+						screenObjectType = ObjectTypes.VECTOR_LAYER_TEMPLATE;
+						break;
+					case "valueRLTemplate":
+						screenObjectType = ObjectTypes.RASTER_LAYER_TEMPLATE;
+						break;
+					case "valueAULevel":
+						screenObjectType = ObjectTypes.AU_LEVEL;
 						break;
 					case "valueVLScope":
 					case "valueRLScope":
 					case "valueAUScope":
-						screenComponent = ScreenMetadataObject;
 						screenObjectType = ObjectTypes.SCOPE;
+						break;
+					case "valuesVLPlaces":
+					case "valuesRLPlaces":
+					case "valuesAUPlaces":
+						screenObjectType = ObjectTypes.PLACE;
+						break;
+					case "valuesVLPeriods":
+					case "valuesRLPeriods":
+						screenObjectType = ObjectTypes.PERIOD;
 						break;
 				}
 				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
-				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
+				if(screenObjectType) {
+					this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
+				}
 			}
 		}
 	}
