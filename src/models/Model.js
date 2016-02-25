@@ -147,7 +147,7 @@ class Model {
 
 	getKeys(models) {
 		let keys = [];
-		for (model of models) {
+		for (let model of models) {
 			keys.push(model.key);
 		}
 		return keys;
