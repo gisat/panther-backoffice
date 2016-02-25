@@ -49,7 +49,7 @@ class ScopeModel extends Model {
 				serverName: 'featureLayers', //ids
 				sendToServer: true,
 				transformForLocal: function (data) {
-					return AULevelStore.getFiltered({key: data})
+					return AULevelStore.getByKeyArray(data)
 				},
 				transformForServer: this.getKeys,
 				isPromise: true,

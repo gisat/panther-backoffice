@@ -307,6 +307,20 @@ class Store extends EventEmitter {
 		});
 	}
 
+	/**
+	 * For transforming (for local) array of keys to array of models while preserving order
+	 * todo edit getFiltered to preserve order and get rid of this func?
+	 * @param keyArray
+	 * @returns {Promise}
+	 */
+	getByKeyArray(keyArray) {
+		let promises = [];
+		for (let index in keyArray) {
+			promises[index] = (this.getById(keyArray[index]));
+		}
+		return Promise.all(promises);
+	}
+
 }
 
 Store.dispatchToken = null;
