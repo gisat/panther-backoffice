@@ -146,7 +146,11 @@ class ConfigMetadataScope extends Component{
 		_.assign(modelData, this.state.scope);
 		modelData.active = this.state.valueActive;
 		modelData.name = this.state.valueName;
-		//todo the rest
+		modelData.levels = [];
+		for (let key of this.state.valuesAULevels) {
+			let level = _.findWhere(this.state.auLevels, {key: key});
+			modelData.levels.push(level);
+		}
 		let modelObj = new Model[ObjectTypes.SCOPE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.SCOPE);
