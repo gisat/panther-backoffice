@@ -61,7 +61,8 @@ module.exports = [
 		screens: [
 			{
 				key: "ScreenDashboardBase",
-				component: ScreenDashboardBase
+				component: ScreenDashboardBase,
+				contentAlign: "fill"
 				//component: <ScreenDashboardBase/>
 			}
 		]
