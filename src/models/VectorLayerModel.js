@@ -86,6 +86,11 @@ class VectorLayerModel extends Model {
 		};
 	}
 
+	prepareModel(options) {
+		options.layerType = "vector";
+		return options;
+	}
+
 }
 
 export default VectorLayerModel;

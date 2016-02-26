@@ -15,7 +15,7 @@ class Model {
 				});
 			});
 		} else {
-			_.assign(this,options);
+			_.assign(this,this.prepareModel(options));
 			this.ready = Promise.resolve();
 		}
 	}
@@ -80,6 +80,15 @@ class Model {
 				resolve(ret);
 			})
 		});
+	}
+
+	/**
+	 * Called on options when creating model locally. To be overriden.
+	 * @param options
+	 * @returns {*}
+	 */
+	prepareModel(options) {
+		return options;
 	}
 
 	///**
