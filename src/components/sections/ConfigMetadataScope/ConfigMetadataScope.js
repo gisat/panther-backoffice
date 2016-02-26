@@ -71,31 +71,67 @@ class ConfigMetadataScope extends Component{
 			this.context.setStateFromStores.call(this, store2state, keys);
 			// if stores changed, overrides user input - todo fix
 
-			store2state.scope.then(function(scope) {
-				let newState = {
-					valueActive: scope.active,
-					valueName: scope.name,
-					valuesAULevels: utils.getModelsKeys(scope.levels),
-					valuesPeriods: utils.getModelsKeys(scope.periods)
-				};
-				newState.savedState = utils.deepClone(newState);
-				thisComponent.setState(newState);
-			});
+			if(!keys || keys.indexOf("scope")!=-1) {
+				store2state.scope.then(function (scope) {
+					let newState = {
+						valueActive: scope.active,
+						valueName: scope.name,
+						valuesAULevels: utils.getModelsKeys(scope.levels),
+						valuesPeriods: utils.getModelsKeys(scope.periods)
+					};
+					newState.savedState = utils.deepClone(newState);
+					thisComponent.setState(newState);
+				});
+			}
 		}
-
 	}
 
 	_onStoreChange(keys) {
 		this.setStateFromStores(this.props,keys);
 	}
 
+	_onStoreResponse(result,responseData,stateHash) {
+		var thisComponent = this;
+		if (stateHash === this.getStateHash()) {
+			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
+				let stateKey = responseData.stateKey;
+				let values = utils.deepClone(thisComponent.state[stateKey]);
+				values.push(result[0].key);
+				thisComponent.setState({
+						[stateKey]: values
+					});
+				var screenObjectType;
+				switch(stateKey){
+					case "valuesAULevels":
+						screenObjectType = ObjectTypes.AU_LEVEL;
+						break;
+					case "valuesPeriods":
+						screenObjectType = ObjectTypes.PERIOD;
+						break;
+				}
+				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
+				if(screenObjectType) {
+					this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
+				}
+			}
+		}
+	}
+
 	componentDidMount() {
 		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scope"]));
+		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevels"]));
+		AULevelStore.addResponseListener(this._onStoreResponse.bind(this));
+		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
+		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
 		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scope"]));
+		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
+		AULevelStore.removeResponseListener(this._onStoreResponse.bind(this));
+		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
+		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -174,9 +210,9 @@ class ConfigMetadataScope extends Component{
 	}
 
 	onChangeObjectSelect (stateKey, objectType, value, values) {
-		values = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
+		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
-		newState[stateKey] = values;
+		newState[stateKey] = newValues;
 		this.setState(newState);
 	}
 
