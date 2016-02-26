@@ -46,7 +46,7 @@ class ScreenAnalysisRuns extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 	}
 
 	store2state(props) {
@@ -134,9 +134,9 @@ class ScreenAnalysisRuns extends Component {
 	}
 
 	onChangeObjectSelect (stateKey, objectType, value, values) {
-		values = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
+		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
-		newState[stateKey] = values;
+		newState[stateKey] = newValues;
 		this.setState(newState);
 	}
 

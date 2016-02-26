@@ -102,7 +102,7 @@ class ConfigDataLayer extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 	}
 
 	store2state(props) {
@@ -165,7 +165,7 @@ class ConfigDataLayer extends Component {
 			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
 				//console.log("_onStoreResponse set state: periods:", thisComponent.state.periods);
 				let stateKey = responseData.stateKey;
-				let values = thisComponent.state[stateKey];
+				let values = utils.deepClone(thisComponent.state[stateKey]);
 				values.push(result[0].key);
 				thisComponent.setState({
 					[stateKey]: values
@@ -692,9 +692,9 @@ class ConfigDataLayer extends Component {
 	}
 
 	onChangeObjectSelect (stateKey, objectType, value, values) {
-		values = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
+		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
-		newState[stateKey] = values;
+		newState[stateKey] = newValues;
 		this.setState(newState);
 	}
 

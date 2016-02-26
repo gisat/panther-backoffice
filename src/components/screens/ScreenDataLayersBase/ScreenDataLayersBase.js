@@ -23,7 +23,7 @@ class ScreenDataLayersBase extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 	}
 
 	getUrl() {

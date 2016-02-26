@@ -29,7 +29,7 @@ export default {
 	 */
 	handleNewObjects: function(values, objectType, responseData, stateHash) {
 		var newValues = [];
-		for (var singleValue of values) {
+		for (var singleValue of this.deepClone(values)) {
 			if(singleValue.create){
 				delete singleValue.create; // discard new object bit
 				delete singleValue.label; // discard temp compatibility key

@@ -66,7 +66,7 @@ class ScreenMetadataBase extends Component{
 	constructor(props) {
 		super(props);
 
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 
 		this._tabs = [
 			{ data: "scopes", dataType: ObjectTypes.SCOPE },
