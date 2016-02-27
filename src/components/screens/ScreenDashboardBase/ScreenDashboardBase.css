@@ -3,12 +3,7 @@
 	flex-wrap: wrap;
 	align-content: flex-start;
 }
-.frame-wrapper {
-	border: 1px solid #999;
-	border-radius: .2rem;
-	margin-bottom: 1.5rem;
-	box-shadow: .05rem .05rem .2rem 0 rgba(0,0,0,.07);
-}
+
 .frame-wrapper.flexchild {
 	margin: 0 1rem 1.5rem;
 }

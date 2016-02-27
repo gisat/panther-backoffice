@@ -822,6 +822,15 @@ todo hex colours, button icons */
 
 
 
+.frame-wrapper {
+	border: 1px solid #999;
+	border-radius: .2rem;
+	margin-bottom: 1.5rem;
+	box-shadow: .05rem .05rem .2rem 0 rgba(0,0,0,.07);
+}
+.frame-wrapper.filled {
+	background: #c0c0c0;
+}
 
 .ui.button.puma-screen-button {
 	padding-right: 2.5rem!important;
