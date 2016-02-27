@@ -5,10 +5,10 @@ import Router from 'react-routing/src/Router';
 import http from './core/HttpClient';
 import App from './components/App';
 import Page from './components/Page';
+import LoginPage from './components/pages/LoginPage';
 import ContentPage from './components/temp/ContentPage';
 import NotFoundPage from './components/temp/NotFoundPage';
 import ErrorPage from './components/temp/ErrorPage';
-import LoginPage from './components/temp/LoginPage';
 
 import { publicPath } from './config';
 
