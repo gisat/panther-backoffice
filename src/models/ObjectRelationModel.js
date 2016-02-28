@@ -97,6 +97,10 @@ class ObjectRelationModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
+			placeKey: {
+				serverName: 'location', //id
+				sendToServer: false //temp local value only, until we can filter by nested key/value
+			},
 			period: {
 				serverName: 'year', //id
 				sendToServer: true,

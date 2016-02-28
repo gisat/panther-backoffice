@@ -83,7 +83,7 @@ class PlaceRelations extends Component {
 			//attributes: AttributeStore.getAll(),
 			//periods: PeriodStore.getAll(),
 			place: PlaceStore.getById(props.selectorValue),
-			//layerRelations: ObjectRelationStore.getByDataSource(props.selectorValue),
+			placeRelations: ObjectRelationStore.getFiltered({placeKey: props.selectorValue}) // todo rewrite after getFiltered can filter by nested key
 			//dataLayerColumns: DataLayerColumnsStore.getByDataSource(props.selectorValue)
 		};
 	}
@@ -111,6 +111,11 @@ class PlaceRelations extends Component {
 		//		thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.columns2state(columns, relations));
 		//	});
 		//}
+		if(!keys || keys.indexOf("placeRelations")!=-1) {
+			store2state.placeRelations.then(function(relations){
+				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations));
+			});
+		}
 	}
 
 	_onStoreChange(keys) {
@@ -159,7 +164,7 @@ class PlaceRelations extends Component {
 
 	componentWillReceiveProps(newProps) {
 		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.setStateFromStores(newProps,["place"]);
+			this.setStateFromStores(newProps,["place","placeRelations"]);
 			this.updateStateHash(newProps);
 		}
 	}
@@ -289,64 +294,83 @@ class PlaceRelations extends Component {
 	 */
 	relations2state(relations) {
 		let ret = {
-			layerType: null,
-			valueVLTemplate: [],
-			valueVLScope: [],
-			valuesVLPlaces: [],
-			valuesVLPeriods: [],
-			valueRLTemplate: [],
-			valueRLScope: [],
-			valuesRLPlaces: [],
-			valuesRLPeriods: [],
-			valueAUScope: [],
-			valuesAUPlaces: [],
-			valueAULevel: []
+			relationsAttSet: [],
+			relationsAULevel: [],
+			relationsVector: [],
+			relationsRaster: []
 		};
-		relations = _.reject(relations, function (item) {
-			return item.isOfAttributeSet;
-		});
 		if(relations.length > 0) {
-			//console.log("store2state relations2state():");
-			//console.log(relations);
-			var layerType = relations[0].layerObject.layerType;
-			ret.layerType = layerType;
-			var values = {};
-			relations.map(function(relation){
-				if (relation.layerObject){
-					values.template = [relation.layerObject.key];
-				}
-				if (relation.place){
-					if (relation.place.scope){
-						values.scope = [relation.place.scope.key];
+			// separate relations by type
+			for(let rel of relations) {
+				if(rel.layerObject) {
+					switch(rel.layerObject.layerType) {
+						case "au":
+							if(rel.isOfAttributeSet) {
+								ret.relationsAttSet.push(rel);
+							} else {
+								ret.relationsAULevel.push(rel);
+							}
+							break;
+						case "vector":
+							ret.relationsVector.push(rel);
+							break;
+						case "raster":
+							ret.relationsRaster.push(rel);
+							break;
+						default:
+							console.error("RELATION HAS LAYEROBJECT OF INVALID LAYERTYPE",rel);
 					}
-					values.places = _.union(values.places,[relation.place.key]);
+				} else {
+					console.error("RELATION HAS NO LAYEROBJECT",rel);
 				}
-				if (relation.period){
-					values.periods = _.union(values.periods,[relation.period.key]);
-				}
-			});
-			switch (layerType) {
-				case "vector":
-					ret.valueVLTemplate = values.template;
-					ret.valueVLScope = values.scope;
-					ret.valuesVLPlaces = values.places;
-					ret.valuesVLPeriods = values.periods;
-					break;
-				case "raster":
-					ret.valueRLTemplate = values.template;
-					ret.valueRLScope = values.scope;
-					ret.valuesRLPlaces = values.places;
-					ret.valuesRLPeriods = values.periods;
-					break;
-				case "au":
-					ret.valueAULevel = values.template;
-					ret.valueAUScope = values.scope;
-					ret.valuesAUPlaces = values.places;
 			}
 		}
-		let savedState = {};
-		_.assign(savedState, ret);
-		this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
+
+		//relations = _.reject(relations, function (item) {
+		//	return item.isOfAttributeSet;
+		//});
+		//if(relations.length > 0) {
+		//	//console.log("store2state relations2state():");
+		//	//console.log(relations);
+		//	var layerType = relations[0].layerObject.layerType;
+		//	ret.layerType = layerType;
+		//	var values = {};
+		//	relations.map(function(relation){
+		//		if (relation.layerObject){
+		//			values.template = [relation.layerObject.key];
+		//		}
+		//		if (relation.place){
+		//			if (relation.place.scope){
+		//				values.scope = [relation.place.scope.key];
+		//			}
+		//			values.places = _.union(values.places,[relation.place.key]);
+		//		}
+		//		if (relation.period){
+		//			values.periods = _.union(values.periods,[relation.period.key]);
+		//		}
+		//	});
+		//	switch (layerType) {
+		//		case "vector":
+		//			ret.valueVLTemplate = values.template;
+		//			ret.valueVLScope = values.scope;
+		//			ret.valuesVLPlaces = values.places;
+		//			ret.valuesVLPeriods = values.periods;
+		//			break;
+		//		case "raster":
+		//			ret.valueRLTemplate = values.template;
+		//			ret.valueRLScope = values.scope;
+		//			ret.valuesRLPlaces = values.places;
+		//			ret.valuesRLPeriods = values.periods;
+		//			break;
+		//		case "au":
+		//			ret.valueAULevel = values.template;
+		//			ret.valueAUScope = values.scope;
+		//			ret.valuesAUPlaces = values.places;
+		//	}
+		//}
+		//let savedState = {};
+		//_.assign(savedState, ret);
+		//this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
 		return ret;
 	}
 
