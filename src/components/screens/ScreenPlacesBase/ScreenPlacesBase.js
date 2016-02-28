@@ -2,24 +2,114 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenPlacesBase.css';
 import withStyles from '../../../decorators/withStyles';
 
-import UIScreenButton from '../../atoms/UIScreenButton';
+import path from "path";
 
-import LinkTableByScopePlace from '../../elements/LinkTableByScopePlace';
-import LinkTableVectorByScopePlace from '../../elements/LinkTableVectorByScopePlace';
-import LinkTableRasterByScopePlace from '../../elements/LinkTableRasterByScopePlace';
+import utils from '../../../utils/utils';
+import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
+
+import ActionCreator from '../../../actions/ActionCreator';
+
+import PlaceStore from '../../../stores/PlaceStore';
+
+import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 import SelectorPlace from '../../sections/SelectorPlace';
+import PlaceRelations from '../../sections/PlaceRelations';
+
+var initialState = {
+	places: [],
+	selectorValue: null
+};
 
 
 @withStyles(styles)
 class ScreenPlacesBase extends Component{
 
+	static contextTypes = {
+		setStateFromStores: PropTypes.func.isRequired,
+		onInteraction: PropTypes.func.isRequired,
+		onSetScreenData: PropTypes.func.isRequired,
+		openScreen: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired
+	};
+
 	constructor(props) {
 		super(props);
+		this.state = utils.deepClone(initialState);
 
-		this.state = {
-			activeScreenOpener: null
+	}
+
+	getUrl() {
+		return path.join(this.props.parentUrl, "places/" + this.state.selectorValue); // todo
+	}
+
+	store2state(props) {
+		if (!props) {
+			props = this.props;
+		}
+		return {
+			places: PlaceStore.getAll()
 		};
+	}
 
+	_onStoreChange() {
+		this.context.setStateFromStores.call(this, this.store2state());
+	}
+
+	_onStoreResponse(result,responseData,stateHash) {
+		if (stateHash === this.getStateHash()) {
+			if (result) {
+				var screenComponent,screenName,screenObjectType;
+				screenComponent = ScreenMetadataObject;
+				screenObjectType =  ObjectTypes.PLACE;
+				screenName = "ScreenPlacesBase-ScreenMetadata" + screenObjectType;
+				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
+				this.setState({
+					selectorValue: result[0].key
+				});
+			}
+		}
+	}
+
+	componentDidMount() {
+		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
+		PlaceStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.context.setStateFromStores.call(this, this.store2state());
+	}
+
+	componentWillUnmount() {
+		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
+		PlaceStore.removeResponseListener(this._onStoreResponse.bind(this));
+	}
+
+	/**
+	 * Differentiate between states
+	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
+	 */
+	updateStateHash(state) {
+		if(!state){
+			state = this.state;
+		}
+		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
+		this._stateHash = utils.stringHash(state.selectorValue);
+	}
+	getStateHash() {
+		if(!this._stateHash) {
+			this.updateStateHash();
+		}
+		return this._stateHash;
+	}
+
+
+	onSelectorChange (value) {
+		this.setState({
+			selectorValue: value
+		});
+	}
+
+	onNewEmptyObject () {
+		let objectType = ObjectTypes.PLACE;
+		let model = new Model[objectType]({active:false});
+		ActionCreator.createObjectAndRespond(model, objectType, {}, this.getStateHash());
 	}
 
 	openScreenScopeExample(openerKey,scopeKey,e) {
@@ -30,40 +120,24 @@ class ScreenPlacesBase extends Component{
 
 	render() {
 
-		var isParentScreenDisabled = "NA";
-		if(this.props.disabled){
-			isParentScreenDisabled = "disabled"
-		}
-		else {
-			isParentScreenDisabled = "enabled"
-		}
-
 		return (
 			<div>
 				<div className="screen-setter"><div>
-					<SelectorPlace/>
+					<SelectorPlace
+						disabled={this.props.disabled}
+						data={this.state.places}
+						value={this.state.selectorValue}
+						onChange={this.onSelectorChange.bind(this)}
+						onNew={this.onNewEmptyObject.bind(this)}
+					/>
 				</div></div>
 				<div className="screen-content"><div>
-					<h1 className="fit-after">Ho Chi Minh City</h1>
-					<div className="heading-sub">
-						Scope:&nbsp;
-						<UIScreenButton
-							onClick={this.openScreenScopeExample.bind(this,1,1)}
-							className={this.state.activeScreenOpener==1 ? 'screen-opener' : ''}
-						>
-							Local
-						</UIScreenButton>
-					</div>
-			{/* <p>disable pass test: <b>{isParentScreenDisabled}</b></p> */}
-					<h2>Attribute sets</h2>
-					<LinkTableByScopePlace/>
-
-					<h2>Vector layers</h2>
-					<LinkTableVectorByScopePlace/>
-
-					<h2>Raster layers</h2>
-					<LinkTableRasterByScopePlace/>
-
+					<PlaceRelations
+						disabled={this.props.disabled}
+						places={this.state.places}
+						selectorValue={this.state.selectorValue}
+						screenKey={this.props.screenKey}
+					/>
 				</div></div>
 			</div>
 		);

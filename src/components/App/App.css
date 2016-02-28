@@ -1451,6 +1451,10 @@ todo hex colours, button icons */
 	text-align: right;
 	padding-right: .3rem;
 }
+.UICustomSelect.SelectPlace .UICustomSelect-option .option-parent,
+.UICustomSelect.SelectPlace .UICustomSelect-value .option-parent {
+	width: 8rem;
+}
 
 .UICustomSelect-option.not-referenced:not(.is-focused) {
 	background: #fcf3e7;

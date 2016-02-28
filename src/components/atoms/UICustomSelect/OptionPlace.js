@@ -37,7 +37,7 @@ var OptionPlace = React.createClass({
 			<div>
 				<span className="option-id">{option.key}</span>
 				<span>{option.name}</span>
-				<span className="option-parent">{option.scope}</span>
+				<span className="option-parent">{option.scope ? option.scope.name : "-"}</span>
 			</div>
 	);
 	},
