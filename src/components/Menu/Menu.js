@@ -21,31 +21,31 @@ class Menu extends Component {
 			<nav id="menu" className={this.props.className} >
 				<ul>
 					<li>
-						<a href={publicPath + "/"} onClick={Link.handleClick} >
+						<a href={publicPath + "/"} onClick={Link.handleClick} tabIndex="-1">
 							<UISVG src='icon-dashboard.isvg' />
 							<span>Dashboard</span>
 						</a>
 					</li>
 					<li>
-						<a href={publicPath + "/places"} onClick={Link.handleClick} >
+						<a href={publicPath + "/places"} onClick={Link.handleClick} tabIndex="-1">
 							<UISVG src='icon-places.isvg' />
 							<span>Places</span>
 						</a>
 					</li>
 					<li>
-						<a href={publicPath + "/datalayers"} onClick={Link.handleClick} >
+						<a href={publicPath + "/datalayers"} onClick={Link.handleClick} tabIndex="-1">
 							<UISVG src='icon-datalayers.isvg' />
 							<span>Data layers</span>
 						</a>
 					</li>
 					<li>
-						<a href={publicPath + "/analyses"} onClick={Link.handleClick} >
+						<a href={publicPath + "/analyses"} onClick={Link.handleClick} tabIndex="-1">
 							<UISVG src='icon-analyses.isvg' />
 							<span>Analyses</span>
 						</a>
 					</li>
 					<li>
-						<a href={publicPath + "/metadata"} onClick={Link.handleClick} >
+						<a href={publicPath + "/metadata"} onClick={Link.handleClick} tabIndex="-1">
 							<UISVG src='icon-metadata.isvg' />
 							<span>Metadata structures</span>
 						</a>
