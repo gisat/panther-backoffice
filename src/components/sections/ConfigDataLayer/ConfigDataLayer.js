@@ -744,20 +744,30 @@ class ConfigDataLayer extends Component {
 			prod = "Select data layer";
 		}
 
-		var mapFrame = "";
+		//var mapFrame = "";
+		var mapImage = "";
 		if(this.props.selectorValue) {
 
-			var mapFrameStyle = {
-				border: 'none',
-				width: '350px',
-				height: '600px'
+			//var mapFrameStyle = {
+			//	border: 'none',
+			//	width: '350px',
+			//	height: '600px'
+			//};
+			var mapImageStyle = {
+				border: '1px solid rgba(0,0,0,.15);'
 			};
-			var mapFrameSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
+			//var mapFrameSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
+			var mapImageSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=800&transparent=true";
 
-			// todo not an iframe
-			mapFrame = (
+			//// todo not an iframe
+			//mapFrame = (
+			//	<div className="beside">
+			//		<iframe src={mapFrameSrc} style={mapFrameStyle}></iframe>
+			//	</div>
+			//);
+			mapImage = (
 				<div className="beside">
-					<iframe src={mapFrameSrc} style={mapFrameStyle}></iframe>
+					<img src={mapImageSrc} style={mapImageStyle} />
 				</div>
 			);
 
@@ -770,7 +780,7 @@ class ConfigDataLayer extends Component {
 		return (
 			<div>
 
-				{mapFrame}
+				{mapImage}
 
 				<div
 					//className="frame-input-wrapper"
