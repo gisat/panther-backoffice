@@ -457,13 +457,23 @@ class PlaceRelations extends Component {
 				</div>
 				{/* <p>disable pass test: <b>{isParentScreenDisabled}</b></p> */}
 				<h2>Attribute sets</h2>
-				<LinkTableByScopePlace/>
+				<LinkTableByScopePlace
+					relationsAttSet={this.state.relationsAttSet}
+					relationsAULevel={this.state.relationsAULevel}
+					place={this.state.place}
+				/>
 
 				<h2>Vector layers</h2>
-				<LinkTableVectorByScopePlace/>
+				<LinkTableVectorByScopePlace
+					relations={this.state.relationsVector}
+					place={this.state.place}
+				/>
 
 				<h2>Raster layers</h2>
-				<LinkTableRasterByScopePlace/>
+				<LinkTableRasterByScopePlace
+					relations={this.state.relationsRaster}
+					place={this.state.place}
+				/>
 
 			</div>
 		);
