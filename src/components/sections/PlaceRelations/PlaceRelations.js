@@ -295,7 +295,7 @@ class PlaceRelations extends Component {
 	relations2state(relations) {
 		let ret = {
 			relationsAttSet: {},
-			relationsAULevel: [],
+			relationsAULevel: {},
 			relationsVector: {},
 			relationsRaster: {}
 		};
@@ -362,6 +362,17 @@ class PlaceRelations extends Component {
 			repo[rel.attributeSet.key].levels[rel.layerObject.key].periods[rel.period.key].relations.push(rel);
 		};
 
+		var addRelationLevel = function(repo,rel) {
+			if(!repo[rel.layerObject.key]) {
+				repo[rel.layerObject.key] = {
+					key: rel.layerObject.key,
+					name: rel.layerObject.name,
+					relations: []
+				};
+			}
+			repo[rel.layerObject.key].relations.push(rel);
+		};
+
 
 		if(relations.length > 0) {
 			// separate relations by type
@@ -372,7 +383,7 @@ class PlaceRelations extends Component {
 							if(rel.isOfAttributeSet) {
 								addRelationAttSet(ret.relationsAttSet,rel);
 							} else {
-								ret.relationsAULevel.push(rel);
+								addRelationLevel(ret.relationsAULevel,rel);
 							}
 							break;
 						case "vector":
@@ -390,52 +401,6 @@ class PlaceRelations extends Component {
 			}
 		}
 
-		//relations = _.reject(relations, function (item) {
-		//	return item.isOfAttributeSet;
-		//});
-		//if(relations.length > 0) {
-		//	//console.log("store2state relations2state():");
-		//	//console.log(relations);
-		//	var layerType = relations[0].layerObject.layerType;
-		//	ret.layerType = layerType;
-		//	var values = {};
-		//	relations.map(function(relation){
-		//		if (relation.layerObject){
-		//			values.template = [relation.layerObject.key];
-		//		}
-		//		if (relation.place){
-		//			if (relation.place.scope){
-		//				values.scope = [relation.place.scope.key];
-		//			}
-		//			values.places = _.union(values.places,[relation.place.key]);
-		//		}
-		//		if (relation.period){
-		//			values.periods = _.union(values.periods,[relation.period.key]);
-		//		}
-		//	});
-		//	switch (layerType) {
-		//		case "vector":
-		//			ret.valueVLTemplate = values.template;
-		//			ret.valueVLScope = values.scope;
-		//			ret.valuesVLPlaces = values.places;
-		//			ret.valuesVLPeriods = values.periods;
-		//			break;
-		//		case "raster":
-		//			ret.valueRLTemplate = values.template;
-		//			ret.valueRLScope = values.scope;
-		//			ret.valuesRLPlaces = values.places;
-		//			ret.valuesRLPeriods = values.periods;
-		//			break;
-		//		case "au":
-		//			ret.valueAULevel = values.template;
-		//			ret.valueAUScope = values.scope;
-		//			ret.valuesAUPlaces = values.places;
-		//	}
-		//}
-		//let savedState = {};
-		//_.assign(savedState, ret);
-		//this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
-		console.log(utils.deepClone(ret.relationsAttSet));
 		return ret;
 	}
 
