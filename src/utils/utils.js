@@ -3,6 +3,7 @@ import ActionCreator from '../actions/ActionCreator';
 import {Model} from '../constants/ObjectTypes';
 import ScopeStore from '../stores/ScopeStore';
 import ThemeStore from '../stores/ThemeStore';
+import AttributeSetStore from '../stores/AttributeSetStore';
 import ScopeModel from '../models/ScopeModel';
 import _ from 'underscore';
 
@@ -95,6 +96,68 @@ export default {
 				}, function(){
 
 					reject("getPeriodsForScope: theme with filter {scope: " + scope + "} not resolved.");
+
+				});
+			});
+		});
+	},
+
+	getAttSetsForScope: function(scope) {
+		return new Promise(function(resolve, reject){
+
+			var scopePromise = null;
+			if(scope instanceof ScopeModel) {
+				scopePromise = Promise.resolve(scope);
+			}else{
+				scopePromise = ScopeStore.getById(scope);
+			}
+
+			scopePromise.then(function(scopeModel){
+				ThemeStore.getFiltered({scope: scopeModel}).then(function(themeModels){
+
+					if(!themeModels.length){
+						return reject("getAttSetsForScope: themes with filter {scope: "+scope+"} not found.");
+					}
+
+					var attSetKeys = [];
+					var attSetModels = [];
+					var promises = [];
+
+					for(let theme of themeModels){
+						if(!theme.hasOwnProperty("topics")){
+							return reject("getAttSetsForScope: no topics property in theme!");
+						}
+						for(let topic of theme.topics){
+
+							var attSetPromise = AttributeSetStore.getFiltered({topic: topic});
+							promises.push(attSetPromise);
+							attSetPromise.then(function(attributeSets){
+
+								for(let attSet of attributeSets){
+									attSetKeys.push(attSet.key);
+									attSetModels.push(attSet);
+								}
+
+							}, function(){
+
+								reject("getAttSetsForScope: attributeSets with filter {topic: " + topic + "} not resolved.");
+
+							});
+
+						}
+					}
+
+					Promise.all(promises).then(function(){
+						resolve({
+							keys: _.uniq(attSetKeys),
+							models: _.uniq(attSetModels)
+						});
+					});
+
+
+				}, function(){
+
+					reject("getAttSetsForScope: theme with filter {scope: " + scope + "} not resolved.");
 
 				});
 			});
