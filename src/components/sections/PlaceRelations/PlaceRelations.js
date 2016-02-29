@@ -296,9 +296,47 @@ class PlaceRelations extends Component {
 		let ret = {
 			relationsAttSet: [],
 			relationsAULevel: [],
-			relationsVector: [],
-			relationsRaster: []
+			relationsVector: {},
+			relationsRaster: {}
 		};
+
+		var addRelationLayer = function(repo,rel) {
+			if(!repo[rel.layerObject.key]) {
+				repo[rel.layerObject.key] = {
+					key: rel.layerObject.key,
+					name: rel.layerObject.name,
+					periods: {},
+					attSets: {}
+				};
+			}
+			if(!rel.isOfAttributeSet) {
+				if(!repo[rel.layerObject.key].periods[rel.period.key]) {
+					repo[rel.layerObject.key].periods[rel.period.key] = {
+						key: rel.period.key,
+						name: rel.period.name,
+						relations: []
+					};
+				}
+				repo[rel.layerObject.key].periods[rel.period.key].relations.push(rel);
+			} else {
+				if(!repo[rel.layerObject.key].attSets[rel.attributeSet.key]) {
+					repo[rel.layerObject.key].attSets[rel.attributeSet.key] = {
+						key: rel.attributeSet.key,
+						name: rel.attributeSet.name,
+						periods: {}
+					};
+					if(!repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key]) {
+						repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key] = {
+							key: rel.period.key,
+							name: rel.period.name,
+							relations: []
+						};
+					}
+					repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key].relations.push(rel);
+				}
+			}
+		};
+
 		if(relations.length > 0) {
 			// separate relations by type
 			for(let rel of relations) {
@@ -312,10 +350,10 @@ class PlaceRelations extends Component {
 							}
 							break;
 						case "vector":
-							ret.relationsVector.push(rel);
+							addRelationLayer(ret.relationsVector,rel);
 							break;
 						case "raster":
-							ret.relationsRaster.push(rel);
+							addRelationLayer(ret.relationsRaster,rel);
 							break;
 						default:
 							console.error("RELATION HAS LAYEROBJECT OF INVALID LAYERTYPE",rel);
