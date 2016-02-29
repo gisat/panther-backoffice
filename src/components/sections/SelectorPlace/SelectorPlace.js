@@ -46,7 +46,7 @@ class SelectorPlace extends Component{
 									singleValueComponent={SingleValuePlace}
 									className="UICustomSelect SelectPlace"
 									valueKey="key"
-									labelKey="place"
+									labelKey="name"
 									value={this.props.value}
 									clearable={false}
 								/>
