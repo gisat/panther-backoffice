@@ -294,7 +294,7 @@ class PlaceRelations extends Component {
 	 */
 	relations2state(relations) {
 		let ret = {
-			relationsAttSet: [],
+			relationsAttSet: {},
 			relationsAULevel: [],
 			relationsVector: {},
 			relationsRaster: {}
@@ -325,17 +325,43 @@ class PlaceRelations extends Component {
 						name: rel.attributeSet.name,
 						periods: {}
 					};
-					if(!repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key]) {
-						repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key] = {
-							key: rel.period.key,
-							name: rel.period.name,
-							relations: []
-						};
-					}
-					repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key].relations.push(rel);
 				}
+				if(!repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key]) {
+					repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key] = {
+						key: rel.period.key,
+						name: rel.period.name,
+						relations: []
+					};
+				}
+				repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key].relations.push(rel);
 			}
 		};
+
+		var addRelationAttSet = function(repo,rel) {
+			if(!repo[rel.attributeSet.key]) {
+				repo[rel.attributeSet.key] = {
+					key: rel.attributeSet.key,
+					name: rel.attributeSet.name,
+					levels: {}
+				};
+			}
+			if(!repo[rel.attributeSet.key].levels[rel.layerObject.key]) {
+				repo[rel.attributeSet.key].levels[rel.layerObject.key] = {
+					key: rel.layerObject.key,
+					name: rel.layerObject.name,
+					periods: {}
+				};
+			}
+			if(!repo[rel.attributeSet.key].levels[rel.layerObject.key].periods[rel.period.key]) {
+				repo[rel.attributeSet.key].levels[rel.layerObject.key].periods[rel.period.key] = {
+					key: rel.period.key,
+					name: rel.period.name,
+					relations: []
+				};
+			}
+			repo[rel.attributeSet.key].levels[rel.layerObject.key].periods[rel.period.key].relations.push(rel);
+		};
+
 
 		if(relations.length > 0) {
 			// separate relations by type
@@ -344,7 +370,7 @@ class PlaceRelations extends Component {
 					switch(rel.layerObject.layerType) {
 						case "au":
 							if(rel.isOfAttributeSet) {
-								ret.relationsAttSet.push(rel);
+								addRelationAttSet(ret.relationsAttSet,rel);
 							} else {
 								ret.relationsAULevel.push(rel);
 							}
@@ -409,6 +435,7 @@ class PlaceRelations extends Component {
 		//let savedState = {};
 		//_.assign(savedState, ret);
 		//this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
+		console.log(utils.deepClone(ret.relationsAttSet));
 		return ret;
 	}
 
