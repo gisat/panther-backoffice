@@ -120,12 +120,21 @@ class ScreenPlacesBase extends Component{
 
 	render() {
 
+		var selectorData = this.state.places;
+		selectorData.sort(function(a, b) {
+			if(!a.scope && b.scope) return 1;
+			if(a.scope && !b.scope) return -1;
+			if(a.key > b.key) return 1;
+			if(a.key < b.key) return -1;
+			return 0;
+		});
+
 		return (
 			<div>
 				<div className="screen-setter"><div>
 					<SelectorPlace
 						disabled={this.props.disabled}
-						data={this.state.places}
+						data={selectorData}
 						value={this.state.selectorValue}
 						onChange={this.onSelectorChange.bind(this)}
 						onNew={this.onNewEmptyObject.bind(this)}

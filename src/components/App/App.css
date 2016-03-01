@@ -1464,7 +1464,8 @@ todo hex colours, button icons */
 	width: 8rem;
 }
 
-.UICustomSelect-option.not-referenced:not(.is-focused) {
+.UICustomSelect-option.not-referenced:not(.is-focused),
+.UICustomSelect-option.no-scope:not(.is-focused) {
 	background: #fcf3e7;
 }
 
