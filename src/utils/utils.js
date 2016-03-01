@@ -3,6 +3,9 @@ import ActionCreator from '../actions/ActionCreator';
 import {Model} from '../constants/ObjectTypes';
 import ScopeStore from '../stores/ScopeStore';
 import ThemeStore from '../stores/ThemeStore';
+import VectorLayerStore from '../stores/VectorLayerStore';
+import RasterLayerStore from '../stores/RasterLayerStore';
+import GeneralLayerStore from '../stores/GeneralLayerStore';
 import AttributeSetStore from '../stores/AttributeSetStore';
 import ScopeModel from '../models/ScopeModel';
 import _ from 'underscore';
@@ -96,6 +99,76 @@ export default {
 				}, function(){
 
 					reject("getPeriodsForScope: theme with filter {scope: " + scope + "} not resolved.");
+
+				});
+			});
+		});
+	},
+
+	// todo merge with getAttSetsForScope
+	getLayerTemplatesForScope: function(scope,layerType) {
+		return new Promise(function(resolve, reject){
+
+			var layerStore = GeneralLayerStore;
+			if(layerType=="vector") {
+				layerStore = VectorLayerStore;
+			} else if (layerStore=="raster") {
+				layerStore = RasterLayerStore;
+			}
+
+			var scopePromise = null;
+			if(scope instanceof ScopeModel) {
+				scopePromise = Promise.resolve(scope);
+			}else{
+				scopePromise = ScopeStore.getById(scope);
+			}
+
+			scopePromise.then(function(scopeModel){
+				ThemeStore.getFiltered({scope: scopeModel}).then(function(themeModels){
+
+					if(!themeModels.length){
+						return reject("getLayerTemplatesForScope: themes with filter {scope: "+scope+"} not found.");
+					}
+
+					var retKeys = [];
+					var retModels = [];
+					var promises = [];
+
+					for(let theme of themeModels){
+						if(!theme.hasOwnProperty("topics")){
+							return reject("getLayerTemplatesForScope: no topics property in theme!");
+						}
+						for(let topic of theme.topics){
+
+							var layersPromise = layerStore.getFiltered({topic: topic});
+							promises.push(layersPromise);
+							layersPromise.then(function(layers){
+
+								for(let layer of layers){
+									retKeys.push(layer.key);
+									retModels.push(layer);
+								}
+
+							}, function(){
+
+								reject("getLayerTemplatesForScope: layers with filter {topic: " + topic + "} not resolved.");
+
+							});
+
+						}
+					}
+
+					Promise.all(promises).then(function(){
+						resolve({
+							keys: _.uniq(retKeys),
+							models: _.uniq(retModels)
+						});
+					});
+
+
+				}, function(){
+
+					reject("getLayerTemplatesForScope: theme with filter {scope: " + scope + "} not resolved.");
 
 				});
 			});

@@ -348,14 +348,11 @@ class LinkTableByScopePlace extends Component {
 	}
 
 	_onStoreChange(keys) {
-		//console.log("_onStoreChange() ===============");
 		this.setStateFromStores(this.props,keys);
 	}
 
 	openScreenExample(idAttSet,idAULevel) {
 		this.state.example = "Clicked on " + idAttSet + ", " + idAULevel;
-		/*this.forceUpdate();*/
-		/*alert("hey, " + idAttSet);*/
 	}
 
 	componentDidMount() {
@@ -416,6 +413,7 @@ class LinkTableByScopePlace extends Component {
 		) {
 			var thisComponent = this;
 
+			// todo visualy differentiate unset levels (w/o data layer)
 			var auLevelsInsert = this.props.place.scope.levels.map(function (auLevel) {
 				return (
 					<td
@@ -436,11 +434,6 @@ class LinkTableByScopePlace extends Component {
 				);
 			});
 
-			//var scopeAttSetsPromise = utils.getAttSetsForScope(this.props.place.scope);
-			//scopeAttSetsPromise.then(function(scopeAttSets){
-			//
-			//});
-
 			var auAttSetsInsert = thisComponent.state.scopeAttributeSets.models.map(function (scopeAttSet) {
 				if(scopeAttSet.vectorLayers.length==0) {
 					var auAttSet = thisComponent.props.relationsAttSet[scopeAttSet.key];
@@ -454,7 +447,7 @@ class LinkTableByScopePlace extends Component {
 						var tdClassName = "selectable";
 						var auASLPeriodsInsert = thisComponent.state.scopePeriods.models.map(function (scopePeriod) {
 							var periodData = null;
-							if (auASLevel) {
+							if (auASLevel && auASLevel.periods[scopePeriod.key]) {
 								switch (auASLevel.periods[scopePeriod.key].relations.length) {
 									case 0:
 										periodData = "none";
@@ -589,7 +582,6 @@ class LinkTableByScopePlace extends Component {
 			);
 
 		}
-
 
 		return ret;
 	}
