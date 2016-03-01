@@ -1,3 +1,21 @@
+.ui.message>:last-child {
+	margin: .5rem 0 0 0;
+}
+
+.ui.attached.warning.message, .ui.warning.message {
+	box-shadow: 0 0 0 1px #B79E6E inset,0 0 0 0 transparent;
+}
+.ui.warning.message {
+	/*background-color: #D8D0C4;*/
+	background-color: rgba(216, 208, 196, 0.5);
+	/*background-color: transparent;*/
+	color: #6B4508;
+}
+.ui.warning.message .header {
+	color: #6B4508;
+}
+
+
 .ui.table {
 	background: transparent;
 	border-radius: .28571429rem .28571429rem 0 0;

@@ -422,7 +422,7 @@ class LinkTableVectorByScopePlace extends Component {
 						var attSetPeriodsElement = (
 							<td
 								className={tdClassName}
-								key={"layer-" + vectorLayer.key + "-attset-" + layerAttSet.key + "-periods"}
+								key={"layer-" + scopeLayerTemplate.key + "-attset-" + layerAttSet.key + "-periods"}
 							>
 								<a
 									href="#"
@@ -472,9 +472,9 @@ class LinkTableVectorByScopePlace extends Component {
 						</tbody>
 					</Table>
 
-					<div className="note">
+					{/*<div className="note">
 						Set available layers in <UIScreenButton>scope settings</UIScreenButton>
-					</div>
+					</div>*/}
 
 				</div>
 			);

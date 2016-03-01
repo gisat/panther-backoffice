@@ -423,6 +423,15 @@ class PlaceRelations extends Component {
 	}
 
 
+	onOpenPlaceConfig() {
+		this.context.onInteraction().call();
+		if(this.state.place) {
+			let itemType = ObjectTypes.PLACE;
+			var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
+			this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:this.state.place.key});
+		}
+	}
+
 	onOpenScopeConfig() {
 		this.context.onInteraction().call();
 		if(this.state.place) {
@@ -443,38 +452,99 @@ class PlaceRelations extends Component {
 
 	render() {
 
+		var headerInsert = null,
+			headerInsertChildren = [],
+			configInsert = null;
+
+		headerInsertChildren.push(
+			<h1
+				key="placeHeading"
+				className="fit-after"
+			>
+				{this.state.place ? this.state.place.name : " "}
+			</h1>
+		);
+
+		var prod = null;
+		if (!this.props.selectorValue) {
+			prod = "Select place";
+		}
+
+
+		if(this.state.place) {
+			if (this.state.place.scope) {
+
+				headerInsertChildren.push(
+					<div
+						key="placeScopeSettingsButton"
+						className="heading-sub"
+					>
+						Scope:&nbsp;
+						<UIScreenButton
+							onClick={this.onOpenScopeConfig.bind(this)}
+						>
+							{this.state.place.scope.name}
+						</UIScreenButton>
+					</div>
+				);
+
+				configInsert = (
+					<div>
+						<h2>Attribute sets</h2>
+						<LinkTableByScopePlace
+							disabled={this.props.disabled}
+							relationsAttSet={this.state.relationsAttSet}
+							relationsAULevel={this.state.relationsAULevel}
+							place={this.state.place}
+						/>
+
+						<h2>Vector layers</h2>
+						<LinkTableVectorByScopePlace
+							disabled={this.props.disabled}
+							relations={this.state.relationsVector}
+							place={this.state.place}
+						/>
+
+						<h2>Raster layers</h2>
+						<LinkTableRasterByScopePlace
+							disabled={this.props.disabled}
+							relations={this.state.relationsRaster}
+							place={this.state.place}
+						/>
+					</div>
+				);
+			} else {
+				headerInsertChildren.push(
+					<div className="ui warning message">
+						<div className="header">
+							No scope assigned
+						</div>
+						<div>
+							Please assign the place to a scope to configure relations.
+							<UIScreenButton
+								onClick={this.onOpenPlaceConfig.bind(this)}
+							>
+								Place settings
+							</UIScreenButton>
+						</div>
+					</div>
+				);
+			}
+		}
+
+		headerInsert = React.createElement('div', null, headerInsertChildren);
+		var prodInsert =(
+			<div className="prod">
+				{prod}
+			</div>
+		);
+
 
 		return (
 			<div>
-				<h1 className="fit-after">{this.state.place ? this.state.place.name : " "}</h1>
-				<div className="heading-sub">
-					Scope:&nbsp;
-					<UIScreenButton
-						onClick={this.onOpenScopeConfig.bind(this)}
-					>
-						Local
-					</UIScreenButton>
-				</div>
-				{/* <p>disable pass test: <b>{isParentScreenDisabled}</b></p> */}
-				<h2>Attribute sets</h2>
-				<LinkTableByScopePlace
-					relationsAttSet={this.state.relationsAttSet}
-					relationsAULevel={this.state.relationsAULevel}
-					place={this.state.place}
-				/>
-
-				<h2>Vector layers</h2>
-				<LinkTableVectorByScopePlace
-					relations={this.state.relationsVector}
-					place={this.state.place}
-				/>
-
-				<h2>Raster layers</h2>
-				<LinkTableRasterByScopePlace
-					relations={this.state.relationsRaster}
-					place={this.state.place}
-				/>
-
+				{headerInsert}
+				{prodInsert}
+				{configInsert}
 			</div>
 		);
 

@@ -887,6 +887,14 @@ todo hex colours, button icons */
 	animation-iteration-count: 3;
 }
 
+.ui.message .puma-screen-button {
+	position: absolute;
+	right: .8rem;
+	top: 50%;
+	transform: translateY(-50%);
+	/*transform: translateY(-44.444444444%);*/
+}
+
 
 /*
 .ui.labeled.icon.button.puma-screen-button > .icon,

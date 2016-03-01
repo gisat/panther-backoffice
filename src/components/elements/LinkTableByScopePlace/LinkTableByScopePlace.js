@@ -574,9 +574,9 @@ class LinkTableByScopePlace extends Component {
 						</tbody>
 					</Table>
 
-					<div className="note">
+					{/*<div className="note">
 						Set available attribute sets & AU levels in <UIScreenButton>scope settings</UIScreenButton>
-					</div>
+					</div>*/}
 
 				</div>
 			);
