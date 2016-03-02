@@ -194,9 +194,13 @@ class Store extends EventEmitter {
 			var url = path.resolve(publicPath, "api-proxy")
 					// append METHOD and last API directory, just for better debugging
 					+ "?" + method.toUpperCase() + "-" + thisStore.getApiUrl().split("/").pop();
+			var apiUrl = thisStore.getApiUrl();
+			if(method=="DELETE") {
+				apiUrl = path.join(apiUrl, object.data._id.toString());
+			}
 			superagent
 			.post(url)
-			.send({apiUrl: thisStore.getApiUrl()})
+			.send({apiUrl: apiUrl})
 			.send({method: method})
 			.send({ssid: tempSsid})
 			.send({sessionid: tempSessionid})
