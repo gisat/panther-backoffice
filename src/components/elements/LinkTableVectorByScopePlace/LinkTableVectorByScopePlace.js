@@ -32,7 +32,8 @@ class LinkTableVectorByScopePlace extends Component {
 	static propTypes = {
 		disabled: React.PropTypes.bool,
 		relations: React.PropTypes.object,
-		place: React.PropTypes.object
+		place: React.PropTypes.object,
+		onCellClick: React.PropTypes.func
 	};
 
 	static defaultProps = {
@@ -191,10 +192,6 @@ class LinkTableVectorByScopePlace extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	openScreenExample(idLayer,idAttSet) {
-		this.state.example = "Clicked on " + idLayer + ", " + idAttSet;
-	}
-
 	componentDidMount() {
 
 		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates"]));
@@ -241,6 +238,12 @@ class LinkTableVectorByScopePlace extends Component {
 			});
 		});
 	}
+
+
+	onCellClick(idLayer,idAttSet) {
+		this.props.onCellClick(idLayer,idAttSet);
+	}
+
 
 	render() {
 
@@ -341,10 +344,10 @@ class LinkTableVectorByScopePlace extends Component {
 					>
 						<a
 							href="#"
-							onClick={thisComponent.openScreenExample.bind(
+							onClick={thisComponent.onCellClick.bind(
 								thisComponent,
 								scopeLayerTemplate.key,
-								false
+								null
 							)}
 						>
 							{layerPeriodsInsert}
@@ -426,7 +429,7 @@ class LinkTableVectorByScopePlace extends Component {
 							>
 								<a
 									href="#"
-									onClick={thisComponent.openScreenExample.bind(
+									onClick={thisComponent.onCellClick.bind(
 										thisComponent,
 										scopeLayerTemplate.key,
 										layerAttSet.key

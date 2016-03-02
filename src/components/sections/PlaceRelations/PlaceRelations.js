@@ -15,6 +15,9 @@ import LinkTableVectorByScopePlace from '../../elements/LinkTableVectorByScopePl
 import LinkTableRasterByScopePlace from '../../elements/LinkTableRasterByScopePlace';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
+import ScreenLinksByAttSetAULevel from '../../screens/ScreenLinksByAttSetAULevel';
+//import ScreenPlaceDataSourceVector from '../../screens/ScreenPlaceDataSourceVector';
+//import ScreenPlaceDataSourceRaster from '../../screens/ScreenPlaceDataSourceRaster';
 
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
@@ -31,14 +34,9 @@ import PeriodStore from '../../../stores/PeriodStore';
 import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
 var initialState = {
-	savedState: {},
 	place: null,
-	scopes: [],
-	vectorLayerTemplates: [],
-	rasterLayerTemplates: [],
-	auLevels: [],
-	attributes: [],
-	periods: []
+	placeRelations: [],
+	scopes: []
 };
 
 
@@ -76,15 +74,8 @@ class PlaceRelations extends Component {
 		}
 		return {
 			scopes: ScopeStore.getAll(),
-			//vectorLayerTemplates: VectorLayerStore.getAll(),
-			//rasterLayerTemplates: RasterLayerStore.getAll(),
-			//auLevels: AULevelStore.getAll(),
-			//attributeSets: AttributeSetStore.getAll(),
-			//attributes: AttributeStore.getAll(),
-			//periods: PeriodStore.getAll(),
 			place: PlaceStore.getById(props.selectorValue),
 			placeRelations: ObjectRelationStore.getFiltered({placeKey: props.selectorValue}) // todo rewrite after getFiltered can filter by nested key
-			//dataLayerColumns: DataLayerColumnsStore.getByDataSource(props.selectorValue)
 		};
 	}
 
@@ -96,21 +87,6 @@ class PlaceRelations extends Component {
 		let store2state = this.store2state(props);
 		this.context.setStateFromStores.call(this, store2state, keys);
 		// if stores changed, overrides user input - todo fix
-		//if(!keys || keys.indexOf("place")!=-1) {
-		//	store2state.place.then(function(relations) {
-		//		thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations));
-		//	});
-		//}
-		//if(!keys || keys.indexOf("attributeSets")!=-1) {
-		//	store2state.attributeSets.then(function(attributeSets) {
-		//		thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
-		//	});
-		//}
-		//if(!keys || keys.indexOf("layerRelations")!=-1 || keys.indexOf("dataLayerColumns")!=-1) {
-		//	Promise.all([store2state.layerRelations, store2state.dataLayerColumns]).then(function([relations, columns]) {
-		//		thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.columns2state(columns, relations));
-		//	});
-		//}
 		if(!keys || keys.indexOf("placeRelations")!=-1) {
 			store2state.placeRelations.then(function(relations){
 				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations));
@@ -119,170 +95,26 @@ class PlaceRelations extends Component {
 	}
 
 	_onStoreChange(keys) {
-		//console.log("_onStoreChange() ===============");
 		this.setStateFromStores(this.props,keys);
 	}
 
 	componentDidMount() {
-		//ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		//ScopeStore.addResponseListener(this._onStoreResponse.bind(this));
-		//PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
-		//PlaceStore.addResponseListener(this._onStoreResponse.bind(this));
-		//VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
-		//VectorLayerStore.addResponseListener(this._onStoreResponse.bind(this));
-		//RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
-		//RasterLayerStore.addResponseListener(this._onStoreResponse.bind(this));
-		//AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		//AULevelStore.addResponseListener(this._onStoreResponse.bind(this));
-		//AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
-		//AttributeStore.addChangeListener(this._onStoreChange.bind(this,["attributes"]));
-		//PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
-		//PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
-		//ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
-		//DataLayerColumnsStore.addChangeListener(this._onStoreChange.bind(this,["dataLayerColumns"]));
+		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["place"]));
+		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["placeRelations"]));
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		//ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		//ScopeStore.removeResponseListener(this._onStoreResponse.bind(this));
-		//PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
-		//PlaceStore.removeResponseListener(this._onStoreResponse.bind(this));
-		//VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
-		//VectorLayerStore.removeResponseListener(this._onStoreResponse.bind(this));
-		//RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
-		//RasterLayerStore.removeResponseListener(this._onStoreResponse.bind(this));
-		//AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		//AULevelStore.removeResponseListener(this._onStoreResponse.bind(this));
-		//AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
-		//AttributeStore.removeChangeListener(this._onStoreChange.bind(this,["attributes"]));
-		//PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
-		//PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
-		//ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
-		//DataLayerColumnsStore.removeChangeListener(this._onStoreChange.bind(this,["dataLayerColumns"]));
+		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["place"]));
+		ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["placeRelations"]));
 	}
 
 	componentWillReceiveProps(newProps) {
 		if(newProps.selectorValue!=this.props.selectorValue) {
 			this.setStateFromStores(newProps,["place","placeRelations"]);
 			this.updateStateHash(newProps);
-		}
-	}
-
-
-	/**
-	 * Prepare options for data table selects
-	 * Called in store2state().
-	 * @param attributeSets
-	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
-	 */
-	atts2state(attributeSets) {
-		var ret = {
-			destinationsVL: null,
-			destinationsAU: null
-		};
-		let attsetatts = [];
-		if (attributeSets) {
-			for (let attset of attributeSets) {
-				if(attset.attributes) {
-					for (let att of attset.attributes) {
-						let object = {
-							key: attset.key + "-" + att.key,
-							name: attset.name + " " + att.name,
-							attributeName: att.name,
-							attributeSetName: attset.name,
-							attributeKey: att.key,
-							attributeSetKey: attset.key
-						};
-						attsetatts.push(object);
-					}
-				}
-			}
-		}
-		ret.destinationsVL = _.union(VLDESTINATIONS,attsetatts);
-		ret.destinationsAU = _.union(AUDESTINATIONS,attsetatts);
-		return ret;
-	}
-
-	/**
-	 * Prepare columns and selects relations.
-	 * Called in store2state().
-	 * @param columns
-	 * @param relations
-	 * @returns {{columnMaps: {au: {}, vector: {}}}}
-	 */
-	columns2state(columns, relations) {
-		let ret = {
-			columnMaps: {
-				au: {},
-				vector: {}
-			}
-		};
-
-		// create empty columns structure
-		delete columns.ready;
-		_.each(columns, function(value){
-			let columnRelation = {
-				valueUseAs: [],
-				valuesPeriods: []
-			};
-			ret.columnMaps.au[value.name] = columnRelation;
-			ret.columnMaps.vector[value.name] = columnRelation;
-		});
-
-		// fill it with relations (valueUseAs's and valuesPeriods')
-		_.each(relations, function(relation){
-			if(relation.hasOwnProperty("fidColumn") && relation.fidColumn && relation.fidColumn.length){
-				this.addRelationToColumnMap(ret, relation.fidColumn, "I");
-			}
-			if(relation.hasOwnProperty("nameColumn") && relation.nameColumn && relation.nameColumn.length){
-				this.addRelationToColumnMap(ret, relation.nameColumn, "N");
-			}
-			if(relation.hasOwnProperty("parentColumn") && relation.parentColumn && relation.parentColumn.length){
-				this.addRelationToColumnMap(ret, relation.parentColumn, "P");
-			}
-
-			if(relation.hasOwnProperty("columnMap") && relation.isOfAttributeSet){
-				_.each(relation.columnMap, function(column){
-					let keyString = relation.attributeSet.key + "-" + column.attribute.key;
-					this.addRelationToColumnMap(ret, column.column, keyString, relation);
-				}, this);
-			}
-		}, this);
-
-		//console.log("_________ columns2state returns _________:\n", ret);
-
-		let savedState = {};
-		_.assign(savedState, ret);
-		this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
-		return ret;
-		//return mock;
-	}
-
-	/**
-	 * Adds column / attribute relation to columnMap
-	 * @param columnMap
-	 * @param column
-	 * @param value
-	 * @param relation
-	 */
-	addRelationToColumnMap(columnMap, column, value, relation){
-		var period = null;
-		if(relation && relation.hasOwnProperty("period") && relation.period!==null) {
-			period = relation.period.key;
-		}else if(relation){
-			console.log("======================================\n====== RELATION.period IS MISSING ======\n======================================");
-		}
-		columnMap.columnMaps.au[column].valueUseAs =
-			_.union(columnMap.columnMaps.au[column].valueUseAs, [value]);
-		if(period) columnMap.columnMaps.au[column].valuesPeriods =
-			_.union(columnMap.columnMaps.au[column].valuesPeriods, [period]);
-
-		if(value != "P") {
-			columnMap.columnMaps.vector[column].valueUseAs =
-				_.union(columnMap.columnMaps.vector[column].valueUseAs, [value]);
-			if(period) columnMap.columnMaps.vector[column].valuesPeriods =
-				_.union(columnMap.columnMaps.vector[column].valuesPeriods, [period]);
 		}
 	}
 
@@ -442,11 +274,26 @@ class PlaceRelations extends Component {
 	}
 
 
-	onObjectClick (itemType, value, event) {
-		console.log("yay! " + value.key);
+	onCellClick (table, row, col) {
 		this.context.onInteraction().call();
-		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
-		this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:value.key});
+		var screenName = this.props.screenKey + "-ScreenPlaceDataSource" + table;
+		var screenComponent, data;
+		switch(table){
+			case "AttSet":
+				if(row==null) {
+					screenComponent = ScreenLinksByAttSetAULevel; // todo replace
+				} else {
+					screenComponent = ScreenLinksByAttSetAULevel;
+				}
+				data = {
+					placeKey: this.props.selectorValue,
+					attSetKey: row,
+					auLevelKey: col
+				};
+				break;
+			// todo the other cases
+		}
+		this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},data);
 	}
 
 
@@ -496,6 +343,7 @@ class PlaceRelations extends Component {
 							relationsAttSet={this.state.relationsAttSet}
 							relationsAULevel={this.state.relationsAULevel}
 							place={this.state.place}
+							onCellClick={this.onCellClick.bind(this,"AttSet")}
 						/>
 
 						<h2>Vector layers</h2>
@@ -503,6 +351,7 @@ class PlaceRelations extends Component {
 							disabled={this.props.disabled}
 							relations={this.state.relationsVector}
 							place={this.state.place}
+							//onCellClick={this.onCellClick.bind(this,"Vector")}
 						/>
 
 						<h2>Raster layers</h2>
@@ -510,6 +359,7 @@ class PlaceRelations extends Component {
 							disabled={this.props.disabled}
 							relations={this.state.relationsRaster}
 							place={this.state.place}
+							//onCellClick={this.onCellClick.bind(this,"Raster")}
 						/>
 					</div>
 				);

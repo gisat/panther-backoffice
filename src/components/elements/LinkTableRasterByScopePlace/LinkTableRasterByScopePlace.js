@@ -28,7 +28,8 @@ class LinkTableRasterByScopePlace extends Component {
 	static propTypes = {
 		disabled: React.PropTypes.bool,
 		relations: React.PropTypes.object,
-		place: React.PropTypes.object
+		place: React.PropTypes.object,
+		onCellClick: React.PropTypes.func
 	};
 
 	static defaultProps = {
@@ -73,10 +74,6 @@ class LinkTableRasterByScopePlace extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	openScreenExample(idLayer,idAttSet) {
-		this.state.example = "Clicked on " + idLayer + ", " + idAttSet;
-	}
-
 	componentDidMount() {
 
 		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates"]));
@@ -117,6 +114,12 @@ class LinkTableRasterByScopePlace extends Component {
 			});
 		});
 	}
+
+
+	onCellClick(idLayer,idAttSet) {
+		this.props.onCellClick(idLayer,idAttSet);
+	}
+
 
 	render() {
 
@@ -197,10 +200,10 @@ class LinkTableRasterByScopePlace extends Component {
 						<td className={tdLayerClassName}>
 							<a
 								href="#"
-								onClick={thisComponent.openScreenExample.bind(
+								onClick={thisComponent.onCellClick.bind(
 										thisComponent,
 										scopeLayerTemplate.key,
-										false
+										null
 									)}
 							>
 								{layerPeriodsInsert}

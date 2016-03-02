@@ -7,79 +7,76 @@ import Select from 'react-select';
 
 import OptionKeyName from '../../atoms/UICustomSelect/OptionKeyName';
 import SingleValueKeyName from '../../atoms/UICustomSelect/SingleValueKeyName';
+import OptionPlace from '../../atoms/UICustomSelect/OptionPlace';
+import SingleValuePlace from '../../atoms/UICustomSelect/SingleValuePlace';
 
-//const MAX_ITEMS = 6;
-//const ASYNC_DELAY = 500;
-const ATTSETS = [
-			{ key: 352, name: "Land Cover classes L3" },
-			{ key: 623, name: "Aggregated LC Classes Formation" },
-			{ key: 18, name: "Populations1" }
-		];
-const AULEVELS = [
-			{ key: 1,	name: "AOI"	},
-			{ key: 2, name: "Core City x Outer Urban Zone" },
-			{ key: 3, name: "GADM2" },
-			{ key: 4, name: "GADM3" },
-			{ key: 5, name: "GADM4" }
-		];
 
 @withStyles(styles)
 class SelectorAttSetAULevel extends Component{
 
-	constructor(props) {
-		super(props);
+	static propTypes = {
+		disabled: React.PropTypes.bool,
+		dataPlace: React.PropTypes.array.isRequired,		// Expects "key","name"
+		dataAttSet: React.PropTypes.array.isRequired,		// Expects "key","name"
+		dataAULevel: React.PropTypes.array.isRequired,		// Expects "key","name"
+		valuePlace: React.PropTypes.any,
+		valueAttSet: React.PropTypes.any,
+		valueAULevel: React.PropTypes.any,
+		onChange: React.PropTypes.func.isRequired
+	};
 
-		this.state = {
-			valueAttSet: 352,
-			valueAULevel: 2
-		};
+	static defaultProps = {
+		disabled: false,
+		valuePlace: null,
+		valueAttSet: null,
+		valueAULevel: null
+	};
 
+	onChangePlace (value) {
+		this.props.onChange("place",value);
 	}
-
 	onChangeAttSet (value) {
-		this.state.valueAttSet = value;
+		this.props.onChange("attSet",value);
 	}
 	onChangeAULevel (value) {
-		this.state.valueAULevel = value;
+		this.props.onChange("auLevel",value);
 	}
 
-//	getPlaces (input, callback) {
-//		alert("baf");
-//		input = input.toLowerCase();
-//		var options = PLACES.filter(i => {
-//			return i.place.substr(0, input.length) === input;
-//		});
-//		var data = {
-//			options: options.slice(0, MAX_ITEMS),
-//			complete: options.length <= MAX_ITEMS,
-//		};
-//		setTimeout(function() {
-//			callback(null, data);
-//		}, ASYNC_DELAY);
-//	}
-
 	render() {
-		var selectInputProps = {
-			className: "" //"ui input"
-		};
 
 		return (
 			<div>
 				<div className="selector double">
+
+					<div className="input">
+						<label className="container">
+							Place
+							<Select
+								onChange={this.onChangePlace.bind(this)}
+								options={this.props.dataPlace}
+								optionComponent={OptionPlace}
+								singleValueComponent={SingleValuePlace}
+								className="UICustomSelect SelectPlace"
+								valueKey="key"
+								labelKey="name"
+								value={this.props.valuePlace}
+								clearable={false}
+							/>
+						</label>
+					</div>
+
 					<div className="input">
 						<label className="container">
 							Attribute set
 							<Select
 								onChange={this.onChangeAttSet.bind(this)}
-								//loadOptions={this.getPlaces}
-								options={ATTSETS}
+								options={this.props.dataAttSet}
 								optionComponent={OptionKeyName}
 								singleValueComponent={SingleValueKeyName}
 								className="UICustomSelect"
 								valueKey="key"
 								labelKey="name"
-								inputProps={selectInputProps}
-								value={this.state.valueAttSet}
+								value={this.props.valueAttSet}
 								clearable={false}
 							/>
 						</label>
@@ -90,15 +87,13 @@ class SelectorAttSetAULevel extends Component{
 							Analytical units level
 							<Select
 								onChange={this.onChangeAULevel.bind(this)}
-								//loadOptions={this.getPlaces}
-								options={AULEVELS}
+								options={this.props.dataAULevel}
 								optionComponent={OptionKeyName}
 								singleValueComponent={SingleValueKeyName}
 								className="UICustomSelect-keyname"
 								valueKey="key"
 								labelKey="name"
-								inputProps={selectInputProps}
-								value={this.state.valueAULevel}
+								value={this.props.valueAULevel}
 								clearable={false}
 							/>
 						</label>

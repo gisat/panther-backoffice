@@ -31,7 +31,8 @@ class LinkTableByScopePlace extends Component {
 		disabled: React.PropTypes.bool,
 		relationsAttSet: React.PropTypes.object,
 		relationsAULevel: React.PropTypes.object,
-		place: React.PropTypes.object
+		place: React.PropTypes.object,
+		onCellClick: React.PropTypes.func
 	};
 
 	static defaultProps = {
@@ -351,10 +352,6 @@ class LinkTableByScopePlace extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	openScreenExample(idAttSet,idAULevel) {
-		this.state.example = "Clicked on " + idAttSet + ", " + idAULevel;
-	}
-
 	componentDidMount() {
 
 		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["scopeAttributeSets"]));
@@ -400,6 +397,12 @@ class LinkTableByScopePlace extends Component {
 		});
 	}
 
+
+	onCellClick(idAttSet,idAULevel) {
+		this.props.onCellClick(idAttSet,idAULevel);
+	}
+
+
 	render() {
 
 		var ret = null;
@@ -422,7 +425,7 @@ class LinkTableByScopePlace extends Component {
 					>
 						<a
 							href="#"
-							onClick={thisComponent.openScreenExample.bind(
+							onClick={thisComponent.onCellClick.bind(
 								thisComponent,
 								null,
 								auLevel.key
@@ -503,7 +506,7 @@ class LinkTableByScopePlace extends Component {
 							>
 								<a
 									href="#"
-									onClick={thisComponent.openScreenExample.bind(
+									onClick={thisComponent.onCellClick.bind(
 										thisComponent,
 										scopeAttSet.key,
 										scopeLevel.key
@@ -532,7 +535,7 @@ class LinkTableByScopePlace extends Component {
 					//		<td className="selectable heading">
 					//			<a
 					//				href="#"
-					//				onClick={thisComponent.openScreenExample.bind(
+					//				onClick={thisComponent.onCellClick.bind(
 					//						thisComponent,
 					//						auAttSet.key,
 					//						null
