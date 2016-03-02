@@ -9,15 +9,15 @@ class AnalysisModel extends Model {
 
 	data() {
 		return {
-			key: {
+			key: { // for all
 				serverName: '_id', //number
 				sendToServer: true
 			},
-			name: {
+			name: { // for all
 				serverName: 'name', //string
 				sendToServer: true
 			},
-			topics: {
+			topics: { // for all
 				serverName: 'topics', //ids
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -27,7 +27,7 @@ class AnalysisModel extends Model {
 				isPromise: true,
 				isArray: true
 			},
-			analysisType: {
+			analysisType: { // for all
 				serverName: 'type', // spatial, fid, math
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -35,7 +35,7 @@ class AnalysisModel extends Model {
 					return data;
 				}
 			},
-			layerObject: {
+			layerObject: { // for spatial
 				serverName: 'areaTemplate', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -44,7 +44,7 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
-			attributeSet: {
+			attributeSet: { // for spatial
 				serverName: 'attributeSet', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -53,7 +53,7 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
-			attributeSets: {
+			attributeSets: { // for fid and math
 				serverName: 'attributeSets', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -62,7 +62,7 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKeys,
 				isPromise: true
 			},
-			groupAttribute: {
+			groupAttribute: { // for spatial
 				serverName: 'groupAttribute', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -71,7 +71,7 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
-			groupAttributeSet: {
+			groupAttributeSet: { // for spatial
 				serverName: 'groupAttributeSet', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -80,7 +80,7 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
-			attributeMap: {
+			attributeMap: { // for fid and spatial
 				serverName: 'attributeMap', //object {column: string, attribute: id}
 				sendToServer: true,
 				isArrayOfNested: true,
@@ -163,12 +163,12 @@ class AnalysisModel extends Model {
 			},
 
 
-			changed: {
+			changed: { // for all
 				serverName: 'changed', //date
 				sendToServer: false,
 				transformForLocal: this.transformDate
 			},
-			changedBy: {
+			changedBy: { // for all
 				serverName: 'changedBy', //id
 				sendToServer: false,
 				transformForLocal: function (data) {
@@ -176,12 +176,12 @@ class AnalysisModel extends Model {
 				},
 				isPromise: true
 			},
-			created: {
+			created: { // for all
 				serverName: 'created', //date
 				sendToServer: false,
 				transformForLocal: this.transformDate
 			},
-			createdBy: {
+			createdBy: { // for all
 				serverName: 'createdBy', //id
 				sendToServer: false,
 				transformForLocal: function (data) {
