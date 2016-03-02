@@ -123,13 +123,7 @@ class AnalysisModel extends Model {
 					},
 					groupVal: {
 						serverName: 'groupVal',
-						sendToServer: true,
-						transformForLocal: function (data) {
-							return data.split(",");
-						},
-						transformForServer: function (data) {
-							return data.join();
-						}
+						sendToServer: true
 					},
 					normAttribute: {
 						serverName: 'normAttribute',
