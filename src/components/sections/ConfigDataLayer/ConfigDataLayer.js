@@ -754,7 +754,7 @@ class ConfigDataLayer extends Component {
 			//	height: '600px'
 			//};
 			var mapImageStyle = {
-				border: '1px solid rgba(0,0,0,.15);'
+				border: '1px solid rgba(0,0,0,.15)'
 			};
 			//var mapFrameSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
 			var mapImageSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=800&transparent=true";

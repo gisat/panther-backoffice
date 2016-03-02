@@ -120,7 +120,7 @@ class ScreenPlacesBase extends Component{
 
 	render() {
 
-		var selectorData = this.state.places;
+		var selectorData = utils.deepClone(this.state.places);
 		selectorData.sort(function(a, b) {
 			if(!a.scope && b.scope) return 1;
 			if(a.scope && !b.scope) return -1;
