@@ -12,7 +12,7 @@ import AULevelStore from '../../../stores/AULevelStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 import PlaceStore from '../../../stores/PlaceStore';
 
-import SelectorAttSetAULevel from '../../sections/SelectorAttSetAULevel';
+import SelectorPlaceAttSetAULevel from '../../sections/SelectorPlaceAttSetAULevel';
 import ConfigPlaceDataSource from '../../sections/ConfigPlaceDataSource';
 
 var initialState = {
@@ -153,7 +153,7 @@ class ScreenPlaceDataSourceAttSet extends Component {
 			<div>
 				<div className="screen-setter"><div>
 					<h2>Data source selection</h2>
-					<SelectorAttSetAULevel
+					<SelectorPlaceAttSetAULevel
 						disabled={this.props.disabled}
 						dataPlace={selectorData}
 						dataAttSet={this.state.attributeSets} // todo filter by scope of selected place

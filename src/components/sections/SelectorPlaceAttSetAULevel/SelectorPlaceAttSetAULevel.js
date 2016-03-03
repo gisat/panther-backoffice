@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './SelectorAttSetAULevel.css';
+import styles from './SelectorPlaceAttSetAULevel.css';
 import withStyles from '../../../decorators/withStyles';
 
 import { Button, Input, Icon } from '../../SEUI/elements';
@@ -12,7 +12,7 @@ import SingleValuePlace from '../../atoms/UICustomSelect/SingleValuePlace';
 
 
 @withStyles(styles)
-class SelectorAttSetAULevel extends Component{
+class SelectorPlaceAttSetAULevel extends Component{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -106,4 +106,4 @@ class SelectorAttSetAULevel extends Component{
 }
 
 
-export default SelectorAttSetAULevel;
+export default SelectorPlaceAttSetAULevel;
