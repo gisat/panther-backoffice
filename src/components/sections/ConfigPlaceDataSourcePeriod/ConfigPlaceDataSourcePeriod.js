@@ -319,7 +319,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		if(condition) {
 
 			ret = (
-				<div>
+				<div className="data-source-period-box">
 
 					<h3 className="rsc-header">{this.props.period}</h3>
 					<div className="row-select-config">
