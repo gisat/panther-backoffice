@@ -15,7 +15,7 @@ import LinkTableVectorByScopePlace from '../../elements/LinkTableVectorByScopePl
 import LinkTableRasterByScopePlace from '../../elements/LinkTableRasterByScopePlace';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
-import ScreenLinksByAttSetAULevel from '../../screens/ScreenLinksByAttSetAULevel';
+import ScreenPlaceDataSourceAttSet from '../../screens/ScreenPlaceDataSourceAttSet';
 //import ScreenPlaceDataSourceVector from '../../screens/ScreenPlaceDataSourceVector';
 //import ScreenPlaceDataSourceRaster from '../../screens/ScreenPlaceDataSourceRaster';
 
@@ -281,9 +281,9 @@ class PlaceRelations extends Component {
 		switch(table){
 			case "AttSet":
 				if(row==null) {
-					screenComponent = ScreenLinksByAttSetAULevel; // todo replace
+					screenComponent = ScreenPlaceDataSourceAttSet; // todo replace
 				} else {
-					screenComponent = ScreenLinksByAttSetAULevel;
+					screenComponent = ScreenPlaceDataSourceAttSet;
 				}
 				data = {
 					placeKey: this.props.selectorValue,

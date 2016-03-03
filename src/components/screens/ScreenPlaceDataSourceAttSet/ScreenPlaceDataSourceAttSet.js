@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ScreenLinksByAttSetAULevel.css';
+import styles from './ScreenPlaceDataSourceAttSet.css';
 import withStyles from '../../../decorators/withStyles';
 
 import path from "path";
@@ -26,7 +26,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenLinksByAttSetAULevel extends Component {
+class ScreenPlaceDataSourceAttSet extends Component {
 
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired
@@ -178,4 +178,4 @@ class ScreenLinksByAttSetAULevel extends Component {
 	}
 }
 
-export default ScreenLinksByAttSetAULevel;
+export default ScreenPlaceDataSourceAttSet;

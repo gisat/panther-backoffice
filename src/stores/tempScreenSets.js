@@ -12,7 +12,7 @@ import ScreenMetadataBase from '../components/screens/ScreenMetadataBase';
 import ScreenMetadataLayerVector from '../components/screens/ScreenMetadataLayerVector';
 
 import ScreenPlacesBase from '../components/screens/ScreenPlacesBase';
-import ScreenLinksByAttSetAULevel from '../components/screens/ScreenLinksByAttSetAULevel';
+import ScreenPlaceDataSourceAttSet from '../components/screens/ScreenPlaceDataSourceAttSet';
 
 module.exports = [
 	{
@@ -106,7 +106,7 @@ module.exports = [
 				//type: "constant",
 				size: 40,
 				position: "retracted",
-				component: ScreenLinksByAttSetAULevel
+				component: ScreenPlaceDataSourceAttSet
 				//component: <ScreenLinksByAttSetAULevel />
 			}
 		]
