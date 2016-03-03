@@ -1,0 +1,6 @@
+{
+	"name": "ConfigPlaceDataSource",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ConfigPlaceDataSource.js"
+}

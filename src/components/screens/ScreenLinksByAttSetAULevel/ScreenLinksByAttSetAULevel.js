@@ -13,7 +13,7 @@ import AttributeSetStore from '../../../stores/AttributeSetStore';
 import PlaceStore from '../../../stores/PlaceStore';
 
 import SelectorAttSetAULevel from '../../sections/SelectorAttSetAULevel';
-import ConfigLinksByAttSetAULevel from '../../sections/ConfigLinksByAttSetAULevel';
+import ConfigPlaceDataSource from '../../sections/ConfigPlaceDataSource';
 
 var initialState = {
 	places: [],
@@ -165,7 +165,7 @@ class ScreenLinksByAttSetAULevel extends Component {
 					/>
 				</div></div>
 				<div className="screen-content"><div>
-					<ConfigLinksByAttSetAULevel
+					<ConfigPlaceDataSource
 						disabled={this.props.disabled}
 						screenKey={this.props.screenKey}
 						selectorValuePlace={this.state.selectorValuePlace}

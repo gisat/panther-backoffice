@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ConfigLinksByAttSetAULevel.css';
+import styles from './ConfigPlaceDataSource.css';
 import withStyles from '../../../decorators/withStyles';
 
 import UISVG from '../../atoms/UISVG';
@@ -22,7 +22,7 @@ const DATALAYERS = require('../../../stores/tempDataLayers');
 
 
 @withStyles(styles)
-class ConfigLinksByAttSetAULevel extends Component{
+class ConfigPlaceDataSource extends Component{
 
 
 	componentDidMount() {
@@ -349,4 +349,4 @@ class ConfigLinksByAttSetAULevel extends Component{
 	}
 }
 
-export default ConfigLinksByAttSetAULevel;
+export default ConfigPlaceDataSource;
