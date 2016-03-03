@@ -152,7 +152,7 @@ class ScreenPlaceDataSourceAttSet extends Component {
 		return (
 			<div>
 				<div className="screen-setter"><div>
-					<h2>Data source selection</h2>
+					<h2>Data source selection: Attribute set</h2>
 					<SelectorPlaceAttSetAULevel
 						disabled={this.props.disabled}
 						dataPlace={selectorData}
@@ -168,6 +168,7 @@ class ScreenPlaceDataSourceAttSet extends Component {
 					<ConfigPlaceDataSource
 						disabled={this.props.disabled}
 						screenKey={this.props.screenKey}
+						relationsContext="AttSet"
 						selectorValuePlace={this.state.selectorValuePlace}
 						selectorValueAttSet={this.state.selectorValueAttSet}
 						selectorValueAULevel={this.state.selectorValueAULevel}

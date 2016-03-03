@@ -49,7 +49,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		return (
 			<div>
 
-				<h3 className="rsc-header">2000</h3>
+				<h3 className="rsc-header">{this.props.period}</h3>
 				{/* todo -> component */}
 				<div className="row-select-config">
 					<CheckboxFields type="grouped" radio name="rsc-asaul-623-2-1" onChange={function(){}}>
