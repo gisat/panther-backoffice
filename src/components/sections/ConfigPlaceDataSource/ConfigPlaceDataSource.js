@@ -10,7 +10,6 @@ import ConfigPlaceDataSourcePeriod from '../ConfigPlaceDataSourcePeriod';
 import PlaceStore from '../../../stores/PlaceStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 import AULevelStore from '../../../stores/AULevelStore';
-import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 
 var initialState = {
 	place: null,
@@ -141,6 +140,12 @@ class ConfigPlaceDataSource extends Component {
 						vectorLayer: this.props.selectorValueVectorLayer
 					});
 					break;
+				case "VectorAttSet":
+				_.assign(configComponentProps,{
+					attributeSet: this.props.selectorValueAttSet,
+					vectorLayer: this.props.selectorValueVectorLayer
+				});
+				break;
 				case "Raster":
 					_.assign(configComponentProps,{
 						rasterLayer: this.props.selectorValueRasterLayer
