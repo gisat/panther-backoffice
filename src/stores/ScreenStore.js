@@ -4,6 +4,8 @@ import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
 import utils from '../utils/utils';
 
+import _ from 'underscore';
+
 import ScreenAnalysesBase from '../components/screens/ScreenAnalysesBase';
 import ScreenAnalysisSpatial from '../components/screens/ScreenAnalysisSpatial';
 import ScreenAnalysisSpatialRules from '../components/screens/ScreenAnalysisSpatialRules';
@@ -19,82 +21,77 @@ import ScreenPlacesBase from '../components/screens/ScreenPlacesBase';
 import ScreenPlaceDataSourceAttSet from '../components/screens/ScreenPlaceDataSourceAttSet';
 
 
-var initialScreenSets = [
-	{
-		key: "analyses",
+var initialScreenSets = {
+	analyses: {
 		title: "Analyses",
-		screens: [
-			{
-				key: "ScreenAnalysesBase",
+		screens: {
+			ScreenAnalysesBase: {
+				order: 0,
 				component: ScreenAnalysesBase
 			},
-			{
-				key: "ScreenAnalysisSpatial",
+			ScreenAnalysisSpatial: {
+				order: 1,
 				size: 40,
 				position: "retracted",
 				component: ScreenAnalysisSpatial,
 				parentUrl: "/analyses/spatial"
 			},
-			{
-				key: "ScreenAnalysisSpatialRules",
+			ScreenAnalysisSpatialRules: {
+				order: 2,
 				size: 80,
 				position: "retracted",
 				component: ScreenAnalysisSpatialRules
 			}
-		]
+		}
 	},
 
-	{
-		key: "dashboard",
+	dashboard: {
 		title: "Dashboard",
-		screens: [
-			{
-				key: "ScreenDashboardBase",
+		screens: {
+			ScreenDashboardBase: {
+				order: 0,
 				component: ScreenDashboardBase,
 				contentAlign: "fill"
 			}
-		]
+		}
 	},
 
-	{
-		key: "dataLayers",
+	dataLayers: {
 		title: "Data layers",
-		screens: [
-			{
-				key: "ScreenDataLayersBase",
+		screens: {
+			ScreenDataLayersBase: {
+				order: 0,
 				component: ScreenDataLayersBase
 			}
-		]
+		}
 	},
 
-	{
-		key: "metadata",
+	metadata: {
 		title: "Metadata structures",
-		screens: [
-			{
-				key: "ScreenMetadataBase",
+		screens: {
+			ScreenMetadataBase: {
+				order: 0,
 				component: ScreenMetadataBase
 			}
-		]
+		}
 	},
 
-	{
-		key: "places",
+	places: {
 		title: "Places",
-		screens: [
-			{
-				key: "ScreenPlacesBase",
+		screens: {
+			ScreenPlacesBase: {
+				order: 0,
 				component: ScreenPlacesBase
 			},
-			{
-				key: "ScreenPlaceDataSourceAttSet",
+			ScreenPlaceDataSourceAttSet: {
+				order: 1,
 				size: 40,
 				position: "retracted",
 				component: ScreenPlaceDataSourceAttSet
 			}
-		]
+		}
 	}
-];
+};
 
 
 class ScreenStore extends Store {
@@ -119,7 +116,24 @@ class ScreenStore extends Store {
 	}
 
 	load() {
-		return Promise.resolve(utils.deepClone(initialScreenSets));
+		this._screenSets = utils.deepClone(initialScreenSets);
+		return Promise.resolve(this.getModels());
+	}
+
+	getModels() {
+		let models = [], i=0;
+		_.each(this._screenSets, function(screenSetObject,screenSetKey,screensets) {
+			models[i] = utils.deepClone(screenSetObject);
+			models[i].key = screenSetKey;
+			models[i].screens = [];
+			_.each(screenSetObject.screens, function(screenObject,screenKey,screens){
+				screenObject.key = screenKey;
+				models[i].screens[screenObject.order] = screenObject;
+			});
+			i++;
+		});
+		console.log("ss",this._screenSets);
+		return models;
 	}
 
 	create(model) {
@@ -186,9 +200,13 @@ class ScreenStore extends Store {
 
 					// write screenStack orders (index in screenSet, to determine all left from etc.)
 					stacks[screenSet.key].map(function (stackRecord) {
+						console.log("order before",stackRecord.screen.order );
 						stackRecord.order = screenSet.screens.indexOf(stackRecord.screen);
+						console.log("order after",stackRecord.order);
 					});
 				}
+				console.log("models",models);
+				console.log("stacks",stacks);
 				resolve(stacks);
 			});
 		});
