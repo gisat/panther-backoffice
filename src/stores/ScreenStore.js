@@ -131,8 +131,6 @@ class ScreenStore extends Store {
 			});
 			i++;
 		});
-		console.log("screenSets",screenSets);
-		console.log("models",models);
 		return models;
 	}
 
@@ -158,7 +156,6 @@ class ScreenStore extends Store {
 				return 0;
 			});
 		});
-		console.log("history",stacks);
 		return stacks;
 	}
 
@@ -231,9 +228,35 @@ class ScreenStore extends Store {
 		}
 	}
 
+	getScreenScreenSetKey(screenKey) {
+		if(screenKey) {
+			return _.findKey(this._screenSets,function(screenSet){
+				return !!screenSet.screens[screenKey];
+			});
+		}
+	}
+
 	removeScreen(screenKey) {
-		var screenSet = this.getScreenScreenSet(screenKey);
-		delete this._screenSets[screenSet].screens[screenKey];
+		var thisStore = this;
+		this._models.then(function(models){
+
+			let screenSetKey = thisStore.getScreenScreenSetKey(screenKey);
+
+			delete thisStore._screenSets[screenSetKey].screens[screenKey];
+
+			let stack = _.findWhere(thisStore._historyStacks, {key: screenSetKey});
+			stack = _.reject(stack,function(screen){
+				return screen.key == screenKey;
+			});
+
+			let model = _.findWhere(models, {key: screenSetKey});
+			model.screens = _.reject(model.screens,function(screen){
+				return screen.key == screenKey;
+			});
+
+			thisStore.emitChange();
+
+		});
 	}
 
 
@@ -328,7 +351,7 @@ class ScreenStore extends Store {
 			if(positionClass=="closed") {
 				// when closing, delete screen from state after a while
 				setTimeout(function () {
-					this.removeScreen(screenKey);
+					thisStore.removeScreen(screenKey);
 					//if(index != -1){
 					//	newScreens.splice(index, 1);
 					//}
@@ -390,13 +413,14 @@ class ScreenStore extends Store {
 				//	if (typeof e == "undefined") return false;
 				//	return e.key == record.key;
 				//})[0];
+				record.screen.position = record.screen.position || "open";
 
 				var screenSize = newScreen.size || normalWidth;
 				var realScreenSize = screenSize + constPlus - retractedWidth;
-				//console.log("        =record "+record.key+"-"+record.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
+				//console.log("        =record "+record.key+"-"+record.screen.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
 				switch (positionClass) {
 					case "open":
-						if (record.screen.position == "open" || !record.screen.position) {
+						if (record.screen.position == "open") {
 
 							if(retractAllFurther || record.screen.order < retractAllLeftFrom) {
 								//retractScreen(record.key, newScreens);
@@ -436,7 +460,7 @@ class ScreenStore extends Store {
 							if(newScreen.contentAlign == "fill") retractAllFurther = true;
 							if(typeof newScreen.size == "undefined") retractAllLeftFrom = Math.max(retractAllLeftFrom, record.order);
 
-						} else if (record.position == "retracted") {
+						} else if (record.screen.position == "retracted") {
 							// asi nic?
 						}
 						break;
@@ -446,7 +470,7 @@ class ScreenStore extends Store {
 						//page.setState({hasMaximised: false});
 						newScreenSet.hasMaximised = false;
 
-						if (record.position == "open") {
+						if (record.screen.position == "open") {
 							foundOpen = true;
 
 							if ((availableWidth - realScreenSize) >= 0) { //  || typeof size == "undefined"
@@ -461,7 +485,7 @@ class ScreenStore extends Store {
 								retractAllFurther = true;
 							}
 
-						} else if (record.position == "retracted") {
+						} else if (record.screen.position == "retracted") {
 							if (availableWidth >= 0 && !current && !retractAllFurther &&  !(record.order < retractAllLeftFrom) && !record.userDidThat){
 								// open
 								//openScreen(record.key, newScreens);
@@ -497,7 +521,7 @@ class ScreenStore extends Store {
 				}
 
 				if (current) record.userDidThat = true;
-				if (record.screen.position == "open" || !record.screen.position) availableWidth -= realScreenSize;
+				if (record.screen.position == "open") availableWidth -= realScreenSize;
 				//console.log("         ======= availableWidth:"+availableWidth);
 				current = false;
 			});
@@ -538,9 +562,7 @@ class ScreenStore extends Store {
 			// apply changes of state
 			this._screenSets = newScreenSets;
 			this._historyStacks = newHistoryStacks;
-			console.log("newHistoryStacks",newHistoryStacks);
 			this._models = Promise.resolve(newModels);
-			console.log("newModels",newModels);
 			//newScreenSets[screenSetKey].screens = utils.deepClone(newScreens);
 			//page.setState({
 			//	screens: newScreens,
@@ -567,9 +589,11 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			break;
 		case ActionTypes.SCREEN_RETRACT:
 			console.log("Retracting screen",action.screenKey);
+			storeInstance.setScreenPosition(action.screenKey,"retracted");
 			break;
 		case ActionTypes.SCREEN_CLOSE:
 			console.log("Closing screen",action.screenKey);
+			storeInstance.setScreenPosition(action.screenKey,"closed");
 			break;
 		default:
 			return;
