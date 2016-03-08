@@ -290,7 +290,15 @@ class ScreenStore extends Store {
 			// - new structures - to be saved
 			var newScreenSets = utils.deepClone(this._screenSets);
 			var newModels = this.generateModels(newScreenSets);
-			var newHistoryStacks = this.generateHistoryStacks(newScreenSets);
+			//var newHistoryStacks = this.generateHistoryStacks(newScreenSets);
+			var newHistoryStacks = utils.deepClone(this._historyStacks);
+			for (var stackKey in newHistoryStacks) {
+				if(newHistoryStacks.hasOwnProperty(stackKey)){
+					for (var record of newHistoryStacks[stackKey]) {
+						record.screen = newScreenSets[stackKey].screens[record.screen.key];
+					}
+				}
+			}
 
 			var newScreenSet = _.findWhere(newModels,{key:screenSetKey});
 			//var newScreens = _.clone(this._models[screenSetKey].screens);
@@ -478,6 +486,7 @@ class ScreenStore extends Store {
 								// enable
 								//enableScreen(record.key, newScreens);
 								record.screen.disabled = false;
+								record.screen.forceWidth = null;
 							}else{
 								// disable
 								thisStore.reduceScreenWidth(record.screen, availableWidth + retractedWidth);
@@ -487,7 +496,7 @@ class ScreenStore extends Store {
 							}
 
 						} else if (record.screen.position == "retracted") {
-							if (availableWidth >= 0 && !current && !retractAllFurther &&  !(record.order < retractAllLeftFrom) && !record.userDidThat){
+							if (availableWidth >= 0 && !current && !retractAllFurther &&  !(record.screen.order < retractAllLeftFrom) && !record.userDidThat){
 								// open
 								//openScreen(record.key, newScreens);
 								record.screen.position = "open";
@@ -496,10 +505,12 @@ class ScreenStore extends Store {
 									// enable
 									//enableScreen(record.key, newScreens);
 									record.screen.disabled = false;
+									record.screen.forceWidth = null;
 								}else if(!foundOpen){
 									// enable
 									//enableScreen(record.key, newScreens);
 									record.screen.disabled = false;
+									record.screen.forceWidth = null;
 									// maximise
 									//maximiseScreen(record.key, newScreens);
 									record.screen.forceWidth = null;
@@ -522,7 +533,7 @@ class ScreenStore extends Store {
 				}
 
 				if (current) record.userDidThat = true;
-				if (record.screen.position == "open") availableWidth -= realScreenSize;
+				if (~record.screen.position.indexOf("open")) availableWidth -= realScreenSize;
 				//console.log("         ======= availableWidth:"+availableWidth);
 				current = false;
 			});
