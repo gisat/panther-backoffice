@@ -289,9 +289,10 @@ class ScreenStore extends Store {
 			var screen = screenSet.screens[screenKey];
 			// - new structures - to be saved
 			var newScreenSets = utils.deepClone(this._screenSets);
-			var newScreenSet = newScreenSets[screenSetKey];
 			var newModels = this.generateModels(newScreenSets);
 			var newHistoryStacks = this.generateHistoryStacks(newScreenSets);
+
+			var newScreenSet = _.findWhere(newModels,{key:screenSetKey});
 			//var newScreens = _.clone(this._models[screenSetKey].screens);
 			var newScreens = _.findWhere(newModels,{key: screenSetKey}).screens;
 			var newScreen = _.findWhere(newScreens,{key: screenKey});
