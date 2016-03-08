@@ -416,7 +416,7 @@ class ScreenStore extends Store {
 				//})[0];
 				record.screen.position = record.screen.position || "open";
 
-				var screenSize = newScreen.size || normalWidth;
+				var screenSize = record.screen.size || normalWidth;
 				var realScreenSize = screenSize + constPlus - retractedWidth;
 				//console.log("        =record "+record.key+"-"+record.screen.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
 				switch (positionClass) {
