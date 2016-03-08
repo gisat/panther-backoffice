@@ -111,7 +111,7 @@ class ScreenContainer extends Component{
 			case "retracted":
 				this.openScreen();
 				break;
-			case "open":
+			default: // "open", "open maximised"
 				this.retractScreen();
 				break;
 		}
