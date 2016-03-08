@@ -150,7 +150,7 @@ class ScreenStore extends Store {
 					userDidThat: true
 				});
 			});
-			// reorder this._historyStacks - open screens on top
+			// reorder this._historyStacks - open screens on top // todo does this work?
 			stacks[screenSetKey].sort(function (a, b) {
 				if ((a.screen.position == "closed" || a.screen.position == "retracted") && b.screen.position == "open") {
 					return 1;
@@ -396,7 +396,7 @@ class ScreenStore extends Store {
 				//console.log("        =record "+record.key+"-"+record.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
 				switch (positionClass) {
 					case "open":
-						if (record.screen.position == "open") {
+						if (record.screen.position == "open" || !record.screen.position) {
 
 							if(retractAllFurther || record.screen.order < retractAllLeftFrom) {
 								//retractScreen(record.key, newScreens);
@@ -425,7 +425,6 @@ class ScreenStore extends Store {
 										record.screen.position = "retracted";
 										record.userDidThat = false;
 									}else{
-										console.log("1");
 										thisStore.reduceScreenWidth(record.screen, availableWidth + retractedWidth);
 									}
 
@@ -456,7 +455,6 @@ class ScreenStore extends Store {
 								record.screen.disabled = false;
 							}else{
 								// disable
-								console.log("2");
 								thisStore.reduceScreenWidth(record.screen, availableWidth + retractedWidth);
 								//disableScreen(record.key, newScreens);
 								record.screen.disabled = true;
@@ -488,7 +486,6 @@ class ScreenStore extends Store {
 									// disable
 									//disableScreen(record.key, newScreens);
 									record.screen.disabled = true;
-									console.log("3");
 									thisStore.reduceScreenWidth(record.screen, availableWidth + retractedWidth);
 									retractAllFurther = true;
 								}
@@ -500,7 +497,7 @@ class ScreenStore extends Store {
 				}
 
 				if (current) record.userDidThat = true;
-				if (record.position == "open") availableWidth -= realScreenSize;
+				if (record.screen.position == "open" || !record.screen.position) availableWidth -= realScreenSize;
 				//console.log("         ======= availableWidth:"+availableWidth);
 				current = false;
 			});
