@@ -245,7 +245,7 @@ class Page extends Component {
 
 			ret = (
 				<div id="content">
-					<div className={classNames("content", {"has-maximised": this.state.hasMaximised})}>
+					<div className={classNames("content", {"has-maximised": this.state.screenSet.hasMaximised})}>
 						{screenNodes}
 					</div>
 				</div>
