@@ -6,6 +6,8 @@ import _ from 'underscore';
 
 import utils from '../../utils/utils';
 
+import ActionCreator from '../../actions/ActionCreator';
+
 import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
 const screenStack = require('../../stores/screenStack');
@@ -104,6 +106,29 @@ class ScreenContainer extends Component{
 		});
 	}
 
+	retractOrOpenScreen() {
+		switch(this.props.screenState.position) {
+			case "retracted":
+				this.openScreen();
+				break;
+			case "open":
+				this.retractScreen();
+				break;
+		}
+	}
+
+	openScreen() {
+		ActionCreator.openScreen(this.props.screenState.key);
+	}
+
+	retractScreen() {
+		ActionCreator.retractScreen(this.props.screenState.key);
+	}
+
+	closeScreen() {
+		ActionCreator.closeScreen(this.props.screenState.key);
+	}
+
 	///**
 	// * setUrl combines parent URL an current screen URL
 	// * function is passed to Screen as prop
@@ -182,19 +207,19 @@ class ScreenContainer extends Component{
 					<Buttons basic icon vertical>
 						<IconButton
 							name="chevron right"
-							onClick={this.props.onRetract.bind(null,{init: false})}
+							onClick={this.retractOrOpenScreen.bind(this)}
 						/>
 					</Buttons>
 				</div>
 				<div
 					className="screen-overlay"
-					onClick={this.props.onOpen.bind(null,{init: false})}
+					onClick={this.openScreen.bind(this)}
 				></div>
 				<div className="screen-controls top">
 					<Buttons basic icon vertical>
 						<IconButton
 							name="remove"
-							onClick={this.props.onClose.bind(null,{init: false})}
+							onClick={this.closeScreen.bind(this)}
 						/>
 					</Buttons>
 				</div>

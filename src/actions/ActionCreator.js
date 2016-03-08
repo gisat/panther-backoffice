@@ -100,6 +100,33 @@ export default {
 				return;
 		}
 		AppDispatcher.dispatch(action);
+	},
+
+
+	openScreen(screenKey, data) {
+		data = data || {};
+		var action = {
+			type: ActionTypes.SCREEN_OPEN,
+			screenKey: screenKey,
+			data: data
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	retractScreen(screenKey) {
+		var action = {
+			type: ActionTypes.SCREEN_RETRACT,
+			screenKey: screenKey
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	closeScreen(screenKey) {
+		var action = {
+			type: ActionTypes.SCREEN_CLOSE,
+			screenKey: screenKey
+		};
+		AppDispatcher.dispatch(action);
 	}
 
 };

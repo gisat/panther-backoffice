@@ -24,6 +24,7 @@ import ScreenPlaceDataSourceAttSet from '../components/screens/ScreenPlaceDataSo
 var initialScreenSets = {
 	analyses: {
 		title: "Analyses",
+		hasMaximised: false,
 		screens: {
 			ScreenAnalysesBase: {
 				order: 0,
@@ -47,6 +48,7 @@ var initialScreenSets = {
 
 	dashboard: {
 		title: "Dashboard",
+		hasMaximised: false,
 		screens: {
 			ScreenDashboardBase: {
 				order: 0,
@@ -58,6 +60,7 @@ var initialScreenSets = {
 
 	dataLayers: {
 		title: "Data layers",
+		hasMaximised: false,
 		screens: {
 			ScreenDataLayersBase: {
 				order: 0,
@@ -68,6 +71,7 @@ var initialScreenSets = {
 
 	metadata: {
 		title: "Metadata structures",
+		hasMaximised: false,
 		screens: {
 			ScreenMetadataBase: {
 				order: 0,
@@ -78,6 +82,7 @@ var initialScreenSets = {
 
 	places: {
 		title: "Places",
+		hasMaximised: false,
 		screens: {
 			ScreenPlacesBase: {
 				order: 0,
@@ -100,8 +105,77 @@ class ScreenStore extends Store {
 		super();		//this._models = this.load();
 		let thisStore = this;
 		this._models.then(function(){
-			thisStore._historyStacks = thisStore.initializeHistoryStacks();
+			thisStore._historyStacks = thisStore.generateHistoryStacks();
 		});
+	}
+
+	load() {
+		this._screenSets = utils.deepClone(initialScreenSets);
+		return Promise.resolve(this.generateModels());
+	}
+
+	/**
+	 * generate models from _screenSets for use with store get methods
+	 * @returns {Array}
+	 */
+	generateModels(screenSets) {
+		screenSets = screenSets || this._screenSets;
+		let models = [], i=0;
+		_.each(screenSets, function(screenSetObject,screenSetKey,screensets) {
+			models[i] = utils.deepClone(screenSetObject);
+			models[i].key = screenSetKey;
+			models[i].screens = [];
+			_.each(screenSetObject.screens, function(screenObject,screenKey,screens){
+				screenObject.key = screenKey;
+				models[i].screens[screenObject.order] = screenObject; // reference, not copy
+			});
+			i++;
+		});
+		console.log("screenSets",screenSets);
+		console.log("models",models);
+		return models;
+	}
+
+	generateHistoryStacks(screenSets) {
+		screenSets = screenSets || this._screenSets;
+		var thisStore = this;
+		let stacks = {};
+
+		_.each(screenSets, function(screenSetObject, screenSetKey){
+			// create this._historyStacks from screenSet
+			stacks[screenSetKey] = [];
+			_.mapObject(screenSetObject.screens,function (screenObject, screenKey) {
+				stacks[screenSetKey].unshift({
+					screen: screenObject, // reference, not copy
+					userDidThat: true
+				});
+			});
+			// reorder this._historyStacks - open screens on top
+			stacks[screenSetKey].sort(function (a, b) {
+				if ((a.screen.position == "closed" || a.screen.position == "retracted") && b.screen.position == "open") {
+					return 1;
+				}
+				return 0;
+			});
+		});
+		console.log("history",stacks);
+		return stacks;
+	}
+
+	updateOrder(screenSetKey) {
+		var modelPromise = this.getById(screenSetKey);
+		modelPromise.then(function(model){
+			_.each(model.screens, function(screen, screenIndex, screens){
+				console.log("updateOrder before",screen.order);
+				screen.order = screenIndex;
+				console.log("updateOrder after",screen.order);
+			});
+		});
+
+	}
+
+	reload() {
+		return null;
 	}
 
 	getApiUrl(){
@@ -109,31 +183,6 @@ class ScreenStore extends Store {
 	}
 	getInstance(options,data){
 		return null;
-	}
-
-	reload() {
-		return null;
-	}
-
-	load() {
-		this._screenSets = utils.deepClone(initialScreenSets);
-		return Promise.resolve(this.getModels());
-	}
-
-	getModels() {
-		let models = [], i=0;
-		_.each(this._screenSets, function(screenSetObject,screenSetKey,screensets) {
-			models[i] = utils.deepClone(screenSetObject);
-			models[i].key = screenSetKey;
-			models[i].screens = [];
-			_.each(screenSetObject.screens, function(screenObject,screenKey,screens){
-				screenObject.key = screenKey;
-				models[i].screens[screenObject.order] = screenObject;
-			});
-			i++;
-		});
-		console.log("ss",this._screenSets);
-		return models;
 	}
 
 	create(model) {
@@ -174,43 +223,336 @@ class ScreenStore extends Store {
 		return null;
 	}
 
-
-	initializeHistoryStacks() {
-		var thisStore = this;
-		return new Promise(function (resolve, reject) {
-			thisStore._models.then(function (models) {
-				let stacks = {};
-				for (var screenSet of models) {
-					// create screenStack from screenSet
-					stacks[screenSet.key] = [];
-					screenSet.screens.map(function (screen) {
-						stacks[screenSet.key].unshift({
-							screen: screen, // reference, not copy
-							userDidThat: true
-						});
-					});
-
-					// reorder screenStack - open screens on top
-					stacks[screenSet.key].sort(function (a, b) {
-						if ((a.screen.position == "closed" || a.screen.position == "retracted") && b.screen.position == "open") {
-							return 1;
-						}
-						return 0;
-					});
-
-					// write screenStack orders (index in screenSet, to determine all left from etc.)
-					stacks[screenSet.key].map(function (stackRecord) {
-						console.log("order before",stackRecord.screen.order );
-						stackRecord.order = screenSet.screens.indexOf(stackRecord.screen);
-						console.log("order after",stackRecord.order);
-					});
-				}
-				console.log("models",models);
-				console.log("stacks",stacks);
-				resolve(stacks);
+	getScreenScreenSet(screenKey) {
+		if(screenKey) {
+			return _.find(this._screenSets,function(screenSet){
+				return !!screenSet.screens[screenKey];
 			});
-		});
+		}
 	}
+
+	removeScreen(screenKey) {
+		var screenSet = this.getScreenScreenSet(screenKey);
+		delete this._screenSets[screenSet].screens[screenKey];
+	}
+
+
+	reduceScreenWidth (screen, width){
+		if (width === null) {
+			screen.forceWidth = null;
+		} else if (!screen.forceWidth) {
+			screen.forceWidth = width;
+		} else {
+			screen.forceWidth = Math.min(screen.forceWidth, width);
+		}
+	}
+
+	setScreenPosition(screenKey, positionClass, options) {
+
+		var thisStore = this;
+		// find screen & get relevant screenSet
+		var screenSet = this.getScreenScreenSet(screenKey);
+
+		if(screenSet) {
+			options = options || {};
+			//var page = this;
+			// clone state screen array
+
+			// set basic objects:
+			// - existing structures:
+			var screenSetKey = _.findKey(this._screenSets,function(item){
+				return item == screenSet;
+			});
+			var screen = screenSet.screens[screenKey];
+			// - new structures - to be saved
+			var newScreenSets = utils.deepClone(this._screenSets);
+			var newScreenSet = newScreenSets[screenSetKey];
+			var newModels = this.generateModels(newScreenSets);
+			var newHistoryStacks = this.generateHistoryStacks(newScreenSets);
+			//var newScreens = _.clone(this._models[screenSetKey].screens);
+			var newScreens = _.findWhere(newModels,{key: screenSetKey}).screens;
+			var newScreen = _.findWhere(newScreens,{key: screenKey});
+			//var screenSetKey = screenSetKey;
+			//var newScreenSets = utils.deepClone(page.state.screenSets);
+
+			var historyStack = newHistoryStacks[screenSetKey];
+			//this._historyStacks[screenSetKey] = this._historyStacks[screenSetKey] || [];
+
+
+			//////////////// log
+			//console.log("");
+			//console.log("###sSP  ["+screenKey+" » "+positionClass+"]  options:", options);
+			////console.log("this class: "+this.constructor.name);
+			//var log = " /Stack: ";
+			//this._historyStacks[screenSetKey].map(function(screen, i){
+			//	log += " [" + i + "]" + screen.key + " " + screen.position;
+			//	//if(!screen.allowRetract) log += "/xR";
+			//	if(screen.userDidThat) log += "/U";
+			//	log += "{"+screen.order+"}";
+			//});
+			//console.log(log);
+			//log = "/ STATE: ";
+			//newScreens.map(function(screen){
+			//	log += screen.key + " " + screen.position + "(" + (screen.disabled ? "DIS":"en") + ") | ";
+			//});
+			//console.log(log);
+			//////////////// log
+
+
+
+			//var index = -1;
+			var index = _.indexOf(newScreens,newScreen);
+			// get index for actual screen
+			//newScreens.map(function (obj, i) {
+			//	if (obj.key == screenKey) {
+			//		index = i;
+			//	}
+			//});
+
+			/////////// set new position class (open, retracted, closed) ///////////
+			newScreen.position = positionClass;
+
+			//resetScreenWidth(screenKey, newScreens);
+			newScreen.forceWidth = null;
+
+			// handle props.disabled (content disabling)
+			switch (positionClass) {
+				case "closed":
+				case "retracted":
+					newScreen.disabled = true;
+					break;
+				case "open":
+					newScreen.disabled = false;
+			}
+
+			if(positionClass=="closed") {
+				// when closing, delete screen from state after a while
+				setTimeout(function () {
+					this.removeScreen(screenKey);
+					//if(index != -1){
+					//	newScreens.splice(index, 1);
+					//}
+					//page.setState({
+					//	screens: newScreens
+					//});
+				}, 1000);
+			}
+
+
+			// moving screen to top of history - todo should be own function
+			////// log user operation to this._historyStacks
+			// remove previous records for the same screen
+			//var allowRetract = (newScreens[0].key != screenKey); // Zatim nepouzivane, mozna to nebude potreba.
+			historyStack.map(function(record, i){
+				if(record.screen.key == screenKey){
+					//allowRetract = record.allowRetract;
+					historyStack.splice(i, 1);
+				}
+			});
+			// add record for this operation
+			if(positionClass == "open" || positionClass == "retracted"){
+				historyStack.unshift({
+					screen: newScreen,
+					//key: screenKey,
+					//position: positionClass,
+					//allowRetract: allowRetract
+					userDidThat: true
+				});
+			}
+
+			// reindex this._historyStacks orders
+			// should not be needed, we do not delete any order information anymore
+			//this._historyStacks[screenSetKey].map(function(record){
+			//	newScreens.map(function(stateRecord, stateIndex){
+			//		if(stateRecord.key == record.key) record.order = stateIndex;
+			//	});
+			//});
+
+
+
+			var menuWidth = 3.75;
+			var retractedWidth = 5;
+			var constPlus = 1;
+			var normalWidth = 50;
+			var remSize = 16;
+			var windowWidth = window.innerWidth / remSize;
+			var screenCount = historyStack.length;
+			var availableWidth = windowWidth - menuWidth - (screenCount * retractedWidth);
+			//console.log("        =init innerWidth:" + window.innerWidth / remSize + " availableWidth:"+availableWidth);
+
+			var retractAllFurther = false;
+			var retractAllLeftFrom = 0;
+			var current = true; // first record in the this._historyStacks is the screen which has been opened or retracted by user
+			var foundOpen = false;
+			historyStack.map(function (record) {
+
+				//var screenState = $.grep(newScreens, function (e) {
+				//	if (typeof e == "undefined") return false;
+				//	return e.key == record.key;
+				//})[0];
+
+				var screenSize = newScreen.size || normalWidth;
+				var realScreenSize = screenSize + constPlus - retractedWidth;
+				//console.log("        =record "+record.key+"-"+record.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
+				switch (positionClass) {
+					case "open":
+						if (record.screen.position == "open") {
+
+							if(retractAllFurther || record.screen.order < retractAllLeftFrom) {
+								//retractScreen(record.key, newScreens);
+								record.screen.forceWidth = null;
+								record.screen.position = "retracted";
+								record.userDidThat = false;
+
+								// fits partly or not at all
+							}else if ((availableWidth - realScreenSize) < 0) {
+
+								if(current){
+									//maximiseScreen(record.key, newScreens);
+									record.screen.forceWidth = null;
+									record.screen.position = "open maximised";
+									//page.setState({hasMaximised: true});
+									newScreenSet.hasMaximised = true;
+								}else{
+
+									//disableScreen(record.key, newScreens);
+									record.screen.disabled = true;
+
+									// doesn't fit at all
+									if (availableWidth < 0) {
+										//retractScreen(record.key, newScreens);
+										record.screen.forceWidth = null;
+										record.screen.position = "retracted";
+										record.userDidThat = false;
+									}else{
+										console.log("1");
+										thisStore.reduceScreenWidth(record.screen, availableWidth + retractedWidth);
+									}
+
+								}
+
+							}
+
+							//if (typeof size == "undefined") retractAllFurther = true;
+							if(newScreen.contentAlign == "fill") retractAllFurther = true;
+							if(typeof newScreen.size == "undefined") retractAllLeftFrom = Math.max(retractAllLeftFrom, record.order);
+
+						} else if (record.position == "retracted") {
+							// asi nic?
+						}
+						break;
+					case "closed":
+						current = false; // Beacause when screen has been closed, it's no more in the this._historyStacks
+					case "retracted":
+						//page.setState({hasMaximised: false});
+						newScreenSet.hasMaximised = false;
+
+						if (record.position == "open") {
+							foundOpen = true;
+
+							if ((availableWidth - realScreenSize) >= 0) { //  || typeof size == "undefined"
+								// enable
+								//enableScreen(record.key, newScreens);
+								record.screen.disabled = false;
+							}else{
+								// disable
+								console.log("2");
+								thisStore.reduceScreenWidth(record.screen, availableWidth + retractedWidth);
+								//disableScreen(record.key, newScreens);
+								record.screen.disabled = true;
+								retractAllFurther = true;
+							}
+
+						} else if (record.position == "retracted") {
+							if (availableWidth >= 0 && !current && !retractAllFurther &&  !(record.order < retractAllLeftFrom) && !record.userDidThat){
+								// open
+								//openScreen(record.key, newScreens);
+								record.screen.position = "open";
+								record.userDidThat = false;
+								if ((availableWidth - realScreenSize) >= 0) {
+									// enable
+									//enableScreen(record.key, newScreens);
+									record.screen.disabled = false;
+								}else if(!foundOpen){
+									// enable
+									//enableScreen(record.key, newScreens);
+									record.screen.disabled = false;
+									// maximise
+									//maximiseScreen(record.key, newScreens);
+									record.screen.forceWidth = null;
+									record.screen.position = "open maximised";
+									//page.setState({hasMaximised: true});
+									newScreenSet.hasMaximised = true;
+									retractAllFurther = true;
+								}else{
+									// disable
+									//disableScreen(record.key, newScreens);
+									record.screen.disabled = true;
+									console.log("3");
+									thisStore.reduceScreenWidth(record.screen, availableWidth + retractedWidth);
+									retractAllFurther = true;
+								}
+								foundOpen = true;
+							}
+						}
+						if (!current && typeof newScreen.size == "undefined") retractAllLeftFrom = record.order; // todo: nema se to testovat jenom pro otevrene?
+						if (!current && newScreen.contentAlign == "fill") retractAllFurther = true;
+				}
+
+				if (current) record.userDidThat = true;
+				if (record.position == "open") availableWidth -= realScreenSize;
+				//console.log("         ======= availableWidth:"+availableWidth);
+				current = false;
+			});
+
+
+			// reorder this._historyStacks to be open-first when init run
+			//if(options.init){
+			//	//console.log("| / this._historyStacks[me.state.key][0].key:", this._historyStacks[me.state.key][0].key);
+			//	historyStack.sort(function(a, b){
+			//		if((a.position == "closed" || a.position == "retracted") && b.position == "open"){
+			//			return 1;
+			//		}
+			//		return 0;
+			//	});
+			//	//console.log("| \\ this._historyStacks[me.state.key][0].key:", this._historyStacks[me.state.key][0].key);
+			//}
+
+
+			//////////////// log
+			//log = "\\ Stack: ";
+			//this._historyStacks[screenSetKey].map(function(screen, i){
+			//	log += " [" + i + "]" + screen.key + " " + screen.position;
+			//	//if(!screen.allowRetract) log += "/xR";
+			//	if(screen.userDidThat) log += "/U";
+			//	log += "{"+screen.order+"}";
+			//});
+			//console.log(log);
+			//log = " \\STATE: ";
+			//newScreens.map(function(screen){
+			//	log += screen.key + " " + screen.position + "(" + (screen.disabled ? "DIS":"enb") + ") | ";
+			//});
+			//console.log(log);
+			//console.log("  ----------------------------");
+			//////////////// log
+
+
+
+			// apply changes of state
+			this._screenSets = newScreenSets;
+			this._historyStacks = newHistoryStacks;
+			console.log("newHistoryStacks",newHistoryStacks);
+			this._models = Promise.resolve(newModels);
+			console.log("newModels",newModels);
+			//newScreenSets[screenSetKey].screens = utils.deepClone(newScreens);
+			//page.setState({
+			//	screens: newScreens,
+			//	screenSets: newScreenSets
+			//});
+			this.emitChange();
+		}
+	}
+
 
 }
 
@@ -218,16 +560,23 @@ let storeInstance = new ScreenStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 
-	//switch(action.type) {
-	//	case ActionTypes.SCREEN_CREATE_OPEN:
-	//
-	//		break;
-	//	case ActionTypes.SCREEN_CLOSE:
-	//
-	//		break;
-	//	default:
-	//		return;
-	//}
+	switch(action.type) {
+		case ActionTypes.SCREEN_CREATE_OPEN:
+
+			break;
+		case ActionTypes.SCREEN_OPEN:
+			console.log("Opening screen",action.screenKey);
+			storeInstance.setScreenPosition(action.screenKey,"open");
+			break;
+		case ActionTypes.SCREEN_RETRACT:
+			console.log("Retracting screen",action.screenKey);
+			break;
+		case ActionTypes.SCREEN_CLOSE:
+			console.log("Closing screen",action.screenKey);
+			break;
+		default:
+			return;
+	}
 
 	//storeInstance.emitChange();
 
