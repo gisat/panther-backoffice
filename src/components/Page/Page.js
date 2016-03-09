@@ -36,15 +36,17 @@ class Page extends Component {
 
 	static childContextTypes = {
 		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired
+		//openScreen: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string
 	};
 
 	getChildContext(){
 		return {
 			onSetScreenData: this.context.onSetScreenData.bind(this),
-			openScreen: this.openScreen.bind(this),
-			setStateDeep: this.context.setStateDeep
+			//openScreen: this.openScreen.bind(this),
+			setStateDeep: this.context.setStateDeep,
+			screenSetKey: this.props.screenSet
 		};
 	}
 
@@ -175,48 +177,48 @@ class Page extends Component {
 		// todo is this ever used?
 	}
 
-	openScreen(key,component,parentUrl,options,data,openerCallback) {
-		var screenSets = utils.deepClone(this.state.screenSets);
-		var screenSet = {
-			key: this.state.key,
-			title: this.state.title,
-			screens: utils.deepClone(this.state.screens)
-		};
-		var existingScreen = _.findWhere(screenSet.screens, {key: key});
-		if(existingScreen) {
-			this.onSetScreenData(existingScreen.key, data)();
-			this.refs[key].onDynamicOpen();
-		} else {
-			var screen = {
-				key: key,
-				position: "closed",
-				component: component,
-				parentUrl: parentUrl,
-				data: data
-			};
-			if(options.type) {
-				screen.type = options.type;
-			}
-			if(options.size) {
-				screen.size = options.size;
-			}
-			screenSet.screens.push(screen);
-			screenSets[this.state.key].screens.push(screen);
-			screenStack[screenSet.key].unshift({
-				key: screen.key,
-				position: screen.position,
-				userDidThat: true
-			});
-			this.setState({
-					screens: screenSet.screens,
-					screenSets: screenSets
-				},
-				function(){
-					this.refs[key].onDynamicOpen();
-				});
-		}
-
-	}
+	//openScreen(key,component,parentUrl,options,data,openerCallback) {
+	//	var screenSets = utils.deepClone(this.state.screenSets);
+	//	var screenSet = {
+	//		key: this.state.key,
+	//		title: this.state.title,
+	//		screens: utils.deepClone(this.state.screens)
+	//	};
+	//	var existingScreen = _.findWhere(screenSet.screens, {key: key});
+	//	if(existingScreen) {
+	//		this.onSetScreenData(existingScreen.key, data)();
+	//		this.refs[key].onDynamicOpen();
+	//	} else {
+	//		var screen = {
+	//			key: key,
+	//			position: "closed",
+	//			component: component,
+	//			parentUrl: parentUrl,
+	//			data: data
+	//		};
+	//		if(options.type) {
+	//			screen.type = options.type;
+	//		}
+	//		if(options.size) {
+	//			screen.size = options.size;
+	//		}
+	//		screenSet.screens.push(screen);
+	//		screenSets[this.state.key].screens.push(screen);
+	//		screenStack[screenSet.key].unshift({
+	//			key: screen.key,
+	//			position: screen.position,
+	//			userDidThat: true
+	//		});
+	//		this.setState({
+	//				screens: screenSet.screens,
+	//				screenSets: screenSets
+	//			},
+	//			function(){
+	//				this.refs[key].onDynamicOpen();
+	//			});
+	//	}
+	//
+	//}
 
 	render() {
 		let ret = null;
@@ -234,10 +236,10 @@ class Page extends Component {
 						ref={screen.key}
 						key={screen.key}
 						screenState={screen}
-						onClose={this.context.setScreenPosition.bind(this, screen.key, "closed")}
-						onRetract={this.context.setScreenPosition.bind(this, screen.key, "retracted")}
-						onOpen={this.context.setScreenPosition.bind(this, screen.key, "open")}
-						onSetScreenData={this.context.onSetScreenData.bind(this)}
+						//onClose={this.context.setScreenPosition.bind(this, screen.key, "closed")}
+						//onRetract={this.context.setScreenPosition.bind(this, screen.key, "retracted")}
+						//onOpen={this.context.setScreenPosition.bind(this, screen.key, "open")}
+						//onSetScreenData={this.context.onSetScreenData.bind(this)}
 						refs={this.refs}
 					/>
 				);

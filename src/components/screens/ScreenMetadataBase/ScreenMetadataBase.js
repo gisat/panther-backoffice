@@ -59,8 +59,9 @@ class ScreenMetadataBase extends Component{
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired
+		//openScreen: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
 	};
 
 	constructor(props) {
@@ -244,7 +245,17 @@ class ScreenMetadataBase extends Component{
 	onObjectListItemClick(itemType, item, event) {
 		this.context.onInteraction().call();
 		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
-		this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
+		//this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
+		let options = {
+			component: ScreenMetadataObject,
+			parentUrl: this.props.parentUrl,
+			size: 40,
+			data: {
+				objectType: itemType,
+				objectKey:item.key
+			}
+		};
+		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 
 		//todo highlighting screen opener.
 		//this.changeActiveObjectListItem(itemType,item.key);

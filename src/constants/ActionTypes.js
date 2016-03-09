@@ -26,6 +26,7 @@ export default keyMirror({
 	OBJECT_RELATION_UPDATE: null,
 	OBJECT_RELATION_DELETE: null,
 	OBJECT_RELATION_HANDLE: null,
+	SCREEN_CREATE_OPEN: null,
 	SCREEN_OPEN: null,
 	SCREEN_RETRACT: null,
 	SCREEN_CLOSE: null,

@@ -58,12 +58,12 @@ class ScreenContainer extends Component{
 					//console.log("/ screenStack[page][0]: ", screenStack[page][0]);
 					console.log("SCREEN-INTERACTION " + page + "/" + this.props.screenState.key);
 					//console.log("ONSCREENINTERACTIVITY\nfuncToRunAfter:", funcToRunAfter, "\nthis:", this);
-					screenStack[page].map(function (screen, index) {
-						if (screen.key == this.props.screenState.key) {
-							removed = screenStack[page].splice(index, 1);
-						}
-					}.bind(this)); // binds to ScreenContainer
-					screenStack[page].unshift(removed[0]);
+					//screenStack[page].map(function (screen, index) {
+					//	if (screen.key == this.props.screenState.key) {
+					//		removed = screenStack[page].splice(index, 1);
+					//	}
+					//}.bind(this)); // binds to ScreenContainer
+					//screenStack[page].unshift(removed[0]);
 					//console.log("\\ screenStack[page][0]: ", screenStack[page][0]);
 					if(funcToRunAfter) funcToRunAfter();
 				}.bind(this); // binds to ScreenContainer

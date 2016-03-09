@@ -220,6 +220,18 @@ class ScreenStore extends Store {
 		return null;
 	}
 
+	getScreen(screenKey) {
+		if (screenKey) {
+			let screen = null;
+			_.each(this._screenSets, function(screenSet){
+				if (screenSet.screens.hasOwnProperty(screenKey)) {
+					screen = screenSet.screens[screenKey];
+				}
+			}, this);
+			return screen;
+		}
+	}
+
 	getScreenScreenSet(screenKey) {
 		if(screenKey) {
 			return _.find(this._screenSets,function(screenSet){
@@ -233,6 +245,55 @@ class ScreenStore extends Store {
 			return _.findKey(this._screenSets,function(screenSet){
 				return !!screenSet.screens[screenKey];
 			});
+		}
+	}
+
+	createOpenScreen(screenKey, screenSetKey, options, responseData, responseHash) {
+		var thisStore = this;
+		let screen = this.getScreen(screenKey);
+		if (screen && screen != null) {
+
+			// screen already exists -> send data, throw the rest away
+			// (it should be the same, and if not, we don't want to change it)
+			screen.data = screen.data || {};
+			_.assign(screen.data,options.data);
+			this.setScreenPosition(screenKey,"open");
+			// todo send focus (actions? focuslistener in screencontainer?)
+			//this.emitChange();
+			//this.emit(EventTypes.SCREEN_OPENED,screenKey,responseData,responseHash);
+			//this.emit(EventTypes.SCREEN_FOCUS,screenKey);
+
+		} else {
+
+			// screen does not exist -> create it
+			let order = -1;
+			_.mapObject(this._screenSets[screenSetKey].screens,function(screenObject, screenKey){
+				order = Math.max(order,screenObject.order);
+			});
+			order++;
+			console.log("opening screen with order", order);
+			screen = {
+				key: screenKey,
+				component: options.component || React.createElement('div'),
+				parentUrl: options.parentUrl || "",
+				position: "closed",
+				order: order,
+				data: options.data
+			};
+			this._screenSets[screenSetKey].screens[screenKey] = screen;
+			this._models = Promise.resolve(this.generateModels());
+			this._historyStacks[screenSetKey].unshift({
+				screen: screen,
+				userDidThat: true
+			});
+			this.emitChange();
+			setTimeout(function(){
+				//ActionCreator
+				thisStore.setScreenPosition(screenKey,"open");
+			},100);
+			//this.emit(EventTypes.SCREEN_OPENED,responseData,responseHash);
+			//this.emit(EventTypes.SCREEN_FOCUS,screenKey);
+			// todo send focus
 		}
 	}
 
@@ -593,7 +654,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 
 	switch(action.type) {
 		case ActionTypes.SCREEN_CREATE_OPEN:
-
+			storeInstance.createOpenScreen(action.screenKey,action.screenSetKey,action.options,action.responseData,action.responseHash);
 			break;
 		case ActionTypes.SCREEN_OPEN:
 			console.log("Opening screen",action.screenKey);

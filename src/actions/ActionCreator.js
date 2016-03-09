@@ -103,6 +103,18 @@ export default {
 	},
 
 
+	createOpenScreen(screenKey, screenSetKey, options, responseData, responseHash) {
+		var action = {
+			type: ActionTypes.SCREEN_CREATE_OPEN,
+			screenKey: screenKey,
+			screenSetKey: screenSetKey,
+			options: options,
+			resposeData: responseData,
+			responseHash: responseHash
+		};
+		AppDispatcher.dispatch(action);
+	},
+
 	openScreen(screenKey, data) {
 		data = data || {};
 		var action = {
