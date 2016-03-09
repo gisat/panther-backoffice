@@ -139,6 +139,14 @@ export default {
 			screenKey: screenKey
 		};
 		AppDispatcher.dispatch(action);
+	},
+
+	logScreenActivity(screenKey) {
+		var action = {
+			type: ActionTypes.SCREEN_LOG_ACTIVITY,
+			screenKey: screenKey
+		};
+		AppDispatcher.dispatch(action);
 	}
 
 };

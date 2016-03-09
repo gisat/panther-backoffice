@@ -30,6 +30,7 @@ export default keyMirror({
 	SCREEN_OPEN: null,
 	SCREEN_RETRACT: null,
 	SCREEN_CLOSE: null,
+	SCREEN_LOG_ACTIVITY: null,
 	APP_INITIALIZED: null,
 	LAYER_ADD: null
 });

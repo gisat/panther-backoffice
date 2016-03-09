@@ -80,6 +80,7 @@ class ScreenContainer extends Component{
 		this.setState({
 			isFocused: true
 		});
+		ActionCreator.logScreenActivity(this.props.screenState.key);
 	}
 
 	onPanelBlur() {

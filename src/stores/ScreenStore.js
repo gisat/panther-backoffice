@@ -326,6 +326,27 @@ class ScreenStore extends Store {
 		});
 	}
 
+	logScreenActivity(screenKey) {
+		let screenSetKey = this.getScreenScreenSetKey(screenKey);
+		if (screenSetKey) {
+			let historyStack = this._historyStacks[screenSetKey];
+			let screen = null;
+			historyStack.map(function(record, i){
+				if(record.screen.key == screenKey){
+					screen = record.screen;
+					historyStack.splice(i, 1);
+				}
+			});
+			historyStack.unshift({
+				screen: screen,
+				userDidThat: true
+			});
+
+		}
+	}
+
+
+
 
 	reduceScreenWidth (screen, width){
 		if (width === null) {
@@ -673,6 +694,9 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 		case ActionTypes.SCREEN_CLOSE:
 			console.log("Closing screen",action.screenKey);
 			storeInstance.setScreenPosition(action.screenKey,"closed");
+			break;
+		case ActionTypes.SCREEN_LOG_ACTIVITY:
+			storeInstance.logScreenActivity(action.screenKey);
 			break;
 		default:
 			return;
