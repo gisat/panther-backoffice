@@ -59,8 +59,8 @@ class PlaceRelations extends Component {
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired
+		setStateDeep: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
 	};
 
 	constructor(props) {
@@ -260,7 +260,16 @@ class PlaceRelations extends Component {
 		if(this.state.place) {
 			let itemType = ObjectTypes.PLACE;
 			var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
-			this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:this.state.place.key});
+			let options = {
+				component: ScreenMetadataObject,
+				parentUrl: this.props.parentUrl,
+				size: 40,
+				data: {
+					objectType: itemType,
+					objectKey: this.state.place.key
+				}
+			};
+			ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 		}
 	}
 
@@ -269,7 +278,16 @@ class PlaceRelations extends Component {
 		if(this.state.place) {
 			let itemType = ObjectTypes.SCOPE;
 			var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
-			this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:this.state.place.scope.key});
+			let options = {
+				component: ScreenMetadataObject,
+				parentUrl: this.props.parentUrl,
+				size: 40,
+				data: {
+					objectType: itemType,
+					objectKey: this.state.place.scope.key
+				}
+			};
+			ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 		}
 	}
 
@@ -293,7 +311,13 @@ class PlaceRelations extends Component {
 				break;
 			// todo the other cases
 		}
-		this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},data);
+		let options = {
+			component: screenComponent,
+			parentUrl: this.props.parentUrl,
+			size: 40,
+			data: data
+		};
+		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
 

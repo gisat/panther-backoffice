@@ -28,8 +28,8 @@ class ScreenPlacesBase extends Component{
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired
+		setStateDeep: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
 	};
 
 	constructor(props) {
@@ -58,11 +58,17 @@ class ScreenPlacesBase extends Component{
 	_onStoreResponse(result,responseData,stateHash) {
 		if (stateHash === this.getStateHash()) {
 			if (result) {
-				var screenComponent,screenName,screenObjectType;
-				screenComponent = ScreenMetadataObject;
-				screenObjectType =  ObjectTypes.PLACE;
-				screenName = "ScreenPlacesBase-ScreenMetadata" + screenObjectType;
-				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
+				var screenName = "ScreenPlacesBase-ScreenMetadata" + ObjectTypes.PLACE;
+				let options = {
+					component: ScreenMetadataObject,
+					parentUrl: this.props.parentUrl,
+					size: 40,
+					data: {
+						objectType: ObjectTypes.PLACE,
+						objectKey: result[0].key
+					}
+				};
+				ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 				this.setState({
 					selectorValue: result[0].key
 				});

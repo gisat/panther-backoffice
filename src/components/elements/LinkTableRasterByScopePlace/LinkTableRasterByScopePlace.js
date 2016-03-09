@@ -40,7 +40,6 @@ class LinkTableRasterByScopePlace extends Component {
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired,
 		setStateDeep: PropTypes.func.isRequired,
 		onSetTitle: PropTypes.func.isRequired
 	};

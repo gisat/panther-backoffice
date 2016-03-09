@@ -96,8 +96,8 @@ class ConfigDataLayer extends Component {
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired
+		setStateDeep: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
 	};
 
 	constructor(props) {
@@ -201,7 +201,16 @@ class ConfigDataLayer extends Component {
 				}
 				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
 				if(screenObjectType) {
-					this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
+					let options = {
+						component: ScreenMetadataObject,
+						parentUrl: this.props.parentUrl,
+						size: 40,
+						data: {
+							objectType: screenObjectType,
+							objectKey: result[0].key
+						}
+					};
+					ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 				}
 			}
 		}
@@ -702,7 +711,16 @@ class ConfigDataLayer extends Component {
 		console.log("yay! " + value.key);
 		this.context.onInteraction().call();
 		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
-		this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:value.key});
+		let options = {
+			component: ScreenMetadataObject,
+			parentUrl: this.props.parentUrl,
+			size: 40,
+			data: {
+				objectType: itemType,
+				objectKey: value.key
+			}
+		};
+		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
 	onChangeColumnTableSelect (stateKey, layerType, column, value, values) {

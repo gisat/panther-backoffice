@@ -127,12 +127,17 @@ class ScreenMetadataBase extends Component{
 			//console.log("responseData",responseData);
 			//console.log("stateHash",stateHash);
 			if (result) {
-				var screenComponent,screenName,screenObjectType;
-				screenComponent = ScreenMetadataObject;
-				//screenComponent = <ScreenMetadataObject/>;
-				screenObjectType = responseData.objectType;
-				screenName = "ScreenDataLayersBase-ScreenMetadata" + screenObjectType;
-				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
+				var screenName = "ScreenDataLayersBase-ScreenMetadata" + responseData.objectType;
+				let options = {
+					component: ScreenMetadataObject,
+					parentUrl: this.props.parentUrl,
+					size: 40,
+					data: {
+						objectType: responseData.objectType,
+						objectKey: result[0].key
+					}
+				};
+				ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 			}
 		}
 	}

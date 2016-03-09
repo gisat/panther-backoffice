@@ -40,8 +40,7 @@ class ScreenAnalysisRuns extends Component {
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired
+		onSetScreenData: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
