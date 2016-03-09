@@ -11,8 +11,6 @@ import ScreenStore from '../../stores/ScreenStore';
 
 import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
-const screenStack = require('../../stores/screenStack');
-
 var initialState = {
 	isFocused: false
 };
@@ -52,20 +50,12 @@ class ScreenContainer extends Component{
 			 * @param funcToRunAfter (function) another function to be called after
 			 * @returns function
 			 */
-			onInteraction: function(funcToRunAfter){
+			onInteraction: function(funcToRunAfter){ // todo remove
 				return function() {
 					var page = this.context.activePageKey();
 					var removed = [];
-					//console.log("/ screenStack[page][0]: ", screenStack[page][0]);
 					console.log("SCREEN-INTERACTION " + page + "/" + this.props.screenState.key);
 					//console.log("ONSCREENINTERACTIVITY\nfuncToRunAfter:", funcToRunAfter, "\nthis:", this);
-					//screenStack[page].map(function (screen, index) {
-					//	if (screen.key == this.props.screenState.key) {
-					//		removed = screenStack[page].splice(index, 1);
-					//	}
-					//}.bind(this)); // binds to ScreenContainer
-					//screenStack[page].unshift(removed[0]);
-					//console.log("\\ screenStack[page][0]: ", screenStack[page][0]);
 					if(funcToRunAfter) funcToRunAfter();
 				}.bind(this); // binds to ScreenContainer
 			}.bind(this) // binds to ScreenContainer
@@ -79,30 +69,11 @@ class ScreenContainer extends Component{
 	}
 
 	componentDidMount() {
-		//console.log("CDM");
-		//if(this.props.screenState.isDynamic){
-		//	var thisComponent = this;
-		//	setTimeout(function () {
-		//		thisComponent.props.onOpen();
-		//	}, 100);
-		//}
 		ScreenStore.addFocusListener(this._focusScreen.bind(this));
 	}
 
 	componentWillUnmount() {
 		ScreenStore.removeFocusListener(this._focusScreen.bind(this));
-	}
-
-	onDynamicOpen() {
-		var thisComponent = this;
-		setTimeout(function () {
-			thisComponent.props.onOpen();
-			thisComponent._domSelf.focus();
-			// battle selects stealing focus:
-			setTimeout(function () {
-				thisComponent._domSelf.focus();
-			}, 800);
-		}, 100);
 	}
 
 	onPanelFocus() {
