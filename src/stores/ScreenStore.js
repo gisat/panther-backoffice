@@ -115,7 +115,7 @@ class ScreenStore extends Store {
 	}
 
 	/**
-	 * generate models from _screenSets for use with store get methods
+	 * generate models from _screenSets (or updated/cloned version) for use with store get methods
 	 * @returns {Array}
 	 */
 	generateModels(screenSets) {
@@ -134,6 +134,11 @@ class ScreenStore extends Store {
 		return models;
 	}
 
+	/**
+	 * generate history from _screenSets (or updated/cloned version)
+	 * @param screenSets
+	 * @returns {{}}
+	 */
 	generateHistoryStacks(screenSets) {
 		screenSets = screenSets || this._screenSets;
 		var thisStore = this;
@@ -159,6 +164,10 @@ class ScreenStore extends Store {
 		return stacks;
 	}
 
+	/**
+	 * recompute physical screen order (in _models = in interface)
+	 * @param screenSetKey
+	 */
 	updateOrder(screenSetKey) {
 		var modelPromise = this.getById(screenSetKey);
 		modelPromise.then(function(model){
@@ -177,6 +186,8 @@ class ScreenStore extends Store {
 	removeFocusListener(callback) {
 		this.removeListener(EventTypes.SCREEN_FOCUS, callback);
 	}
+
+	// methods not used with this store
 
 	reload() {
 		return null;
@@ -205,28 +216,19 @@ class ScreenStore extends Store {
 		return null;
 	}
 
-	//createObjectAndRespond(model,responseData,responseStateHash) {
-	//	//console.log("PeriodStore createObject responseData",responseData);
-	//	// todo ? Model.resolveForServer ?
-	//	//var object = {
-	//	//	name: objectData.name,
-	//	//	active: false
-	//	//};
-	//	var thisStore = this;
-	//	var resultPromise = this.create(model);
-	//
-	//	resultPromise.then(function(result){
-	//		thisStore.reload().then(function(){
-	//			thisStore.emitChange();
-	//			thisStore.emit(EventTypes.OBJECT_CREATED,result,responseData,responseStateHash);
-	//		});
-	//	});
-	//}
+	createObjectAndRespond(model,responseData,responseStateHash) {
+		return null;
+	}
 
 	request(method, object){
 		return null;
 	}
 
+	/**
+	 * get screen object (REFERENCE!) from screen key
+	 * @param screenKey
+	 * @returns {*}
+	 */
 	getScreen(screenKey) {
 		if (screenKey) {
 			let screen = null;
@@ -239,6 +241,10 @@ class ScreenStore extends Store {
 		}
 	}
 
+	/**
+	 * get screenSet (reference?) from screen key
+	 * @param screenKey
+	 */
 	getScreenScreenSet(screenKey) {
 		if(screenKey) {
 			return _.find(this._screenSets,function(screenSet){
@@ -247,6 +253,10 @@ class ScreenStore extends Store {
 		}
 	}
 
+	/**
+	 * get screenSet key from screen key
+	 * @param screenKey
+	 */
 	getScreenScreenSetKey(screenKey) {
 		if(screenKey) {
 			return _.findKey(this._screenSets,function(screenSet){
@@ -255,6 +265,14 @@ class ScreenStore extends Store {
 		}
 	}
 
+	/**
+	 * open screen (create if doesn't exist), send data
+	 * @param screenKey
+	 * @param screenSetKey
+	 * @param options - object with screen properties. Only used when creating new
+	 * @param responseData - object sent with event on completion
+	 * @param responseHash - hash sent with event on completion
+	 */
 	createOpenScreen(screenKey, screenSetKey, options, responseData, responseHash) {
 		var thisStore = this;
 		let screen = this.getScreen(screenKey);
@@ -300,6 +318,10 @@ class ScreenStore extends Store {
 		}
 	}
 
+	/**
+	 * remove screen from _screenSets, _models & _historyStacks
+	 * @param screenKey
+	 */
 	removeScreen(screenKey) {
 		var thisStore = this;
 		this._models.then(function(models){
@@ -325,6 +347,10 @@ class ScreenStore extends Store {
 		});
 	}
 
+	/**
+	 * move screen to top of history stack on interaction in it
+	 * @param screenKey
+	 */
 	logScreenActivity(screenKey) {
 		let screenSetKey = this.getScreenScreenSetKey(screenKey);
 		if (screenSetKey) {
@@ -357,6 +383,12 @@ class ScreenStore extends Store {
 		}
 	}
 
+	/**
+	 * update screen position (state of openness), determine how other screens will be affected
+	 * @param screenKey
+	 * @param positionClass - "open" / "retracted" / "closed"
+	 * @param options - todo remove?
+	 */
 	setScreenPosition(screenKey, positionClass, options) {
 
 		var thisStore = this;
@@ -697,8 +729,6 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 		default:
 			return;
 	}
-
-	//storeInstance.emitChange();
 
 });
 
