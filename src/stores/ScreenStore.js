@@ -171,6 +171,15 @@ class ScreenStore extends Store {
 
 	}
 
+	addFocusListener(callback) {
+		this.on(EventTypes.SCREEN_FOCUS, callback);
+		//this.on(EventTypes.OBJECT_CREATE_FAILED, callback); //etc
+	}
+
+	removeFocusListener(callback) {
+		this.removeListener(EventTypes.SCREEN_FOCUS, callback);
+	}
+
 	reload() {
 		return null;
 	}
@@ -258,10 +267,8 @@ class ScreenStore extends Store {
 			screen.data = screen.data || {};
 			_.assign(screen.data,options.data);
 			this.setScreenPosition(screenKey,"open");
-			// todo send focus (actions? focuslistener in screencontainer?)
-			//this.emitChange();
 			//this.emit(EventTypes.SCREEN_OPENED,screenKey,responseData,responseHash);
-			//this.emit(EventTypes.SCREEN_FOCUS,screenKey);
+			this.emit(EventTypes.SCREEN_FOCUS,screenKey);
 
 		} else {
 
@@ -286,14 +293,13 @@ class ScreenStore extends Store {
 				screen: screen,
 				userDidThat: true
 			});
-			this.emitChange();
+			this.emitChange(); // add closed screen
 			setTimeout(function(){
 				//ActionCreator
 				thisStore.setScreenPosition(screenKey,"open");
+				//this.emit(EventTypes.SCREEN_OPENED,responseData,responseHash);
+				thisStore.emit(EventTypes.SCREEN_FOCUS,screenKey);
 			},100);
-			//this.emit(EventTypes.SCREEN_OPENED,responseData,responseHash);
-			//this.emit(EventTypes.SCREEN_FOCUS,screenKey);
-			// todo send focus
 		}
 	}
 

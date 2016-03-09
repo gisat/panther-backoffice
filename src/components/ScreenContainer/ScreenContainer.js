@@ -7,6 +7,7 @@ import _ from 'underscore';
 import utils from '../../utils/utils';
 
 import ActionCreator from '../../actions/ActionCreator';
+import ScreenStore from '../../stores/ScreenStore';
 
 import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
@@ -72,6 +73,12 @@ class ScreenContainer extends Component{
 		};
 	}
 
+	_focusScreen(screenKey) {
+		if(screenKey==this.props.screenState.key) {
+			this._domSelf.focus();
+		}
+	}
+
 	componentDidMount() {
 		//console.log("CDM");
 		//if(this.props.screenState.isDynamic){
@@ -80,6 +87,11 @@ class ScreenContainer extends Component{
 		//		thisComponent.props.onOpen();
 		//	}, 100);
 		//}
+		ScreenStore.addFocusListener(this._focusScreen.bind(this));
+	}
+
+	componentWillUnmount() {
+		ScreenStore.removeFocusListener(this._focusScreen.bind(this));
 	}
 
 	onDynamicOpen() {
