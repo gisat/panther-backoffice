@@ -29,22 +29,17 @@ class Page extends Component {
 		onSetTitle: PropTypes.func.isRequired,
 		activePageKey: PropTypes.func.isRequired,
 		setScreenPosition: PropTypes.func.isRequired,
-		onSetScreenData: PropTypes.func.isRequired,
 		setStateDeep: PropTypes.func.isRequired,
 		setStateFromStores: PropTypes.func.isRequired
 	};
 
 	static childContextTypes = {
-		onSetScreenData: PropTypes.func.isRequired,
-		//openScreen: PropTypes.func.isRequired,
 		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string
 	};
 
 	getChildContext(){
 		return {
-			onSetScreenData: this.context.onSetScreenData.bind(this),
-			//openScreen: this.openScreen.bind(this),
 			setStateDeep: this.context.setStateDeep,
 			screenSetKey: this.props.screenSet
 		};
@@ -137,10 +132,6 @@ class Page extends Component {
 			});
 		}
 
-	}
-
-	onSetScreenData(screenKey, data){
-		return this.context.onSetScreenData.bind(this, screenKey, data)();
 	}
 
 	//buildScreenStack(screenSet) {
@@ -239,7 +230,6 @@ class Page extends Component {
 						//onClose={this.context.setScreenPosition.bind(this, screen.key, "closed")}
 						//onRetract={this.context.setScreenPosition.bind(this, screen.key, "retracted")}
 						//onOpen={this.context.setScreenPosition.bind(this, screen.key, "open")}
-						//onSetScreenData={this.context.onSetScreenData.bind(this)}
 						refs={this.refs}
 					/>
 				);

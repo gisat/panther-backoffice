@@ -44,37 +44,6 @@ const context = {
 		document.getElementsByTagName('head')[0].appendChild(meta);
 	},
 
-	/**
-	 * onSetScreenData generates function for sending state data between screens.
-	 * Use:
-	 * - callback: onClick={this.context.onSetScreenData("analyses2", {id: 42})}
-	 * - directly: this.context.onSetScreenData("analyses2", {id: 42})()
-	 * @param screenKey
-	 * @param data (object)
-	 * @returns function
-	 */
-	onSetScreenData: function(screenKey, data){
-		return function(){
-			var page = this;
-			var index = -1;
-			//console.log("SET-SCREEN-DATA ", screenKey);
-			page.state.screens.map(function (obj, i) {
-				if (obj.key == screenKey) {
-					index = i;
-				}
-			});
-			//console.log("SET-SCREEN-DATA index", index);
-			if (index == -1) return false;
-			var newScreens = utils.deepClone(page.state.screens);
-			for (var key in data) {
-				newScreens[index].data[key] = data[key];
-			}
-			//console.log("newScreens:", newScreens);
-			page.setState({
-				screens: newScreens
-			});
-		}.bind(this)
-	},
 
 	setStateFromStores: function(store2state,keys){
 		//console.log("88888888888888888888888888888888888888");

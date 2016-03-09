@@ -36,8 +36,7 @@ class ConfigMetadataPeriod extends Component{
 
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired,
-		onInteraction: PropTypes.func.isRequired,
-		onSetScreenData: PropTypes.func.isRequired
+		onInteraction: PropTypes.func.isRequired
 	};
 
 	constructor(props) {

@@ -69,7 +69,6 @@ class ScreenContainer extends Component{
 					if(funcToRunAfter) funcToRunAfter();
 				}.bind(this); // binds to ScreenContainer
 			}.bind(this) // binds to ScreenContainer
-			//onSetScreenData: this.props.onSetScreenData
 		};
 	}
 

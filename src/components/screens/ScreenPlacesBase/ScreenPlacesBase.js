@@ -27,7 +27,6 @@ class ScreenPlacesBase extends Component{
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		onSetScreenData: PropTypes.func.isRequired,
 		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
