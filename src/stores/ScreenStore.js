@@ -163,9 +163,7 @@ class ScreenStore extends Store {
 		var modelPromise = this.getById(screenSetKey);
 		modelPromise.then(function(model){
 			_.each(model.screens, function(screen, screenIndex, screens){
-				console.log("updateOrder before",screen.order);
 				screen.order = screenIndex;
-				console.log("updateOrder after",screen.order);
 			});
 		});
 
@@ -320,6 +318,8 @@ class ScreenStore extends Store {
 			model.screens = _.reject(model.screens,function(screen){
 				return screen.key == screenKey;
 			});
+
+			thisStore.updateOrder(screenSetKey);
 
 			thisStore.emitChange();
 
