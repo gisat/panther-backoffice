@@ -276,7 +276,6 @@ class ScreenStore extends Store {
 				order = Math.max(order,screenObject.order);
 			});
 			order++;
-			console.log("opening screen with order", order);
 			screen = {
 				key: screenKey,
 				component: options.component || React.createElement('div'),
@@ -684,15 +683,12 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			storeInstance.createOpenScreen(action.screenKey,action.screenSetKey,action.options,action.responseData,action.responseHash);
 			break;
 		case ActionTypes.SCREEN_OPEN:
-			console.log("Opening screen",action.screenKey);
 			storeInstance.setScreenPosition(action.screenKey,"open");
 			break;
 		case ActionTypes.SCREEN_RETRACT:
-			console.log("Retracting screen",action.screenKey);
 			storeInstance.setScreenPosition(action.screenKey,"retracted");
 			break;
 		case ActionTypes.SCREEN_CLOSE:
-			console.log("Closing screen",action.screenKey);
 			storeInstance.setScreenPosition(action.screenKey,"closed");
 			break;
 		case ActionTypes.SCREEN_LOG_ACTIVITY:
