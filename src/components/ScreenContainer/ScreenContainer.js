@@ -50,11 +50,13 @@ class ScreenContainer extends Component{
 			 * @param funcToRunAfter (function) another function to be called after
 			 * @returns function
 			 */
-			onInteraction: function(funcToRunAfter){ // todo remove
+			// todo remove?
+			// remove if focus events are enough (interactions bubble through)
+			onInteraction: function(funcToRunAfter){
 				return function() {
 					var page = this.context.activePageKey();
 					var removed = [];
-					console.log("SCREEN-INTERACTION " + page + "/" + this.props.screenState.key);
+					//console.log("SCREEN-INTERACTION " + page + "/" + this.props.screenState.key);
 					//console.log("ONSCREENINTERACTIVITY\nfuncToRunAfter:", funcToRunAfter, "\nthis:", this);
 					if(funcToRunAfter) funcToRunAfter();
 				}.bind(this); // binds to ScreenContainer
