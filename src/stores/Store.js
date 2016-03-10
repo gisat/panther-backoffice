@@ -17,6 +17,7 @@ class Store extends EventEmitter {
 		//Promise.resolve(this._models).then(function(models){
 		//	console.log("Store > constructor > _models",models);
 		//});
+		this._maxListeners = 20; // increase listener limit a bit, but todo fix removeListeners
 	}
 
 	/**
