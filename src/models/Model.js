@@ -135,7 +135,7 @@ class Model {
 						value[i] = self.serializeModel(value[i],model[key].model);
 					}
 				} else if (model[key].hasOwnProperty("transformForServer")){
-					value = model[key].transformForServer(value);
+					value = model[key].transformForServer(value, object);
 				}
 				key = model[key].serverName;
 				serializedObject[key] = value;
