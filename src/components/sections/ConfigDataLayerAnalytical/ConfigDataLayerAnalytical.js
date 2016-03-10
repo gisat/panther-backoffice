@@ -41,6 +41,12 @@ class ConfigDataLayerAnalytical extends Component{
 
 	render() {
 
+		let layerPeriods = [];
+		if(this.props.valueScope && this.props.valueScope.length) {
+			let scope = _.findWhere(this.props.scopes,{key: this.props.valueScope[0]});
+			layerPeriods = scope.periods;
+		}
+
 		let tableRows = [];
 		_.each(this.props.columnMap, function(column, columnName){
 			let destinationValue = null;
@@ -62,7 +68,7 @@ class ConfigDataLayerAnalytical extends Component{
 					destinations={this.props.destinations}
 					destinationValue={destinationValue}
 					destinationObject={destination}
-					periods={this.props.periods}
+					periods={layerPeriods}
 					selectedPeriods={column.valuesPeriods}
 					onChangeDestination={this.props.onChangeColumnTableDestination.bind(null,"au")}
 					onChangePeriods={this.props.onChangeColumnTablePeriods.bind(null,"au")}

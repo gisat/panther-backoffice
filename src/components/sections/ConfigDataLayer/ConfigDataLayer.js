@@ -516,14 +516,16 @@ class ConfigDataLayer extends Component {
 
 	saveForm() {
 
-		var periodsPromise = null;
+		var AUPeriods = null;
 		if(this.state.layerType == "au"){
-			periodsPromise = utils.getPeriodsForScope(this.state.valueAUScope[0]);
-		}else{
-			periodsPromise = Promise.resolve();
+			let scope = _.findWhere(this.state.scopes,{key: this.state.valueAUScope[0]});
+			AUPeriods = _.map(scope.periods,function(period){
+				return period.key;
+			});
+			//periodsPromise = utils.getPeriodsForScope(this.state.valueAUScope[0]);
 		}
 		var thisComponent = this;
-		periodsPromise.then(function(AUPeriods){
+
 
 			var relations = [];
 			_.assign(relations, thisComponent.state.layerRelations);
@@ -578,18 +580,29 @@ class ConfigDataLayer extends Component {
 			for (let placeValue of values.places) {
 				for (let periodValue of values.periods) {
 					let existingModel = _.find(relations, function(obj) {
-						return ((obj.place.key == placeValue) && (obj.period.key == periodValue) && !obj.isOfAttributeSet);
+						return (
+						(obj.place && (obj.place.key == placeValue)) &&
+						(obj.period && (obj.period.key == periodValue)) &&
+						!obj.isOfAttributeSet
+						);
 					});
 					if (existingModel) {
 						// exists -> update
-						relations = _.reject(relations, function(item) { return item.key === existingModel.key; });
-						if(existingModel.layerObject.key!=layerTemplate.key){
+						if(
+							existingModel.layerObject.key != layerTemplate.key ||
+							existingModel.fidColumn != values.fidColumn ||
+							existingModel.nameColumn != values.nameColumn ||
+							existingModel.parentColumn != values.parentColumn
+						){
 							existingModel.layerObject = layerTemplate;
 							if(values.fidColumn) existingModel.fidColumn = values.fidColumn;
 							if(values.nameColumn) existingModel.nameColumn = values.nameColumn;
 							if(values.parentColumn) existingModel.parentColumn = values.parentColumn;
 							actionData.push({type:"update",model:existingModel});
 						}
+						relations = _.reject(relations, function(item) {
+							return item.key === existingModel.key;
+						});
 					} else {
 						// does not exist -> create
 						let object = {
@@ -657,14 +670,23 @@ class ConfigDataLayer extends Component {
 							});
 							if (existingModel) {
 								// exists -> update
-								existingModel.columnMap = columnMap;
-								if(values.fidColumn) existingModel.fidColumn = values.fidColumn;
-								if(values.nameColumn) existingModel.nameColumn = values.nameColumn;
-								if(values.parentColumn) existingModel.parentColumn = values.parentColumn;
+								if(
+									existingModel.columnMap != columnMap || // todo working comparison :)
+									existingModel.layerObject.key != layerTemplate.key ||
+									existingModel.fidColumn != values.fidColumn ||
+									existingModel.nameColumn != values.nameColumn ||
+									existingModel.parentColumn != values.parentColumn
+								) {
+									existingModel.columnMap = columnMap;
+									existingModel.layerObject = layerTemplate;
+									if (values.fidColumn) existingModel.fidColumn = values.fidColumn;
+									if (values.nameColumn) existingModel.nameColumn = values.nameColumn;
+									if (values.parentColumn) existingModel.parentColumn = values.parentColumn;
+									actionData.push({type: "update", model: existingModel});
+								}
 								relations = _.reject(relations, function (item) {
 									return item.key === existingModel.key;
 								});
-								actionData.push({type: "update", model: existingModel});
 							} else {
 								// does not exist -> create
 								let object = {
@@ -688,7 +710,6 @@ class ConfigDataLayer extends Component {
 			});
 			//console.log("handleObjects() actionData", actionData);
 			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
-		});
 
 	}
 
