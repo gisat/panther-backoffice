@@ -7,6 +7,8 @@ import PlaceStore from '../stores/PlaceStore';
 import PeriodStore from '../stores/PeriodStore';
 import AttributeStore from '../stores/AttributeStore';
 
+import DataLayerModel from '../models/DataLayerModel';
+
 
 class ObjectRelationModel extends Model {
 
@@ -78,15 +80,13 @@ class ObjectRelationModel extends Model {
 			dataSource: {
 				serverName: 'layer', //id
 				sendToServer: true,
-				transformForLocal: function (data) {
-					return DataLayerStore.getById(data)
-				},
-				transformForServer: this.getKey,
+				transformForLocal: this.transformDataSourceForLocal,
+				transformForServer: this.transformDataSourceForServer,
 				isPromise: true
 			},
 			dataSourceString: {
 				serverName: 'layer', //id
-				sendToServer: false //temp local value only, until we can filter by nested key/value
+				sendToServer: false //temp local value only, until we can filter by nested key/value + backup of dataSource (when that gets nullified)
 			},
 			dataSourceOrigin: {
 				serverName: 'dataSourceOrigin', // geonode / analyses / future whatever
@@ -163,6 +163,23 @@ class ObjectRelationModel extends Model {
 				}
 			}
 		};
+	}
+
+	transformDataSourceForLocal (data) {
+		if (~data.indexOf("analysis:")) {
+			return Promise.resolve(null); // todo process an_analysisRunId_auLevel
+		} else {
+			return DataLayerStore.getById(data)
+		}
+	}
+
+	transformDataSourceForServer (model, relationModel) {
+		if (model instanceof DataLayerModel) {
+			return this.getKey(model);
+		} else {
+			return relationModel.dataSourceString;
+		}
+
 	}
 
 }
