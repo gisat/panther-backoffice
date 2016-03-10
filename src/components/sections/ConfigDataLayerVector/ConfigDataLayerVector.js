@@ -43,6 +43,10 @@ class ConfigDataLayerVector extends Component{
 
 	render() {
 
+		let layerPeriods = _.filter(this.props.periods,function(period){
+			return _.contains(this.props.valuesPeriods,period.key);
+		},this);
+
 		let tableRows = [];
 		_.each(this.props.columnMap, function(column, columnName){
 			let destinationValue = null;
@@ -64,7 +68,7 @@ class ConfigDataLayerVector extends Component{
 					destinations={this.props.destinations}
 					destinationValue={destinationValue}
 					destinationObject={destination}
-					periods={this.props.periods}
+					periods={layerPeriods}
 					selectedPeriods={column.valuesPeriods}
 					onChangeDestination={this.props.onChangeColumnTableDestination.bind(null,"vector")}
 					onChangePeriods={this.props.onChangeColumnTablePeriods.bind(null,"vector")}
