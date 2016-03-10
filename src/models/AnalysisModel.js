@@ -17,6 +17,32 @@ class AnalysisModel extends Model {
 				serverName: 'name', //string
 				sendToServer: true
 			},
+			changed: { // for all
+				serverName: 'changed', //date
+				sendToServer: false,
+				transformForLocal: this.transformDate
+			},
+			changedBy: { // for all
+				serverName: 'changedBy', //id
+				sendToServer: false,
+				transformForLocal: function (data) {
+					return UserStore.getById(data);
+				},
+				isPromise: true
+			},
+			created: { // for all
+				serverName: 'created', //date
+				sendToServer: false,
+				transformForLocal: this.transformDate
+			},
+			createdBy: { // for all
+				serverName: 'createdBy', //id
+				sendToServer: false,
+				transformForLocal: function (data) {
+					return UserStore.getById(data);
+				},
+				isPromise: true
+			},
 			topics: { // for all
 				serverName: 'topics', //ids
 				sendToServer: true,
@@ -31,8 +57,34 @@ class AnalysisModel extends Model {
 				serverName: 'type', // spatial, fid, math
 				sendToServer: true,
 				transformForLocal: function (data) {
-					//if(!data) { data = ""; } todo default value?
-					return data;
+					let ret = null;
+					switch(data) {
+						case "spatialagg":
+							ret = "spatial";
+							break;
+						case "fidagg":
+							ret = "level";
+							break;
+						case "math":
+							ret = "math";
+							break;
+					}
+					return ret;
+				},
+				transformForServer: function (data) {
+					let ret = null;
+					switch(data) {
+						case "spatial":
+							ret = "spatialagg";
+							break;
+						case "level":
+							ret = "fidagg";
+							break;
+						case "math":
+							ret = "math";
+							break;
+					}
+					return ret;
 				}
 			},
 			layerObject: { // for spatial
@@ -144,44 +196,10 @@ class AnalysisModel extends Model {
 						isPromise: true
 					},
 					operationType: { // todo rename to something more accurate?
-						serverName: 'type', //
-						sendToServer: true,
-						//transformForLocal: function (data) {
-						//	// todo default value?
-						//	return data;
-						//},
-						transformForServer: this.getKey,
-						isPromise: true
+						serverName: 'type', // 'sum' 'sumarea' 'avgarea' 'avgattrarea' + ?? (2 more)
+						sendToServer: true
 					}
 				}
-			},
-
-
-			changed: { // for all
-				serverName: 'changed', //date
-				sendToServer: false,
-				transformForLocal: this.transformDate
-			},
-			changedBy: { // for all
-				serverName: 'changedBy', //id
-				sendToServer: false,
-				transformForLocal: function (data) {
-					return UserStore.getById(data);
-				},
-				isPromise: true
-			},
-			created: { // for all
-				serverName: 'created', //date
-				sendToServer: false,
-				transformForLocal: this.transformDate
-			},
-			createdBy: { // for all
-				serverName: 'createdBy', //id
-				sendToServer: false,
-				transformForLocal: function (data) {
-					return UserStore.getById(data);
-				},
-				isPromise: true
 			}
 		};
 	}
