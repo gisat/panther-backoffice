@@ -87,12 +87,6 @@ var initialScreenSets = {
 			ScreenPlacesBase: {
 				order: 0,
 				component: ScreenPlacesBase
-			},
-			ScreenPlaceDataSourceAttSet: {
-				order: 1,
-				size: 40,
-				position: "retracted",
-				component: ScreenPlaceDataSourceAttSet
 			}
 		}
 	}
