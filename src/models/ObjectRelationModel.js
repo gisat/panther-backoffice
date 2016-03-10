@@ -88,6 +88,22 @@ class ObjectRelationModel extends Model {
 				serverName: 'layer', //id
 				sendToServer: false //temp local value only, until we can filter by nested key/value
 			},
+			dataSourceOrigin: {
+				serverName: 'dataSourceOrigin', // geonode / analyses / future whatever
+				sendToServer: true,
+				transformForLocal: function (data, serverObject) {
+					if (data) {
+						return data;
+					} else {
+						if (~serverObject.layer.indexOf("analysis:")) {
+							return "analyses";
+						} else {
+							return "geonode";
+						}
+					}
+
+				}
+			},
 			place: {
 				serverName: 'location', //id
 				sendToServer: true,
@@ -126,27 +142,6 @@ class ObjectRelationModel extends Model {
 				serverName: 'parentColumn', //string
 				sendToServer: true
 			},
-			//columnMap: {
-			//	serverName: 'columnMap', //object {column: string, attribute: id}
-			//	sendToServer: true,
-			//	transformForLocal: function (data) {
-			//		if(data) {
-			//			let ret = data.map(function(obj){
-			//				return {
-			//					column: obj.column,
-			//					attribute: AttributeStore.getById(obj.attribute)
-			//				};
-			//			});
-			//			return Promise.resolve(ret);
-			//		}
-			//		return Promise.resolve({});
-			//	},
-			//	transformForServer: function (model) {
-			//		return []; // todo
-			//	},
-			//	isPromise: true,
-			//	isArray: true
-			//}
 			columnMap: {
 				serverName: 'columnMap', //object {column: string, attribute: id}
 				sendToServer: true,
