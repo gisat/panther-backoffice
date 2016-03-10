@@ -30,6 +30,7 @@ import AULevelStore from '../../../stores/AULevelStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
+import AnalysisStore from '../../../stores/AnalysisStore';
 
 
 var initialState = {
@@ -316,169 +317,210 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		}
 		if(condition) {
 
+			let relationsInsert = null;
+
+			if(this.state.relations && this.state.relations.length) {
+				let relationListInsert = [];
+				for (let relation of this.state.relations) {
+					switch (relation.dataSourceOrigin) {
+
+						case "analyses":
+							let analysisRelationInsert = (
+								<Checkbox key="asaul-data-841" className="rsc-row">
+									<UISVG src='icon-analyses.isvg' className="positive" />
+									<span className="option-id">237</span>
+									(some analysis)
+								</Checkbox>
+							);
+							relationListInsert.push(analysisRelationInsert);
+							break;
+
+						case "geonode":
+							let geonodeRelationInsert = (
+								<Checkbox
+									key={"asaul-data-" + relation.key}
+									className="rsc-row active expandable"
+								>
+									<UISVG
+										src='icon-datalayers.isvg'
+										className="positive"
+									/>
+									{relation.dataSourceString}
+								</Checkbox>
+							);
+							relationListInsert.push(geonodeRelationInsert);
+							let configInsert = (
+								<div
+									key={"config-form-" + relation.key}
+									className="rsc-expand "
+								>
+									<a href="#" className="rsc-btn-expand">configure<b/></a>
+									<div><div>
+
+										<label className="container">
+											Data layer
+											<Select
+												//onChange={this.onChangeAttSet.bind(this)}
+												//loadOptions={this.getPlaces}
+												options={DATALAYERS}
+												valueKey="key"
+												labelKey="key"
+												//inputProps={selectInputProps}
+												value="geonode:hcmc_b3_gadm_adm"
+											/>
+										</label>
+
+										<label className="container">
+											FID column (Feature identifier)
+											<Select
+												//onChange={this.onChangeAttSet.bind(this)}
+												//loadOptions={this.getPlaces}
+												options={COLUMNS}
+												valueKey="key"
+												labelKey="key"
+												//inputProps={selectInputProps}
+												value="ID_0"
+											/>
+										</label>
+
+										<Table celled className="fixed">
+											<thead>
+											<tr>
+												<th>Attribute</th>
+												<th>Source column</th>
+											</tr>
+											</thead>
+											<tbody>
+
+											<tr>
+												<td className="header">Continuous Urban Fabric (S.L. > 80%)</td>
+												<td className="allowOverflow resetui">
+													<Select
+														//onChange={this.onChangeAttSet.bind(this)}
+														//loadOptions={this.getPlaces}
+														options={COLUMNS}
+														valueKey="key"
+														labelKey="key"
+														//inputProps={selectInputProps}
+														value="uf_00"
+													/>
+												</td>
+											</tr>
+
+											<tr>
+												<td className="header">Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
+												<td className="allowOverflow resetui">
+													<Select
+														//onChange={this.onChangeAttSet.bind(this)}
+														//loadOptions={this.getPlaces}
+														options={COLUMNS}
+														valueKey="key"
+														labelKey="key"
+														//inputProps={selectInputProps}
+														value="diff_uf"
+													/>
+												</td>
+											</tr>
+
+											<tr>
+												<td className="header">Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
+												<td className="allowOverflow resetui">
+													<Select
+														//onChange={this.onChangeAttSet.bind(this)}
+														//loadOptions={this.getPlaces}
+														options={COLUMNS}
+														valueKey="key"
+														labelKey="key"
+														//inputProps={selectInputProps}
+														value="uf_00"
+													/>
+												</td>
+											</tr>
+
+											<tr>
+												<td className="header">Industrial, Commercial and Transport Units</td>
+												<td className="allowOverflow resetui">
+													<Select
+														//onChange={this.onChangeAttSet.bind(this)}
+														//loadOptions={this.getPlaces}
+														options={COLUMNS}
+														valueKey="key"
+														labelKey="key"
+														//inputProps={selectInputProps}
+														value="fo_00"
+													/>
+												</td>
+											</tr>
+
+											<tr>
+												<td className="header">Construction sites</td>
+												<td className="allowOverflow resetui">
+													<Select
+														//onChange={this.onChangeAttSet.bind(this)}
+														//loadOptions={this.getPlaces}
+														options={COLUMNS}
+														valueKey="key"
+														labelKey="key"
+														//inputProps={selectInputProps}
+														value="diff_uf"
+													/>
+												</td>
+											</tr>
+
+
+											</tbody>
+										</Table>
+
+									</div></div>
+								</div>
+							);
+							relationListInsert.push(configInsert);
+							break;
+					}
+				}
+
+				relationsInsert = (
+						<div className="row-select-config">
+							<CheckboxFields
+								type="grouped"
+								radio
+								name="rsc-asaul-623-2-1"
+								onChange={function(){}}
+							>
+								{relationListInsert}
+								<span
+									// checkboxFields has problem with one child being more children :)
+								/>
+							</CheckboxFields>
+						</div>
+				);
+
+			} else {
+
+			}
+
 			ret = (
 				<div className="data-source-period-box">
 
-					<h3 className="rsc-header">{this.props.period}</h3>
-					<div className="row-select-config">
-						<CheckboxFields
-							type="grouped"
-							radio
-							name="rsc-asaul-623-2-1"
-							onChange={function(){}}
-						>
+					<h3 className="rsc-header">{this.state.period.name}</h3>
 
-							<Checkbox
-								key="asaul-data-42"
-								className="rsc-row active expandable"
-							>
-								<UISVG
-									src='icon-datalayers.isvg'
-									className="positive"
-								/>
-								puma_hcmc_lulc_status_2000
-							</Checkbox>
-							<div className="rsc-expand ">
-								<a href="#" className="rsc-btn-expand">configure<b/></a>
-								<div><div>
-
-									<label className="container">
-										Data layer
-										<Select
-											//onChange={this.onChangeAttSet.bind(this)}
-											//loadOptions={this.getPlaces}
-											options={DATALAYERS}
-											valueKey="key"
-											labelKey="key"
-											//inputProps={selectInputProps}
-											value="geonode:hcmc_b3_gadm_adm"
-										/>
-									</label>
-
-									<label className="container">
-										FID column (Feature identifier)
-										<Select
-											//onChange={this.onChangeAttSet.bind(this)}
-											//loadOptions={this.getPlaces}
-											options={COLUMNS}
-											valueKey="key"
-											labelKey="key"
-											//inputProps={selectInputProps}
-											value="ID_0"
-										/>
-									</label>
-
-									<Table celled className="fixed">
-										<thead>
-										<tr>
-											<th>Attribute</th>
-											<th>Source column</th>
-										</tr>
-										</thead>
-										<tbody>
-
-										<tr>
-											<td className="header">Continuous Urban Fabric (S.L. > 80%)</td>
-											<td className="allowOverflow resetui">
-												<Select
-													//onChange={this.onChangeAttSet.bind(this)}
-													//loadOptions={this.getPlaces}
-													options={COLUMNS}
-													valueKey="key"
-													labelKey="key"
-													//inputProps={selectInputProps}
-													value="uf_00"
-												/>
-											</td>
-										</tr>
-
-										<tr>
-											<td className="header">Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
-											<td className="allowOverflow resetui">
-												<Select
-													//onChange={this.onChangeAttSet.bind(this)}
-													//loadOptions={this.getPlaces}
-													options={COLUMNS}
-													valueKey="key"
-													labelKey="key"
-													//inputProps={selectInputProps}
-													value="diff_uf"
-												/>
-											</td>
-										</tr>
-
-										<tr>
-											<td className="header">Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
-											<td className="allowOverflow resetui">
-												<Select
-													//onChange={this.onChangeAttSet.bind(this)}
-													//loadOptions={this.getPlaces}
-													options={COLUMNS}
-													valueKey="key"
-													labelKey="key"
-													//inputProps={selectInputProps}
-													value="uf_00"
-												/>
-											</td>
-										</tr>
-
-										<tr>
-											<td className="header">Industrial, Commercial and Transport Units</td>
-											<td className="allowOverflow resetui">
-												<Select
-													//onChange={this.onChangeAttSet.bind(this)}
-													//loadOptions={this.getPlaces}
-													options={COLUMNS}
-													valueKey="key"
-													labelKey="key"
-													//inputProps={selectInputProps}
-													value="fo_00"
-												/>
-											</td>
-										</tr>
-
-										<tr>
-											<td className="header">Construction sites</td>
-											<td className="allowOverflow resetui">
-												<Select
-													//onChange={this.onChangeAttSet.bind(this)}
-													//loadOptions={this.getPlaces}
-													options={COLUMNS}
-													valueKey="key"
-													labelKey="key"
-													//inputProps={selectInputProps}
-													value="diff_uf"
-												/>
-											</td>
-										</tr>
-
-
-										</tbody>
-									</Table>
-
-								</div></div>
-							</div>
-
-							<Checkbox key="asaul-data-841" className="rsc-row">
-								<UISVG src='icon-analyses.isvg' className="positive" />
-								<span className="option-id">237</span>
-								Status aggregated
-							</Checkbox>
-
-						</CheckboxFields>
-					</div>
+					{relationsInsert}
 
 					<div className="rsc-controls">
-						<IconButton name="plus" basic>
+						<IconButton
+							name="plus"
+							basic
+						>
 							Add data layer source
 						</IconButton>
-						<UIScreenButton basic>
+						<UIScreenButton
+							basic
+						>
 							<Icon name="plus" />
 							New analysis
 						</UIScreenButton>
 						<SaveButton />
 					</div>
-
 				</div>
 			);
 
