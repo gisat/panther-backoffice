@@ -59,14 +59,14 @@ class Model {
 			//	promises.push(nestedPromise);
 			} else {
 				if (keyProps.isPromise) {
-					let promise = keyProps.transformForLocal(data[keyProps.serverName]);
+					let promise = keyProps.transformForLocal(data[keyProps.serverName], data);
 					promise.then(function(transformedData){
 						ret[key] = transformedData;
 					});
 					promises.push(promise);
 				} else {
 					if (keyProps.transformForLocal) {
-						ret[key] = keyProps.transformForLocal(data[keyProps.serverName]);
+						ret[key] = keyProps.transformForLocal(data[keyProps.serverName], data);
 					} else {
 						ret[key] = data[keyProps.serverName];
 					}
