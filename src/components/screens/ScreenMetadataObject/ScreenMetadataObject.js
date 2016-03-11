@@ -12,7 +12,15 @@ import ActionCreator from '../../../actions/ActionCreator';
 //import PeriodStore from '../../../stores/PeriodStore';
 import SelectorMetadataObject from '../../sections/SelectorMetadataObject';
 import ConfigMetadataScope from '../../sections/ConfigMetadataScope';
-import ConfigMetadataPeriod from '../../sections/ConfigMetadataPeriod';
+//import ConfigMetadataPlace from '../../sections/ConfigMetadataPlace';
+import ConfigMetadataLayerVector from '../../sections/ConfigMetadataLayerVector';
+import ConfigMetadataLayerRaster from '../../sections/ConfigMetadataLayerRaster';
+//import ConfigMetadataAULevel from '../../sections/ConfigMetadataAULevel';
+//import ConfigMetadataAttribute from '../../sections/ConfigMetadataAttribute';
+//import ConfigMetadataAttributeSet from '../../sections/ConfigMetadataAttributeSet';
+//import ConfigMetadataTopic from '../../sections/ConfigMetadataTopic';
+//import ConfigMetadataTheme from '../../sections/ConfigMetadataTheme';
+//import ConfigMetadataLayerGroup from '../../sections/ConfigMetadataLayerGroup';
 import ConfigMetadataStyle from '../../sections/ConfigMetadataStyle';
 
 var initialState = {
@@ -174,9 +182,36 @@ class ScreenMetadataObject extends Component{
 				case ObjectTypes.SCOPE:
 					configComponent = <ConfigMetadataScope {...props} />;
 					break;
+				//case ObjectTypes.PLACE:
+				//	configComponent = <ConfigMetadataPlace {...props} />;
+				//	break;
 				case ObjectTypes.PERIOD:
 					configComponent = <ConfigMetadataPeriod {...props} />;
 					break;
+				case ObjectTypes.VECTOR_LAYER_TEMPLATE:
+					configComponent = <ConfigMetadataLayerVector {...props} />;
+					break;
+				case ObjectTypes.RASTER_LAYER_TEMPLATE:
+					configComponent = <ConfigMetadataLayerRaster {...props} />;
+					break;
+				//case ObjectTypes.AU_LEVEL:
+				//	configComponent = <ConfigMetadataAULevel {...props} />;
+				//	break;
+				//case ObjectTypes.ATTRIBUTE:
+				//	configComponent = <ConfigMetadataAttribute {...props} />;
+				//	break;
+				//case ObjectTypes.ATTRIBUTE_SET:
+				//	configComponent = <ConfigMetadataAttributeSet {...props} />;
+				//	break;
+				//case ObjectTypes.TOPIC:
+				//	configComponent = <ConfigMetadataTopic {...props} />;
+				//	break;
+				//case ObjectTypes.THEME:
+				//	configComponent = <ConfigMetadataTheme {...props} />;
+				//	break;
+				//case ObjectTypes.LAYER_GROUP:
+				//	configComponent = <ConfigMetadataLayerGroup {...props} />;
+				//	break;
 				case ObjectTypes.STYLE:
 					configComponent = <ConfigMetadataStyle {...props} />;
 					break;
