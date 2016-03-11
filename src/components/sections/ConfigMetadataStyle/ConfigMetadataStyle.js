@@ -1,6 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ConfigMetadataStyle.css';
-import withStyles from '../../../decorators/withStyles';
 
 import utils from '../../../utils/utils';
 
@@ -27,7 +25,6 @@ var initialState = {
 };
 
 
-@withStyles(styles)
 class ConfigMetadataStyle extends Component{
 
 	static propTypes = {

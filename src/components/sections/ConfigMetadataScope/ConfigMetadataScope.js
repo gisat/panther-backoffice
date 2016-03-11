@@ -1,6 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ConfigMetadataScope.css';
-import withStyles from '../../../decorators/withStyles';
 
 import utils from '../../../utils/utils';
 
@@ -28,7 +26,6 @@ var initialState = {
 };
 
 
-@withStyles(styles)
 class ConfigMetadataScope extends Component{
 
 	static propTypes = {
