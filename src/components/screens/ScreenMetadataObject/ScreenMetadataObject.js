@@ -165,9 +165,10 @@ class ScreenMetadataObject extends Component{
 
 	render() {
 
+		let ret = null;
 		var configComponent = "";
 		var headline = "";
-		if (this.props.data.objectType) {
+		if (this.props.data.objectType && this.state.selectorData) {
 			headline = objectTypesMetadata[this.props.data.objectType].name;
 			if(objectTypesMetadata[this.props.data.objectType].isTemplate) {
 				headline = headline + " (template)";
@@ -216,26 +217,29 @@ class ScreenMetadataObject extends Component{
 					configComponent = <ConfigMetadataStyle {...props} />;
 					break;
 			}
+
+			ret = (
+				<div>
+					<div className="screen-setter"><div>
+						<h2>{headline}</h2>
+						<SelectorMetadataObject
+							disabled={this.props.disabled}
+							data={this.state.selectorData}
+							value={this.state.selectorValue}
+							onChange={this.onSelectorChange.bind(this)}
+							onNew={this.onNewEmptyObject.bind(this)}
+						/>
+					</div></div>
+					<div className="screen-content"><div>
+						{configComponent}
+					</div></div>
+				</div>
+			);
+
 		}
 
 
-		return (
-			<div>
-				<div className="screen-setter"><div>
-					<h2>{headline}</h2>
-					<SelectorMetadataObject
-						disabled={this.props.disabled}
-						data={this.state.selectorData}
-						value={this.state.selectorValue}
-						onChange={this.onSelectorChange.bind(this)}
-						onNew={this.onNewEmptyObject.bind(this)}
-					/>
-				</div></div>
-				<div className="screen-content"><div>
-					{configComponent}
-				</div></div>
-			</div>
-		);
+		return ret;
 
 	}
 }
