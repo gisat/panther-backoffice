@@ -54,10 +54,11 @@ class StyleModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
-			geoServerName: {
+			serverName: {
 				serverName: 'symbologyName', //string
 				sendToServer: true
 			}
+			// todo origin? - geonode styles
 		};
 	}
 
