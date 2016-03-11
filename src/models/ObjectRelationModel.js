@@ -81,7 +81,7 @@ class ObjectRelationModel extends Model {
 				serverName: 'layer', //id
 				sendToServer: true,
 				transformForLocal: this.transformDataSourceForLocal,
-				transformForServer: this.transformDataSourceForServer,
+				transformForServer: this.transformDataSourceForServer.bind(this),
 				isPromise: true
 			},
 			dataSourceString: {
