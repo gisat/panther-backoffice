@@ -2,12 +2,14 @@ import React from 'react';
 import ActionCreator from '../actions/ActionCreator';
 import {Model} from '../constants/ObjectTypes';
 import ScopeStore from '../stores/ScopeStore';
+import TopicStore from '../stores/TopicStore';
 import ThemeStore from '../stores/ThemeStore';
 import VectorLayerStore from '../stores/VectorLayerStore';
 import RasterLayerStore from '../stores/RasterLayerStore';
 import GeneralLayerStore from '../stores/GeneralLayerStore';
 import AttributeSetStore from '../stores/AttributeSetStore';
 import ScopeModel from '../models/ScopeModel';
+import TopicModel from '../models/TopicModel';
 import _ from 'underscore';
 
 export default {
@@ -231,6 +233,48 @@ export default {
 				}, function(){
 
 					reject("getAttSetsForScope: theme with filter {scope: " + scope + "} not resolved.");
+
+				});
+			});
+		});
+	},
+
+	getThemesForTopics: function(topics) {
+		return new Promise(function(resolve, reject){
+
+			if(!Array.isArray(topics)) {
+				topics = [topics];
+			}
+			var topicsPromises = [];
+			for (var topic of topics) {
+				if (topic instanceof TopicModel) {
+					topicsPromises.push(Promise.resolve(topic));
+				} else {
+					topicsPromises.push(TopicStore.getById(topic));
+				}
+			}
+
+			Promise.all(topicsPromises).then(function(topicModels){
+				ThemeStore.getAll().then(function(themeModels){
+
+					var themes = [];
+
+					for(let theme of themeModels){
+						if(theme.hasOwnProperty("topics")) {
+							for (let topic of theme.topics) {
+								if(_.contains(topicModels,topic)){
+									themes.push(theme);
+								}
+							}
+						}
+					}
+
+					//if (themes.length) {
+					//	resolve(themes);
+					//} else {
+					//	resolve(null);
+					//}
+					resolve(themes);
 
 				});
 			});

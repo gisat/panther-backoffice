@@ -23,6 +23,7 @@ var initialState = {
 	valueActive: false,
 	valueName: "",
 	valueTopic: [],
+	topicThemes: [],
 	valueLayerGroup: [],
 	valuesStyles: []
 };
@@ -157,6 +158,17 @@ class ConfigMetadataLayerRaster extends Component{
 		}
 	}
 
+	componentDidUpdate(oldProps, oldState) {
+		if (this.state.valueTopic && (oldState.valueTopic != this.state.valueTopic)) {
+			var thisComponent = this;
+			utils.getThemesForTopics(this.state.valueTopic).then(function(themes){
+				thisComponent.setState({
+					topicThemes: themes
+				});
+			});
+		}
+	}
+
 
 	/**
 	 * Check if state is the same as it was when loaded from stores
@@ -266,6 +278,25 @@ class ConfigMetadataLayerRaster extends Component{
 			isActiveClasses = "activeness-indicator active";
 		}
 
+		var topicInfoInsert = null;
+		if(this.state.valueTopic && this.state.valueTopic.length) {
+			let themesString = "";
+			if(this.state.topicThemes) {
+				for (let theme of this.state.topicThemes) {
+					if (themesString) {
+						themesString += ", ";
+					}
+					themesString += theme.name
+				}
+			}
+			topicInfoInsert = (
+				<div className="frame-input-wrapper-info">
+					<b>{this.state.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
+					{this.state.topicThemes.length ? themesString : "No themes"}
+				</div>
+			);
+		}
+
 		return (
 			<div>
 
@@ -311,6 +342,7 @@ class ConfigMetadataLayerRaster extends Component{
 							value={this.state.valueTopic}
 						/>
 					</label>
+					{topicInfoInsert}
 				</div>
 
 				<div className="frame-input-wrapper">
