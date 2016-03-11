@@ -182,7 +182,7 @@ class ConfigMetadataStyle extends Component{
 		modelData.active = this.state.valueActive;
 		modelData.name = this.state.valueName;
 		modelData.serverName = this.state.valueServerName;
-		modelData.topic = _.findWhere(this.state.topics, {key: this.state.valueTopic});
+		modelData.topic = _.findWhere(this.state.topics, {key: this.state.valueTopic[0]});
 		let modelObj = new Model[ObjectTypes.STYLE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.STYLE);
