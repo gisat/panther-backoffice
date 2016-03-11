@@ -13,6 +13,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 import SelectorMetadataObject from '../../sections/SelectorMetadataObject';
 import ConfigMetadataScope from '../../sections/ConfigMetadataScope';
 import ConfigMetadataPeriod from '../../sections/ConfigMetadataPeriod';
+import ConfigMetadataStyle from '../../sections/ConfigMetadataStyle';
 
 var initialState = {
 	scopes: [],
@@ -175,6 +176,9 @@ class ScreenMetadataObject extends Component{
 					break;
 				case ObjectTypes.PERIOD:
 					configComponent = <ConfigMetadataPeriod {...props} />;
+					break;
+				case ObjectTypes.STYLE:
+					configComponent = <ConfigMetadataStyle {...props} />;
 					break;
 			}
 		}
