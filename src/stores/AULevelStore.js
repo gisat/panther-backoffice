@@ -39,8 +39,6 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			return;
 	}
 
-	storeInstance.emitChange();
-
 });
 
 export default storeInstance;

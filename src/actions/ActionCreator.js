@@ -90,8 +90,38 @@ export default {
 			case ObjectTypes.SCOPE:
 				action.type = ActionTypes.SCOPE_HANDLE;
 				break;
+			case ObjectTypes.PLACE:
+				action.type = ActionTypes.PLACE_HANDLE;
+				break;
 			case ObjectTypes.PERIOD:
 				action.type = ActionTypes.PERIOD_HANDLE;
+				break;
+			case ObjectTypes.VECTOR_LAYER_TEMPLATE:
+				action.type = ActionTypes.VECTOR_LAYER_TEMPLATE_HANDLE;
+				break;
+			case ObjectTypes.RASTER_LAYER_TEMPLATE:
+				action.type = ActionTypes.RASTER_LAYER_TEMPLATE_HANDLE;
+				break;
+			case ObjectTypes.AU_LEVEL:
+				action.type = ActionTypes.AU_LEVEL_HANDLE;
+				break;
+			case ObjectTypes.ATTRIBUTE:
+				action.type = ActionTypes.ATTRIBUTE_HANDLE;
+				break;
+			case ObjectTypes.ATTRIBUTE_SET:
+				action.type = ActionTypes.ATTRIBUTE_SET_HANDLE;
+				break;
+			case ObjectTypes.TOPIC:
+				action.type = ActionTypes.TOPIC_HANDLE;
+				break;
+			case ObjectTypes.THEME:
+				action.type = ActionTypes.THEME_HANDLE;
+				break;
+			case ObjectTypes.LAYER_GROUP:
+				action.type = ActionTypes.LAYER_GROUP_HANDLE;
+				break;
+			case ObjectTypes.STYLE:
+				action.type = ActionTypes.STYLE_HANDLE;
 				break;
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_HANDLE;
