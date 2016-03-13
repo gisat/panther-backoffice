@@ -15,7 +15,7 @@ import ConfigMetadataScope from '../../sections/ConfigMetadataScope';
 //import ConfigMetadataPlace from '../../sections/ConfigMetadataPlace';
 import ConfigMetadataLayerVector from '../../sections/ConfigMetadataLayerVector';
 import ConfigMetadataLayerRaster from '../../sections/ConfigMetadataLayerRaster';
-//import ConfigMetadataAULevel from '../../sections/ConfigMetadataAULevel';
+import ConfigMetadataAULevel from '../../sections/ConfigMetadataAULevel';
 //import ConfigMetadataAttribute from '../../sections/ConfigMetadataAttribute';
 //import ConfigMetadataAttributeSet from '../../sections/ConfigMetadataAttributeSet';
 //import ConfigMetadataTopic from '../../sections/ConfigMetadataTopic';
@@ -195,9 +195,9 @@ class ScreenMetadataObject extends Component{
 				case ObjectTypes.RASTER_LAYER_TEMPLATE:
 					configComponent = <ConfigMetadataLayerRaster {...props} />;
 					break;
-				//case ObjectTypes.AU_LEVEL:
-				//	configComponent = <ConfigMetadataAULevel {...props} />;
-				//	break;
+				case ObjectTypes.AU_LEVEL:
+					configComponent = <ConfigMetadataAULevel {...props} />;
+					break;
 				//case ObjectTypes.ATTRIBUTE:
 				//	configComponent = <ConfigMetadataAttribute {...props} />;
 				//	break;
