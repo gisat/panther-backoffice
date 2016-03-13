@@ -9,6 +9,7 @@ import RasterLayerStore from '../stores/RasterLayerStore';
 import GeneralLayerStore from '../stores/GeneralLayerStore';
 import AttributeSetStore from '../stores/AttributeSetStore';
 import ScopeModel from '../models/ScopeModel';
+import VectorLayerModel from '../models/VectorLayerModel';
 import TopicModel from '../models/TopicModel';
 import _ from 'underscore';
 
@@ -275,6 +276,48 @@ export default {
 					//	resolve(null);
 					//}
 					resolve(themes);
+
+				});
+			});
+		});
+	},
+
+	getAttSetsForLayers: function(layers) {
+		return new Promise(function(resolve, reject){
+
+			if(!Array.isArray(layers)) {
+				layers = [layers];
+			}
+			var layersPromises = [];
+			for (var layer of layers) {
+				if (layer instanceof VectorLayerModel) {
+					layersPromises.push(Promise.resolve(layer));
+				} else {
+					layersPromises.push(VectorLayerStore.getById(layer));
+				}
+			}
+
+			Promise.all(layersPromises).then(function(layerModels){
+				AttributeSetStore.getAll().then(function(attSetModels){
+
+					var attSets = [];
+
+					for(let attSet of attSetModels){
+						if(attSet.hasOwnProperty("vectorLayers")) {
+							for (let layer of attSet.vectorLayers) {
+								if(_.contains(layerModels,layer)){
+									attSets.push(attSet);
+								}
+							}
+						}
+					}
+
+					//if (themes.length) {
+					//	resolve(themes);
+					//} else {
+					//	resolve(null);
+					//}
+					resolve(attSets);
 
 				});
 			});

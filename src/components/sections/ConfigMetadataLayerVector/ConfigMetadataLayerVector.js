@@ -14,6 +14,7 @@ import VectorLayerStore from '../../../stores/VectorLayerStore';
 import TopicStore from '../../../stores/TopicStore';
 import LayerGroupStore from '../../../stores/LayerGroupStore';
 import StyleStore from '../../../stores/StyleStore';
+import AttributeSetStore from '../../../stores/AttributeSetStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
@@ -25,7 +26,8 @@ var initialState = {
 	valueTopic: [],
 	topicThemes: [],
 	valueLayerGroup: [],
-	valuesStyles: []
+	valuesStyles: [],
+	valuesAttSets: []
 };
 
 
@@ -57,7 +59,8 @@ class ConfigMetadataLayerVector extends Component{
 			layer: VectorLayerStore.getById(props.selectorValue),
 			topics: TopicStore.getAll(),
 			layerGroups: LayerGroupStore.getAll(),
-			styles: StyleStore.getAll()
+			styles: StyleStore.getAll(),
+			attributeSets: AttributeSetStore.getAll()
 		};
 	}
 
@@ -73,6 +76,12 @@ class ConfigMetadataLayerVector extends Component{
 
 			if(!keys || keys.indexOf("layer")!=-1) {
 				store2state.layer.then(function (layer) {
+					let attSetPromise = utils.getAttSetsForLayers(layer);
+					attSetPromise.then(function(attSets){
+						thisComponent.context.setStateFromStores.call(thisComponent, {
+							valuesAttSets: utils.getModelsKeys(attSets)
+						});
+					});
 					let newState = {
 						valueActive: layer.active,
 						valueName: layer.name,
@@ -111,6 +120,9 @@ class ConfigMetadataLayerVector extends Component{
 						break;
 					case "valuesStyles":
 						screenObjectType = ObjectTypes.STYLE;
+						break;
+					case "valuesAttSets":
+						screenObjectType = ObjectTypes.ATTRIBUTE_SET;
 						break;
 				}
 				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
@@ -374,6 +386,23 @@ class ConfigMetadataLayerVector extends Component{
 							valueKey="key"
 							labelKey="name"
 							value={this.state.valuesStyles}
+						/>
+					</label>
+				</div>
+
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Attribute sets
+						<UIObjectSelect
+							multi
+							onChange={this.onChangeObjectSelect.bind(this, "valuesAttSets", ObjectTypes.ATTRIBUTE_SET)}
+							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.ATTRIBUTE_SET)}
+							options={this.state.attributeSets}
+							allowCreate
+							newOptionCreator={utils.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.state.valuesAttSets}
 						/>
 					</label>
 				</div>
