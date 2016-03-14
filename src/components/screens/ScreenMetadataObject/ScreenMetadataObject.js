@@ -13,6 +13,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 import SelectorMetadataObject from '../../sections/SelectorMetadataObject';
 import ConfigMetadataScope from '../../sections/ConfigMetadataScope';
 import ConfigMetadataPlace from '../../sections/ConfigMetadataPlace';
+import ConfigMetadataPeriod from '../../sections/ConfigMetadataPeriod';
 import ConfigMetadataLayerVector from '../../sections/ConfigMetadataLayerVector';
 import ConfigMetadataLayerRaster from '../../sections/ConfigMetadataLayerRaster';
 import ConfigMetadataAULevel from '../../sections/ConfigMetadataAULevel';
