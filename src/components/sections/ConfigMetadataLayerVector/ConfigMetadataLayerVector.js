@@ -78,19 +78,17 @@ class ConfigMetadataLayerVector extends Component{
 				store2state.layer.then(function (layer) {
 					let attSetPromise = utils.getAttSetsForLayers(layer);
 					attSetPromise.then(function(attSets){
-						thisComponent.context.setStateFromStores.call(thisComponent, {
+						let newState = {
+							valueActive: layer.active,
+							valueName: layer.name,
+							valueTopic: layer.topic ? [layer.topic.key] : [],
+							valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
+							valuesStyles: utils.getModelsKeys(layer.styles),
 							valuesAttSets: utils.getModelsKeys(attSets)
-						});
+						};
+						newState.savedState = utils.deepClone(newState);
+						thisComponent.setState(newState);
 					});
-					let newState = {
-						valueActive: layer.active,
-						valueName: layer.name,
-						valueTopic: layer.topic ? [layer.topic.key] : [],
-						valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
-						valuesStyles: utils.getModelsKeys(layer.styles)
-					};
-					newState.savedState = utils.deepClone(newState);
-					thisComponent.setState(newState);
 				});
 			}
 		}
@@ -194,7 +192,8 @@ class ConfigMetadataLayerVector extends Component{
 				this.state.valueName == this.state.layer.name &&
 				_.isEqual(this.state.valueTopic,this.state.savedState.valueTopic) &&
 				_.isEqual(this.state.valueLayerGroup,this.state.savedState.valueLayerGroup) &&
-				_.isEqual(this.state.valuesStyles,this.state.savedState.valuesStyles)
+				_.isEqual(this.state.valuesStyles,this.state.savedState.valuesStyles) &&
+				_.isEqual(this.state.valuesAttSets,this.state.savedState.valuesAttSets)
 			);
 		}
 		return isIt;
@@ -219,6 +218,7 @@ class ConfigMetadataLayerVector extends Component{
 	}
 
 	saveForm() {
+		var thisComponent = this;
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.layer);
 		modelData.active = this.state.valueActive;
@@ -230,6 +230,35 @@ class ConfigMetadataLayerVector extends Component{
 			let period = _.findWhere(this.state.styles, {key: key});
 			modelData.styles.push(period);
 		}
+		modelData.attributeSets = [];
+
+		// for now, vectorLayer-attributeSet relations are stored in attribute sets
+		var attSetActionData = [], oldAttSets = [];
+		_.assign(oldAttSets,this.state.savedState.valuesAttSets);
+		for (let key of this.state.valuesAttSets) {
+			let attSet = _.findWhere(this.state.attributeSets, {key: key});
+			modelData.attributeSets.push(attSet); // saving in vector layer, for possible future use
+			let attSetModelData = {};
+			_.assign(attSetModelData, attSet);
+			attSetModelData.vectorLayers = _.union(attSetModelData.vectorLayers, [this.state.layer]);
+			let attSetModelObj = new Model[ObjectTypes.ATTRIBUTE_SET](attSetModelData);
+			attSetActionData.push({type:"update",model:attSetModelObj});
+			oldAttSets = _.reject(oldAttSets, function(item) {
+				return item === key;
+			});
+		}
+		for (let key of oldAttSets) {
+			let attSet = _.findWhere(this.state.attributeSets, {key: key});
+			let attSetModelData = {};
+			_.assign(attSetModelData, attSet);
+			attSetModelData.vectorLayers = _.reject(attSetModelData.vectorLayers, function(item){
+				return item.key === thisComponent.state.layer.key;
+			});
+			let attSetModelObj = new Model[ObjectTypes.ATTRIBUTE_SET](attSetModelData);
+			attSetActionData.push({type:"update",model:attSetModelObj});
+		}
+		ActionCreator.handleObjects(attSetActionData,ObjectTypes.ATTRIBUTE_SET);
+
 		let modelObj = new Model[ObjectTypes.VECTOR_LAYER_TEMPLATE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.VECTOR_LAYER_TEMPLATE);
