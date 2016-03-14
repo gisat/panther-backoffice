@@ -517,7 +517,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							basic
 						>
 							<Icon name="plus" />
-							New analysis
+							New analysis run
 						</UIScreenButton>
 						<SaveButton />
 					</div>
