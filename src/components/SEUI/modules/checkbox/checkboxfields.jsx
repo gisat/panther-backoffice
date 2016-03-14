@@ -17,6 +17,7 @@ export class CheckboxFields extends Component {
 				disabled: React.PropTypes.bool,
 				name: React.PropTypes.string.isRequired,
 				onChange: React.PropTypes.func, //EDIT
+				selected: React.PropTypes.array,
 				radio: React.PropTypes.bool,
 				readOnly: React.PropTypes.bool,
 				type: React.PropTypes.oneOf([
@@ -27,26 +28,28 @@ export class CheckboxFields extends Component {
 
 		static defaultProps = {
 				component: 'div',
-				defaultClasses: true
+				defaultClasses: true,
+				selected: []
 		};
 
-		constructor(props) {
-				super(props);
-
-				let active = this.props.radio ? -1 : [];
-
-				this.state = {
-						active: active
-				};
-		}
+		//constructor(props) {
+		//		super(props);
+		//
+		//		let active = this.props.radio ? -1 : [];
+		//
+		//		this.state = {
+		//				active: active
+		//		};
+		//}
 
 		onClick(key)  {
 				// don't remove radio buttons if you click them twice
-				if (key === this.state.active && this.props.radio) {
+				//if (key === this.state.active && this.props.radio) {
+				if (this.props.radio && [key] == this.props.selected) {
 						return;
 				// but do remove for everything else
 				} else {
-						this.setActive(key);
+						//this.setActive(key);
 						this.props.onChange(key); //EDIT
 				}
 		}
@@ -62,14 +65,16 @@ export class CheckboxFields extends Component {
 				} else {
 						return React.Children.map(this.props.children, child => {
 								if (child.type == Checkbox) {
-										element = this.cloneChild(index, child);
+										//element = this.cloneChild(index, child);
+										element = this.cloneChild(child.key, child); //EDIT
 
 										element = React.DOM.div({
-												key: index,
+												//key: index,
+												key: child.key, //EDIT
 												className: 'field'
 										}, element);
 
-										index++;
+										//index++; //EDIT
 								} else if (typeof child === 'string') {
 										return (
 												<label htmlFor={this.props.name}>{child}</label>
@@ -131,7 +136,8 @@ export class CheckboxFields extends Component {
 		}
 
 		getActive(index) {
-				let state = this.state.active;
+				//let state = this.state.active;
+				let state = this.props.selected;
 				let active = false;
 
 				if (Array.isArray(state)) {

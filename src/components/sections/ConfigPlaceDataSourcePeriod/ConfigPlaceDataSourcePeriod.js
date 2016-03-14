@@ -41,7 +41,8 @@ var initialState = {
 	vectorLayer: null,
 	rasterLayer: null,
 	relations: [],
-	expandConfig: {}
+	expandConfig: {},
+	selected: null
 };
 
 
@@ -286,6 +287,12 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		this.context.setStateDeep.call(this, {expandConfig: {$merge: newExpandConfig}});
 	}
 
+	onChange(selected) {
+		this.setState({
+			selected: selected
+		});
+	}
+
 
 
 	render() {
@@ -330,6 +337,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 
 			if(this.state.relations && this.state.relations.length) {
 				let relationListInsert = [];
+				let selected = this.state.selected == null ? [null] : [this.state.selected.toString()];
 				for (let relation of this.state.relations) {
 					switch (relation.dataSourceOrigin) {
 
@@ -340,7 +348,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							});
 							let analysisRelationInsert = (
 								<Checkbox
-									key={"asaul-data-" + relation.key}
+									key={relation.key}
 									className={analysisRowClasses}
 								>
 									<UISVG src='icon-analyses.isvg' className="positive" />
@@ -360,7 +368,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							});
 							let geonodeRelationInsert = (
 								<Checkbox
-									key={"asaul-data-" + relation.key}
+									key={relation.key}
 									className={geonodeRowClasses}
 								>
 									<UISVG
@@ -506,6 +514,9 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							relationListInsert.push(configInsert);
 							break;
 					}
+					if(relation.active && (this.state.selected == null)) {
+						selected = [relation.key.toString()]
+					}
 				}
 
 				relationsInsert = (
@@ -514,7 +525,8 @@ class ConfigPlaceDataSourcePeriod extends Component {
 								type="grouped"
 								radio
 								name="rsc-asaul-623-2-1"
-								onChange={function(){}}
+								selected={selected}
+								onChange={this.onChange.bind(this)}
 							>
 								{relationListInsert}
 								<span
