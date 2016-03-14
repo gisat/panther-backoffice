@@ -12,7 +12,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 //import PeriodStore from '../../../stores/PeriodStore';
 import SelectorMetadataObject from '../../sections/SelectorMetadataObject';
 import ConfigMetadataScope from '../../sections/ConfigMetadataScope';
-//import ConfigMetadataPlace from '../../sections/ConfigMetadataPlace';
+import ConfigMetadataPlace from '../../sections/ConfigMetadataPlace';
 import ConfigMetadataLayerVector from '../../sections/ConfigMetadataLayerVector';
 import ConfigMetadataLayerRaster from '../../sections/ConfigMetadataLayerRaster';
 import ConfigMetadataAULevel from '../../sections/ConfigMetadataAULevel';
@@ -183,9 +183,9 @@ class ScreenMetadataObject extends Component{
 				case ObjectTypes.SCOPE:
 					configComponent = <ConfigMetadataScope {...props} />;
 					break;
-				//case ObjectTypes.PLACE:
-				//	configComponent = <ConfigMetadataPlace {...props} />;
-				//	break;
+				case ObjectTypes.PLACE:
+					configComponent = <ConfigMetadataPlace {...props} />;
+					break;
 				case ObjectTypes.PERIOD:
 					configComponent = <ConfigMetadataPeriod {...props} />;
 					break;
