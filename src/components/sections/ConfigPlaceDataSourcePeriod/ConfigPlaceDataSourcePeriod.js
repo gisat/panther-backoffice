@@ -3,6 +3,7 @@ import styles from './ConfigPlaceDataSourcePeriod.css';
 import withStyles from '../../../decorators/withStyles';
 
 import _ from 'underscore';
+import classNames from 'classnames';
 import utils from '../../../utils/utils';
 
 import UISVG from '../../atoms/UISVG';
@@ -39,7 +40,8 @@ var initialState = {
 	auLevel: null,
 	vectorLayer: null,
 	rasterLayer: null,
-	relations: []
+	relations: [],
+	expandConfig: {}
 };
 
 
@@ -72,7 +74,8 @@ class ConfigPlaceDataSourcePeriod extends Component {
 
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired,
-		onInteraction: PropTypes.func.isRequired
+		onInteraction: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
@@ -222,12 +225,6 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayer"]));
 		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["relations"]));
 		this.setStateFromStores();
-
-		$(".rsc-btn-expand").click(function() {
-			var parentElement = $(this).parent();
-			parentElement.toggleClass("expanded");
-			parentElement.prev().children(".rsc-row").toggleClass("expanded");
-		});
 	}
 
 	componentWillUnmount() {
@@ -279,6 +276,18 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		}
 	}
 
+	onToggleConfig(config) {
+		let expand = true;
+		if(this.state.expandConfig[config]) {
+			expand = false;
+		}
+		let newExpandConfig = {};
+		newExpandConfig[config] = expand;
+		this.context.setStateDeep.call(this, {expandConfig: {$merge: newExpandConfig}});
+	}
+
+
+
 	render() {
 
 		var ret = null;
@@ -325,8 +334,15 @@ class ConfigPlaceDataSourcePeriod extends Component {
 					switch (relation.dataSourceOrigin) {
 
 						case "analyses":
+							let analysisRowClasses = classNames({
+								'rsc-row': true,
+								'active': relation.active
+							});
 							let analysisRelationInsert = (
-								<Checkbox key="asaul-data-841" className="rsc-row">
+								<Checkbox
+									key={"asaul-data-" + relation.key}
+									className={analysisRowClasses}
+								>
 									<UISVG src='icon-analyses.isvg' className="positive" />
 									<span className="option-id">237</span>
 									(some analysis)
@@ -336,10 +352,16 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							break;
 
 						case "geonode":
+							let geonodeRowClasses = classNames({
+								'rsc-row': true,
+								'expandable': true,
+								'active': relation.active,
+								'expanded': this.state.expandConfig[relation.key]
+							});
 							let geonodeRelationInsert = (
 								<Checkbox
 									key={"asaul-data-" + relation.key}
-									className="rsc-row active expandable"
+									className={geonodeRowClasses}
 								>
 									<UISVG
 										src='icon-datalayers.isvg'
@@ -352,9 +374,16 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							let configInsert = (
 								<div
 									key={"config-form-" + relation.key}
-									className="rsc-expand "
+									className={this.state.expandConfig[relation.key] ? "rsc-expand expanded" : "rsc-expand "}
 								>
-									<a href="#" className="rsc-btn-expand">configure<b/></a>
+									<a
+										href="#"
+										className="rsc-btn-expand"
+										onClick={this.onToggleConfig.bind(this,relation.key)}
+									>
+										configure
+										<b/>
+									</a>
 									<div><div>
 
 										<label className="container">
