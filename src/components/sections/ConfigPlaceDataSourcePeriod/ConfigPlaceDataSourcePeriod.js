@@ -32,6 +32,7 @@ import VectorLayerStore from '../../../stores/VectorLayerStore';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 import AnalysisStore from '../../../stores/AnalysisStore';
+import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
 
 var initialState = {
@@ -41,6 +42,7 @@ var initialState = {
 	vectorLayer: null,
 	rasterLayer: null,
 	relations: [],
+	relationsState: {},
 	expandConfig: {},
 	selected: null
 };
@@ -214,6 +216,29 @@ class ConfigPlaceDataSourcePeriod extends Component {
 					for (let relation of thisComponent.state.relations) {
 						if(relation.active) {
 							selected = relation.key.toString();
+						}
+						if (relation.dataSourceOrigin=="geonode") {
+							(function (relation) { // todo is this needed with let instead of var?
+
+								let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(relation.dataSourceString);
+								let relationsState = {};
+								dataLayerColumnsPromise.then(function (dataLayerColumns) {
+									let columns = [];
+									_.each(dataLayerColumns, function(column){
+										if (column.hasOwnProperty("name")) {
+											columns.push({
+												key: column.name,
+												name: column.name
+											});
+										}
+									});
+									relationsState[relation.dataSourceString] = {
+										columns: columns
+									};
+									thisComponent.context.setStateDeep.call(thisComponent, {relationsState: {$merge: relationsState}});
+								});
+
+							})(relation);
 						}
 					}
 					let state = {
