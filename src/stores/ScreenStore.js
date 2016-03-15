@@ -350,17 +350,21 @@ class ScreenStore extends Store {
 		if (screenSetKey) {
 			let historyStack = this._historyStacks[screenSetKey];
 			let screen = null;
-			historyStack.map(function(record, i){
-				if(record.screen.key == screenKey){
-					screen = record.screen;
-					historyStack.splice(i, 1);
-				}
-			});
-			historyStack.unshift({
-				screen: screen,
-				userDidThat: true
-			});
+			if (!this._focusedScreenKey || this._focusedScreenKey!=screenKey) {
 
+				historyStack.map (function(record, i) {
+					if (record.screen.key == screenKey) {
+						screen = record.screen;
+						historyStack.splice(i, 1);
+					}
+				});
+				historyStack.unshift({
+					screen: screen,
+					userDidThat: true
+				});
+
+				this._focusedScreenKey = screenKey;
+			}
 		}
 	}
 
