@@ -5,6 +5,7 @@ import EventTypes from '../constants/EventTypes';
 import utils from '../utils/utils';
 
 import _ from 'underscore';
+import ga from 'react-ga';
 
 import ScreenAnalysesBase from '../components/screens/ScreenAnalysesBase';
 import ScreenAnalysisSpatial from '../components/screens/ScreenAnalysisSpatial';
@@ -362,6 +363,8 @@ class ScreenStore extends Store {
 					screen: screen,
 					userDidThat: true
 				});
+
+				ga.pageview(screenKey); // todo with url
 
 				this._focusedScreenKey = screenKey;
 			}
