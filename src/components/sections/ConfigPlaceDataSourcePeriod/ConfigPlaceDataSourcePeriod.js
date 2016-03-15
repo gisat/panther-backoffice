@@ -208,7 +208,20 @@ class ConfigPlaceDataSourcePeriod extends Component {
 						};
 						break;
 				}
-				thisComponent.context.setStateFromStores.call(thisComponent, relations2state);
+				let relations2statePromise = thisComponent.context.setStateFromStores.call(thisComponent, relations2state);
+				relations2statePromise.then(function () {
+					let selected = thisComponent.state.selected;
+					for (let relation of thisComponent.state.relations) {
+						if(relation.active) {
+							selected = relation.key.toString();
+						}
+					}
+					let state = {
+						selected: selected
+					};
+					state.savedState = utils.deepClone(state);
+					thisComponent.setState(state);
+				});
 			});
 		}
 	}
@@ -276,6 +289,55 @@ class ConfigPlaceDataSourcePeriod extends Component {
 			this.setStateFromStores(newProps);
 		}
 	}
+
+	/**
+	 * Check if state is the same as it was when loaded from stores
+	 * @returns {boolean}
+	 */
+	isStateUnchanged() {
+		let isSelectionUnchanged = true, areConfigsUnchanged = true;
+		let condition = false;
+		switch(this.props.relationsContext) {
+			case "AttSet":
+				condition = (
+					this.state.place &&
+					this.state.period &&
+					this.state.attributeSet &&
+					this.state.auLevel
+				);
+				break;
+			case "Vector":
+				condition = (
+					this.state.place &&
+					this.state.period &&
+					this.state.vectorLayer
+				);
+				break;
+			case "VectorAttSet":
+				condition = (
+					this.state.place &&
+					this.state.period &&
+					this.state.attributeSet &&
+					this.state.vectorLayer
+				);
+				break;
+			case "Raster":
+				condition = (
+					this.state.place &&
+					this.state.period &&
+					this.state.rasterLayer
+				);
+				break;
+		}
+		if(condition && this.state.savedState) {
+			isSelectionUnchanged = (
+				this.state.selected == this.state.savedState.selected
+			);
+		}
+		return (isSelectionUnchanged && areConfigsUnchanged);
+	}
+
+
 
 	onToggleConfig(config) {
 		let expand = true;
@@ -514,9 +576,9 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							relationListInsert.push(configInsert);
 							break;
 					}
-					if(relation.active && (this.state.selected == null)) {
-						selected = [relation.key.toString()]
-					}
+					//if(relation.active && (this.state.selected == null)) {
+					//	selected = [relation.key.toString()]
+					//}
 				}
 
 				relationsInsert = (
@@ -540,6 +602,16 @@ class ConfigPlaceDataSourcePeriod extends Component {
 
 			}
 
+
+			var saveButton = (
+				<SaveButton
+					saved={this.isStateUnchanged()}
+					className="save-button"
+					//onClick={this.saveForm.bind(this)}
+				/>
+			);
+
+
 			ret = (
 				<div className="data-source-period-box">
 
@@ -560,7 +632,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							<Icon name="plus" />
 							New analysis run
 						</UIScreenButton>
-						<SaveButton />
+						{saveButton}
 					</div>
 				</div>
 			);
