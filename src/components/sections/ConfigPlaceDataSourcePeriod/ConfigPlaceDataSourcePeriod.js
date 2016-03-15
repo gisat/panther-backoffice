@@ -32,6 +32,7 @@ import VectorLayerStore from '../../../stores/VectorLayerStore';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 import AnalysisStore from '../../../stores/AnalysisStore';
+import DataLayerStore from '../../../stores/DataLayerStore';
 import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
 
@@ -93,14 +94,16 @@ class ConfigPlaceDataSourcePeriod extends Component {
 					place: PlaceStore.getById(props.place),
 					period: PeriodStore.getById(props.period),
 					attributeSet: AttributeSetStore.getById(props.attributeSet),
-					auLevel: AULevelStore.getById(props.auLevel)
+					auLevel: AULevelStore.getById(props.auLevel),
+					dataLayers: DataLayerStore.getAll()
 				};
 				break;
 			case "Vector":
 				return {
 					place: PlaceStore.getById(props.place),
 					period: PeriodStore.getById(props.period),
-					vectorLayer: VectorLayerStore.getById(props.vectorLayer)
+					vectorLayer: VectorLayerStore.getById(props.vectorLayer),
+					dataLayers: DataLayerStore.getAll()
 				};
 				break;
 			case "VectorAttSet":
@@ -108,14 +111,16 @@ class ConfigPlaceDataSourcePeriod extends Component {
 					place: PlaceStore.getById(props.place),
 					period: PeriodStore.getById(props.period),
 					attributeSet: AttributeSetStore.getById(props.attributeSet),
-					vectorLayer: VectorLayerStore.getById(props.vectorLayer)
+					vectorLayer: VectorLayerStore.getById(props.vectorLayer),
+					dataLayers: DataLayerStore.getAll()
 				};
 				break;
 			case "Raster":
 				return {
 					place: PlaceStore.getById(props.place),
 					period: PeriodStore.getById(props.period),
-					rasterLayer: RasterLayerStore.getById(props.rasterLayer)
+					rasterLayer: RasterLayerStore.getById(props.rasterLayer),
+					dataLayers: DataLayerStore.getAll()
 				};
 				break;
 		}
@@ -234,7 +239,9 @@ class ConfigPlaceDataSourcePeriod extends Component {
 									});
 									relationsState[relation.key] = {
 										columns: columns,
-										valuesColumnMap: relation.columnMap
+										valuesColumnMap: relation.columnMap,
+										valueDataLayer: relation.dataSource.key,
+										valueFidColumn: relation.fidColumn
 									};
 									thisComponent.context.setStateDeep.call(thisComponent, {relationsState: {$merge: relationsState}});
 								});
@@ -467,7 +474,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 								</Checkbox>
 							);
 							relationListInsert.push(geonodeRelationInsert);
-							if (this.state.relationsState[relation.key]) {
+							if (this.state.relationsState[relation.key] && this.state.dataLayers) {
 								let attSetTableRowsInsert = [];
 								for (let att of relation.attributeSet.attributes) {
 									let record = _.find(this.state.relationsState[relation.key].valuesColumnMap, function (item) {
@@ -511,12 +518,10 @@ class ConfigPlaceDataSourcePeriod extends Component {
 													Data layer
 													<Select
 														//onChange={this.onChangeAttSet.bind(this)}
-														//loadOptions={this.getPlaces}
-														options={DATALAYERS}
+														options={this.state.dataLayers}
 														valueKey="key"
 														labelKey="key"
-														//inputProps={selectInputProps}
-														value="geonode:hcmc_b3_gadm_adm"
+														value={this.state.relationsState[relation.key].valueDataLayer}
 													/>
 												</label>
 
@@ -524,12 +529,10 @@ class ConfigPlaceDataSourcePeriod extends Component {
 													FID column (Feature identifier)
 													<Select
 														//onChange={this.onChangeAttSet.bind(this)}
-														//loadOptions={this.getPlaces}
-														options={COLUMNS}
+														options={this.state.relationsState[relation.key].columns}
 														valueKey="key"
 														labelKey="key"
-														//inputProps={selectInputProps}
-														value="ID_0"
+														value={this.state.relationsState[relation.key].valueFidColumn}
 													/>
 												</label>
 
