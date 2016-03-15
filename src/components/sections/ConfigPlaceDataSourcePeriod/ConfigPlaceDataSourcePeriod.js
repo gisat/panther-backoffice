@@ -232,8 +232,9 @@ class ConfigPlaceDataSourcePeriod extends Component {
 											});
 										}
 									});
-									relationsState[relation.dataSourceString] = {
-										columns: columns
+									relationsState[relation.key] = {
+										columns: columns,
+										valuesColumnMap: relation.columnMap
 									};
 									thisComponent.context.setStateDeep.call(thisComponent, {relationsState: {$merge: relationsState}});
 								});
@@ -466,59 +467,61 @@ class ConfigPlaceDataSourcePeriod extends Component {
 								</Checkbox>
 							);
 							relationListInsert.push(geonodeRelationInsert);
-							let configInsert = (
-								<div
-									key={"config-form-" + relation.key}
-									className={this.state.expandConfig[relation.key] ? "rsc-expand expanded" : "rsc-expand "}
-								>
-									<a
-										href="#"
-										className="rsc-btn-expand"
-										onClick={this.onToggleConfig.bind(this,relation.key)}
+							if (this.state.relationsState[relation.key]) {
+								let attSetTableRowsInsert = [];
+								for (let att of relation.attributeSet.attributes) {
+									let record = _.find(this.state.relationsState[relation.key].valuesColumnMap, function (item) {
+										return item.attribute.key == att.key;
+									});
+									let rowInsert = (
+										<tr
+											key={att.key}
+										>
+											<td className="header">{att.name}</td>
+											<td className="allowOverflow resetui">
+												<Select
+													//onChange={this.onChangeAttSet.bind(this,att.key)}
+													options={this.state.relationsState[relation.key].columns}
+													valueKey="key"
+													labelKey="name"
+													value={record ? record.column : null}
+												/>
+											</td>
+										</tr>
+									);
+									attSetTableRowsInsert.push(rowInsert);
+								}
+								let configInsert = (
+									<div
+										key={"config-form-" + relation.key}
+										className={this.state.expandConfig[relation.key] ? "rsc-expand expanded" : "rsc-expand "}
 									>
-										configure
-										<b/>
-									</a>
-									<div><div>
+										<a
+											href="#"
+											className="rsc-btn-expand"
+											onClick={this.onToggleConfig.bind(this,relation.key)}
+										>
+											configure
+											<b/>
+										</a>
+										<div>
+											<div>
 
-										<label className="container">
-											Data layer
-											<Select
-												//onChange={this.onChangeAttSet.bind(this)}
-												//loadOptions={this.getPlaces}
-												options={DATALAYERS}
-												valueKey="key"
-												labelKey="key"
-												//inputProps={selectInputProps}
-												value="geonode:hcmc_b3_gadm_adm"
-											/>
-										</label>
+												<label className="container">
+													Data layer
+													<Select
+														//onChange={this.onChangeAttSet.bind(this)}
+														//loadOptions={this.getPlaces}
+														options={DATALAYERS}
+														valueKey="key"
+														labelKey="key"
+														//inputProps={selectInputProps}
+														value="geonode:hcmc_b3_gadm_adm"
+													/>
+												</label>
 
-										<label className="container">
-											FID column (Feature identifier)
-											<Select
-												//onChange={this.onChangeAttSet.bind(this)}
-												//loadOptions={this.getPlaces}
-												options={COLUMNS}
-												valueKey="key"
-												labelKey="key"
-												//inputProps={selectInputProps}
-												value="ID_0"
-											/>
-										</label>
-
-										<Table celled className="fixed">
-											<thead>
-											<tr>
-												<th>Attribute</th>
-												<th>Source column</th>
-											</tr>
-											</thead>
-											<tbody>
-
-											<tr>
-												<td className="header">Continuous Urban Fabric (S.L. > 80%)</td>
-												<td className="allowOverflow resetui">
+												<label className="container">
+													FID column (Feature identifier)
 													<Select
 														//onChange={this.onChangeAttSet.bind(this)}
 														//loadOptions={this.getPlaces}
@@ -526,87 +529,37 @@ class ConfigPlaceDataSourcePeriod extends Component {
 														valueKey="key"
 														labelKey="key"
 														//inputProps={selectInputProps}
-														value="uf_00"
+														value="ID_0"
 													/>
-												</td>
-											</tr>
+												</label>
 
-											<tr>
-												<td className="header">Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
-												<td className="allowOverflow resetui">
-													<Select
-														//onChange={this.onChangeAttSet.bind(this)}
-														//loadOptions={this.getPlaces}
-														options={COLUMNS}
-														valueKey="key"
-														labelKey="key"
-														//inputProps={selectInputProps}
-														value="diff_uf"
-													/>
-												</td>
-											</tr>
+												<Table celled className="fixed">
+													<thead>
+													<tr>
+														<th>Attribute</th>
+														<th>Source column</th>
+													</tr>
+													</thead>
+													<tbody>
 
-											<tr>
-												<td className="header">Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
-												<td className="allowOverflow resetui">
-													<Select
-														//onChange={this.onChangeAttSet.bind(this)}
-														//loadOptions={this.getPlaces}
-														options={COLUMNS}
-														valueKey="key"
-														labelKey="key"
-														//inputProps={selectInputProps}
-														value="uf_00"
-													/>
-												</td>
-											</tr>
+													{attSetTableRowsInsert}
 
-											<tr>
-												<td className="header">Industrial, Commercial and Transport Units</td>
-												<td className="allowOverflow resetui">
-													<Select
-														//onChange={this.onChangeAttSet.bind(this)}
-														//loadOptions={this.getPlaces}
-														options={COLUMNS}
-														valueKey="key"
-														labelKey="key"
-														//inputProps={selectInputProps}
-														value="fo_00"
-													/>
-												</td>
-											</tr>
+													</tbody>
+												</Table>
 
-											<tr>
-												<td className="header">Construction sites</td>
-												<td className="allowOverflow resetui">
-													<Select
-														//onChange={this.onChangeAttSet.bind(this)}
-														//loadOptions={this.getPlaces}
-														options={COLUMNS}
-														valueKey="key"
-														labelKey="key"
-														//inputProps={selectInputProps}
-														value="diff_uf"
-													/>
-												</td>
-											</tr>
-
-
-											</tbody>
-										</Table>
-
-									</div></div>
-								</div>
-							);
-							relationListInsert.push(configInsert);
+											</div>
+										</div>
+									</div>
+								);
+								relationListInsert.push(configInsert);
+							}
 							break;
 					}
-					//if(relation.active && (this.state.selected == null)) {
-					//	selected = [relation.key.toString()]
-					//}
+
 				}
 
-				relationsInsert = (
+				if (relationListInsert.length) {
+					relationsInsert = (
 						<div className="row-select-config">
 							<CheckboxFields
 								type="grouped"
@@ -621,7 +574,8 @@ class ConfigPlaceDataSourcePeriod extends Component {
 								/>
 							</CheckboxFields>
 						</div>
-				);
+					);
+				}
 
 			} else {
 
