@@ -13,6 +13,7 @@ import ThemeModel from '../models/ThemeModel';
 import LayerGroupModel from '../models/LayerGroupModel';
 import StyleModel from '../models/StyleModel';
 import ObjectRelationModel from '../models/ObjectRelationModel';
+import AnalysisModel from '../models/AnalysisModel';
 
 import ScopeStore from '../stores/ScopeStore';
 import PlaceStore from '../stores/PlaceStore';
@@ -28,6 +29,7 @@ import ThemeStore from '../stores/ThemeStore';
 import LayerGroupStore from '../stores/LayerGroupStore';
 import StyleStore from '../stores/StyleStore';
 import ObjectRelationStore from '../stores/ObjectRelationStore';
+import AnalysisStore from '../stores/AnalysisStore';
 
 export const Store = {
 	SCOPE: ScopeStore,
@@ -43,7 +45,8 @@ export const Store = {
 	THEME: ThemeStore,
 	LAYER_GROUP: LayerGroupStore,
 	STYLE: StyleStore,
-	OBJECT_RELATION: ObjectRelationStore
+	OBJECT_RELATION: ObjectRelationStore,
+	ANALYSIS: AnalysisStore
 };
 
 export const Model = {
@@ -60,7 +63,8 @@ export const Model = {
 	THEME: ThemeModel,
 	LAYER_GROUP: LayerGroupModel,
 	STYLE: StyleModel,
-	OBJECT_RELATION: ObjectRelationModel
+	OBJECT_RELATION: ObjectRelationModel,
+	ANALYSIS: AnalysisModel
 };
 
 export default keyMirror(Model);
@@ -124,6 +128,10 @@ export const objectTypesMetadata = {
 		url: "style"
 	},
 	OBJECT_RELATION: {
+		name: null,
+		url: null
+	},
+	ANALYSIS: {
 		name: null,
 		url: null
 	}

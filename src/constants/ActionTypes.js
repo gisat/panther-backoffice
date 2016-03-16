@@ -38,5 +38,7 @@ export default keyMirror({
 	SCREEN_CLOSE: null,
 	SCREEN_LOG_ACTIVITY: null,
 	APP_INITIALIZED: null,
-	LAYER_ADD: null
+	LAYER_ADD: null,
+	ANALYSIS_HANDLE: null,
+	ANALYSIS_CREATE_RESPOND: null
 });

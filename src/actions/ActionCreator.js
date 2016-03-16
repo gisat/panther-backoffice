@@ -126,6 +126,9 @@ export default {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_HANDLE;
 				break;
+			case ObjectTypes.ANALYSIS:
+				action.type = ActionTypes.ANALYSIS_HANDLE;
+				break;
 			default:
 				return;
 		}

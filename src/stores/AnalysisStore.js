@@ -21,10 +21,10 @@ let storeInstance = new AnalysisStore();
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 
 	switch(action.type) {
-		case ActionTypes.PERIOD_CREATE_RESPOND:
+		case ActionTypes.ANALYSIS_CREATE_RESPOND:
 			storeInstance.createObjectAndRespond(action.model, action.responseData, action.stateHash);
 			break;
-		case ActionTypes.PERIOD_HANDLE:
+		case ActionTypes.ANALYSIS_HANDLE:
 			storeInstance.handle(action.data);
 			break;
 		default:
