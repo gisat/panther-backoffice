@@ -170,99 +170,117 @@ class ConfigPlaceDataSourcePeriod extends Component {
 			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
 
 			setStatePromise.then(function () {
-				thisComponent.setRelationsState(props,keys);
+
+				let relations2statePromise = thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(props,thisComponent.state,keys));
+
+				relations2statePromise.then(function(){
+
+					thisComponent.setRelationsState(props,thisComponent.state,keys);
+
+				});
 			});
 		}
 	}
 
-	setRelationsState(props,keys) {
-		var thisComponent = this;
+	relations2state(props,state,keys) {
+		if (!props) {
+			props = this.props;
+		}
+		if (!state) {
+			state = this.state;
+		}
 		let relations2state = {};
 		switch(props.relationsContext) {
 			case "AttSet":
 				relations2state = {
 					relations: ObjectRelationStore.getFiltered({
-						place: thisComponent.state.place,
-						period: thisComponent.state.period,
+						place: state.place,
+						period: state.period,
 						isOfAttributeSet: true,
-						attributeSet: thisComponent.state.attributeSet,
-						layerObject: thisComponent.state.auLevel
+						attributeSet: state.attributeSet,
+						layerObject: state.auLevel
 					})
 				};
 				break;
 			case "Vector":
 				relations2state = {
 					relations: ObjectRelationStore.getFiltered({
-						place: thisComponent.state.place,
-						period: thisComponent.state.period,
+						place: state.place,
+						period: state.period,
 						isOfAttributeSet: false,
-						layerObject: thisComponent.state.vectorLayer
+						layerObject: state.vectorLayer
 					})
 				};
 				break;
 			case "VectorAttSet":
 				relations2state = {
 					relations: ObjectRelationStore.getFiltered({
-						place: thisComponent.state.place,
-						period: thisComponent.state.period,
+						place: state.place,
+						period: state.period,
 						isOfAttributeSet: true,
-						attributeSet: thisComponent.state.attributeSet,
-						layerObject: thisComponent.state.vectorLayer
+						attributeSet: state.attributeSet,
+						layerObject: state.vectorLayer
 					})
 				};
 				break;
 			case "Raster":
 				relations2state = {
 					relations: ObjectRelationStore.getFiltered({
-						place: thisComponent.state.place,
-						period: thisComponent.state.period,
+						place: state.place,
+						period: state.period,
 						isOfAttributeSet: false,
-						layerObject: thisComponent.state.rasterLayer
+						layerObject: state.rasterLayer
 					})
 				};
 				break;
 		}
-		let relations2statePromise = thisComponent.context.setStateFromStores.call(thisComponent, relations2state);
+		return relations2state;
+	}
 
-		relations2statePromise.then(function () {
-			let selected = thisComponent.state.selected;
-			for (let relation of thisComponent.state.relations) {
-				if(relation.active) {
-					selected = relation.key.toString();
-				}
-				if (relation.dataSourceOrigin=="geonode") {
-					(function (relation) { // todo is this needed with let instead of var?
+	setRelationsState(props,state,keys) {
+		var thisComponent = this;
+		if (!state) {
+			state = this.state;
+		}
 
-						let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(relation.dataSourceString);
-						let relationsState = {};
-						dataLayerColumnsPromise.then(function (dataLayerColumns) {
-							let columns = [];
-							_.each(dataLayerColumns, function(column){
-								if (column.hasOwnProperty("name")) {
-									columns.push({
-										key: column.name,
-										name: column.name
-									});
-								}
-							});
-							relationsState[relation.key] = {
-								columns: columns,
-								valuesColumnMap: relation.columnMap,
-								valueDataLayer: relation.dataSource.key,
-								valueFidColumn: relation.fidColumn
-							};
-							thisComponent.context.setStateDeep.call(thisComponent, {relationsState: {$merge: relationsState}});
-						});
-
-					})(relation);
-				}
+		let selected = state.selected;
+		for (let relation of thisComponent.state.relations) {
+			if(relation.active) {
+				selected = relation.key.toString();
 			}
-			let state = {
-				selected: selected
-			};
-			state.savedState = utils.deepClone(state);
-			thisComponent.setState(state);
-		});
+			if (relation.dataSourceOrigin=="geonode") {
+				(function (relation) { // todo is this needed with let instead of var?
+
+					let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(relation.dataSourceString);
+					let relationsState = {};
+					dataLayerColumnsPromise.then(function (dataLayerColumns) {
+						let columns = [];
+						_.each(dataLayerColumns, function(column){
+							if (column.hasOwnProperty("name")) {
+								columns.push({
+									key: column.name,
+									name: column.name
+								});
+							}
+						});
+						relationsState[relation.key] = {
+							columns: columns,
+							valuesColumnMap: relation.columnMap,
+							valueDataLayer: relation.dataSource.key,
+							valueFidColumn: relation.fidColumn
+						};
+						thisComponent.context.setStateDeep.call(thisComponent, {relationsState: {$merge: relationsState}});
+					});
+
+				})(relation);
+			}
+		}
+		let newState = {
+			selected: selected
+		};
+		newState.savedState = utils.deepClone(newState);
+		thisComponent.setState(newState);
+
 	}
 
 	_onStoreChange(keys) {
@@ -328,6 +346,26 @@ class ConfigPlaceDataSourcePeriod extends Component {
 			this.setStateFromStores(newProps);
 		}
 	}
+
+	//componentWillUpdate(newProps, newState) {
+	//	var thisComponent = this;
+	//	if(newState.hasOwnProperty("relationsState")) {
+	//		let changed = false;
+	//		_.each(newState.relationsState, function (relState, relKey, relationsState) {
+	//			if (
+	//				relState.hasOwnProperty("valueDataLayer") &&
+	//				thisComponent.state.relationsState.hasOwnProperty(relKey) &&
+	//				relState.valueDataLayer != thisComponent.state.relationsState[relKey].valueDataLayer
+	//			) {
+	//				changed = true;
+	//			}
+	//		});
+	//		if (changed) {
+	//
+	//		}
+	//	}
+	//}
+
 
 	/**
 	 * Check if state is the same as it was when loaded from stores
