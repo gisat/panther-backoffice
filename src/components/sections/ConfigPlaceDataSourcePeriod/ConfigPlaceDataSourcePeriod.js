@@ -388,6 +388,27 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		});
 	}
 
+	onChangeAttSet(relationKey,attributeKey, value, values) {
+		//let record = _.find(this.state.relationsState[relation.key].valuesColumnMap, function (item) {
+		//	return item.attribute.key == att.key;
+		//});
+	}
+
+	onChangeDataLayer(relationKey, value, values) {
+		//this.state.relationsState[relation.key].valueDataLayer
+		//let relationsState = {
+		//	[relationKey]: {
+		//		valueDataLayer: value
+		//	}
+		//};
+		//this.context.setStateDeep.call(this, {relationsState: {$merge: relationsState}});
+		// todo fix - like this, merge is shallow
+	}
+
+	onChangeFidColumn(relationKey, value, values) {
+		//this.state.relationsState[relation.key].valueFidColumn
+	}
+
 
 
 	render() {
@@ -487,7 +508,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 											<td className="header">{att.name}</td>
 											<td className="allowOverflow resetui">
 												<Select
-													//onChange={this.onChangeAttSet.bind(this,att.key)}
+													onChange={this.onChangeAttSet.bind(this,relation.key,att.key)}
 													options={this.state.relationsState[relation.key].columns}
 													valueKey="key"
 													labelKey="name"
@@ -517,7 +538,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 												<label className="container">
 													Data layer
 													<Select
-														//onChange={this.onChangeAttSet.bind(this)}
+														onChange={this.onChangeDataLayer.bind(this, relation.key)}
 														options={this.state.dataLayers}
 														valueKey="key"
 														labelKey="key"
@@ -528,7 +549,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 												<label className="container">
 													FID column (Feature identifier)
 													<Select
-														//onChange={this.onChangeAttSet.bind(this)}
+														onChange={this.onChangeFidColumn.bind(this, relation.key)}
 														options={this.state.relationsState[relation.key].columns}
 														valueKey="key"
 														labelKey="key"
