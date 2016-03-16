@@ -45,7 +45,8 @@ var initialState = {
 	relations: [],
 	relationsState: {},
 	expandConfig: {},
-	selected: null
+	selected: null,
+	savedState: {}
 };
 
 
@@ -244,6 +245,8 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		}
 
 		let selected = state.selected;
+		let relationsState = {};
+		let promises = [];
 		for (let relation of thisComponent.state.relations) {
 			if(relation.active) {
 				selected = relation.key.toString();
@@ -256,34 +259,42 @@ class ConfigPlaceDataSourcePeriod extends Component {
 						valueDataLayer = state.relationsState[relation.key].valueDataLayer;
 					}
 					let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(valueDataLayer);
-					let relationsState = {};
-					dataLayerColumnsPromise.then(function (dataLayerColumns) {
-						let columns = [];
-						_.each(dataLayerColumns, function(column){
-							if (column.hasOwnProperty("name")) {
-								columns.push({
-									key: column.name,
-									name: column.name
-								});
-							}
+					promises.push(dataLayerColumnsPromise);
+					if(dataLayerColumnsPromise) {
+						dataLayerColumnsPromise.then(function (dataLayerColumns) {
+							let columns = [];
+							_.each(dataLayerColumns, function (column) {
+								if (column.hasOwnProperty("name")) {
+									columns.push({
+										key: column.name,
+										name: column.name
+									});
+								}
+							});
+							relationsState[relation.key] = {
+								columns: columns,
+								valuesColumnMap: relation.columnMap,
+								valueDataLayer: valueDataLayer,
+								valueFidColumn: relation.fidColumn
+							};
 						});
-						relationsState[relation.key] = {
-							columns: columns,
-							valuesColumnMap: relation.columnMap,
-							valueDataLayer: relation.dataSource.key,
-							valueFidColumn: relation.fidColumn
-						};
-						thisComponent.context.setStateDeep.call(thisComponent, {relationsState: {$merge: relationsState}});
-					});
+					}
 
 				})(relation);
 			}
 		}
-		let newState = {
-			selected: selected
-		};
-		newState.savedState = utils.deepClone(newState);
-		thisComponent.setState(newState);
+		Promise.all(promises).then(function(){
+			let savedState = {
+				selected: selected
+			};
+			let newState = {
+				relationsState: {$merge: relationsState},
+				selected: {$set: selected},
+				savedState: {$merge: savedState}
+			};
+			thisComponent.context.setStateDeep.call(thisComponent, newState);
+
+		});
 
 	}
 
@@ -351,24 +362,24 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		}
 	}
 
-	//componentWillUpdate(newProps, newState) {
-	//	var thisComponent = this;
-	//	if(newState.hasOwnProperty("relationsState")) {
-	//		let changed = false;
-	//		_.each(newState.relationsState, function (relState, relKey, relationsState) {
-	//			if (
-	//				relState.hasOwnProperty("valueDataLayer") &&
-	//				thisComponent.state.relationsState.hasOwnProperty(relKey) &&
-	//				relState.valueDataLayer != thisComponent.state.relationsState[relKey].valueDataLayer
-	//			) {
-	//				changed = true;
-	//			}
-	//		});
-	//		if (changed) {
-	//
-	//		}
-	//	}
-	//}
+	componentWillUpdate(newProps, newState) {
+		var thisComponent = this;
+		if(newState.hasOwnProperty("relationsState")) {
+			let changed = false;
+			_.each(newState.relationsState, function (relState, relKey, relationsState) {
+				if (
+					relState.hasOwnProperty("valueDataLayer") &&
+					thisComponent.state.relationsState.hasOwnProperty(relKey) &&
+					relState.valueDataLayer != thisComponent.state.relationsState[relKey].valueDataLayer
+				) {
+					changed = true;
+				}
+			});
+			if (changed) {
+				this.setRelationsState(newProps,newState);
+			}
+		}
+	}
 
 
 	/**
@@ -550,6 +561,15 @@ class ConfigPlaceDataSourcePeriod extends Component {
 									let record = _.find(this.state.relationsState[relation.key].valuesColumnMap, function (item) {
 										return item.attribute.key == att.key;
 									});
+									let columnInsert = null;
+									if (record) {
+										let isValueValid = _.find(this.state.relationsState[relation.key].columns, function (stateCol) {
+											return stateCol.key == record.column
+										});
+										if (isValueValid) {
+											columnInsert = record.column;
+										}
+									}
 									let rowInsert = (
 										<tr
 											key={att.key}
@@ -561,7 +581,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 													options={this.state.relationsState[relation.key].columns}
 													valueKey="key"
 													labelKey="name"
-													value={record ? record.column : null}
+													value={columnInsert}
 												/>
 											</td>
 										</tr>
