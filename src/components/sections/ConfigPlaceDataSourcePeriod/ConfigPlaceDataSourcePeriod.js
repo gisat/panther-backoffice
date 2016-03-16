@@ -448,9 +448,19 @@ class ConfigPlaceDataSourcePeriod extends Component {
 	}
 
 	onChangeAttSet(relationKey,attributeKey, value, values) {
-		//let record = _.find(this.state.relationsState[relation.key].valuesColumnMap, function (item) {
-		//	return item.attribute.key == att.key;
-		//});
+		let columnMap = utils.deepClone(this.state.relationsState[relationKey].valuesColumnMap);
+		let record = _.find(columnMap, function (item) {
+			return item.attribute.key == attributeKey;
+		});
+		record.column = value;
+		let state = {
+			relationsState: {
+				[relationKey]: {
+					valuesColumnMap: {$set: columnMap}
+				}
+			}
+		};
+		this.context.setStateDeep.call(this, state);
 	}
 
 	onChangeDataLayer(relationKey, value, values) {
@@ -462,11 +472,17 @@ class ConfigPlaceDataSourcePeriod extends Component {
 			}
 		};
 		this.context.setStateDeep.call(this, state);
-		// todo refresh columns, clear fidColumn & columnMap
 	}
 
 	onChangeFidColumn(relationKey, value, values) {
-		//this.state.relationsState[relation.key].valueFidColumn
+		let state = {
+			relationsState: {
+				[relationKey]: {
+					valueFidColumn: {$set: value}
+				}
+			}
+		};
+		this.context.setStateDeep.call(this, state);
 	}
 
 
