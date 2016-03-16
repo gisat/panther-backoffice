@@ -251,7 +251,11 @@ class ConfigPlaceDataSourcePeriod extends Component {
 			if (relation.dataSourceOrigin=="geonode") {
 				(function (relation) { // todo is this needed with let instead of var?
 
-					let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(relation.dataSourceString);
+					let valueDataLayer = relation.dataSourceString;
+					if (state.relationsState[relation.key]) {
+						valueDataLayer = state.relationsState[relation.key].valueDataLayer;
+					}
+					let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(valueDataLayer);
 					let relationsState = {};
 					dataLayerColumnsPromise.then(function (dataLayerColumns) {
 						let columns = [];
