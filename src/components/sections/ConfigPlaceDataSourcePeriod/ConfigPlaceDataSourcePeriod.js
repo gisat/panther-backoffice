@@ -170,93 +170,99 @@ class ConfigPlaceDataSourcePeriod extends Component {
 			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
 
 			setStatePromise.then(function () {
-				let relations2state = {};
-				switch(props.relationsContext) {
-					case "AttSet":
-						relations2state = {
-							relations: ObjectRelationStore.getFiltered({
-								place: thisComponent.state.place,
-								period: thisComponent.state.period,
-								isOfAttributeSet: true,
-								attributeSet: thisComponent.state.attributeSet,
-								layerObject: thisComponent.state.auLevel
-							})
-						};
-						break;
-					case "Vector":
-						relations2state = {
-							relations: ObjectRelationStore.getFiltered({
-								place: thisComponent.state.place,
-								period: thisComponent.state.period,
-								isOfAttributeSet: false,
-								layerObject: thisComponent.state.vectorLayer
-							})
-						};
-						break;
-					case "VectorAttSet":
-						relations2state = {
-							relations: ObjectRelationStore.getFiltered({
-								place: thisComponent.state.place,
-								period: thisComponent.state.period,
-								isOfAttributeSet: true,
-								attributeSet: thisComponent.state.attributeSet,
-								layerObject: thisComponent.state.vectorLayer
-							})
-						};
-						break;
-					case "Raster":
-						relations2state = {
-							relations: ObjectRelationStore.getFiltered({
-								place: thisComponent.state.place,
-								period: thisComponent.state.period,
-								isOfAttributeSet: false,
-								layerObject: thisComponent.state.rasterLayer
-							})
-						};
-						break;
-				}
-				let relations2statePromise = thisComponent.context.setStateFromStores.call(thisComponent, relations2state);
-				relations2statePromise.then(function () {
-					let selected = thisComponent.state.selected;
-					for (let relation of thisComponent.state.relations) {
-						if(relation.active) {
-							selected = relation.key.toString();
-						}
-						if (relation.dataSourceOrigin=="geonode") {
-							(function (relation) { // todo is this needed with let instead of var?
-
-								let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(relation.dataSourceString);
-								let relationsState = {};
-								dataLayerColumnsPromise.then(function (dataLayerColumns) {
-									let columns = [];
-									_.each(dataLayerColumns, function(column){
-										if (column.hasOwnProperty("name")) {
-											columns.push({
-												key: column.name,
-												name: column.name
-											});
-										}
-									});
-									relationsState[relation.key] = {
-										columns: columns,
-										valuesColumnMap: relation.columnMap,
-										valueDataLayer: relation.dataSource.key,
-										valueFidColumn: relation.fidColumn
-									};
-									thisComponent.context.setStateDeep.call(thisComponent, {relationsState: {$merge: relationsState}});
-								});
-
-							})(relation);
-						}
-					}
-					let state = {
-						selected: selected
-					};
-					state.savedState = utils.deepClone(state);
-					thisComponent.setState(state);
-				});
+				thisComponent.setRelationsState(props,keys);
 			});
 		}
+	}
+
+	setRelationsState(props,keys) {
+		var thisComponent = this;
+		let relations2state = {};
+		switch(props.relationsContext) {
+			case "AttSet":
+				relations2state = {
+					relations: ObjectRelationStore.getFiltered({
+						place: thisComponent.state.place,
+						period: thisComponent.state.period,
+						isOfAttributeSet: true,
+						attributeSet: thisComponent.state.attributeSet,
+						layerObject: thisComponent.state.auLevel
+					})
+				};
+				break;
+			case "Vector":
+				relations2state = {
+					relations: ObjectRelationStore.getFiltered({
+						place: thisComponent.state.place,
+						period: thisComponent.state.period,
+						isOfAttributeSet: false,
+						layerObject: thisComponent.state.vectorLayer
+					})
+				};
+				break;
+			case "VectorAttSet":
+				relations2state = {
+					relations: ObjectRelationStore.getFiltered({
+						place: thisComponent.state.place,
+						period: thisComponent.state.period,
+						isOfAttributeSet: true,
+						attributeSet: thisComponent.state.attributeSet,
+						layerObject: thisComponent.state.vectorLayer
+					})
+				};
+				break;
+			case "Raster":
+				relations2state = {
+					relations: ObjectRelationStore.getFiltered({
+						place: thisComponent.state.place,
+						period: thisComponent.state.period,
+						isOfAttributeSet: false,
+						layerObject: thisComponent.state.rasterLayer
+					})
+				};
+				break;
+		}
+		let relations2statePromise = thisComponent.context.setStateFromStores.call(thisComponent, relations2state);
+
+		relations2statePromise.then(function () {
+			let selected = thisComponent.state.selected;
+			for (let relation of thisComponent.state.relations) {
+				if(relation.active) {
+					selected = relation.key.toString();
+				}
+				if (relation.dataSourceOrigin=="geonode") {
+					(function (relation) { // todo is this needed with let instead of var?
+
+						let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(relation.dataSourceString);
+						let relationsState = {};
+						dataLayerColumnsPromise.then(function (dataLayerColumns) {
+							let columns = [];
+							_.each(dataLayerColumns, function(column){
+								if (column.hasOwnProperty("name")) {
+									columns.push({
+										key: column.name,
+										name: column.name
+									});
+								}
+							});
+							relationsState[relation.key] = {
+								columns: columns,
+								valuesColumnMap: relation.columnMap,
+								valueDataLayer: relation.dataSource.key,
+								valueFidColumn: relation.fidColumn
+							};
+							thisComponent.context.setStateDeep.call(thisComponent, {relationsState: {$merge: relationsState}});
+						});
+
+					})(relation);
+				}
+			}
+			let state = {
+				selected: selected
+			};
+			state.savedState = utils.deepClone(state);
+			thisComponent.setState(state);
+		});
 	}
 
 	_onStoreChange(keys) {
