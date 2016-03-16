@@ -395,14 +395,15 @@ class ConfigPlaceDataSourcePeriod extends Component {
 	}
 
 	onChangeDataLayer(relationKey, value, values) {
-		//this.state.relationsState[relation.key].valueDataLayer
-		//let relationsState = {
-		//	[relationKey]: {
-		//		valueDataLayer: value
-		//	}
-		//};
-		//this.context.setStateDeep.call(this, {relationsState: {$merge: relationsState}});
-		// todo fix - like this, merge is shallow
+		let state = {
+			relationsState: {
+				[relationKey]: {
+					valueDataLayer: {$set: value}
+				}
+			}
+		};
+		this.context.setStateDeep.call(this, state);
+		// todo refresh columns, clear fidColumn & columnMap
 	}
 
 	onChangeFidColumn(relationKey, value, values) {
