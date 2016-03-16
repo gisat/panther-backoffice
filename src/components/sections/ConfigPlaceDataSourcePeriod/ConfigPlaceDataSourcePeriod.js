@@ -473,6 +473,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 
 	render() {
 
+		var thisComponent = this;
 		var ret = null;
 		let condition = false;
 		switch(this.props.relationsContext) {
@@ -588,6 +589,13 @@ class ConfigPlaceDataSourcePeriod extends Component {
 									);
 									attSetTableRowsInsert.push(rowInsert);
 								}
+								let fidValue = null;
+								let isFidValueValid = _.find(this.state.relationsState[relation.key].columns, function (stateCol) {
+									return stateCol.key == thisComponent.state.relationsState[relation.key].valueFidColumn
+								});
+								if (isFidValueValid) {
+									fidValue = this.state.relationsState[relation.key].valueFidColumn;
+								}
 								let configInsert = (
 									<div
 										key={"config-form-" + relation.key}
@@ -622,7 +630,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 														options={this.state.relationsState[relation.key].columns}
 														valueKey="key"
 														labelKey="key"
-														value={this.state.relationsState[relation.key].valueFidColumn}
+														value={fidValue}
 													/>
 												</label>
 
