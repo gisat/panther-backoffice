@@ -425,6 +425,14 @@ class ConfigPlaceDataSourcePeriod extends Component {
 			isSelectionUnchanged = (
 				this.state.selected == this.state.savedState.selected
 			);
+			for (let relation of this.state.relations) {
+				if (this.state.relationsState[relation.key]) {
+					areConfigsUnchanged = (
+						areConfigsUnchanged &&
+						_.isEqual(relation.columnMap,this.state.relationsState[relation.key].valuesColumnMap)
+					);
+				}
+			}
 		}
 		return (isSelectionUnchanged && areConfigsUnchanged);
 	}
@@ -449,6 +457,8 @@ class ConfigPlaceDataSourcePeriod extends Component {
 
 	onChangeAttSet(relationKey,attributeKey, value, values) {
 		let columnMap = utils.deepClone(this.state.relationsState[relationKey].valuesColumnMap);
+		//let columnMap = this.state.relationsState[relationKey].valuesColumnMap;
+		// todo deepClone not cloning models :|
 		let record = _.find(columnMap, function (item) {
 			return item.attribute.key == attributeKey;
 		});
