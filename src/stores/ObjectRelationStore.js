@@ -43,7 +43,8 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			break;
 		case ActionTypes.OBJECT_RELATION_HANDLE:
 			console.log("ObjectRelationStore OBJECT_RELATION_HANDLE action");
-			storeInstance.handle(action.data);
+			//storeInstance.handle(action.data);
+			storeInstance.multiHandle(action.data);
 			break;
 		default:
 			return;

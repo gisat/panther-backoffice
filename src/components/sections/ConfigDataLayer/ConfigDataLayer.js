@@ -529,7 +529,7 @@ class ConfigDataLayer extends Component {
 
 			var relations = [];
 			_.assign(relations, thisComponent.state.layerRelations);
-			var actionData = [], layerTemplates = [], values = {};
+			var actionData = [[],[]], layerTemplates = [], values = {};
 			switch (thisComponent.state.layerType) {
 				case "raster":
 					layerTemplates = thisComponent.state.rasterLayerTemplates;
@@ -598,7 +598,7 @@ class ConfigDataLayer extends Component {
 							if(values.fidColumn) existingModel.fidColumn = values.fidColumn;
 							if(values.nameColumn) existingModel.nameColumn = values.nameColumn;
 							if(values.parentColumn) existingModel.parentColumn = values.parentColumn;
-							actionData.push({type:"update",model:existingModel});
+							actionData[0].push({type:"update",model:existingModel});
 						}
 						relations = _.reject(relations, function(item) {
 							return item.key === existingModel.key;
@@ -612,7 +612,7 @@ class ConfigDataLayer extends Component {
 						};
 						object = _.assign(object,baseObject);
 						let newModel = new Model[ObjectTypes.OBJECT_RELATION](object);
-						actionData.push({type:"create",model:newModel});
+						actionData[0].push({type:"create",model:newModel});
 					}
 				}
 			}
@@ -682,7 +682,7 @@ class ConfigDataLayer extends Component {
 									if (values.fidColumn) existingModel.fidColumn = values.fidColumn;
 									if (values.nameColumn) existingModel.nameColumn = values.nameColumn;
 									if (values.parentColumn) existingModel.parentColumn = values.parentColumn;
-									actionData.push({type: "update", model: existingModel});
+									actionData[1].push({type: "update", model: existingModel});
 								}
 								relations = _.reject(relations, function (item) {
 									return item.key === existingModel.key;
@@ -698,7 +698,7 @@ class ConfigDataLayer extends Component {
 								};
 								object = _.assign(object, baseObjectForColumnMap);
 								let newModel = new Model[ObjectTypes.OBJECT_RELATION](object);
-								actionData.push({type: "create", model: newModel});
+								actionData[1].push({type: "create", model: newModel});
 							}
 						}
 					}
@@ -706,7 +706,7 @@ class ConfigDataLayer extends Component {
 			}
 			// was not in valuesRLPlaces × valuesRLPeriods, thus was removed -> delete
 			relations.map(function(unusedModel){
-				actionData.push({type:"delete",model:unusedModel});
+				actionData[1].push({type:"delete",model:unusedModel});
 			});
 			//console.log("handleObjects() actionData", actionData);
 			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
