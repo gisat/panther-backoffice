@@ -8,6 +8,7 @@ import VectorLayerStore from '../stores/VectorLayerStore';
 import RasterLayerStore from '../stores/RasterLayerStore';
 import GeneralLayerStore from '../stores/GeneralLayerStore';
 import AttributeSetStore from '../stores/AttributeSetStore';
+import GeneralModel from '../models/Model';
 import ScopeModel from '../models/ScopeModel';
 import VectorLayerModel from '../models/VectorLayerModel';
 import TopicModel from '../models/TopicModel';
@@ -332,6 +333,43 @@ export default {
 
 			_.each(clone, function (value, key) {
 				clone[key] = this.deepClone(value);
+			}, this);
+
+		}
+
+		return clone;
+	},
+
+	deepCloneKeepModels: function(data) {
+		var clone = data;
+		if(
+			_.isObject(data) &&
+			!React.Component.isPrototypeOf(data)
+			&& !(data instanceof GeneralModel)
+		) {
+
+			clone = _.clone(data);
+
+			_.each(clone, function (value, key) {
+				clone[key] = this.deepCloneKeepModels(value);
+			}, this);
+
+		}
+
+		return clone;
+	},
+
+	clone: function(data) {
+		var clone = data;
+		if(
+			_.isObject(data) &&
+			!React.Component.isPrototypeOf(data)
+		) {
+
+			clone = _.clone(data);
+
+			_.each(clone, function (value, key) {
+				clone[key] = this.deepCloneKeepModels(value);
 			}, this);
 
 		}
