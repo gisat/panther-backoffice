@@ -112,6 +112,42 @@ class Store extends EventEmitter {
 		});
 	}
 
+	multiHandle(actionData) {
+
+		var promises = {
+			0: Promise.resolve()
+		};
+		actionData.forEach(function(batch,index){
+
+			promises[index].then(function(){
+				if(batch.length) {
+					var batchPromises = [];
+					batch.forEach(function (action) {
+						switch (action.type) {
+							case "create":
+								batchPromises.push(this.create(action.model));
+								break;
+							case "update":
+								batchPromises.push(this.update(action.model));
+								break;
+							case "delete":
+								batchPromises.push(this.delete(action.model));
+								break;
+						}
+					}, this);
+					promises[index + 1] = Promise.all(batchPromises);
+				} else {
+					promises[index + 1] = Promise.resolve();
+				}
+			});
+
+		},this);
+
+		Promise.all(promises.values()).then(function(){
+			this.reload();
+		});
+	}
+
 	createObjectAndRespond(model,responseData,responseStateHash) {
 		//console.log("PeriodStore createObject responseData",responseData);
 		// todo ? Model.resolveForServer ?
