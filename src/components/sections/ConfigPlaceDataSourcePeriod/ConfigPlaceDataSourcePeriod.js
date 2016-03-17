@@ -456,9 +456,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 	}
 
 	onChangeAttSet(relationKey,attributeKey, value, values) {
-		let columnMap = utils.deepClone(this.state.relationsState[relationKey].valuesColumnMap);
-		//let columnMap = this.state.relationsState[relationKey].valuesColumnMap;
-		// todo deepClone not cloning models :|
+		let columnMap = utils.clone(this.state.relationsState[relationKey].valuesColumnMap);
 		let record = _.find(columnMap, function (item) {
 			return item.attribute.key == attributeKey;
 		});
