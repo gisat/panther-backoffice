@@ -2,12 +2,14 @@
 import EventEmitter from 'events';
 import superagent from 'superagent';
 import path from 'path';
+import _ from 'underscore';
+import async from 'async';
+
 import DataLayerModel from '../models/DataLayerModel';
 import EventTypes from '../constants/EventTypes';
 
-import _ from 'underscore';
-
 import { publicPath, apiProtocol, apiHost, apiPath, tempSsid, tempSessionid, tempCsrftoken } from '../config';
+
 
 class Store extends EventEmitter {
 
@@ -92,60 +94,43 @@ class Store extends EventEmitter {
 	}
 
 	handle(actionData) {
-		var promises = [];
-		var thisStore = this;
-		actionData.forEach(function(action){
-			switch (action.type) {
-				case "create":
-					promises.push(thisStore.create(action.model));
-					break;
-				case "update":
-					promises.push(thisStore.update(action.model));
-					break;
-				case "delete":
-					promises.push(thisStore.delete(action.model));
-					break;
-			}
-		});
-		Promise.all(promises).then(function(){
-			thisStore.reload();
-		});
-	}
 
-	multiHandle(actionData) {
+		async.eachSeries( // few callbacks for Tom
 
-		var promises = {
-			0: Promise.resolve()
-		};
-		actionData.forEach(function(batch,index){
+			// this is the array to be iterated
+			arguments,
 
-			promises[index].then(function(){
-				if(batch.length) {
-					var batchPromises = [];
-					batch.forEach(function (action) {
-						switch (action.type) {
-							case "create":
-								batchPromises.push(this.create(action.model));
-								break;
-							case "update":
-								batchPromises.push(this.update(action.model));
-								break;
-							case "delete":
-								batchPromises.push(this.delete(action.model));
-								break;
-						}
-					}, this);
-					promises[index + 1] = Promise.all(batchPromises);
-				} else {
-					promises[index + 1] = Promise.resolve();
+			// this is the iterator
+			// it works synchronous in async.eachSeries - it's waiting for each cycle to be finished
+			function(actionData, callback){
+				var promises = [];
+				actionData.forEach(function(action){
+					switch (action.type) {
+						case "create":
+							promises.push(this.create(action.model));
+							break;
+						case "update":
+							promises.push(this.update(action.model));
+							break;
+						case "delete":
+							promises.push(this.delete(action.model));
+							break;
+					}
+				}, this);
+				Promise.all(promises).then(function(){
+					callback(); // this is how one cycle says it's finished
+				});
+			}.bind(this),
+
+			// this is the final callback of async.eachSeries
+			function(err){
+				if(err){
+					return console.error(err);
 				}
-			});
+				this.reload();
+			}.bind(this)
+		);
 
-		},this);
-
-		Promise.all(promises.values()).then(function(){
-			this.reload();
-		});
 	}
 
 	createObjectAndRespond(model,responseData,responseStateHash) {
