@@ -50,7 +50,7 @@ export class CheckboxFields extends Component {
 				// but do remove for everything else
 				} else {
 						//this.setActive(key);
-						this.props.onChange(key); //EDIT
+						this.props.onChange(key,748596); //EDIT
 				}
 		}
 
@@ -103,7 +103,7 @@ export class CheckboxFields extends Component {
 		cloneChild(index, child) {
 				let boundClick = this.onClick.bind(this, index);
 
-				let { children, component, defaultClasses, onClick, type,
+				let { children, component, defaultClasses, onClick, type, onChange,
 							...other } = this.props;
 
 				return React.cloneElement(child, {

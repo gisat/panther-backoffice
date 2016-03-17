@@ -449,10 +449,13 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		this.context.setStateDeep.call(this, {expandConfig: {$merge: newExpandConfig}});
 	}
 
-	onChange(selected) {
-		this.setState({
-			selected: selected
-		});
+	onChange(selected,thing) {
+		// todo syntheticEvent gets passed here. WHYYYYY?
+		if(thing===748596) { // not a weird call
+			this.setState({
+				selected: selected
+			});
+		}
 	}
 
 	onChangeAttSet(relationKey,attributeKey, value, values) {
