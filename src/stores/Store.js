@@ -107,9 +107,10 @@ class Store extends EventEmitter {
 
 			// this is the iterator
 			// it works synchronous in async.eachSeries - it's waiting for each cycle to be finished
-			function(actionData, callback){
+			function(batch, callback){
+				console.log("BATCH", batch); // todo remove log
 				var promises = [];
-				actionData.forEach(function(action){
+				batch.forEach(function(action){
 					switch (action.type) {
 						case "create":
 							promises.push(this.create(action.model));
@@ -123,12 +124,14 @@ class Store extends EventEmitter {
 					}
 				}, this);
 				Promise.all(promises).then(function(){
+					console.log("BATCH FINISHED"); // todo remove log
 					callback(); // this is how one cycle says it's finished
 				});
 			}.bind(this),
 
 			// this is the final callback of async.eachSeries
 			function(err){
+				console.log("FINAL CALLBACK", err); // todo remove log
 				if(err){
 					return console.error(err);
 				}
