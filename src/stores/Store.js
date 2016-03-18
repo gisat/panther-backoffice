@@ -95,10 +95,15 @@ class Store extends EventEmitter {
 
 	handle(actionData) {
 
-		async.eachSeries( // few callbacks for Tom
+		// if not arrray of arrays (batches of commands)
+		if(!Array.isArray(actionData[0])){
+			actionData = [actionData];
+		}
+
+		async.eachSeries(
 
 			// this is the array to be iterated
-			arguments,
+			actionData,
 
 			// this is the iterator
 			// it works synchronous in async.eachSeries - it's waiting for each cycle to be finished
