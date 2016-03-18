@@ -93,6 +93,10 @@ class Store extends EventEmitter {
 		return this.request(method, {data: object});
 	}
 
+	/**
+	 * Handle requests asynchronously or in synchronous batches. When all is resolved, reloads the form.
+	 * @param actionData Array of arrays (of synchronous batches of requests) or array of requests
+	 */
 	handle(actionData) {
 
 		// if not arrray of arrays (batches of commands)
