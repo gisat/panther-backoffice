@@ -94,7 +94,7 @@ class Store extends EventEmitter {
 	}
 
 	/**
-	 * Handle requests asynchronously or in synchronous batches. When all is resolved, reloads the form.
+	 * Handle requests asynchronously or in synchronous batches. When all is resolved, reloads the store.
 	 * @param actionData Array of arrays (of synchronous batches of requests) or array of requests
 	 */
 	handle(actionData) {
