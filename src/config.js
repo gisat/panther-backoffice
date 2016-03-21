@@ -8,6 +8,8 @@ export const apiProtocol = "http://";
 export const apiHost = "localhost:4000";
 export const apiPath = "/";
 
+export const geonodeProtocol = "http://";
+export const geonodeHost = "37.205.9.78";
 
 export const tempSsid = "axssclakw1btrb2286erdniw14q5k7dn";
 export const tempSessionid = "3nbg1bhc6ticj1kkkwyx1j5kg4njiz50";

@@ -6,7 +6,7 @@ import _ from 'underscore';
 import path from "path";
 
 import utils from '../../../utils/utils';
-import {apiProtocol,apiHost} from '../../../config';
+import {geonodeProtocol, geonodeHost} from '../../../config';
 
 import Select from 'react-select';
 import SaveButton from '../../atoms/SaveButton';
@@ -795,7 +795,7 @@ class ConfigDataLayer extends Component {
 				border: '1px solid rgba(0,0,0,.15)'
 			};
 			//var mapFrameSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
-			var mapImageSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=800&transparent=true";
+			var mapImageSrc = geonodeProtocol + geonodeHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=800&transparent=true";
 
 			//// todo not an iframe
 			//mapFrame = (
