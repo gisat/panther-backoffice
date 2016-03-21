@@ -8,6 +8,6 @@ export const apiHost = "37.205.9.78";
 export const apiPath = "/tool/";
 
 
-export const tempSsid = "usuhtto69t2xhyg32v6ffwc5psboyn2h";
+export const tempSsid = "axssclakw1btrb2286erdniw14q5k7dn";
 export const tempSessionid = "3nbg1bhc6ticj1kkkwyx1j5kg4njiz50";
-export const tempCsrftoken = "FNtZT1UL4EpxiJn6BlM2cLeXzMrta4zp";
+export const tempCsrftoken = "W9zb8gJwOcI9qeqbpQezsuFieLIAw1yv";

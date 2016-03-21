@@ -18,19 +18,15 @@ let storeInstance = new ScopeStore();
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 
 	switch(action.type) {
-		//case ActionTypes.APP_INITIALIZED:
-		//	reset();
-		//	break;
-		//case ActionTypes.LAYER_ADD:
-		//	//appState.page = action.page;
-		//	//appState.path = action.path;
-		//	console.log("Action: LAYER_ADD");
-		//	break;
+		case ActionTypes.SCOPE_CREATE_RESPOND:
+			storeInstance.createObjectAndRespond(action.model, action.responseData, action.stateHash);
+			break;
+		case ActionTypes.SCOPE_HANDLE:
+			storeInstance.handle(action.data);
+			break;
 		default:
 			return;
 	}
-
-	storeInstance.emitChange();
 
 });
 

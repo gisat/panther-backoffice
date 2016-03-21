@@ -2,138 +2,204 @@ import React, { PropTypes, Component } from 'react';
 import styles from './LinkTableVectorByScopePlace.css';
 import withStyles from '../../../decorators/withStyles';
 
+import _ from 'underscore';
+
+import utils from '../../../utils/utils';
+
 import UIScreenButton from '../../atoms/UIScreenButton';
 
 import { Segment, Button, Input, Header, IconButton, Icon, PopupButton } from '../../SEUI/elements';
 import { Popup, Modal } from '../../SEUI/modules';
 import { Form, Fields, Field, Table } from '../../SEUI/collections';
 
+import VectorLayerStore from '../../../stores/VectorLayerStore';
+import AttributeSetStore from '../../../stores/AttributeSetStore';
+import PeriodStore from '../../../stores/PeriodStore';
+import ThemeStore from '../../../stores/ThemeStore';
+import TopicStore from '../../../stores/TopicStore';
+
+var initialState = {
+	example: "Nothing is happening.",
+	scopeLayerTemplates: {},
+	scopeAttributeSets: {},
+	scopePeriods: {}
+};
+
+
 @withStyles(styles)
 class LinkTableVectorByScopePlace extends Component {
 
+	static propTypes = {
+		disabled: React.PropTypes.bool,
+		relations: React.PropTypes.object,
+		place: React.PropTypes.object,
+		onCellClick: React.PropTypes.func
+	};
+
+	static defaultProps = {
+		disabled: false
+	};
+
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
+		setStateFromStores: PropTypes.func.isRequired,
+		onInteraction: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired,
+		onSetTitle: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
 		super(props);
+		this.state = utils.deepClone(initialState);
+	}
 
-		this.state = {
-			example: "Nothing is happening.",
-			vectorLayers: [
-			{
-				key: 16,
-				name: "Land cover",
-				periods: [
-					{
-						key: 1,
-						name: "2000",
-						data: "only"
-					},
-					{
-						key: 2,
-						name: "2010",
-						data: "only"
-					}
-				],
-				attSets: [
-					{
-						key: 152,
-						name: "Status code",
-						periods: [
-							{
-								key: 1,
-								name: "2000",
-								data: "only"
-							},
-							{
-								key: 2,
-								name: "2010",
-								data: "only"
-							}
-						]
-					}
-				]
-			}, // layer
-			{
-				key: 25,
-				name: "Land cover Change",
-				periods: [
-					{
-						key: 1,
-						name: "2000",
-						data: "only"
-					},
-					{
-						key: 2,
-						name: "2010",
-						data: "only"
-					}
-				],
-				attSets: [
-					{
-						key: 182,
-						name: "Change code",
-						periods: [
-							{
-								key: 1,
-								name: "2000",
-								data: "only"
-							},
-							{
-								key: 2,
-								name: "2010",
-								data: "none"
-							}
-						]
-					}
-				]
-			}, // layer
-			{
-				key: 88,
-				name: "Road network",
-				periods: [
-					{
-						key: 1,
-						name: "2000",
-						data: "only"
-					},
-					{
-						key: 2,
-						name: "2010",
-						data: "only"
-					}
-				],
-				attSets: [
-					{
-						key: 120,
-						name: "Road type",
-						periods: [
-							{
-								key: 1,
-								name: "2000",
-								data: "only"
-							},
-							{
-								key: 2,
-								name: "2010",
-								data: "none"
-							}
-						]
-					}
-				]
-			} // layer
+	//constructor(props) {
+	//	super(props);
+	//
+	//	this.state = {
+	//		example: "Nothing is happening.",
+	//		vectorLayers: [
+	//		{
+	//			key: 16,
+	//			name: "Land cover",
+	//			periods: [
+	//				{
+	//					key: 1,
+	//					name: "2000",
+	//					data: "only"
+	//				},
+	//				{
+	//					key: 2,
+	//					name: "2010",
+	//					data: "only"
+	//				}
+	//			],
+	//			attSets: [
+	//				{
+	//					key: 152,
+	//					name: "Status code",
+	//					periods: [
+	//						{
+	//							key: 1,
+	//							name: "2000",
+	//							data: "only"
+	//						},
+	//						{
+	//							key: 2,
+	//							name: "2010",
+	//							data: "only"
+	//						}
+	//					]
+	//				}
+	//			]
+	//		}, // layer
+	//		{
+	//			key: 25,
+	//			name: "Land cover Change",
+	//			periods: [
+	//				{
+	//					key: 1,
+	//					name: "2000",
+	//					data: "only"
+	//				},
+	//				{
+	//					key: 2,
+	//					name: "2010",
+	//					data: "only"
+	//				}
+	//			],
+	//			attSets: [
+	//				{
+	//					key: 182,
+	//					name: "Change code",
+	//					periods: [
+	//						{
+	//							key: 1,
+	//							name: "2000",
+	//							data: "only"
+	//						},
+	//						{
+	//							key: 2,
+	//							name: "2010",
+	//							data: "none"
+	//						}
+	//					]
+	//				}
+	//			]
+	//		}, // layer
+	//		{
+	//			key: 88,
+	//			name: "Road network",
+	//			periods: [
+	//				{
+	//					key: 1,
+	//					name: "2000",
+	//					data: "only"
+	//				},
+	//				{
+	//					key: 2,
+	//					name: "2010",
+	//					data: "only"
+	//				}
+	//			],
+	//			attSets: [
+	//				{
+	//					key: 120,
+	//					name: "Road type",
+	//					periods: [
+	//						{
+	//							key: 1,
+	//							name: "2000",
+	//							data: "only"
+	//						},
+	//						{
+	//							key: 2,
+	//							name: "2010",
+	//							data: "none"
+	//						}
+	//					]
+	//				}
+	//			]
+	//		} // layer
+	//
+	//	]
+	//	};
+	//}
 
-		]
+	store2state(props) {
+		if(!props){
+			props = this.props;
+		}
+		return {
+			scopeLayerTemplates: utils.getLayerTemplatesForScope(props.place.scope, "vector"),
+			scopeAttributeSets: utils.getAttSetsForScope(props.place.scope),
+			scopePeriods: utils.getPeriodsForScope(props.place.scope)
 		};
 	}
 
-	openScreenExample(idLayer,idAttSet) {
-		this.state.example = "Clicked on " + idLayer + ", " + idAttSet;
+	setStateFromStores(props,keys) {
+		if(!props){
+			props = this.props;
+		}
+		if(props.place && props.place.scope) {
+			let store2state = this.store2state(props);
+			this.context.setStateFromStores.call(this, store2state, keys);
+		}
+	}
+
+	_onStoreChange(keys) {
+		this.setStateFromStores(this.props,keys);
 	}
 
 	componentDidMount() {
 
+		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates"]));
+		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["scopeAttributeSets"]));
+		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["scopePeriods"]));
+		ThemeStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates","scopeAttributeSets","scopePeriods"]));
+		TopicStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates","scopeAttributeSets","scopePeriods"]));
+		this.setStateFromStores();
+
+		// todo react instead of jquery
 		$("#LinkTableVectorByScopePlace td.selectable").each(function() {
 			$(this).focusin(function() {
 				$(this).addClass("focus");
@@ -144,182 +210,278 @@ class LinkTableVectorByScopePlace extends Component {
 		});
 	}
 
+	componentWillUnmount() {
+		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates"]));
+		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["scopeAttributeSets"]));
+		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["scopePeriods"]));
+		ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates","scopeAttributeSets","scopePeriods"]));
+		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates","scopeAttributeSets","scopePeriods"]));
+	}
+
+	componentWillReceiveProps(newProps) {
+		if(newProps.place!=this.props.place) {
+			this.setStateFromStores(newProps,["scopeLayerTemplates","scopeAttributeSets","scopePeriods"]);
+			//this.updateStateHash(newProps);
+		}
+	}
+
+	componentDidUpdate() {
+		// todo react instead of jquery
+		$("#LinkTableByScopePlace td.selectable").each(function() {
+			$(this).focusin(function() {
+				$(this).addClass("focus");
+			});
+			$(this).focusout(function() {
+				$(this).removeClass("focus");
+			});
+		});
+	}
+
+
+	onCellClick(idLayer,idAttSet) {
+		this.props.onCellClick(idLayer,idAttSet);
+	}
+
+
 	render() {
 
-		var thisComponent = this;
 
+		var ret = null;
 
-		/* how many max attsets under one layer? */
-		var maxLayerAttSets = 0;
-		for (var layer of this.state.vectorLayers) {
-			var currentAttSetsLength = layer.attSets.length;
-			maxLayerAttSets = (currentAttSetsLength > maxLayerAttSets ? currentAttSetsLength : maxLayerAttSets);
-		}
-		var vectorAttSetsColumns = maxLayerAttSets * 2;
+		if (
+			this.props.place &&
+			this.props.place.scope &&
+			this.state.scopeLayerTemplates.models &&
+			this.state.scopeAttributeSets.models &&
+			this.state.scopePeriods.models
+		) {
+			var thisComponent = this;
 
+			var layerTemplates = utils.deepClone(this.state.scopeLayerTemplates.models);
 
-		var vectorLayersInsert = this.state.vectorLayers.map(function (vectorLayer) {
-
-			var layerRowChildren = [];
-			var tdLayerClassName = "selectable";
-			var dataNoneCountLayer = 0;
-			var layerPeriodsInsert = vectorLayer.periods.map(function (period) {
-				var periodClassName = "data-" + period.data;
-				var iconName = "check circle";
-				if(period.data=="none"){
-					iconName="radio";
-					++dataNoneCountLayer;
-				}
-				else if(period.data=="selected"){
-					iconName="check circle outline"
-				}
-
-				return (
-					<span
-						className={periodClassName}
-						key={"period-" + period.key}
-					>
-						<Icon name={iconName}/>
-						{period.name}
-						<br/>
-					</span>
-				);
-			});
-
-			if(dataNoneCountLayer==0){
-				tdLayerClassName += " positive";
+			/* how many max attsets under one layer? */
+			var maxLayerAttSets = 0;
+			for (var layer of layerTemplates) {
+				let layerAttSets = _.filter(this.state.scopeAttributeSets.models, function (attSet) {
+					return !!_.findWhere(attSet.vectorLayers, {key: layer.key});
+				});
+				layer.attSets = layerAttSets;
+				var currentAttSetsLength = layerAttSets.length;
+				maxLayerAttSets = (currentAttSetsLength > maxLayerAttSets ? currentAttSetsLength : maxLayerAttSets);
 			}
-			else if(dataNoneCountLayer==vectorLayer.periods.length){
-				tdLayerClassName += " negative";
-			}
-			else {
-				tdLayerClassName += " warning";
-			}
+			var vectorAttSetsColumns = maxLayerAttSets * 2;
 
-			var layerHeaderElement = (
-				<td
-					className="header"
-					key="header"
-				>
-					{vectorLayer.name}
-				</td>
-			);
-			var layerPeriodsElement = (
-				<td
-					className={tdLayerClassName}
-					key={"layer-" + vectorLayer.key + "-periods"}
-				>
-					<a
-						href="#"
-						onClick={thisComponent.openScreenExample.bind(
-								thisComponent,
-								vectorLayer.key,
-								false
-							)}
-					>
-						{layerPeriodsInsert}
-					</a>
-				</td>
-			);
 
-			layerRowChildren.push(layerHeaderElement,layerPeriodsElement);
+			var vectorLayersInsert = this.state.scopeLayerTemplates.models.map(function (scopeLayerTemplate) {
+				var vectorLayer = thisComponent.props.relations[scopeLayerTemplate.key];
 
-			for (var layerAttSet of vectorLayer.attSets) {
-
-				var attSetHeaderElement = React.createElement('td', {className: 'header', key: layerAttSet.key}, layerAttSet.name);
-
-					var dataNoneCount = 0;
-					var tdClassName = "selectable";
-					var layerAttSetPeriodsInsert = layerAttSet.periods.map(function (period) {
-						var periodClassName = "data-" + period.data;
-						var iconName = "check circle";
-						if(period.data=="none"){
-							iconName="radio";
-							++dataNoneCount;
+				var layerRowChildren = [];
+				var tdLayerClassName = "selectable";
+				var dataNoneCountLayer = 0;
+				var layerPeriodsInsert = thisComponent.state.scopePeriods.models.map(function (scopePeriod) {
+					var periodData = null;
+					if (vectorLayer && vectorLayer.periods[scopePeriod.key]) {
+						switch (vectorLayer.periods[scopePeriod.key].relations.length) {
+							case 0:
+								periodData = "none";
+								break;
+							case 1:
+								periodData = "only";
+								break;
+							default:
+								periodData = "selected";
 						}
-						else if(period.data=="selected"){
-							iconName="check circle outline"
-						}
-
-						return (
-							<span
-								className={periodClassName}
-								key={"period-" + period.key}
-							>
-								<Icon name={iconName}/>
-								{period.name}
-								<br/>
-							</span>
-						);
-					});
-
-					if(dataNoneCount==0){
-						tdClassName += " positive";
-					}
-					else if(dataNoneCount==layerAttSet.periods.length){
-						tdClassName += " negative";
-					}
-					else {
-						tdClassName += " warning";
+					} else {
+						periodData = "none";
 					}
 
-					var attSetPeriodsElement = (
-						<td
-							className={tdClassName}
-							key={"layer-" + vectorLayer.key + "-attset-" + layerAttSet.key + "-periods"}
+					var periodClassName = "data-" + periodData;
+					var iconName = "check circle";
+					if (periodData == "none") {
+						iconName = "radio";
+						++dataNoneCountLayer;
+					}
+					else if (periodData == "selected") {
+						iconName = "check circle outline"
+					}
+
+					return (
+						<span
+							className={periodClassName}
+							key={"period-" + scopePeriod.key}
 						>
-							<a
-								href="#"
-								onClick={thisComponent.openScreenExample.bind(
+						<Icon name={iconName}/>
+							{scopePeriod.name}
+							<br/>
+					</span>
+					);
+				});
+
+				if (dataNoneCountLayer == 0) {
+					tdLayerClassName += " positive";
+				}
+				else if (dataNoneCountLayer == thisComponent.state.scopePeriods.models.length) {
+					tdLayerClassName += " negative";
+				}
+				else {
+					tdLayerClassName += " warning";
+				}
+
+				var layerHeaderElement = (
+					<td
+						className="header"
+						key="header"
+					>
+						{scopeLayerTemplate.name}
+					</td>
+				);
+				var layerPeriodsElement = (
+					<td
+						className={tdLayerClassName}
+						key={"layer-" + scopeLayerTemplate.key + "-periods"}
+					>
+						<a
+							href="#"
+							onClick={thisComponent.onCellClick.bind(
+								thisComponent,
+								scopeLayerTemplate.key,
+								null
+							)}
+						>
+							{layerPeriodsInsert}
+						</a>
+					</td>
+				);
+
+				layerRowChildren.push(layerHeaderElement, layerPeriodsElement);
+
+				var additionalColumns = vectorAttSetsColumns;
+
+				var relationsLayerTemplate = _.findWhere(layerTemplates,{key:scopeLayerTemplate.key});
+				if(relationsLayerTemplate) {
+					for (var layerAttSet of relationsLayerTemplate.attSets) {
+
+						var attSetHeaderElement = React.createElement('td', {
+							className: 'header',
+							key: layerAttSet.key
+						}, layerAttSet.name);
+
+						var dataNoneCount = 0;
+						var tdClassName = "selectable";
+						var layerAttSetPeriodsInsert = thisComponent.state.scopePeriods.models.map(function (scopePeriod) {
+							var periodData = null;
+							if (vectorLayer &&
+								vectorLayer.attSets[layerAttSet.key] &&
+								vectorLayer.attSets[layerAttSet.key].periods[scopePeriod.key]
+							) {
+								switch (vectorLayer.attSets[layerAttSet.key].periods[scopePeriod.key].relations.length) {
+									case 0:
+										periodData = "none";
+										break;
+									case 1:
+										periodData = "only";
+										break;
+									default:
+										periodData = "selected";
+								}
+							} else {
+								periodData = "none";
+							}
+
+							var periodClassName = "data-" + periodData;
+							var iconName = "check circle";
+							if (periodData == "none") {
+								iconName = "radio";
+								++dataNoneCount;
+							}
+							else if (periodData == "selected") {
+								iconName = "check circle outline"
+							}
+
+							return (
+								<span
+									className={periodClassName}
+									key={"period-" + scopePeriod.key}
+								>
+								<Icon name={iconName}/>
+									{scopePeriod.name}
+									<br/>
+							</span>
+							);
+						});
+
+						if (dataNoneCount == 0) {
+							tdClassName += " positive";
+						}
+						else if (dataNoneCount == thisComponent.state.scopePeriods.models.length) {
+							tdClassName += " negative";
+						}
+						else {
+							tdClassName += " warning";
+						}
+
+						var attSetPeriodsElement = (
+							<td
+								className={tdClassName}
+								key={"layer-" + scopeLayerTemplate.key + "-attset-" + layerAttSet.key + "-periods"}
+							>
+								<a
+									href="#"
+									onClick={thisComponent.onCellClick.bind(
 										thisComponent,
-										vectorLayer.key,
+										scopeLayerTemplate.key,
 										layerAttSet.key
 									)}
-							>
-								{layerAttSetPeriodsInsert}
-							</a>
-						</td>
-					);
+								>
+									{layerAttSetPeriodsInsert}
+								</a>
+							</td>
+						);
 
-					layerRowChildren.push(attSetHeaderElement,attSetPeriodsElement);
-			}
+						layerRowChildren.push(attSetHeaderElement, attSetPeriodsElement);
+					}
 
-			var additionalColumns = vectorAttSetsColumns - (vectorLayer.attSets.length * 2);
-			var additionalColumnsInsert;
-			if(additionalColumns) {
-				additionalColumnsInsert = <td colSpan={additionalColumns} key="additionalcolumns"></td>;
-			}
+					additionalColumns = vectorAttSetsColumns - (relationsLayerTemplate.attSets.length * 2);
+				}
 
-			layerRowChildren.push(additionalColumnsInsert);
+				var additionalColumnsInsert;
+				if (additionalColumns) {
+					additionalColumnsInsert = <td colSpan={additionalColumns} key="additionalcolumns"></td>;
+				}
 
-			return React.createElement('tr', {key: "vectorlayer-" + vectorLayer.key}, layerRowChildren);
+				layerRowChildren.push(additionalColumnsInsert);
 
-		});
+				return React.createElement('tr', {key: "vectorlayer-" + scopeLayerTemplate.key}, layerRowChildren);
 
-		return (
+			});
 
-		<div>
+			ret = (
 
-		<Table celled className="LinkTable ByScopePlace fixed separateRows" id="LinkTableVectorByScopePlace">
-			<thead>
-				<tr>
-					<th colSpan="2">Layer</th>
-					<th colSpan={vectorAttSetsColumns}>
-						Attribute sets
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				{vectorLayersInsert}
-			</tbody>
-		</Table>
+				<div>
 
-		<div className="note">
-			Set available layers in <UIScreenButton>scope settings</UIScreenButton>
-		</div>
+					<Table celled className="LinkTable ByScopePlace fixed separateRows" id="LinkTableVectorByScopePlace">
+						<thead>
+						<tr>
+							<th colSpan="2">Layer</th>
+							<th colSpan={vectorAttSetsColumns}>
+								Attribute sets
+							</th>
+						</tr>
+						</thead>
+						<tbody>
+						{vectorLayersInsert}
+						</tbody>
+					</Table>
 
-		</div>
-		);
+					{/*<div className="note">
+						Set available layers in <UIScreenButton>scope settings</UIScreenButton>
+					</div>*/}
+
+				</div>
+			);
+		}
+
+		return ret;
 	}
 
 }

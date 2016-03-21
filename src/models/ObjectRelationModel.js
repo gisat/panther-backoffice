@@ -7,6 +7,8 @@ import PlaceStore from '../stores/PlaceStore';
 import PeriodStore from '../stores/PeriodStore';
 import AttributeStore from '../stores/AttributeStore';
 
+import DataLayerModel from '../models/DataLayerModel';
+
 
 class ObjectRelationModel extends Model {
 
@@ -78,15 +80,29 @@ class ObjectRelationModel extends Model {
 			dataSource: {
 				serverName: 'layer', //id
 				sendToServer: true,
-				transformForLocal: function (data) {
-					return DataLayerStore.getById(data)
-				},
-				transformForServer: this.getKey,
+				transformForLocal: this.transformDataSourceForLocal,
+				transformForServer: this.transformDataSourceForServer.bind(this),
 				isPromise: true
 			},
 			dataSourceString: {
 				serverName: 'layer', //id
-				sendToServer: false //temp local value only, until we can filter by nested key/value
+				sendToServer: false //temp local value only, until we can filter by nested key/value + backup of dataSource (when that gets nullified)
+			},
+			dataSourceOrigin: {
+				serverName: 'dataSourceOrigin', // geonode / analyses / future whatever
+				sendToServer: true,
+				transformForLocal: function (data, serverObject) {
+					if (data) {
+						return data;
+					} else {
+						if (~serverObject.layer.indexOf("analysis:")) {
+							return "analyses";
+						} else {
+							return "geonode";
+						}
+					}
+
+				}
 			},
 			place: {
 				serverName: 'location', //id
@@ -96,6 +112,10 @@ class ObjectRelationModel extends Model {
 				},
 				transformForServer: this.getKey,
 				isPromise: true
+			},
+			placeKey: {
+				serverName: 'location', //id
+				sendToServer: false //temp local value only, until we can filter by nested key/value
 			},
 			period: {
 				serverName: 'year', //id
@@ -122,27 +142,6 @@ class ObjectRelationModel extends Model {
 				serverName: 'parentColumn', //string
 				sendToServer: true
 			},
-			//columnMap: {
-			//	serverName: 'columnMap', //object {column: string, attribute: id}
-			//	sendToServer: true,
-			//	transformForLocal: function (data) {
-			//		if(data) {
-			//			let ret = data.map(function(obj){
-			//				return {
-			//					column: obj.column,
-			//					attribute: AttributeStore.getById(obj.attribute)
-			//				};
-			//			});
-			//			return Promise.resolve(ret);
-			//		}
-			//		return Promise.resolve({});
-			//	},
-			//	transformForServer: function (model) {
-			//		return []; // todo
-			//	},
-			//	isPromise: true,
-			//	isArray: true
-			//}
 			columnMap: {
 				serverName: 'columnMap', //object {column: string, attribute: id}
 				sendToServer: true,
@@ -164,6 +163,23 @@ class ObjectRelationModel extends Model {
 				}
 			}
 		};
+	}
+
+	transformDataSourceForLocal (data) {
+		if (~data.indexOf("analysis:")) {
+			return Promise.resolve(null); // todo process an_analysisRunId_auLevel
+		} else {
+			return DataLayerStore.getById(data)
+		}
+	}
+
+	transformDataSourceForServer (model, relationModel) {
+		if (model instanceof DataLayerModel) {
+			return this.getKey(model);
+		} else {
+			return relationModel.dataSourceString;
+		}
+
 	}
 
 }

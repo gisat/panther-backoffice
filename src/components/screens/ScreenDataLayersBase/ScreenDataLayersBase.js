@@ -4,6 +4,8 @@ import withStyles from '../../../decorators/withStyles';
 
 import path from "path";
 
+import utils from '../../../utils/utils';
+
 import DataLayerStore from '../../../stores/DataLayerStore';
 import SelectorDataLayer from '../../sections/SelectorDataLayer';
 import ConfigDataLayer from '../../sections/ConfigDataLayer';
@@ -23,7 +25,7 @@ class ScreenDataLayersBase extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 	}
 
 	getUrl() {
@@ -92,6 +94,7 @@ class ScreenDataLayersBase extends Component {
 						disabled={this.props.disabled}
 						selectorValue={this.state.selectorValue}
 						dataLayers={this.state.dataLayers}
+						screenKey={this.props.screenKey}
 						parentUrl={this.getUrl()}
 					/>
 				</div></div>

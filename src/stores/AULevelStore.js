@@ -29,19 +29,15 @@ let storeInstance = new AULevelStore();
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 
 	switch(action.type) {
-		//case ActionTypes.APP_INITIALIZED:
-		//	reset();
-		//	break;
-		//case ActionTypes.LAYER_ADD:
-		//	//appState.page = action.page;
-		//	//appState.path = action.path;
-		//	console.log("Action: LAYER_ADD");
-		//	break;
+		case ActionTypes.AU_LEVEL_CREATE_RESPOND:
+			storeInstance.createObjectAndRespond(action.model, action.responseData, action.stateHash);
+			break;
+		case ActionTypes.AU_LEVEL_HANDLE:
+			storeInstance.handle(action.data);
+			break;
 		default:
 			return;
 	}
-
-	storeInstance.emitChange();
 
 });
 

@@ -1,6 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ConfigMetadataPeriod.css';
-import withStyles from '../../../decorators/withStyles';
 
 import utils from '../../../utils/utils';
 
@@ -21,7 +19,6 @@ var initialState = {
 };
 
 
-@withStyles(styles)
 class ConfigMetadataPeriod extends Component{
 
 	static propTypes = {
@@ -36,14 +33,12 @@ class ConfigMetadataPeriod extends Component{
 
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired,
-		onInteraction: PropTypes.func.isRequired,
-		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired
+		onInteraction: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
 		super(props);
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 	}
 
 	store2state(props) {
@@ -124,13 +119,6 @@ class ConfigMetadataPeriod extends Component{
 			this.updateStateHash();
 		}
 		return this._stateHash;
-	}
-
-	createNew() {
-		//let newModel = new Model[ObjectTypes.PERIOD](object);
-		//var actionData = [], layerTemplates = [], values = {};
-		//actionData.push({type:"create",model:newModel});
-		//ActionCreator.handleObjects(actionData,ObjectTypes.PERIOD);
 	}
 
 	saveForm() {

@@ -1,8 +1,17 @@
+import React from 'react';
 import ActionCreator from '../actions/ActionCreator';
 import {Model} from '../constants/ObjectTypes';
 import ScopeStore from '../stores/ScopeStore';
+import TopicStore from '../stores/TopicStore';
 import ThemeStore from '../stores/ThemeStore';
+import VectorLayerStore from '../stores/VectorLayerStore';
+import RasterLayerStore from '../stores/RasterLayerStore';
+import GeneralLayerStore from '../stores/GeneralLayerStore';
+import AttributeSetStore from '../stores/AttributeSetStore';
+import GeneralModel from '../models/Model';
 import ScopeModel from '../models/ScopeModel';
+import VectorLayerModel from '../models/VectorLayerModel';
+import TopicModel from '../models/TopicModel';
 import _ from 'underscore';
 
 export default {
@@ -28,13 +37,14 @@ export default {
 	 */
 	handleNewObjects: function(values, objectType, responseData, stateHash) {
 		var newValues = [];
-		for (var singleValue of values) {
+		for (var singleValue of this.deepClone(values)) {
 			if(singleValue.create){
 				delete singleValue.create; // discard new object bit
 				delete singleValue.label; // discard temp compatibility key
 				delete singleValue.value; // discard temp compatibility key
 				delete singleValue.key; // discard temp key = name
 				let valueModel = new Model[objectType](singleValue);
+				valueModel.active = false;
 				ActionCreator.createObjectAndRespond(valueModel,objectType,responseData,stateHash);
 			}
 			else {
@@ -80,8 +90,8 @@ export default {
 							return reject("getPeriodsForScope: no periods property in theme!");
 						}
 						for(let period of theme.periods){
-							ret.keys.push(period.key);
-							ret.models.push(period);
+							periodKeys.push(period.key);
+							periodModels.push(period);
 						}
 					}
 
@@ -97,6 +107,282 @@ export default {
 				});
 			});
 		});
+	},
+
+	// todo merge with getAttSetsForScope
+	getLayerTemplatesForScope: function(scope,layerType) {
+		return new Promise(function(resolve, reject){
+
+			var layerStore = GeneralLayerStore;
+			if(layerType=="vector") {
+				layerStore = VectorLayerStore;
+			} else if (layerStore=="raster") {
+				layerStore = RasterLayerStore;
+			}
+
+			var scopePromise = null;
+			if(scope instanceof ScopeModel) {
+				scopePromise = Promise.resolve(scope);
+			}else{
+				scopePromise = ScopeStore.getById(scope);
+			}
+
+			scopePromise.then(function(scopeModel){
+				ThemeStore.getFiltered({scope: scopeModel}).then(function(themeModels){
+
+					if(!themeModels.length){
+						return reject("getLayerTemplatesForScope: themes with filter {scope: "+scope+"} not found.");
+					}
+
+					var retKeys = [];
+					var retModels = [];
+					var promises = [];
+
+					for(let theme of themeModels){
+						if(!theme.hasOwnProperty("topics")){
+							return reject("getLayerTemplatesForScope: no topics property in theme!");
+						}
+						for(let topic of theme.topics){
+
+							var layersPromise = layerStore.getFiltered({topic: topic});
+							promises.push(layersPromise);
+							layersPromise.then(function(layers){
+
+								for(let layer of layers){
+									retKeys.push(layer.key);
+									retModels.push(layer);
+								}
+
+							}, function(){
+
+								reject("getLayerTemplatesForScope: layers with filter {topic: " + topic + "} not resolved.");
+
+							});
+
+						}
+					}
+
+					Promise.all(promises).then(function(){
+						resolve({
+							keys: _.uniq(retKeys),
+							models: _.uniq(retModels)
+						});
+					});
+
+
+				}, function(){
+
+					reject("getLayerTemplatesForScope: theme with filter {scope: " + scope + "} not resolved.");
+
+				});
+			});
+		});
+	},
+
+	getAttSetsForScope: function(scope) {
+		return new Promise(function(resolve, reject){
+
+			var scopePromise = null;
+			if(scope instanceof ScopeModel) {
+				scopePromise = Promise.resolve(scope);
+			}else{
+				scopePromise = ScopeStore.getById(scope);
+			}
+
+			scopePromise.then(function(scopeModel){
+				ThemeStore.getFiltered({scope: scopeModel}).then(function(themeModels){
+
+					if(!themeModels.length){
+						return reject("getAttSetsForScope: themes with filter {scope: "+scope+"} not found.");
+					}
+
+					var attSetKeys = [];
+					var attSetModels = [];
+					var promises = [];
+
+					for(let theme of themeModels){
+						if(!theme.hasOwnProperty("topics")){
+							return reject("getAttSetsForScope: no topics property in theme!");
+						}
+						for(let topic of theme.topics){
+
+							var attSetPromise = AttributeSetStore.getFiltered({topic: topic});
+							promises.push(attSetPromise);
+							attSetPromise.then(function(attributeSets){
+
+								for(let attSet of attributeSets){
+									attSetKeys.push(attSet.key);
+									attSetModels.push(attSet);
+								}
+
+							}, function(){
+
+								reject("getAttSetsForScope: attributeSets with filter {topic: " + topic + "} not resolved.");
+
+							});
+
+						}
+					}
+
+					Promise.all(promises).then(function(){
+						resolve({
+							keys: _.uniq(attSetKeys),
+							models: _.uniq(attSetModels)
+						});
+					});
+
+
+				}, function(){
+
+					reject("getAttSetsForScope: theme with filter {scope: " + scope + "} not resolved.");
+
+				});
+			});
+		});
+	},
+
+	getThemesForTopics: function(topics) {
+		return new Promise(function(resolve, reject){
+
+			if(!Array.isArray(topics)) {
+				topics = [topics];
+			}
+			var topicsPromises = [];
+			for (var topic of topics) {
+				if (topic instanceof TopicModel) {
+					topicsPromises.push(Promise.resolve(topic));
+				} else {
+					topicsPromises.push(TopicStore.getById(topic));
+				}
+			}
+
+			Promise.all(topicsPromises).then(function(topicModels){
+				ThemeStore.getAll().then(function(themeModels){
+
+					var themes = [];
+
+					for(let theme of themeModels){
+						if(theme.hasOwnProperty("topics")) {
+							for (let topic of theme.topics) {
+								if(_.contains(topicModels,topic)){
+									themes.push(theme);
+								}
+							}
+						}
+					}
+
+					//if (themes.length) {
+					//	resolve(themes);
+					//} else {
+					//	resolve(null);
+					//}
+					resolve(themes);
+
+				});
+			});
+		});
+	},
+
+	getAttSetsForLayers: function(layers) {
+		return new Promise(function(resolve, reject){
+
+			if(!Array.isArray(layers)) {
+				layers = [layers];
+			}
+			var layersPromises = [];
+			for (var layer of layers) {
+				if (layer instanceof VectorLayerModel) {
+					layersPromises.push(Promise.resolve(layer));
+				} else {
+					layersPromises.push(VectorLayerStore.getById(layer));
+				}
+			}
+
+			Promise.all(layersPromises).then(function(layerModels){
+				AttributeSetStore.getAll().then(function(attSetModels){
+
+					var attSets = [];
+
+					for(let attSet of attSetModels){
+						if(attSet.hasOwnProperty("vectorLayers")) {
+							for (let layer of attSet.vectorLayers) {
+								if(_.contains(layerModels,layer)){
+									attSets.push(attSet);
+								}
+							}
+						}
+					}
+
+					//if (themes.length) {
+					//	resolve(themes);
+					//} else {
+					//	resolve(null);
+					//}
+					resolve(attSets);
+
+				});
+			});
+		});
+	},
+
+	deepClone: function(data) {
+		var clone = data;
+		if(_.isObject(data) && !React.Component.isPrototypeOf(data)) {
+
+			clone = _.clone(data);
+
+			_.each(clone, function (value, key) {
+				clone[key] = this.deepClone(value);
+			}, this);
+
+		}
+
+		return clone;
+	},
+
+	deepCloneKeepModels: function(data) {
+		var clone = data;
+		if(
+			_.isObject(data) &&
+			!React.Component.isPrototypeOf(data)
+			&& !(data instanceof GeneralModel)
+		) {
+
+			clone = _.clone(data);
+
+			_.each(clone, function (value, key) {
+				clone[key] = this.deepCloneKeepModels(value);
+			}, this);
+
+		}
+
+		return clone;
+	},
+
+	clone: function(data) {
+		var clone = data;
+		if(
+			_.isObject(data) &&
+			!React.Component.isPrototypeOf(data)
+		) {
+
+			clone = _.clone(data);
+
+			_.each(clone, function (value, key) {
+				clone[key] = this.deepCloneKeepModels(value);
+			}, this);
+
+		}
+
+		return clone;
+	},
+
+	getModelsKeys(modelArray) {
+		var keyArray = [];
+		_.each(modelArray, function(model, key) {
+			keyArray.push(model.key);
+		});
+		return keyArray;
 	}
 
 }

@@ -4,6 +4,8 @@ import withStyles from '../../../decorators/withStyles';
 
 import path from "path";
 
+import utils from '../../../utils/utils';
+
 import PeriodStore from '../../../stores/PeriodStore';
 import SelectorMetadataPeriod from '../../sections/SelectorMetadataPeriod'; // todo universal selector
 import ConfigMetadataPeriod from '../../sections/ConfigMetadataPeriod';
@@ -23,7 +25,7 @@ class ScreenMetadataPeriod extends Component{
 
 	constructor(props) {
 		super(props);
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 
 		if(this.props.data && this.props.data.initialKey) {
 			this.state.selectorValue = this.props.data.initialKey;

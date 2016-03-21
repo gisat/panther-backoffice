@@ -26,21 +26,21 @@ export class Checkbox extends Component {
 				defaultClasses: true
 		};
 
-		constructor(props) {
-				super(props);
-
-				this.state = {
-						active: this.props.checked
-				}
-		}
-
-		onClick() {
-				if (!this.state.active || (this.state.active && !this.props.radio)) {
-						this.setState({
-								active: !this.state.active
-						});
-				}
-		}
+		//constructor(props) {
+		//		super(props);
+		//
+		//		this.state = {
+		//				active: this.props.checked
+		//		}
+		//}
+		//
+		//onClick() {
+		//		if (!this.state.active || (this.state.active && !this.props.radio)) {
+		//				this.setState({
+		//						active: !this.state.active
+		//				});
+		//		}
+		//}
 
 		renderChildren() {
 				let { children, defaultClasses, className, onClick,
@@ -52,7 +52,8 @@ export class Checkbox extends Component {
 								type: 'checkbox',
 								key: 'input',
 								className: 'hidden',
-								checked: this.state.active || this.props.checked,
+								//checked: this.state.active || this.props.checked,
+								checked: this.props.checked,
 								readOnly: true,
 								...other
 						}),
@@ -94,7 +95,8 @@ export class Checkbox extends Component {
 
 						// state
 						'read-only': this.props.readOnly,
-						checked: this.state.active || this.props.checked,
+						//checked: this.state.active || this.props.checked,
+						checked: this.props.checked,
 						disabled: this.props.disabled,
 						indeterminate: this.props.indeterminate
 				};

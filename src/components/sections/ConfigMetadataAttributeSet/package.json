@@ -1,0 +1,6 @@
+{
+	"name": "ConfigMetadataAttributeSet",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ConfigMetadataAttributeSet.js"
+}

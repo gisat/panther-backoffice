@@ -95,14 +95,13 @@ class ConfigDataLayer extends Component {
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired
+		setStateDeep: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
 	};
 
 	constructor(props) {
 		super(props);
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 	}
 
 	store2state(props) {
@@ -135,7 +134,6 @@ class ConfigDataLayer extends Component {
 		// todo determine from keys, if the following needs to be done
 		if(!keys || keys.indexOf("layerRelations")!=-1) {
 			store2state.layerRelations.then(function(relations) {
-				// todo we work with relations (attsets,columns) with .ready not removed
 				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations));
 			});
 		}
@@ -166,7 +164,7 @@ class ConfigDataLayer extends Component {
 			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
 				//console.log("_onStoreResponse set state: periods:", thisComponent.state.periods);
 				let stateKey = responseData.stateKey;
-				let values = thisComponent.state[stateKey];
+				let values = utils.deepClone(thisComponent.state[stateKey]);
 				values.push(result[0].key);
 				thisComponent.setState({
 					[stateKey]: values
@@ -174,29 +172,62 @@ class ConfigDataLayer extends Component {
 				function () {
 					//console.log("_onStoreResponse updated state:", thisComponent.state);
 				});
-				var screenComponent,screenName,screenObjectType;
+				var screenObjectType;
 				switch(stateKey){
+					case "valueVLTemplate":
+						screenObjectType = ObjectTypes.VECTOR_LAYER_TEMPLATE;
+						break;
+					case "valueRLTemplate":
+						screenObjectType = ObjectTypes.RASTER_LAYER_TEMPLATE;
+						break;
+					case "valueAULevel":
+						screenObjectType = ObjectTypes.AU_LEVEL;
+						break;
+					case "valueVLScope":
+					case "valueRLScope":
+					case "valueAUScope":
+						screenObjectType = ObjectTypes.SCOPE;
+						break;
+					case "valuesVLPlaces":
+					case "valuesRLPlaces":
+					case "valuesAUPlaces":
+						screenObjectType = ObjectTypes.PLACE;
+						break;
 					case "valuesVLPeriods":
 					case "valuesRLPeriods":
-						//screenComponent = <ScreenMetadataPeriod/>;
-						screenComponent = <ScreenMetadataObject/>;
 						screenObjectType = ObjectTypes.PERIOD;
-						screenName = "ScreenDataLayersBase-ScreenMetadataPeriod";
 						break;
 				}
-				//this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{initialKey:result[0].key});
-				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
+				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
+				if(screenObjectType) {
+					let options = {
+						component: ScreenMetadataObject,
+						parentUrl: this.props.parentUrl,
+						size: 40,
+						data: {
+							objectType: screenObjectType,
+							objectKey: result[0].key
+						}
+					};
+					ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+				}
 			}
 		}
 	}
 
 	componentDidMount() {
 		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		ScopeStore.addResponseListener(this._onStoreResponse.bind(this));
 		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
+		PlaceStore.addResponseListener(this._onStoreResponse.bind(this));
 		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
+		VectorLayerStore.addResponseListener(this._onStoreResponse.bind(this));
 		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
+		RasterLayerStore.addResponseListener(this._onStoreResponse.bind(this));
 		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		AttributeSetStore.addChangeListener(this._onStoreChange);
+		AULevelStore.addResponseListener(this._onStoreResponse.bind(this));
+		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
+		AttributeStore.addChangeListener(this._onStoreChange.bind(this,["attributes"]));
 		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
 		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
@@ -206,11 +237,17 @@ class ConfigDataLayer extends Component {
 
 	componentWillUnmount() {
 		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		ScopeStore.removeResponseListener(this._onStoreResponse.bind(this));
 		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
+		PlaceStore.removeResponseListener(this._onStoreResponse.bind(this));
 		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
+		VectorLayerStore.removeResponseListener(this._onStoreResponse.bind(this));
 		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
+		RasterLayerStore.removeResponseListener(this._onStoreResponse.bind(this));
 		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		AttributeSetStore.removeChangeListener(this._onStoreChange);
+		AULevelStore.removeResponseListener(this._onStoreResponse.bind(this));
+		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
+		AttributeStore.removeChangeListener(this._onStoreChange.bind(this,["attributes"]));
 		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
 		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
 		ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
@@ -219,7 +256,7 @@ class ConfigDataLayer extends Component {
 
 	componentWillReceiveProps(newProps) {
 		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.setStateFromStores(newProps);
+			this.setStateFromStores(newProps,["layer","layerRelations","dataLayerColumns"]);
 			//this.context.setStateFromStores.call(this, this.store2state(newProps));
 			this.updateStateHash(newProps);
 		}
@@ -231,34 +268,34 @@ class ConfigDataLayer extends Component {
 	 */
 	isStateUnchanged() {
 		var isIt = true;
-		if(this.state.hasOwnProperty("relationsState")){
-			if(this.state.layerType==this.state.relationsState.layerType) {
-				// todo could be universal? compare whatever properties relationsState has?
+		if(this.state.hasOwnProperty("savedState")){
+			if(this.state.layerType==this.state.savedState.layerType) {
+				// todo could be universal? compare whatever properties savedState has?
 				//console.log("isStateUnchanged layerType");
 				if(this.state.layerType=="vector" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("vector")) {
 					//console.log("isStateUnchanged vector");
 					isIt = (
-						this.state.valueVLTemplate==this.state.relationsState.valueVLTemplate &&
-						this.state.valueVLScope==this.state.relationsState.valueVLScope &&
-						this.state.valuesVLPlaces==this.state.relationsState.valuesVLPlaces &&
-						this.state.valuesVLPeriods==this.state.relationsState.valuesVLPeriods &&
-						this.state.columnMaps.vector==this.state.savedState.columnMaps.vector
+						_.isEqual(this.state.valueVLTemplate,this.state.savedState.valueVLTemplate) &&
+						_.isEqual(this.state.valueVLScope,this.state.savedState.valueVLScope) &&
+						_.isEqual(this.state.valuesVLPlaces,this.state.savedState.valuesVLPlaces) &&
+						_.isEqual(this.state.valuesVLPeriods,this.state.savedState.valuesVLPeriods) &&
+						_.isEqual(this.state.columnMaps.vector,this.state.savedState.columnMaps.vector)
 					);
 				} else if(this.state.layerType=="raster") {
 					//console.log("isStateUnchanged raster");
 					isIt = (
-						this.state.valueRLTemplate==this.state.relationsState.valueRLTemplate &&
-						this.state.valueRLScope==this.state.relationsState.valueRLScope &&
-						this.state.valuesRLPlaces==this.state.relationsState.valuesRLPlaces &&
-						this.state.valuesRLPeriods==this.state.relationsState.valuesRLPeriods
+						_.isEqual(this.state.valueRLTemplate,this.state.savedState.valueRLTemplate) &&
+						_.isEqual(this.state.valueRLScope,this.state.savedState.valueRLScope) &&
+						_.isEqual(this.state.valuesRLPlaces,this.state.savedState.valuesRLPlaces) &&
+						_.isEqual(this.state.valuesRLPeriods,this.state.savedState.valuesRLPeriods)
 					);
 				} else if(this.state.layerType=="au" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("au")) {
 					//console.log("isStateUnchanged au");
 					isIt = (
-						this.state.valueAULevel==this.state.relationsState.valueAULevel &&
-						this.state.valueAUScope==this.state.relationsState.valueAUScope &&
-						this.state.valuesAUPlaces==this.state.relationsState.valuesAUPlaces &&
-						this.state.columnMaps.au==this.state.savedState.columnMaps.au
+						_.isEqual(this.state.valueAULevel,this.state.savedState.valueAULevel) &&
+						_.isEqual(this.state.valueAUScope,this.state.savedState.valueAUScope) &&
+						_.isEqual(this.state.valuesAUPlaces,this.state.savedState.valuesAUPlaces) &&
+						_.isEqual(this.state.columnMaps.au,this.state.savedState.columnMaps.au)
 					);
 				}
 			} else {
@@ -267,7 +304,7 @@ class ConfigDataLayer extends Component {
 		} else {
 			isIt = false;
 		}
-		//console.log(isIt);
+		//console.log("isIt",isIt);
 		return isIt;
 	}
 
@@ -356,7 +393,7 @@ class ConfigDataLayer extends Component {
 
 		let savedState = {};
 		_.assign(savedState, ret);
-		this.context.setStateDeep.call(this, {savedState: {$set: savedState}}); // save store state for comparison with changed local
+		this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
 		return ret;
 		//return mock;
 	}
@@ -450,16 +487,10 @@ class ConfigDataLayer extends Component {
 					ret.valueAUScope = values.scope;
 					ret.valuesAUPlaces = values.places;
 			}
-			let relationsState = {};
-			_.assign(relationsState, ret);
-			ret.relationsState = relationsState; // save store state for comparison with changed local
-
-			//todo, Tom: Should be something like this
-			//let savedState = {};
-			//_.assign(savedState, ret);
-			//this.context.setStateDeep.call(this, {savedState: {$set: savedState}}); // save store state for comparison with changed local
 		}
-		//todo 2: Shouldn't it be here?
+		let savedState = {};
+		_.assign(savedState, ret);
+		this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
 		return ret;
 	}
 
@@ -485,18 +516,20 @@ class ConfigDataLayer extends Component {
 
 	saveForm() {
 
-		var periodsPromise = null;
+		var AUPeriods = null;
 		if(this.state.layerType == "au"){
-			periodsPromise = utils.getPeriodsForScope(this.state.valueAUScope[0]);
-		}else{
-			periodsPromise = Promise.resolve();
+			let scope = _.findWhere(this.state.scopes,{key: this.state.valueAUScope[0]});
+			AUPeriods = _.map(scope.periods,function(period){
+				return period.key;
+			});
+			//periodsPromise = utils.getPeriodsForScope(this.state.valueAUScope[0]);
 		}
 		var thisComponent = this;
-		periodsPromise.then(function(AUPeriods){
+
 
 			var relations = [];
 			_.assign(relations, thisComponent.state.layerRelations);
-			var actionData = [], layerTemplates = [], values = {};
+			var actionData = [[],[]], layerTemplates = [], values = {};
 			switch (thisComponent.state.layerType) {
 				case "raster":
 					layerTemplates = thisComponent.state.rasterLayerTemplates;
@@ -547,18 +580,29 @@ class ConfigDataLayer extends Component {
 			for (let placeValue of values.places) {
 				for (let periodValue of values.periods) {
 					let existingModel = _.find(relations, function(obj) {
-						return ((obj.place.key == placeValue) && (obj.period.key == periodValue) && !obj.isOfAttributeSet);
+						return (
+						(obj.place && (obj.place.key == placeValue)) &&
+						(obj.period && (obj.period.key == periodValue)) &&
+						!obj.isOfAttributeSet
+						);
 					});
 					if (existingModel) {
 						// exists -> update
-						relations = _.reject(relations, function(item) { return item.key === existingModel.key; });
-						if(existingModel.layerObject.key!=layerTemplate.key){
+						if(
+							existingModel.layerObject.key != layerTemplate.key ||
+							existingModel.fidColumn != values.fidColumn ||
+							existingModel.nameColumn != values.nameColumn ||
+							existingModel.parentColumn != values.parentColumn
+						){
 							existingModel.layerObject = layerTemplate;
 							if(values.fidColumn) existingModel.fidColumn = values.fidColumn;
 							if(values.nameColumn) existingModel.nameColumn = values.nameColumn;
 							if(values.parentColumn) existingModel.parentColumn = values.parentColumn;
-							actionData.push({type:"update",model:existingModel});
+							actionData[0].push({type:"update",model:existingModel});
 						}
+						relations = _.reject(relations, function(item) {
+							return item.key === existingModel.key;
+						});
 					} else {
 						// does not exist -> create
 						let object = {
@@ -568,7 +612,7 @@ class ConfigDataLayer extends Component {
 						};
 						object = _.assign(object,baseObject);
 						let newModel = new Model[ObjectTypes.OBJECT_RELATION](object);
-						actionData.push({type:"create",model:newModel});
+						actionData[0].push({type:"create",model:newModel});
 					}
 				}
 			}
@@ -626,14 +670,23 @@ class ConfigDataLayer extends Component {
 							});
 							if (existingModel) {
 								// exists -> update
-								existingModel.columnMap = columnMap;
-								if(values.fidColumn) existingModel.fidColumn = values.fidColumn;
-								if(values.nameColumn) existingModel.nameColumn = values.nameColumn;
-								if(values.parentColumn) existingModel.parentColumn = values.parentColumn;
+								if(
+									existingModel.columnMap != columnMap || // todo working comparison :)
+									existingModel.layerObject.key != layerTemplate.key ||
+									existingModel.fidColumn != values.fidColumn ||
+									existingModel.nameColumn != values.nameColumn ||
+									existingModel.parentColumn != values.parentColumn
+								) {
+									existingModel.columnMap = columnMap;
+									existingModel.layerObject = layerTemplate;
+									if (values.fidColumn) existingModel.fidColumn = values.fidColumn;
+									if (values.nameColumn) existingModel.nameColumn = values.nameColumn;
+									if (values.parentColumn) existingModel.parentColumn = values.parentColumn;
+									actionData[1].push({type: "update", model: existingModel});
+								}
 								relations = _.reject(relations, function (item) {
 									return item.key === existingModel.key;
 								});
-								actionData.push({type: "update", model: existingModel});
 							} else {
 								// does not exist -> create
 								let object = {
@@ -645,7 +698,7 @@ class ConfigDataLayer extends Component {
 								};
 								object = _.assign(object, baseObjectForColumnMap);
 								let newModel = new Model[ObjectTypes.OBJECT_RELATION](object);
-								actionData.push({type: "create", model: newModel});
+								actionData[1].push({type: "create", model: newModel});
 							}
 						}
 					}
@@ -653,11 +706,10 @@ class ConfigDataLayer extends Component {
 			}
 			// was not in valuesRLPlaces × valuesRLPeriods, thus was removed -> delete
 			relations.map(function(unusedModel){
-				actionData.push({type:"delete",model:unusedModel});
+				actionData[1].push({type:"delete",model:unusedModel});
 			});
 			//console.log("handleObjects() actionData", actionData);
 			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
-		});
 
 	}
 
@@ -669,14 +721,26 @@ class ConfigDataLayer extends Component {
 	}
 
 	onChangeObjectSelect (stateKey, objectType, value, values) {
-		values = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
+		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
-		newState[stateKey] = values;
+		newState[stateKey] = newValues;
 		this.setState(newState);
 	}
 
-	onObjectClick (value, event) {
-		console.log("yay! " + value["key"]);
+	onObjectClick (itemType, value, event) {
+		console.log("yay! " + value.key);
+		this.context.onInteraction().call();
+		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
+		let options = {
+			component: ScreenMetadataObject,
+			parentUrl: this.props.parentUrl,
+			size: 40,
+			data: {
+				objectType: itemType,
+				objectKey: value.key
+			}
+		};
+		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
 	onChangeColumnTableSelect (stateKey, layerType, column, value, values) {
@@ -718,20 +782,30 @@ class ConfigDataLayer extends Component {
 			prod = "Select data layer";
 		}
 
-		var mapFrame = "";
+		//var mapFrame = "";
+		var mapImage = "";
 		if(this.props.selectorValue) {
 
-			var mapFrameStyle = {
-				border: 'none',
-				width: '350px',
-				height: '600px'
+			//var mapFrameStyle = {
+			//	border: 'none',
+			//	width: '350px',
+			//	height: '600px'
+			//};
+			var mapImageStyle = {
+				border: '1px solid rgba(0,0,0,.15)'
 			};
-			var mapFrameSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
+			//var mapFrameSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
+			var mapImageSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=800&transparent=true";
 
-			// todo not an iframe
-			mapFrame = (
+			//// todo not an iframe
+			//mapFrame = (
+			//	<div className="beside">
+			//		<iframe src={mapFrameSrc} style={mapFrameStyle}></iframe>
+			//	</div>
+			//);
+			mapImage = (
 				<div className="beside">
-					<iframe src={mapFrameSrc} style={mapFrameStyle}></iframe>
+					<img src={mapImageSrc} style={mapImageStyle} />
 				</div>
 			);
 
@@ -744,7 +818,7 @@ class ConfigDataLayer extends Component {
 		return (
 			<div>
 
-				{mapFrame}
+				{mapImage}
 
 				<div
 					//className="frame-input-wrapper"

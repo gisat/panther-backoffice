@@ -1,169 +1,360 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ConfigMetadataLayerVector.css';
-import withStyles from '../../../decorators/withStyles';
 
-import { Input, Icon, IconButton, Buttons } from '../../SEUI/elements';
+import utils from '../../../utils/utils';
+
+import { Input, Button } from '../../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
-import Select from 'react-select';
 import _ from 'underscore';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
 
+import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
+import ActionCreator from '../../../actions/ActionCreator';
+import VectorLayerStore from '../../../stores/VectorLayerStore';
+import TopicStore from '../../../stores/TopicStore';
+import LayerGroupStore from '../../../stores/LayerGroupStore';
+import StyleStore from '../../../stores/StyleStore';
+import AttributeSetStore from '../../../stores/AttributeSetStore';
 
-const TOPICS = [
-			{ key: 7, topic: 'Land cover structure', themes: [18,23,32] },
-			{ key: 12, topic: 'Land cover development', themes: [18,23,32] },
-			{ key: 16, topic: 'Urban population', themes: [30] },
-			{ key: 19, topic: 'Urban expansions', themes: [30] },
-			{ key: 22, topic: 'Total populations', themes: [25] },
-			{ key: 23, topic: 'Population density grid', themes: [18,23,25,30,32] },
-			{ key: 33, topic: 'Roads', themes: [18,23,32] }
-		];
-const THEMES = [
-			{ key: 18, theme: 'Population' },
-			{ key: 23, theme: 'Transportation' },
-			{ key: 25, theme: 'Total population' },
-			{ key: 30, theme: 'Urban expansion' },
-			{ key: 32, theme: 'Land cover' }
-		];
-var LAYERGROUPS = [
-			{ key: 1, name: 'Information layers' },
-			{ key: 2, name: 'Reference satellite images' }
-		];
-const STYLES = [
-			{ key: 10, name: 'detailed' },
-			{ key: 18, name: 'aggregated' },
-			{ key: 23, name: 'urban fabric' },
-			{ key: 30, name: 'flows' }
-		];
+import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 
+var initialState = {
+	style: null,
+	valueActive: false,
+	valueName: "",
+	valueTopic: [],
+	topicThemes: [],
+	valueLayerGroup: [],
+	valuesStyles: [],
+	valuesAttSets: []
+};
 
-@withStyles(styles)
+
 class ConfigMetadataLayerVector extends Component{
 
+	static propTypes = {
+		disabled: React.PropTypes.bool,
+		selectorValue: React.PropTypes.any
+	};
+
+	static defaultProps = {
+		disabled: false,
+		selectorValue: null
+	};
+
 	static contextTypes = {
-		onInteraction: PropTypes.func.isRequired
+		setStateFromStores: PropTypes.func.isRequired,
+		onInteraction: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
 	};
 
 	constructor(props) {
 		super(props);
+		this.state = utils.deepClone(initialState);
+	}
 
-		this.state = {
-			valuesTopics: [12,22],
-			valueGroup: [],
-			valuesStyles: [30],
-			themesString: ""
+	store2state(props) {
+		return {
+			layer: VectorLayerStore.getById(props.selectorValue),
+			topics: TopicStore.getAll(),
+			layerGroups: LayerGroupStore.getAll(),
+			styles: StyleStore.getAll(),
+			attributeSets: AttributeSetStore.getAll()
 		};
-
 	}
 
-	resolveThemes(topics) {
-		var stringThemes = "";
-		if(topics) {
-			var themes = [];
-			if (!Array.isArray(topics)) {
-				topics = topics.split(",");
+	setStateFromStores(props,keys) {
+		if(!props){
+			props = this.props;
+		}
+		if(props.selectorValue) {
+			var thisComponent = this;
+			let store2state = this.store2state(props);
+			this.context.setStateFromStores.call(this, store2state, keys);
+			// if stores changed, overrides user input - todo fix
+
+			if(!keys || keys.indexOf("layer")!=-1) {
+				store2state.layer.then(function (layer) {
+					let attSetPromise = utils.getAttSetsForLayers(layer);
+					attSetPromise.then(function(attSets){
+						let newState = {
+							valueActive: layer.active,
+							valueName: layer.name,
+							valueTopic: layer.topic ? [layer.topic.key] : [],
+							valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
+							valuesStyles: utils.getModelsKeys(layer.styles),
+							valuesAttSets: utils.getModelsKeys(attSets)
+						};
+						newState.savedState = utils.deepClone(newState);
+						thisComponent.setState(newState);
+					});
+				});
 			}
-			for(var topicKey of topics) {
-				var topic = _.findWhere(TOPICS, {key: Number(topicKey)});
-				themes = _.union(themes, topic.themes);
-			}
-			themes = themes.sort(function (a, b) {return a - b});
-			for(var themeKey of themes) {
-				var theme = _.findWhere(THEMES, {key: themeKey});
-				if(stringThemes) {
-					stringThemes += ", ";
+		}
+	}
+
+	_onStoreChange(keys) {
+		this.setStateFromStores(this.props,keys);
+	}
+
+	_onStoreResponse(result,responseData,stateHash) {
+		var thisComponent = this;
+		if (stateHash === this.getStateHash()) {
+			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
+				let stateKey = responseData.stateKey;
+				let values = utils.deepClone(thisComponent.state[stateKey]);
+				values.push(result[0].key);
+				thisComponent.setState({
+					[stateKey]: values
+				});
+				var screenObjectType;
+				switch(stateKey){
+					case "valueTopic":
+						screenObjectType = ObjectTypes.TOPIC;
+						break;
+					case "valueLayerGroup":
+						screenObjectType = ObjectTypes.LAYER_GROUP;
+						break;
+					case "valuesStyles":
+						screenObjectType = ObjectTypes.STYLE;
+						break;
+					case "valuesAttSets":
+						screenObjectType = ObjectTypes.ATTRIBUTE_SET;
+						break;
 				}
-				stringThemes += theme.theme;
+				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
+				if(screenObjectType) {
+					let options = {
+						component: ScreenMetadataObject,
+						parentUrl: this.props.parentUrl,
+						size: 40,
+						data: {
+							objectType: screenObjectType,
+							objectKey: result[0].key
+						}
+					};
+					ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+				}
 			}
 		}
-		this.setState({
-			themesString: stringThemes
-		});
 	}
-
-	onChangeName (e) {
-		console.log(e.target.value);
-	}
-
-	handleNewObjects(values, store) {
-		var newValues = [];
-		for (var singleValue of values) {
-			if(singleValue.create){
-				// replace with actual object creation and config screen opening
-				delete singleValue.create;
-				delete singleValue.label;
-				delete singleValue.value;
-				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				store.push(singleValue);
-			}
-			newValues.push(singleValue.key);
-		}
-		return newValues;
-	}
-
-	onChangeTopics (value, values) {
-		values = this.handleNewObjects(values, TOPICS);
-		this.setState({
-			valuesTopics: values
-		});
-		this.resolveThemes(values);
-	}
-
-	onChangeGroup (value, values) {
-		values = this.handleNewObjects(values, LAYERGROUPS);
-		this.setState({
-			valueGroup: values
-		});
-	}
-
-	onChangeStyles (value, values) {
-		values = this.handleNewObjects(values, STYLES);
-		this.setState({
-			valuesStyles: values
-		});
-	}
-
-
-	onObjectClick (value, event) {
-		console.log("yay! " + value["key"]);
-	}
-
-
-	topicOptionFactory (inputValue) {
-		var newOption = {
-				key: inputValue,
-				topic: inputValue,
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-		return newOption;
-	}
-	keyNameOptionFactory (inputValue) {
-		var newOption = {
-				key: inputValue,
-				name: inputValue,
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-		return newOption;
-	}
-
-
 
 	componentDidMount() {
-
-		this.resolveThemes(this.state.valuesTopics);
-
+		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["layer"]));
+		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
+		TopicStore.addResponseListener(this._onStoreResponse.bind(this));
+		LayerGroupStore.addChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
+		LayerGroupStore.addResponseListener(this._onStoreResponse.bind(this));
+		StyleStore.addChangeListener(this._onStoreChange.bind(this,["styles"]));
+		StyleStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.setStateFromStores();
 	}
+
+	componentWillUnmount() {
+		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["layer"]));
+		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
+		TopicStore.removeResponseListener(this._onStoreResponse.bind(this));
+		LayerGroupStore.removeChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
+		LayerGroupStore.removeResponseListener(this._onStoreResponse.bind(this));
+		StyleStore.removeChangeListener(this._onStoreChange.bind(this,["styles"]));
+		StyleStore.removeResponseListener(this._onStoreResponse.bind(this));
+	}
+
+	componentWillReceiveProps(newProps) {
+		if(newProps.selectorValue!=this.props.selectorValue) {
+			this.setStateFromStores(newProps);
+			this.updateStateHash(newProps);
+		}
+	}
+
+	componentDidUpdate(oldProps, oldState) {
+		if (this.state.valueTopic && (oldState.valueTopic != this.state.valueTopic)) {
+			var thisComponent = this;
+			utils.getThemesForTopics(this.state.valueTopic).then(function(themes){
+				thisComponent.setState({
+					topicThemes: themes
+				});
+			});
+		}
+	}
+
+
+	/**
+	 * Check if state is the same as it was when loaded from stores
+	 * @returns {boolean}
+	 */
+	isStateUnchanged() {
+		var isIt = true;
+		if(this.state.layer) {
+			isIt = (
+				this.state.valueActive == this.state.layer.active &&
+				this.state.valueName == this.state.layer.name &&
+				_.isEqual(this.state.valueTopic,this.state.savedState.valueTopic) &&
+				_.isEqual(this.state.valueLayerGroup,this.state.savedState.valueLayerGroup) &&
+				_.isEqual(this.state.valuesStyles,this.state.savedState.valuesStyles) &&
+				_.isEqual(this.state.valuesAttSets,this.state.savedState.valuesAttSets)
+			);
+		}
+		return isIt;
+	}
+
+	/**
+	 * Differentiate between states
+	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
+	 */
+	updateStateHash(props) {
+		if(!props){
+			props = this.props;
+		}
+		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
+		this._stateHash = utils.stringHash(props.selectorValue);
+	}
+	getStateHash() {
+		if(!this._stateHash) {
+			this.updateStateHash();
+		}
+		return this._stateHash;
+	}
+
+	saveForm() {
+		var thisComponent = this;
+		var actionData = [], modelData = {};
+		_.assign(modelData, this.state.layer);
+		modelData.active = this.state.valueActive;
+		modelData.name = this.state.valueName;
+		modelData.topic = _.findWhere(this.state.topics, {key: this.state.valueTopic[0]});
+		modelData.layerGroup = _.findWhere(this.state.layerGroups, {key: this.state.valueLayerGroup[0]});
+		modelData.styles = [];
+		for (let key of this.state.valuesStyles) {
+			let period = _.findWhere(this.state.styles, {key: key});
+			modelData.styles.push(period);
+		}
+		modelData.attributeSets = [];
+
+		// for now, vectorLayer-attributeSet relations are stored in attribute sets
+		var attSetActionData = [], oldAttSets = [];
+		_.assign(oldAttSets,this.state.savedState.valuesAttSets);
+		for (let key of this.state.valuesAttSets) {
+			let attSet = _.findWhere(this.state.attributeSets, {key: key});
+			modelData.attributeSets.push(attSet); // saving in vector layer, for possible future use
+			let attSetModelData = {};
+			_.assign(attSetModelData, attSet);
+			attSetModelData.vectorLayers = _.union(attSetModelData.vectorLayers, [this.state.layer]);
+			let attSetModelObj = new Model[ObjectTypes.ATTRIBUTE_SET](attSetModelData);
+			attSetActionData.push({type:"update",model:attSetModelObj});
+			oldAttSets = _.reject(oldAttSets, function(item) {
+				return item === key;
+			});
+		}
+		for (let key of oldAttSets) {
+			let attSet = _.findWhere(this.state.attributeSets, {key: key});
+			let attSetModelData = {};
+			_.assign(attSetModelData, attSet);
+			attSetModelData.vectorLayers = _.reject(attSetModelData.vectorLayers, function(item){
+				return item.key === thisComponent.state.layer.key;
+			});
+			let attSetModelObj = new Model[ObjectTypes.ATTRIBUTE_SET](attSetModelData);
+			attSetActionData.push({type:"update",model:attSetModelObj});
+		}
+		ActionCreator.handleObjects(attSetActionData,ObjectTypes.ATTRIBUTE_SET);
+
+		let modelObj = new Model[ObjectTypes.VECTOR_LAYER_TEMPLATE](modelData);
+		actionData.push({type:"update",model:modelObj});
+		ActionCreator.handleObjects(actionData,ObjectTypes.VECTOR_LAYER_TEMPLATE);
+	}
+
+	onChangeActive() {
+		this.setState({
+			valueActive: !this.state.valueActive
+		});
+	}
+
+	onChangeName(e) {
+		this.setState({
+			valueName: e.target.value
+		});
+	}
+
+	onChangeObjectSelect (stateKey, objectType, value, values) {
+		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
+		var newState = {};
+		newState[stateKey] = newValues;
+		this.setState(newState);
+	}
+
+	onObjectClick (itemType, value, event) {
+		this.context.onInteraction().call();
+		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
+		let options = {
+			component: ScreenMetadataObject,
+			parentUrl: this.props.parentUrl,
+			size: 40,
+			data: {
+				objectType: itemType,
+				objectKey: value.key
+			}
+		};
+		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+	}
+
 
 	render() {
 
+		var saveButton = " ";
+		if (this.state.layer) {
+			saveButton = (
+				<SaveButton
+					saved={this.isStateUnchanged()}
+					className="save-button"
+					onClick={this.saveForm.bind(this)}
+				/>
+			);
+		}
+
+		var isActiveText = "inactive";
+		var isActiveClasses = "activeness-indicator";
+		if(this.state.layer && this.state.layer.active){
+			isActiveText = "active";
+			isActiveClasses = "activeness-indicator active";
+		}
+
+		var topicInfoInsert = null;
+		if(this.state.valueTopic && this.state.valueTopic.length) {
+			let themesString = "";
+			if(this.state.topicThemes) {
+				for (let theme of this.state.topicThemes) {
+					if (themesString) {
+						themesString += ", ";
+					}
+					themesString += theme.name
+				}
+			}
+			topicInfoInsert = (
+				<div className="frame-input-wrapper-info">
+					<b>{this.state.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
+					{this.state.topicThemes.length ? themesString : "No themes"}
+				</div>
+			);
+		}
+
 		return (
 			<div>
+
+				<div className="frame-input-wrapper">
+					<div className="container activeness">
+						<Checkbox
+							checked={this.state.valueActive}
+							onClick={this.onChangeActive.bind(this)}
+						>
+							<span>Active</span>
+						</Checkbox>
+						<div className="frame-input-pull-right">
+							{isActiveText}
+							<div className={isActiveClasses}></div>
+						</div>
+					</div>
+				</div>
 
 				<div className="frame-input-wrapper">
 					<label className="container">
@@ -172,45 +363,41 @@ class ConfigMetadataLayerVector extends Component{
 							type="text"
 							name="name"
 							placeholder=" "
-							defaultValue="Land cover"
+							value={this.state.valueName}
 							onChange={this.onChangeName.bind(this)}
 						/>
 					</label>
 				</div>
 
 				<div className="frame-input-wrapper">
-						<label className="container">
-							Topics
-							<UIObjectSelect
-								multi
-								onChange={this.onChangeTopics.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								options={TOPICS}
-								allowCreate
-								newOptionCreator={this.topicOptionFactory.bind(this)}
-								valueKey="key"
-								labelKey="topic"
-								value={this.state.valuesTopics}
-							/>
-						</label>
-						<div className="frame-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
+					<label className="container">
+						Topic
+						<UIObjectSelect
+							onChange={this.onChangeObjectSelect.bind(this, "valueTopic", ObjectTypes.TOPIC)}
+							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.TOPIC)}
+							options={this.state.topics}
+							allowCreate
+							newOptionCreator={utils.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.state.valueTopic}
+						/>
+					</label>
+					{topicInfoInsert}
 				</div>
-
 
 				<div className="frame-input-wrapper">
 					<label className="container">
 						Layer group
 						<UIObjectSelect
-							onChange={this.onChangeGroup.bind(this)}
-							onOptionLabelClick={this.onObjectClick.bind(this)}
-							//loadOptions={this.getScopes}
-							options={LAYERGROUPS}
+							onChange={this.onChangeObjectSelect.bind(this, "valueLayerGroup", ObjectTypes.LAYER_GROUP)}
+							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.LAYER_GROUP)}
+							options={this.state.layerGroups}
 							allowCreate
-							newOptionCreator={this.keyNameOptionFactory.bind(this)}
+							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valueGroup}
+							value={this.state.valueLayerGroup}
 						/>
 					</label>
 				</div>
@@ -220,12 +407,11 @@ class ConfigMetadataLayerVector extends Component{
 						Styles
 						<UIObjectSelect
 							multi
-							onChange={this.onChangeStyles.bind(this)}
-							onOptionLabelClick={this.onObjectClick.bind(this)}
-							//loadOptions={this.getScopes}
-							options={STYLES}
+							onChange={this.onChangeObjectSelect.bind(this, "valuesStyles", ObjectTypes.STYLE)}
+							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.STYLE)}
+							options={this.state.styles}
 							allowCreate
-							newOptionCreator={this.keyNameOptionFactory.bind(this)}
+							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.state.valuesStyles}
@@ -233,8 +419,24 @@ class ConfigMetadataLayerVector extends Component{
 					</label>
 				</div>
 
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Attribute sets
+						<UIObjectSelect
+							multi
+							onChange={this.onChangeObjectSelect.bind(this, "valuesAttSets", ObjectTypes.ATTRIBUTE_SET)}
+							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.ATTRIBUTE_SET)}
+							options={this.state.attributeSets}
+							allowCreate
+							newOptionCreator={utils.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.state.valuesAttSets}
+						/>
+					</label>
+				</div>
 
-				<SaveButton saved />
+				{saveButton}
 
 			</div>
 		);

@@ -2,12 +2,14 @@
 import EventEmitter from 'events';
 import superagent from 'superagent';
 import path from 'path';
+import _ from 'underscore';
+import async from 'async';
+
 import DataLayerModel from '../models/DataLayerModel';
 import EventTypes from '../constants/EventTypes';
 
-import _ from 'underscore';
-
 import { publicPath, apiProtocol, apiHost, apiPath, tempSsid, tempSessionid, tempCsrftoken } from '../config';
+
 
 class Store extends EventEmitter {
 
@@ -17,6 +19,7 @@ class Store extends EventEmitter {
 		//Promise.resolve(this._models).then(function(models){
 		//	console.log("Store > constructor > _models",models);
 		//});
+		this._maxListeners = 20; // increase listener limit a bit, but todo fix removeListeners
 	}
 
 	/**
@@ -90,24 +93,73 @@ class Store extends EventEmitter {
 		return this.request(method, {data: object});
 	}
 
+	/**
+	 * Handle requests asynchronously or in synchronous batches. When all is resolved, reloads the store.
+	 * @param actionData Array of arrays (of synchronous batches of requests) or array of requests
+	 */
 	handle(actionData) {
-		var promises = [];
+
+		// if not arrray of arrays (batches of commands)
+		if(!Array.isArray(actionData[0])){
+			actionData = [actionData];
+		}
+
+		async.eachSeries(
+
+			// this is the array to be iterated
+			actionData,
+
+			// this is the iterator
+			// it works synchronous in async.eachSeries - it's waiting for each cycle to be finished
+			function(batch, callback){
+				console.log("BATCH", batch); // todo remove log
+				var promises = [];
+				batch.forEach(function(action){
+					switch (action.type) {
+						case "create":
+							promises.push(this.create(action.model));
+							break;
+						case "update":
+							promises.push(this.update(action.model));
+							break;
+						case "delete":
+							promises.push(this.delete(action.model));
+							break;
+					}
+				}, this);
+				Promise.all(promises).then(function(){
+					console.log("BATCH FINISHED"); // todo remove log
+					callback(); // this is how one cycle says it's finished
+				});
+			}.bind(this),
+
+			// this is the final callback of async.eachSeries
+			function(err){
+				console.log("FINAL CALLBACK", err); // todo remove log
+				if(err){
+					return console.error(err);
+				}
+				this.reload();
+			}.bind(this)
+		);
+
+	}
+
+	createObjectAndRespond(model,responseData,responseStateHash) {
+		//console.log("PeriodStore createObject responseData",responseData);
+		// todo ? Model.resolveForServer ?
+		//var object = {
+		//	name: objectData.name,
+		//	active: false
+		//};
 		var thisStore = this;
-		actionData.forEach(function(action){
-			switch (action.type) {
-				case "create":
-					promises.push(thisStore.create(action.model));
-					break;
-				case "update":
-					promises.push(thisStore.update(action.model));
-					break;
-				case "delete":
-					promises.push(thisStore.delete(action.model));
-					break;
-			}
-		});
-		Promise.all(promises).then(function(){
-			thisStore.reload();
+		var resultPromise = this.create(model);
+
+		resultPromise.then(function(result){
+			thisStore.reload().then(function(){
+				thisStore.emitChange();
+				thisStore.emit(EventTypes.OBJECT_CREATED,result,responseData,responseStateHash);
+			});
 		});
 	}
 
@@ -176,9 +228,13 @@ class Store extends EventEmitter {
 			var url = path.resolve(publicPath, "api-proxy")
 					// append METHOD and last API directory, just for better debugging
 					+ "?" + method.toUpperCase() + "-" + thisStore.getApiUrl().split("/").pop();
+			var apiUrl = thisStore.getApiUrl();
+			if(method=="DELETE") {
+				apiUrl = path.join(apiUrl, object.data._id.toString());
+			}
 			superagent
 			.post(url)
-			.send({apiUrl: thisStore.getApiUrl()})
+			.send({apiUrl: apiUrl})
 			.send({method: method})
 			.send({ssid: tempSsid})
 			.send({sessionid: tempSessionid})
@@ -219,6 +275,9 @@ class Store extends EventEmitter {
 						}
 					}
 					Promise.all(promises).then(function(){
+						_.each(ret, function(instance){
+							delete instance.ready;
+						}, this);
 						resolve(ret);
 					});
 
@@ -243,6 +302,7 @@ class Store extends EventEmitter {
 					_.each(options, function (value, key) {
 						if(_.isArray(value)) {
 							if(_.isEmpty(value)) {
+								shouldRemain = false;
 								return;
 							}
 							if(!_.contains(value, model[key])) {
@@ -283,6 +343,20 @@ class Store extends EventEmitter {
 				reject(err);
 			});
 		});
+	}
+
+	/**
+	 * For transforming (for local) array of keys to array of models while preserving order
+	 * todo edit getFiltered to preserve order and get rid of this func?
+	 * @param keyArray
+	 * @returns {Promise}
+	 */
+	getByKeyArray(keyArray) {
+		let promises = [];
+		for (let index in keyArray) {
+			promises[index] = (this.getById(keyArray[index]));
+		}
+		return Promise.all(promises);
 	}
 
 }

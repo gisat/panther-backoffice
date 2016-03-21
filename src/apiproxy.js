@@ -6,7 +6,7 @@ import {apiProtocol, apiHost, apiPath} from './config';
 
 export default function(proxyRequest, proxyResponse){
 
-	var logLikeCrazy = false;
+	var logLikeCrazy = true;
 
 	if(logLikeCrazy) {
 		console.log('');
@@ -37,7 +37,8 @@ export default function(proxyRequest, proxyResponse){
 		url: url,
 		headers: {
 			'Cookie': cookies.join("; ")
-		}
+		},
+		timeout: 2*60*1000
 	};
 	if(body.hasOwnProperty("formData") && Object.keys(body.formData).length){
 		if(logLikeCrazy) console.log("body.formData (", typeof body.formData, ")", body.formData);

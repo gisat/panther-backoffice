@@ -5,6 +5,8 @@ import Select from 'react-select';
 import { Table } from '../../SEUI/collections';
 
 import utils from '../../../utils/utils';
+import ObjectTypes from '../../../constants/ObjectTypes';
+
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
 import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
@@ -41,6 +43,10 @@ class ConfigDataLayerVector extends Component{
 
 	render() {
 
+		let layerPeriods = _.filter(this.props.periods,function(period){
+			return _.contains(this.props.valuesPeriods,period.key);
+		},this);
+
 		let tableRows = [];
 		_.each(this.props.columnMap, function(column, columnName){
 			let destinationValue = null;
@@ -62,7 +68,7 @@ class ConfigDataLayerVector extends Component{
 					destinations={this.props.destinations}
 					destinationValue={destinationValue}
 					destinationObject={destination}
-					periods={this.props.periods}
+					periods={layerPeriods}
 					selectedPeriods={column.valuesPeriods}
 					onChangeDestination={this.props.onChangeColumnTableDestination.bind(null,"vector")}
 					onChangePeriods={this.props.onChangeColumnTablePeriods.bind(null,"vector")}
@@ -79,7 +85,7 @@ class ConfigDataLayerVector extends Component{
 							Layer template (Name)
 							<UIObjectSelect
 								onChange={this.props.onChangeTemplate}
-								onOptionLabelClick={this.props.onObjectClick}
+								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.VECTOR_LAYER_TEMPLATE)}
 								options={this.props.layerTemplates}
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
@@ -96,7 +102,7 @@ class ConfigDataLayerVector extends Component{
 							Scope
 							<UIObjectSelect
 								onChange={this.props.onChangeScope}
-								onOptionLabelClick={this.props.onObjectClick}
+								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.SCOPE)}
 								options={this.props.scopes}
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
@@ -113,7 +119,7 @@ class ConfigDataLayerVector extends Component{
 							<UIObjectSelect
 								multi
 								onChange={this.props.onChangePlaces}
-								onOptionLabelClick={this.props.onObjectClick}
+								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PLACE)}
 								options={this.props.places}
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
@@ -130,7 +136,7 @@ class ConfigDataLayerVector extends Component{
 							<UIObjectSelect
 								multi
 								onChange={this.props.onChangePeriods.bind(this)}
-								onOptionLabelClick={this.props.onObjectClick}
+								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PERIOD)}
 								options={this.props.periods}
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}

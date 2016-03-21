@@ -4,6 +4,8 @@ class DataLayerColumnsModel extends Model {
 
 	resolveForLocal(data) {
 		return new Promise(function (resolve, reject) {
+			//OpenaLyers is imported in html (/src/components/Html/Html.js) due to absence of npm in version 2
+			//todo upgrade to OpenLayers 3 - it has different api for Format
 			var format = new OpenLayers.Format.WFSDescribeFeatureType();
 			data = format.read(data);
 			if(!data.hasOwnProperty("featureTypes") || !data.featureTypes.length) resolve([]);

@@ -38,7 +38,7 @@ var initialState = {
 	topics: [],
 	layerGroups: [],
 	styles: [],
-	activeMenuItem: "vector-layer",
+	activeMenuItem: "scope",
 	activeObjectListItems: {}
 };
 
@@ -47,7 +47,8 @@ var initialState = {
 class ScreenMetadataBase extends Component{
 
 	static propTypes = {
-		disabled: React.PropTypes.bool
+		disabled: PropTypes.bool,
+		screenKey: PropTypes.string.isRequired
 	};
 
 	static defaultProps = {
@@ -57,15 +58,14 @@ class ScreenMetadataBase extends Component{
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		onSetScreenData: PropTypes.func.isRequired,
-		openScreen: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired
+		setStateDeep: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
 	};
 
 	constructor(props) {
 		super(props);
 
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 
 		this._tabs = [
 			{ data: "scopes", dataType: ObjectTypes.SCOPE },
@@ -125,11 +125,17 @@ class ScreenMetadataBase extends Component{
 			//console.log("responseData",responseData);
 			//console.log("stateHash",stateHash);
 			if (result) {
-				var screenComponent,screenName,screenObjectType;
-				screenComponent = <ScreenMetadataObject/>;
-				screenObjectType = responseData.objectType;
-				screenName = "ScreenDataLayersBase-ScreenMetadata" + screenObjectType;
-				this.context.openScreen(screenName,screenComponent,this.props.parentUrl,{size:40},{objectType: screenObjectType,objectKey:result[0].key});
+				var screenName = "ScreenDataLayersBase-ScreenMetadata" + responseData.objectType;
+				let options = {
+					component: ScreenMetadataObject,
+					parentUrl: this.props.parentUrl,
+					size: 40,
+					data: {
+						objectType: responseData.objectType,
+						objectKey: result[0].key
+					}
+				};
+				ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 			}
 		}
 	}
@@ -241,15 +247,24 @@ class ScreenMetadataBase extends Component{
 
 	onObjectListItemClick(itemType, item, event) {
 		this.context.onInteraction().call();
-		// todo open screen with item
-		var screenName = "ScreenMetadataBase-ScreenMetadata" + itemType;
-		this.context.openScreen(screenName,<ScreenMetadataObject/>,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
+		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
+		//this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
+		let options = {
+			component: ScreenMetadataObject,
+			parentUrl: this.props.parentUrl,
+			size: 40,
+			data: {
+				objectType: itemType,
+				objectKey:item.key
+			}
+		};
+		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 
+		//todo highlighting screen opener.
 		//this.changeActiveObjectListItem(itemType,item.key);
 	}
 	onObjectListAddClick(itemType, event) {
 		this.context.onInteraction().call();
-		// todo create item + open screen
 		let model = new Model[itemType]({active:false});
 		let responseData = {
 			objectType: itemType

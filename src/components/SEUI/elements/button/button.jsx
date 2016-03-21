@@ -68,7 +68,8 @@ class Button extends React.Component {
 		}
 
 		render() {
-				let Component = (this.props.attached || this.context.isAttached || this.props.animated || React.Children.count(this.props.children) > 1) ? 'div' : 'button';
+				//let Component = (this.props.attached || this.context.isAttached || this.props.animated || React.Children.count(this.props.children) > 1) ? 'div' : 'button';
+			let Component = (this.props.attached || this.context.isAttached || this.props.animated) ? 'div' : 'button';
 
 				// consume props
 				let { active, animated, attached, basic, children, circular, color,

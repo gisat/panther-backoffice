@@ -1,0 +1,6 @@
+{
+	"name": "ConfigMetadataPlace",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ConfigMetadataPlace.js"
+}

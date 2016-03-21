@@ -86,6 +86,11 @@ class AULevelModel extends Model {
 		};
 	}
 
+	prepareModel(options) {
+		options.layerType = "au";
+		return options;
+	}
+
 }
 
 export default AULevelModel;

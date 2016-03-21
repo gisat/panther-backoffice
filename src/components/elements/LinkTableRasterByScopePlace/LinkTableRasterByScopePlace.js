@@ -2,85 +2,84 @@ import React, { PropTypes, Component } from 'react';
 import styles from './LinkTableRasterByScopePlace.css';
 import withStyles from '../../../decorators/withStyles';
 
+import _ from 'underscore';
+
+import utils from '../../../utils/utils';
+
 import UIScreenButton from '../../atoms/UIScreenButton';
 
 import { Segment, Button, Input, Header, IconButton, Icon, PopupButton } from '../../SEUI/elements';
 import { Popup, Modal } from '../../SEUI/modules';
 import { Form, Fields, Field, Table } from '../../SEUI/collections';
 
+import RasterLayerStore from '../../../stores/RasterLayerStore';
+import PeriodStore from '../../../stores/PeriodStore';
+
+var initialState = {
+	example: "Nothing is happening.",
+	scopeLayerTemplates: {},
+	scopePeriods: {}
+};
+
+
 @withStyles(styles)
 class LinkTableRasterByScopePlace extends Component {
 
+	static propTypes = {
+		disabled: React.PropTypes.bool,
+		relations: React.PropTypes.object,
+		place: React.PropTypes.object,
+		onCellClick: React.PropTypes.func
+	};
+
+	static defaultProps = {
+		disabled: false
+	};
+
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
+		setStateFromStores: PropTypes.func.isRequired,
+		onInteraction: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired,
+		onSetTitle: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
 		super(props);
+		this.state = utils.deepClone(initialState);
+	}
 
-		this.state = {
-			example: "Nothing is happening.",
-			rasterLayers: [
-			{
-				key: 8,
-				name: "Population grid",
-				periods: [
-					{
-						key: 1,
-						name: "2000",
-						data: "only"
-					},
-					{
-						key: 2,
-						name: "2010",
-						data: "only"
-					}
-				]
-			}, // layer
-			{
-				key: 13,
-				name: "Urban expansion grid",
-				periods: [
-					{
-						key: 1,
-						name: "2000",
-						data: "only"
-					},
-					{
-						key: 2,
-						name: "2010",
-						data: "only"
-					}
-				]
-			}, // layer
-			{
-				key: 20,
-				name: "Global urban footprint",
-				periods: [
-					{
-						key: 1,
-						name: "2000",
-						data: "only"
-					},
-					{
-						key: 2,
-						name: "2010",
-						data: "only"
-					}
-				]
-			} // layer
-
-		]
+	store2state(props) {
+		if(!props){
+			props = this.props;
+		}
+		return {
+			scopeLayerTemplates: utils.getLayerTemplatesForScope(props.place.scope, "raster"),
+			scopePeriods: utils.getPeriodsForScope(props.place.scope)
 		};
 	}
 
-	openScreenExample(idLayer) {
-		this.state.example = "Clicked on " + idLayer;
+	setStateFromStores(props,keys) {
+		if(!props){
+			props = this.props;
+		}
+		if(props.place && props.place.scope) {
+			let store2state = this.store2state(props);
+			this.context.setStateFromStores.call(this, store2state, keys);
+		}
+	}
+
+	_onStoreChange(keys) {
+		this.setStateFromStores(this.props,keys);
 	}
 
 	componentDidMount() {
 
-		$("#LinkTableRasterByScopePlace td.selectable").each(function() {
+		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates"]));
+		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["scopePeriods"]));
+		this.setStateFromStores();
+
+		// todo react instead of jquery
+		$("#LinkTableVectorByScopePlace td.selectable").each(function() {
 			$(this).focusin(function() {
 				$(this).addClass("focus");
 			});
@@ -90,96 +89,153 @@ class LinkTableRasterByScopePlace extends Component {
 		});
 	}
 
+	componentWillUnmount() {
+		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates"]));
+		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["scopePeriods"]));
+	}
+
+	componentWillReceiveProps(newProps) {
+		if(newProps.place!=this.props.place) {
+			this.setStateFromStores(newProps,["scopeLayerTemplates","scopePeriods"]);
+			//this.updateStateHash(newProps);
+		}
+	}
+
+	componentDidUpdate() {
+		// todo react instead of jquery
+		$("#LinkTableByScopePlace td.selectable").each(function() {
+			$(this).focusin(function() {
+				$(this).addClass("focus");
+			});
+			$(this).focusout(function() {
+				$(this).removeClass("focus");
+			});
+		});
+	}
+
+
+	onCellClick(idLayer,idAttSet) {
+		this.props.onCellClick(idLayer,idAttSet);
+	}
+
+
 	render() {
 
-		var thisComponent = this;
+		var ret = null;
 
-		var rasterLayersInsert = this.state.rasterLayers.map(function (rasterLayer) {
+		if (
+			this.props.place &&
+			this.props.place.scope &&
+			this.state.scopeLayerTemplates.models &&
+			this.state.scopePeriods.models
+		) {
+			var thisComponent = this;
 
-			var tdLayerClassName = "selectable";
-			var dataNoneCountLayer = 0;
-			var layerPeriodsInsert = rasterLayer.periods.map(function (period) {
-				var periodClassName = "data-" + period.data;
-				var iconName = "check circle";
-				if(period.data=="none"){
-					iconName="radio";
-					++dataNoneCountLayer;
+			var layerTemplates = utils.deepClone(this.state.scopeLayerTemplates.models);
+
+
+			var rasterLayersInsert = this.state.scopeLayerTemplates.models.map(function (scopeLayerTemplate) {
+				var rasterLayer = thisComponent.props.relations[scopeLayerTemplate.key];
+
+				var tdLayerClassName = "selectable";
+				var dataNoneCountLayer = 0;
+				var layerPeriodsInsert = thisComponent.state.scopePeriods.models.map(function (scopePeriod) {
+					var periodData = null;
+					if (rasterLayer && rasterLayer.periods[scopePeriod.key]) {
+						switch (rasterLayer.periods[scopePeriod.key].relations.length) {
+							case 0:
+								periodData = "none";
+								break;
+							case 1:
+								periodData = "only";
+								break;
+							default:
+								periodData = "selected";
+						}
+					} else {
+						periodData = "none";
+					}
+
+					var periodClassName = "data-" + periodData;
+					var iconName = "check circle";
+					if (periodData == "none") {
+						iconName = "radio";
+						++dataNoneCountLayer;
+					}
+					else if (periodData == "selected") {
+						iconName = "check circle outline"
+					}
+
+					return (
+						<span
+							className={periodClassName}
+							key={"period-" + scopePeriod.key}
+						>
+							<Icon name={iconName}/>
+							{scopePeriod.name}
+							<br/>
+						</span>
+					);
+				});
+
+				if (dataNoneCountLayer == 0) {
+					tdLayerClassName += " positive";
 				}
-				else if(period.data=="selected"){
-					iconName="check circle outline"
+				else if (dataNoneCountLayer == thisComponent.state.scopePeriods.models.length) {
+					tdLayerClassName += " negative";
+				}
+				else {
+					tdLayerClassName += " warning";
 				}
 
 				return (
-					<span
-						className={periodClassName}
-						key={"period-" + period.key}
+					<tr
+						key={"rasterlayer-" + scopeLayerTemplate.key}
 					>
-						<Icon name={iconName}/>
-						{period.name}
-						<br/>
-					</span>
+						<td className="header">
+							{scopeLayerTemplate.name}
+						</td>
+						<td className={tdLayerClassName}>
+							<a
+								href="#"
+								onClick={thisComponent.onCellClick.bind(
+										thisComponent,
+										scopeLayerTemplate.key,
+										null
+									)}
+							>
+								{layerPeriodsInsert}
+							</a>
+						</td>
+					</tr>
 				);
 			});
 
-			if(dataNoneCountLayer==0){
-				tdLayerClassName += " positive";
-			}
-			else if(dataNoneCountLayer==rasterLayer.periods.length){
-				tdLayerClassName += " negative";
-			}
-			else {
-				tdLayerClassName += " warning";
-			}
+			ret = (
 
-			return (
-				<tr
-					key={"rasterlayer-" + rasterLayer.key}
-				>
-					<td className="header">
-						{rasterLayer.name}
-					</td>
-					<td className={tdLayerClassName}>
-						<a
-							href="#"
-							onClick={thisComponent.openScreenExample.bind(
-									thisComponent,
-									rasterLayer.key,
-									false
-								)}
-						>
-							{layerPeriodsInsert}
-						</a>
-					</td>
-				</tr>
+				/* -> tabs - reference periods */
+				<div>
+
+					<Table celled className="LinkTable ByScopePlace fixed separateRows" id="LinkTableRasterByScopePlace">
+						<thead>
+						<tr>
+							<th colSpan="2">Layer</th>
+						</tr>
+						</thead>
+						<tbody>
+						{rasterLayersInsert}
+						</tbody>
+					</Table>
+
+					{/*<div className="note">
+						Set available layers in <UIScreenButton>scope settings</UIScreenButton>
+					</div>*/}
+
+				</div>
 			);
-		});
+		}
 
-		return (
-
-		/* -> tabs - reference periods */
-		<div>
-			{/*
-			<br/>
-			<p>{this.state.example}</p>
-			*/}
-
-		<Table celled className="LinkTable ByScopePlace fixed separateRows" id="LinkTableRasterByScopePlace">
-			<thead>
-				<tr>
-					<th colSpan="2">Layer</th>
-				</tr>
-			</thead>
-			<tbody>
-				{rasterLayersInsert}
-			</tbody>
-		</Table>
-
-		<div className="note">
-			Set available layers in <UIScreenButton>scope settings</UIScreenButton>
-		</div>
-
-		</div>
-		);
+		return ret;
 
 	}
 

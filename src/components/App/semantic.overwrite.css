@@ -1,3 +1,21 @@
+.ui.message>:last-child {
+	margin: .5rem 0 0 0;
+}
+
+.ui.attached.warning.message, .ui.warning.message {
+	box-shadow: 0 0 0 1px #B79E6E inset,0 0 0 0 transparent;
+}
+.ui.warning.message {
+	/*background-color: #D8D0C4;*/
+	background-color: rgba(216, 208, 196, 0.5);
+	/*background-color: transparent;*/
+	color: #6B4508;
+}
+.ui.warning.message .header {
+	color: #6B4508;
+}
+
+
 .ui.table {
 	background: transparent;
 	border-radius: .28571429rem .28571429rem 0 0;
@@ -61,9 +79,14 @@
 .ui.table.LinkTable tbody td.selectable.focus,
 .ui.table.LinkTable tbody td.selectable.focus:hover,
 .ui.table.LinkTable  td.selectable.heading.focus:hover {
-	background: #cfe5ff!important;
+	box-shadow: inset 0 0 0 2px #4d8aff;
+}
+.ui.table.LinkTable tbody td.selectable.selected,
+.ui.table.LinkTable tbody td.selectable.selected:hover,
+.ui.table.LinkTable  td.selectable.heading.selected:hover {
+	/*background: #cfe5ff!important;*/
 	background: #ffff9e!important;
-	box-shadow: inset 0px 0px 3px 2px rgba(0,123,255,1);
+	/*box-shadow: inset 0px 0px 3px 2px rgba(0,123,255,1);*/
 	box-shadow: inset 0px 0px 3px 2px rgb(239, 220, 1);
 }
 td.selectable::after {
@@ -98,7 +121,7 @@ td.selectable.warning::after {
 	50% { right: .5rem; }
 	100% { right: .3rem; }
 }
-td.selectable.focus::after {
+td.selectable.selected::after {
 	color: #c3c300;
 	animation-name: puma-item-selected;
 	animation-duration: 1s;
@@ -192,9 +215,17 @@ td.selectable.focus::after {
 }
 .ui.basic.button:focus,
 .ui.basic.button:hover,
+.ui.basic.blue.button:focus,
+.ui.basic.blue.button:hover,
 .ui.basic.buttons .button:focus,
 .ui.basic.buttons .button:hover {
 		background: rgba(255, 255, 255, 0.1)!important;
+}
+.ui.basic.button:focus,
+.ui.basic.blue.button:focus,
+.ui.basic.buttons .button:focus {
+	box-shadow: 0 0 0 1px #4d8aff, 0 0 0 1px #4d8aff inset!important;
+	border-color: #4d8aff;
 }
 
 

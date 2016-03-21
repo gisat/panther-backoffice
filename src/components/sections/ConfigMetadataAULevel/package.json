@@ -1,0 +1,6 @@
+{
+	"name": "ConfigMetadataAULevel",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ConfigMetadataAULevel.js"
+}

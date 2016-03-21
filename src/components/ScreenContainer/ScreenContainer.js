@@ -4,9 +4,12 @@ import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import _ from 'underscore';
 
-import { Icon, IconButton, Buttons } from '../SEUI/elements';
+import utils from '../../utils/utils';
 
-const screenStack = require('../../stores/screenStack');
+import ActionCreator from '../../actions/ActionCreator';
+import ScreenStore from '../../stores/ScreenStore';
+
+import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
 var initialState = {
 	isFocused: false
@@ -31,7 +34,7 @@ class ScreenContainer extends Component{
 
 	constructor(props) {
 		super(props);
-		this.state = initialState;
+		this.state = utils.deepClone(initialState);
 	}
 
 	getChildContext(){
@@ -47,59 +50,68 @@ class ScreenContainer extends Component{
 			 * @param funcToRunAfter (function) another function to be called after
 			 * @returns function
 			 */
+			// todo remove?
+			// remove if focus events are enough (interactions bubble through)
 			onInteraction: function(funcToRunAfter){
 				return function() {
 					var page = this.context.activePageKey();
 					var removed = [];
-					//console.log("/ screenStack[page][0]: ", screenStack[page][0]);
-					console.log("SCREEN-INTERACTION " + page + "/" + this.props.screenState.key);
+					//console.log("SCREEN-INTERACTION " + page + "/" + this.props.screenState.key);
 					//console.log("ONSCREENINTERACTIVITY\nfuncToRunAfter:", funcToRunAfter, "\nthis:", this);
-					screenStack[page].map(function (screen, index) {
-						if (screen.key == this.props.screenState.key) {
-							removed = screenStack[page].splice(index, 1);
-						}
-					}.bind(this)); // binds to ScreenContainer
-					screenStack[page].unshift(removed[0]);
-					//console.log("\\ screenStack[page][0]: ", screenStack[page][0]);
 					if(funcToRunAfter) funcToRunAfter();
 				}.bind(this); // binds to ScreenContainer
 			}.bind(this) // binds to ScreenContainer
-			//onSetScreenData: this.props.onSetScreenData
 		};
 	}
 
-	componentDidMount() {
-		//console.log("CDM");
-		//if(this.props.screenState.isDynamic){
-		//	var thisComponent = this;
-		//	setTimeout(function () {
-		//		thisComponent.props.onOpen();
-		//	}, 100);
-		//}
+	_focusScreen(screenKey) {
+		if(screenKey==this.props.screenState.key) {
+			this._domSelf.focus();
+		}
 	}
 
-	onDynamicOpen() {
-		var thisComponent = this;
-		setTimeout(function () {
-			thisComponent.props.onOpen();
-			thisComponent._domSelf.focus();
-			// battle selects stealing focus:
-			setTimeout(function () {
-				thisComponent._domSelf.focus();
-			}, 800);
-		}, 100);
+	componentDidMount() {
+		ScreenStore.addFocusListener(this._focusScreen.bind(this));
+	}
+
+	componentWillUnmount() {
+		ScreenStore.removeFocusListener(this._focusScreen.bind(this));
 	}
 
 	onPanelFocus() {
 		this.setState({
 			isFocused: true
 		});
+		ActionCreator.logScreenActivity(this.props.screenState.key);
 	}
 
 	onPanelBlur() {
 		this.setState({
 			isFocused: false
 		});
+	}
+
+	retractOrOpenScreen() {
+		switch(this.props.screenState.position) {
+			case "retracted":
+				this.openScreen();
+				break;
+			default: // "open", "open maximised"
+				this.retractScreen();
+				break;
+		}
+	}
+
+	openScreen() {
+		ActionCreator.openScreen(this.props.screenState.key);
+	}
+
+	retractScreen() {
+		ActionCreator.retractScreen(this.props.screenState.key);
+	}
+
+	closeScreen() {
+		ActionCreator.closeScreen(this.props.screenState.key);
 	}
 
 	///**
@@ -149,6 +161,15 @@ class ScreenContainer extends Component{
 
 		var totallyLocalData = {};
 		_.assign(totallyLocalData,this.props.screenState.data);
+		var screen = React.createElement(
+			this.props.screenState.component,
+			{
+				disabled: disabled,
+				data: totallyLocalData,
+				screenKey: this.props.screenState.key,
+				parentUrl: this.props.screenState.parentUrl || ""
+			}
+		);
 
 		return (
 			<div
@@ -160,29 +181,30 @@ class ScreenContainer extends Component{
 				onBlur={this.onPanelBlur.bind(this)}
 			>
 				<div className="screen-scroll"><div>
-					{React.cloneElement(this.props.screenState.component, {
+					{/*React.cloneElement(this.props.screenState.component, {
 						disabled: disabled,
 						data: totallyLocalData,
 						parentUrl: this.props.screenState.parentUrl || ""
-					} )}
+					} )*/}
+					{screen}
 				</div></div>
 				<div className="screen-controls middle">
 					<Buttons basic icon vertical>
 						<IconButton
 							name="chevron right"
-							onClick={this.props.onRetract.bind(null,{init: false})}
+							onClick={this.retractOrOpenScreen.bind(this)}
 						/>
 					</Buttons>
 				</div>
 				<div
 					className="screen-overlay"
-					onClick={this.props.onOpen.bind(null,{init: false})}
+					onClick={this.openScreen.bind(this)}
 				></div>
 				<div className="screen-controls top">
 					<Buttons basic icon vertical>
 						<IconButton
 							name="remove"
-							onClick={this.props.onClose.bind(null,{init: false})}
+							onClick={this.closeScreen.bind(this)}
 						/>
 					</Buttons>
 				</div>

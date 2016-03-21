@@ -15,7 +15,7 @@ class Model {
 				});
 			});
 		} else {
-			_.assign(this,options);
+			_.assign(this,this.prepareModel(options));
 			this.ready = Promise.resolve();
 		}
 	}
@@ -59,14 +59,14 @@ class Model {
 			//	promises.push(nestedPromise);
 			} else {
 				if (keyProps.isPromise) {
-					let promise = keyProps.transformForLocal(data[keyProps.serverName]);
+					let promise = keyProps.transformForLocal(data[keyProps.serverName], data);
 					promise.then(function(transformedData){
 						ret[key] = transformedData;
 					});
 					promises.push(promise);
 				} else {
 					if (keyProps.transformForLocal) {
-						ret[key] = keyProps.transformForLocal(data[keyProps.serverName]);
+						ret[key] = keyProps.transformForLocal(data[keyProps.serverName], data);
 					} else {
 						ret[key] = data[keyProps.serverName];
 					}
@@ -80,6 +80,15 @@ class Model {
 				resolve(ret);
 			})
 		});
+	}
+
+	/**
+	 * Called on options when creating model locally. To be overriden.
+	 * @param options
+	 * @returns {*}
+	 */
+	prepareModel(options) {
+		return options;
 	}
 
 	///**
@@ -126,7 +135,7 @@ class Model {
 						value[i] = self.serializeModel(value[i],model[key].model);
 					}
 				} else if (model[key].hasOwnProperty("transformForServer")){
-					value = model[key].transformForServer(value);
+					value = model[key].transformForServer(value, object);
 				}
 				key = model[key].serverName;
 				serializedObject[key] = value;
@@ -147,7 +156,7 @@ class Model {
 
 	getKeys(models) {
 		let keys = [];
-		for (model of models) {
+		for (let model of models) {
 			keys.push(model.key);
 		}
 		return keys;

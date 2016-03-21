@@ -5,6 +5,7 @@ import withContext from '../../decorators/withContext';
 import withStyles from '../../decorators/withStyles';
 
 import Menu from '../Menu';
+import Page from '../Page';
 
 
 @withContext
@@ -18,12 +19,18 @@ class App extends Component {
 	};
 
 	render() {
-		return !this.props.error ? (
-			<div>
-				<Menu />
-				{this.props.children}
-			</div>
-		) : this.props.children;
+		let ret = "";
+		if(this.props.children.type===Page) {
+			ret = (
+				<div>
+					<Menu />
+					{this.props.children}
+				</div>
+			);
+		} else {
+			ret = this.props.children;
+		}
+		return ret;
 	}
 
 	//closeScreen(page, screenKey) {

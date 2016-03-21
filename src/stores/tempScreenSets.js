@@ -12,7 +12,7 @@ import ScreenMetadataBase from '../components/screens/ScreenMetadataBase';
 import ScreenMetadataLayerVector from '../components/screens/ScreenMetadataLayerVector';
 
 import ScreenPlacesBase from '../components/screens/ScreenPlacesBase';
-import ScreenLinksByAttSetAULevel from '../components/screens/ScreenLinksByAttSetAULevel';
+import ScreenPlaceDataSourceAttSet from '../components/screens/ScreenPlaceDataSourceAttSet';
 
 module.exports = [
 	{
@@ -21,7 +21,8 @@ module.exports = [
 		screens: [
 			{
 				key: "ScreenAnalysesBase",
-				component: <ScreenAnalysesBase/>,
+				component: ScreenAnalysesBase,
+				//component: <ScreenAnalysesBase/>,
 				data: {
 					x: 7
 				}
@@ -31,7 +32,8 @@ module.exports = [
 				//type: "constant",
 				size: 40,
 				position: "retracted",
-				component: <ScreenAnalysisSpatial/>,
+				component: ScreenAnalysisSpatial,
+				//component: <ScreenAnalysisSpatial/>,
 				parentUrl: "/analyses/spatial",
 				data: {
 					neco: 42,
@@ -43,7 +45,8 @@ module.exports = [
 				//contentAlign: "fill",
 				size: 80,
 				position: "retracted",
-				component: <ScreenAnalysisSpatialRules/>,
+				component: ScreenAnalysisSpatialRules,
+				//component: <ScreenAnalysisSpatialRules/>,
 				data: {
 					rule_id: 47,
 					title: "pumpa"
@@ -58,7 +61,9 @@ module.exports = [
 		screens: [
 			{
 				key: "ScreenDashboardBase",
-				component: <ScreenDashboardBase/>
+				component: ScreenDashboardBase,
+				contentAlign: "fill"
+				//component: <ScreenDashboardBase/>
 			}
 		]
 	},
@@ -69,7 +74,8 @@ module.exports = [
 		screens: [
 			{
 				key: "ScreenDataLayersBase",
-				component: <ScreenDataLayersBase/>
+				component: ScreenDataLayersBase
+				//component: <ScreenDataLayersBase/>
 			}
 		]
 	},
@@ -80,7 +86,8 @@ module.exports = [
 		screens: [
 			{
 				key: "ScreenMetadataBase",
-				component: <ScreenMetadataBase/>
+				component: ScreenMetadataBase
+				//component: <ScreenMetadataBase/>
 			}
 		]
 	},
@@ -91,14 +98,16 @@ module.exports = [
 		screens: [
 			{
 				key: "screenPlacesBase",
-				component: <ScreenPlacesBase />
+				component: ScreenPlacesBase
+				//component: <ScreenPlacesBase />
 			},
 			{
 				key: "screenLinksByAttSetAULevel",
 				//type: "constant",
 				size: 40,
 				position: "retracted",
-				component: <ScreenLinksByAttSetAULevel />
+				component: ScreenPlaceDataSourceAttSet
+				//component: <ScreenLinksByAttSetAULevel />
 			}
 		]
 	}

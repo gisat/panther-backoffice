@@ -822,6 +822,15 @@ todo hex colours, button icons */
 
 
 
+.frame-wrapper {
+	border: 1px solid #999;
+	border-radius: .2rem;
+	margin-bottom: 1.5rem;
+	box-shadow: .05rem .05rem .2rem 0 rgba(0,0,0,.07);
+}
+.frame-wrapper.filled {
+	background: #c0c0c0;
+}
 
 .ui.button.puma-screen-button {
 	padding-right: 2.5rem!important;
@@ -876,6 +885,14 @@ todo hex colours, button icons */
 	animation-name: puma-screen-button-screen-opener;
 	animation-duration: 1s;
 	animation-iteration-count: 3;
+}
+
+.ui.message .puma-screen-button {
+	position: absolute;
+	right: .8rem;
+	top: 50%;
+	transform: translateY(-50%);
+	/*transform: translateY(-44.444444444%);*/
 }
 
 
@@ -1201,6 +1218,9 @@ todo hex colours, button icons */
 
 	padding-left: 2rem;
 }
+.UIObjectSelect.is-ordered .UIObjectSelect-item {
+	padding-left: 6rem;
+}
 .UIObjectSelect.template .UIObjectSelect-item,
 .Select.template.has-value:not(.Select--multi) > .UIObjectSelect-control{
 /*	background: transparent;*/
@@ -1232,6 +1252,15 @@ todo hex colours, button icons */
 	border-right: 1px solid #95A6C7;
 	padding: 0;
 	text-align: center;
+}
+.UIObjectSelect-ordering-controls {
+	position: absolute;
+	top: 0;
+	left: 2rem;
+	width: 4rem;
+}
+.UIObjectSelect-ordering-controls .UIObjectSelect-item-icon:nth-child(2) {
+	left: 2rem;
 }
 .UIObjectSelect-item-icon:hover {
 	background: rgba(255,255,255,.3);
@@ -1430,8 +1459,13 @@ todo hex colours, button icons */
 	text-align: right;
 	padding-right: .3rem;
 }
+.UICustomSelect.SelectPlace .UICustomSelect-option .option-parent,
+.UICustomSelect.SelectPlace .UICustomSelect-value .option-parent {
+	width: 8rem;
+}
 
-.UICustomSelect-option.not-referenced:not(.is-focused) {
+.UICustomSelect-option.not-referenced:not(.is-focused),
+.UICustomSelect-option.no-scope:not(.is-focused) {
 	background: #fcf3e7;
 }
 

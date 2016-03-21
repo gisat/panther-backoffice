@@ -1,0 +1,17 @@
+.login-box {
+	position: absolute;
+	top:50%;
+	left:50%;
+	transform: translate(-51%,-55%);
+
+	padding:2rem;
+	width: 25rem;
+	height: 17.5rem;
+}
+.login-box .ui.button {
+	margin-top:1rem;
+}
+/*.login-page {*/
+	/*background: bottom center url("../../../public/hcmclandsat.jpg");*/
+	/*background-size: cover;*/
+/*}*/

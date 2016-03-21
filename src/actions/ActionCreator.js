@@ -11,14 +11,22 @@ export default {
 			responseData: responseData,
 			stateHash: stateHash
 		};
-		switch (objectType) {
-			case ObjectTypes.PERIOD:
-				action.type = ActionTypes.PERIOD_CREATE_RESPOND;
-				break;
-			default:
-				return;
+		let actionType = objectType+"_CREATE_RESPOND";
+		if(ActionTypes[actionType]) {
+			action.type = ActionTypes[actionType];
+			AppDispatcher.dispatch(action);
+		} else {
+			console.error("UNKNOWN ACTION TYPE",actionType);
 		}
-		AppDispatcher.dispatch(action);
+		//switch (objectType) {
+		//	case ObjectTypes.SCOPE:
+		//		action.type = ActionTypes.SCOPE_CREATE_RESPOND;
+		//		break;
+		//	case ObjectTypes.PERIOD:
+		//		action.type = ActionTypes.PERIOD_CREATE_RESPOND;
+		//		break;
+		//}
+		//AppDispatcher.dispatch(action);
 	},
 
 	createObject: function(model,objectType) {
@@ -79,17 +87,98 @@ export default {
 		};
 		//console.log("ActionCreator handleObjects()");
 		switch (objectType) {
-			case ObjectTypes.OBJECT_RELATION:
-				action.type = ActionTypes.OBJECT_RELATION_HANDLE;
-				//console.log("action type",action.type);
+			case ObjectTypes.SCOPE:
+				action.type = ActionTypes.SCOPE_HANDLE;
+				break;
+			case ObjectTypes.PLACE:
+				action.type = ActionTypes.PLACE_HANDLE;
 				break;
 			case ObjectTypes.PERIOD:
 				action.type = ActionTypes.PERIOD_HANDLE;
-				//console.log("action type",action.type);
+				break;
+			case ObjectTypes.VECTOR_LAYER_TEMPLATE:
+				action.type = ActionTypes.VECTOR_LAYER_TEMPLATE_HANDLE;
+				break;
+			case ObjectTypes.RASTER_LAYER_TEMPLATE:
+				action.type = ActionTypes.RASTER_LAYER_TEMPLATE_HANDLE;
+				break;
+			case ObjectTypes.AU_LEVEL:
+				action.type = ActionTypes.AU_LEVEL_HANDLE;
+				break;
+			case ObjectTypes.ATTRIBUTE:
+				action.type = ActionTypes.ATTRIBUTE_HANDLE;
+				break;
+			case ObjectTypes.ATTRIBUTE_SET:
+				action.type = ActionTypes.ATTRIBUTE_SET_HANDLE;
+				break;
+			case ObjectTypes.TOPIC:
+				action.type = ActionTypes.TOPIC_HANDLE;
+				break;
+			case ObjectTypes.THEME:
+				action.type = ActionTypes.THEME_HANDLE;
+				break;
+			case ObjectTypes.LAYER_GROUP:
+				action.type = ActionTypes.LAYER_GROUP_HANDLE;
+				break;
+			case ObjectTypes.STYLE:
+				action.type = ActionTypes.STYLE_HANDLE;
+				break;
+			case ObjectTypes.OBJECT_RELATION:
+				action.type = ActionTypes.OBJECT_RELATION_HANDLE;
+				break;
+			case ObjectTypes.ANALYSIS:
+				action.type = ActionTypes.ANALYSIS_HANDLE;
 				break;
 			default:
 				return;
 		}
+		AppDispatcher.dispatch(action);
+	},
+
+
+	createOpenScreen(screenKey, screenSetKey, options, responseData, responseHash) {
+		var action = {
+			type: ActionTypes.SCREEN_CREATE_OPEN,
+			screenKey: screenKey,
+			screenSetKey: screenSetKey,
+			options: options,
+			resposeData: responseData,
+			responseHash: responseHash
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	openScreen(screenKey, data) {
+		data = data || {};
+		var action = {
+			type: ActionTypes.SCREEN_OPEN,
+			screenKey: screenKey,
+			data: data
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	retractScreen(screenKey) {
+		var action = {
+			type: ActionTypes.SCREEN_RETRACT,
+			screenKey: screenKey
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	closeScreen(screenKey) {
+		var action = {
+			type: ActionTypes.SCREEN_CLOSE,
+			screenKey: screenKey
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	logScreenActivity(screenKey) {
+		var action = {
+			type: ActionTypes.SCREEN_LOG_ACTIVITY,
+			screenKey: screenKey
+		};
 		AppDispatcher.dispatch(action);
 	}
 

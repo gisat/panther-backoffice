@@ -31,19 +31,15 @@ let storeInstance = new VectorLayerStore();
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 
 	switch(action.type) {
-		//case ActionTypes.APP_INITIALIZED:
-		//	reset();
-		//	break;
-		//case ActionTypes.LAYER_ADD:
-		//	//appState.page = action.page;
-		//	//appState.path = action.path;
-		//	console.log("Action: LAYER_ADD");
-		//	break;
+		case ActionTypes.VECTOR_LAYER_TEMPLATE_CREATE_RESPOND:
+			storeInstance.createObjectAndRespond(action.model, action.responseData, action.stateHash);
+			break;
+		case ActionTypes.VECTOR_LAYER_TEMPLATE_HANDLE:
+			storeInstance.handle(action.data);
+			break;
 		default:
 			return;
 	}
-
-	storeInstance.emitChange();
 
 });
 

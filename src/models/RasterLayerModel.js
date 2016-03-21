@@ -86,6 +86,11 @@ class RasterLayerModel extends Model {
 		};
 	}
 
+	prepareModel(options) {
+		options.layerType = "raster";
+		return options;
+	}
+
 }
 
 export default RasterLayerModel;
