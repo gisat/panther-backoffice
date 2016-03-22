@@ -20,7 +20,7 @@ import ConfigMetadataAULevel from '../../sections/ConfigMetadataAULevel';
 //import ConfigMetadataAttribute from '../../sections/ConfigMetadataAttribute';
 import ConfigMetadataAttributeSet from '../../sections/ConfigMetadataAttributeSet';
 //import ConfigMetadataTopic from '../../sections/ConfigMetadataTopic';
-//import ConfigMetadataTheme from '../../sections/ConfigMetadataTheme';
+import ConfigMetadataTheme from '../../sections/ConfigMetadataTheme';
 //import ConfigMetadataLayerGroup from '../../sections/ConfigMetadataLayerGroup';
 import ConfigMetadataStyle from '../../sections/ConfigMetadataStyle';
 
@@ -208,9 +208,9 @@ class ScreenMetadataObject extends Component{
 				//case ObjectTypes.TOPIC:
 				//	configComponent = <ConfigMetadataTopic {...props} />;
 				//	break;
-				//case ObjectTypes.THEME:
-				//	configComponent = <ConfigMetadataTheme {...props} />;
-				//	break;
+				case ObjectTypes.THEME:
+					configComponent = <ConfigMetadataTheme {...props} />;
+					break;
 				//case ObjectTypes.LAYER_GROUP:
 				//	configComponent = <ConfigMetadataLayerGroup {...props} />;
 				//	break;

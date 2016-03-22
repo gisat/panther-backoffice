@@ -76,6 +76,16 @@ class ThemeModel extends Model {
 				isPromise: true,
 				isArray: true
 			},
+			topicsPreferential: {
+				serverName: 'prefTopics', //ids
+				sendToServer: true,
+				transformForLocal: function (data) {
+					return TopicStore.getFiltered({key: data})
+				},
+				transformForServer: this.getKeys,
+				isPromise: true,
+				isArray: true
+			},
 			visualizations: { // ordered array of ids, not using in backoffice
 				serverName: 'visOrder',
 				sendToServer: false
