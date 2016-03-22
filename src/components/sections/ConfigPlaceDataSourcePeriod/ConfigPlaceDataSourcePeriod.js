@@ -255,9 +255,9 @@ class ConfigPlaceDataSourcePeriod extends Component {
 				(function (relation) { // todo is this needed with let instead of var?
 
 					let valueDataLayer = relation.dataSourceString;
-					if (state.relationsState[relation.key]) {
-						valueDataLayer = state.relationsState[relation.key].valueDataLayer;
-					}
+					//if (state.relationsState[relation.key]) {
+					//	valueDataLayer = state.relationsState[relation.key].valueDataLayer;
+					//}
 					let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(valueDataLayer);
 					promises.push(dataLayerColumnsPromise);
 					if(dataLayerColumnsPromise) {
@@ -274,7 +274,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							relationsState[relation.key] = {
 								columns: columns,
 								valuesColumnMap: relation.columnMap,
-								valueDataLayer: valueDataLayer,
+								//valueDataLayer: valueDataLayer,
 								valueFidColumn: relation.fidColumn
 							};
 						});
@@ -362,24 +362,24 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		}
 	}
 
-	componentWillUpdate(newProps, newState) {
-		var thisComponent = this;
-		if(newState.hasOwnProperty("relationsState")) {
-			let changed = false;
-			_.each(newState.relationsState, function (relState, relKey, relationsState) {
-				if (
-					relState.hasOwnProperty("valueDataLayer") &&
-					thisComponent.state.relationsState.hasOwnProperty(relKey) &&
-					relState.valueDataLayer != thisComponent.state.relationsState[relKey].valueDataLayer
-				) {
-					changed = true;
-				}
-			});
-			if (changed) {
-				this.setRelationsState(newProps,newState);
-			}
-		}
-	}
+	//componentWillUpdate(newProps, newState) {
+	//	var thisComponent = this;
+	//	//if(newState.hasOwnProperty("relationsState")) {
+	//	//	let changed = false;
+	//	//	_.each(newState.relationsState, function (relState, relKey, relationsState) {
+	//	//		if (
+	//	//			relState.hasOwnProperty("valueDataLayer") &&
+	//	//			thisComponent.state.relationsState.hasOwnProperty(relKey) &&
+	//	//			relState.valueDataLayer != thisComponent.state.relationsState[relKey].valueDataLayer
+	//	//		) {
+	//	//			changed = true;
+	//	//		}
+	//	//	});
+	//	//	if (changed) {
+	//	//		this.setRelationsState(newProps,newState);
+	//	//	}
+	//	//}
+	//}
 
 
 	/**
@@ -474,16 +474,16 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		this.context.setStateDeep.call(this, state);
 	}
 
-	onChangeDataLayer(relationKey, value, values) {
-		let state = {
-			relationsState: {
-				[relationKey]: {
-					valueDataLayer: {$set: value}
-				}
-			}
-		};
-		this.context.setStateDeep.call(this, state);
-	}
+	//onChangeDataLayer(relationKey, value, values) {
+	//	let state = {
+	//		relationsState: {
+	//			[relationKey]: {
+	//				valueDataLayer: {$set: value}
+	//			}
+	//		}
+	//	};
+	//	this.context.setStateDeep.call(this, state);
+	//}
 
 	onChangeFidColumn(relationKey, value, values) {
 		let state = {
@@ -639,7 +639,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 										<div>
 											<div>
 
-												<label className="container">
+												{/*<label className="container">
 													Data layer
 													<Select
 														onChange={this.onChangeDataLayer.bind(this, relation.key)}
@@ -648,7 +648,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 														labelKey="key"
 														value={this.state.relationsState[relation.key].valueDataLayer}
 													/>
-												</label>
+												</label>*/}
 
 												<label className="container">
 													FID column (Feature identifier)
