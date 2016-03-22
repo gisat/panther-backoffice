@@ -6,7 +6,7 @@ import {apiProtocol, apiHost, apiPath} from './config';
 
 export default function(proxyRequest, proxyResponse){
 
-	var logLikeCrazy = true;
+	var logLikeCrazy = false;
 
 	if(logLikeCrazy) {
 		console.log('');
