@@ -159,38 +159,6 @@ class ConfigMetadataTheme extends Component{
 		}
 	}
 
-	componentDidUpdate(oldProps, oldState) {
-		if (this.state.valueScope && (oldState.valueScope != this.state.valueScope)) {
-			// scope changed - change periods accordingly
-			// todo move to own onChange methods, not to duplicate state updates
-			// 	(also solves the following)
-			// todo only do after user changed scope, not after saveForm
-			//let valuesPeriods = utils.clone(this.state.valuesPeriods);
-			var periods = [];
-			if (this.state.valueScope[0]) {
-				var selectedScope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
-				periods = utils.getModelsKeys(selectedScope.periods);
-			}
-			//valuesPeriods = _.filter(valuesPeriods,function(key){
-			//	return _.contains(periods,key);
-			//},this);
-			this.setState({
-				//valuesPeriods: valuesPeriods
-				valuesPeriods: periods // implicitly use all scope's periods
-			});
-		}
-		if (this.state.valuesTopics && (oldState.valuesTopics != this.state.valuesTopics)) {
-			// topics changed - change preferential accordingly
-			let valuesTopicsPreferential = utils.clone(this.state.valuesTopicsPreferential);
-			valuesTopicsPreferential = _.filter(valuesTopicsPreferential,function(key){
-				return _.contains(this.state.valuesTopics,key);
-			},this);
-			this.setState({
-				valuesTopicsPreferential: valuesTopicsPreferential
-			});
-		}
-	}
-
 
 	/**
 	 * Check if state is the same as it was when loaded from stores
@@ -278,6 +246,36 @@ class ConfigMetadataTheme extends Component{
 		this.setState(newState);
 	}
 
+	onChangeScope (value, values) {
+		let newValue = utils.handleNewObjects(values, ObjectTypes.SCOPE, {stateKey: "valueScope"}, this.getStateHash());
+
+		var periods = [];
+		if (value) {
+			let scope = _.findWhere(this.state.scopes, {key: value});
+			periods = utils.getModelsKeys(scope.periods);
+		}
+
+		this.setState({
+			valueScope: newValue,
+			valuesPeriods: periods
+		});
+	}
+
+	onChangeTopics (value, values) {
+		let newValue = utils.handleNewObjects(values, ObjectTypes.TOPIC, {stateKey: "valuesTopics"}, this.getStateHash());
+
+		// topics changed - change preferential accordingly
+		let valuesTopicsPreferential = utils.clone(this.state.valuesTopicsPreferential);
+		valuesTopicsPreferential = _.filter(valuesTopicsPreferential,function(key){
+			return _.contains(newValue,key);
+		},this);
+
+		this.setState({
+			valuesTopics: newValue,
+			valuesTopicsPreferential: valuesTopicsPreferential
+		});
+	}
+
 	onObjectClick (itemType, value, event) {
 		this.context.onInteraction().call();
 		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
@@ -360,7 +358,7 @@ class ConfigMetadataTheme extends Component{
 					<label className="container">
 						Scope
 						<UIObjectSelect
-							onChange={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
+							onChange={this.onChangeScope.bind(this)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.SCOPE)}
 							options={this.state.scopes}
 							allowCreate
@@ -377,7 +375,7 @@ class ConfigMetadataTheme extends Component{
 						Topics
 						<UIObjectSelect
 							multi
-							onChange={this.onChangeObjectSelect.bind(this, "valuesTopics", ObjectTypes.TOPIC)}
+							onChange={this.onChangeTopics.bind(this)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.TOPIC)}
 							options={this.state.topics}
 							allowCreate
