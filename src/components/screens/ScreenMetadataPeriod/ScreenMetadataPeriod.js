@@ -9,6 +9,7 @@ import utils from '../../../utils/utils';
 import PeriodStore from '../../../stores/PeriodStore';
 import SelectorMetadataPeriod from '../../sections/SelectorMetadataPeriod'; // todo universal selector
 import ConfigMetadataPeriod from '../../sections/ConfigMetadataPeriod';
+import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	periods: [],
@@ -26,6 +27,7 @@ class ScreenMetadataPeriod extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, "addChangeListener", "removeChangeListener");
 
 		if(this.props.data && this.props.data.initialKey) {
 			this.state.selectorValue = this.props.data.initialKey;
@@ -50,12 +52,12 @@ class ScreenMetadataPeriod extends Component{
 	}
 
 	componentDidMount() {
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this));
+		this.changeListener.add(PeriodStore);
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentWillUnmount() {
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

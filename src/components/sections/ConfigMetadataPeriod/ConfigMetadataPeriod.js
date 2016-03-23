@@ -11,6 +11,8 @@ import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 import PeriodStore from '../../../stores/PeriodStore';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 
 var initialState = {
 	period: null,
@@ -39,6 +41,8 @@ class ConfigMetadataPeriod extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -72,12 +76,13 @@ class ConfigMetadataPeriod extends Component{
 	}
 
 	componentDidMount() {
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["period"]));
+		this.changeListener.add(PeriodStore, ["period"]);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["period"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

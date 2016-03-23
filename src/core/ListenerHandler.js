@@ -1,24 +1,34 @@
 class ListenerHandler {
-	constructor(component, storeChangeHandler) {
+	constructor(component, storeChangeHandler, addListenerName, removeListenerName) {
 		this.storeListeners = {};
 
 		this.component = component;
 		this.storeChangeHandler = storeChangeHandler;
+
+		this.addListenerName = addListenerName;
+		this.removeListenerName = removeListenerName;
 	}
 
-	addListener(store, args) {
+	add(store, args) {
 		if (!this.storeListeners[store]) {
 			this.storeListeners[store] = [];
 		}
-		var newListener = this.storeChangeHandler.bind(this.component, args);
-		store.addChangeListener(newListener);
-		this.listeners[store].push(newListener);
+		var newListener = this.storeChangeHandler.bind(this.component, args); // Component is needed
+		store[this.addListenerName](newListener);
+		this.storeListeners[store].push(newListener);
 	}
 
-	cleanListeners() {
+	clean() {
+		let removeListenerName = this.removeListenerName;
 		for(let store in this.storeListeners) {
+			if(!this.storeListeners.hasOwnProperty(store)) {
+				return;
+			}
 			this.storeListeners[store].forEach(function(listener){
-				store.removeChangeListener(listener);
+				// TODO: Understand undefined. 
+				if(store[removeListenerName]) {
+					store[removeListenerName](listener);
+				}
 			});
 		}
 	}

@@ -11,6 +11,8 @@ import PlaceStore from '../../../stores/PlaceStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 import AULevelStore from '../../../stores/AULevelStore';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 var initialState = {
 	place: null,
 	attSet: null,
@@ -49,6 +51,8 @@ class ConfigPlaceDataSource extends Component {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -86,16 +90,15 @@ class ConfigPlaceDataSource extends Component {
 	}
 
 	componentDidMount() {
-		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["place"]));
-		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["attSet"]));
-		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevel"]));
+		this.changeListener.add(PlaceStore, ["place"]);
+		this.changeListener.add(AttributeSetStore, ["attSet"]);
+		this.changeListener.add(AULevelStore, ["auLevel"]);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["place"]));
-		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attSet"]));
-		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevel"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

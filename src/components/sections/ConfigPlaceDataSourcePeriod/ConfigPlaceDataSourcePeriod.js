@@ -15,6 +15,8 @@ import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 const COLUMNS = [
 			{ key: "ID_0"	},
 			{ key: "uf_00" },
@@ -86,6 +88,8 @@ class ConfigPlaceDataSourcePeriod extends Component {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -303,24 +307,19 @@ class ConfigPlaceDataSourcePeriod extends Component {
 	}
 
 	componentDidMount() {
-		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["place"]));
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["period"]));
-		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["attSet"]));
-		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevel"]));
-		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayer"]));
-		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayer"]));
-		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["relations"]));
+		this.changeListener.add(PlaceStore, ["place"]);
+		this.changeListener.add(PeriodStore, ["period"]);
+		this.changeListener.add(AttributeSetStore, ["attSet"]);
+		this.changeListener.add(AULevelStore, ["auLevel"]);
+		this.changeListener.add(VectorLayerStore, ["vectorLayer"]);
+		this.changeListener.add(RasterLayerStore, ["rasterLayer"]);
+		this.changeListener.add(ObjectRelationStore, ["relations"]);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["place"]));
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["period"]));
-		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attSet"]));
-		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevel"]));
-		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayer"]));
-		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayer"]));
-		ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["relations"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

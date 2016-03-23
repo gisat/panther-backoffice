@@ -15,6 +15,8 @@ import TopicStore from '../../../stores/TopicStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 
 var initialState = {
 	style: null,
@@ -46,6 +48,9 @@ class ConfigMetadataStyle extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -118,16 +123,16 @@ class ConfigMetadataStyle extends Component{
 	}
 
 	componentDidMount() {
-		StyleStore.addChangeListener(this._onStoreChange.bind(this,["style"]));
-		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.add(StyleStore, ["style"]);
+		this.changeListener.add(TopicStore, ["topics"]);
+		this.responseListener.add(TopicStore);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		StyleStore.removeChangeListener(this._onStoreChange.bind(this,["style"]));
-		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.removeResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

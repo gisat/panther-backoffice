@@ -15,6 +15,8 @@ import ScopeStore from '../../../stores/ScopeStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 
 var initialState = {
 	place: null,
@@ -46,6 +48,9 @@ class ConfigMetadataPlace extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -118,16 +123,16 @@ class ConfigMetadataPlace extends Component{
 	}
 
 	componentDidMount() {
-		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["place"]));
-		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		ScopeStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.add(PlaceStore,["place"]);
+		this.changeListener.add(ScopeStore,["scopes"]);
+		this.responseListener.add(ScopeStore);
+		
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["place"]));
-		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		ScopeStore.removeResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

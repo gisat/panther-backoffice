@@ -33,6 +33,8 @@ import AttributeSetStore from '../../../stores/AttributeSetStore';
 import PeriodStore from '../../../stores/PeriodStore';
 import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 var initialState = {
 	place: null,
 	placeRelations: [],
@@ -65,6 +67,8 @@ class PlaceRelations extends Component {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -98,16 +102,15 @@ class PlaceRelations extends Component {
 	}
 
 	componentDidMount() {
-		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["place"]));
-		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["placeRelations"]));
+		this.changeListener.add(ScopeStore, ["scopes"]);
+		this.changeListener.add(PlaceStore, ["place"]);
+		this.changeListener.add(ObjectRelationStore, ["placeRelations"]);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["place"]));
-		ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["placeRelations"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
