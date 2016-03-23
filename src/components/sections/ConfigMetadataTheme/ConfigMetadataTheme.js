@@ -162,6 +162,8 @@ class ConfigMetadataTheme extends Component{
 	componentDidUpdate(oldProps, oldState) {
 		if (this.state.valueScope && (oldState.valueScope != this.state.valueScope)) {
 			// scope changed - change periods accordingly
+			// todo move to own onChange methods, not to duplicate state updates
+			// 	(also solves the following)
 			// todo only do after user changed scope, not after saveForm
 			//let valuesPeriods = utils.clone(this.state.valuesPeriods);
 			var periods = [];
