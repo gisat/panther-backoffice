@@ -21,7 +21,7 @@ import ConfigMetadataAULevel from '../../sections/ConfigMetadataAULevel';
 import ConfigMetadataAttributeSet from '../../sections/ConfigMetadataAttributeSet';
 //import ConfigMetadataTopic from '../../sections/ConfigMetadataTopic';
 import ConfigMetadataTheme from '../../sections/ConfigMetadataTheme';
-//import ConfigMetadataLayerGroup from '../../sections/ConfigMetadataLayerGroup';
+import ConfigMetadataLayerGroup from '../../sections/ConfigMetadataLayerGroup';
 import ConfigMetadataStyle from '../../sections/ConfigMetadataStyle';
 
 var initialState = {
@@ -211,9 +211,9 @@ class ScreenMetadataObject extends Component{
 				case ObjectTypes.THEME:
 					configComponent = <ConfigMetadataTheme {...props} />;
 					break;
-				//case ObjectTypes.LAYER_GROUP:
-				//	configComponent = <ConfigMetadataLayerGroup {...props} />;
-				//	break;
+				case ObjectTypes.LAYER_GROUP:
+					configComponent = <ConfigMetadataLayerGroup {...props} />;
+					break;
 				case ObjectTypes.STYLE:
 					configComponent = <ConfigMetadataStyle {...props} />;
 					break;

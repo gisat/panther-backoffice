@@ -44,8 +44,9 @@ class LayerGroupModel extends Model {
 				},
 				isPromise: true
 			},
-			orderWeight: {
-				serverName: 'priority' //number - weight (higher is first)
+			order: {
+				serverName: 'priority', //number - order (lower is first)
+				sendToServer: true
 			}
 		};
 	}
