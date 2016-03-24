@@ -18,6 +18,8 @@ import AttributeSetStore from '../../../stores/AttributeSetStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 
 var initialState = {
 	style: null,
@@ -52,6 +54,9 @@ class ConfigMetadataLayerVector extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -141,24 +146,20 @@ class ConfigMetadataLayerVector extends Component{
 	}
 
 	componentDidMount() {
-		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["layer"]));
-		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.addResponseListener(this._onStoreResponse.bind(this));
-		LayerGroupStore.addChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
-		LayerGroupStore.addResponseListener(this._onStoreResponse.bind(this));
-		StyleStore.addChangeListener(this._onStoreChange.bind(this,["styles"]));
-		StyleStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.add(VectorLayerStore, ["layer"]);
+		this.changeListener.add(TopicStore, ["topics"]);
+		this.responseListener.add(TopicStore);
+		this.changeListener.add(LayerGroupStore, ["layerGroups"]);
+		this.responseListener.add(LayerGroupStore);
+		this.changeListener.add(StyleStore, ["styles"]);
+		this.responseListener.add(StyleStore);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["layer"]));
-		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.removeResponseListener(this._onStoreResponse.bind(this));
-		LayerGroupStore.removeChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
-		LayerGroupStore.removeResponseListener(this._onStoreResponse.bind(this));
-		StyleStore.removeChangeListener(this._onStoreChange.bind(this,["styles"]));
-		StyleStore.removeResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

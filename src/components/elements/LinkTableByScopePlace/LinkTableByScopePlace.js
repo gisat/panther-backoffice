@@ -17,6 +17,8 @@ import PeriodStore from '../../../stores/PeriodStore';
 import ThemeStore from '../../../stores/ThemeStore';
 import TopicStore from '../../../stores/TopicStore';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 var initialState = {
 	example: "Nothing is happening.",
 	scopeAttributeSets: {},
@@ -324,6 +326,7 @@ class LinkTableByScopePlace extends Component {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -352,10 +355,11 @@ class LinkTableByScopePlace extends Component {
 
 	componentDidMount() {
 
-		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["scopeAttributeSets"]));
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["scopePeriods"]));
-		ThemeStore.addChangeListener(this._onStoreChange.bind(this,["scopeAttributeSets","scopePeriods"]));
-		TopicStore.addChangeListener(this._onStoreChange.bind(this,["scopeAttributeSets","scopePeriods"]));
+		this.changeListener.add(AttributeSetStore, ["scopeAttributeSets"]);
+		this.changeListener.add(PeriodStore, ["scopePeriods"]);
+		this.changeListener.add(ThemeStore, ["scopeAttributeSets","scopePeriods"]);
+		this.changeListener.add(TopicStore, ["scopeAttributeSets","scopePeriods"]);
+
 		this.setStateFromStores();
 
 		// todo react instead of jquery
@@ -370,10 +374,7 @@ class LinkTableByScopePlace extends Component {
 	}
 
 	componentWillUnmount() {
-		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["scopeAttributeSets"]));
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["scopePeriods"]));
-		ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["scopeAttributeSets","scopePeriods"]));
-		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["scopeAttributeSets","scopePeriods"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

@@ -18,6 +18,8 @@ import PeriodStore from '../../../stores/PeriodStore';
 import ThemeStore from '../../../stores/ThemeStore';
 import TopicStore from '../../../stores/TopicStore';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 var initialState = {
 	example: "Nothing is happening.",
 	scopeLayerTemplates: {},
@@ -50,6 +52,7 @@ class LinkTableVectorByScopePlace extends Component {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	//constructor(props) {
@@ -192,11 +195,12 @@ class LinkTableVectorByScopePlace extends Component {
 
 	componentDidMount() {
 
-		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates"]));
-		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["scopeAttributeSets"]));
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["scopePeriods"]));
-		ThemeStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates","scopeAttributeSets","scopePeriods"]));
-		TopicStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates","scopeAttributeSets","scopePeriods"]));
+		this.changeListener.add(VectorLayerStore, ["scopeLayerTemplates"]);
+		this.changeListener.add(VectorLayerStore, ["scopeAttributeSets"]);
+		this.changeListener.add(VectorLayerStore, ["scopePeriods"]);
+		this.changeListener.add(VectorLayerStore, ["scopeLayerTemplates","scopeAttributeSets","scopePeriods"]);
+		this.changeListener.add(VectorLayerStore, ["scopeLayerTemplates","scopeAttributeSets","scopePeriods"]);
+
 		this.setStateFromStores();
 
 		// todo react instead of jquery
@@ -211,11 +215,7 @@ class LinkTableVectorByScopePlace extends Component {
 	}
 
 	componentWillUnmount() {
-		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates"]));
-		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["scopeAttributeSets"]));
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["scopePeriods"]));
-		ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates","scopeAttributeSets","scopePeriods"]));
-		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates","scopeAttributeSets","scopePeriods"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

@@ -16,6 +16,7 @@ import TopicStore from '../../../stores/TopicStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
+import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	attributeSet: null,
@@ -48,6 +49,9 @@ class ConfigMetadataAttributeSet extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -124,20 +128,18 @@ class ConfigMetadataAttributeSet extends Component{
 	}
 
 	componentDidMount() {
-		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["attributeSet"]));
-		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.addResponseListener(this._onStoreResponse.bind(this));
-		AttributeStore.addChangeListener(this._onStoreChange.bind(this,["attributes"]));
-		AttributeStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.add(AttributeSetStore, ["attributeSet"]);
+		this.changeListener.add(TopicStore, ["attributeSet"]);
+		this.responseListener.add(TopicStore);
+		this.changeListener.add(AttributeStore, ["attributeSet"]);
+		this.responseListener.add(AttributeStore);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attributeSet"]));
-		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.removeResponseListener(this._onStoreResponse.bind(this));
-		AttributeStore.removeChangeListener(this._onStoreChange.bind(this,["attributes"]));
-		AttributeStore.removeResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

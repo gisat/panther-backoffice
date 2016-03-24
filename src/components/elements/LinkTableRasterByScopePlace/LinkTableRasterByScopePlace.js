@@ -15,6 +15,8 @@ import { Form, Fields, Field, Table } from '../../SEUI/collections';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
 import PeriodStore from '../../../stores/PeriodStore';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 var initialState = {
 	example: "Nothing is happening.",
 	scopeLayerTemplates: {},
@@ -46,6 +48,7 @@ class LinkTableRasterByScopePlace extends Component {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -74,8 +77,8 @@ class LinkTableRasterByScopePlace extends Component {
 
 	componentDidMount() {
 
-		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates"]));
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["scopePeriods"]));
+		this.changeListener.add(RasterLayerStore, ["scopeLayerTemplates"]);
+		this.changeListener.add(PeriodStore, ["scopePeriods"]);
 		this.setStateFromStores();
 
 		// todo react instead of jquery
@@ -90,8 +93,7 @@ class LinkTableRasterByScopePlace extends Component {
 	}
 
 	componentWillUnmount() {
-		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["scopeLayerTemplates"]));
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["scopePeriods"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
