@@ -421,19 +421,23 @@ class ConfigPlaceDataSourcePeriod extends Component {
 				break;
 		}
 		if(condition && this.state.savedState) {
-			isSelectionUnchanged = (
-				this.state.selected == this.state.savedState.selected
-			);
+			isSelectionUnchanged = this.isSelectionUnchanged();
 			for (let relation of this.state.relations) {
 				if (this.state.relationsState[relation.key]) {
 					areConfigsUnchanged = (
 						areConfigsUnchanged &&
-						_.isEqual(relation.columnMap,this.state.relationsState[relation.key].valuesColumnMap)
+						this.isConfigUnchanged(relation)
 					);
 				}
 			}
 		}
 		return (isSelectionUnchanged && areConfigsUnchanged);
+	}
+	isSelectionUnchanged() {
+		return this.state.selected == this.state.savedState.selected
+	}
+	isConfigUnchanged(relation) {
+		return _.isEqual(relation.columnMap,this.state.relationsState[relation.key].valuesColumnMap)
 	}
 
 
