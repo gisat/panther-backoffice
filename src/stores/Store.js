@@ -309,7 +309,7 @@ class Store extends EventEmitter {
 								shouldRemain = false;
 							}
 						} else {
-							if (!model[key] || model[key] != value) {
+							if (!model.hasOwnProperty(key) || model[key] != value) {
 								shouldRemain = false;
 							}
 						}
