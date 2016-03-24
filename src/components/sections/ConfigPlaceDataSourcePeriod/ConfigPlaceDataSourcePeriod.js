@@ -730,7 +730,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 					{relationsInsert}
 
 					<div className="rsc-controls">
-						<IconButton
+						{/*<IconButton
 							name="plus"
 							basic
 						>
@@ -741,7 +741,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 						>
 							<Icon name="plus" />
 							New analysis run
-						</UIScreenButton>
+						</UIScreenButton>*/}
 						{saveButton}
 					</div>
 				</div>
