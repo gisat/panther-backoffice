@@ -3,6 +3,8 @@ import React, { PropTypes, Component } from 'react';
 import { Button, Input, Icon } from '../../SEUI/elements';
 import Select from 'react-select';
 
+import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
+
 import OptionKeyName from '../../atoms/UICustomSelect/OptionKeyName';
 import SingleValueKeyName from '../../atoms/UICustomSelect/SingleValueKeyName';
 import OptionPlace from '../../atoms/UICustomSelect/OptionPlace';
@@ -13,7 +15,10 @@ class SelectorPlaceLayer extends Component{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
-		layerType: PropTypes.oneOf(["vector","raster"]).isRequired,
+		layerType: PropTypes.oneOf([
+			ObjectTypes.VECTOR_LAYER_TEMPLATE,
+			ObjectTypes.RASTER_LAYER_TEMPLATE
+		]).isRequired,
 		dataPlace: React.PropTypes.array.isRequired,		// Expects "key","name"
 		dataLayer: React.PropTypes.array.isRequired,		// Expects "key","name"
 		valuePlace: React.PropTypes.any,
@@ -59,7 +64,7 @@ class SelectorPlaceLayer extends Component{
 
 					<div className="input">
 						<label className="container">
-							{this.props.layerType == "vector" ? "Vector layer" : "Raster layer"}
+							{objectTypesMetadata[this.props.layerType].name}
 							<Select
 								onChange={this.onChangeLayer.bind(this)}
 								options={this.props.dataLayer}

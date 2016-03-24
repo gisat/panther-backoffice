@@ -10,7 +10,7 @@ import AULevelStore from '../../../stores/AULevelStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 import PlaceStore from '../../../stores/PlaceStore';
 
-import SelectorPlaceAttSetAULevel from '../../sections/SelectorPlaceAttSetAULevel';
+import SelectorPlaceLayer from '../../sections/SelectorPlaceLayer';
 import ConfigPlaceDataSource from '../../sections/ConfigPlaceDataSource';
 
 import ListenerHandler from '../../../core/ListenerHandler';
@@ -18,15 +18,19 @@ import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	places: [],
-	attributeSets: [],
-	auLevels: [],
+	layers: [],
 	selectorValuePlace: null,
-	selectorValueAttSet: null,
-	selectorValueAULevel: null
+	selectorValueLayer: null
 };
 
 
 class ScreenPlaceDataSourceLayer extends Component {
+
+	static propTypes = {
+		data: PropTypes.shape({
+			objectType: PropTypes.string.isRequired
+		})
+	};
 
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired
@@ -38,21 +42,21 @@ class ScreenPlaceDataSourceLayer extends Component {
 		this.changeListener = new ListenerHandler(this, this._onStoreChange, "addChangeListener", "removeChangeListener");
 
 		if(this.props.data) {
+			if (this.props.data.objectType) {
+				this.state.objectType = this.props.data.objectType;
+			}
 			if (this.props.data.placeKey) {
 				this.state.selectorValuePlace = this.props.data.placeKey;
 			}
-			if (this.props.data.attSetKey) {
-				this.state.selectorValueAttSet = this.props.data.attSetKey;
-			}
-			if (this.props.data.auLevelKey) {
-				this.state.selectorValueAULevel = this.props.data.auLevelKey;
+			if (this.props.data.layerKey) {
+				this.state.selectorValueLayer = this.props.data.layerKey;
 			}
 		}
 	}
 
-	getUrl() {
-		return path.join(this.props.parentUrl, "links/" + this.state.selectorValuePlace + "-" + this.state.selectorValueAttSet + "-" + this.state.selectorValueAULevel); // todo
-	}
+	//getUrl() {
+	//	return path.join(this.props.parentUrl, "links/" + this.state.selectorValuePlace + "-" + this.state.selectorValueAttSet + "-" + this.state.selectorValueAULevel); // todo
+	//}
 
 	store2state(props) {
 		if (!props) {
@@ -60,8 +64,7 @@ class ScreenPlaceDataSourceLayer extends Component {
 		}
 		return {
 			places: PlaceStore.getAll(),
-			attributeSets: AttributeSetStore.getAll(),
-			auLevels: AULevelStore.getAll()
+			layers: Store[props.data.objectType].getAll()
 		};
 	}
 
@@ -71,8 +74,7 @@ class ScreenPlaceDataSourceLayer extends Component {
 
 	componentDidMount() {
 		this.changeListener.add(PlaceStore, ["places"]);
-		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
-		this.changeListener.add(AULevelStore, ["auLevels"]);
+		this.changeListener.add(Store[this.props.data.objectType], ["layers"]);
 
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
@@ -87,14 +89,9 @@ class ScreenPlaceDataSourceLayer extends Component {
 				selectorValuePlace: newProps.data.placeKey
 			});
 		}
-		if(newProps.data.attSetKey && (this.props.data.attSetKey != newProps.data.attSetKey)) {
+		if(newProps.data.layerKey && (this.props.data.layerKey != newProps.data.layerKey)) {
 			this.setState({
-				selectorValueAttSet: newProps.data.attSetKey
-			});
-		}
-		if(newProps.data.auLevelKey && (this.props.data.auLevelKey != newProps.data.auLevelKey)) {
-			this.setState({
-				selectorValueAULevel: newProps.data.auLevelKey
+				selectorValueAttSet: newProps.data.layerKey
 			});
 		}
 	}
@@ -108,7 +105,7 @@ class ScreenPlaceDataSourceLayer extends Component {
 			state = this.state;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(state.selectorValuePlace + state.selectorValueAttSet + state.selectorValueAULevel);
+		this._stateHash = utils.stringHash(state.selectorValuePlace + state.selectorValueLayer);
 	}
 	getStateHash() {
 		if(!this._stateHash) {
@@ -124,11 +121,8 @@ class ScreenPlaceDataSourceLayer extends Component {
 			case "place":
 				stateKey = "selectorValuePlace";
 				break;
-			case "attSet":
-				stateKey = "selectorValueAttSet";
-				break;
-			case "auLevel":
-				stateKey = "selectorValueAULevel";
+			case "layer":
+				stateKey = "selectorValueLayer";
 				break;
 		}
 		if(stateKey) {
@@ -149,18 +143,28 @@ class ScreenPlaceDataSourceLayer extends Component {
 			return 0;
 		});
 
+		var layerTypeInsert = objectTypesMetadata[this.props.data.objectType].name;
+		var context;
+		switch (this.props.data.objectType) {
+			case ObjectTypes.VECTOR_LAYER_TEMPLATE:
+				context = "Vector";
+				break;
+			case ObjectTypes.RASTER_LAYER_TEMPLATE:
+				context = "Raster";
+				break;
+		}
+
 		return (
 			<div>
 				<div className="screen-setter"><div>
-					<h2>Data source selection: Attribute set</h2>
-					<SelectorPlaceAttSetAULevel
+					<h2>Data source selection: {layerTypeInsert}</h2>
+					<SelectorPlaceLayer
 						disabled={this.props.disabled}
+						layerType={this.props.data.objectType}
 						dataPlace={selectorData}
-						dataAttSet={this.state.attributeSets} // todo filter by scope of selected place
-						dataAULevel={this.state.auLevels} // todo filter by scope of selected place
+						dataLayer={this.state.layers} // todo filter by scope of selected place
 						valuePlace={this.state.selectorValuePlace}
-						valueAttSet={this.state.selectorValueAttSet}
-						valueAULevel={this.state.selectorValueAULevel}
+						valueLayer={this.state.selectorValueLayer}
 						onChange={this.onSelectorChange.bind(this)}
 					/>
 				</div></div>
@@ -168,10 +172,9 @@ class ScreenPlaceDataSourceLayer extends Component {
 					<ConfigPlaceDataSource
 						disabled={this.props.disabled}
 						screenKey={this.props.screenKey}
-						relationsContext="AttSet"
+						relationsContext={context}
 						selectorValuePlace={this.state.selectorValuePlace}
-						selectorValueAttSet={this.state.selectorValueAttSet}
-						selectorValueAULevel={this.state.selectorValueAULevel}
+						selectorValueLayer={this.state.selectorValueLayer}
 					/>
 				</div></div>
 			</div>

@@ -16,8 +16,8 @@ import LinkTableRasterByScopePlace from '../../elements/LinkTableRasterByScopePl
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 import ScreenPlaceDataSourceAttSet from '../../screens/ScreenPlaceDataSourceAttSet';
-//import ScreenPlaceDataSourceVector from '../../screens/ScreenPlaceDataSourceVector';
-//import ScreenPlaceDataSourceRaster from '../../screens/ScreenPlaceDataSourceRaster';
+//import ScreenPlaceDataSourceVectorAttSet from '../../screens/ScreenPlaceDataSourceVectorAttSet';
+import ScreenPlaceDataSourceLayer from '../../screens/ScreenPlaceDataSourceLayer';
 
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
@@ -311,7 +311,27 @@ class PlaceRelations extends Component {
 					auLevelKey: col
 				};
 				break;
-			// todo the other cases
+			case "Vector":
+				if(col==null) {
+					screenComponent = ScreenPlaceDataSourceLayer;
+				} else {
+					screenComponent = ScreenPlaceDataSourceAttSet; // todo replace
+				}
+				data = {
+					placeKey: this.props.selectorValue,
+					objectType: ObjectTypes.VECTOR_LAYER_TEMPLATE,
+					layerKey: row,
+					attSetKey: col
+				};
+				break;
+			case "Raster":
+				screenComponent = ScreenPlaceDataSourceLayer; // todo replace
+				data = {
+					placeKey: this.props.selectorValue,
+					objectType: ObjectTypes.RASTER_LAYER_TEMPLATE,
+					layerKey: row
+				};
+				break;
 		}
 		let options = {
 			component: screenComponent,
@@ -377,7 +397,7 @@ class PlaceRelations extends Component {
 							disabled={this.props.disabled}
 							relations={this.state.relationsVector}
 							place={this.state.place}
-							//onCellClick={this.onCellClick.bind(this,"Vector")}
+							onCellClick={this.onCellClick.bind(this,"Vector")}
 						/>
 
 						<h2>Raster layers</h2>
@@ -385,7 +405,7 @@ class PlaceRelations extends Component {
 							disabled={this.props.disabled}
 							relations={this.state.relationsRaster}
 							place={this.state.place}
-							//onCellClick={this.onCellClick.bind(this,"Raster")}
+							onCellClick={this.onCellClick.bind(this,"Raster")}
 						/>
 					</div>
 				);
