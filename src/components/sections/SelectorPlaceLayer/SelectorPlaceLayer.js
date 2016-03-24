@@ -12,7 +12,7 @@ import SingleValuePlace from '../../atoms/UICustomSelect/SingleValuePlace';
 
 
 @withStyles(styles)
-class SelectorPlaceAttSetAULevel extends Component{
+class SelectorPlaceLayer extends Component{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -84,4 +84,4 @@ class SelectorPlaceAttSetAULevel extends Component{
 }
 
 
-export default SelectorPlaceAttSetAULevel;
+export default SelectorPlaceLayer;

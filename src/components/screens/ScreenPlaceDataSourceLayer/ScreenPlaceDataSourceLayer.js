@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ScreenPlaceDataSourceAttSet.css';
+import styles from './ScreenPlaceDataSourceLayer.css';
 import withStyles from '../../../decorators/withStyles';
 
 import path from "path";
@@ -29,7 +29,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenPlaceDataSourceAttSet extends Component {
+class ScreenPlaceDataSourceLayer extends Component {
 
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired
@@ -182,4 +182,4 @@ class ScreenPlaceDataSourceAttSet extends Component {
 	}
 }
 
-export default ScreenPlaceDataSourceAttSet;
+export default ScreenPlaceDataSourceLayer;
