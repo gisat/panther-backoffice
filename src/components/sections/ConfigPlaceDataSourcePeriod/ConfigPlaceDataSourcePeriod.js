@@ -387,6 +387,29 @@ class ConfigPlaceDataSourcePeriod extends Component {
 	 */
 	isStateUnchanged() {
 		let isSelectionUnchanged = true, areConfigsUnchanged = true;
+		let condition = this.stateCondition();
+		if(condition && this.state.savedState) {
+			isSelectionUnchanged = this.isSelectionUnchanged();
+			for (let relation of this.state.relations) {
+				if (this.state.relationsState[relation.key]) {
+					areConfigsUnchanged = (
+						areConfigsUnchanged &&
+						this.isConfigUnchanged(relation)
+					);
+				}
+			}
+		}
+		return (isSelectionUnchanged && areConfigsUnchanged);
+	}
+	isSelectionUnchanged() {
+		return this.state.selected == this.state.savedState.selected
+	}
+	isConfigUnchanged(relation) {
+		return _.isEqual(relation.columnMap,this.state.relationsState[relation.key].valuesColumnMap)
+	}
+
+
+	stateCondition() {
 		let condition = false;
 		switch(this.props.relationsContext) {
 			case "AttSet":
@@ -420,24 +443,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 				);
 				break;
 		}
-		if(condition && this.state.savedState) {
-			isSelectionUnchanged = this.isSelectionUnchanged();
-			for (let relation of this.state.relations) {
-				if (this.state.relationsState[relation.key]) {
-					areConfigsUnchanged = (
-						areConfigsUnchanged &&
-						this.isConfigUnchanged(relation)
-					);
-				}
-			}
-		}
-		return (isSelectionUnchanged && areConfigsUnchanged);
-	}
-	isSelectionUnchanged() {
-		return this.state.selected == this.state.savedState.selected
-	}
-	isConfigUnchanged(relation) {
-		return _.isEqual(relation.columnMap,this.state.relationsState[relation.key].valuesColumnMap)
+		return condition;
 	}
 
 
@@ -505,39 +511,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 
 		var thisComponent = this;
 		var ret = null;
-		let condition = false;
-		switch(this.props.relationsContext) {
-			case "AttSet":
-				condition = (
-					this.state.place &&
-					this.state.period &&
-					this.state.attributeSet &&
-					this.state.auLevel
-				);
-				break;
-			case "Vector":
-				condition = (
-					this.state.place &&
-					this.state.period &&
-					this.state.vectorLayer
-				);
-				break;
-			case "VectorAttSet":
-				condition = (
-					this.state.place &&
-					this.state.period &&
-					this.state.attributeSet &&
-					this.state.vectorLayer
-				);
-				break;
-			case "Raster":
-				condition = (
-					this.state.place &&
-					this.state.period &&
-					this.state.rasterLayer
-				);
-				break;
-		}
+		let condition = this.stateCondition();
 		if(condition) {
 
 			let relationsInsert = null;
