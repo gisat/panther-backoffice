@@ -15,6 +15,8 @@ import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 const COLUMNS = [
 			{ key: "ID_0"	},
 			{ key: "uf_00" },
@@ -86,6 +88,8 @@ class ConfigPlaceDataSourcePeriod extends Component {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -255,9 +259,9 @@ class ConfigPlaceDataSourcePeriod extends Component {
 				(function (relation) { // todo is this needed with let instead of var?
 
 					let valueDataLayer = relation.dataSourceString;
-					if (state.relationsState[relation.key]) {
-						valueDataLayer = state.relationsState[relation.key].valueDataLayer;
-					}
+					//if (state.relationsState[relation.key]) {
+					//	valueDataLayer = state.relationsState[relation.key].valueDataLayer;
+					//}
 					let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(valueDataLayer);
 					promises.push(dataLayerColumnsPromise);
 					if(dataLayerColumnsPromise) {
@@ -274,7 +278,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							relationsState[relation.key] = {
 								columns: columns,
 								valuesColumnMap: relation.columnMap,
-								valueDataLayer: valueDataLayer,
+								//valueDataLayer: valueDataLayer,
 								valueFidColumn: relation.fidColumn
 							};
 						});
@@ -303,24 +307,19 @@ class ConfigPlaceDataSourcePeriod extends Component {
 	}
 
 	componentDidMount() {
-		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["place"]));
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["period"]));
-		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["attSet"]));
-		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevel"]));
-		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayer"]));
-		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayer"]));
-		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["relations"]));
+		this.changeListener.add(PlaceStore, ["place"]);
+		this.changeListener.add(PeriodStore, ["period"]);
+		this.changeListener.add(AttributeSetStore, ["attSet"]);
+		this.changeListener.add(AULevelStore, ["auLevel"]);
+		this.changeListener.add(VectorLayerStore, ["vectorLayer"]);
+		this.changeListener.add(RasterLayerStore, ["rasterLayer"]);
+		this.changeListener.add(ObjectRelationStore, ["relations"]);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["place"]));
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["period"]));
-		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attSet"]));
-		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevel"]));
-		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayer"]));
-		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayer"]));
-		ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["relations"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -362,24 +361,24 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		}
 	}
 
-	componentWillUpdate(newProps, newState) {
-		var thisComponent = this;
-		if(newState.hasOwnProperty("relationsState")) {
-			let changed = false;
-			_.each(newState.relationsState, function (relState, relKey, relationsState) {
-				if (
-					relState.hasOwnProperty("valueDataLayer") &&
-					thisComponent.state.relationsState.hasOwnProperty(relKey) &&
-					relState.valueDataLayer != thisComponent.state.relationsState[relKey].valueDataLayer
-				) {
-					changed = true;
-				}
-			});
-			if (changed) {
-				this.setRelationsState(newProps,newState);
-			}
-		}
-	}
+	//componentWillUpdate(newProps, newState) {
+	//	var thisComponent = this;
+	//	//if(newState.hasOwnProperty("relationsState")) {
+	//	//	let changed = false;
+	//	//	_.each(newState.relationsState, function (relState, relKey, relationsState) {
+	//	//		if (
+	//	//			relState.hasOwnProperty("valueDataLayer") &&
+	//	//			thisComponent.state.relationsState.hasOwnProperty(relKey) &&
+	//	//			relState.valueDataLayer != thisComponent.state.relationsState[relKey].valueDataLayer
+	//	//		) {
+	//	//			changed = true;
+	//	//		}
+	//	//	});
+	//	//	if (changed) {
+	//	//		this.setRelationsState(newProps,newState);
+	//	//	}
+	//	//}
+	//}
 
 
 	/**
@@ -474,16 +473,16 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		this.context.setStateDeep.call(this, state);
 	}
 
-	onChangeDataLayer(relationKey, value, values) {
-		let state = {
-			relationsState: {
-				[relationKey]: {
-					valueDataLayer: {$set: value}
-				}
-			}
-		};
-		this.context.setStateDeep.call(this, state);
-	}
+	//onChangeDataLayer(relationKey, value, values) {
+	//	let state = {
+	//		relationsState: {
+	//			[relationKey]: {
+	//				valueDataLayer: {$set: value}
+	//			}
+	//		}
+	//	};
+	//	this.context.setStateDeep.call(this, state);
+	//}
 
 	onChangeFidColumn(relationKey, value, values) {
 		let state = {
@@ -639,7 +638,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 										<div>
 											<div>
 
-												<label className="container">
+												{/*<label className="container">
 													Data layer
 													<Select
 														onChange={this.onChangeDataLayer.bind(this, relation.key)}
@@ -648,7 +647,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 														labelKey="key"
 														value={this.state.relationsState[relation.key].valueDataLayer}
 													/>
-												</label>
+												</label>*/}
 
 												<label className="container">
 													FID column (Feature identifier)

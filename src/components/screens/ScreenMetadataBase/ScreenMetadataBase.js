@@ -24,6 +24,7 @@ import TopicStore from '../../../stores/TopicStore';
 import LayerGroupStore from '../../../stores/LayerGroupStore';
 import StyleStore from '../../../stores/StyleStore';
 
+import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	scopes: [],
@@ -66,6 +67,8 @@ class ScreenMetadataBase extends Component{
 		super(props);
 
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 
 		this._tabs = [
 			{ data: "scopes", dataType: ObjectTypes.SCOPE },
@@ -141,58 +144,37 @@ class ScreenMetadataBase extends Component{
 	}
 
 	componentDidMount() {
-		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		ScopeStore.addResponseListener(this._onStoreResponse.bind(this));
-		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
-		VectorLayerStore.addResponseListener(this._onStoreResponse.bind(this));
-		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
-		RasterLayerStore.addResponseListener(this._onStoreResponse.bind(this));
-		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		AULevelStore.addResponseListener(this._onStoreResponse.bind(this));
-		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
-		AttributeSetStore.addResponseListener(this._onStoreResponse.bind(this));
-		AttributeStore.addChangeListener(this._onStoreChange.bind(this,["attributes"]));
-		AttributeStore.addResponseListener(this._onStoreResponse.bind(this));
-		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
-		PlaceStore.addResponseListener(this._onStoreResponse.bind(this));
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
-		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
-		ThemeStore.addChangeListener(this._onStoreChange.bind(this,["themes"]));
-		ThemeStore.addResponseListener(this._onStoreResponse.bind(this));
-		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.addResponseListener(this._onStoreResponse.bind(this));
-		LayerGroupStore.addChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
-		LayerGroupStore.addResponseListener(this._onStoreResponse.bind(this));
-		StyleStore.addChangeListener(this._onStoreChange.bind(this,["styles"]));
-		StyleStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.add(ScopeStore, ["scopes"]);
+		this.responseListener.add(ScopeStore);
+		this.changeListener.add(VectorLayerStore, ["vectorLayerTemplates"]);
+		this.responseListener.add(VectorLayerStore);
+		this.changeListener.add(RasterLayerStore, ["rasterLayerTemplates"]);
+		this.responseListener.add(RasterLayerStore);
+		this.changeListener.add(AULevelStore, ["auLevels"]);
+		this.responseListener.add(AULevelStore);
+		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
+		this.responseListener.add(AttributeSetStore);
+		this.changeListener.add(AttributeStore, ["attributes"]);
+		this.responseListener.add(AttributeStore);
+		this.changeListener.add(PlaceStore, ["places"]);
+		this.responseListener.add(PlaceStore);
+		this.changeListener.add(PeriodStore, ["periods"]);
+		this.responseListener.add(PeriodStore);
+		this.changeListener.add(ThemeStore, ["themes"]);
+		this.responseListener.add(ThemeStore);
+		this.changeListener.add(TopicStore, ["topics"]);
+		this.responseListener.add(TopicStore);
+		this.changeListener.add(LayerGroupStore, ["layerGroups"]);
+		this.responseListener.add(LayerGroupStore);
+		this.changeListener.add(StyleStore, ["styles"]);
+		this.responseListener.add(StyleStore);
+		
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentWillUnmount() {
-		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		ScopeStore.removeResponseListener(this._onStoreResponse.bind(this));
-		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
-		VectorLayerStore.addResponseListener(this._onStoreResponse.bind(this));
-		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
-		RasterLayerStore.addResponseListener(this._onStoreResponse.bind(this));
-		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		AULevelStore.addResponseListener(this._onStoreResponse.bind(this));
-		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
-		AttributeSetStore.addResponseListener(this._onStoreResponse.bind(this));
-		AttributeStore.removeChangeListener(this._onStoreChange.bind(this,["attributes"]));
-		AttributeStore.addResponseListener(this._onStoreResponse.bind(this));
-		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
-		PlaceStore.addResponseListener(this._onStoreResponse.bind(this));
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
-		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
-		ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["themes"]));
-		ThemeStore.addResponseListener(this._onStoreResponse.bind(this));
-		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.addResponseListener(this._onStoreResponse.bind(this));
-		LayerGroupStore.removeChangeListener(this._onStoreChange.bind(this,["layerGroups"]));
-		LayerGroupStore.addResponseListener(this._onStoreResponse.bind(this));
-		StyleStore.removeChangeListener(this._onStoreChange.bind(this,["styles"]));
-		StyleStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

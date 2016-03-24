@@ -6,7 +6,7 @@ import _ from 'underscore';
 import path from "path";
 
 import utils from '../../../utils/utils';
-import {apiProtocol,apiHost} from '../../../config';
+import {geonodeProtocol, geonodeHost} from '../../../config';
 
 import Select from 'react-select';
 import SaveButton from '../../atoms/SaveButton';
@@ -30,6 +30,8 @@ import AttributeStore from '../../../stores/AttributeStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 import PeriodStore from '../../../stores/PeriodStore';
 import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
+
+import ListenerHandler from '../../../core/ListenerHandler';
 
 const LAYERTYPES = [
 	{key: "vector", name: "Vector layer"},
@@ -102,6 +104,9 @@ class ConfigDataLayer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -216,42 +221,29 @@ class ConfigDataLayer extends Component {
 	}
 
 	componentDidMount() {
-		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		ScopeStore.addResponseListener(this._onStoreResponse.bind(this));
-		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
-		PlaceStore.addResponseListener(this._onStoreResponse.bind(this));
-		VectorLayerStore.addChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
-		VectorLayerStore.addResponseListener(this._onStoreResponse.bind(this));
-		RasterLayerStore.addChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
-		RasterLayerStore.addResponseListener(this._onStoreResponse.bind(this));
-		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		AULevelStore.addResponseListener(this._onStoreResponse.bind(this));
-		AttributeSetStore.addChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
-		AttributeStore.addChangeListener(this._onStoreChange.bind(this,["attributes"]));
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
-		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
-		ObjectRelationStore.addChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
-		DataLayerColumnsStore.addChangeListener(this._onStoreChange.bind(this,["dataLayerColumns"]));
+		this.changeListener.add(ScopeStore, ["scopes"]);
+		this.responseListener.add(ScopeStore);
+		this.changeListener.add(VectorLayerStore, ["vectorLayerTemplates"]);
+		this.responseListener.add(VectorLayerStore);
+		this.changeListener.add(RasterLayerStore, ["rasterLayerTemplates"]);
+		this.responseListener.add(RasterLayerStore);
+		this.changeListener.add(AULevelStore, ["auLevels"]);
+		this.responseListener.add(AULevelStore);
+		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
+		this.changeListener.add(AttributeStore, ["attributes"]);
+		this.changeListener.add(PlaceStore, ["places"]);
+		this.responseListener.add(PlaceStore);
+		this.changeListener.add(PeriodStore, ["periods"]);
+		this.responseListener.add(PeriodStore);
+		this.changeListener.add(ObjectRelationStore,["layerRelations"]);
+		this.changeListener.add(DataLayerColumnsStore,["dataLayerColumns"]);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		ScopeStore.removeResponseListener(this._onStoreResponse.bind(this));
-		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
-		PlaceStore.removeResponseListener(this._onStoreResponse.bind(this));
-		VectorLayerStore.removeChangeListener(this._onStoreChange.bind(this,["vectorLayerTemplates"]));
-		VectorLayerStore.removeResponseListener(this._onStoreResponse.bind(this));
-		RasterLayerStore.removeChangeListener(this._onStoreChange.bind(this,["rasterLayerTemplates"]));
-		RasterLayerStore.removeResponseListener(this._onStoreResponse.bind(this));
-		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		AULevelStore.removeResponseListener(this._onStoreResponse.bind(this));
-		AttributeSetStore.removeChangeListener(this._onStoreChange.bind(this,["attributeSets"]));
-		AttributeStore.removeChangeListener(this._onStoreChange.bind(this,["attributes"]));
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
-		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
-		ObjectRelationStore.removeChangeListener(this._onStoreChange.bind(this,["layerRelations"]));
-		DataLayerColumnsStore.removeChangeListener(this._onStoreChange.bind(this,["dataLayerColumns"]));
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -795,7 +787,7 @@ class ConfigDataLayer extends Component {
 				border: '1px solid rgba(0,0,0,.15)'
 			};
 			//var mapFrameSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
-			var mapImageSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=800&transparent=true";
+			var mapImageSrc = geonodeProtocol + geonodeHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=800&transparent=true";
 
 			//// todo not an iframe
 			//mapFrame = (

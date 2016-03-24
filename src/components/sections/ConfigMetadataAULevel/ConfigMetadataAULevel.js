@@ -17,6 +17,8 @@ import StyleStore from '../../../stores/StyleStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 
 var initialState = {
 	style: null,
@@ -46,6 +48,7 @@ class ConfigMetadataAULevel extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -82,12 +85,12 @@ class ConfigMetadataAULevel extends Component{
 	}
 
 	componentDidMount() {
-		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["layer"]));
+		this.changeListener.add(AULevelStore, ["layer"]);
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["layer"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

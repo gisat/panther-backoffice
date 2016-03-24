@@ -10,6 +10,8 @@ import ScreenContainer from '../ScreenContainer';
 
 import ScreenStore from '../../stores/ScreenStore';
 
+import ListenerHandler from '../../core/ListenerHandler';
+
 var initialState = {
 	key: null,
 	title: null,
@@ -44,6 +46,7 @@ class Page extends Component {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -62,14 +65,14 @@ class Page extends Component {
 
 	componentDidMount() {
 		if(this.props.screenSet) {
-			ScreenStore.addChangeListener(this._onStoreChange.bind(this));
+			this.changeListener.add(ScreenStore);
 			this.context.setStateFromStores.call(this, this.store2state());
 		}
 	}
 
 	componentWillUnmount() {
 		if(this.props.screenSet) {
-			ScreenStore.removeChangeListener(this._onStoreChange.bind(this));
+			this.changeListener.clean();
 		}
 	}
 

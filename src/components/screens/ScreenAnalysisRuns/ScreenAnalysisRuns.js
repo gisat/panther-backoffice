@@ -16,6 +16,8 @@ import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
 import PeriodStore from '../../../stores/PeriodStore';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 
 var initialState = {
 	analysis: null,
@@ -45,6 +47,7 @@ class ScreenAnalysisRuns extends Component {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -70,18 +73,16 @@ class ScreenAnalysisRuns extends Component {
 	}
 
 	componentDidMount() {
-		AnalysisStore.addChangeListener(this._onStoreChange.bind(this,["analysis"]));
-		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
+		this.changeListener.add(AnalysisStore, ["analysis"]);
+		this.changeListener.add(ScopeStore, ["scopes"]);
+		this.changeListener.add(PlaceStore, ["places"]);
+		this.changeListener.add(PeriodStore, ["periods"]);
+		
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		AnalysisStore.removeChangeListener(this._onStoreChange.bind(this,["analysis"]));
-		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

@@ -16,6 +16,8 @@ import PeriodStore from '../../../stores/PeriodStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 
 var initialState = {
 	scope: null,
@@ -47,6 +49,9 @@ class ConfigMetadataScope extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -123,20 +128,18 @@ class ConfigMetadataScope extends Component{
 	}
 
 	componentDidMount() {
-		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scope"]));
-		AULevelStore.addChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		AULevelStore.addResponseListener(this._onStoreResponse.bind(this));
-		PeriodStore.addChangeListener(this._onStoreChange.bind(this,["periods"]));
-		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.add(ScopeStore, ["scope"]);
+		this.changeListener.add(AULevelStore, ["auLevels"]);
+		this.responseListener.add(AULevelStore);
+		this.changeListener.add(PeriodStore, ["periods"]);
+		this.responseListener.add(PeriodStore);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scope"]));
-		AULevelStore.removeChangeListener(this._onStoreChange.bind(this,["auLevels"]));
-		AULevelStore.removeResponseListener(this._onStoreResponse.bind(this));
-		PeriodStore.removeChangeListener(this._onStoreChange.bind(this,["periods"]));
-		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

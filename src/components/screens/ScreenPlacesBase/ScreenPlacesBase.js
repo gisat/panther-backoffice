@@ -15,6 +15,8 @@ import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 import SelectorPlace from '../../sections/SelectorPlace';
 import PlaceRelations from '../../sections/PlaceRelations';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 var initialState = {
 	places: [],
 	selectorValue: null
@@ -34,7 +36,8 @@ class ScreenPlacesBase extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	getUrl() {
@@ -76,14 +79,15 @@ class ScreenPlacesBase extends Component{
 	}
 
 	componentDidMount() {
-		PlaceStore.addChangeListener(this._onStoreChange.bind(this,["places"]));
-		PlaceStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.add(PlaceStore, ["places"]);
+		this.responseListener.add(PlaceStore);
+
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentWillUnmount() {
-		PlaceStore.removeChangeListener(this._onStoreChange.bind(this,["places"]));
-		PlaceStore.removeResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	/**

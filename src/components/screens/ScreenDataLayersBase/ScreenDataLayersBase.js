@@ -10,6 +10,8 @@ import DataLayerStore from '../../../stores/DataLayerStore';
 import SelectorDataLayer from '../../sections/SelectorDataLayer';
 import ConfigDataLayer from '../../sections/ConfigDataLayer';
 
+import ListenerHandler from '../../../core/ListenerHandler';
+
 var initialState = {
 	dataLayers: [],
 	selectorValue: null
@@ -26,6 +28,7 @@ class ScreenDataLayersBase extends Component {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	getUrl() {
@@ -46,12 +49,13 @@ class ScreenDataLayersBase extends Component {
 	}
 
 	componentDidMount() {
-		DataLayerStore.addChangeListener(this._onStoreChange.bind(this));
+		this.changeListener.add(DataLayerStore);
+
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentWillUnmount() {
-		DataLayerStore.removeChangeListener(this._onStoreChange.bind(this));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -63,6 +67,8 @@ class ScreenDataLayersBase extends Component {
 	}
 
 	onSelectorChange (value) {
+		console.log("onSelectorChange");
+		
 		this.setState({
 			selectorValue: value
 		});

@@ -5,23 +5,24 @@ import utils from '../../../utils/utils';
 import { Input, Button } from '../../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
+import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
-import PeriodStore from '../../../stores/PeriodStore';
+import TopicStore from '../../../stores/TopicStore';
 
-import ListenerHandler from '../../../core/ListenerHandler';
+import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 
 var initialState = {
-	period: null,
+	topic: null,
 	valueActive: false,
 	valueName: ""
 };
 
 
-class ConfigMetadataPeriod extends Component{
+class ConfigMetadataTopic extends Component{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -35,19 +36,18 @@ class ConfigMetadataPeriod extends Component{
 
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired,
-		onInteraction: PropTypes.func.isRequired
+		onInteraction: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
 		return {
-			period: PeriodStore.getById(props.selectorValue)
+			topic: TopicStore.getById(props.selectorValue)
 		};
 	}
 
@@ -61,14 +61,17 @@ class ConfigMetadataPeriod extends Component{
 			this.context.setStateFromStores.call(this, store2state, keys);
 			// if stores changed, overrides user input - todo fix
 
-			store2state.period.then(function(period) {
-				thisComponent.setState({
-					valueActive: period.active,
-					valueName: period.name
+			if(!keys || keys.indexOf("topic")!=-1) {
+				store2state.topic.then(function (topic) {
+					let newState = {
+						valueActive: topic.active,
+						valueName: topic.name
+					};
+					newState.savedState = utils.deepClone(newState);
+					thisComponent.setState(newState);
 				});
-			});
+			}
 		}
-
 	}
 
 	_onStoreChange(keys) {
@@ -76,13 +79,12 @@ class ConfigMetadataPeriod extends Component{
 	}
 
 	componentDidMount() {
-		this.changeListener.add(PeriodStore, ["period"]);
-
+		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topic"]));
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		this.changeListener.clean();
+		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topic"]));
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -99,10 +101,10 @@ class ConfigMetadataPeriod extends Component{
 	 */
 	isStateUnchanged() {
 		var isIt = true;
-		if(this.state.period) {
+		if(this.state.topic) {
 			isIt = (
-				this.state.valueActive == this.state.period.active &&
-				this.state.valueName == this.state.period.name
+					this.state.valueActive == this.state.topic.active &&
+					this.state.valueName == this.state.topic.name
 			);
 		}
 		return isIt;
@@ -128,12 +130,12 @@ class ConfigMetadataPeriod extends Component{
 
 	saveForm() {
 		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.period);
+		_.assign(modelData, this.state.topic);
 		modelData.active = this.state.valueActive;
 		modelData.name = this.state.valueName;
-		let modelObj = new Model[ObjectTypes.PERIOD](modelData);
+		let modelObj = new Model[ObjectTypes.TOPIC](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.PERIOD);
+		ActionCreator.handleObjects(actionData,ObjectTypes.TOPIC);
 	}
 
 	onChangeActive() {
@@ -152,7 +154,7 @@ class ConfigMetadataPeriod extends Component{
 	render() {
 
 		var saveButton = " ";
-		if (this.state.period) {
+		if (this.state.topic) {
 			saveButton = (
 				<SaveButton
 					saved={this.isStateUnchanged()}
@@ -164,7 +166,7 @@ class ConfigMetadataPeriod extends Component{
 
 		var isActiveText = "inactive";
 		var isActiveClasses = "activeness-indicator";
-		if(this.state.period && this.state.period.active){
+		if(this.state.topic && this.state.topic.active){
 			isActiveText = "active";
 			isActiveClasses = "activeness-indicator active";
 		}
@@ -208,4 +210,4 @@ class ConfigMetadataPeriod extends Component{
 	}
 }
 
-export default ConfigMetadataPeriod;
+export default ConfigMetadataTopic;

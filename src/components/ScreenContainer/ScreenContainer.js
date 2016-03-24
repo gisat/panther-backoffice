@@ -11,6 +11,8 @@ import ScreenStore from '../../stores/ScreenStore';
 
 import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
+import ListenerHandler from '../../core/ListenerHandler';
+
 var initialState = {
 	isFocused: false
 };
@@ -35,6 +37,8 @@ class ScreenContainer extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.focusListener = new ListenerHandler(this, this._focusScreen, 'addFocusListener', 'removeFocusListener');
 	}
 
 	getChildContext(){
@@ -71,11 +75,12 @@ class ScreenContainer extends Component{
 	}
 
 	componentDidMount() {
-		ScreenStore.addFocusListener(this._focusScreen.bind(this));
+		console.log(ScreenStore);
+		this.focusListener.add(ScreenStore);
 	}
 
 	componentWillUnmount() {
-		ScreenStore.removeFocusListener(this._focusScreen.bind(this));
+		this.focusListener.clean();
 	}
 
 	onPanelFocus() {

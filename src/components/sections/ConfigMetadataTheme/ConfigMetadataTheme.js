@@ -10,28 +10,26 @@ import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
-import RasterLayerStore from '../../../stores/RasterLayerStore';
+import ThemeStore from '../../../stores/ThemeStore';
 import TopicStore from '../../../stores/TopicStore';
-import LayerGroupStore from '../../../stores/LayerGroupStore';
-import StyleStore from '../../../stores/StyleStore';
+import ScopeStore from '../../../stores/ScopeStore';
+import PeriodStore from '../../../stores/PeriodStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
-
-import ListenerHandler from '../../../core/ListenerHandler';
 
 
 var initialState = {
 	style: null,
 	valueActive: false,
 	valueName: "",
-	valueTopic: [],
-	topicThemes: [],
-	valueLayerGroup: [],
-	valuesStyles: []
+	valueScope: [],
+	valuesTopics: [],
+	valuesTopicsPreferential: [],
+	valuesPeriods: []
 };
 
 
-class ConfigMetadataLayerRaster extends Component{
+class ConfigMetadataTheme extends Component{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -52,17 +50,13 @@ class ConfigMetadataLayerRaster extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
 		return {
-			layer: RasterLayerStore.getById(props.selectorValue),
-			topics: TopicStore.getAll(),
-			layerGroups: LayerGroupStore.getAll(),
-			styles: StyleStore.getAll()
+			theme: ThemeStore.getById(props.selectorValue),
+			scopes: ScopeStore.getAll(),
+			topics: TopicStore.getAll()
 		};
 	}
 
@@ -76,17 +70,20 @@ class ConfigMetadataLayerRaster extends Component{
 			this.context.setStateFromStores.call(this, store2state, keys);
 			// if stores changed, overrides user input - todo fix
 
-			if(!keys || keys.indexOf("layer")!=-1) {
-				store2state.layer.then(function (layer) {
+			if(!keys || keys.indexOf("theme")!=-1) {
+				store2state.theme.then(function (theme) {
+
 					let newState = {
-						valueActive: layer.active,
-						valueName: layer.name,
-						valueTopic: layer.topic ? [layer.topic.key] : [],
-						valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
-						valuesStyles: utils.getModelsKeys(layer.styles)
+						valueActive: theme.active,
+						valueName: theme.name,
+						valueScope: theme.scope ? [theme.scope.key] : [],
+						valuesTopics: utils.getModelsKeys(theme.topics),
+						valuesTopicsPreferential: utils.getModelsKeys(theme.topicsPreferential),
+						valuesPeriods: utils.getModelsKeys(theme.periods)
 					};
 					newState.savedState = utils.deepClone(newState);
 					thisComponent.setState(newState);
+
 				});
 			}
 		}
@@ -104,18 +101,19 @@ class ConfigMetadataLayerRaster extends Component{
 				let values = utils.deepClone(thisComponent.state[stateKey]);
 				values.push(result[0].key);
 				thisComponent.setState({
-						[stateKey]: values
-					});
+					[stateKey]: values
+				});
 				var screenObjectType;
 				switch(stateKey){
-					case "valueTopic":
+					case "valueScope":
+						screenObjectType = ObjectTypes.SCOPE;
+						break;
+					case "valuesTopics":
+					case "valuesTopicsPreferential":
 						screenObjectType = ObjectTypes.TOPIC;
 						break;
-					case "valueLayerGroup":
-						screenObjectType = ObjectTypes.LAYER_GROUP;
-						break;
-					case "valuesStyles":
-						screenObjectType = ObjectTypes.STYLE;
+					case "valuesPeriods":
+						screenObjectType = ObjectTypes.PERIOD;
 						break;
 				}
 				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
@@ -136,37 +134,28 @@ class ConfigMetadataLayerRaster extends Component{
 	}
 
 	componentDidMount() {
-		this.changeListener.add(RasterLayerStore, ["layer"]);
-		this.changeListener.add(TopicStore, ["topics"]);
-		this.responseListener.add(TopicStore);
-		this.changeListener.add(LayerGroupStore, ["layerGroups"]);
-		this.responseListener.add(LayerGroupStore);
-		this.changeListener.add(StyleStore, ["styles"]);
-		this.responseListener.add(StyleStore);
-
+		ThemeStore.addChangeListener(this._onStoreChange.bind(this,["theme"]));
+		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		ScopeStore.addResponseListener(this._onStoreResponse.bind(this));
+		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
+		TopicStore.addResponseListener(this._onStoreResponse.bind(this));
+		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
-		this.changeListener.clean();
-		this.responseListener.clean();
+		ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["theme"]));
+		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
+		ScopeStore.removeResponseListener(this._onStoreResponse.bind(this));
+		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
+		TopicStore.removeResponseListener(this._onStoreResponse.bind(this));
+		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
 	}
 
 	componentWillReceiveProps(newProps) {
 		if(newProps.selectorValue!=this.props.selectorValue) {
 			this.setStateFromStores(newProps);
 			this.updateStateHash(newProps);
-		}
-	}
-
-	componentDidUpdate(oldProps, oldState) {
-		if (this.state.valueTopic && (oldState.valueTopic != this.state.valueTopic)) {
-			var thisComponent = this;
-			utils.getThemesForTopics(this.state.valueTopic).then(function(themes){
-				thisComponent.setState({
-					topicThemes: themes
-				});
-			});
 		}
 	}
 
@@ -177,13 +166,14 @@ class ConfigMetadataLayerRaster extends Component{
 	 */
 	isStateUnchanged() {
 		var isIt = true;
-		if(this.state.layer) {
+		if(this.state.theme) {
 			isIt = (
-					this.state.valueActive == this.state.layer.active &&
-					this.state.valueName == this.state.layer.name &&
-					_.isEqual(this.state.valueTopic,this.state.savedState.valueTopic) &&
-					_.isEqual(this.state.valueLayerGroup,this.state.savedState.valueLayerGroup) &&
-					_.isEqual(this.state.valuesStyles,this.state.savedState.valuesStyles)
+				this.state.valueActive == this.state.theme.active &&
+				this.state.valueName == this.state.theme.name &&
+				_.isEqual(this.state.valueScope,this.state.savedState.valueScope) &&
+				_.isEqual(this.state.valuesTopics,this.state.savedState.valuesTopics) &&
+				_.isEqual(this.state.valuesTopicsPreferential,this.state.savedState.valuesTopicsPreferential) &&
+				_.isEqual(this.state.valuesPeriods,this.state.savedState.valuesPeriods)
 			);
 		}
 		return isIt;
@@ -208,20 +198,33 @@ class ConfigMetadataLayerRaster extends Component{
 	}
 
 	saveForm() {
+		var thisComponent = this;
 		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.layer);
+		_.assign(modelData, this.state.theme);
 		modelData.active = this.state.valueActive;
 		modelData.name = this.state.valueName;
-		modelData.topic = _.findWhere(this.state.topics, {key: this.state.valueTopic[0]});
-		modelData.layerGroup = _.findWhere(this.state.layerGroups, {key: this.state.valueLayerGroup[0]});
-		modelData.styles = [];
-		for (let key of this.state.valuesStyles) {
-			let period = _.findWhere(this.state.styles, {key: key});
-			modelData.styles.push(period);
+		modelData.scope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
+		modelData.topics = [];
+		for (let key of this.state.valuesTopics) {
+			let topic = _.findWhere(this.state.topics, {key: key});
+			modelData.topics.push(topic);
 		}
-		let modelObj = new Model[ObjectTypes.RASTER_LAYER_TEMPLATE](modelData);
+		modelData.topicsPreferential = [];
+		for (let key of this.state.valuesTopicsPreferential) {
+			let topic = _.findWhere(this.state.topics, {key: key});
+			modelData.topicsPreferential.push(topic);
+		}
+		modelData.periods = [];
+		if (modelData.scope) {
+			for (let key of this.state.valuesPeriods) {
+				let period = _.findWhere(modelData.scope.periods, {key: key});
+				modelData.periods.push(period);
+			}
+		}
+
+		let modelObj = new Model[ObjectTypes.THEME](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.RASTER_LAYER_TEMPLATE);
+		ActionCreator.handleObjects(actionData,ObjectTypes.THEME);
 	}
 
 	onChangeActive() {
@@ -243,6 +246,36 @@ class ConfigMetadataLayerRaster extends Component{
 		this.setState(newState);
 	}
 
+	onChangeScope (value, values) {
+		let newValue = utils.handleNewObjects(values, ObjectTypes.SCOPE, {stateKey: "valueScope"}, this.getStateHash());
+
+		var periods = [];
+		if (value) {
+			let scope = _.findWhere(this.state.scopes, {key: value});
+			periods = utils.getModelsKeys(scope.periods);
+		}
+
+		this.setState({
+			valueScope: newValue,
+			valuesPeriods: periods
+		});
+	}
+
+	onChangeTopics (value, values) {
+		let newValue = utils.handleNewObjects(values, ObjectTypes.TOPIC, {stateKey: "valuesTopics"}, this.getStateHash());
+
+		// topics changed - change preferential accordingly
+		let valuesTopicsPreferential = utils.clone(this.state.valuesTopicsPreferential);
+		valuesTopicsPreferential = _.filter(valuesTopicsPreferential,function(key){
+			return _.contains(newValue,key);
+		},this);
+
+		this.setState({
+			valuesTopics: newValue,
+			valuesTopicsPreferential: valuesTopicsPreferential
+		});
+	}
+
 	onObjectClick (itemType, value, event) {
 		this.context.onInteraction().call();
 		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
@@ -262,7 +295,7 @@ class ConfigMetadataLayerRaster extends Component{
 	render() {
 
 		var saveButton = " ";
-		if (this.state.layer) {
+		if (this.state.theme) {
 			saveButton = (
 				<SaveButton
 					saved={this.isStateUnchanged()}
@@ -274,29 +307,21 @@ class ConfigMetadataLayerRaster extends Component{
 
 		var isActiveText = "inactive";
 		var isActiveClasses = "activeness-indicator";
-		if(this.state.layer && this.state.layer.active){
+		if(this.state.theme && this.state.theme.active){
 			isActiveText = "active";
 			isActiveClasses = "activeness-indicator active";
 		}
 
-		var topicInfoInsert = null;
-		if(this.state.valueTopic && this.state.valueTopic.length) {
-			let themesString = "";
-			if(this.state.topicThemes) {
-				for (let theme of this.state.topicThemes) {
-					if (themesString) {
-						themesString += ", ";
-					}
-					themesString += theme.name
-				}
-			}
-			topicInfoInsert = (
-				<div className="frame-input-wrapper-info">
-					<b>{this.state.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
-					{this.state.topicThemes.length ? themesString : "No themes"}
-				</div>
-			);
+		var selectedTopics = _.filter(this.state.topics,function(topic){
+			return _.contains(this.state.valuesTopics,topic.key);
+		},this);
+
+		var periodsOptions = [];
+		if(this.state.valueScope[0]) {
+			var selectedScope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
+			periodsOptions = selectedScope.periods;
 		}
+
 
 		return (
 			<div>
@@ -331,50 +356,67 @@ class ConfigMetadataLayerRaster extends Component{
 
 				<div className="frame-input-wrapper">
 					<label className="container">
-						Topic
+						Scope
 						<UIObjectSelect
-							onChange={this.onChangeObjectSelect.bind(this, "valueTopic", ObjectTypes.TOPIC)}
+							onChange={this.onChangeScope.bind(this)}
+							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.SCOPE)}
+							options={this.state.scopes}
+							allowCreate
+							newOptionCreator={utils.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.state.valueScope}
+						/>
+					</label>
+				</div>
+
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Topics
+						<UIObjectSelect
+							multi
+							onChange={this.onChangeTopics.bind(this)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.TOPIC)}
 							options={this.state.topics}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valueTopic}
-						/>
-					</label>
-					{topicInfoInsert}
-				</div>
-
-				<div className="frame-input-wrapper">
-					<label className="container">
-						Layer group
-						<UIObjectSelect
-							onChange={this.onChangeObjectSelect.bind(this, "valueLayerGroup", ObjectTypes.LAYER_GROUP)}
-							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.LAYER_GROUP)}
-							options={this.state.layerGroups}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
-							valueKey="key"
-							labelKey="name"
-							value={this.state.valueLayerGroup}
+							value={this.state.valuesTopics}
 						/>
 					</label>
 				</div>
 
 				<div className="frame-input-wrapper">
 					<label className="container">
-						Styles
+						Preferential topics
 						<UIObjectSelect
 							multi
-							onChange={this.onChangeObjectSelect.bind(this, "valuesStyles", ObjectTypes.STYLE)}
-							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.STYLE)}
-							options={this.state.styles}
+							onChange={this.onChangeObjectSelect.bind(this, "valuesTopicsPreferential", ObjectTypes.TOPIC)}
+							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.TOPIC)}
+							options={selectedTopics}
+							//allowCreate //we only choose from those above, first it has to be there
+							//newOptionCreator={utils.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.state.valuesTopicsPreferential}
+						/>
+					</label>
+				</div>
+
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Periods
+						<UIObjectSelect
+							multi
+							onChange={this.onChangeObjectSelect.bind(this, "valuesPeriods", ObjectTypes.PERIOD)}
+							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.PERIOD)}
+							options={periodsOptions}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valuesStyles}
+							value={this.state.valuesPeriods}
 						/>
 					</label>
 				</div>
@@ -387,4 +429,4 @@ class ConfigMetadataLayerRaster extends Component{
 	}
 }
 
-export default ConfigMetadataLayerRaster;
+export default ConfigMetadataTheme;
