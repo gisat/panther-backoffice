@@ -1,6 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './SelectorPlaceRasterLayer.css';
-import withStyles from '../../../decorators/withStyles';
 
 import { Button, Input, Icon } from '../../SEUI/elements';
 import Select from 'react-select';
@@ -11,7 +9,6 @@ import OptionPlace from '../../atoms/UICustomSelect/OptionPlace';
 import SingleValuePlace from '../../atoms/UICustomSelect/SingleValuePlace';
 
 
-@withStyles(styles)
 class SelectorPlaceLayer extends Component{
 
 	static propTypes = {

@@ -1,6 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ScreenPlaceDataSourceLayer.css';
-import withStyles from '../../../decorators/withStyles';
 
 import path from "path";
 
@@ -28,7 +26,6 @@ var initialState = {
 };
 
 
-@withStyles(styles)
 class ScreenPlaceDataSourceLayer extends Component {
 
 	static contextTypes = {
