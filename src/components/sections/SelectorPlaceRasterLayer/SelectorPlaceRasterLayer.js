@@ -16,24 +16,25 @@ class SelectorPlaceAttSetAULevel extends Component{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
+		layerType: PropTypes.oneOf(["vector","raster"]).isRequired,
 		dataPlace: React.PropTypes.array.isRequired,		// Expects "key","name"
-		dataRasterLayer: React.PropTypes.array.isRequired,		// Expects "key","name"
+		dataLayer: React.PropTypes.array.isRequired,		// Expects "key","name"
 		valuePlace: React.PropTypes.any,
-		valueRasterLayer: React.PropTypes.any,
+		valueLayer: React.PropTypes.any,
 		onChange: React.PropTypes.func.isRequired
 	};
 
 	static defaultProps = {
 		disabled: false,
 		valuePlace: null,
-		valueRasterLayer: null
+		valueLayer: null
 	};
 
 	onChangePlace (value) {
 		this.props.onChange("place",value);
 	}
-	onChangeRasterLayer (value) {
-		this.props.onChange("rasterLayer",value);
+	onChangeLayer (value) {
+		this.props.onChange("layer",value);
 	}
 
 	render() {
@@ -61,16 +62,16 @@ class SelectorPlaceAttSetAULevel extends Component{
 
 					<div className="input">
 						<label className="container">
-							Raster layer
+							{this.props.layerType == "vector" ? "Vector layer" : "Raster layer"}
 							<Select
-								onChange={this.onChangeRasterLayer.bind(this)}
-								options={this.props.dataRasterLayer}
+								onChange={this.onChangeLayer.bind(this)}
+								options={this.props.dataLayer}
 								optionComponent={OptionKeyName}
 								singleValueComponent={SingleValueKeyName}
 								className="UICustomSelect"
 								valueKey="key"
 								labelKey="name"
-								value={this.props.valueRasterLayer}
+								value={this.props.valueLayer}
 								clearable={false}
 							/>
 						</label>
