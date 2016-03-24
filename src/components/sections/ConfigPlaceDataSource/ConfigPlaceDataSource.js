@@ -5,9 +5,12 @@ import withStyles from '../../../decorators/withStyles';
 import _ from 'underscore';
 import utils from '../../../utils/utils';
 
+import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
+
 import ConfigPlaceDataSourcePeriod from '../ConfigPlaceDataSourcePeriod';
 
 import PlaceStore from '../../../stores/PlaceStore';
+import GeneralLayerStore from '../../../stores/GeneralLayerStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 import AULevelStore from '../../../stores/AULevelStore';
 
@@ -15,6 +18,7 @@ import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	place: null,
+	layer: null,
 	attSet: null,
 	auLevel: null
 };
@@ -30,8 +34,7 @@ class ConfigPlaceDataSource extends Component {
 		selectorValuePlace: PropTypes.number,
 		selectorValueAttSet: PropTypes.number,
 		selectorValueAULevel: PropTypes.number,
-		selectorValueVectorLayer: PropTypes.number,
-		selectorValueRasterLayer: PropTypes.number
+		selectorValueLayer: PropTypes.number
 };
 
 	static defaultProps = {
@@ -39,8 +42,7 @@ class ConfigPlaceDataSource extends Component {
 		selectorValuePlace: null,
 		selectorValueAttSet: null,
 		selectorValueAULevel: null,
-		selectorValueVectorLayer: null,
-		selectorValueRasterLayer: null
+		selectorValueLayer: null
 	};
 
 	static contextTypes = {
@@ -58,6 +60,7 @@ class ConfigPlaceDataSource extends Component {
 	store2state(props) {
 		return {
 			place: PlaceStore.getById(props.selectorValuePlace),
+			layer: GeneralLayerStore.getById(props.selectorValueLayer),
 			attSet: AttributeSetStore.getById(props.selectorValueAttSet),
 			auLevel: AULevelStore.getById(props.selectorValueAULevel)
 		};
@@ -67,11 +70,31 @@ class ConfigPlaceDataSource extends Component {
 		if(!props){
 			props = this.props;
 		}
-		if(
-			props.selectorValuePlace &&
-			props.selectorValueAttSet &&
-			props.selectorValueAULevel
-		) {
+		let condition = false;
+		switch(props.relationsContext) {
+			case "AttSet":
+				condition = (
+					props.selectorValuePlace &&
+					props.selectorValueAttSet &&
+					props.selectorValueAULevel
+				);
+				break;
+			case "Vector":
+			case "Raster":
+				condition = (
+					props.selectorValuePlace &&
+					props.selectorValueLayer
+				);
+				break;
+			case "VectorAttSet":
+				condition = (
+					props.selectorValuePlace &&
+					props.selectorValueLayer &&
+					props.selectorValueAttSet
+				);
+				break;
+		}
+		if(condition) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
 			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
@@ -111,16 +134,48 @@ class ConfigPlaceDataSource extends Component {
 		}
 	}
 
+	stateCondition() {
+		let condition = false;
+		switch(this.props.relationsContext) {
+			case "AttSet":
+				condition = (
+					this.state.place &&
+					this.state.attSet &&
+					this.state.auLevel &&
+					this.state.scopePeriods
+				);
+				break;
+			case "Vector":
+				condition = (
+					this.state.place &&
+					this.state.layer &&
+					this.state.scopePeriods
+				);
+				break;
+			case "VectorAttSet":
+				condition = (
+					this.state.place &&
+					this.state.layer &&
+					this.state.attSet &&
+					this.state.scopePeriods
+				);
+				break;
+			case "Raster":
+				condition = (
+					this.state.place &&
+					this.state.layer &&
+					this.state.scopePeriods
+				);
+				break;
+		}
+		return condition;
+	}
+
 
 	render() {
 
 		var ret = null;
-		if(
-			this.state.place &&
-			this.state.attSet &&
-			this.state.auLevel &&
-			this.state.scopePeriods
-		) {
+		if(this.stateCondition()) {
 
 			let configComponentProps = {
 				disabled: this.props.disabled,
@@ -138,18 +193,18 @@ class ConfigPlaceDataSource extends Component {
 					break;
 				case "Vector":
 					_.assign(configComponentProps,{
-						vectorLayer: this.props.selectorValueVectorLayer
+						vectorLayer: this.props.selectorValueLayer
 					});
 					break;
 				case "VectorAttSet":
 				_.assign(configComponentProps,{
 					attributeSet: this.props.selectorValueAttSet,
-					vectorLayer: this.props.selectorValueVectorLayer
+					vectorLayer: this.props.selectorValueLayer
 				});
 				break;
 				case "Raster":
 					_.assign(configComponentProps,{
-						rasterLayer: this.props.selectorValueRasterLayer
+						rasterLayer: this.props.selectorValueLayer
 					});
 					break;
 			}
