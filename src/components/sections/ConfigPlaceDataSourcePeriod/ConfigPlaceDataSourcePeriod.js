@@ -6,6 +6,9 @@ import _ from 'underscore';
 import classNames from 'classnames';
 import utils from '../../../utils/utils';
 
+import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
+import ActionCreator from '../../../actions/ActionCreator';
+
 import UISVG from '../../atoms/UISVG';
 import UIScreenButton from '../../atoms/UIScreenButton';
 import SaveButton from '../../atoms/SaveButton';
@@ -391,12 +394,10 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		if(condition && this.state.savedState) {
 			isSelectionUnchanged = this.isSelectionUnchanged();
 			for (let relation of this.state.relations) {
-				if (this.state.relationsState[relation.key]) {
-					areConfigsUnchanged = (
-						areConfigsUnchanged &&
-						this.isConfigUnchanged(relation)
-					);
-				}
+				areConfigsUnchanged = (
+					areConfigsUnchanged &&
+					this.isConfigUnchanged(relation)
+				);
 			}
 		}
 		return (isSelectionUnchanged && areConfigsUnchanged);
@@ -405,7 +406,51 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		return this.state.selected == this.state.savedState.selected
 	}
 	isConfigUnchanged(relation) {
-		return _.isEqual(relation.columnMap,this.state.relationsState[relation.key].valuesColumnMap)
+		if (this.state.relationsState[relation.key]) {
+			return _.isEqual(relation.columnMap, this.state.relationsState[relation.key].valuesColumnMap)
+		} else {
+			return true;
+		}
+	}
+
+
+	saveForm() {
+		let condition = this.stateCondition();
+		if (condition && this.state.relations) {
+
+			var actionData = [];
+			var relations = utils.clone(this.state.relations);
+
+			let isSelectionUnchanged = this.isSelectionUnchanged();
+			for (let relation of relations) {
+
+				let object = {
+					key: relation.key
+				};
+
+				let isConfigUnchanged = this.isConfigUnchanged(relation);
+				if(!isConfigUnchanged || !isSelectionUnchanged) {
+
+					if (!isConfigUnchanged) {
+
+						object.fidColumn = this.state.relationsState[relation.key].valueFidColumn;
+						object.columnMap = this.state.relationsState[relation.key].valuesColumnMap;
+
+					}
+
+					if (!isSelectionUnchanged) {
+						object.active = (this.state.selected == relation.key);
+					}
+
+					let model = new Model[ObjectTypes.OBJECT_RELATION](object);
+					actionData.push({type: "update", model: model});
+				}
+
+			}
+
+			console.log("relations to save:", actionData);
+			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
+		}
 	}
 
 
@@ -691,7 +736,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 				<SaveButton
 					saved={this.isStateUnchanged()}
 					className="save-button"
-					//onClick={this.saveForm.bind(this)}
+					onClick={this.saveForm.bind(this)}
 				/>
 			);
 
