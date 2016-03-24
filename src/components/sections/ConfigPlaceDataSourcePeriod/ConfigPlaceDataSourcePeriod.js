@@ -607,36 +607,38 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							relationListInsert.push(geonodeRelationInsert);
 							if (this.state.relationsState[relation.key] && this.state.dataLayers) {
 								let attSetTableRowsInsert = [];
-								for (let att of relation.attributeSet.attributes) {
-									let record = _.find(this.state.relationsState[relation.key].valuesColumnMap, function (item) {
-										return item.attribute.key == att.key;
-									});
-									let columnInsert = null;
-									if (record) {
-										let isValueValid = _.find(this.state.relationsState[relation.key].columns, function (stateCol) {
-											return stateCol.key == record.column
+								if (relation.attributeSet) {
+									for (let att of relation.attributeSet.attributes) {
+										let record = _.find(this.state.relationsState[relation.key].valuesColumnMap, function (item) {
+											return item.attribute.key == att.key;
 										});
-										if (isValueValid) {
-											columnInsert = record.column;
+										let columnInsert = null;
+										if (record) {
+											let isValueValid = _.find(this.state.relationsState[relation.key].columns, function (stateCol) {
+												return stateCol.key == record.column
+											});
+											if (isValueValid) {
+												columnInsert = record.column;
+											}
 										}
+										let rowInsert = (
+											<tr
+												key={att.key}
+											>
+												<td className="header">{att.name}</td>
+												<td className="allowOverflow resetui">
+													<Select
+														onChange={this.onChangeAttSet.bind(this,relation.key,att.key)}
+														options={this.state.relationsState[relation.key].columns}
+														valueKey="key"
+														labelKey="name"
+														value={columnInsert}
+													/>
+												</td>
+											</tr>
+										);
+										attSetTableRowsInsert.push(rowInsert);
 									}
-									let rowInsert = (
-										<tr
-											key={att.key}
-										>
-											<td className="header">{att.name}</td>
-											<td className="allowOverflow resetui">
-												<Select
-													onChange={this.onChangeAttSet.bind(this,relation.key,att.key)}
-													options={this.state.relationsState[relation.key].columns}
-													valueKey="key"
-													labelKey="name"
-													value={columnInsert}
-												/>
-											</td>
-										</tr>
-									);
-									attSetTableRowsInsert.push(rowInsert);
 								}
 								let fidValue = null;
 								let isFidValueValid = _.find(this.state.relationsState[relation.key].columns, function (stateCol) {
@@ -644,6 +646,24 @@ class ConfigPlaceDataSourcePeriod extends Component {
 								});
 								if (isFidValueValid) {
 									fidValue = this.state.relationsState[relation.key].valueFidColumn;
+								}
+								let configTableInsert = null;
+								if (attSetTableRowsInsert.length) {
+									configTableInsert = (
+										<Table celled className="fixed">
+											<thead>
+											<tr>
+												<th>Attribute</th>
+												<th>Source column</th>
+											</tr>
+											</thead>
+											<tbody>
+
+											{attSetTableRowsInsert}
+
+											</tbody>
+										</Table>
+									);
 								}
 								let configInsert = (
 									<div
@@ -683,19 +703,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 													/>
 												</label>
 
-												<Table celled className="fixed">
-													<thead>
-													<tr>
-														<th>Attribute</th>
-														<th>Source column</th>
-													</tr>
-													</thead>
-													<tbody>
-
-													{attSetTableRowsInsert}
-
-													</tbody>
-												</Table>
+												{configTableInsert}
 
 											</div>
 										</div>
