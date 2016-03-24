@@ -13,7 +13,12 @@ class ListenerHandler {
 		if (!this.storeListeners[store]) {
 			this.storeListeners[store] = [];
 		}
-		var newListener = this.storeChangeHandler.bind(this.component, args); // Component is needed
+		var newListener;
+		if(args) {
+			newListener = this.storeChangeHandler.bind(this.component, args); // Component is needed
+		} else {
+			newListener = this.storeChangeHandler.bind(this.component);
+		}
 		store[this.addListenerName](newListener);
 		this.storeListeners[store].push(newListener);
 	}
@@ -25,7 +30,7 @@ class ListenerHandler {
 				return;
 			}
 			this.storeListeners[store].forEach(function(listener){
-				// TODO: Understand undefined. 
+				// TODO: Understand undefined.
 				if(store[removeListenerName]) {
 					store[removeListenerName](listener);
 				}

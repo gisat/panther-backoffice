@@ -11,6 +11,6 @@ export const apiPath = "/";
 export const geonodeProtocol = "http://";
 export const geonodeHost = "37.205.9.78";
 
-export const tempSsid = "axssclakw1btrb2286erdniw14q5k7dn";
-export const tempSessionid = "3nbg1bhc6ticj1kkkwyx1j5kg4njiz50";
-export const tempCsrftoken = "W9zb8gJwOcI9qeqbpQezsuFieLIAw1yv";
+export const tempSsid = "e8d8ojimp93yzgn3uagfb77m62e7d37m";
+export const tempSessionid = "e8d8ojimp93yzgn3uagfb77m62e7d37m";
+export const tempCsrftoken = "M50e8yIxLwHkYWU6nKNTDx2yWV7w70b4";
