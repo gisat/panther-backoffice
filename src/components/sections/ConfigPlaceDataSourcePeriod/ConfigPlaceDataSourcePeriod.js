@@ -273,7 +273,8 @@ class ConfigPlaceDataSourcePeriod extends Component {
 								columns: columns,
 								valuesColumnMap: relation.columnMap,
 								//valueDataLayer: valueDataLayer,
-								valueFidColumn: relation.fidColumn
+								valueFidColumn: relation.fidColumn,
+								valueNameColumn: relation.nameColumn
 							};
 						});
 					}
@@ -425,6 +426,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 					if (!isConfigUnchanged) {
 
 						object.fidColumn = this.state.relationsState[relation.key].valueFidColumn;
+						object.nameColumn = this.state.relationsState[relation.key].valueNameColumn;
 						object.columnMap = this.state.relationsState[relation.key].valuesColumnMap;
 
 					}
@@ -541,6 +543,17 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		this.context.setStateDeep.call(this, state);
 	}
 
+	onChangeNameColumn(relationKey, value, values) {
+		let state = {
+			relationsState: {
+				[relationKey]: {
+					valueNameColumn: {$set: value}
+				}
+			}
+		};
+		this.context.setStateDeep.call(this, state);
+	}
+
 
 
 	render() {
@@ -638,6 +651,13 @@ class ConfigPlaceDataSourcePeriod extends Component {
 								if (isFidValueValid) {
 									fidValue = this.state.relationsState[relation.key].valueFidColumn;
 								}
+								let nameValue = null;
+								let isNameValueValid = _.find(this.state.relationsState[relation.key].columns, function (stateCol) {
+									return stateCol.key == thisComponent.state.relationsState[relation.key].valueNameColumn
+								});
+								if (isNameValueValid) {
+									nameValue = this.state.relationsState[relation.key].valueNameColumn;
+								}
 								let configTableInsert = null;
 								if (attSetTableRowsInsert.length) {
 									configTableInsert = (
@@ -691,6 +711,17 @@ class ConfigPlaceDataSourcePeriod extends Component {
 														valueKey="key"
 														labelKey="key"
 														value={fidValue}
+													/>
+												</label>
+
+												<label className="container">
+													Name column
+													<Select
+														onChange={this.onChangeNameColumn.bind(this, relation.key)}
+														options={this.state.relationsState[relation.key].columns}
+														valueKey="key"
+														labelKey="key"
+														value={nameValue}
 													/>
 												</label>
 
