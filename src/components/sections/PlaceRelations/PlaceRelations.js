@@ -16,7 +16,7 @@ import LinkTableRasterByScopePlace from '../../elements/LinkTableRasterByScopePl
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 import ScreenPlaceDataSourceAttSet from '../../screens/ScreenPlaceDataSourceAttSet';
-//import ScreenPlaceDataSourceVectorAttSet from '../../screens/ScreenPlaceDataSourceVectorAttSet';
+import ScreenPlaceDataSourceVectorLayerAttSet from '../../screens/ScreenPlaceDataSourceVectorLayerAttSet';
 import ScreenPlaceDataSourceLayer from '../../screens/ScreenPlaceDataSourceLayer';
 
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
@@ -315,7 +315,7 @@ class PlaceRelations extends Component {
 				if(col==null) {
 					screenComponent = ScreenPlaceDataSourceLayer;
 				} else {
-					screenComponent = ScreenPlaceDataSourceAttSet; // todo replace
+					screenComponent = ScreenPlaceDataSourceVectorLayerAttSet;
 				}
 				data = {
 					placeKey: this.props.selectorValue,

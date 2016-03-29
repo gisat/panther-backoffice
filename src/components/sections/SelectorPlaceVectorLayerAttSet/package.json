@@ -1,0 +1,6 @@
+{
+	"name": "SelectorPlaceVectorLayerAttSet",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./SelectorPlaceVectorLayerAttSet.js"
+}

@@ -1,0 +1,6 @@
+{
+	"name": "ScreenPlaceDataSourceVectorLayerAttSet",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenPlaceDataSourceVectorLayerAttSet.js"
+}
