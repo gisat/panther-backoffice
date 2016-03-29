@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 
 import path from "path";
+import _ from 'underscore';
 
 import utils from '../../../utils/utils';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
@@ -61,7 +62,8 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 		return {
 			places: PlaceStore.getAll(),
 			layers: VectorLayerStore.getAll(),
-			attributeSets: AttributeSetStore.getAll()
+			//attributeSets: AttributeSetStore.getAll()
+			attributeSets: utils.getAttSetsForLayers(props.data.layerKey)
 		};
 	}
 
@@ -122,20 +124,39 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 		var stateKey;
 		switch(select) {
 			case "place":
-				stateKey = "selectorValuePlace";
-				break;
-			case "layer":
-				stateKey = "selectorValueLayer";
+				this.setState({
+					selectorValuePlace: value
+				});
 				break;
 			case "attSet":
-				stateKey = "selectorValueAttSet";
+				this.setState({
+					selectorValueAttSet: value
+				});
+				break;
+			case "layer":
+				this.onChangeLayer(select, value)
 				break;
 		}
-		if(stateKey) {
-			this.setState({
-				[stateKey]: value
+	}
+
+	onChangeLayer (select, value) {
+		var thisComponent = this;
+		//var layer = _.findWhere(this.state.layers,{key: value});
+		//var layerAttSetsPromise = utils.getAttSetsForLayers(layer);
+		var layerAttSetsPromise = utils.getAttSetsForLayers(value);
+		layerAttSetsPromise.then( function (layerAttSets) {
+
+			let selectorValueAttSet = null;
+			if (layerAttSets.length == 1) {
+				selectorValueAttSet = layerAttSets[0].key;
+			}
+			console.log(layerAttSets);
+			thisComponent.setState({
+				selectorValueLayer: value,
+				attributeSets: layerAttSets,
+				selectorValueAttSet: selectorValueAttSet
 			});
-		}
+		});
 	}
 
 	render() {

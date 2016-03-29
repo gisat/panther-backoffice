@@ -90,7 +90,7 @@ class ConfigPlaceDataSource extends Component {
 				condition = (
 					props.selectorValuePlace &&
 					props.selectorValueLayer &&
-					props.selectorValueAttSet
+					props.selectorValueAttSet || props.valueAttSet == null
 				);
 				break;
 		}
