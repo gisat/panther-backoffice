@@ -4,6 +4,13 @@
 @import './react-select.overwrite.css';
 
 
+/* red screen of death: hiding behind menu fix */
+div[style*="box-sizing:border-box;font-family:sans-serif;position:fixed;padding:10px;top:0;left:0;bottom:0;right:0;width:100%;background:rgb(204, 0, 0);"]{
+	padding-left: 70px !important;
+}
+
+
+
 html {
 	-webkit-box-sizing: border-box; /* Needed for mobile WebKit */
 	-moz-box-sizing: border-box; /* Needed for Firefox */
