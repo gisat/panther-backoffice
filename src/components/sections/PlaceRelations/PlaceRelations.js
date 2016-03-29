@@ -15,6 +15,7 @@ import LinkTableVectorByScopePlace from '../../elements/LinkTableVectorByScopePl
 import LinkTableRasterByScopePlace from '../../elements/LinkTableRasterByScopePlace';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
+import ScreenPlaceDataSourceAULevel from '../../screens/ScreenPlaceDataSourceAULevel';
 import ScreenPlaceDataSourceAttSet from '../../screens/ScreenPlaceDataSourceAttSet';
 import ScreenPlaceDataSourceVectorLayerAttSet from '../../screens/ScreenPlaceDataSourceVectorLayerAttSet';
 import ScreenPlaceDataSourceLayer from '../../screens/ScreenPlaceDataSourceLayer';
@@ -301,7 +302,7 @@ class PlaceRelations extends Component {
 		switch(table){
 			case "AttSet":
 				if(row==null) {
-					screenComponent = ScreenPlaceDataSourceAttSet; // todo replace
+					screenComponent = ScreenPlaceDataSourceAULevel;
 				} else {
 					screenComponent = ScreenPlaceDataSourceAttSet;
 				}
