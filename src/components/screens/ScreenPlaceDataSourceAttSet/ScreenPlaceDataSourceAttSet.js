@@ -163,47 +163,56 @@ class ScreenPlaceDataSourceAttSet extends Component {
 
 	render() {
 
-		var selectorDataPlace = utils.deepClone(this.state.places);
-		selectorDataPlace.sort(function(a, b) {
-			if(!a.scope && b.scope) return 1;
-			if(a.scope && !b.scope) return -1;
-			if(a.key > b.key) return 1;
-			if(a.key < b.key) return -1;
-			return 0;
-		});
+		if(this.state.scope) {
 
-		var selectorDataAttSets = utils.deepClone(this.state.attributeSets.models);
-		selectorDataAttSets = _.reject(selectorDataAttSets, function(attSet) {
-			return !!attSet.vectorLayers.length
-		});
+			var selectorDataPlace = utils.deepClone(this.state.places);
+			selectorDataPlace.sort(function (a, b) {
+				if (!a.scope && b.scope) return 1;
+				if (a.scope && !b.scope) return -1;
+				if (a.key > b.key) return 1;
+				if (a.key < b.key) return -1;
+				return 0;
+			});
 
-		return (
-			<div>
-				<div className="screen-setter"><div>
-					<h2>Data source selection: Attribute set</h2>
-					<SelectorPlaceAttSetAULevel
-						disabled={this.props.disabled}
-						dataPlace={selectorDataPlace}
-						dataAttSet={selectorDataAttSets} // todo filter by scope of selected place
-						dataAULevel={this.state.scope.levels} // todo filter by scope of selected place
-						valuePlace={this.state.selectorValuePlace}
-						valueAttSet={this.state.selectorValueAttSet}
-						valueAULevel={this.state.selectorValueAULevel}
-						onChange={this.onSelectorChange.bind(this)}
-					/>
-				</div></div>
-				<div className="screen-content"><div>
-					<ConfigPlaceDataSource
-						disabled={this.props.disabled}
-						screenKey={this.props.screenKey}
-						relationsContext="AttSet"
-						selectorValuePlace={this.state.selectorValuePlace}
-						selectorValueAttSet={this.state.selectorValueAttSet}
-						selectorValueAULevel={this.state.selectorValueAULevel}
-					/>
-				</div></div>
-			</div>
-		);
+			var selectorDataAttSets = utils.deepClone(this.state.attributeSets.models);
+			selectorDataAttSets = _.reject(selectorDataAttSets, function (attSet) {
+				return !!attSet.vectorLayers.length
+			});
+
+			return (
+				<div>
+					<div className="screen-setter">
+						<div>
+							<h2>Data source selection: Attribute set</h2>
+							<SelectorPlaceAttSetAULevel
+								disabled={this.props.disabled}
+								dataPlace={selectorDataPlace}
+								dataAttSet={selectorDataAttSets} // todo filter by scope of selected place
+								dataAULevel={this.state.scope.levels} // todo filter by scope of selected place
+								valuePlace={this.state.selectorValuePlace}
+								valueAttSet={this.state.selectorValueAttSet}
+								valueAULevel={this.state.selectorValueAULevel}
+								onChange={this.onSelectorChange.bind(this)}
+							/>
+						</div>
+					</div>
+					<div className="screen-content">
+						<div>
+							<ConfigPlaceDataSource
+								disabled={this.props.disabled}
+								screenKey={this.props.screenKey}
+								relationsContext="AttSet"
+								selectorValuePlace={this.state.selectorValuePlace}
+								selectorValueAttSet={this.state.selectorValueAttSet}
+								selectorValueAULevel={this.state.selectorValueAULevel}
+							/>
+						</div>
+					</div>
+				</div>
+			);
+		} else {
+			return null;
+		}
 	}
 }
 
