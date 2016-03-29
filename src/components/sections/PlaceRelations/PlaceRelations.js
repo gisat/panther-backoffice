@@ -296,7 +296,7 @@ class PlaceRelations extends Component {
 
 	onCellClick (table, row, col) {
 		this.context.onInteraction().call();
-		var screenName = this.props.screenKey + "-ScreenPlaceDataSource" + table;
+		var screenName = this.props.screenKey + "-ScreenPlaceDataSource" + table + "Scope" + this.state.place.scope.key;
 		var screenComponent, data;
 		switch(table){
 			case "AttSet":
@@ -306,6 +306,7 @@ class PlaceRelations extends Component {
 					screenComponent = ScreenPlaceDataSourceAttSet;
 				}
 				data = {
+					scopeKey: this.state.place.scope.key,
 					placeKey: this.props.selectorValue,
 					attSetKey: row,
 					auLevelKey: col
@@ -318,6 +319,7 @@ class PlaceRelations extends Component {
 					screenComponent = ScreenPlaceDataSourceVectorLayerAttSet;
 				}
 				data = {
+					scopeKey: this.state.place.scope.key,
 					placeKey: this.props.selectorValue,
 					objectType: ObjectTypes.VECTOR_LAYER_TEMPLATE,
 					layerKey: row,
@@ -325,8 +327,9 @@ class PlaceRelations extends Component {
 				};
 				break;
 			case "Raster":
-				screenComponent = ScreenPlaceDataSourceLayer; // todo replace
+				screenComponent = ScreenPlaceDataSourceLayer;
 				data = {
+					scopeKey: this.state.place.scope.key,
 					placeKey: this.props.selectorValue,
 					objectType: ObjectTypes.RASTER_LAYER_TEMPLATE,
 					layerKey: row

@@ -10,6 +10,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 import PlaceStore from '../../../stores/PlaceStore';
+import ScopeStore from '../../../stores/ScopeStore';
 
 import SelectorPlaceVectorLayerAttSet from '../../sections/SelectorPlaceVectorLayerAttSet';
 import ConfigPlaceDataSource from '../../sections/ConfigPlaceDataSource';
@@ -18,9 +19,10 @@ import ListenerHandler from '../../../core/ListenerHandler';
 
 
 var initialState = {
+	scope: null,
 	places: [],
 	attributeSets: [],
-	auLevels: [],
+	layers: [],
 	selectorValuePlace: null,
 	selectorValueLayer: null,
 	selectorValueAttSet: null
@@ -60,15 +62,37 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 			props = this.props;
 		}
 		return {
-			places: PlaceStore.getAll(),
-			layers: VectorLayerStore.getAll(),
-			//attributeSets: AttributeSetStore.getAll()
+			//places: PlaceStore.getAll(),
+			scope: ScopeStore.getById(props.data.scopeKey),
 			attributeSets: utils.getAttSetsForLayers(props.data.layerKey)
 		};
 	}
 
+	setStateFromStores(props,keys) {
+		if(!props){
+			props = this.props;
+		}
+		if(
+			props.data.scopeKey &&
+			props.data.placeKey
+		) {
+			var thisComponent = this;
+			let store2state = this.store2state(props);
+			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
+
+			setStatePromise.then(function () {
+				let next2state = {
+					places: PlaceStore.getFiltered({scope: thisComponent.state.scope}),
+					layers: utils.getLayerTemplatesForScope(thisComponent.state.scope, "vector")
+				};
+				thisComponent.context.setStateFromStores.call(thisComponent, next2state);
+			});
+		}
+	}
+
 	_onStoreChange(keys) {
-		this.context.setStateFromStores.call(this, this.store2state(), keys);
+		//this.context.setStateFromStores.call(this, this.store2state(), keys);
+		this.setStateFromStores(this.props,keys);
 	}
 
 	componentDidMount() {
@@ -76,7 +100,8 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 		this.changeListener.add(VectorLayerStore, ["layers"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 
-		this.context.setStateFromStores.call(this, this.store2state());
+		//this.context.setStateFromStores.call(this, this.store2state());
+		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
@@ -121,7 +146,6 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 
 
 	onSelectorChange (select, value) {
-		var stateKey;
 		switch(select) {
 			case "place":
 				this.setState({
@@ -161,42 +185,50 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 
 	render() {
 
-		var selectorData = utils.deepClone(this.state.places);
-		selectorData.sort(function(a, b) {
-			if(!a.scope && b.scope) return 1;
-			if(a.scope && !b.scope) return -1;
-			if(a.key > b.key) return 1;
-			if(a.key < b.key) return -1;
-			return 0;
-		});
+		if (this.state.layers.hasOwnProperty("models")) {
+			var selectorDataPlace = utils.deepClone(this.state.places);
+			selectorDataPlace.sort(function (a, b) {
+				if (!a.scope && b.scope) return 1;
+				if (a.scope && !b.scope) return -1;
+				if (a.key > b.key) return 1;
+				if (a.key < b.key) return -1;
+				return 0;
+			});
 
-		return (
-			<div>
-				<div className="screen-setter"><div>
-					<h2>Data source selection: Vector layer attribute set</h2>
-					<SelectorPlaceVectorLayerAttSet
-						disabled={this.props.disabled}
-						dataPlace={selectorData}
-						dataLayer={this.state.layers} // todo filter by scope of selected place
-						dataAttSet={this.state.attributeSets} // todo filter by selected layer (load from layer?)
-						valuePlace={this.state.selectorValuePlace}
-						valueLayer={this.state.selectorValueLayer}
-						valueAttSet={this.state.selectorValueAttSet}
-						onChange={this.onSelectorChange.bind(this)}
-					/>
-				</div></div>
-				<div className="screen-content"><div>
-					<ConfigPlaceDataSource
-						disabled={this.props.disabled}
-						screenKey={this.props.screenKey}
-						relationsContext="VectorAttSet"
-						selectorValuePlace={this.state.selectorValuePlace}
-						selectorValueLayer={this.state.selectorValueLayer}
-						selectorValueAttSet={this.state.selectorValueAttSet}
-					/>
-				</div></div>
-			</div>
-		);
+			return (
+				<div>
+					<div className="screen-setter">
+						<div>
+							<h2>Data source selection: Vector layer attribute set</h2>
+							<SelectorPlaceVectorLayerAttSet
+								disabled={this.props.disabled}
+								dataPlace={selectorDataPlace}
+								dataLayer={this.state.layers.models}
+								dataAttSet={this.state.attributeSets}
+								valuePlace={this.state.selectorValuePlace}
+								valueLayer={this.state.selectorValueLayer}
+								valueAttSet={this.state.selectorValueAttSet}
+								onChange={this.onSelectorChange.bind(this)}
+							/>
+						</div>
+					</div>
+					<div className="screen-content">
+						<div>
+							<ConfigPlaceDataSource
+								disabled={this.props.disabled}
+								screenKey={this.props.screenKey}
+								relationsContext="VectorAttSet"
+								selectorValuePlace={this.state.selectorValuePlace}
+								selectorValueLayer={this.state.selectorValueLayer}
+								selectorValueAttSet={this.state.selectorValueAttSet}
+							/>
+						</div>
+					</div>
+				</div>
+			);
+		} else {
+			return null;
+		}
 	}
 }
 
