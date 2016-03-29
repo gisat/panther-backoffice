@@ -20,15 +20,6 @@ import Select from 'react-select';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 
-const COLUMNS = [
-			{ key: "ID_0"	},
-			{ key: "uf_00" },
-			{ key: "uf_10" },
-			{ key: "diff_uf" },
-			{ key: "fo_00" }
-		];
-const DATALAYERS = require('../../../stores/tempDataLayers');
-
 import PlaceStore from '../../../stores/PlaceStore';
 import PeriodStore from '../../../stores/PeriodStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
