@@ -126,7 +126,7 @@ class ConfigMetadataPlace extends Component{
 		this.changeListener.add(PlaceStore,["place"]);
 		this.changeListener.add(ScopeStore,["scopes"]);
 		this.responseListener.add(ScopeStore);
-		
+
 		this.setStateFromStores();
 	}
 
@@ -153,7 +153,7 @@ class ConfigMetadataPlace extends Component{
 			isIt = (
 					this.state.valueActive == this.state.place.active &&
 					this.state.valueName == this.state.place.name &&
-					this.state.valueBoundingBox == this.state.place.boundingBox &&
+					//this.state.valueBoundingBox == this.state.place.boundingBox &&
 					_.isEqual(this.state.valueScope,this.state.savedState.valueScope)
 			);
 		}
@@ -183,7 +183,7 @@ class ConfigMetadataPlace extends Component{
 		_.assign(modelData, this.state.place);
 		modelData.active = this.state.valueActive;
 		modelData.name = this.state.valueName;
-		modelData.boundingBox = this.state.valueBoundingBox;
+		//modelData.boundingBox = this.state.valueBoundingBox;
 		modelData.scope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
 		let modelObj = new Model[ObjectTypes.PLACE](modelData);
 		actionData.push({type:"update",model:modelObj});
@@ -202,9 +202,9 @@ class ConfigMetadataPlace extends Component{
 		});
 	}
 
-	onChangeServerName(e) {
+	onChangeBoundingBox(e) {
 		this.setState({
-			valueServerName: e.target.value
+			valueBoundingBox: e.target.value
 		});
 	}
 
@@ -298,18 +298,18 @@ class ConfigMetadataPlace extends Component{
 					</label>
 				</div>
 
-				<div className="frame-input-wrapper">
+				{/*<div className="frame-input-wrapper">
 					<label className="container">
 						Bounding box
 						<Input
 							type="text"
-							name="serverName"
+							name="boundingBox"
 							placeholder=" "
 							value={this.state.valueBoundingBox}
-							onChange={this.onChangeServerName.bind(this)}
+							onChange={this.onChangeBoundingBox.bind(this)}
 						/>
 					</label>
-				</div>
+				</div>*/}
 
 				{saveButton}
 
