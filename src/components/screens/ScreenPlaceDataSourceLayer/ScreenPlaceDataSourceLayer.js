@@ -9,6 +9,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 import AULevelStore from '../../../stores/AULevelStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 import PlaceStore from '../../../stores/PlaceStore';
+import ScopeStore from '../../../stores/ScopeStore';
 
 import SelectorPlaceLayer from '../../sections/SelectorPlaceLayer';
 import ConfigPlaceDataSource from '../../sections/ConfigPlaceDataSource';
@@ -17,6 +18,7 @@ import ListenerHandler from '../../../core/ListenerHandler';
 
 
 var initialState = {
+	scope: null,
 	places: [],
 	layers: [],
 	selectorValuePlace: null,
@@ -63,20 +65,40 @@ class ScreenPlaceDataSourceLayer extends Component {
 			props = this.props;
 		}
 		return {
-			places: PlaceStore.getAll(),
-			layers: Store[props.data.objectType].getAll()
+			scope: ScopeStore.getById(props.data.scopeKey)
 		};
 	}
 
+	setStateFromStores(props,keys) {
+		if(!props){
+			props = this.props;
+		}
+		if(
+			props.data.scopeKey &&
+			props.data.placeKey
+		) {
+			var thisComponent = this;
+			let store2state = this.store2state(props);
+			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
+			setStatePromise.then(function () {
+				let next2state = {
+					places: PlaceStore.getFiltered({scope: thisComponent.state.scope}),
+					layers: utils.getLayerTemplatesForScope(thisComponent.state.scope, thisComponent.props.data.objectType)
+				};
+				thisComponent.context.setStateFromStores.call(thisComponent, next2state);
+			});
+		}
+	}
+
 	_onStoreChange(keys) {
-		this.context.setStateFromStores.call(this, this.store2state(), keys);
+		this.setStateFromStores(this.props,keys);
 	}
 
 	componentDidMount() {
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(Store[this.props.data.objectType], ["layers"]);
 
-		this.context.setStateFromStores.call(this, this.store2state());
+		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
@@ -134,8 +156,8 @@ class ScreenPlaceDataSourceLayer extends Component {
 
 	render() {
 
-		var selectorData = utils.deepClone(this.state.places);
-		selectorData.sort(function(a, b) {
+		var selectorDataPlace = utils.deepClone(this.state.places);
+		selectorDataPlace.sort(function(a, b) {
 			if(!a.scope && b.scope) return 1;
 			if(a.scope && !b.scope) return -1;
 			if(a.key > b.key) return 1;
@@ -161,8 +183,8 @@ class ScreenPlaceDataSourceLayer extends Component {
 					<SelectorPlaceLayer
 						disabled={this.props.disabled}
 						layerType={this.props.data.objectType}
-						dataPlace={selectorData}
-						dataLayer={this.state.layers} // todo filter by scope of selected place
+						dataPlace={selectorDataPlace}
+						dataLayer={this.state.layers.models} // todo filter by scope of selected place
 						valuePlace={this.state.selectorValuePlace}
 						valueLayer={this.state.selectorValueLayer}
 						onChange={this.onSelectorChange.bind(this)}

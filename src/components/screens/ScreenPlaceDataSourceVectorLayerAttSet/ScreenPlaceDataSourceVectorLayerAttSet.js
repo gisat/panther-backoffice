@@ -62,7 +62,6 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 			props = this.props;
 		}
 		return {
-			//places: PlaceStore.getAll(),
 			scope: ScopeStore.getById(props.data.scopeKey),
 			attributeSets: utils.getAttSetsForLayers(props.data.layerKey)
 		};
