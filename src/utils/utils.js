@@ -1,6 +1,6 @@
 import React from 'react';
 import ActionCreator from '../actions/ActionCreator';
-import {Model} from '../constants/ObjectTypes';
+import ObjectTypes, {Model, Store, objectTypesMetadata} from '../constants/ObjectTypes';
 import ScopeStore from '../stores/ScopeStore';
 import TopicStore from '../stores/TopicStore';
 import ThemeStore from '../stores/ThemeStore';
@@ -114,9 +114,15 @@ export default {
 		return new Promise(function(resolve, reject){
 
 			var layerStore = GeneralLayerStore;
-			if(layerType=="vector") {
+			if(
+				layerType == ObjectTypes.VECTOR_LAYER_TEMPLATE
+				|| layerType == "vector"
+			) {
 				layerStore = VectorLayerStore;
-			} else if (layerStore=="raster") {
+			} else if (
+				layerType == ObjectTypes.RASTER_LAYER_TEMPLATE
+				|| layerType == "raster"
+			) {
 				layerStore = RasterLayerStore;
 			}
 
