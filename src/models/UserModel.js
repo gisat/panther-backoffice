@@ -1,6 +1,8 @@
-/**
- * Created by jbalhar on 30. 3. 2016.
- */
+import superagent from 'superagent';
+import path from 'path';
+
+import { publicPath, apiProtocol, apiHost, apiPath} from '../config';
+
 class User {
 
 }
@@ -17,7 +19,7 @@ export function isLogged() {
 }
 
 export function login(username, password) {
-	superagent("POST", url)
+	superagent("POST", apiProtocol + apiHost + path.resolve(publicPath, "/api/login/login"))
 		.send({
 			username: username,
 			password: password
