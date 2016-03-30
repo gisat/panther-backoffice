@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ScreenAnalysisSpatialRules.css';
+import styles from './ScreenAnalysisRulesSpatial.css';
 import withStyles from '../../../decorators/withStyles';
 import path from "path";
 
@@ -87,7 +87,7 @@ const ATTSETS = [
 		];
 
 @withStyles(styles)
-class ScreenAnalysisSpatialRules extends Component{
+class ScreenAnalysisRulesSpatial extends Component{
 
 	constructor(props) {
 		super(props);
@@ -385,4 +385,4 @@ class ScreenAnalysisSpatialRules extends Component{
 	}
 }
 
-export default ScreenAnalysisSpatialRules;
+export default ScreenAnalysisRulesSpatial;

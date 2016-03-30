@@ -9,7 +9,7 @@ import ga from 'react-ga';
 
 import ScreenAnalysesBase from '../components/screens/ScreenAnalysesBase';
 import ScreenAnalysisSpatial from '../components/screens/ScreenAnalysisSpatial';
-import ScreenAnalysisSpatialRules from '../components/screens/ScreenAnalysisSpatialRules';
+import ScreenAnalysisRulesSpatial from '../components/screens/ScreenAnalysisRulesSpatial';
 
 import ScreenDashboardBase from '../components/screens/ScreenDashboardBase';
 
@@ -38,11 +38,11 @@ var initialScreenSets = {
 				component: ScreenAnalysisSpatial,
 				parentUrl: "/analyses/spatial"
 			},
-			ScreenAnalysisSpatialRules: {
+			ScreenAnalysisRulesSpatial: {
 				order: 2,
 				size: 80,
 				position: "retracted",
-				component: ScreenAnalysisSpatialRules
+				component: ScreenAnalysisRulesSpatial
 			}
 		}
 	},
