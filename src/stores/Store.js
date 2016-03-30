@@ -174,7 +174,7 @@ class Store extends EventEmitter {
 
 			var url = apiProtocol + apiHost + path.join(apiPath, thisStore.getApiUrl()).replace(/\\/g, "/");
 			superagent(method.toUpperCase(), url)
-				.send({data: object})
+				.send(object)
 				.withCredentials()
 				.set('Access-Control-Allow-Origin', 'true')
 				.set('Accept', 'application/json')
