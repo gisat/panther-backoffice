@@ -130,7 +130,7 @@ class ConfigPlaceDataSourceAULevel extends Component {
 		let promises = [];
 		let dataLayers = [];
 		let valueDataLayer = null;
-		for (let relation of thisComponent.state.relations) {
+		for (let relation of thisComponent.state.relations) { // todo clear form if no relations
 
 			if (relation.dataSourceOrigin=="geonode") {
 				(function (relation) { // todo is this needed with let instead of var?
