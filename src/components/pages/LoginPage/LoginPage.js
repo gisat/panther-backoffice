@@ -33,8 +33,7 @@ class LoginPage extends Component {
 			this.setState({error: "Invalid login information"});
 		} else {
 			Location.pushState(
-				this.props && this.props.state || null,
-				"/"
+				null, "/"
 			);
 		}
 	}
