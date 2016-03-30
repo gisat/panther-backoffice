@@ -1,24 +1,27 @@
 import superagent from 'superagent';
 import path from 'path';
 
-import { publicPath, apiProtocol, apiHost, apiPath} from '../config';
+import { publicPath, apiProtocol, apiHost} from '../config';
 
 class User {
+	constructor() {
+		this.logged = false;
+	}
 
+	isLogged() {
+		return this.logged;
+	}
+
+	login() {
+		this.logged = true;
+	}
 }
 
-let logged = null;
-export default User;
+let logged = new User();
+console.log(logged);
+export default logged;
 
-export function loggedUser(){
-	return logged;
-}
-
-export function isLogged() {
-	return logged != null;
-}
-
-export function login(username, password) {
+export function login(username, password, callback) {
 	superagent("POST", apiProtocol + apiHost + path.resolve(publicPath, "/api/login/login"))
 		.send({
 			username: username,
@@ -29,7 +32,19 @@ export function login(username, password) {
 		.set('Accept', 'application/json')
 		.set('Access-Control-Allow-Credentials', 'true')
 		.end(function(err, res){
-			console.log(err);
-			console.log(res);
+			if(err) {
+				callback({
+					err: err
+				});
+			} else {
+				console.log(res);
+				// ssid
+				// sessionid
+				// csrftoken
+				logged.login();
+				callback({
+					success: res
+				});
+			}
 		});
 }

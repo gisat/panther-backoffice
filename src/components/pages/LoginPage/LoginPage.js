@@ -2,6 +2,8 @@ import React, {PropTypes, Component} from 'react';
 import styles from './LoginPage.css';
 import withStyles from '../../../decorators/withStyles';
 import {login} from '../../../models/UserModel';
+import Location from '../../../core/Location';
+import {publicPath} from '../../../config';
 
 import {Input, Button} from '../../SEUI/elements';
 
@@ -12,16 +14,29 @@ class LoginPage extends Component {
 
 		this.state = {
 			valueName: "",
-			valuePassword: ""
+			valuePassword: "",
+			error: ""
 		};
 	}
 
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
+		onSetTitle: PropTypes.func.isRequired
 	};
 
 	onClick() {
-		login(this.state.valueName, this.state.valuePassword);
+		this.setState({error: ''});
+		login(this.state.valueName, this.state.valuePassword, this.requestEnd.bind(this));
+	}
+
+	requestEnd(result) {
+		if(result.err) {
+			this.setState({error: "Invalid login information"});
+		} else {
+			Location.pushState(
+				this.props && this.props.state || null,
+				"/"
+			);
+		}
 	}
 
 	nameChanged(event){
@@ -57,6 +72,9 @@ class LoginPage extends Component {
 							value={this.state.valuePassword}
 							onChange={this.passwordChanged.bind(this)}
 						/>
+					</label>
+					<label className="container">
+						{this.state.error}
 					</label>
 					<Button
 						basic

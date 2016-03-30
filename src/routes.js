@@ -9,7 +9,7 @@ import LoginPage from './components/pages/LoginPage';
 import ContentPage from './components/temp/ContentPage';
 import NotFoundPage from './components/temp/NotFoundPage';
 import ErrorPage from './components/temp/ErrorPage';
-import {isLogged} from './models/UserModel';
+import logged from './models/UserModel';
 
 import { publicPath } from './config';
 
@@ -23,7 +23,7 @@ const router = new Router(on => {
 
 	on('*', (state, next) => {
 		console.log("Looking for authorization");
-		if(!isLogged()){
+		if(!logged.isLogged()){
 			console.log("Isn't authorized");
 			return <LoginPage />
 		} else {
