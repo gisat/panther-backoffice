@@ -147,7 +147,8 @@ class Model {
 
 	// todo static?
 	transformDate(dateString) {
-		return new Date(dateString);
+		if (dateString) return new Date(dateString);
+		return null;
 	}
 
 	getKey(model) {
