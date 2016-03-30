@@ -10,12 +10,9 @@ import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
 
 const OPERATIONS = [
-			{ key: "COUNT", name: "COUNT"	},
-			{ key: "SUM", name: "SUM (area/length)" },
-			{ key: "SUMATT", name: "SUM (attribute)" },
-			{ key: "AVG", name: "AVERAGE (area/length)" },
-			{ key: "AVGATT", name: "AVERAGE (attribute)" },
-			{ key: "AVGATTATT", name: "AVERAGE (attribute), weighted by attribute" }
+			{ key: "SUMATT", name: "SUM" },
+			{ key: "AVGATTAREA", name: "AVERAGE, weighted by area/length" },
+			{ key: "AVGATTATT", name: "AVERAGE, weighted by attribute" }
 		];
 const ATTRIBUTES = [
 			{
@@ -52,33 +49,6 @@ const ATTRIBUTES = [
 				name: "Drawing a blank"
 			}
 		];
-const STATUSCODES = [
-			{
-				key: 111
-			}, {
-				key: 112
-			}, {
-				key: 113
-			}, {
-				key: 120
-			}, {
-				key: 130
-			}, {
-				key: 140
-			}, {
-				key: 200
-			}, {
-				key: 310
-			}, {
-				key: 320
-			}, {
-				key: 330
-			}, {
-				key: 510
-			}, {
-				key: 520
-			}
-];
 const ATTSETS = [
 			{ key: 352, name: "Land Cover classes L3" },
 			{ key: 623, name: "Aggregated LC Classes Formation" },
@@ -93,9 +63,7 @@ class ScreenAnalysisRulesLevel extends Component{
 		super(props);
 
 		this.state = {
-			valueResultAttSet: [352],
-			valueFilterAttSet: [28],
-			themesString: "",
+			valueResultAttSets: [352,18],
 			data: this.props.data
 		};
 
@@ -122,24 +90,10 @@ class ScreenAnalysisRulesLevel extends Component{
 		return newValues;
 	}
 
-	onChangeFeatureLayer (value, values) {
-		//values = this.handleNewObjects(values, ATTSETS);
-		this.setState({
-			valueFeatureLayer: value
-		});
-	}
-
 	onChangeResultAttSet (value, values) {
-		//values = this.handleNewObjects(values, ATTSETS);
+		value = this.handleNewObjects(values, ATTSETS);
 		this.setState({
 			valueResultAttSet: value
-		});
-	}
-
-	onChangeFilterAttSet (value, values) {
-		//values = this.handleNewObjects(values, ATTSETS);
-		this.setState({
-			valueFilterAttSet: value
 		});
 	}
 
@@ -168,64 +122,33 @@ class ScreenAnalysisRulesLevel extends Component{
 
 					<div className="frame-input-wrapper">
 						<label className="container">
-							Feature layer (vector layer template)
+							Result attribute sets
 							<UIObjectSelect
-								onChange={this.onChangeFeatureLayer.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								//options={this.state.vectorLayerTemplates}
-								valueKey="key"
-								labelKey="name"
-								//value={this.state.valueFeatureLayer}
-								className="template"
-							/>
-						</label>
-					</div>
-
-					<div className="frame-input-wrapper">
-						<label className="container">
-							Result attribute set
-							<UIObjectSelect
+								multi
 								onChange={this.onChangeResultAttSet.bind(this)}
 								onOptionLabelClick={this.onObjectClick.bind(this)}
 								//loadOptions={this.getScopes}
 								options={ATTSETS}
 								valueKey="key"
 								labelKey="name"
-								value={this.state.valueResultAttSet}
+								value={this.state.valueResultAttSets}
 								className="template"
 							/>
 						</label>
 					</div>
 
-				<div className="frame-input-wrapper">
-						<label className="container">
-							Filter attribute set
-							<UIObjectSelect
-								onChange={this.onChangeFilterAttSet.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								options={ATTSETS}
-								valueKey="key"
-								labelKey="name"
-								value={this.state.valueFilterAttSet}
-								className="template"
-							/>
-						</label>
-				</div>
 
 				<Table celled className="fixed" id="AnalysisSpatialRuleTable">
 					<thead>
 						<tr>
 							<th>Operation</th>
-							<th colSpan="2"></th>
-							<th>Filter</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 
 						<tr className="row-header">
-							<td colSpan="4" className="resetui">Continuous Urban Fabric (S.L. > 80%)</td>
+							<td colSpan="2" className="resetui">Continuous Urban Fabric (S.L. > 80%)</td>
 						</tr>
 						<tr>
 							<td className="allowOverflow resetui">
@@ -238,31 +161,18 @@ class ScreenAnalysisRulesLevel extends Component{
 										valueKey="key"
 										labelKey="name"
 										//inputProps={selectInputProps}
-										value="SUM"
+										value="SUMATT"
 									/>
 								</label>
 							</td>
-							<td colSpan="2"></td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Status code:
-									<Input
-										type="text"
-										name="name"
-										placeholder=" "
-										defaultValue="111" // remove
-										//value={this.state.valueWhatever}
-										//onChange={this.onChangeWhatever.bind(this)}
-									/>
-								</label>
-							</td>
+							<td></td>
 						</tr>
 
 					</tbody>
 					<tbody className="internal row">
 
 						<tr className="row-header">
-							<td colSpan="4" className="resetui">Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
+							<td colSpan="2" className="resetui">Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
 						</tr>
 						<tr>
 							<td className="allowOverflow resetui">
@@ -281,7 +191,7 @@ class ScreenAnalysisRulesLevel extends Component{
 							</td>
 							<td className="allowOverflow resetui">
 								<label className="container">
-									Attribute to average
+									Weighting attribute
 									<Select
 										//onChange={this.onChangeAttSet.bind(this)}
 										//loadOptions={this.getPlaces}
@@ -293,40 +203,13 @@ class ScreenAnalysisRulesLevel extends Component{
 									/>
 								</label>
 							</td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Weighting attribute
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={ATTRIBUTES}
-										valueKey="key"
-										labelKey="name"
-										//inputProps={selectInputProps}
-										value="162"
-									/>
-								</label>
-							</td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Status code:
-									<Input
-										type="text"
-										name="name"
-										placeholder=" "
-										defaultValue="112" // remove
-										//value={this.state.valueWhatever}
-										//onChange={this.onChangeWhatever.bind(this)}
-									/>
-								</label>
-							</td>
 						</tr>
 
 					</tbody>
 					<tbody className="internal row">
 
 						<tr className="row-header">
-							<td colSpan="4" className="resetui">Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
+							<td colSpan="2" className="resetui">Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
 						</tr>
 						<tr>
 							<td className="allowOverflow resetui">
@@ -343,34 +226,7 @@ class ScreenAnalysisRulesLevel extends Component{
 									/>
 								</label>
 							</td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Attribute to sum
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={ATTRIBUTES}
-										valueKey="key"
-										labelKey="name"
-										//inputProps={selectInputProps}
-										value="160"
-									/>
-								</label>
-							</td>
 							<td></td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Status code:
-									<Input
-										type="text"
-										name="name"
-										placeholder=" "
-										defaultValue="113" // remove
-										//value={this.state.valueWhatever}
-										//onChange={this.onChangeWhatever.bind(this)}
-									/>
-								</label>
-							</td>
 						</tr>
 
 

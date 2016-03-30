@@ -10,6 +10,8 @@ import ga from 'react-ga';
 import ScreenAnalysesBase from '../components/screens/ScreenAnalysesBase';
 import ScreenAnalysisSpatial from '../components/screens/ScreenAnalysisSpatial';
 import ScreenAnalysisRulesSpatial from '../components/screens/ScreenAnalysisRulesSpatial';
+import ScreenAnalysisRulesLevel from '../components/screens/ScreenAnalysisRulesLevel';
+import ScreenAnalysisRulesMath from '../components/screens/ScreenAnalysisRulesMath';
 
 import ScreenDashboardBase from '../components/screens/ScreenDashboardBase';
 
@@ -43,6 +45,18 @@ var initialScreenSets = {
 				size: 80,
 				position: "retracted",
 				component: ScreenAnalysisRulesSpatial
+			},
+			ScreenAnalysisRulesLevel: {
+				order: 3,
+				size: 60,
+				position: "retracted",
+				component: ScreenAnalysisRulesLevel
+			},
+			ScreenAnalysisRulesMath: {
+				order: 4,
+				size: 80,
+				position: "retracted",
+				component: ScreenAnalysisRulesMath
 			}
 		}
 	},
