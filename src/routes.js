@@ -9,6 +9,7 @@ import LoginPage from './components/pages/LoginPage';
 import ContentPage from './components/temp/ContentPage';
 import NotFoundPage from './components/temp/NotFoundPage';
 import ErrorPage from './components/temp/ErrorPage';
+import {isLogged} from './models/UserModel';
 
 import { publicPath } from './config';
 
@@ -19,6 +20,17 @@ const router = new Router(on => {
 	});
 
 	hookRoute(on, '/login', async () => <LoginPage />);
+
+	on('*', (state, next) => {
+		console.log("Looking for authorization");
+		if(!isLogged()){
+			console.log("Isn't authorized");
+			return <LoginPage />
+		} else {
+			console.log("Authorization succeeded");
+			next();
+		}
+	});
 
 	hookRoute(on, '/', async () => <Page screenSet="dashboard" />);
 
