@@ -9,6 +9,7 @@ import LoginPage from './components/pages/LoginPage';
 import ContentPage from './components/temp/ContentPage';
 import NotFoundPage from './components/temp/NotFoundPage';
 import ErrorPage from './components/temp/ErrorPage';
+import logged from './models/UserModel';
 
 import { publicPath } from './config';
 
@@ -19,6 +20,16 @@ const router = new Router(on => {
 	});
 
 	hookRoute(on, '/login', async () => <LoginPage />);
+
+	on('*', async (state, next) => {
+		if(!logged.isLogged()){
+			return <LoginPage />
+		} else {
+			console.log("Successfully logged");
+			const component = await next();
+			return component;
+		}
+	});
 
 	hookRoute(on, '/', async () => <Page screenSet="dashboard" />);
 

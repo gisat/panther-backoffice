@@ -172,119 +172,58 @@ class Store extends EventEmitter {
 		var thisStore = this;
 		return new Promise(function (resolve, reject) {
 
-
-			// todo: Request API directly. Need to solve CORS credentials problem
-			/*var url = apiProtocol + apiHost + path.join(apiPath, me.getApiUrl()).replace(/\\/g, "/");
-			var method = "GET";
-
+			var url = apiProtocol + apiHost + path.join(apiPath, thisStore.getApiUrl()).replace(/\\/g, "/");
 			superagent(method.toUpperCase(), url)
-				.send({data: object})
+				.send(object)
+				.query({justMine: true})
 				.withCredentials()
 				.set('Access-Control-Allow-Origin', 'true')
 				.set('Accept', 'application/json')
 				.set('Access-Control-Allow-Credentials', 'true')
 				.end(function(err, res){
-
-					if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers") {
-						console.log("RES1: ", res);
-						console.log("RES1 REQ METHOD: " + res.req.method);
-					}
-
-
 					if(err || typeof res == 'undefined'){
 						reject(err);
 						return;
 					}
-					var ret = [];
+
 					var responseJson = JSON.parse(res.text);
-					//console.log("Response JSON: ", responseJson, "%%%%%%%%%%%%%%%%%%%%%%%%%%");
-					if(typeof responseJson.data == 'undefined'){
-						if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers")
-							console.log("((((((((((((((((( LAYERS no data )))))))))))))))))");
-						//reject("no data attribute");
-						return;
-					}else{
-						if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers")
-							console.log("<<<<<<<<<<<<<<<<<< LAYERS OK >>>>>>>>>>>>>>>>>>>>>");
+
+					// if there is no data attribute in the response
+					if (!responseJson.hasOwnProperty('data')) {
+						return resolve();
 					}
-					if(responseJson.data.hasOwnProperty("_id")) {
+
+					// if only one record in the response
+					if (responseJson.data.hasOwnProperty("_id")) {
 						responseJson.data = [responseJson.data];
 					}
-					for(let obj of responseJson.data){
-						let instance = me.getInstance(null,obj);
-						if(instance){
-							ret.push(instance);
+
+					// instantiate objects with models
+					if(typeof responseJson.data == "string") {
+
+						let instance = thisStore.getInstance(null, responseJson.data);
+						resolve(instance);
+
+					} else {
+
+						var ret = [], promises = [];
+						for (let obj of responseJson.data) {
+							let instance = thisStore.getInstance(null, obj);
+							if (instance) {
+								ret.push(instance);
+								promises.push(instance.ready);
+							}
 						}
-						//ret.push(new DataLayerModel(obj));
+						Promise.all(promises).then(function(){
+							_.each(ret, function(instance){
+								delete instance.ready;
+							}, this);
+							resolve(ret);
+						});
+
 					}
-					if(res.req.url == "http://37.205.9.78/tool/api/layers/getLayers")
-						console.log("RETURNING: ", ret);
-					resolve(ret);
 				});
-			/////////////////////////////////// */
-
-
-			// todo Temporary use of API proxy
-			var url = path.resolve(publicPath, "api-proxy")
-					// append METHOD and last API directory, just for better debugging
-					+ "?" + method.toUpperCase() + "-" + thisStore.getApiUrl().split("/").pop();
-			var apiUrl = thisStore.getApiUrl();
-			if(method=="DELETE") {
-				apiUrl = path.join(apiUrl, object.data._id.toString());
-			}
-			superagent
-			.post(url)
-			.send({apiUrl: apiUrl})
-			.send({method: method})
-			.send({ssid: tempSsid})
-			.send({sessionid: tempSessionid})
-			.send({csrftoken: tempCsrftoken})
-			.send({formData: object})
-			.end(function(err, res){
-				if(err || typeof res == 'undefined'){
-					reject(err);
-					return;
-				}
-
-				var responseJson = JSON.parse(res.text);
-
-				// if there is no data attribute in the response
-				if (!responseJson.hasOwnProperty('data')) {
-					return resolve();
-				}
-
-				// if only one record in the response
-				if (responseJson.data.hasOwnProperty("_id")) {
-					responseJson.data = [responseJson.data];
-				}
-
-				// instantiate objects with models
-				if(typeof responseJson.data == "string") {
-
-					let instance = thisStore.getInstance(null, responseJson.data);
-					resolve(instance);
-
-				} else {
-
-					var ret = [], promises = [];
-					for (let obj of responseJson.data) {
-						let instance = thisStore.getInstance(null, obj);
-						if (instance) {
-							ret.push(instance);
-							promises.push(instance.ready);
-						}
-					}
-					Promise.all(promises).then(function(){
-						_.each(ret, function(instance){
-							delete instance.ready;
-						}, this);
-						resolve(ret);
-					});
-
-				}
-			});
-
-
+			///////////////////////////////////
 
 		});
 	}
