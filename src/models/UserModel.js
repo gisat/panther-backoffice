@@ -42,6 +42,7 @@ export function login(username, password, callback) {
 				// sessionid
 				// csrftoken
 				logged.login();
+				console.log(logged);
 				callback({
 					success: res
 				});

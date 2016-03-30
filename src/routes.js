@@ -21,16 +21,15 @@ const router = new Router(on => {
 
 	hookRoute(on, '/login', async () => <LoginPage />);
 
-	/*on('*', (state, next) => {
-		console.log("Looking for authorization");
+	on('*', async (state, next) => {
 		if(!logged.isLogged()){
-			console.log("Isn't authorized");
 			return <LoginPage />
 		} else {
-			console.log("Authorization succeeded");
-			next();
+			console.log("Successfully logged");
+			const component = await next();
+			return component;
 		}
-	});*/
+	});
 
 	hookRoute(on, '/', async () => <Page screenSet="dashboard" />);
 
