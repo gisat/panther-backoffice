@@ -676,6 +676,21 @@ class ConfigPlaceDataSourcePeriod extends Component {
 										</Table>
 									);
 								}
+								let nameField = "";
+								if (this.props.relationsContext == "Vector") {
+									nameField = (
+										<label className="container">
+											Name column
+											<Select
+												onChange={this.onChangeNameColumn.bind(this, relation.key)}
+												options={this.state.relationsState[relation.key].columns}
+												valueKey="key"
+												labelKey="key"
+												value={nameValue}
+											/>
+										</label>
+									);
+								}
 								let configInsert = (
 									<div
 										key={"config-form-" + relation.key}
@@ -714,16 +729,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 													/>
 												</label>
 
-												<label className="container">
-													Name column
-													<Select
-														onChange={this.onChangeNameColumn.bind(this, relation.key)}
-														options={this.state.relationsState[relation.key].columns}
-														valueKey="key"
-														labelKey="key"
-														value={nameValue}
-													/>
-												</label>
+												{nameField}
 
 												{configTableInsert}
 
