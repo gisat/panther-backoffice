@@ -16,185 +16,341 @@ import UIScreenButton from '../../atoms/UIScreenButton';
 import SaveButton from '../../atoms/SaveButton';
 
 import AnalysisStore from '../../../stores/AnalysisStore';
+import AnalysisModel from '../../../models/AnalysisModel';
 import AnalysisRunStore from '../../../stores/AnalysisRunStore';
+import TopicStore from '../../../stores/TopicStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
+//import ConfigAnalysisRulesSpatial from '../../sections/ConfigAnalysisRulesSpatial';
+//import ConfigAnalysisRulesLevel from '../../sections/ConfigAnalysisRulesLevel';
+//import ConfigAnalysisRulesMath from '../../sections/ConfigAnalysisRulesMath';
 
 
-const TOPICS = [
-			{ key: 7, topic: 'Land cover structure', themes: [18,23,32] },
-			{ key: 12, topic: 'Land cover development', themes: [18,23,32] },
-			{ key: 16, topic: 'Urban population', themes: [30] },
-			{ key: 19, topic: 'Urban expansions', themes: [30] },
-			{ key: 22, topic: 'Total populations', themes: [25] },
-			{ key: 23, topic: 'Population density grid', themes: [18,23,25,30,32] },
-			{ key: 33, topic: 'Roads', themes: [18,23,32] }
-		];
-const THEMES = [
-			{ key: 18, theme: 'Population' },
-			{ key: 23, theme: 'Transportation' },
-			{ key: 25, theme: 'Total population' },
-			{ key: 30, theme: 'Urban expansion' },
-			{ key: 32, theme: 'Land cover' }
-		];
+var initialState = {
+	analysis: null,
+	valueName: "",
+	valueTopics: [],
+	topicThemes: []
+};
 
 
+class ConfigAnalysis extends Component {
 
-class ConfigAnalysis extends Component{
+	static propTypes = {
+		disabled: PropTypes.bool,
+		screenKey: PropTypes.string,
+		selectorValue: PropTypes.any
+	};
+
+	static defaultProps = {
+		disabled: false,
+		selectorValue: null
+	};
+
+	static contextTypes = {
+		setStateFromStores: PropTypes.func.isRequired,
+		onInteraction: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
+	};
 
 	constructor(props) {
 		super(props);
+		this.state = utils.deepClone(initialState);
 
-		this.state = {
-			idAnalysisSpatial: this.props.id,
-			valuesTopics: [12,22],
-			themesString: "",
-			data: this.props.data
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
+	}
+
+	store2state(props) {
+		return {
+			analysis: AnalysisStore.getById(props.selectorValue),
+			topics: TopicStore.getAll()
 		};
+	}
 
+	setStateFromStores(props,keys) {
+		if(!props){
+			props = this.props;
+		}
+		if(props.selectorValue) {
+			var thisComponent = this;
+			let store2state = this.store2state(props);
+			this.context.setStateFromStores.call(this, store2state, keys);
+			// if stores changed, overrides user input - todo fix
+
+			if(!keys || keys.indexOf("analysis")!=-1 || keys.indexOf("runs")!=-1) {
+				store2state.analysis.then(function (analysis) {
+					let runsPromise = AnalysisRunStore.getFiltered({analysis: analysis});
+					runsPromise.then(function(runs){
+						let newState = {
+							runs: runs,
+							valueName: analysis.name,
+							valueTopics: utils.getModelsKeys(analysis.topics)
+						};
+						newState.savedState = utils.deepClone(newState);
+						thisComponent.setState(newState);
+					});
+				});
+			}
+		}
+	}
+
+	_onStoreChange(keys) {
+		this.setStateFromStores(this.props,keys);
+	}
+
+	_onStoreResponse(result,responseData,stateHash) {
+		var thisComponent = this;
+		if (stateHash === this.getStateHash()) {
+			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
+				let stateKey = responseData.stateKey;
+				let values = utils.deepClone(thisComponent.state[stateKey]);
+				values.push(result[0].key);
+				thisComponent.setState({
+					[stateKey]: values
+				});
+				var screenObjectType;
+				switch(stateKey){
+					case "valueTopics":
+						screenObjectType = ObjectTypes.TOPIC;
+						break;
+				}
+				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
+				if(screenObjectType) {
+					let options = {
+						component: ScreenMetadataObject,
+						parentUrl: this.props.parentUrl,
+						size: 40,
+						data: {
+							objectType: screenObjectType,
+							objectKey: result[0].key
+						}
+					};
+					ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+				}
+			}
+		}
+	}
+
+	componentDidMount() {
+		this.changeListener.add(AnalysisStore, ["analysis"]);
+		this.changeListener.add(AnalysisRunStore, ["runs"]);
+		this.changeListener.add(TopicStore, ["topics"]);
+		this.responseListener.add(TopicStore);
+
+		this.setStateFromStores();
+	}
+
+	componentWillUnmount() {
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
-		if (newProps.id != this.state.idAnalysisSpatial) {
-			this.setState({idAnalysisSpatial: newProps.id});
+		if(newProps.selectorValue!=this.props.selectorValue) {
+			this.setStateFromStores(newProps);
+			this.updateStateHash(newProps);
 		}
 	}
 
-	resolveThemes(topics) {
-		var stringThemes = "";
-		if(topics) {
-			var themes = [];
-			if (!Array.isArray(topics)) {
-				topics = topics.split(",");
-			}
-			for(var topicKey of topics) {
-				var topic = _.findWhere(TOPICS, {key: Number(topicKey)});
-				themes = _.union(themes, topic.themes);
-			}
-			themes = themes.sort(function (a, b) {return a - b});
-			for(var themeKey of themes) {
-				var theme = _.findWhere(THEMES, {key: themeKey});
-				if(stringThemes) {
-					stringThemes += ", ";
-				}
-				stringThemes += theme.theme;
-			}
+	componentDidUpdate(oldProps, oldState) {
+		if (this.state.valueTopics && (oldState.valueTopics != this.state.valueTopics)) {
+			var thisComponent = this;
+			utils.getThemesForTopics(this.state.valueTopics).then(function(themes){
+				thisComponent.setState({
+					topicThemes: themes
+				});
+			});
 		}
+	}
+
+
+	/**
+	 * Check if state is the same as it was when loaded from stores
+	 * @returns {boolean}
+	 */
+	isStateUnchanged() {
+		var isIt = true;
+		if(this.state.analysis) {
+			isIt = (
+				this.state.valueName == this.state.analysis.name &&
+				_.isEqual(this.state.valueTopics,this.state.savedState.valueTopics)
+			);
+		}
+		return isIt;
+	}
+
+	/**
+	 * Differentiate between states
+	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
+	 */
+	updateStateHash(props) {
+		if(!props){
+			props = this.props;
+		}
+		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
+		this._stateHash = utils.stringHash(props.selectorValue);
+	}
+	getStateHash() {
+		if(!this._stateHash) {
+			this.updateStateHash();
+		}
+		return this._stateHash;
+	}
+
+	saveForm() {
+		var thisComponent = this;
+		let objectType = null;
+		switch(this.state.analysis.analysisType) {
+			case "spatial":
+				objectType = ObjectTypes.ANALYSIS_SPATIAL;
+				break;
+			case "level":
+				objectType = ObjectTypes.ANALYSIS_LEVEL;
+				break;
+			case "math":
+				objectType = ObjectTypes.ANALYSIS_MATH;
+				break;
+		}
+		var actionData = [], modelData = {};
+		//_.assign(modelData, this.state.analysis);
+		modelData.key = this.state.analysis.key;
+		modelData.name = this.state.valueName;
+		modelData.topics = [];
+		for (let key of this.state.valueTopics) {
+			let topic = _.findWhere(this.state.topics, {key: key});
+			modelData.topics.push(topic);
+		}
+
+		let modelObj = new AnalysisModel(modelData);
+		actionData.push({type:"update",model:modelObj});
+		console.log("save analysis:", actionData);
+		ActionCreator.handleObjects(actionData,objectType);
+	}
+
+
+	onChangeName(e) {
 		this.setState({
-			themesString: stringThemes
+			valueName: e.target.value
 		});
 	}
 
-	handleNewObjects(values, store) {
-		var newValues = [];
-		for (var singleValue of values) {
-			if(singleValue.create){
-				// replace with actual object creation and config screen opening
-				delete singleValue.create;
-				delete singleValue.label;
-				delete singleValue.value;
-				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				store.push(singleValue);
+	onChangeObjectSelect (stateKey, objectType, value, values) {
+		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
+		var newState = {};
+		newState[stateKey] = newValues;
+		this.setState(newState);
+	}
+
+	onObjectClick (itemType, value, event) {
+		this.context.onInteraction().call();
+		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
+		let options = {
+			component: ScreenMetadataObject,
+			parentUrl: this.props.parentUrl,
+			size: 40,
+			data: {
+				objectType: itemType,
+				objectKey: value.key
 			}
-			newValues.push(singleValue.key);
-		}
-		return newValues;
+		};
+		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
-	onChangeTopics (value, values) {
-		values = this.handleNewObjects(values, TOPICS);
-		this.setState({
-			valuesTopics: values
-		});
-		this.resolveThemes(values);
-	}
-
-
-	onObjectClick (value, event) {
-		console.log("yay! " + value["key"]);
-	}
-
-
-	topicOptionFactory (inputValue) {
-		var newOption = {
-				key: inputValue,
-				topic: inputValue,
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-		return newOption;
-	}
-
-
-	componentDidMount() {
-
-
-
-	}
-
-	onChangeName(){
-		console.log("name changed");
-	}
 
 	render() {
 
-		var selectInputProps = {
-			className: "" //"ui input"
-		};
+		var saveButton = " ";
+		if (this.state.analysis) {
+			saveButton = (
+				<SaveButton
+					saved={this.isStateUnchanged()}
+					className="save-button"
+					onClick={this.saveForm.bind(this)}
+				/>
+			);
+		}
 
-		return (
-			<div>
-
-				<span className="todo">{this.props.selectorValue}</span>
-
-				<div className="frame-input-wrapper">
-					<label className="container">
-						Name
-						<Input type="text" name="name" placeholder=" " defaultValue="Land cover status" onChange={this.onChangeName.bind(this)} />
-					</label>
+		var topicInfoInsert = null;
+		if(this.state.valueTopics && this.state.valueTopics.length) {
+			let themesString = "";
+			if(this.state.topicThemes) {
+				for (let theme of this.state.topicThemes) {
+					if (themesString) {
+						themesString += ", ";
+					}
+					themesString += theme.name
+				}
+			}
+			topicInfoInsert = (
+				<div className="frame-input-wrapper-info">
+					<b>{this.state.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
+					{this.state.topicThemes.length ? themesString : "No themes"}
 				</div>
+			);
+		}
 
-				<div className="frame-input-wrapper">
+		let ret = null;
+
+
+		if (this.state.analysis && this.state.runs) {
+
+			ret = (
+				<div>
+
+					<div className="frame-input-wrapper">
 						<label className="container">
-							Topics
-							<UIObjectSelect
-								multi
-								onChange={this.onChangeTopics.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								options={TOPICS}
-								allowCreate
-								newOptionCreator={this.topicOptionFactory.bind(this)}
-								valueKey="key"
-								labelKey="topic"
-								value={this.state.valuesTopics}
+							Name
+							<Input
+								type="text"
+								name="name"
+								placeholder=" "
+								value={this.state.valueName}
+								onChange={this.onChangeName.bind(this)}
 							/>
 						</label>
-						<div className="frame-input-wrapper-info"><b>Themes:</b> {this.state.themesString}</div>
-				</div>
+					</div>
 
-				<SaveButton saved />
+					<div className="frame-input-wrapper">
+						<label className="container">
+							Topic
+							<UIObjectSelect
+								multi
+								onChange={this.onChangeObjectSelect.bind(this, "valueTopics", ObjectTypes.TOPIC)}
+								onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.TOPIC)}
+								options={this.state.topics}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.valueTopics}
+							/>
+						</label>
+						{topicInfoInsert}
+					</div>
+
+					{saveButton}
 
 
-				<div className="section-header">
-					<h3>Operations</h3>
-					<UIScreenButton basic>
-						<Icon name="configure" />
-						Configure
-					</UIScreenButton>
-				</div>
+					<div className="section-header">
+						<h3>Operations</h3>
+						<UIScreenButton basic>
+							<Icon name="configure" />
+							Configure
+						</UIScreenButton>
+					</div>
 
-				<Table celled className="fixed">
-					<thead>
+					<Table celled className="fixed">
+						<thead>
 						<tr>
 							<th>Result Attribute</th>
 							<th>Operation</th>
 							<th>Filter</th>
 						</tr>
-					</thead>
-					<tbody>
+						</thead>
+						<tbody>
 
 						<tr>
 							<td>Continuous Urban Fabric (S.L. > 80%)</td>
@@ -226,28 +382,28 @@ class ConfigAnalysis extends Component{
 							<td>Status code: 130</td>
 						</tr>
 
-					</tbody>
-				</Table>
+						</tbody>
+					</Table>
 
 
-				<div className="section-header">
-					<h3>Runs</h3>
-					<UIScreenButton basic>
-						<Icon name="plus" />
-						New run
-					</UIScreenButton>
-				</div>
+					<div className="section-header">
+						<h3>Runs</h3>
+						<UIScreenButton basic>
+							<Icon name="plus" />
+							New run
+						</UIScreenButton>
+					</div>
 
-				<Table basic="very" className="fixed">
-					<thead>
+					<Table basic="very" className="fixed">
+						<thead>
 						<tr>
 							<th>Place</th>
 							<th>Period</th>
 							<th>AU levels</th>
 							<th>Date</th>
 						</tr>
-					</thead>
-					<tbody>
+						</thead>
+						<tbody>
 
 						<tr>
 							<td>Cebu City</td>
@@ -292,11 +448,16 @@ class ConfigAnalysis extends Component{
 						</tr>
 
 
-					</tbody>
-				</Table>
+						</tbody>
+					</Table>
 
-			</div>
-		);
+				</div>
+			);
+
+		}
+
+
+		return ret;
 
 	}
 }
