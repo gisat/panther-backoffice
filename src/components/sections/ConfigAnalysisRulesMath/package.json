@@ -1,0 +1,6 @@
+{
+	"name": "ConfigAnalysisRulesMath",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ConfigAnalysisRulesMath.js"
+}

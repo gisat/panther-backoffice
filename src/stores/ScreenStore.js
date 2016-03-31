@@ -33,31 +33,24 @@ var initialScreenSets = {
 				order: 0,
 				component: ScreenAnalysesBase
 			},
-			ScreenAnalysisSpatial: {
-				order: 1,
-				size: 40,
-				position: "retracted",
-				component: ScreenAnalysisSpatial,
-				parentUrl: "/analyses/spatial"
-			},
-			ScreenAnalysisRulesSpatial: {
-				order: 2,
-				size: 80,
-				position: "retracted",
-				component: ScreenAnalysisRulesSpatial
-			},
-			ScreenAnalysisRulesLevel: {
-				order: 3,
-				size: 60,
-				position: "retracted",
-				component: ScreenAnalysisRulesLevel
-			},
-			ScreenAnalysisRulesMath: {
-				order: 4,
-				size: 80,
-				position: "retracted",
-				component: ScreenAnalysisRulesMath
-			}
+			// ScreenAnalysisRulesSpatial: {
+			// 	order: 2,
+			// 	size: 80,
+			// 	position: "retracted",
+			// 	component: ScreenAnalysisRulesSpatial
+			// },
+			// ScreenAnalysisRulesLevel: {
+			// 	order: 3,
+			// 	size: 60,
+			// 	position: "retracted",
+			// 	component: ScreenAnalysisRulesLevel
+			// },
+			// ScreenAnalysisRulesMath: {
+			// 	order: 4,
+			// 	size: 80,
+			// 	position: "retracted",
+			// 	component: ScreenAnalysisRulesMath
+			// }
 		}
 	},
 

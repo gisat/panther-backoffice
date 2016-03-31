@@ -99,6 +99,7 @@ class ScreenAnalysesBase extends Component{
 					size: 40,
 					data: {
 						objectType: responseData.objectType,
+						analysisType: responseData.analysisType,
 						objectKey: result[0].key
 					}
 				};
@@ -153,15 +154,16 @@ class ScreenAnalysesBase extends Component{
 		});
 	}
 
-	onObjectListItemClick(itemType, item, event) {
+	onObjectListItemClick(itemType, analysisType, item, event) {
 		this.context.onInteraction().call();
-		var screenName = this.props.screenKey + "-ScreenAnalysis" + itemType;
+		var screenName = this.props.screenKey + "-ScreenAnalysis" + analysisType;
 		let options = {
 			component: ScreenAnalysisConfig,
 			parentUrl: this.props.parentUrl,
 			size: 40,
 			data: {
 				objectType: itemType,
+				analysisType: analysisType,
 				objectKey: item.key
 			}
 		};
@@ -175,7 +177,8 @@ class ScreenAnalysesBase extends Component{
 		this.context.onInteraction().call();
 		let model = new AnalysisModel({analysisType: analysisType});
 		let responseData = {
-			objectType: itemType
+			objectType: itemType,
+			analysisType: analysisType
 		};
 		ActionCreator.createObjectAndRespond(model,itemType,responseData,this.getStateHash());
 		//this.changeActiveObjectListItem(itemType,null);

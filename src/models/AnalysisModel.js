@@ -114,7 +114,7 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKeys,
 				isPromise: true
 			},
-			groupAttribute: { // for spatial
+			filterAttribute: { // for spatial
 				serverName: 'groupAttribute', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -123,7 +123,7 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
-			groupAttributeSet: { // for spatial
+			filterAttributeSet: { // for spatial
 				serverName: 'groupAttributeSet', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -131,6 +131,10 @@ class AnalysisModel extends Model {
 				},
 				transformForServer: this.getKey,
 				isPromise: true
+			},
+			useSum: {
+				serverName: 'useSum', //boolean
+				sendToServer: true
 			},
 			attributeMap: { // for fid and spatial
 				serverName: 'attributeMap', //object {column: string, attribute: id}
@@ -155,7 +159,7 @@ class AnalysisModel extends Model {
 						transformForServer: this.getKey,
 						isPromise: true
 					},
-					calcAttribute: {
+					valueAttribute: {
 						serverName: 'calcAttribute',
 						sendToServer: true,
 						transformForLocal: function (data) {
@@ -164,7 +168,7 @@ class AnalysisModel extends Model {
 						transformForServer: this.getKey,
 						isPromise: true
 					},
-					calcAttributeSet: {
+					valueAttributeSet: {
 						serverName: 'calcAttributeSet',
 						sendToServer: true,
 						transformForLocal: function (data) {
@@ -173,11 +177,11 @@ class AnalysisModel extends Model {
 						transformForServer: this.getKey,
 						isPromise: true
 					},
-					groupVal: {
+					filterValue: {
 						serverName: 'groupVal',
 						sendToServer: true
 					},
-					normAttribute: {
+					weightingAttribute: {
 						serverName: 'normAttribute',
 						sendToServer: true,
 						transformForLocal: function (data) {
@@ -186,7 +190,7 @@ class AnalysisModel extends Model {
 						transformForServer: this.getKey,
 						isPromise: true
 					},
-					normAttributeSet: {
+					weightingAttributeSet: {
 						serverName: 'normAttributeSet',
 						sendToServer: true,
 						transformForLocal: function (data) {
@@ -207,3 +211,38 @@ class AnalysisModel extends Model {
 }
 
 export default AnalysisModel;
+
+/*
+Operation types:
+
+ Spatial:
+ name: 'Count',
+ type: 'count'
+
+ name: 'Avg area/length',
+ type: 'avgarea'
+
+ name: 'Sum area/length',
+ type: 'sumarea'
+
+ name: 'Sum attribute',
+ type: 'sumattr'
+
+ name: 'Avg attribute (weight area/length)',
+ type: 'avgattrarea'
+
+ name: 'Avg attribute (weight attribute)',
+ type: 'avgattrattr'
+
+
+ FID:
+ name: 'Sum area/length',
+ type: 'sum'
+
+ name: 'Avg (weight area/length)',
+ type: 'avgarea'
+
+ name: 'Avg (weight attribute)',
+ type: 'avgattr'
+
+ */

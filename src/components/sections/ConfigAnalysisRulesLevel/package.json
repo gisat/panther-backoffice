@@ -1,0 +1,6 @@
+{
+	"name": "ConfigAnalysisRulesLevel",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ConfigAnalysisRulesLevel.js"
+}
