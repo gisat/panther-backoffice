@@ -1,7 +1,7 @@
 import superagent from 'superagent';
 import path from 'path';
 
-import { publicPath, apiProtocol, apiHost} from '../config';
+import { apiPath, apiProtocol, apiHost} from '../config';
 
 class User {
 	constructor() {
@@ -21,7 +21,7 @@ let logged = new User();
 export default logged;
 
 export function login(username, password, callback) {
-	superagent("POST", apiProtocol + apiHost + path.resolve(publicPath, "/api/login/login"))
+	superagent("POST", apiProtocol + apiHost + path.join(apiPath, "/api/login/login"))
 		.send({
 			username: username,
 			password: password
