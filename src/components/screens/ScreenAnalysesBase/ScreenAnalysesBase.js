@@ -13,7 +13,7 @@ import AnalysisModel from '../../../models/AnalysisModel';
 import ActionCreator from '../../../actions/ActionCreator';
 
 import ObjectList from '../../elements/ObjectList';
-import ScreenAnalysisConfig from '../../screens/ScreenAnalysisConfig2';
+import ScreenAnalysisConfig from '../../screens/ScreenAnalysisConfig';
 
 
 var initialState = {
@@ -153,15 +153,16 @@ class ScreenAnalysesBase extends Component{
 		});
 	}
 
-	onObjectListItemClick(itemType, item, event) {
+	onObjectListItemClick(itemType, analysisType, item, event) {
 		this.context.onInteraction().call();
-		var screenName = this.props.screenKey + "-ScreenAnalysis" + itemType;
+		var screenName = this.props.screenKey + "-ScreenAnalysis" + analysisType;
 		let options = {
 			component: ScreenAnalysisConfig,
 			parentUrl: this.props.parentUrl,
 			size: 40,
 			data: {
 				objectType: itemType,
+				analysisType: analysisType,
 				objectKey: item.key
 			}
 		};
