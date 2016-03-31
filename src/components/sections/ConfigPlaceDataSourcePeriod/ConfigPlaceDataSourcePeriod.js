@@ -6,6 +6,9 @@ import _ from 'underscore';
 import classNames from 'classnames';
 import utils from '../../../utils/utils';
 
+import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
+import ActionCreator from '../../../actions/ActionCreator';
+
 import UISVG from '../../atoms/UISVG';
 import UIScreenButton from '../../atoms/UIScreenButton';
 import SaveButton from '../../atoms/SaveButton';
@@ -17,15 +20,6 @@ import Select from 'react-select';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 
-const COLUMNS = [
-			{ key: "ID_0"	},
-			{ key: "uf_00" },
-			{ key: "uf_10" },
-			{ key: "diff_uf" },
-			{ key: "fo_00" }
-		];
-const DATALAYERS = require('../../../stores/tempDataLayers');
-
 import PlaceStore from '../../../stores/PlaceStore';
 import PeriodStore from '../../../stores/PeriodStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
@@ -33,7 +27,6 @@ import AULevelStore from '../../../stores/AULevelStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
-import AnalysisStore from '../../../stores/AnalysisStore';
 import DataLayerStore from '../../../stores/DataLayerStore';
 import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
@@ -279,7 +272,8 @@ class ConfigPlaceDataSourcePeriod extends Component {
 								columns: columns,
 								valuesColumnMap: relation.columnMap,
 								//valueDataLayer: valueDataLayer,
-								valueFidColumn: relation.fidColumn
+								valueFidColumn: relation.fidColumn,
+								valueNameColumn: relation.nameColumn
 							};
 						});
 					}
@@ -387,6 +381,72 @@ class ConfigPlaceDataSourcePeriod extends Component {
 	 */
 	isStateUnchanged() {
 		let isSelectionUnchanged = true, areConfigsUnchanged = true;
+		let condition = this.stateCondition();
+		if(condition && this.state.savedState) {
+			isSelectionUnchanged = this.isSelectionUnchanged();
+			for (let relation of this.state.relations) {
+				areConfigsUnchanged = (
+					areConfigsUnchanged &&
+					this.isConfigUnchanged(relation)
+				);
+			}
+		}
+		return (isSelectionUnchanged && areConfigsUnchanged);
+	}
+	isSelectionUnchanged() {
+		return this.state.selected == this.state.savedState.selected
+	}
+	isConfigUnchanged(relation) {
+		if (this.state.relationsState[relation.key]) {
+			return _.isEqual(relation.columnMap, this.state.relationsState[relation.key].valuesColumnMap)
+		} else {
+			return true;
+		}
+	}
+
+
+	saveForm() {
+		let condition = this.stateCondition();
+		if (condition && this.state.relations) {
+
+			var actionData = [];
+			var relations = utils.clone(this.state.relations);
+
+			let isSelectionUnchanged = this.isSelectionUnchanged();
+			for (let relation of relations) {
+
+				let object = {
+					key: relation.key
+				};
+
+				let isConfigUnchanged = this.isConfigUnchanged(relation);
+				if(!isConfigUnchanged || !isSelectionUnchanged) {
+
+					if (!isConfigUnchanged) {
+
+						object.fidColumn = this.state.relationsState[relation.key].valueFidColumn;
+						object.nameColumn = this.state.relationsState[relation.key].valueNameColumn;
+						object.columnMap = this.state.relationsState[relation.key].valuesColumnMap;
+
+					}
+
+					if (!isSelectionUnchanged) {
+						object.active = (this.state.selected == relation.key);
+					}
+
+					let model = new Model[ObjectTypes.OBJECT_RELATION](object);
+					actionData.push({type: "update", model: model});
+				}
+
+			}
+
+			console.log("relations to save:", actionData);
+			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
+		}
+	}
+
+
+	stateCondition() {
 		let condition = false;
 		switch(this.props.relationsContext) {
 			case "AttSet":
@@ -420,20 +480,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 				);
 				break;
 		}
-		if(condition && this.state.savedState) {
-			isSelectionUnchanged = (
-				this.state.selected == this.state.savedState.selected
-			);
-			for (let relation of this.state.relations) {
-				if (this.state.relationsState[relation.key]) {
-					areConfigsUnchanged = (
-						areConfigsUnchanged &&
-						_.isEqual(relation.columnMap,this.state.relationsState[relation.key].valuesColumnMap)
-					);
-				}
-			}
-		}
-		return (isSelectionUnchanged && areConfigsUnchanged);
+		return condition;
 	}
 
 
@@ -495,45 +542,24 @@ class ConfigPlaceDataSourcePeriod extends Component {
 		this.context.setStateDeep.call(this, state);
 	}
 
+	onChangeNameColumn(relationKey, value, values) {
+		let state = {
+			relationsState: {
+				[relationKey]: {
+					valueNameColumn: {$set: value}
+				}
+			}
+		};
+		this.context.setStateDeep.call(this, state);
+	}
+
 
 
 	render() {
 
 		var thisComponent = this;
 		var ret = null;
-		let condition = false;
-		switch(this.props.relationsContext) {
-			case "AttSet":
-				condition = (
-					this.state.place &&
-					this.state.period &&
-					this.state.attributeSet &&
-					this.state.auLevel
-				);
-				break;
-			case "Vector":
-				condition = (
-					this.state.place &&
-					this.state.period &&
-					this.state.vectorLayer
-				);
-				break;
-			case "VectorAttSet":
-				condition = (
-					this.state.place &&
-					this.state.period &&
-					this.state.attributeSet &&
-					this.state.vectorLayer
-				);
-				break;
-			case "Raster":
-				condition = (
-					this.state.place &&
-					this.state.period &&
-					this.state.rasterLayer
-				);
-				break;
-		}
+		let condition = this.stateCondition();
 		if(condition) {
 
 			let relationsInsert = null;
@@ -549,14 +575,15 @@ class ConfigPlaceDataSourcePeriod extends Component {
 								'rsc-row': true,
 								'active': relation.active
 							});
+							
 							let analysisRelationInsert = (
 								<Checkbox
 									key={relation.key}
 									className={analysisRowClasses}
 								>
 									<UISVG src='icon-analyses.isvg' className="positive" />
-									<span className="option-id">237</span>
-									(some analysis)
+									<span className="option-id">{relation.dataSource.analysis.key}</span>
+									{relation.dataSource.analysis.name}
 								</Checkbox>
 							);
 							relationListInsert.push(analysisRelationInsert);
@@ -584,36 +611,38 @@ class ConfigPlaceDataSourcePeriod extends Component {
 							relationListInsert.push(geonodeRelationInsert);
 							if (this.state.relationsState[relation.key] && this.state.dataLayers) {
 								let attSetTableRowsInsert = [];
-								for (let att of relation.attributeSet.attributes) {
-									let record = _.find(this.state.relationsState[relation.key].valuesColumnMap, function (item) {
-										return item.attribute.key == att.key;
-									});
-									let columnInsert = null;
-									if (record) {
-										let isValueValid = _.find(this.state.relationsState[relation.key].columns, function (stateCol) {
-											return stateCol.key == record.column
+								if (relation.attributeSet) {
+									for (let att of relation.attributeSet.attributes) {
+										let record = _.find(this.state.relationsState[relation.key].valuesColumnMap, function (item) {
+											return item.attribute.key == att.key;
 										});
-										if (isValueValid) {
-											columnInsert = record.column;
+										let columnInsert = null;
+										if (record) {
+											let isValueValid = _.find(this.state.relationsState[relation.key].columns, function (stateCol) {
+												return stateCol.key == record.column
+											});
+											if (isValueValid) {
+												columnInsert = record.column;
+											}
 										}
+										let rowInsert = (
+											<tr
+												key={att.key}
+											>
+												<td className="header">{att.name}</td>
+												<td className="allowOverflow resetui">
+													<Select
+														onChange={this.onChangeAttSet.bind(this,relation.key,att.key)}
+														options={this.state.relationsState[relation.key].columns}
+														valueKey="key"
+														labelKey="name"
+														value={columnInsert}
+													/>
+												</td>
+											</tr>
+										);
+										attSetTableRowsInsert.push(rowInsert);
 									}
-									let rowInsert = (
-										<tr
-											key={att.key}
-										>
-											<td className="header">{att.name}</td>
-											<td className="allowOverflow resetui">
-												<Select
-													onChange={this.onChangeAttSet.bind(this,relation.key,att.key)}
-													options={this.state.relationsState[relation.key].columns}
-													valueKey="key"
-													labelKey="name"
-													value={columnInsert}
-												/>
-											</td>
-										</tr>
-									);
-									attSetTableRowsInsert.push(rowInsert);
 								}
 								let fidValue = null;
 								let isFidValueValid = _.find(this.state.relationsState[relation.key].columns, function (stateCol) {
@@ -621,6 +650,46 @@ class ConfigPlaceDataSourcePeriod extends Component {
 								});
 								if (isFidValueValid) {
 									fidValue = this.state.relationsState[relation.key].valueFidColumn;
+								}
+								let nameValue = null;
+								let isNameValueValid = _.find(this.state.relationsState[relation.key].columns, function (stateCol) {
+									return stateCol.key == thisComponent.state.relationsState[relation.key].valueNameColumn
+								});
+								if (isNameValueValid) {
+									nameValue = this.state.relationsState[relation.key].valueNameColumn;
+								}
+								let configTableInsert = null;
+								if (attSetTableRowsInsert.length) {
+									configTableInsert = (
+										<Table celled className="fixed">
+											<thead>
+											<tr>
+												<th>Attribute</th>
+												<th>Source column</th>
+											</tr>
+											</thead>
+											<tbody>
+
+											{attSetTableRowsInsert}
+
+											</tbody>
+										</Table>
+									);
+								}
+								let nameField = "";
+								if (this.props.relationsContext == "Vector") {
+									nameField = (
+										<label className="container">
+											Name column
+											<Select
+												onChange={this.onChangeNameColumn.bind(this, relation.key)}
+												options={this.state.relationsState[relation.key].columns}
+												valueKey="key"
+												labelKey="key"
+												value={nameValue}
+											/>
+										</label>
+									);
 								}
 								let configInsert = (
 									<div
@@ -660,19 +729,9 @@ class ConfigPlaceDataSourcePeriod extends Component {
 													/>
 												</label>
 
-												<Table celled className="fixed">
-													<thead>
-													<tr>
-														<th>Attribute</th>
-														<th>Source column</th>
-													</tr>
-													</thead>
-													<tbody>
+												{nameField}
 
-													{attSetTableRowsInsert}
-
-													</tbody>
-												</Table>
+												{configTableInsert}
 
 											</div>
 										</div>
@@ -713,7 +772,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 				<SaveButton
 					saved={this.isStateUnchanged()}
 					className="save-button"
-					//onClick={this.saveForm.bind(this)}
+					onClick={this.saveForm.bind(this)}
 				/>
 			);
 
@@ -726,7 +785,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 					{relationsInsert}
 
 					<div className="rsc-controls">
-						<IconButton
+						{/*<IconButton
 							name="plus"
 							basic
 						>
@@ -737,7 +796,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 						>
 							<Icon name="plus" />
 							New analysis run
-						</UIScreenButton>
+						</UIScreenButton>*/}
 						{saveButton}
 					</div>
 				</div>

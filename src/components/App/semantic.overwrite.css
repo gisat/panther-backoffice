@@ -38,6 +38,10 @@
 	line-height: 1.5;
 }
 
+.ui td.resetui .UIObjectSelect-item-icon {
+	line-height: 1.875rem;
+}
+
 
 /* todo merge heading + header */
 .ui.table.LinkTable tbody td.selectable.heading  {
@@ -167,6 +171,9 @@ td.selectable.selected::after {
 }
 .ui.icon.button, .ui.icon.buttons .button {
 	padding: .625rem;
+}
+.ui.smaller.button {
+	height: 2.125rem;
 }
 
 
@@ -553,5 +560,6 @@ td.selectable.selected::after {
 	border-top: 1px solid rgba(34,36,38,.1);
 	color: #444;
 	background: #b6b6b6;
+	cursor: auto;
 }
 

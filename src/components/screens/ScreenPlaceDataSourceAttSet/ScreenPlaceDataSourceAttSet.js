@@ -1,8 +1,7 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ScreenPlaceDataSourceAttSet.css';
-import withStyles from '../../../decorators/withStyles';
 
 import path from "path";
+import _ from 'underscore';
 
 import utils from '../../../utils/utils';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
@@ -11,6 +10,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 import AULevelStore from '../../../stores/AULevelStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 import PlaceStore from '../../../stores/PlaceStore';
+import ScopeStore from '../../../stores/ScopeStore';
 
 import SelectorPlaceAttSetAULevel from '../../sections/SelectorPlaceAttSetAULevel';
 import ConfigPlaceDataSource from '../../sections/ConfigPlaceDataSource';
@@ -19,6 +19,7 @@ import ListenerHandler from '../../../core/ListenerHandler';
 
 
 var initialState = {
+	scope: null,
 	places: [],
 	attributeSets: [],
 	auLevels: [],
@@ -28,7 +29,6 @@ var initialState = {
 };
 
 
-@withStyles(styles)
 class ScreenPlaceDataSourceAttSet extends Component {
 
 	static contextTypes = {
@@ -62,14 +62,34 @@ class ScreenPlaceDataSourceAttSet extends Component {
 			props = this.props;
 		}
 		return {
-			places: PlaceStore.getAll(),
-			attributeSets: AttributeSetStore.getAll(),
-			auLevels: AULevelStore.getAll()
+			scope: ScopeStore.getById(props.data.scopeKey)
 		};
 	}
 
+	setStateFromStores(props,keys) {
+		if(!props){
+			props = this.props;
+		}
+		if(
+			props.data.scopeKey &&
+			props.data.placeKey
+		) {
+			var thisComponent = this;
+			let store2state = this.store2state(props);
+			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
+
+			setStatePromise.then(function () {
+				let next2state = {
+					places: PlaceStore.getFiltered({scope: thisComponent.state.scope}),
+					attributeSets: utils.getAttSetsForScope(thisComponent.state.scope)
+				};
+				thisComponent.context.setStateFromStores.call(thisComponent, next2state);
+			});
+		}
+	}
+
 	_onStoreChange(keys) {
-		this.context.setStateFromStores.call(this, this.store2state(), keys);
+		this.setStateFromStores(this.props,keys);
 	}
 
 	componentDidMount() {
@@ -77,7 +97,7 @@ class ScreenPlaceDataSourceAttSet extends Component {
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 		this.changeListener.add(AULevelStore, ["auLevels"]);
 
-		this.context.setStateFromStores.call(this, this.store2state());
+		this.setStateFromStores();
 	}
 
 	componentWillUnmount() {
@@ -143,42 +163,56 @@ class ScreenPlaceDataSourceAttSet extends Component {
 
 	render() {
 
-		var selectorData = utils.deepClone(this.state.places);
-		selectorData.sort(function(a, b) {
-			if(!a.scope && b.scope) return 1;
-			if(a.scope && !b.scope) return -1;
-			if(a.key > b.key) return 1;
-			if(a.key < b.key) return -1;
-			return 0;
-		});
+		if(this.state.scope) {
 
-		return (
-			<div>
-				<div className="screen-setter"><div>
-					<h2>Data source selection: Attribute set</h2>
-					<SelectorPlaceAttSetAULevel
-						disabled={this.props.disabled}
-						dataPlace={selectorData}
-						dataAttSet={this.state.attributeSets} // todo filter by scope of selected place
-						dataAULevel={this.state.auLevels} // todo filter by scope of selected place
-						valuePlace={this.state.selectorValuePlace}
-						valueAttSet={this.state.selectorValueAttSet}
-						valueAULevel={this.state.selectorValueAULevel}
-						onChange={this.onSelectorChange.bind(this)}
-					/>
-				</div></div>
-				<div className="screen-content"><div>
-					<ConfigPlaceDataSource
-						disabled={this.props.disabled}
-						screenKey={this.props.screenKey}
-						relationsContext="AttSet"
-						selectorValuePlace={this.state.selectorValuePlace}
-						selectorValueAttSet={this.state.selectorValueAttSet}
-						selectorValueAULevel={this.state.selectorValueAULevel}
-					/>
-				</div></div>
-			</div>
-		);
+			var selectorDataPlace = utils.deepClone(this.state.places);
+			selectorDataPlace.sort(function (a, b) {
+				if (!a.scope && b.scope) return 1;
+				if (a.scope && !b.scope) return -1;
+				if (a.key > b.key) return 1;
+				if (a.key < b.key) return -1;
+				return 0;
+			});
+
+			var selectorDataAttSets = utils.deepClone(this.state.attributeSets.models);
+			selectorDataAttSets = _.reject(selectorDataAttSets, function (attSet) {
+				return !!attSet.vectorLayers.length
+			});
+
+			return (
+				<div>
+					<div className="screen-setter">
+						<div>
+							<h2>Data source selection: Attribute set</h2>
+							<SelectorPlaceAttSetAULevel
+								disabled={this.props.disabled}
+								dataPlace={selectorDataPlace}
+								dataAttSet={selectorDataAttSets} // todo filter by scope of selected place
+								dataAULevel={this.state.scope.levels} // todo filter by scope of selected place
+								valuePlace={this.state.selectorValuePlace}
+								valueAttSet={this.state.selectorValueAttSet}
+								valueAULevel={this.state.selectorValueAULevel}
+								onChange={this.onSelectorChange.bind(this)}
+							/>
+						</div>
+					</div>
+					<div className="screen-content">
+						<div>
+							<ConfigPlaceDataSource
+								disabled={this.props.disabled}
+								screenKey={this.props.screenKey}
+								relationsContext="AttSet"
+								selectorValuePlace={this.state.selectorValuePlace}
+								selectorValueAttSet={this.state.selectorValueAttSet}
+								selectorValueAULevel={this.state.selectorValueAULevel}
+							/>
+						</div>
+					</div>
+				</div>
+			);
+		} else {
+			return null;
+		}
 	}
 }
 

@@ -9,7 +9,9 @@ import ga from 'react-ga';
 
 import ScreenAnalysesBase from '../components/screens/ScreenAnalysesBase';
 import ScreenAnalysisSpatial from '../components/screens/ScreenAnalysisSpatial';
-import ScreenAnalysisSpatialRules from '../components/screens/ScreenAnalysisSpatialRules';
+import ScreenAnalysisRulesSpatial from '../components/screens/ScreenAnalysisRulesSpatial';
+import ScreenAnalysisRulesLevel from '../components/screens/ScreenAnalysisRulesLevel';
+import ScreenAnalysisRulesMath from '../components/screens/ScreenAnalysisRulesMath';
 
 import ScreenDashboardBase from '../components/screens/ScreenDashboardBase';
 
@@ -31,19 +33,24 @@ var initialScreenSets = {
 				order: 0,
 				component: ScreenAnalysesBase
 			},
-			ScreenAnalysisSpatial: {
-				order: 1,
-				size: 40,
-				position: "retracted",
-				component: ScreenAnalysisSpatial,
-				parentUrl: "/analyses/spatial"
-			},
-			ScreenAnalysisSpatialRules: {
-				order: 2,
-				size: 80,
-				position: "retracted",
-				component: ScreenAnalysisSpatialRules
-			}
+			// ScreenAnalysisRulesSpatial: {
+			// 	order: 2,
+			// 	size: 80,
+			// 	position: "retracted",
+			// 	component: ScreenAnalysisRulesSpatial
+			// },
+			// ScreenAnalysisRulesLevel: {
+			// 	order: 3,
+			// 	size: 60,
+			// 	position: "retracted",
+			// 	component: ScreenAnalysisRulesLevel
+			// },
+			// ScreenAnalysisRulesMath: {
+			// 	order: 4,
+			// 	size: 80,
+			// 	position: "retracted",
+			// 	component: ScreenAnalysisRulesMath
+			// }
 		}
 	},
 

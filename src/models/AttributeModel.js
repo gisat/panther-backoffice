@@ -54,11 +54,41 @@ class AttributeModel extends Model {
 			},
 			standardUnits: {
 				serverName: 'standardUnits', // text / numeric
-				sendToServer: true
+				sendToServer: true,
+				transformForLocal: function (data, serverObject) {
+					if (data) {
+						return data;
+					} else {
+						if (
+							serverObject.units == "m2"
+							//|| serverObject.units == "sqm"
+							//|| serverObject.units == "square meters"
+						) {
+							return "m2";
+						} else if (
+							serverObject.units == "km2"
+						) {
+							return "km2";
+						} else {
+							return null;
+						}
+					}
+
+				}
 			},
 			customUnits: {
 				serverName: 'units', // string
-				sendToServer: true
+				sendToServer: true,
+				transformForLocal: function (data) {
+					if (
+						data == "m2" ||
+						data == "km2"
+					) {
+						return null;
+					} else {
+						return data;
+					}
+				}
 			},
 			color: {
 				serverName: 'color', // string - hex code

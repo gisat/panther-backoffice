@@ -15,9 +15,10 @@ import LinkTableVectorByScopePlace from '../../elements/LinkTableVectorByScopePl
 import LinkTableRasterByScopePlace from '../../elements/LinkTableRasterByScopePlace';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
+import ScreenPlaceDataSourceAULevel from '../../screens/ScreenPlaceDataSourceAULevel';
 import ScreenPlaceDataSourceAttSet from '../../screens/ScreenPlaceDataSourceAttSet';
-//import ScreenPlaceDataSourceVector from '../../screens/ScreenPlaceDataSourceVector';
-//import ScreenPlaceDataSourceRaster from '../../screens/ScreenPlaceDataSourceRaster';
+import ScreenPlaceDataSourceVectorLayerAttSet from '../../screens/ScreenPlaceDataSourceVectorLayerAttSet';
+import ScreenPlaceDataSourceLayer from '../../screens/ScreenPlaceDataSourceLayer';
 
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
@@ -296,22 +297,45 @@ class PlaceRelations extends Component {
 
 	onCellClick (table, row, col) {
 		this.context.onInteraction().call();
-		var screenName = this.props.screenKey + "-ScreenPlaceDataSource" + table;
+		var screenName = this.props.screenKey + "-ScreenPlaceDataSource" + table + "Scope" + this.state.place.scope.key;
 		var screenComponent, data;
 		switch(table){
 			case "AttSet":
 				if(row==null) {
-					screenComponent = ScreenPlaceDataSourceAttSet; // todo replace
+					screenComponent = ScreenPlaceDataSourceAULevel;
 				} else {
 					screenComponent = ScreenPlaceDataSourceAttSet;
 				}
 				data = {
+					scopeKey: this.state.place.scope.key,
 					placeKey: this.props.selectorValue,
 					attSetKey: row,
 					auLevelKey: col
 				};
 				break;
-			// todo the other cases
+			case "Vector":
+				if(col==null) {
+					screenComponent = ScreenPlaceDataSourceLayer;
+				} else {
+					screenComponent = ScreenPlaceDataSourceVectorLayerAttSet;
+				}
+				data = {
+					scopeKey: this.state.place.scope.key,
+					placeKey: this.props.selectorValue,
+					objectType: ObjectTypes.VECTOR_LAYER_TEMPLATE,
+					layerKey: row,
+					attSetKey: col
+				};
+				break;
+			case "Raster":
+				screenComponent = ScreenPlaceDataSourceLayer;
+				data = {
+					scopeKey: this.state.place.scope.key,
+					placeKey: this.props.selectorValue,
+					objectType: ObjectTypes.RASTER_LAYER_TEMPLATE,
+					layerKey: row
+				};
+				break;
 		}
 		let options = {
 			component: screenComponent,
@@ -377,7 +401,7 @@ class PlaceRelations extends Component {
 							disabled={this.props.disabled}
 							relations={this.state.relationsVector}
 							place={this.state.place}
-							//onCellClick={this.onCellClick.bind(this,"Vector")}
+							onCellClick={this.onCellClick.bind(this,"Vector")}
 						/>
 
 						<h2>Raster layers</h2>
@@ -385,7 +409,7 @@ class PlaceRelations extends Component {
 							disabled={this.props.disabled}
 							relations={this.state.relationsRaster}
 							place={this.state.place}
-							//onCellClick={this.onCellClick.bind(this,"Raster")}
+							onCellClick={this.onCellClick.bind(this,"Raster")}
 						/>
 					</div>
 				);

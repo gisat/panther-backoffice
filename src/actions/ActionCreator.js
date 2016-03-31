@@ -126,8 +126,14 @@ export default {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_HANDLE;
 				break;
-			case ObjectTypes.ANALYSIS:
-				action.type = ActionTypes.ANALYSIS_HANDLE;
+			case ObjectTypes.ANALYSIS_SPATIAL:
+				action.type = ActionTypes.ANALYSIS_SPATIAL_HANDLE;
+				break;
+			case ObjectTypes.ANALYSIS_LEVEL:
+				action.type = ActionTypes.ANALYSIS_LEVEL_HANDLE;
+				break;
+			case ObjectTypes.ANALYSIS_MATH:
+				action.type = ActionTypes.ANALYSIS_MATH_HANDLE;
 				break;
 			default:
 				return;

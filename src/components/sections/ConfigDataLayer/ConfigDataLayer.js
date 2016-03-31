@@ -438,9 +438,9 @@ class ConfigDataLayer extends Component {
 			valuesAUPlaces: [],
 			valueAULevel: []
 		};
-		relations = _.reject(relations, function (item) {
-			return item.isOfAttributeSet;
-		});
+		// relations = _.reject(relations, function (item) {
+		// 	return item.isOfAttributeSet;
+		// });
 		if(relations.length > 0) {
 			//console.log("store2state relations2state():");
 			//console.log(relations);

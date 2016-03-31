@@ -56,7 +56,9 @@ class ConfigDataLayerAnalytical extends Component{
 				if(destination && destination.hasOwnProperty("key")) {
 					destinationValue = [destination.key];
 				}else{
-					destinationValue = "[" + (column.valueUseAs[0]) + "]";
+					destination = null;
+					column.valuesPeriods = null;
+					// destinationValue = "[" + (column.valueUseAs[0]) + "]";
 					console.error("Attribute "+ column.valueUseAs[0] +" doesn't exist in AU destinations!");
 				}
 			}

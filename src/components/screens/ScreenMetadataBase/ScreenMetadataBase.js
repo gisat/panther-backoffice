@@ -121,14 +121,9 @@ class ScreenMetadataBase extends Component{
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
-		//var thisComponent = this;
 		if (stateHash === this.getStateHash()) {
-			//console.info("_onStoreResponse()");
-			//console.log("result",result);
-			//console.log("responseData",responseData);
-			//console.log("stateHash",stateHash);
 			if (result) {
-				var screenName = "ScreenDataLayersBase-ScreenMetadata" + responseData.objectType;
+				var screenName = this.props.screenKey + "-ScreenMetadata" + responseData.objectType;
 				let options = {
 					component: ScreenMetadataObject,
 					parentUrl: this.props.parentUrl,
@@ -168,7 +163,7 @@ class ScreenMetadataBase extends Component{
 		this.responseListener.add(LayerGroupStore);
 		this.changeListener.add(StyleStore, ["styles"]);
 		this.responseListener.add(StyleStore);
-		
+
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
@@ -177,9 +172,9 @@ class ScreenMetadataBase extends Component{
 		this.responseListener.clean();
 	}
 
-	componentWillReceiveProps(newProps) {
-		// no props we need to react to
-	}
+	//componentWillReceiveProps(newProps) {
+	//	// no props we need to react to
+	//}
 
 	//shouldComponentUpdate() {
 	//	return false; // can we only rerender children?
@@ -230,7 +225,6 @@ class ScreenMetadataBase extends Component{
 	onObjectListItemClick(itemType, item, event) {
 		this.context.onInteraction().call();
 		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
-		//this.context.openScreen(screenName,ScreenMetadataObject,this.props.parentUrl,{size:40},{objectType: itemType,objectKey:item.key});
 		let options = {
 			component: ScreenMetadataObject,
 			parentUrl: this.props.parentUrl,
