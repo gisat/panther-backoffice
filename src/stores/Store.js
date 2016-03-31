@@ -8,7 +8,7 @@ import async from 'async';
 import DataLayerModel from '../models/DataLayerModel';
 import EventTypes from '../constants/EventTypes';
 
-import { publicPath, apiProtocol, apiHost, apiPath, tempSsid, tempSessionid, tempCsrftoken } from '../config';
+import { apiProtocol, apiHost, apiPath } from '../config';
 
 
 class Store extends EventEmitter {
