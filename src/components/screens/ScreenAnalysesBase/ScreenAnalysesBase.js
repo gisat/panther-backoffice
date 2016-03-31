@@ -99,6 +99,7 @@ class ScreenAnalysesBase extends Component{
 					size: 40,
 					data: {
 						objectType: responseData.objectType,
+						analysisType: responseData.analysisType,
 						objectKey: result[0].key
 					}
 				};
@@ -176,7 +177,8 @@ class ScreenAnalysesBase extends Component{
 		this.context.onInteraction().call();
 		let model = new AnalysisModel({analysisType: analysisType});
 		let responseData = {
-			objectType: itemType
+			objectType: itemType,
+			analysisType: analysisType
 		};
 		ActionCreator.createObjectAndRespond(model,itemType,responseData,this.getStateHash());
 		//this.changeActiveObjectListItem(itemType,null);

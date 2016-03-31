@@ -22,9 +22,9 @@ import TopicStore from '../../../stores/TopicStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
-//import ConfigAnalysisRulesSpatial from '../../sections/ConfigAnalysisRulesSpatial';
-//import ConfigAnalysisRulesLevel from '../../sections/ConfigAnalysisRulesLevel';
-//import ConfigAnalysisRulesMath from '../../sections/ConfigAnalysisRulesMath';
+import ConfigAnalysisRulesSpatial from '../../sections/ConfigAnalysisRulesSpatial';
+import ConfigAnalysisRulesLevel from '../../sections/ConfigAnalysisRulesLevel';
+import ConfigAnalysisRulesMath from '../../sections/ConfigAnalysisRulesMath';
 
 
 var initialState = {
@@ -262,40 +262,59 @@ class ConfigAnalysis extends Component {
 
 	render() {
 
-		var saveButton = " ";
-		if (this.state.analysis) {
-			saveButton = (
-				<SaveButton
-					saved={this.isStateUnchanged()}
-					className="save-button"
-					onClick={this.saveForm.bind(this)}
-				/>
-			);
-		}
-
-		var topicInfoInsert = null;
-		if(this.state.valueTopics && this.state.valueTopics.length) {
-			let themesString = "";
-			if(this.state.topicThemes) {
-				for (let theme of this.state.topicThemes) {
-					if (themesString) {
-						themesString += ", ";
-					}
-					themesString += theme.name
-				}
-			}
-			topicInfoInsert = (
-				<div className="frame-input-wrapper-info">
-					<b>{this.state.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
-					{this.state.topicThemes.length ? themesString : "No themes"}
-				</div>
-			);
-		}
 
 		let ret = null;
 
 
 		if (this.state.analysis && this.state.runs) {
+
+			var saveButton = " ";
+			if (this.state.analysis) {
+				saveButton = (
+					<SaveButton
+						saved={this.isStateUnchanged()}
+						className="save-button"
+						onClick={this.saveForm.bind(this)}
+					/>
+				);
+			}
+
+			var topicInfoInsert = null;
+			if(this.state.valueTopics && this.state.valueTopics.length) {
+				let themesString = "";
+				if(this.state.topicThemes) {
+					for (let theme of this.state.topicThemes) {
+						if (themesString) {
+							themesString += ", ";
+						}
+						themesString += theme.name
+					}
+				}
+				topicInfoInsert = (
+					<div className="frame-input-wrapper-info">
+						<b>{this.state.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
+						{this.state.topicThemes.length ? themesString : "No themes"}
+					</div>
+				);
+			}
+
+			var configComponent = "";
+			var props = {
+				disabled: this.props.disabled,
+				selectorValue: this.state.selectorValue,
+				// parentUrl: this.getUrl()
+			};
+			switch (this.state.analysis.analysisType) {
+				case "spatial":
+					configComponent = <ConfigAnalysisRulesSpatial {...props} />;
+					break;
+				case "level":
+					configComponent = <ConfigAnalysisRulesLevel {...props} />;
+					break;
+				case "math":
+					configComponent = <ConfigAnalysisRulesMath {...props} />;
+					break;
+			}
 
 			ret = (
 				<div>
@@ -336,62 +355,21 @@ class ConfigAnalysis extends Component {
 
 					<div className="section-header">
 						<h3>Operations</h3>
-						<UIScreenButton basic>
+						{/*<UIScreenButton basic>
 							<Icon name="configure" />
 							Configure
-						</UIScreenButton>
+						</UIScreenButton>*/}
 					</div>
 
-					<Table celled className="fixed">
-						<thead>
-						<tr>
-							<th>Result Attribute</th>
-							<th>Operation</th>
-							<th>Filter</th>
-						</tr>
-						</thead>
-						<tbody>
-
-						<tr>
-							<td>Continuous Urban Fabric (S.L. > 80%)</td>
-							<td>SUM (area/length)</td>
-							<td>Status code: 111</td>
-						</tr>
-
-						<tr>
-							<td>Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
-							<td>SUM (area/length)</td>
-							<td>Status code: 112</td>
-						</tr>
-
-						<tr>
-							<td>Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
-							<td>SUM (area/length)</td>
-							<td>Status code: 113</td>
-						</tr>
-
-						<tr>
-							<td>Industrial, Commercial and Transport Units</td>
-							<td>SUM (area/length)</td>
-							<td>Status code: 120, 121</td>
-						</tr>
-
-						<tr>
-							<td>Construction sites</td>
-							<td>SUM (area/length)</td>
-							<td>Status code: 130</td>
-						</tr>
-
-						</tbody>
-					</Table>
+					{configComponent}
 
 
 					<div className="section-header">
 						<h3>Runs</h3>
-						<UIScreenButton basic>
+						{/*<UIScreenButton basic>
 							<Icon name="plus" />
 							New run
-						</UIScreenButton>
+						</UIScreenButton>*/}
 					</div>
 
 					<Table basic="very" className="fixed">

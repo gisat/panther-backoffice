@@ -72,11 +72,9 @@ class ScreenAnalysisConfig extends Component{
 	}
 
 	componentDidMount() {
-		if(this.props.data.objectType) {
-			this.changeListener.add(AnalysisStore);
-			this.responseListener.add(AnalysisStore);
-			this.context.setStateFromStores.call(this, this.store2state());
-		}
+		this.changeListener.add(AnalysisStore);
+		this.responseListener.add(AnalysisStore);
+		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
 	componentWillUnmount() {
