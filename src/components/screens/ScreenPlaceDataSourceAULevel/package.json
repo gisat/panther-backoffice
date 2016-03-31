@@ -1,0 +1,6 @@
+{
+	"name": "ScreenPlaceDataSourceAULevel",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenPlaceDataSourceAULevel.js"
+}
