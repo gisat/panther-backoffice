@@ -4,12 +4,9 @@ import 'babel-core/polyfill';
 import path from 'path';
 import express from 'express';
 import React from 'react';
-import bodyParser from 'body-parser';
 import ReactDOM from 'react-dom/server';
 import Router from './routes';
 import Html from './components/Html';
-import apiproxy from './apiproxy';
-
 
 import {publicPath, serverPort} from './config';
 
@@ -19,15 +16,6 @@ const server = global.server = express();
 server.set('port', serverPort);
 
 server.use(express.static(path.join(__dirname, 'public')));
-
-//
-// Proxy server for connecting to PUMA API
-// -----------------------------------------------------------------------------
-server.use(bodyParser());
-server.post('/api-proxy/', function(req, res){
-	//console.log("°°°°°°°°°°°° PUMA proxy API server.post °°°°°°°°°°°°");
-	apiproxy(req, res);
-});
 
 //
 // Register API middleware

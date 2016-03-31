@@ -59,28 +59,6 @@ class ScreenDashboardBase extends Component{
 						</div>
 
 						<div className="frame-wrapper flexchild">
-							<span className="row left-icon">
-								<Icon name="user" />
-								Franz Maria van de la Smith-Kreuzbergbauer
-							</span>
-							<a
-								className="row left-icon right-icon"
-								href={publicPath + "/user/settings"}
-							>
-								<Icon name="setting"/>
-								<span>Settings</span>
-								<Icon name="angle double right" className="right"/>
-							</a>
-							<a
-								className="row left-icon"
-								href={publicPath + "/logout"}
-							>
-								<Icon name="sign out"/>
-								<span>Log out</span>
-							</a>
-						</div>
-
-						<div className="frame-wrapper flexchild">
 							<a className="row left-icon right-icon">
 								<Icon name="help" />
 								Help
