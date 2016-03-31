@@ -171,14 +171,15 @@ class Store extends EventEmitter {
 
 		var thisStore = this;
 		return new Promise(function (resolve, reject) {
-
 			var url = apiProtocol + apiHost + path.join(apiPath, thisStore.getApiUrl()).replace(/\\/g, "/");
-			superagent(method.toUpperCase(), url)
-				.send(object)
-				.query({justMine: true})
+			var communicationObject = superagent(method.toUpperCase(), url);
+			communicationObject._callback = function(){
+				console.log(arguments[0]);
+			};
+				communicationObject.send(object)
 				.withCredentials()
-				.set('Access-Control-Allow-Origin', 'true')
 				.set('Accept', 'application/json')
+				.set('Access-Control-Allow-Origin', 'true')
 				.set('Access-Control-Allow-Credentials', 'true')
 				.end(function(err, res){
 					if(err || typeof res == 'undefined'){

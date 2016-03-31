@@ -25,7 +25,6 @@ const router = new Router(on => {
 		if(!logged.isLogged()){
 			return <LoginPage />
 		} else {
-			console.log("Successfully logged");
 			const component = await next();
 			return component;
 		}
