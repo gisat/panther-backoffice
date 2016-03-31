@@ -35,8 +35,6 @@ class ConfigAnalysisRulesMath extends Component {
 		let ret = null;
 		if (this.props.analysis) {
 
-			console.log("analysis",this.props.analysis);
-
 			let rowsInsert = [];
 
 			let operationInsert = [];

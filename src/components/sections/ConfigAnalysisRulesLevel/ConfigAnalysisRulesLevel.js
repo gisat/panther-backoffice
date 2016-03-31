@@ -40,8 +40,6 @@ class ConfigAnalysisRulesLevel extends Component {
 		let ret = null;
 		if (this.props.analysis) {
 
-			console.log("analysis",this.props.analysis);
-
 			let rowsInsert = [];
 			for (let record of this.props.analysis.attributeMap) {
 
