@@ -18,7 +18,6 @@ class User {
 }
 
 let logged = new User();
-console.log(logged);
 export default logged;
 
 export function login(username, password, callback) {
@@ -37,12 +36,10 @@ export function login(username, password, callback) {
 					err: err
 				});
 			} else {
-				console.log(res);
 				// ssid
 				// sessionid
 				// csrftoken
 				logged.login();
-				console.log(logged);
 				callback({
 					success: res
 				});
