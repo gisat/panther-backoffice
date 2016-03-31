@@ -315,6 +315,59 @@ class ConfigAnalysis extends Component {
 					break;
 			}
 
+
+			var runsTableRows = [];
+			_.each(this.state.runs, function(analysisRunModel){
+
+				// create AU Levels string
+				var auLevels = [];
+				_.each(analysisRunModel.layers, function(auLevelModel){
+					auLevels.push(auLevelModel.name);
+				}, this);
+
+				// create Finished string
+				var finished = "";
+				var finishedTooltip = analysisRunModel.status;
+
+				if(typeof analysisRunModel.finished == "undefined"){
+					finished = "running&hellip;";
+				} else {
+					if(typeof analysisRunModel.status != "undefined" && analysisRunModel.status.substr(0,8) == "Failed. ") {
+						finished = "failed";
+					} else {
+						if (analysisRunModel.finished instanceof Date) {
+							finished = analysisRunModel.finished.getFullYear() + "-" + analysisRunModel.finished.getMonth() + "-" + analysisRunModel.finished.getDate();
+						} else {
+							finished = analysisRunModel.finished;
+						}
+					}
+				}
+
+				var row = (
+					<tr>
+						<td>{analysisRunModel.place.name}</td>
+						<td>{analysisRunModel.period.name}</td>
+						<td>{auLevels.join(", ")}</td>
+						<td title={finishedTooltip}>{finished}</td>
+					</tr>
+				);
+				runsTableRows.push(row);
+			}, this);
+			var runsTable = (<Table basic="very" className="fixed">
+				<thead>
+					<tr>
+						<th>Place</th>
+						<th>Period</th>
+						<th>AU levels</th>
+						<th>Finished</th>
+					</tr>
+				</thead>
+				<tbody>
+					{runsTableRows}
+				</tbody>
+			</Table>);
+
+
 			ret = (
 				<div>
 
@@ -371,62 +424,7 @@ class ConfigAnalysis extends Component {
 						</UIScreenButton>*/}
 					</div>
 
-					<Table basic="very" className="fixed">
-						<thead>
-						<tr>
-							<th>Place</th>
-							<th>Period</th>
-							<th>AU levels</th>
-							<th>Date</th>
-						</tr>
-						</thead>
-						<tbody>
-
-						<tr>
-							<td>Cebu City</td>
-							<td>2000</td>
-							<td>GADM2</td>
-							<td>2015-11-17</td>
-						</tr>
-
-						<tr>
-							<td>Cebu City</td>
-							<td>2010</td>
-							<td>GADM2</td>
-							<td>2015-11-17</td>
-						</tr>
-
-						<tr>
-							<td>Hai Phong</td>
-							<td>2000</td>
-							<td>GADM2</td>
-							<td>2015-11-17</td>
-						</tr>
-
-						<tr>
-							<td>Hai Phong</td>
-							<td>2010</td>
-							<td>GADM2</td>
-							<td>2015-11-17</td>
-						</tr>
-
-						<tr>
-							<td>Ulaanbaatar</td>
-							<td>2000</td>
-							<td>GADM2</td>
-							<td>2015-11-17</td>
-						</tr>
-
-						<tr>
-							<td>Ulaanbaatar</td>
-							<td>2010</td>
-							<td>GADM2</td>
-							<td>2015-11-17</td>
-						</tr>
-
-
-						</tbody>
-					</Table>
+					{runsTable}
 
 				</div>
 			);
