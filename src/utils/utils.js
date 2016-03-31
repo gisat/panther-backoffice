@@ -270,7 +270,10 @@ export default {
 					for(let theme of themeModels){
 						if(theme.hasOwnProperty("topics")) {
 							for (let topic of theme.topics) {
-								if(_.contains(topicModels,topic)){
+								if(
+									_.contains(topicModels,topic) &&
+									!_.contains(themes, theme)
+								){
 									themes.push(theme);
 								}
 							}
