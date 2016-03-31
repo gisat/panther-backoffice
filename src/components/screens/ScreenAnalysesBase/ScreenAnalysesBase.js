@@ -13,7 +13,7 @@ import AnalysisModel from '../../../models/AnalysisModel';
 import ActionCreator from '../../../actions/ActionCreator';
 
 import ObjectList from '../../elements/ObjectList';
-import ScreenAnalysisConfig from '../../screens/ScreenAnalysisConfig';
+import ScreenAnalysisConfig from '../../screens/ScreenAnalysisConfig2';
 
 
 var initialState = {
