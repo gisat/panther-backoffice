@@ -301,8 +301,7 @@ class ConfigAnalysis extends Component {
 			var configComponent = "";
 			var props = {
 				disabled: this.props.disabled,
-				selectorValue: this.state.selectorValue,
-				// parentUrl: this.getUrl()
+				analysis: this.state.analysis
 			};
 			switch (this.state.analysis.analysisType) {
 				case "spatial":
