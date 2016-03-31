@@ -9,155 +9,81 @@ import Select from 'react-select';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
 
-const OPERATIONS = [
-			{ key: "COUNT", name: "COUNT"	},
-			{ key: "SUM", name: "SUM (area/length)" },
-			{ key: "SUMATT", name: "SUM (attribute)" },
-			{ key: "AVG", name: "AVERAGE (area/length)" },
-			{ key: "AVGATT", name: "AVERAGE (attribute)" },
-			{ key: "AVGATTATT", name: "AVERAGE (attribute), weighted by attribute" }
-		];
-const ATTRIBUTES = [
-			{
-				key: 135,
-				attset: "Land cover classes",
-				name: "Continuous Urban Fabric (S.L. > 80%)"
-			}, {
-				key: 136,
-				attset: "Land cover classes",
-				name: "Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)"
-			}, {
-				key: 137,
-				attset: "Land cover classes",
-				name: "Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)"
-			}, {
-				key: 138,
-				attset: "Land cover classes",
-				name: "Industrial, Commercial and Transport Units"
-			}, {
-				key: 139,
-				attset: "Land cover classes",
-				name: "Construction sites"
-			}, {
-				key: 140,
-				attset: "Land cover classes",
-				name: "Urban greenery"
-			}, {
-				key: 160,
-				attset: "Land cover feature data",
-				name: "Population"
-			}, {
-				key: 162,
-				attset: "Land cover feature data",
-				name: "Drawing a blank"
-			}
-		];
-const STATUSCODES = [
-			{
-				key: 111
-			}, {
-				key: 112
-			}, {
-				key: 113
-			}, {
-				key: 120
-			}, {
-				key: 130
-			}, {
-				key: 140
-			}, {
-				key: 200
-			}, {
-				key: 310
-			}, {
-				key: 320
-			}, {
-				key: 330
-			}, {
-				key: 510
-			}, {
-				key: 520
-			}
-];
+import utils from '../../../utils/utils';
+import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
+
 const ATTSETS = [
 			{ key: 352, name: "Land Cover classes L3" },
 			{ key: 623, name: "Aggregated LC Classes Formation" },
 			{ key: 18, name: "Populations1" },
-			{ key: 28, name: "Status code" },
+			{ key: 28, name: "Status code" }
 		];
 
 @withStyles(styles)
 class ScreenAnalysisRulesMath extends Component{
 
+	static contextTypes = {
+		setStateFromStores: PropTypes.func.isRequired,
+		onInteraction: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired
+	};
+
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			valueResultAttSet: [352],
-			valueFilterAttSet: [28],
-			themesString: "",
+			valueResultAttSets: [352],
+			valueMapMathAttSets: {
+				352: {
+					1: [28],
+					2: [18]
+				}
+			},
+			valueMapUseSum: {
+				352: true
+			},
 			data: this.props.data
 		};
 
 	}
 
-	getUrl() {
-		return path.join(this.props.parentUrl, "rules");
+	//getUrl() {
+	//	return path.join(this.props.parentUrl, "rules");
+	//}
+
+	onChangeResultAttSets (value, values) {
+		//values = utils.handleNewObjects(values, ObjectTypes.ATTRIBUTE_SET, {stateKey: "valueResultAttSet"}, this.getStateHash());
+		values = value; // temp
+		this.setState({
+			valueResultAttSets: values
+		});
 	}
 
-
-	handleNewObjects(values, store) {
-		var newValues = [];
-		for (var singleValue of values) {
-			if(singleValue.create){
-				// replace with actual object creation and config screen opening
-				delete singleValue.create;
-				delete singleValue.label;
-				delete singleValue.value;
-				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				store.push(singleValue);
+	onChangeMathAttSet (resultAttSetKey, mathAttSetIndex, value, values) {
+		//values = utils.handleNewObjects(values, ObjectTypes.ATTRIBUTE_SET, {stateKey: "valueResultAttSet"}, this.getStateHash());
+		values = value; // temp
+		let newState = {
+			valueMapMathAttSets: {
+				[resultAttSetKey]: {
+					[mathAttSetIndex]: {$set: values}
+				}
 			}
-			newValues.push(singleValue.key);
-		}
-		return newValues;
+		};
+		this.context.setStateDeep.call(this,newState);
 	}
 
-	onChangeFeatureLayer (value, values) {
-		//values = this.handleNewObjects(values, ATTSETS);
-		this.setState({
-			valueFeatureLayer: value
-		});
-	}
-
-	onChangeResultAttSet (value, values) {
-		//values = this.handleNewObjects(values, ATTSETS);
-		this.setState({
-			valueResultAttSet: value
-		});
-	}
-
-	onChangeFilterAttSet (value, values) {
-		//values = this.handleNewObjects(values, ATTSETS);
-		this.setState({
-			valueFilterAttSet: value
-		});
+	onChangeOperation (resultAttSetKey) {
+		let newState = {
+			valueMapUseSum: {
+				[resultAttSetKey]: {$set: !this.state.valueMapUseSum[resultAttSetKey]}
+			}
+		};
+		this.context.setStateDeep.call(this,newState);
 	}
 
 
 	onObjectClick (value, event) {
 		console.log("yay! " + value["key"]);
-	}
-
-
-	keyNameOptionFactory (inputValue) {
-		var newOption = {
-				key: inputValue,
-				name: inputValue,
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-		return newOption;
 	}
 
 
@@ -168,213 +94,71 @@ class ScreenAnalysisRulesMath extends Component{
 
 					<div className="frame-input-wrapper">
 						<label className="container">
-							Feature layer (vector layer template)
+							Result attribute sets
 							<UIObjectSelect
-								onChange={this.onChangeFeatureLayer.bind(this)}
+								multi
+								onChange={this.onChangeResultAttSets.bind(this)}
 								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								//options={this.state.vectorLayerTemplates}
+								options={ATTSETS}
 								valueKey="key"
 								labelKey="name"
-								//value={this.state.valueFeatureLayer}
+								value={this.state.valueResultAttSets}
 								className="template"
 							/>
 						</label>
 					</div>
-
-					<div className="frame-input-wrapper">
-						<label className="container">
-							Result attribute set
-							<UIObjectSelect
-								onChange={this.onChangeResultAttSet.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								options={ATTSETS}
-								valueKey="key"
-								labelKey="name"
-								value={this.state.valueResultAttSet}
-								className="template"
-							/>
-						</label>
-					</div>
-
-				<div className="frame-input-wrapper">
-						<label className="container">
-							Filter attribute set
-							<UIObjectSelect
-								onChange={this.onChangeFilterAttSet.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								options={ATTSETS}
-								valueKey="key"
-								labelKey="name"
-								value={this.state.valueFilterAttSet}
-								className="template"
-							/>
-						</label>
-				</div>
 
 				<Table celled className="fixed" id="AnalysisSpatialRuleTable">
 					<thead>
 						<tr>
+							<th>Result attribute set</th>
 							<th>Operation</th>
-							<th colSpan="2"></th>
-							<th>Filter</th>
 						</tr>
 					</thead>
 					<tbody>
 
-						<tr className="row-header">
-							<td colSpan="4" className="resetui">Continuous Urban Fabric (S.L. > 80%)</td>
-						</tr>
 						<tr>
 							<td className="allowOverflow resetui">
-								<label className="container">
-									Operation
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={OPERATIONS}
+								Land Cover classes L3
+							</td>
+							<td className="allowOverflow resetui">
+								<div className="ptr-analysis-operation-row">
+									<div className="ptr-analysis-operation-symbol none">
+									</div>
+									<UIObjectSelect
+										onChange={this.onChangeMathAttSet.bind(this,'352','1')}
+										onOptionLabelClick={this.onObjectClick.bind(this)}
+										options={ATTSETS}
 										valueKey="key"
 										labelKey="name"
-										//inputProps={selectInputProps}
-										value="SUM"
+										value={this.state.valueMapMathAttSets['352']['1']}
+										className="template"
 									/>
-								</label>
-							</td>
-							<td colSpan="2"></td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Status code:
-									<Input
-										type="text"
-										name="name"
-										placeholder=" "
-										defaultValue="111" // remove
-										//value={this.state.valueWhatever}
-										//onChange={this.onChangeWhatever.bind(this)}
+								</div>
+								<div className="ptr-analysis-operation-row">
+									<div className="ptr-analysis-operation-symbol plus">
+										<IconButton
+											basic
+											name={this.state.valueMapUseSum['352'] ? "plus" : "minus"}
+											size="smaller"
+											onClick={this.onChangeOperation.bind(this,'352')}
+										/>
+									</div>
+									<UIObjectSelect
+										onChange={this.onChangeMathAttSet.bind(this,'352','2')}
+										onOptionLabelClick={this.onObjectClick.bind(this)}
+										options={ATTSETS}
+										valueKey="key"
+										labelKey="name"
+										value={this.state.valueMapMathAttSets['352']['2']}
+										className="template"
 									/>
-								</label>
+								</div>
 							</td>
 						</tr>
 
 					</tbody>
-					<tbody className="internal row">
 
-						<tr className="row-header">
-							<td colSpan="4" className="resetui">Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
-						</tr>
-						<tr>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Operation
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={OPERATIONS}
-										valueKey="key"
-										labelKey="name"
-										//inputProps={selectInputProps}
-										value="AVGATTATT"
-									/>
-								</label>
-							</td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Attribute to average
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={ATTRIBUTES}
-										valueKey="key"
-										labelKey="name"
-										//inputProps={selectInputProps}
-										value="160"
-									/>
-								</label>
-							</td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Weighting attribute
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={ATTRIBUTES}
-										valueKey="key"
-										labelKey="name"
-										//inputProps={selectInputProps}
-										value="162"
-									/>
-								</label>
-							</td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Status code:
-									<Input
-										type="text"
-										name="name"
-										placeholder=" "
-										defaultValue="112" // remove
-										//value={this.state.valueWhatever}
-										//onChange={this.onChangeWhatever.bind(this)}
-									/>
-								</label>
-							</td>
-						</tr>
-
-					</tbody>
-					<tbody className="internal row">
-
-						<tr className="row-header">
-							<td colSpan="4" className="resetui">Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
-						</tr>
-						<tr>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Operation
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={OPERATIONS}
-										valueKey="key"
-										labelKey="name"
-										//inputProps={selectInputProps}
-										value="SUMATT"
-									/>
-								</label>
-							</td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Attribute to sum
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={ATTRIBUTES}
-										valueKey="key"
-										labelKey="name"
-										//inputProps={selectInputProps}
-										value="160"
-									/>
-								</label>
-							</td>
-							<td></td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Status code:
-									<Input
-										type="text"
-										name="name"
-										placeholder=" "
-										defaultValue="113" // remove
-										//value={this.state.valueWhatever}
-										//onChange={this.onChangeWhatever.bind(this)}
-									/>
-								</label>
-							</td>
-						</tr>
-
-
-					</tbody>
 				</Table>
 
 					<SaveButton saved />
