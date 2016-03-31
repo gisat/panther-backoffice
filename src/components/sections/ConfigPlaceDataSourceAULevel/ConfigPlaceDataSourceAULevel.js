@@ -259,45 +259,45 @@ class ConfigPlaceDataSourceAULevel extends Component {
 	}
 
 
-	//saveForm() {
-	//	let condition = this.stateCondition();
-	//	if (condition && this.state.relations) {
-	//
-	//		var actionData = [];
-	//		var relations = utils.clone(this.state.relations);
-	//
-	//		let isSelectionUnchanged = this.isSelectionUnchanged();
-	//		for (let relation of relations) {
-	//
-	//			let object = {
-	//				key: relation.key
-	//			};
-	//
-	//			let isConfigUnchanged = this.isConfigUnchanged(relation);
-	//			if(!isConfigUnchanged || !isSelectionUnchanged) {
-	//
-	//				if (!isConfigUnchanged) {
-	//
-	//					object.fidColumn = this.state.relationsState[relation.key].valueFidColumn;
-	//					object.nameColumn = this.state.relationsState[relation.key].valueNameColumn;
-	//					object.columnMap = this.state.relationsState[relation.key].valuesColumnMap;
-	//
-	//				}
-	//
-	//				if (!isSelectionUnchanged) {
-	//					object.active = (this.state.selected == relation.key);
-	//				}
-	//
-	//				let model = new Model[ObjectTypes.OBJECT_RELATION](object);
-	//				actionData.push({type: "update", model: model});
-	//			}
-	//
-	//		}
-	//
-	//		console.log("relations to save:", actionData);
-	//		ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
-	//	}
-	//}
+	saveForm() {
+		if (
+			this.state.relations &&
+			this.state.valueDataLayer &&
+			this.state.valueFidColumn
+		) {
+
+			var actionData = [];
+			var relations = utils.clone(this.state.relations);
+
+			for (let relation of relations) {
+
+				let dataSource = _.findWhere(this.state.dataLayers, {key: this.state.valueDataLayer});
+
+				let object = {
+					key: relation.key,
+					dataSource: dataSource,
+					fidColumn: this.state.valueFidColumn
+				};
+				if (this.state.valueNameColumn) {
+					object.nameColumn = this.state.valueNameColumn;
+				} else if (this.state.savedState.valueNameColumn) {
+					object.nameColumn = null;
+				}
+				if (this.state.valueParentColumn) {
+					object.parentColumn = this.state.valueParentColumn;
+				} else if (this.state.savedState.valueParentColumn) {
+					object.parentColumn = null;
+				}
+
+				let model = new Model[ObjectTypes.OBJECT_RELATION](object);
+				actionData.push({type: "update", model: model});
+
+			}
+
+			//console.log("relations to save:", actionData);
+			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
+		}
+	}
 
 
 	onChangeDataLayer(value, values) {
@@ -342,7 +342,7 @@ class ConfigPlaceDataSourceAULevel extends Component {
 				<SaveButton
 					saved={this.isStateUnchanged()}
 					className="save-button"
-					//onClick={this.saveForm.bind(this)}
+					onClick={this.saveForm.bind(this)}
 				/>
 			);
 
