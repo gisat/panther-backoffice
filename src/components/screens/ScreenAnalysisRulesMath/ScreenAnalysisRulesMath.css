@@ -4,3 +4,15 @@
 #AnalysisSpatialRuleTable thead tr th:nth-child(2) {
 	border-left:0;
 }
+
+.ptr-analysis-operation-row {
+	display: flex;
+	margin-bottom: .5rem;
+}
+.ptr-analysis-operation-row > div {
+	flex-grow: 1;
+}
+.ptr-analysis-operation-row .ptr-analysis-operation-symbol {
+	width: 3rem;
+	flex-grow: 0;
+}
