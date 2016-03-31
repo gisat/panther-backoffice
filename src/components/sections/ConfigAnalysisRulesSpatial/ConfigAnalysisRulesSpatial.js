@@ -50,11 +50,16 @@ class ConfigAnalysisRulesSpatial extends Component {
 
 				let operation = _.findWhere(OPERATIONS,{key: record.operationType});
 
+				let filter = "";
+				if (this.props.analysis.filterAttribute) {
+					filter = this.props.analysis.filterAttribute.name + ": " + record.filterValue;
+				}
+
 				let row = (
 					<tr>
 						<td>{record.attribute.name}</td>
 						<td>{operation.name}</td>
-						<td>{this.props.analysis.filterAttribute.name + ": " + record.filterValue}</td>
+						<td>{filter}</td>
 					</tr>
 				);
 
