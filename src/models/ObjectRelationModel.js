@@ -6,6 +6,7 @@ import DataLayerStore from '../stores/DataLayerStore';
 import PlaceStore from '../stores/PlaceStore';
 import PeriodStore from '../stores/PeriodStore';
 import AttributeStore from '../stores/AttributeStore';
+import AnalysisRunStore from '../stores/AnalysisRunStore';
 
 import DataLayerModel from '../models/DataLayerModel';
 
@@ -167,7 +168,8 @@ class ObjectRelationModel extends Model {
 
 	transformDataSourceForLocal (data) {
 		if (~data.indexOf("analysis:")) {
-			return Promise.resolve(null); // todo process an_analysisRunId_auLevel
+			let id = data.split("_")[1];
+			return AnalysisRunStore.getById(id); // todo process an_analysisRunId_auLevel
 		} else {
 			return DataLayerStore.getById(data)
 		}

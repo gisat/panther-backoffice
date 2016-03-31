@@ -27,7 +27,6 @@ import AULevelStore from '../../../stores/AULevelStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
-import AnalysisStore from '../../../stores/AnalysisStore';
 import DataLayerStore from '../../../stores/DataLayerStore';
 import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
@@ -576,14 +575,15 @@ class ConfigPlaceDataSourcePeriod extends Component {
 								'rsc-row': true,
 								'active': relation.active
 							});
+							
 							let analysisRelationInsert = (
 								<Checkbox
 									key={relation.key}
 									className={analysisRowClasses}
 								>
 									<UISVG src='icon-analyses.isvg' className="positive" />
-									<span className="option-id">237</span>
-									(some analysis)
+									<span className="option-id">{relation.dataSource.analysis.key}</span>
+									{relation.dataSource.analysis.name}
 								</Checkbox>
 							);
 							relationListInsert.push(analysisRelationInsert);
