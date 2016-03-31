@@ -1,0 +1,6 @@
+{
+	"name": "ConfigAnalysis",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ConfigAnalysis.js"
+}

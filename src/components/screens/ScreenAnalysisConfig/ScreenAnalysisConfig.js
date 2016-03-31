@@ -10,7 +10,7 @@ import ListenerHandler from '../../../core/ListenerHandler';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
 
 import SelectorAnalysis from '../../sections/SelectorAnalysis';
-import ConfigAnalysisSpatial from '../../sections/ConfigAnalysisSpatial';
+import ConfigAnalysis from '../../sections/ConfigAnalysis';
 
 import AnalysisStore from '../../../stores/AnalysisStore';
 import AnalysisModel from '../../../models/AnalysisModel';
@@ -154,7 +154,7 @@ class ScreenAnalysisConfig extends Component{
 						/>
 					</div></div>
 					<div className="screen-content"><div>
-						<ConfigAnalysisSpatial
+						<ConfigAnalysis
 							disabled={this.props.disabled}
 							screenKey={this.props.screenKey}
 							selectorValue={this.state.selectorValue}
