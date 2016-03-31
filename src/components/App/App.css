@@ -1478,6 +1478,12 @@ todo hex colours, button icons */
 }
 
 
+.ptr-analysis-placeholder {
+	display: inline-block;
+	width: 1.3rem;
+}
+
+
 /* ==== development === */
 
 /* todo 1.25 margins */
