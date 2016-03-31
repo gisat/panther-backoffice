@@ -132,6 +132,10 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
+			useSum: {
+				serverName: 'useSum', //boolean
+				sendToServer: true
+			},
 			attributeMap: { // for fid and spatial
 				serverName: 'attributeMap', //object {column: string, attribute: id}
 				sendToServer: true,
