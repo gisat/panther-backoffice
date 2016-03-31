@@ -207,3 +207,38 @@ class AnalysisModel extends Model {
 }
 
 export default AnalysisModel;
+
+/*
+Operation types:
+
+ Spatial:
+ name: 'Count',
+ type: 'count'
+
+ name: 'Avg area/length',
+ type: 'avgarea'
+
+ name: 'Sum area/length',
+ type: 'sumarea'
+
+ name: 'Sum attribute',
+ type: 'sumattr'
+
+ name: 'Avg attribute (weight area/length)',
+ type: 'avgattrarea'
+
+ name: 'Avg attribute (weight attribute)',
+ type: 'avgattrattr'
+
+
+ FID:
+ name: 'Sum area/length',
+ type: 'sum'
+
+ name: 'Avg (weight area/length)',
+ type: 'avgarea'
+
+ name: 'Avg (weight attribute)',
+ type: 'avgattr'
+
+ */
