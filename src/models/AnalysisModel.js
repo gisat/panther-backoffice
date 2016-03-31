@@ -114,7 +114,7 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKeys,
 				isPromise: true
 			},
-			groupAttribute: { // for spatial
+			filterAttribute: { // for spatial
 				serverName: 'groupAttribute', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -123,7 +123,7 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
-			groupAttributeSet: { // for spatial
+			filterAttributeSet: { // for spatial
 				serverName: 'groupAttributeSet', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -155,7 +155,7 @@ class AnalysisModel extends Model {
 						transformForServer: this.getKey,
 						isPromise: true
 					},
-					calcAttribute: {
+					valueAttribute: {
 						serverName: 'calcAttribute',
 						sendToServer: true,
 						transformForLocal: function (data) {
@@ -164,7 +164,7 @@ class AnalysisModel extends Model {
 						transformForServer: this.getKey,
 						isPromise: true
 					},
-					calcAttributeSet: {
+					valueAttributeSet: {
 						serverName: 'calcAttributeSet',
 						sendToServer: true,
 						transformForLocal: function (data) {
@@ -173,11 +173,11 @@ class AnalysisModel extends Model {
 						transformForServer: this.getKey,
 						isPromise: true
 					},
-					groupVal: {
+					filterValue: {
 						serverName: 'groupVal',
 						sendToServer: true
 					},
-					normAttribute: {
+					weightingAttribute: {
 						serverName: 'normAttribute',
 						sendToServer: true,
 						transformForLocal: function (data) {
@@ -186,7 +186,7 @@ class AnalysisModel extends Model {
 						transformForServer: this.getKey,
 						isPromise: true
 					},
-					normAttributeSet: {
+					weightingAttributeSet: {
 						serverName: 'normAttributeSet',
 						sendToServer: true,
 						transformForLocal: function (data) {
