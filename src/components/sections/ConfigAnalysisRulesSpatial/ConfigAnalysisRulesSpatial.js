@@ -71,7 +71,7 @@ class ConfigAnalysisRulesSpatial extends Component {
 				<Table celled className="fixed">
 					<thead>
 					<tr>
-						<th>Result Attribute</th>
+						<th>Result attribute</th>
 						<th>Operation</th>
 						<th>Filter</th>
 					</tr>
