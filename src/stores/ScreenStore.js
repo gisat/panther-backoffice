@@ -593,8 +593,10 @@ class ScreenStore extends Store {
 							}
 
 							//if (typeof size == "undefined") retractAllFurther = true;
-							if(newScreen.contentAlign == "fill") retractAllFurther = true;
-							if(typeof newScreen.size == "undefined") retractAllLeftFrom = Math.max(retractAllLeftFrom, record.order);
+							if(record.screen.contentAlign == "fill") retractAllFurther = true;
+							if(typeof record.screen.size == "undefined") {
+								retractAllLeftFrom = Math.max(retractAllLeftFrom, record.screen.order);
+							}
 
 						} else if (record.screen.position == "retracted") {
 							// asi nic?
