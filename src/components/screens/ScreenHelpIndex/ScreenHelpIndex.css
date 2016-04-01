@@ -1,54 +1,24 @@
-.flex-block {
-	display: flex;
-	flex-wrap: wrap;
-	align-content: flex-start;
+
+.help-index {
+	width: 40rem;
 }
 
-.frame-wrapper.flexchild {
-	margin: 0 1rem 1.5rem;
-}
-.frame-wrapper > .row {
+.help-link {
 	display: block;
-	width: 100%;
-	height: 2.5rem;
-	line-height: 2.5rem;
-	padding: 0 1rem;
-	border-bottom: 1px solid rgba(0,0,0,.15);
+	border-bottom: 1px solid rgba(0,0,0,.05);
+	padding: .5rem 1rem;
+	cursor: pointer;
 }
-
-a.row:hover {
+.help-link:hover {
 	background: rgba(255,255,255,.1);
 }
-.row.left-icon {
-	padding-left: 2.2rem;
-	position: relative;
+h3 + .help-link {
+	border-top: 1px solid rgba(0,0,0,.05);
 }
-.row i {
-	font-size: 1rem;
-	position: absolute;
+.help-link > span {
+	display: block;
+	line-height: 1.5rem;
 }
-.row i.angle.double.right {
-	font-size: 1.125rem;
-}
-.row.left-icon i {
-	left: .7rem;
-	top:.07rem;
-}
-.row.right-icon {
-	padding-right: 4rem;
-	position: relative;
-}
-.row.right-icon i.right {
-	right: .5rem;
-	left: auto;
-	top:.07rem;
-	color:#999;
-}
-
-
-.pumalogo {
-	min-width: 90px;
-	min-height: 80px;
-
-	background: 10px 20px url("../../../public/puma-logo.png") no-repeat;
+.help-link span.description {
+	color: #888;
 }
