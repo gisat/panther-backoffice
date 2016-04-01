@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenDashboardBase.css';
 import withStyles from '../../../decorators/withStyles';
 
-import { publicPath } from '../../../config';
+import { geonodeProtocol, geonodeHost } from '../../../config';
 
 import { Icon } from '../../SEUI/elements';
 
@@ -13,8 +13,8 @@ class ScreenDashboardBase extends Component{
 	render() {
 
 		// todo config
-		var geoNodeAddress = "http://37.205.9.78/";
-		var geoServerAddress = "http://37.205.9.78/geoserver/";
+		var geoNodeAddress = geonodeProtocol + geonodeHost + "/";
+		var geoServerAddress = geoNodeAddress + "geoserver/";
 
 		return (
 			<div>
