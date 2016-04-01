@@ -269,10 +269,11 @@ label.container {
 .screen-content {
 	margin-bottom: 5rem;
 }
-.screen-setter > div {
+.screen-setter > div,
+.screen-content-only > div {
 	padding:.9375rem 1.875rem;
 }
-.screen-content > div{
+.screen-content > div {
 	padding: 1.875rem;
 	position: relative;
 }

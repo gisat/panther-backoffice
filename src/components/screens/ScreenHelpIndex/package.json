@@ -1,0 +1,6 @@
+{
+	"name": "ScreenHelpIndex",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenHelpIndex.js"
+}
