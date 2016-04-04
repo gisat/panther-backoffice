@@ -9,6 +9,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 
 import { Icon } from '../../SEUI/elements';
 
+import ScreenHelpTopicArchitecture from '../help/ScreenHelpTopicArchitecture';
 import ScreenHelpTopicMetadata from '../help/ScreenHelpTopicMetadata';
 
 
@@ -27,6 +28,9 @@ class ScreenHelpIndex extends Component {
 		let component = null;
 		let size = 50;
 		switch (helpScreenKey) {
+			case 'TopicArchitecture':
+				component = ScreenHelpTopicArchitecture;
+				break;
 			case 'TopicMetadata':
 				component = ScreenHelpTopicMetadata;
 				break;
