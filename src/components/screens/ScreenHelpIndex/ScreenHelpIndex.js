@@ -84,11 +84,11 @@ class ScreenHelpIndex extends Component {
 							Sections and controls in Back Office
 						</span>
 					</a>
-					<a className="help-link">
+					{/*<a className="help-link">
 						<span>
 							Keyboard shorcuts
 						</span>
-					</a>
+					</a>*/}
 
 					<h3>Use cases</h3>
 
@@ -100,7 +100,7 @@ class ScreenHelpIndex extends Component {
 							Uploading, describing and displaying layers
 						</span>
 					</a>
-					<a className="help-link">
+					{/*<a className="help-link">
 						<span>
 							Creating a new analysis
 						</span>
@@ -109,7 +109,7 @@ class ScreenHelpIndex extends Component {
 						<span>
 							Managing a place
 						</span>
-					</a>
+					</a>*/}
 
 				</div></div>
 			</div>
