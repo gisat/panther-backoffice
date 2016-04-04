@@ -659,8 +659,8 @@ class ScreenStore extends Store {
 								foundOpen = true;
 							}
 						}
-						if (!current && typeof newScreen.size == "undefined") retractAllLeftFrom = record.order; // todo: nema se to testovat jenom pro otevrene?
-						if (!current && newScreen.contentAlign == "fill") retractAllFurther = true;
+						if (!current && typeof record.screen.size == "undefined") retractAllLeftFrom = record.screen.order; // todo: nema se to testovat jenom pro otevrene?
+						if (!current && record.screen.contentAlign == "fill") retractAllFurther = true;
 				}
 
 				if (current) record.userDidThat = true;
