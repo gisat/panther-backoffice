@@ -133,6 +133,10 @@ h3, h3 span {
 	font-size: 1.25rem;
 	line-height: 1.875rem;
 }
+h4, h4 span {
+	font-size: 1.125rem;
+	line-height: 1.875rem;
+}
 
 img {
 	border: 1px solid rgba(0,0,0,.15);
@@ -279,7 +283,8 @@ label.container {
 	background: #ccc;
 	/*box-shadow: inset 0px -10px 15px -10px rgba(0,0,0,0.2);/* nope */
 }
-.screen-content {
+.screen-content,
+.screen-content-only {
 	margin-bottom: 5rem;
 }
 .screen-setter > div,
