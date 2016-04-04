@@ -301,6 +301,7 @@ class ScreenStore extends Store {
 				component: options.component || React.createElement('div'),
 				parentUrl: options.parentUrl || "",
 				position: "closed",
+				size: options.size,
 				order: order,
 				data: options.data
 			};
