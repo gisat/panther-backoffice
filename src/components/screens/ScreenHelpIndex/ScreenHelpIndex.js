@@ -11,6 +11,7 @@ import { Icon } from '../../SEUI/elements';
 
 import ScreenHelpTopicArchitecture from '../help/ScreenHelpTopicArchitecture';
 import ScreenHelpTopicMetadata from '../help/ScreenHelpTopicMetadata';
+import ScreenHelpTopicBackOfficeInterface from '../help/ScreenHelpTopicBackOfficeInterface';
 
 
 @withStyles(styles)
@@ -33,6 +34,9 @@ class ScreenHelpIndex extends Component {
 				break;
 			case 'TopicMetadata':
 				component = ScreenHelpTopicMetadata;
+				break;
+			case 'TopicBackOfficeInterface':
+				component = ScreenHelpTopicBackOfficeInterface;
 				break;
 		}
 		if (component) {
@@ -76,7 +80,10 @@ class ScreenHelpIndex extends Component {
 						</span>
 					</a>
 
-					<a className="help-link">
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'TopicBackOfficeInterface')}
+					>
 						<span>
 							Back Office interface
 						</span>
@@ -84,7 +91,11 @@ class ScreenHelpIndex extends Component {
 							Sections and controls in Back Office
 						</span>
 					</a>
-					{/*<a className="help-link">
+					{/*
+					 <a
+					 className="help-link"
+					 onClick={this.onHelpLinkClick.bind(this, 'TopicKeyboard')}
+					 >
 						<span>
 							Keyboard shorcuts
 						</span>
@@ -92,7 +103,10 @@ class ScreenHelpIndex extends Component {
 
 					<h3>Use cases</h3>
 
-					<a className="help-link">
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'UseCaseLayerAdd')}
+					>
 						<span>
 							Adding a new layer
 						</span>
@@ -100,12 +114,19 @@ class ScreenHelpIndex extends Component {
 							Uploading, describing and displaying layers
 						</span>
 					</a>
-					{/*<a className="help-link">
+					{/*
+					 <a
+					 className="help-link"
+					 onClick={this.onHelpLinkClick.bind(this, 'UseCaseAnalysisCreate')}
+					 >
 						<span>
 							Creating a new analysis
 						</span>
 					</a>
-					<a className="help-link">
+					 <a
+					 className="help-link"
+					 onClick={this.onHelpLinkClick.bind(this, 'UseCasePlaceManage')}
+					 >
 						<span>
 							Managing a place
 						</span>

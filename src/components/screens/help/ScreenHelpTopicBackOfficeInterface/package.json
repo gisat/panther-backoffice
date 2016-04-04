@@ -1,0 +1,6 @@
+{
+	"name": "ScreenHelpTopicBackOfficeInterface",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenHelpTopicBackOfficeInterface.js"
+}
