@@ -9,21 +9,38 @@ import ActionCreator from '../../../actions/ActionCreator';
 
 import { Icon } from '../../SEUI/elements';
 
+import ScreenHelpTopicMetadata from '../help/ScreenHelpTopicMetadata';
+
 
 @withStyles(styles)
 class ScreenHelpIndex extends Component {
 
-	//onOpenHelp() {
-	//	var screenName = this.props.screenKey + "-ScreenHelpIndex";
-	//	let options = {
-	//		component: ScreenHelpIndex,
-	//		parentUrl: this.props.parentUrl
-	//	};
-	//	ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
-	//}
+	static contextTypes = {
+		setStateFromStores: PropTypes.func.isRequired,
+		onInteraction: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
+	};
 
-	onClick() {
-		console.log("click");
+	onHelpLinkClick(helpScreenKey) {
+		var screenName = this.props.screenKey + "-ScreenHelp" + helpScreenKey;
+		let component = null;
+		let size = 50;
+		switch (helpScreenKey) {
+			case 'TopicMetadata':
+				component = ScreenHelpTopicMetadata;
+				break;
+		}
+		if (component) {
+			let options = {
+				component: component,
+				parentUrl: this.props.parentUrl,
+				size: size
+			};
+			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
+		} else {
+			console.error("Unknown help screen.");
+		}
 	}
 
 	render() {
@@ -37,13 +54,16 @@ class ScreenHelpIndex extends Component {
 
 					<a
 						className="help-link"
-						onClick={this.onClick}
+						onClick={this.onHelpLinkClick.bind(this, 'TopicArchitecture')}
 					>
 						<span>
 							PUMA system architecture
 						</span>
 					</a>
-					<a className="help-link">
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'TopicMetadata')}
+					>
 						<span>
 							Metadata structures
 						</span>
