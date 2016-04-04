@@ -12,6 +12,7 @@ import { Icon } from '../../SEUI/elements';
 import ScreenHelpTopicArchitecture from '../help/ScreenHelpTopicArchitecture';
 import ScreenHelpTopicMetadata from '../help/ScreenHelpTopicMetadata';
 import ScreenHelpTopicBackOfficeInterface from '../help/ScreenHelpTopicBackOfficeInterface';
+import ScreenHelpTopicAddingLayer from '../help/ScreenHelpTopicAddingLayer';
 
 
 @withStyles(styles)
@@ -37,6 +38,9 @@ class ScreenHelpIndex extends Component {
 				break;
 			case 'TopicBackOfficeInterface':
 				component = ScreenHelpTopicBackOfficeInterface;
+				break;
+			case 'UseCaseLayerAdd':
+				component = ScreenHelpTopicAddingLayer;
 				break;
 		}
 		if (component) {
