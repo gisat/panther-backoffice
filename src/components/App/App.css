@@ -458,6 +458,13 @@ todo hex colours, button icons */
 		width: 51rem;
 	}
 
+
+	.screen.content40.open:not(.disabled),
+	.screen.content40.opening:not(.disabled) {
+		width: 41rem;
+	}
+
+
 	.screen.const20 {
 		max-width: 21rem;
 	}

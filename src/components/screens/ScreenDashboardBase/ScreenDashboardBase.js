@@ -28,7 +28,8 @@ class ScreenDashboardBase extends Component {
 		var screenName = this.props.screenKey + "-ScreenHelpIndex";
 		let options = {
 			component: ScreenHelpIndex,
-			parentUrl: this.props.parentUrl
+			parentUrl: this.props.parentUrl,
+			contentSize: 40
 		};
 		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}

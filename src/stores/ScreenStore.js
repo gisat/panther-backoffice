@@ -302,6 +302,7 @@ class ScreenStore extends Store {
 				parentUrl: options.parentUrl || "",
 				position: "closed",
 				size: options.size,
+				contentSize: options.contentSize,
 				order: order,
 				data: options.data
 			};
@@ -552,7 +553,7 @@ class ScreenStore extends Store {
 				//})[0];
 				record.screen.position = record.screen.position || "open";
 
-				var screenSize = record.screen.size || normalWidth;
+				var screenSize = record.screen.size || record.screen.contentSize || normalWidth;
 				var realScreenSize = screenSize + constPlus - retractedWidth;
 				//console.log("        =record "+record.key+"-"+record.screen.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
 				switch (positionClass) {
