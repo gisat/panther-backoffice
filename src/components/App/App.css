@@ -134,6 +134,18 @@ h3, h3 span {
 	line-height: 1.875rem;
 }
 
+img {
+	border: 1px solid rgba(0,0,0,.15);
+}
+img.image-fit {
+	width: 100%;
+}
+.image-description {
+	font-size: 1rem;
+	font-style: italic;
+	text-align: center;
+	color: #666;
+}
 
 
 
@@ -163,6 +175,7 @@ label.container {
 	border-top: 1px solid rgba(80,80,80,.3);
 	padding-top: 1rem;
 	margin-bottom: 1rem;
+	min-height: 3.75rem;
 }
 .section-header h3 {
 	float: left;
@@ -1046,7 +1059,8 @@ todo hex colours, button icons */
 	left:.625rem;
 }
 
-.rsc-row .isvg svg {
+.rsc-row .isvg svg,
+.isvg.medium svg {
 	vertical-align: middle;
 	width: 2.5rem;
 	height: 2.5rem;
