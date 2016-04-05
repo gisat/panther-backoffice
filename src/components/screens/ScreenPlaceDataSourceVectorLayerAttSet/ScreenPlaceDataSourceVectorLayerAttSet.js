@@ -114,9 +114,10 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 			});
 		}
 		if(newProps.data.layerKey && (this.props.data.layerKey != newProps.data.layerKey)) {
-			this.setState({
-				selectorValueLayer: newProps.data.layerKey
-			});
+			//this.setState({
+			//	selectorValueLayer: newProps.data.layerKey
+			//});
+			this.onChangeLayer(newProps.data.layerKey);
 		}
 		if(newProps.data.attSetKey && (this.props.data.attSetKey != newProps.data.attSetKey)) {
 			this.setState({
@@ -157,12 +158,12 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 				});
 				break;
 			case "layer":
-				this.onChangeLayer(select, value)
+				this.onChangeLayer(value);
 				break;
 		}
 	}
 
-	onChangeLayer (select, value) {
+	onChangeLayer (value) {
 		var thisComponent = this;
 		//var layer = _.findWhere(this.state.layers,{key: value});
 		//var layerAttSetsPromise = utils.getAttSetsForLayers(layer);
@@ -173,7 +174,7 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 			if (layerAttSets.length == 1) {
 				selectorValueAttSet = layerAttSets[0].key;
 			}
-			console.log(layerAttSets);
+			//console.log(layerAttSets);
 			thisComponent.setState({
 				selectorValueLayer: value,
 				attributeSets: layerAttSets,

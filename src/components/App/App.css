@@ -77,6 +77,9 @@ body, input, select {
 p, p a, span {
 	font-size:1.125rem;
 }
+ul.plain li, ol.plain li {
+	font-size: 1.125rem;
+}
 i, b, u {
 	font-size: 100%;
 }
@@ -133,7 +136,23 @@ h3, h3 span {
 	font-size: 1.25rem;
 	line-height: 1.875rem;
 }
+h4, h4 span {
+	font-size: 1.125rem;
+	line-height: 1.875rem;
+}
 
+img {
+	border: 1px solid rgba(0,0,0,.15);
+}
+img.image-fit {
+	width: 100%;
+}
+.image-description {
+	font-size: 1rem;
+	font-style: italic;
+	text-align: center;
+	color: #666;
+}
 
 
 
@@ -163,6 +182,7 @@ label.container {
 	border-top: 1px solid rgba(80,80,80,.3);
 	padding-top: 1rem;
 	margin-bottom: 1rem;
+	min-height: 3.75rem;
 }
 .section-header h3 {
 	float: left;
@@ -266,13 +286,15 @@ label.container {
 	background: #ccc;
 	/*box-shadow: inset 0px -10px 15px -10px rgba(0,0,0,0.2);/* nope */
 }
-.screen-content {
+.screen-content,
+.screen-content-only {
 	margin-bottom: 5rem;
 }
-.screen-setter > div {
+.screen-setter > div,
+.screen-content-only > div {
 	padding:.9375rem 1.875rem;
 }
-.screen-content > div{
+.screen-content > div {
 	padding: 1.875rem;
 	position: relative;
 }
@@ -437,6 +459,7 @@ todo hex colours, button icons */
 	.screen:first-child > .screen-scroll {
 		min-width: 50rem;
 	}
+	.screen-content-only > div,
 	.screen-content > div,
 	.screen-setter > div {
 		width: 50rem;
@@ -456,6 +479,13 @@ todo hex colours, button icons */
 		width: 51rem;
 	}
 
+
+	.screen.content40.open:not(.disabled),
+	.screen.content40.opening:not(.disabled) {
+		width: 41rem;
+	}
+
+
 	.screen.const20 {
 		max-width: 21rem;
 	}
@@ -466,6 +496,7 @@ todo hex colours, button icons */
 	.screen.const20 .screen-scroll {
 		min-width: 21rem;
 	}
+	.screen.const20 .screen-content-only > div,
 	.screen.const20 .screen-content > div,
 	.screen.const20 .screen-setter > div {
 		width: 20rem;
@@ -481,6 +512,7 @@ todo hex colours, button icons */
 	.screen.const30 .screen-scroll {
 		min-width: 31rem;
 	}
+	.screen.const30 .screen-content-only > div,
 	.screen.const30 .screen-content > div,
 	.screen.const30 .screen-setter > div {
 		width: 30rem;
@@ -496,6 +528,7 @@ todo hex colours, button icons */
 	.screen.const40 .screen-scroll {
 		min-width: 41rem;
 	}
+	.screen.const40 .screen-content-only > div,
 	.screen.const40 .screen-content > div,
 	.screen.const40 .screen-setter > div {
 		width: 40rem;
@@ -511,6 +544,7 @@ todo hex colours, button icons */
 	.screen.const50 .screen-scroll {
 		min-width: 51rem;
 	}
+	.screen.const50 .screen-content-only > div,
 	.screen.const50 .screen-content > div,
 	.screen.const50 .screen-setter > div {
 		width: 50rem;
@@ -526,6 +560,7 @@ todo hex colours, button icons */
 	.screen.const60 .screen-scroll {
 		min-width: 61rem;
 	}
+	.screen.const60 .screen-content-only > div,
 	.screen.const60 .screen-content > div,
 	.screen.const60 .screen-setter > div {
 		width: 60rem;
@@ -541,6 +576,7 @@ todo hex colours, button icons */
 	.screen.const70 .screen-scroll {
 		min-width: 71rem;
 	}
+	.screen.const70 .screen-content-only > div,
 	.screen.const70 .screen-content > div,
 	.screen.const70 .screen-setter > div {
 		width: 70rem;
@@ -556,6 +592,7 @@ todo hex colours, button icons */
 	.screen.const80 .screen-scroll {
 		min-width: 81rem;
 	}
+	.screen.const80 .screen-content-only > div,
 	.screen.const80 .screen-content > div,
 	.screen.const80 .screen-setter > div {
 		width: 80rem;
@@ -571,6 +608,7 @@ todo hex colours, button icons */
 	.screen.const90 .screen-scroll {
 		min-width: 91rem;
 	}
+	.screen.const90 .screen-content-only > div,
 	.screen.const90 .screen-content > div,
 	.screen.const90 .screen-setter > div {
 		width: 90rem;
@@ -586,6 +624,7 @@ todo hex colours, button icons */
 	.screen.const100 .screen-scroll {
 		min-width: 101rem;
 	}
+	.screen.const100 .screen-content-only > div,
 	.screen.const100 .screen-content > div,
 	.screen.const100 .screen-setter > div {
 		width: 100rem;
@@ -1028,7 +1067,8 @@ todo hex colours, button icons */
 	left:.625rem;
 }
 
-.rsc-row .isvg svg {
+.rsc-row .isvg svg,
+.isvg.medium svg {
 	vertical-align: middle;
 	width: 2.5rem;
 	height: 2.5rem;
@@ -1483,6 +1523,54 @@ todo hex colours, button icons */
 	width: 1.3rem;
 }
 
+ul.list-steps,
+ol.list-steps {
+	margin-left: 1rem;
+	list-style-type: none;
+}
+ul.list-steps > li,
+ol.list-steps > li {
+	margin: 0 0 .5rem 1rem;
+	counter-increment: step-counter;
+	position: relative;
+}
+ul.list-steps > li::before,
+ol.list-steps > li::before {
+	content: counter(step-counter);
+	position: absolute;
+	left: -1.5rem;
+	font-weight: bold;
+	color: #7a94b4;
+}
+
+.help-step {
+	position: relative;
+	display: inline-block;
+	z-index: 20;
+	width: 2.2rem;
+	margin-right: .5rem;
+	text-align: center;
+	color: #c8c8c8;
+}
+.help-step::before {
+	content: " ";
+	display: block;
+	position: absolute;
+	z-index: -1;
+	top: -.15rem;
+	left: .03rem;
+	width: 2.2rem;
+	height: 2.2rem;
+	background: #859FBF;
+	border-radius: 99999rem;
+}
+
+.help-video {
+	border: 1px solid rgba(0,0,0,.2);
+	margin: 1rem 0 1rem 1rem;
+	max-width: 720px;
+}
+
 
 /* ==== development === */
 
@@ -1498,7 +1586,8 @@ span.todo {
 }
 
 #menu a.current {
-	background: #444;
+	/*background: #444;*/
+	background: #2A3B50;
 }
 #menu a.current .line {
 	fill: #ddd;

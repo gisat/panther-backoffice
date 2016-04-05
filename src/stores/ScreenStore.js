@@ -301,6 +301,8 @@ class ScreenStore extends Store {
 				component: options.component || React.createElement('div'),
 				parentUrl: options.parentUrl || "",
 				position: "closed",
+				size: options.size,
+				contentSize: options.contentSize,
 				order: order,
 				data: options.data
 			};
@@ -551,7 +553,7 @@ class ScreenStore extends Store {
 				//})[0];
 				record.screen.position = record.screen.position || "open";
 
-				var screenSize = record.screen.size || normalWidth;
+				var screenSize = record.screen.size || record.screen.contentSize || normalWidth;
 				var realScreenSize = screenSize + constPlus - retractedWidth;
 				//console.log("        =record "+record.key+"-"+record.screen.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
 				switch (positionClass) {
@@ -593,8 +595,10 @@ class ScreenStore extends Store {
 							}
 
 							//if (typeof size == "undefined") retractAllFurther = true;
-							if(newScreen.contentAlign == "fill") retractAllFurther = true;
-							if(typeof newScreen.size == "undefined") retractAllLeftFrom = Math.max(retractAllLeftFrom, record.order);
+							if(record.screen.contentAlign == "fill") retractAllFurther = true;
+							if(typeof record.screen.size == "undefined") {
+								retractAllLeftFrom = Math.max(retractAllLeftFrom, record.screen.order);
+							}
 
 						} else if (record.screen.position == "retracted") {
 							// asi nic?
@@ -655,8 +659,8 @@ class ScreenStore extends Store {
 								foundOpen = true;
 							}
 						}
-						if (!current && typeof newScreen.size == "undefined") retractAllLeftFrom = record.order; // todo: nema se to testovat jenom pro otevrene?
-						if (!current && newScreen.contentAlign == "fill") retractAllFurther = true;
+						if (!current && typeof record.screen.size == "undefined") retractAllLeftFrom = record.screen.order; // todo: nema se to testovat jenom pro otevrene?
+						if (!current && record.screen.contentAlign == "fill") retractAllFurther = true;
 				}
 
 				if (current) record.userDidThat = true;

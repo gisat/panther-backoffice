@@ -151,6 +151,7 @@ class ScreenContainer extends Component{
 		//var typeClass = this.props.screenState.type || "";
 		var typeClass = this.props.screenState.size ? "constant" : "";
 		var sizeClass = this.props.screenState.size ? "const" + this.props.screenState.size : "";
+		var contentSizeClass = this.props.screenState.contentSize ? "content" + this.props.screenState.contentSize : "";
 		var contentAlignClass = this.props.screenState.contentAlign || "";
 		var positionClass = this.props.screenState.position || "open";
 		var disabledClass = (disabled || positionClass == "retracted" || positionClass == "closed") ? "disabled":"";
@@ -178,7 +179,7 @@ class ScreenContainer extends Component{
 
 		return (
 			<div
-				className={classNames("screen", classes, typeClass, sizeClass, positionClass, disabledClass, contentAlignClass, focusedClass)}
+				className={classNames("screen", classes, typeClass, sizeClass, contentSizeClass, positionClass, disabledClass, contentAlignClass, focusedClass)}
 				style={screenStyles}
 				tabIndex="-1"
 				ref={(el) => this._domSelf = el}

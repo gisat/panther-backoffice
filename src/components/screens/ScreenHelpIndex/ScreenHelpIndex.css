@@ -1,0 +1,24 @@
+
+.help-index > div {
+	width: 40rem;
+}
+
+.help-link {
+	display: block;
+	border-bottom: 1px solid rgba(0,0,0,.05);
+	padding: .5rem 1rem;
+	cursor: pointer;
+}
+.help-link:hover {
+	background: rgba(255,255,255,.1);
+}
+h3 + .help-link {
+	border-top: 1px solid rgba(0,0,0,.05);
+}
+.help-link > span {
+	display: block;
+	line-height: 1.5rem;
+}
+.help-link span.description {
+	color: #888;
+}

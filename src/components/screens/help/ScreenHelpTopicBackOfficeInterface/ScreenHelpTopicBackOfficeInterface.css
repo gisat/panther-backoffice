@@ -1,0 +1,19 @@
+.help-bo-section {
+	position: relative;
+	padding: .4rem 0 0 3rem;
+	margin-bottom: 2rem;
+}
+.help-bo-section-icon {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 3rem;
+}
+.help-bo-section h3 {
+	margin-top: 0;
+}
+.image.help-bo-window {
+	width:40rem;
+
+	background: 0 0 url("../../../../public/placesdatasource.png") no-repeat;
+}

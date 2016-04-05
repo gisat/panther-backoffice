@@ -1,0 +1,6 @@
+{
+	"name": "ScreenHelpUseCaseLayerAdd",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenHelpUseCaseLayerAdd.js"
+}

@@ -1,0 +1,6 @@
+{
+	"name": "ScreenHelpTopicMetadata",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ScreenHelpTopicMetadata.js"
+}

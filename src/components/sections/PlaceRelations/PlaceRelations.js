@@ -297,12 +297,12 @@ class PlaceRelations extends Component {
 
 	onCellClick (table, row, col) {
 		this.context.onInteraction().call();
-		var screenName = this.props.screenKey + "-ScreenPlaceDataSource" + table + "Scope" + this.state.place.scope.key;
 		var screenComponent, data;
 		switch(table){
 			case "AttSet":
 				if(row==null) {
 					screenComponent = ScreenPlaceDataSourceAULevel;
+					table = "AULevel";
 				} else {
 					screenComponent = ScreenPlaceDataSourceAttSet;
 				}
@@ -318,6 +318,7 @@ class PlaceRelations extends Component {
 					screenComponent = ScreenPlaceDataSourceLayer;
 				} else {
 					screenComponent = ScreenPlaceDataSourceVectorLayerAttSet;
+					table = "VectorAttSet"
 				}
 				data = {
 					scopeKey: this.state.place.scope.key,
@@ -337,6 +338,7 @@ class PlaceRelations extends Component {
 				};
 				break;
 		}
+		var screenName = this.props.screenKey + "-ScreenPlaceDataSource" + table + "Scope" + this.state.place.scope.key;
 		let options = {
 			component: screenComponent,
 			parentUrl: this.props.parentUrl,

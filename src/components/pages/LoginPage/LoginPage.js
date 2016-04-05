@@ -33,7 +33,7 @@ class LoginPage extends Component {
 			this.setState({error: "Invalid login information"});
 		} else {
 			Location.pushState(
-				null, "/"
+				null, publicPath + "/"
 			);
 		}
 	}

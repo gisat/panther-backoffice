@@ -27,9 +27,6 @@ a.row:hover {
 	font-size: 1rem;
 	position: absolute;
 }
-.row i.angle.double.right {
-	font-size: 1.125rem;
-}
 .row.left-icon i {
 	left: .7rem;
 	top:.07rem;
@@ -43,6 +40,10 @@ a.row:hover {
 	left: auto;
 	top:.07rem;
 	color:#999;
+}
+.row i.angle.double.right {
+	font-size: 1.125rem;
+	color: inherit;
 }
 
 
