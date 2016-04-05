@@ -44,7 +44,12 @@ class ScreenHelpTopicAddingLayer extends Component {
 
 					<h3>Upload data layer</h3>
 					<p>The geographic data layers has to be uploaded to Panther using the GeoNode interface before it can be connected.</p>
-					<p>Do it like tjis...</p>
+					<ol>
+						<li>Login to GeoNode, go to Layers and click <b>Upload Layers</b> button</li>
+						<li>On Upload screen, select geodata files by <b>Choose files</b> button or by dragging & dropping them to the designed area.</li>
+						<li>Click <b>Upload Files</b> button and wait until it's loaded.</li>
+						<li>It's complete now. You can click <b>Layer info</b> button to navigate to layers detail page or <b>Edit Metadata</b> to manage layers metadata.</li>
+					</ol>
 
 					<h3>Connect data layer to metadata structures</h3>
 					<p>Second step is to link data layers to metadata structures. In Data Layer approach, in general, user selects the data layer on the page <b>Data Layrs</b> and connects layer or its columns to attributes.</p>
