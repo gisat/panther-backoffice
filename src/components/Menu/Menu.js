@@ -11,6 +11,7 @@ import { publicPath } from '../../config';
 class Menu extends Component {
 
 	static propTypes = {
+		activeScreenSet: PropTypes.string,
 		className: PropTypes.string
 	};
 
@@ -21,31 +22,56 @@ class Menu extends Component {
 			<nav id="menu" className={this.props.className} >
 				<ul>
 					<li>
-						<a href={publicPath + "/"} onClick={Link.handleClick} tabIndex="-1">
+						<a
+							href={publicPath + "/"}
+							onClick={Link.handleClick}
+							tabIndex="-1"
+							className={this.props.activeScreenSet == "dashboard" ? "current" : ""}
+						>
 							<UISVG src='icon-dashboard.isvg' />
 							<span>Dashboard</span>
 						</a>
 					</li>
 					<li>
-						<a href={publicPath + "/places"} onClick={Link.handleClick} tabIndex="-1">
+						<a
+							href={publicPath + "/places"}
+							onClick={Link.handleClick}
+							tabIndex="-1"
+							className={this.props.activeScreenSet == "places" ? "current" : ""}
+						>
 							<UISVG src='icon-places.isvg' />
 							<span>Places</span>
 						</a>
 					</li>
 					<li>
-						<a href={publicPath + "/datalayers"} onClick={Link.handleClick} tabIndex="-1">
+						<a
+							href={publicPath + "/datalayers"}
+							onClick={Link.handleClick}
+							tabIndex="-1"
+							className={this.props.activeScreenSet == "dataLayers" ? "current" : ""}
+						>
 							<UISVG src='icon-datalayers.isvg' />
 							<span>Data layers</span>
 						</a>
 					</li>
 					<li>
-						<a href={publicPath + "/analyses"} onClick={Link.handleClick} tabIndex="-1">
+						<a
+							href={publicPath + "/analyses"}
+							onClick={Link.handleClick}
+							tabIndex="-1"
+							className={this.props.activeScreenSet == "analyses" ? "current" : ""}
+						>
 							<UISVG src='icon-analyses.isvg' />
 							<span>Analyses</span>
 						</a>
 					</li>
 					<li>
-						<a href={publicPath + "/metadata"} onClick={Link.handleClick} tabIndex="-1">
+						<a
+							href={publicPath + "/metadata"}
+							onClick={Link.handleClick}
+							tabIndex="-1"
+							className={this.props.activeScreenSet == "metadata" ? "current" : ""}
+						>
 							<UISVG src='icon-metadata.isvg' />
 							<span>Metadata structures</span>
 						</a>

@@ -15,15 +15,18 @@ class App extends Component {
 
 	static propTypes = {
 		children: PropTypes.element.isRequired,
-		error: PropTypes.object,
+		error: PropTypes.object
 	};
 
 	render() {
 		let ret = "";
 		if(this.props.children.type===Page) {
+			let activeScreenSetKey = this.props.children.props.screenSet;
 			ret = (
 				<div>
-					<Menu />
+					<Menu
+						activeScreenSet={activeScreenSetKey}
+					/>
 					{this.props.children}
 				</div>
 			);
