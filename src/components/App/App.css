@@ -1565,6 +1565,12 @@ ol.list-steps > li::before {
 	border-radius: 99999rem;
 }
 
+.help-video {
+	border: 1px solid rgba(0,0,0,.2);
+	margin: 1rem 0 1rem 1rem;
+	max-width: 720px;
+}
+
 
 /* ==== development === */
 

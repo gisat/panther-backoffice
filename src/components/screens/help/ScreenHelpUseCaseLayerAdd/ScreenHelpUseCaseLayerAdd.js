@@ -40,7 +40,7 @@ class ScreenHelpUseCaseLayerAdd extends Component {
 		return (
 			<div>
 				<div className="screen-content-only help-page"><div>
-					<h2>Help: Adding layer</h2>
+					<h2>Help: Adding a new layer</h2>
 
 					<h3>
 						<span className="help-step">1</span>
@@ -49,12 +49,18 @@ class ScreenHelpUseCaseLayerAdd extends Component {
 					<p>The geographic data layer has to be uploaded to PUMA using the GeoNode interface before it can be edited in Back Office or displayed in Data Exploration.</p>
 					<ol className="plain list-steps">
 						<li>From Back Office dashboard navigate the <b>Upload data layers</b> link. Or in GeoNode go to Layers and click <b>Upload Layers</b> button.</li>
-						<li>On Upload screen, select geodata files using the <b>Choose files</b> button or by dragging & dropping them to the designated area.</li>
+						<li>Select geodata files using the <b>Choose files</b> button or by dragging & dropping them to the designated area.</li>
 						<li>Click the <b>Upload Files</b> button and wait until all the files are loaded and the progress bar disappears.</li>
 						<li>The upload is complete. You can click <b>Layer info</b> button to navigate to layers detail page or <b>Edit Metadata</b> to manage layers metadata.</li>
-						<li>After return to Back Office, new data layer should be present in selector at <b>Data Layers</b>.</li>
 					</ol>
-					<iframe width="750" height="552" src="https://www.youtube.com/embed/TZ9J7PXM3LY?rel=0" frameborder="0" allowfullscreen></iframe>
+					<iframe
+						className="help-video"
+						width="720"
+						height="530"
+						src="https://www.youtube.com/embed/TZ9J7PXM3LY?rel=0"
+						frameborder="0"
+						allowfullscreen
+					></iframe>
 
 					<h3>
 						<span className="help-step">2</span>
@@ -71,14 +77,21 @@ class ScreenHelpUseCaseLayerAdd extends Component {
 						<li>Add a <b>Scope</b>.</li>
 						<li>Add one or more <b>Places</b>.</li>
 						<li>Add <b>Level</b>.</li>
-						<li>In the Tabular data section, add primarily <b>FID (feature identifier)</b>, <b>Feature name</b> and <b>Parent feature identifier</b> for other then top most levels.</li>
-						<li>Other columns can be connected to <b>Attributes</b> and <b>Periods</b>.</li>
+						<li>In the Tabular data section, set the column containg ids to <b>FID (feature identifier)</b>. For all but the topmost level, choose <b>Parent feature identifier</b> column. Optionally, choose <b>Feature name</b> column.</li>
+						<li>Other columns can be loaded into <b>Attributes</b> for selected <b>Periods</b>.</li>
 						<li>Save the form with Save button and wait until its label changes to Saved.</li>
 					</ol>
-					<iframe width="750" height="424" src="https://www.youtube.com/embed/0KtCr7PNrAM?rel=0" frameborder="0" allowfullscreen></iframe>
+					<iframe
+						className="help-video"
+						width="720"
+						height="407"
+						src="https://www.youtube.com/embed/0KtCr7PNrAM?rel=0"
+						frameborder="0"
+						allowfullscreen
+					></iframe>
 
 					<h4>Connect vector layer</h4>
-					<p>Connecting vector layer is similar to analytical units layer. It differs with absence of Parent feature identifier.</p>
+					<p>Connecting vector layer is similar to analytical units layer. No Parent feature identifier is set.</p>
 
 					<h4>Connect raster layer</h4>
 					<ol className="plain list-steps">
