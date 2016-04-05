@@ -48,24 +48,47 @@ class ScreenHelpUseCaseLayerAdd extends Component {
 					</h3>
 					<p>The geographic data layer has to be uploaded to PUMA using the GeoNode interface before it can be edited in Back Office or displayed in Data Exploration.</p>
 					<ol className="plain list-steps">
-						<li>Login to GeoNode, go to Layers and click <b>Upload Layers</b> button</li>
+						<li>From Back Office dashboard navigate the <b>Upload data layers</b> link. Or in GeoNode go to Layers and click <b>Upload Layers</b> button.</li>
 						<li>On Upload screen, select geodata files using the <b>Choose files</b> button or by dragging & dropping them to the designated area.</li>
-						<li>Click the <b>Upload Files</b> button and wait until all the files are loaded.</li>
+						<li>Click the <b>Upload Files</b> button and wait until all the files are loaded and the progress bar disappears.</li>
 						<li>The upload is complete. You can click <b>Layer info</b> button to navigate to layers detail page or <b>Edit Metadata</b> to manage layers metadata.</li>
+						<li>After return to Back Office, new data layer should be present in selector at <b>Data Layers</b>.</li>
 					</ol>
+					<iframe width="750" height="552" src="https://www.youtube.com/embed/TZ9J7PXM3LY?rel=0" frameborder="0" allowfullscreen></iframe>
 
 					<h3>
 						<span className="help-step">2</span>
 						Describe layer contents in Back Office
 					</h3>
-					<p>Second step is to link data layers to metadata structures. In Data Layer approach, in general, user selects the data layer on the page <b>Data Layers</b> and connects layer or its columns to attributes.</p>
+					<p>Second step is to link data layers to metadata structures. In general, user selects the data layer on the page <b>Data Layers</b> and connects layer or its columns to attributes.</p>
 
 					<h4>Connect analytical units layer</h4>
 					<p></p>
+					<ol className="plain list-steps">
+						<li>Navigate to <b>Data layers</b> page at Back Office.</li>
+						<li>Select the layer with analytical units.</li>
+						<li>Set <b>Layer type</b> to Analytical units layer.</li>
+						<li>Add a <b>Scope</b>.</li>
+						<li>Add one or more <b>Places</b>.</li>
+						<li>Add <b>Level</b>.</li>
+						<li>In the Tabular data section, add primarily <b>FID (feature identifier)</b>, <b>Feature name</b> and <b>Parent feature identifier</b> for other then top most levels.</li>
+						<li>Other columns can be connected to <b>Attributes</b> and <b>Periods</b>.</li>
+						<li>Save the form with Save button and wait until its label changes to Saved.</li>
+					</ol>
+					<iframe width="750" height="424" src="https://www.youtube.com/embed/0KtCr7PNrAM?rel=0" frameborder="0" allowfullscreen></iframe>
 
 					<h4>Connect vector layer</h4>
+					<p>Connecting vector layer is similar to analytical units layer. It differs with absence of Parent feature identifier.</p>
 
 					<h4>Connect raster layer</h4>
+					<ol className="plain list-steps">
+						<li>Open the layer similarly like in case of analytical units and select Raster layer type.</li>
+						<li>Select <b>Layer template (name)</b>.</li>
+						<li>Add a <b>Scope</b>.</li>
+						<li>Add one or more <b>Places</b>.</li>
+						<li>Add one or more <b>Imaging/reference periods</b>.</li>
+						<li>Save the form with Save button and wait until its label changes to Saved.</li>
+					</ol>
 
 					<h3>
 						<span className="help-step">3</span>
