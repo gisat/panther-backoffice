@@ -3,7 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenDashboardBase.css';
 import withStyles from '../../../decorators/withStyles';
 
-import { geonodeProtocol, geonodeHost } from '../../../config';
+import { geonodeProtocol, geonodeHost, frontOfficeProtocol, frontOfficeHost } from '../../../config';
 
 import utils from '../../../utils/utils';
 import ObjectTypes, {Model, objectTypesMetadata} from '../../../constants/ObjectTypes';
@@ -36,6 +36,7 @@ class ScreenDashboardBase extends Component {
 
 	render() {
 
+		var frontOfficeAddress = frontOfficeProtocol + frontOfficeHost + "/";
 		var geoNodeAddress = geonodeProtocol + geonodeHost + "/";
 		var geoServerAddress = geoNodeAddress + "geoserver/";
 
@@ -50,6 +51,26 @@ class ScreenDashboardBase extends Component {
 						</div>
 
 						<div className="frame-wrapper flexchild">
+							<span className="row">Front Office</span>
+							<a
+								className="row right-icon"
+								target="_blank"
+								href={frontOfficeAddress+"tool/"}
+							>
+								<span>Data Exploration</span>
+								<Icon name="external" className="right"/>
+							</a>
+							{/*<a
+								className="row right-icon"
+								target="_blank"
+								href={frontOfficeAddress+"downloads"}
+							>
+								<span>Downloads</span>
+								<Icon name="external" className="right"/>
+							</a>*/}
+						</div>
+
+						<div className="frame-wrapper flexchild">
 							<span className="row">GeoNode</span>
 							<a
 								className="row right-icon"
@@ -57,6 +78,14 @@ class ScreenDashboardBase extends Component {
 								href={geoNodeAddress+"layers/upload"}
 							>
 								<span>Upload data layers</span>
+								<Icon name="external" className="right"/>
+							</a>
+							<a
+								className="row right-icon"
+								target="_blank"
+								href={geoNodeAddress+"layers"}
+							>
+								<span>Data layers</span>
 								<Icon name="external" className="right"/>
 							</a>
 							<a
@@ -82,14 +111,33 @@ class ScreenDashboardBase extends Component {
 						</div>
 
 						<div className="frame-wrapper flexchild">
-							<a
-								href="#"
-								className="row left-icon right-icon"
-								onClick={this.onOpenHelp.bind(this)}
-							>
+							<span className="row left-icon">
 								<Icon name="help" />
 								Help
+							</span>
+							<a
+								href="#"
+								className="row right-icon"
+								onClick={this.onOpenHelp.bind(this)}
+							>
+								Index
 								<Icon name="angle double right" className="right"/>
+							</a>
+							<a
+								className="row right-icon"
+								target="_blank"
+								href={frontOfficeAddress+"help"}
+							>
+								Front office help
+								<Icon name="external" className="right"/>
+							</a>
+							<a
+								className="row right-icon"
+								target="_blank"
+								href={geoNodeAddress+"help-with-geonode/"}
+							>
+								<span>GeoNode help</span>
+								<Icon name="external" className="right"/>
 							</a>
 						</div>
 
