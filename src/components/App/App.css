@@ -77,6 +77,9 @@ body, input, select {
 p, p a, span {
 	font-size:1.125rem;
 }
+ul.plain li, ol.plain li {
+	font-size: 1.125rem;
+}
 i, b, u {
 	font-size: 100%;
 }
@@ -1518,6 +1521,29 @@ todo hex colours, button icons */
 .ptr-analysis-placeholder {
 	display: inline-block;
 	width: 1.3rem;
+}
+
+
+.help-step {
+	position: relative;
+	display: inline-block;
+	z-index: 20;
+	width: 2.2rem;
+	margin-right: .5rem;
+	text-align: center;
+	color: #c8c8c8;
+}
+.help-step::before {
+	content: " ";
+	display: block;
+	position: absolute;
+	z-index: -1;
+	top: -.15rem;
+	left: .03rem;
+	width: 2.2rem;
+	height: 2.2rem;
+	background: #859FBF;
+	border-radius: 99999rem;
 }
 
 
