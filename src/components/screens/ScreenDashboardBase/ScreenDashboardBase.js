@@ -3,7 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenDashboardBase.css';
 import withStyles from '../../../decorators/withStyles';
 
-import { geonodeProtocol, geonodeHost, frontOfficeProtocol, frontOfficeHost } from '../../../config';
+import { geonodeProtocol, geonodeHost, frontOfficeProtocol, frontOfficeHost, frontOfficeExplorationUrl } from '../../../config';
 
 import utils from '../../../utils/utils';
 import ObjectTypes, {Model, objectTypesMetadata} from '../../../constants/ObjectTypes';
@@ -55,9 +55,17 @@ class ScreenDashboardBase extends Component {
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={frontOfficeAddress+"tool/"}
+								href={frontOfficeAddress + frontOfficeExplorationUrl}
 							>
 								<span>Data Exploration</span>
+								<Icon name="external" className="right"/>
+							</a>
+							<a
+								className="row right-icon"
+								target="_blank"
+								href={frontOfficeAddress}
+							>
+								<span>Project homepage</span>
 								<Icon name="external" className="right"/>
 							</a>
 							{/*<a

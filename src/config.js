@@ -10,5 +10,7 @@ export const apiPath = "/";
 
 export const geonodeProtocol = "http://";
 export const geonodeHost = "37.205.9.78";
+
 export const frontOfficeProtocol = "http://";
 export const frontOfficeHost = "37.205.9.78";
+export const frontOfficeExplorationUrl = "tool/";
