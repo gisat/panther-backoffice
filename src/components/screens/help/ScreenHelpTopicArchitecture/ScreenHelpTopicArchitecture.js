@@ -43,9 +43,9 @@ class ScreenHelpTopicArchitecture extends Component {
 					<h2>Help: PUMA system architecture</h2>
 
 					<p>PUMA, or Platform for Urban Management and Analysis, is a geospatial tool that allows users with no prior GIS experience to access, analyze and share urban spatial data in an interactive and customizable way.<br/>
-					The <b>Front Office</b> (“Data Exploration”) interface is the part of PUMA accessible to end users.</p>
+					<b>Front Office</b> is the part of PUMA accessible to end users, mainly the <b>“Data Exploration”</b> interface.</p>
 
-					<p>The <b>Back Office</b> interface connects and describes data from integrated data sources (GeoNode, GeoServer), offers in-app computations over data from multiple sources and allows system administrators easy management of the data nad metadata available to end users in the Front Office interface.</p>
+					<p>The <b>Back Office</b> interface connects and describes data from integrated data sources (GeoNode, GeoServer), offers in-app computations over data from multiple sources and allows system administrators easy management of the data nad metadata available to end users in the Data Exploration interface.</p>
 
 					<h3>Integrated data sources</h3>
 

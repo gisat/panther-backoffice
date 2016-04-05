@@ -120,7 +120,7 @@ class ScreenDashboardBase extends Component {
 								className="row right-icon"
 								onClick={this.onOpenHelp.bind(this)}
 							>
-								Index
+								Help index
 								<Icon name="angle double right" className="right"/>
 							</a>
 							<a
