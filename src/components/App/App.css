@@ -1523,6 +1523,25 @@ todo hex colours, button icons */
 	width: 1.3rem;
 }
 
+ul.list-steps,
+ol.list-steps {
+	margin-left: 1rem;
+	list-style-type: none;
+}
+ul.list-steps > li,
+ol.list-steps > li {
+	margin: 0 0 .5rem 1rem;
+	counter-increment: step-counter;
+	position: relative;
+}
+ul.list-steps > li::before,
+ol.list-steps > li::before {
+	content: counter(step-counter);
+	position: absolute;
+	left: -1.5rem;
+	font-weight: bold;
+	color: #7a94b4;
+}
 
 .help-step {
 	position: relative;
