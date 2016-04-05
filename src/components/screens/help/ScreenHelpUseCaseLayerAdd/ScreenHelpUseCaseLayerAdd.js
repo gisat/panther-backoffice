@@ -47,7 +47,7 @@ class ScreenHelpUseCaseLayerAdd extends Component {
 						Upload data layer in GeoNode
 					</h3>
 					<p>The geographic data layer has to be uploaded to PUMA using the GeoNode interface before it can be edited in Back Office or displayed in Front Office.</p>
-					<ol className="plain">
+					<ol className="plain list-steps">
 						<li>Login to GeoNode, go to Layers and click <b>Upload Layers</b> button</li>
 						<li>On Upload screen, select geodata files using the <b>Choose files</b> button or by dragging & dropping them to the designated area.</li>
 						<li>Click the <b>Upload Files</b> button and wait until all the files are loaded.</li>
