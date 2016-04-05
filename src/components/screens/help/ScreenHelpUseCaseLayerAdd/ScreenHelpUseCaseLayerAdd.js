@@ -90,10 +90,11 @@ class ScreenHelpUseCaseLayerAdd extends Component {
 						<li>Save the form with Save button and wait until its label changes to Saved.</li>
 					</ol>
 
-					<h3>
+					{/*<h3>
 						<span className="help-step">3</span>
 						Adjust display in Data Exploration
 					</h3>
+					<p></p>*/}
 
 				</div></div>
 			</div>
