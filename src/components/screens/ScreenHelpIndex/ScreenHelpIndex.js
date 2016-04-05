@@ -12,7 +12,7 @@ import { Icon } from '../../SEUI/elements';
 import ScreenHelpTopicArchitecture from '../help/ScreenHelpTopicArchitecture';
 import ScreenHelpTopicMetadata from '../help/ScreenHelpTopicMetadata';
 import ScreenHelpTopicBackOfficeInterface from '../help/ScreenHelpTopicBackOfficeInterface';
-import ScreenHelpTopicAddingLayer from '../help/ScreenHelpTopicAddingLayer';
+import ScreenHelpUseCaseLayerAdd from '../help/ScreenHelpUseCaseLayerAdd';
 
 
 @withStyles(styles)
@@ -40,7 +40,7 @@ class ScreenHelpIndex extends Component {
 				component = ScreenHelpTopicBackOfficeInterface;
 				break;
 			case 'UseCaseLayerAdd':
-				component = ScreenHelpTopicAddingLayer;
+				component = ScreenHelpUseCaseLayerAdd;
 				break;
 		}
 		if (component) {

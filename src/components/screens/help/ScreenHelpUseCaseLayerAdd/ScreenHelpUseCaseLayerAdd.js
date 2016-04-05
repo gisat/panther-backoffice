@@ -7,7 +7,7 @@ import ActionCreator from '../../../../actions/ActionCreator';
 import { Icon } from '../../../SEUI/elements';
 
 
-class ScreenHelpTopicAddingLayer extends Component {
+class ScreenHelpUseCaseLayerAdd extends Component {
 
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired,
@@ -70,4 +70,4 @@ class ScreenHelpTopicAddingLayer extends Component {
 	}
 }
 
-export default ScreenHelpTopicAddingLayer;
+export default ScreenHelpUseCaseLayerAdd;
