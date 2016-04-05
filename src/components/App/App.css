@@ -1580,7 +1580,8 @@ span.todo {
 }
 
 #menu a.current {
-	background: #444;
+	/*background: #444;*/
+	background: #2A3E50;
 }
 #menu a.current .line {
 	fill: #ddd;
