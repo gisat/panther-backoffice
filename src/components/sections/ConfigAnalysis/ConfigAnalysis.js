@@ -25,6 +25,9 @@ import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 import ConfigAnalysisRulesSpatial from '../../sections/ConfigAnalysisRulesSpatial';
 import ConfigAnalysisRulesLevel from '../../sections/ConfigAnalysisRulesLevel';
 import ConfigAnalysisRulesMath from '../../sections/ConfigAnalysisRulesMath';
+import ScreenAnalysisRulesSpatial from '../../screens/ScreenAnalysisRulesSpatial';
+import ScreenAnalysisRulesLevel from '../../screens/ScreenAnalysisRulesLevel';
+import ScreenAnalysisRulesMath from '../../screens/ScreenAnalysisRulesMath';
 
 
 var initialState = {
@@ -259,6 +262,36 @@ class ConfigAnalysis extends Component {
 		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
+	onOpenConfigClick () {
+		let component = null, name = "", size = 80;
+		switch (this.state.analysis.analysisType) {
+			case "spatial":
+				component = ScreenAnalysisRulesSpatial;
+				name = "ScreenAnalysisRulesSpatial";
+				break;
+			case "level":
+				component = ScreenAnalysisRulesLevel;
+				name = "ScreenAnalysisRulesLevel";
+				size = 60;
+				break;
+			case "math":
+				component = ScreenAnalysisRulesMath;
+				name = "ScreenAnalysisRulesMath";
+				break;
+		}
+		this.context.onInteraction().call();
+		var screenName = this.props.screenKey + "-" + name;
+		let options = {
+			component: component,
+			parentUrl: this.props.parentUrl,
+			size: size,
+			data: {
+				analysis: this.state.analysis
+			}
+		};
+		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+	}
+
 
 	render() {
 
@@ -407,10 +440,13 @@ class ConfigAnalysis extends Component {
 
 					<div className="section-header">
 						<h3>Operations</h3>
-						{/*<UIScreenButton basic>
+						<UIScreenButton
+							basic
+							onClick={this.onOpenConfigClick.bind(this)}
+						>
 							<Icon name="configure" />
 							Configure
-						</UIScreenButton>*/}
+						</UIScreenButton>
 					</div>
 
 					{configComponent}
