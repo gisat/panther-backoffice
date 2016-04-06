@@ -3,11 +3,24 @@ import styles from './ScreenAnalysisRulesSpatial.css';
 import withStyles from '../../../decorators/withStyles';
 import path from "path";
 
+import _ from 'underscore';
+import utils from '../../../utils/utils';
+import ActionCreator from '../../../actions/ActionCreator';
+import ListenerHandler from '../../../core/ListenerHandler';
+import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
+import AnalysisOperations, {analysisOperationsMetadata} from '../../../constants/AnalysisOperations';
+
 import { Input, Icon, IconButton, Buttons } from '../../SEUI/elements';
 import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
+
+import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
+
+import AnalysisModel from '../../../models/AnalysisModel';
+import VectorLayerStore from '../../../stores/VectorLayerStore';
+import AttributeSetStore from '../../../stores/AttributeSetStore';
 
 const OPERATIONS = [
 			{ key: "COUNT", name: "COUNT"	},
@@ -86,78 +99,253 @@ const ATTSETS = [
 			{ key: 28, name: "Status code" },
 		];
 
+var initialState = {
+	analysis: null,
+	valueFeatureLayer: [],
+	valueResultAttSet: [],
+	valueFilterAttSet: [],
+	themesString: ""
+};
+
+
 @withStyles(styles)
 class ScreenAnalysisRulesSpatial extends Component{
 
+	static propTypes = {
+		disabled: PropTypes.bool,
+		screenKey: PropTypes.string,
+		data: PropTypes.shape({
+			analysis: PropTypes.instanceOf(AnalysisModel).isRequired
+		})
+	};
+
+	static defaultProps = {
+		disabled: false,
+		screenKey: null
+	};
+
+	static contextTypes = {
+		setStateFromStores: PropTypes.func.isRequired,
+		onInteraction: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
+	};
+
 	constructor(props) {
 		super(props);
+		this.state = utils.deepClone(initialState);
 
-		this.state = {
-			valueResultAttSet: [352],
-			valueFilterAttSet: [28],
-			themesString: "",
-			data: this.props.data
-		};
-
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
+
+	store2state(props) {
+		return {
+			featureLayers: VectorLayerStore.getAll(), // filter by topics?
+			attributeSetsResult: AttributeSetStore.getAll() // filter by topics?
+		};
+	}
+
+	setStateFromStores(props,keys) {
+		if(!props){
+			props = this.props;
+		}
+		if(props.data.analysis) {
+			var thisComponent = this;
+			let store2state = this.store2state(props);
+			this.context.setStateFromStores.call(this, store2state, keys);
+			// if stores changed, overrides user input - todo fix
+		}
+	}
+
+	_onStoreResponse(result,responseData,stateHash) {
+		var thisComponent = this;
+		if (stateHash === this.getStateHash()) {
+			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
+				let stateKey = responseData.stateKey;
+				let values = utils.deepClone(thisComponent.state[stateKey]);
+				values.push(result[0].key);
+				thisComponent.setState({
+					[stateKey]: values
+				});
+				var screenObjectType;
+				switch(stateKey){
+					case "valueFeatureLayer":
+						screenObjectType = ObjectTypes.VECTOR_LAYER_TEMPLATE;
+						break;
+					case "valueResultAttSet":
+					case "valueFilterAttSet":
+						screenObjectType = ObjectTypes.ATTRIBUTE_SET;
+						break;
+				}
+				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
+				if(screenObjectType) {
+					let options = {
+						component: ScreenMetadataObject,
+						parentUrl: this.props.parentUrl,
+						size: 40,
+						data: {
+							objectType: screenObjectType,
+							objectKey: result[0].key
+						}
+					};
+					ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+				}
+			}
+		}
+	}
+
+	componentDidMount() {
+		//this.changeListener.add(AnalysisStore, ["analysis"]);
+		this.changeListener.add(VectorLayerStore, ["featureLayer"]);
+		this.changeListener.add(AttributeSetStore, ["attributeSetsResult"]); // todo attributeSetsLayer
+		this.responseListener.add(VectorLayerStore);
+		this.responseListener.add(AttributeSetStore);
+
+		this.setStateFromStores();
+	}
+
+	componentWillUnmount() {
+		this.changeListener.clean();
+		this.responseListener.clean();
+	}
+
+
+	/**
+	 * Check if state is the same as it was when loaded from stores
+	 * @returns {boolean}
+	 */
+	//isStateUnchanged() {
+	//	var isIt = true;
+	//	if(this.state.analysis) {
+	//		isIt = (
+	//			this.state.valueName == this.state.analysis.name &&
+	//			_.isEqual(this.state.valueTopics,this.state.savedState.valueTopics)
+	//		);
+	//	}
+	//	return isIt;
+	//}
+
+	/**
+	 * Differentiate between states
+	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
+	 */
+	updateStateHash(props) {
+		if(!props){
+			props = this.props;
+		}
+		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
+		this._stateHash = utils.stringHash(props.data.analysis.key.toString());
+	}
+	getStateHash() {
+		if(!this._stateHash) {
+			this.updateStateHash();
+		}
+		return this._stateHash;
+	}
+
+	//saveForm() {
+	//	var thisComponent = this;
+	//	let objectType = null;
+	//	switch(this.state.analysis.analysisType) {
+	//		case "spatial":
+	//			objectType = ObjectTypes.ANALYSIS_SPATIAL;
+	//			break;
+	//		case "level":
+	//			objectType = ObjectTypes.ANALYSIS_LEVEL;
+	//			break;
+	//		case "math":
+	//			objectType = ObjectTypes.ANALYSIS_MATH;
+	//			break;
+	//	}
+	//	var actionData = [], modelData = {};
+	//	//_.assign(modelData, this.state.analysis);
+	//	modelData.key = this.state.analysis.key;
+	//	modelData.name = this.state.valueName;
+	//	modelData.topics = [];
+	//	for (let key of this.state.valueTopics) {
+	//		let topic = _.findWhere(this.state.topics, {key: key});
+	//		modelData.topics.push(topic);
+	//	}
+	//
+	//	let modelObj = new AnalysisModel(modelData);
+	//	actionData.push({type:"update",model:modelObj});
+	//	console.log("save analysis:", actionData);
+	//	ActionCreator.handleObjects(actionData,objectType);
+	//}
+
 
 	getUrl() {
 		return path.join(this.props.parentUrl, "rules");
 	}
 
-
-	handleNewObjects(values, store) {
-		var newValues = [];
-		for (var singleValue of values) {
-			if(singleValue.create){
-				// replace with actual object creation and config screen opening
-				delete singleValue.create;
-				delete singleValue.label;
-				delete singleValue.value;
-				singleValue.key = Math.floor((Math.random() * 10000) + 1);
-				store.push(singleValue);
-			}
-			newValues.push(singleValue.key);
+	getAnalysisType() {
+		switch(this.state.analysis.analysisType) {
+			case "spatial":
+				return ObjectTypes.ANALYSIS_SPATIAL;
+			case "level":
+				return ObjectTypes.ANALYSIS_LEVEL;
+			case "math":
+				return ObjectTypes.ANALYSIS_MATH;
 		}
-		return newValues;
 	}
 
 	onChangeFeatureLayer (value, values) {
-		//values = this.handleNewObjects(values, ATTSETS);
-		this.setState({
-			valueFeatureLayer: value
-		});
+		let newValue = utils.handleNewObjects(values, this.getAnalysisType(), {stateKey: "valueFeatureLayer"}, this.getStateHash());
+		if (newValue.length) {
+
+			var thisComponent = this;
+			var layerAttSetsPromise = utils.getAttSetsForLayers(newValue);
+			layerAttSetsPromise.then(function (layerAttSets) {
+
+				let selectorValueAttSet = null;
+				if (layerAttSets.length == 1) {
+					selectorValueAttSet = layerAttSets[0].key;
+				}
+				//console.log(layerAttSets);
+				thisComponent.setState({
+					valueFeatureLayer: newValue,
+					attributeSetsLayer: layerAttSets,
+					valueFilterAttSet: selectorValueAttSet
+				});
+			});
+
+		} else {
+
+			this.setState({
+				valueFeatureLayer: newValue
+			});
+
+		}
 	}
 
 	onChangeResultAttSet (value, values) {
-		//values = this.handleNewObjects(values, ATTSETS);
+		let newValue = utils.handleNewObjects(values, this.getAnalysisType(), {stateKey: "valueResultAttSet"}, this.getStateHash());
 		this.setState({
-			valueResultAttSet: value
+			valueResultAttSet: newValue
 		});
 	}
 
 	onChangeFilterAttSet (value, values) {
-		//values = this.handleNewObjects(values, ATTSETS);
+		let newValue = utils.handleNewObjects(values, this.getAnalysisType(), {stateKey: "valueFilterAttSet"}, this.getStateHash());
 		this.setState({
-			valueFilterAttSet: value
+			valueFilterAttSet: newValue
 		});
 	}
 
-
-	onObjectClick (value, event) {
-		console.log("yay! " + value["key"]);
-	}
-
-
-	keyNameOptionFactory (inputValue) {
-		var newOption = {
-				key: inputValue,
-				name: inputValue,
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
-		return newOption;
+	onObjectClick (itemType, value, event) {
+		this.context.onInteraction().call();
+		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
+		let options = {
+			component: ScreenMetadataObject,
+			parentUrl: this.props.parentUrl,
+			size: 40,
+			data: {
+				objectType: itemType,
+				objectKey: value.key
+			}
+		};
+		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
 
@@ -171,12 +359,11 @@ class ScreenAnalysisRulesSpatial extends Component{
 							Feature layer (vector layer template)
 							<UIObjectSelect
 								onChange={this.onChangeFeatureLayer.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								//options={this.state.vectorLayerTemplates}
+								onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.VECTOR_LAYER_TEMPLATE)}
+								options={this.state.featureLayers}
 								valueKey="key"
 								labelKey="name"
-								//value={this.state.valueFeatureLayer}
+								value={this.state.valueFeatureLayer}
 								className="template"
 							/>
 						</label>
@@ -187,9 +374,9 @@ class ScreenAnalysisRulesSpatial extends Component{
 							Result attribute set
 							<UIObjectSelect
 								onChange={this.onChangeResultAttSet.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
-								options={ATTSETS}
+								onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.ATTRIBUTE_SET)}
+								//options={ATTSETS}
+								options={this.state.attributeSetsResult}
 								valueKey="key"
 								labelKey="name"
 								value={this.state.valueResultAttSet}
@@ -203,8 +390,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 							Filter attribute set
 							<UIObjectSelect
 								onChange={this.onChangeFilterAttSet.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this)}
-								//loadOptions={this.getScopes}
+								onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.ATTRIBUTE_SET)}
 								options={ATTSETS}
 								valueKey="key"
 								labelKey="name"
