@@ -306,7 +306,9 @@ class ScreenStore extends Store {
 				order: order,
 				data: options.data
 			};
+			console.log("creating screen with data:",screen.data);
 			this._screenSets[screenSetKey].screens[screenKey] = screen;
+			console.log("creating screen models:",this.generateModels());
 			this._models = Promise.resolve(this.generateModels());
 			this._historyStacks[screenSetKey].unshift({
 				screen: screen,
@@ -417,10 +419,10 @@ class ScreenStore extends Store {
 			});
 			var screen = screenSet.screens[screenKey];
 			// - new structures - to be saved
-			var newScreenSets = utils.deepClone(this._screenSets);
+			var newScreenSets = utils.clone(this._screenSets);
 			var newModels = this.generateModels(newScreenSets);
 			//var newHistoryStacks = this.generateHistoryStacks(newScreenSets);
-			var newHistoryStacks = utils.deepClone(this._historyStacks);
+			var newHistoryStacks = utils.clone(this._historyStacks);
 			for (var stackKey in newHistoryStacks) {
 				if(newHistoryStacks.hasOwnProperty(stackKey)){
 					for (var record of newHistoryStacks[stackKey]) {
