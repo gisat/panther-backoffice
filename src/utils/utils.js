@@ -142,7 +142,8 @@ export default {
 
 			var scopePromise = null;
 			if(scope instanceof ScopeModel) {
-				scopePromise = Promise.resolve(scope);
+				//scopePromise = Promise.resolve(scope);
+				scopePromise = ScopeStore.getById(scope.key);
 			}else{
 				scopePromise = ScopeStore.getById(scope);
 			}
@@ -204,7 +205,8 @@ export default {
 
 			var scopePromise = null;
 			if(scope instanceof ScopeModel) {
-				scopePromise = Promise.resolve(scope);
+				//scopePromise = Promise.resolve(scope);
+				scopePromise = ScopeStore.getById(scope.key);
 			}else{
 				scopePromise = ScopeStore.getById(scope);
 			}
