@@ -102,7 +102,6 @@ const ATTSETS = [
 		];
 
 var initialState = {
-	analysis: null,
 	featureLayers: [],
 	attributeSetsResult: [],
 	attributeSetsLayer: [],
@@ -329,7 +328,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 	}
 
 	getAnalysisType() {
-		switch(this.state.analysis.analysisType) {
+		switch(this.props.data.analysis.analysisType) {
 			case "spatial":
 				return ObjectTypes.ANALYSIS_SPATIAL;
 			case "level":
@@ -352,7 +351,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 					selectorValueAttSetAtt = layerAttSets[0].key + "-" + layerAttSets[0].attributes[0].key;
 				}
 				//console.log(layerAttSets);
-				let ret = this.atts2state(layerAttSets);
+				let ret = thisComponent.atts2state(layerAttSets);
 				let newState = {
 					valueFeatureLayer: newValue,
 					attributeSetsLayer: layerAttSets,
@@ -365,7 +364,9 @@ class ScreenAnalysisRulesSpatial extends Component{
 		} else {
 
 			this.setState({
-				valueFeatureLayer: newValue
+				valueFeatureLayer: newValue,
+				attributeSetsLayer: [],
+				valueFilterAttSetAtt: null
 			});
 
 		}
@@ -447,7 +448,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 								singleValueComponent={SingleValueDestination}
 								valueKey="key"
 								labelKey="name"
-								className="multiline"
+								className={this.state.valueFilterAttSetAtt ? "multiline" : ""}
 								value={this.state.valueFilterAttSetAtt}
 							/>
 						</label>
