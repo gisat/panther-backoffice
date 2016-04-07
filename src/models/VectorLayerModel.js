@@ -3,7 +3,7 @@ import UserStore from '../stores/UserStore';
 import LayerGroupStore from '../stores/LayerGroupStore';
 import StyleStore from '../stores/StyleStore';
 import TopicStore from '../stores/TopicStore';
-//import AttributeSetStore from '../stores/AttributeSetStore';
+import AttributeSetStore from '../stores/AttributeSetStore';
 
 
 class VectorLayerModel extends Model {
@@ -84,19 +84,19 @@ class VectorLayerModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
-			//attributeSets: {
-			//	serverName: 'attributeSets', //ids
-			//	sendToServer: true,
-			//	//transformForLocal: function (data) {
-			//	//	return AttributeSetStore.getFiltered({key: data})
-			//	//},
-			//	transformForLocal: function (data) {
-			//		return Promise.resolve(null); // avoiding circular reference while these relations are stored in attribute sets
-			//	},
-			//	transformForServer: this.getKeys,
-			//	isPromise: true,
-			//	isArray: true
-			//}
+			attributeSets: {
+				serverName: 'attributeSets', //ids
+				sendToServer: true,
+				//transformForLocal: function (data) {
+				//	return AttributeSetStore.getFiltered({key: data})
+				//},
+				transformForLocal: function (data) {
+					return Promise.resolve(null); // avoiding circular reference while these relations are stored in attribute sets
+				},
+				transformForServer: this.getKeys,
+				isPromise: true,
+				isArray: true
+			}
 		};
 	}
 
