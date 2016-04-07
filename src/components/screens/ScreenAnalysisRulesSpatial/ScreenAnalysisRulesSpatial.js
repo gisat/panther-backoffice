@@ -405,7 +405,9 @@ class ScreenAnalysisRulesSpatial extends Component{
 	render() {
 		return (
 			<div>
-				<div className="screen-content"><div>
+				<div className="screen-content-only"><div>
+
+					<h2>Spatial analysis operations: {this.props.data.analysis.name}</h2>
 
 					<div className="frame-input-wrapper">
 						<label className="container">
@@ -485,7 +487,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 							<td colSpan="2"></td>
 							<td className="allowOverflow resetui">
 								<label className="container">
-									Status code:
+									Code:
 									<Input
 										type="text"
 										name="name"
@@ -549,7 +551,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 							</td>
 							<td className="allowOverflow resetui">
 								<label className="container">
-									Status code:
+									Code:
 									<Input
 										type="text"
 										name="name"
@@ -600,7 +602,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 							<td></td>
 							<td className="allowOverflow resetui">
 								<label className="container">
-									Status code:
+									Code:
 									<Input
 										type="text"
 										name="name"
