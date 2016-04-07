@@ -106,9 +106,9 @@ var initialState = {
 	attributeSetsResult: [],
 	attributeSetsLayer: [],
 	filterDestinations: [],
-	valueFeatureLayer: null,
-	valueResultAttSet: null,
-	valueFilterAttSetAtt: null,
+	valueFeatureLayer: [],
+	valueResultAttSet: [],
+	valueFilterAttSetAtt: [],
 	themesString: ""
 };
 
@@ -149,9 +149,9 @@ class ScreenAnalysisRulesSpatial extends Component{
 			featureLayers: VectorLayerStore.getAll(), // filter by topics?
 			attributeSetsResult: AttributeSetStore.getAll(), // filter by topics?
 			attributeSetsLayer: utils.getAttSetsForLayers(props.data.analysis.layerObject.key),
-			valueFeatureLayer: props.data.analysis.layerObject.key,
-			valueResultAttSet: props.data.analysis.attributeSet.key,
-			valueFilterAttSetAtt: props.data.analysis.filterAttributeSet.key + "-" + props.data.analysis.filterAttribute.key
+			valueFeatureLayer: [props.data.analysis.layerObject.key],
+			valueResultAttSet: [props.data.analysis.attributeSet.key],
+			valueFilterAttSetAtt: [props.data.analysis.filterAttributeSet.key + "-" + props.data.analysis.filterAttribute.key]
 		};
 	}
 
@@ -355,7 +355,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 				let newState = {
 					valueFeatureLayer: newValue,
 					attributeSetsLayer: layerAttSets,
-					valueFilterAttSetAtt: selectorValueAttSetAtt
+					valueFilterAttSetAtt: [selectorValueAttSetAtt]
 				};
 				_.assign(newState,ret);
 				thisComponent.setState(newState);
@@ -366,7 +366,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 			this.setState({
 				valueFeatureLayer: newValue,
 				attributeSetsLayer: [],
-				valueFilterAttSetAtt: null
+				valueFilterAttSetAtt: []
 			});
 
 		}
@@ -448,7 +448,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 								singleValueComponent={SingleValueDestination}
 								valueKey="key"
 								labelKey="name"
-								className={this.state.valueFilterAttSetAtt ? "multiline" : ""}
+								className={this.state.valueFilterAttSetAtt.length ? "multiline" : ""}
 								value={this.state.valueFilterAttSetAtt}
 							/>
 						</label>
