@@ -525,13 +525,14 @@ class ScreenAnalysisRulesSpatial extends Component{
 								<label className="container">
 									Attribute to average
 									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={ATTRIBUTES}
+										//onChange={this.onChangeFilterAttSetAtt.bind(this)}
+										options={this.state.filterDestinations}
+										optionComponent={OptionDestination}
+										singleValueComponent={SingleValueDestination}
 										valueKey="key"
 										labelKey="name"
-										//inputProps={selectInputProps}
-										value="160"
+										className={["435-432"].length ? "multiline" : ""}
+										value={["435-432"]}
 									/>
 								</label>
 							</td>
@@ -539,13 +540,14 @@ class ScreenAnalysisRulesSpatial extends Component{
 								<label className="container">
 									Weighting attribute
 									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={ATTRIBUTES}
+										//onChange={this.onChangeFilterAttSetAtt.bind(this)}
+										options={this.state.filterDestinations}
+										optionComponent={OptionDestination}
+										singleValueComponent={SingleValueDestination}
 										valueKey="key"
 										labelKey="name"
-										//inputProps={selectInputProps}
-										value="162"
+										className={["435-432"].length ? "multiline" : ""}
+										value={["435-432"]}
 									/>
 								</label>
 							</td>
@@ -589,13 +591,14 @@ class ScreenAnalysisRulesSpatial extends Component{
 								<label className="container">
 									Attribute to sum
 									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={ATTRIBUTES}
+										//onChange={this.onChangeFilterAttSetAtt.bind(this)}
+										options={this.state.filterDestinations}
+										optionComponent={OptionDestination}
+										singleValueComponent={SingleValueDestination}
 										valueKey="key"
 										labelKey="name"
-										//inputProps={selectInputProps}
-										value="160"
+										className={["435-432"].length ? "multiline" : ""}
+										value={["435-432"]}
 									/>
 								</label>
 							</td>
