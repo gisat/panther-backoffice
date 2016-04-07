@@ -105,7 +105,7 @@ var initialState = {
 	featureLayers: [],
 	attributeSetsResult: [],
 	attributeSetsLayer: [],
-	filterDestinations: [],
+	filterDestinations: null,
 	valueFeatureLayer: [],
 	valueResultAttSet: [],
 	valueFilterAttSetAtt: [],
@@ -252,9 +252,10 @@ class ScreenAnalysisRulesSpatial extends Component{
 	 */
 	atts2state(attributeSets) {
 		var ret = {
-			filterDestinations: []
+			filterDestinations: null
 		};
 		if (attributeSets) {
+			ret.filterDestinations = [];
 			for (let attset of attributeSets) {
 				if(attset.attributes) {
 					for (let att of attset.attributes) {
@@ -366,6 +367,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 			this.setState({
 				valueFeatureLayer: newValue,
 				attributeSetsLayer: [],
+				filterDestinations: null,
 				valueFilterAttSetAtt: []
 			});
 
@@ -532,7 +534,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 										valueKey="key"
 										labelKey="name"
 										className={["435-432"].length ? "multiline" : ""}
-										value={["435-432"]}
+										value={this.state.filterDestinations && this.state.filterDestinations.length ? ["435-432"] : []}
 									/>
 								</label>
 							</td>
@@ -547,7 +549,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 										valueKey="key"
 										labelKey="name"
 										className={["435-432"].length ? "multiline" : ""}
-										value={["435-432"]}
+										value={this.state.filterDestinations && this.state.filterDestinations.length ? ["435-432"] : []}
 									/>
 								</label>
 							</td>
@@ -598,7 +600,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 										valueKey="key"
 										labelKey="name"
 										className={["435-432"].length ? "multiline" : ""}
-										value={["435-432"]}
+										value={this.state.filterDestinations && this.state.filterDestinations.length ? ["435-432"] : []}
 									/>
 								</label>
 							</td>
