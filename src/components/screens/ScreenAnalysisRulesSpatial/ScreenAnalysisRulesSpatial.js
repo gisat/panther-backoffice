@@ -17,6 +17,8 @@ import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
+import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
+import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
 
 import AnalysisModel from '../../../models/AnalysisModel';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
@@ -101,9 +103,13 @@ const ATTSETS = [
 
 var initialState = {
 	analysis: null,
-	valueFeatureLayer: [],
-	valueResultAttSet: [],
-	valueFilterAttSet: [],
+	featureLayers: [],
+	attributeSetsResult: [],
+	attributeSetsLayer: [],
+	filterDestinations: [],
+	valueFeatureLayer: null,
+	valueResultAttSet: null,
+	valueFilterAttSetAtt: null,
 	themesString: ""
 };
 
@@ -142,7 +148,11 @@ class ScreenAnalysisRulesSpatial extends Component{
 	store2state(props) {
 		return {
 			featureLayers: VectorLayerStore.getAll(), // filter by topics?
-			attributeSetsResult: AttributeSetStore.getAll() // filter by topics?
+			attributeSetsResult: AttributeSetStore.getAll(), // filter by topics?
+			attributeSetsLayer: utils.getAttSetsForLayers(props.data.analysis.layerObject.key),
+			valueFeatureLayer: props.data.analysis.layerObject.key,
+			valueResultAttSet: props.data.analysis.attributeSet.key,
+			valueFilterAttSetAtt: props.data.analysis.filterAttributeSet.key + "-" + props.data.analysis.filterAttribute.key
 		};
 	}
 
@@ -155,7 +165,16 @@ class ScreenAnalysisRulesSpatial extends Component{
 			let store2state = this.store2state(props);
 			this.context.setStateFromStores.call(this, store2state, keys);
 			// if stores changed, overrides user input - todo fix
+			if(!keys || keys.indexOf("attributeSetsLayer")!=-1) {
+				store2state.attributeSetsLayer.then(function(attributeSets) {
+					thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
+				});
+			}
 		}
+	}
+
+	_onStoreChange(keys) {
+		this.setStateFromStores(this.props,keys);
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -225,6 +244,36 @@ class ScreenAnalysisRulesSpatial extends Component{
 	//	}
 	//	return isIt;
 	//}
+
+	/**
+	 * Prepare options for data table selects
+	 * Called in store2state().
+	 * @param attributeSets
+	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
+	 */
+	atts2state(attributeSets) {
+		var ret = {
+			filterDestinations: []
+		};
+		if (attributeSets) {
+			for (let attset of attributeSets) {
+				if(attset.attributes) {
+					for (let att of attset.attributes) {
+						let object = {
+							key: attset.key + "-" + att.key,
+							name: attset.name + " " + att.name,
+							attributeName: att.name,
+							attributeSetName: attset.name,
+							attributeKey: att.key,
+							attributeSetKey: attset.key
+						};
+						ret.filterDestinations.push(object);
+					}
+				}
+			}
+		}
+		return ret;
+	}
 
 	/**
 	 * Differentiate between states
@@ -298,16 +347,19 @@ class ScreenAnalysisRulesSpatial extends Component{
 			var layerAttSetsPromise = utils.getAttSetsForLayers(newValue);
 			layerAttSetsPromise.then(function (layerAttSets) {
 
-				let selectorValueAttSet = null;
-				if (layerAttSets.length == 1) {
-					selectorValueAttSet = layerAttSets[0].key;
+				let selectorValueAttSetAtt = null;
+				if (layerAttSets.length == 1 && layerAttSets[0].attributes.length == 1) {
+					selectorValueAttSetAtt = layerAttSets[0].key + "-" + layerAttSets[0].attributes[0].key;
 				}
 				//console.log(layerAttSets);
-				thisComponent.setState({
+				let ret = this.atts2state(layerAttSets);
+				let newState = {
 					valueFeatureLayer: newValue,
 					attributeSetsLayer: layerAttSets,
-					valueFilterAttSet: selectorValueAttSet
-				});
+					valueFilterAttSetAtt: selectorValueAttSetAtt
+				};
+				_.assign(newState,ret);
+				thisComponent.setState(newState);
 			});
 
 		} else {
@@ -326,10 +378,10 @@ class ScreenAnalysisRulesSpatial extends Component{
 		});
 	}
 
-	onChangeFilterAttSet (value, values) {
-		let newValue = utils.handleNewObjects(values, this.getAnalysisType(), {stateKey: "valueFilterAttSet"}, this.getStateHash());
+	onChangeFilterAttSetAtt (value, values) {
+		let newValue = utils.handleNewObjects(values, this.getAnalysisType(), {stateKey: "valueFilterAttSetAtt"}, this.getStateHash());
 		this.setState({
-			valueFilterAttSet: newValue
+			valueFilterAttSetAtt: newValue
 		});
 	}
 
@@ -387,15 +439,16 @@ class ScreenAnalysisRulesSpatial extends Component{
 
 				<div className="frame-input-wrapper">
 						<label className="container">
-							Filter attribute set
-							<UIObjectSelect
-								onChange={this.onChangeFilterAttSet.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.ATTRIBUTE_SET)}
-								options={ATTSETS}
+							Filter attribute
+							<Select
+								onChange={this.onChangeFilterAttSetAtt.bind(this)}
+								options={this.state.filterDestinations}
+								optionComponent={OptionDestination}
+								singleValueComponent={SingleValueDestination}
 								valueKey="key"
 								labelKey="name"
-								value={this.state.valueFilterAttSet}
-								className="template"
+								className="multiline"
+								value={this.state.valueFilterAttSetAtt}
 							/>
 						</label>
 				</div>
