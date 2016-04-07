@@ -66,45 +66,59 @@ export default {
 	},
 
 	getPeriodsForScope: function(scope) {
+		var self = this;
 		return new Promise(function(resolve, reject){
 
 			var scopePromise = null;
 			if(scope instanceof ScopeModel) {
-				scopePromise = Promise.resolve(scope);
+				//scopePromise = Promise.resolve(scope);
+				scopePromise = ScopeStore.getById(scope.key);
 			}else{
 				scopePromise = ScopeStore.getById(scope);
 			}
 
 			scopePromise.then(function(scopeModel){
-				ThemeStore.getFiltered({scope: scopeModel}).then(function(themeModels){
 
-					if(!themeModels.length){
-						return reject("getPeriodsForScope: themes with filter {scope: "+scope+"} not find.");
-					}
+				var periodKeys = [];
+				var periodModels = [];
 
-					var periodKeys = [];
-					var periodModels = [];
-
-					for(let theme of themeModels){
-						if(!theme.hasOwnProperty("periods")){
-							return reject("getPeriodsForScope: no periods property in theme!");
-						}
-						for(let period of theme.periods){
-							periodKeys.push(period.key);
-							periodModels.push(period);
-						}
-					}
+				if (scopeModel.periods.length) {
 
 					resolve({
-						keys: _.uniq(periodKeys),
-						models: _.uniq(periodModels)
+						keys: self.getModelsKeys(scopeModel.periods),
+						models: scopeModel.periods
 					});
 
-				}, function(){
+				} else {
 
-					reject("getPeriodsForScope: theme with filter {scope: " + scope + "} not resolved.");
+					ThemeStore.getFiltered({scope: scopeModel}).then(function (themeModels) {
 
-				});
+						if (!themeModels.length) {
+							return reject("getPeriodsForScope: themes with filter {scope: " + scope + "} not find.");
+						}
+
+						for (let theme of themeModels) {
+							if (!theme.hasOwnProperty("periods")) {
+								return reject("getPeriodsForScope: no periods property in theme!");
+							}
+							for (let period of theme.periods) {
+								periodKeys.push(period.key);
+								periodModels.push(period);
+							}
+						}
+
+						resolve({
+							keys: _.uniq(periodKeys),
+							models: _.uniq(periodModels)
+						});
+
+					}, function () {
+
+						reject("getPeriodsForScope: theme with filter {scope: " + scope + "} not resolved.");
+
+					});
+
+				}
 			});
 		});
 	},
