@@ -306,9 +306,7 @@ class ScreenStore extends Store {
 				order: order,
 				data: options.data
 			};
-			console.log("creating screen with data:",screen.data);
 			this._screenSets[screenSetKey].screens[screenKey] = screen;
-			console.log("creating screen models:",this.generateModels());
 			this._models = Promise.resolve(this.generateModels());
 			this._historyStacks[screenSetKey].unshift({
 				screen: screen,
