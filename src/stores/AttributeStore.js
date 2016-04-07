@@ -3,10 +3,17 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import AttributeModel from '../models/AttributeModel';
 
+//import UserStore from './UserStore';
+
+
 class AttributeStore extends Store {
 
 	getApiUrl(){
 		return "/rest/attribute";
+	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
 	}
 
 	getInstance(options,data){

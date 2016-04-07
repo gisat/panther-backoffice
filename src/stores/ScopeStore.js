@@ -3,11 +3,23 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import ScopeModel from '../models/ScopeModel';
 
+//import UserStore from './UserStore';
+import AULevelStore from './AULevelStore';
+import PeriodStore from './PeriodStore';
+
+
 class ScopeStore extends Store {
 
 	getApiUrl(){
 		return "/rest/dataset";
 	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
+		this.changeListener.add(AULevelStore);
+		this.changeListener.add(PeriodStore);
+	}
+
 	getInstance(options,data){
 		return new ScopeModel(options,data);
 	}

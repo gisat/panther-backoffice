@@ -4,12 +4,29 @@ import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
 import AnalysisRunModel from '../models/AnalysisRunModel';
 
+//import UserStore from './UserStore';
+import AnalysisStore from './AnalysisStore';
+import GeneralLayerStore from './GeneralLayerStore';
+import ScopeStore from './ScopeStore';
+import PlaceStore from './PlaceStore';
+import PeriodStore from './PeriodStore';
+
 
 class AnalysisRunStore extends Store {
 
 	getApiUrl(){
 		return "/rest/performedanalysis";
 	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
+		this.changeListener.add(AnalysisStore);
+		this.changeListener.add(GeneralLayerStore);
+		this.changeListener.add(ScopeStore);
+		this.changeListener.add(PlaceStore);
+		this.changeListener.add(PeriodStore);
+	}
+
 	getInstance(options,data){
 		return new AnalysisRunModel(options,data);
 	}

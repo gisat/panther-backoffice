@@ -3,11 +3,25 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import VectorLayerModel from '../models/VectorLayerModel';
 
+//import UserStore from './UserStore';
+import LayerGroupStore from './LayerGroupStore';
+import StyleStore from './StyleStore';
+import TopicStore from './TopicStore';
+
+
 class VectorLayerStore extends Store {
 
 	getApiUrl(){
 		return "/rest/areatemplate";
 	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
+		this.changeListener.add(LayerGroupStore);
+		this.changeListener.add(StyleStore);
+		this.changeListener.add(TopicStore);
+	}
+
 	getInstance(options,data){
 		// for now we have non-raster layers (vector + AU levels)
 		//if(data && !data.justVisualization) {

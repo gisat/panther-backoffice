@@ -3,10 +3,17 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import LayerGroupModel from '../models/LayerGroupModel';
 
+//import UserStore from './UserStore';
+
+
 class LayerGroupStore extends Store {
 
 	getApiUrl(){
 		return "/rest/layergroup";
+	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
 	}
 
 	getInstance(options,data){

@@ -3,10 +3,19 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import StyleModel from '../models/StyleModel';
 
+//import UserStore from './UserStore';
+import TopicStore from './TopicStore';
+
+
 class StyleStore extends Store {
 
 	getApiUrl(){
 		return "/rest/symbology";
+	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
+		this.changeListener.add(TopicStore);
 	}
 
 	getInstance(options,data){
