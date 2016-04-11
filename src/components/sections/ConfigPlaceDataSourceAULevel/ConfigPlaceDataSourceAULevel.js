@@ -322,12 +322,9 @@ class ConfigPlaceDataSourceAULevel extends Component {
 
 	getDataLayerColumns (dataLayerKey) {
 		return new Promise ( function (resolve,reject) {
-			console.log("getDataLayerColumns dataLayerKey",dataLayerKey);
 			let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(dataLayerKey);
 			if(dataLayerColumnsPromise) {
-				console.log("getDataLayerColumns if");
 				dataLayerColumnsPromise.then(function (dataLayerColumns) {
-					console.log("getDataLayerColumns then");
 					let columns = [];
 					_.each(dataLayerColumns, function (column) {
 						if (column.hasOwnProperty("name")) {
@@ -346,8 +343,13 @@ class ConfigPlaceDataSourceAULevel extends Component {
 
 
 	onChangeDataLayer(value, values) {
-		this.setState({
-			valueDataLayer: value
+		let thisComponent = this;
+		let columnsPromise = this.getDataLayerColumns(value);
+		columnsPromise.then( function (columns) {
+			thisComponent.setState({
+				valueDataLayer: value,
+				columns: columns
+			});
 		});
 	}
 
