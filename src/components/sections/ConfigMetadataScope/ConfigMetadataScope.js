@@ -13,6 +13,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 import ScopeStore from '../../../stores/ScopeStore';
 import AULevelStore from '../../../stores/AULevelStore';
 import PeriodStore from '../../../stores/PeriodStore';
+import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
@@ -202,7 +203,53 @@ class ConfigMetadataScope extends Component{
 		}
 		let modelObj = new Model[ObjectTypes.SCOPE](modelData);
 		actionData.push({type:"update",model:modelObj});
+		this.handleRelations(modelObj.periods, this.state.scope.periods);
 		ActionCreator.handleObjects(actionData,ObjectTypes.SCOPE);
+	}
+
+	/**
+	 * propagate changes in scope periods to relations
+	 */
+	handleRelations(newPeriods, oldPeriods) {
+		let thisComponent = this;
+		let actionData = [], promises = [];
+		for (let level of this.state.scope.levels) {
+			let levelRelationsPromise = ObjectRelationStore.getFiltered({layerObject: level});
+			promises.push(levelRelationsPromise);
+		}
+		Promise.all(promises).then(function(relations){
+			relations = _.flatten(relations,true);
+
+			let places = [];
+			for (let relation of relations) {
+				places.push(relation.place);
+			}
+			places = _.uniq(places);
+
+			for (let level of thisComponent.state.scope.levels) {
+				for (let place of places) {
+					let firstLevelPlaceRelation = _.findWhere(relations,{layerObject:level, place:place});
+					if (firstLevelPlaceRelation) {
+						let relationData = utils.clone(firstLevelPlaceRelation);
+						delete relationData.key;
+						delete relationData.period;
+						for (let period of newPeriods) {
+							let relation = _.findWhere(relations, {layerObject: level, place: place, period: period});
+							if(!relation) {
+								let modelData = utils.clone(relationData);
+								modelData.period = period;
+								let modelObj = new Model[ObjectTypes.OBJECT_RELATION](modelData);
+								actionData.push({type:"create",model:modelObj});
+							}
+						}
+					}
+				}
+			}
+
+			console.log("handleRelations actionData",actionData); // todo clear relations for removed periods
+			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
+
+		});
 	}
 
 	onChangeActive() {
