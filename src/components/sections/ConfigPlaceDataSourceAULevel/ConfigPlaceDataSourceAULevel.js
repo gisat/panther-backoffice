@@ -281,13 +281,16 @@ class ConfigPlaceDataSourceAULevel extends Component {
 
 
 	saveForm() {
+
+		var actionData = [];
+
 		if (
-			this.state.relations &&
+			this.state.relations.length &&
 			this.state.valueDataLayer &&
 			this.state.valueFidColumn
 		) {
+			// updating
 
-			var actionData = [];
 			var relations = utils.clone(this.state.relations);
 
 			for (let relation of relations) {
@@ -314,10 +317,57 @@ class ConfigPlaceDataSourceAULevel extends Component {
 				actionData.push({type: "update", model: model});
 
 			}
+		} else if (
+			this.state.valueDataLayer &&
+			this.state.valueFidColumn &&
+			(
+				// this is the uppermost level, or parent column is filled in
+				this.state.place.scope.levels[0].key == this.props.selectorValueAULevel ||
+				this.state.valueParentColumn
+			)
+		) {
+			// saving new relations
 
-			//console.log("relations to save:", actionData);
-			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
+			let scopePeriods = this.state.place.scope.periods;
+			//let scopePeriodsPromise = utils.getPeriodsForScope(this.state.place.scope);
+			for (let period of scopePeriods) {
+
+				let dataSource = _.findWhere(this.state.dataLayers, {key: this.state.valueDataLayer});
+
+				let object = {
+					active: true,
+					period: period,
+					layerObject: this.state.auLevel,
+					place: this.state.place,
+					placeKey: this.state.place.key, // temp - todo remove when unneded
+					isOfAttributeSet: false,
+					dataSource: dataSource,
+					dataSourceString: dataSource.key, // temp - todo remove when unneded
+					dataSourceOrigin: "geonode",
+					fidColumn: this.state.valueFidColumn
+				};
+				if (this.state.valueNameColumn) {
+					object.nameColumn = this.state.valueNameColumn;
+				} else if (this.state.savedState.valueNameColumn) {
+					object.nameColumn = null;
+				}
+				if (this.state.valueParentColumn) {
+					object.parentColumn = this.state.valueParentColumn;
+				} else if (this.state.savedState.valueParentColumn) {
+					object.parentColumn = null;
+				}
+
+				let model = new Model[ObjectTypes.OBJECT_RELATION](object);
+				actionData.push({type: "create", model: model});
+
+			}
 		}
+
+		if (actionData.length) {
+			//console.log("relations to save:", actionData);
+			ActionCreator.handleObjects(actionData, ObjectTypes.OBJECT_RELATION);
+		}
+
 	}
 
 	getDataLayerColumns (dataLayerKey) {
