@@ -140,21 +140,24 @@ class ConfigPlaceDataSourceAULevel extends Component {
 					//	valueDataLayer = state.relationsState[relation.key].valueDataLayer;
 					//}
 					dataLayers.push(valueRelationDataLayer);
-					let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(valueRelationDataLayer);
+					//let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(valueRelationDataLayer);
+					let dataLayerColumnsPromise = thisComponent.getDataLayerColumns(valueRelationDataLayer);
 					promises.push(dataLayerColumnsPromise);
 					if(dataLayerColumnsPromise) {
 						dataLayerColumnsPromise.then(function (dataLayerColumns) {
-							let columns = [];
-							_.each(dataLayerColumns, function (column) {
-								if (column.hasOwnProperty("name")) {
-									columns.push({
-										key: column.name,
-										name: column.name
-									});
-								}
-							});
+							//let columns = [];
+							//_.each(dataLayerColumns, function (column) {
+							//	if (column.hasOwnProperty("name")) {
+							//		columns.push({
+							//			key: column.name,
+							//			name: column.name
+							//		});
+							//	}
+							//});
+							console.log("then getDataLayerColumns",dataLayerColumns);
 							relationsState[relation.key] = {
-								columns: columns,
+								//columns: columns,
+								columns: dataLayerColumns,
 								valuesColumnMap: relation.columnMap,
 								//valueDataLayer: valueRelationDataLayer,
 								valueFidColumn: relation.fidColumn,
@@ -297,6 +300,30 @@ class ConfigPlaceDataSourceAULevel extends Component {
 			//console.log("relations to save:", actionData);
 			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
 		}
+	}
+
+	getDataLayerColumns (dataLayerKey) {
+		return new Promise ( function (resolve,reject) {
+			console.log("getDataLayerColumns dataLayerKey",dataLayerKey);
+			let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(dataLayerKey);
+			if(dataLayerColumnsPromise) {
+				console.log("getDataLayerColumns if");
+				dataLayerColumnsPromise.then(function (dataLayerColumns) {
+					console.log("getDataLayerColumns then");
+					let columns = [];
+					_.each(dataLayerColumns, function (column) {
+						if (column.hasOwnProperty("name")) {
+							columns.push({
+								key: column.name,
+								name: column.name
+							});
+						}
+					});
+					resolve (columns);
+				});
+			}
+		});
+
 	}
 
 
