@@ -130,69 +130,87 @@ class ConfigPlaceDataSourceAULevel extends Component {
 		let promises = [];
 		let dataLayers = [];
 		let valueDataLayer = null;
-		for (let relation of thisComponent.state.relations) { // todo clear form if no relations
+		if (this.state.relations.length) {
+			for (let relation of thisComponent.state.relations) { // todo clear form if no relations
 
-			if (relation.dataSourceOrigin=="geonode") {
-				(function (relation) { // todo is this needed with let instead of var?
+				if (relation.dataSourceOrigin == "geonode") {
+					(function (relation) { // todo is this needed with let instead of var?
 
-					let valueRelationDataLayer = relation.dataSourceString;
-					//if (state.relationsState[relation.key]) {
-					//	valueDataLayer = state.relationsState[relation.key].valueDataLayer;
-					//}
-					dataLayers.push(valueRelationDataLayer);
-					//let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(valueRelationDataLayer);
-					let dataLayerColumnsPromise = thisComponent.getDataLayerColumns(valueRelationDataLayer);
-					promises.push(dataLayerColumnsPromise);
-					if(dataLayerColumnsPromise) {
-						dataLayerColumnsPromise.then(function (dataLayerColumns) {
-							//let columns = [];
-							//_.each(dataLayerColumns, function (column) {
-							//	if (column.hasOwnProperty("name")) {
-							//		columns.push({
-							//			key: column.name,
-							//			name: column.name
-							//		});
-							//	}
-							//});
-							console.log("then getDataLayerColumns",dataLayerColumns);
-							relationsState[relation.key] = {
-								//columns: columns,
-								columns: dataLayerColumns,
-								valuesColumnMap: relation.columnMap,
-								//valueDataLayer: valueRelationDataLayer,
-								valueFidColumn: relation.fidColumn,
-								valueNameColumn: relation.nameColumn,
-								valueParentColumn: relation.parentColumn
-							};
-						});
-					}
+						let valueRelationDataLayer = relation.dataSourceString;
+						//if (state.relationsState[relation.key]) {
+						//	valueDataLayer = state.relationsState[relation.key].valueDataLayer;
+						//}
+						dataLayers.push(valueRelationDataLayer);
+						//let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(valueRelationDataLayer);
+						let dataLayerColumnsPromise = thisComponent.getDataLayerColumns(valueRelationDataLayer);
+						promises.push(dataLayerColumnsPromise);
+						if (dataLayerColumnsPromise) {
+							dataLayerColumnsPromise.then(function (dataLayerColumns) {
+								//let columns = [];
+								//_.each(dataLayerColumns, function (column) {
+								//	if (column.hasOwnProperty("name")) {
+								//		columns.push({
+								//			key: column.name,
+								//			name: column.name
+								//		});
+								//	}
+								//});
+								console.log("then getDataLayerColumns", dataLayerColumns);
+								relationsState[relation.key] = {
+									//columns: columns,
+									columns: dataLayerColumns,
+									valuesColumnMap: relation.columnMap,
+									//valueDataLayer: valueRelationDataLayer,
+									valueFidColumn: relation.fidColumn,
+									valueNameColumn: relation.nameColumn,
+									valueParentColumn: relation.parentColumn
+								};
+							});
+						}
 
-				})(relation);
+					})(relation);
+				}
 			}
-		}
-		Promise.all(promises).then(function(){
+			Promise.all(promises).then(function () {
 
-			valueDataLayer = dataLayers[0]; // todo check all
-			let columns = relationsState[thisComponent.state.relations[0].key].columns;
+				valueDataLayer = dataLayers[0]; // todo check all
+				let columns = relationsState[thisComponent.state.relations[0].key].columns;
+				let savedState = {
+					valueDataLayer: valueDataLayer,
+					valueFidColumn: thisComponent.state.relations[0].fidColumn,
+					valueNameColumn: thisComponent.state.relations[0].nameColumn,
+					valueParentColumn: thisComponent.state.relations[0].parentColumn
+				};
+				let newState = {
+					relationsState: {$merge: relationsState},
+					valueDataLayer: {$set: valueDataLayer},
+					valueFidColumn: {$set: thisComponent.state.relations[0].fidColumn},
+					valueNameColumn: {$set: thisComponent.state.relations[0].nameColumn},
+					valueParentColumn: {$set: thisComponent.state.relations[0].parentColumn},
+					savedState: {$merge: savedState},
+					columns: {$set: columns}
+				};
+				thisComponent.context.setStateDeep.call(thisComponent, newState);
+
+			});
+		} else {
 			let savedState = {
-				valueDataLayer: valueDataLayer,
-				valueFidColumn: thisComponent.state.relations[0].fidColumn,
-				valueNameColumn: thisComponent.state.relations[0].nameColumn,
-				valueParentColumn: thisComponent.state.relations[0].parentColumn
+				valueDataLayer: null,
+				valueFidColumn: null,
+				valueNameColumn: null,
+				valueParentColumn: null
 			};
 			let newState = {
-				relationsState: {$merge: relationsState},
-				valueDataLayer: {$set: valueDataLayer},
-				valueFidColumn: {$set: thisComponent.state.relations[0].fidColumn},
-				valueNameColumn: {$set: thisComponent.state.relations[0].nameColumn},
-				valueParentColumn: {$set: thisComponent.state.relations[0].parentColumn},
+				relationsState: {$merge: {}},
+				valueDataLayer: {$set: null},
+				valueFidColumn: {$set: null},
+				valueNameColumn: {$set: null},
+				valueParentColumn: {$set: null},
 				savedState: {$merge: savedState},
-				columns: {$set: columns}
+				columns: {$set: []}
 			};
 			thisComponent.context.setStateDeep.call(thisComponent, newState);
-
-		});
-
+		}
 	}
 
 	_onStoreChange(keys) {
