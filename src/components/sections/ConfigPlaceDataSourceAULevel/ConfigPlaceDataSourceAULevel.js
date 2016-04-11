@@ -201,7 +201,7 @@ class ConfigPlaceDataSourceAULevel extends Component {
 				valueParentColumn: null
 			};
 			let newState = {
-				relationsState: {$merge: {}},
+				relationsState: {$set: {}},
 				valueDataLayer: {$set: null},
 				valueFidColumn: {$set: null},
 				valueNameColumn: {$set: null},
