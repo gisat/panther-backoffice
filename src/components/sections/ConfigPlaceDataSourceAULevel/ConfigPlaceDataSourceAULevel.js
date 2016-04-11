@@ -182,7 +182,7 @@ class ConfigPlaceDataSourceAULevel extends Component {
 					valueParentColumn: thisComponent.state.relations[0].parentColumn
 				};
 				let newState = {
-					relationsState: {$merge: relationsState},
+					relationsState: {$set: relationsState},
 					valueDataLayer: {$set: valueDataLayer},
 					valueFidColumn: {$set: thisComponent.state.relations[0].fidColumn},
 					valueNameColumn: {$set: thisComponent.state.relations[0].nameColumn},
