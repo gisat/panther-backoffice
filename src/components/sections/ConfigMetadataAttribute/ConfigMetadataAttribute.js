@@ -126,7 +126,7 @@ class ConfigMetadataAttribute extends Component{
 			isIt = (
 					this.state.valueActive == this.state.attribute.active &&
 					this.state.valueName == this.state.attribute.name &&
-					this.state.valueCode == this.state.attribute.code &&
+					//this.state.valueCode == this.state.attribute.code &&
 					_.isEqual(this.state.valueType,this.state.savedState.valueType) &&
 					_.isEqual(this.state.valueUnitsStandard,this.state.savedState.valueUnitsStandard) &&
 					this.state.valueUnitsCustom == this.state.attribute.customUnits &&
@@ -159,7 +159,7 @@ class ConfigMetadataAttribute extends Component{
 		_.assign(modelData, this.state.attribute);
 		modelData.active = this.state.valueActive;
 		modelData.name = this.state.valueName;
-		modelData.code = this.state.valueCode;
+		//modelData.code = this.state.valueCode;
 		//modelData.type = _.findWhere(this.state.topics, {key: this.state.valueTopic[0]});
 		modelData.type = this.state.valueType;
 		modelData.standardUnits = this.state.valueUnitsStandard;
@@ -294,7 +294,7 @@ class ConfigMetadataAttribute extends Component{
 					</label>
 				</div>
 
-				<div className="frame-input-wrapper">
+				{/*<div className="frame-input-wrapper">
 					<label className="container">
 						Code
 						<Input
@@ -305,10 +305,10 @@ class ConfigMetadataAttribute extends Component{
 							onChange={this.onChangeCode.bind(this)}
 						/>
 					</label>
-					{/*<div className="frame-input-wrapper-info">
+					<div className="frame-input-wrapper-info">
 
-					</div>*/}
-				</div>
+					</div>
+				</div>*/}
 
 				<div className="frame-input-wrapper">
 					<label className="container">
