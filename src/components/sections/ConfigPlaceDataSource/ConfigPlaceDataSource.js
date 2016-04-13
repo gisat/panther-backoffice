@@ -112,7 +112,7 @@ class ConfigPlaceDataSource extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(PlaceStore, ["place"]);
 		this.changeListener.add(AttributeSetStore, ["attSet"]);
 		this.changeListener.add(AULevelStore, ["auLevel"]);
@@ -120,7 +120,7 @@ class ConfigPlaceDataSource extends Component {
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

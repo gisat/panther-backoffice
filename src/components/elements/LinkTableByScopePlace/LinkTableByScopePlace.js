@@ -353,7 +353,7 @@ class LinkTableByScopePlace extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 
 		this.changeListener.add(AttributeSetStore, ["scopeAttributeSets"]);
 		this.changeListener.add(PeriodStore, ["scopePeriods"]);
@@ -373,7 +373,7 @@ class LinkTableByScopePlace extends Component {
 		});
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

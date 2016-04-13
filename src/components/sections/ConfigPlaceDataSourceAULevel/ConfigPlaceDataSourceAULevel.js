@@ -217,7 +217,7 @@ class ConfigPlaceDataSourceAULevel extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(PlaceStore, ["place"]);
 		this.changeListener.add(AULevelStore, ["auLevel"]);
 		this.changeListener.add(DataLayerStore, ["dataLayers"]);
@@ -226,7 +226,7 @@ class ConfigPlaceDataSourceAULevel extends Component {
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 
@@ -396,10 +396,12 @@ class ConfigPlaceDataSourceAULevel extends Component {
 		let thisComponent = this;
 		let columnsPromise = this.getDataLayerColumns(value);
 		columnsPromise.then( function (columns) {
-			thisComponent.setState({
-				valueDataLayer: value,
-				columns: columns
-			});
+			if(thisComponent.mounted) {
+				thisComponent.setState({
+					valueDataLayer: value,
+					columns: columns
+				});
+			}
 		});
 	}
 

@@ -120,7 +120,7 @@ class ConfigAnalysisSpatial extends Component{
 	}
 
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 
 
 

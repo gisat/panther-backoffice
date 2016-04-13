@@ -92,7 +92,7 @@ class ScreenPlaceDataSourceAttSet extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 		this.changeListener.add(AULevelStore, ["auLevels"]);
@@ -100,7 +100,7 @@ class ScreenPlaceDataSourceAttSet extends Component {
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

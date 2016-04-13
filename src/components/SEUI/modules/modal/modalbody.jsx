@@ -45,7 +45,7 @@ export class ModalBody extends React.Component {
 				super(props);
 		}
 
-		componentDidMount() {
+		componentDidMount() { this.mounted = true;
 				if (!this.sizes || !this.sizes.height) {
 						let component = $(this);
 

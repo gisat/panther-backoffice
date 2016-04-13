@@ -75,7 +75,7 @@ class LinkTableRasterByScopePlace extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 
 		this.changeListener.add(RasterLayerStore, ["scopeLayerTemplates"]);
 		this.changeListener.add(PeriodStore, ["scopePeriods"]);
@@ -92,7 +92,7 @@ class LinkTableRasterByScopePlace extends Component {
 		});
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

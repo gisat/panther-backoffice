@@ -70,16 +70,21 @@ class ScreenContainer extends Component{
 
 	_focusScreen(screenKey) {
 		if(screenKey==this.props.screenState.key) {
-			this._domSelf.focus();
+			if(this._domSelf) {
+				this._domSelf.focus();
+			} else {
+				console.log(screenKey + " _domSelf is null" + this);
+			}
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { 
+		this.mounted = true;
 		console.log(ScreenStore);
 		this.focusListener.add(ScreenStore);
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.focusListener.clean();
 	}
 

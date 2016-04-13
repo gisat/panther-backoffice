@@ -30,7 +30,7 @@ export class Dimmable extends Component {
 				}
 		}
 
-		componentWillUnmount() {
+		componentWillUnmount() { this.mounted = false;
 				if (this.props.page) {
 						document.body.classList.remove('dimmed');
 				}

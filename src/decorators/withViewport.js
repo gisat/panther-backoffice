@@ -36,7 +36,7 @@ function withViewport(ComposedComponent) {
       EE.on(RESIZE_EVENT, this.handleResize, this);
     }
 
-    componentWillUnmount() {
+    componentWillUnmount() { this.mounted = false;
       EE.removeListener(RESIZE_EVENT, this.handleResize, this);
       if (!EE.listeners(RESIZE_EVENT, true)) {
         window.removeEventListener('resize', handleWindowResize);

@@ -94,14 +94,14 @@ class ScreenPlaceDataSourceLayer extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(Store[this.props.data.objectType], ["layers"]);
 
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

@@ -69,7 +69,7 @@ export class Dimmer extends Component {
 		}
 
 		// IE 10+
-		componentWillUnmount() {
+		componentWillUnmount() { this.mounted = false;
 				if (this.props.page) {
 						document.body.classList.remove('dimmable');
 				}

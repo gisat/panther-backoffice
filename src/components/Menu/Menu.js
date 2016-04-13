@@ -81,7 +81,7 @@ class Menu extends Component {
 		);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 
 		$("#menu").focusin(function() {
 			$(this).addClass("open");

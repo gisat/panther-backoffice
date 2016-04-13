@@ -79,7 +79,9 @@ class ConfigMetadataPlace extends Component{
 						valueScope: place.scope ? [place.scope.key] : []
 					};
 					newState.savedState = utils.deepClone(newState);
-					thisComponent.setState(newState);
+					if(thisComponent.mounted) {
+						thisComponent.setState(newState);
+					}
 				});
 			}
 		}
@@ -122,7 +124,7 @@ class ConfigMetadataPlace extends Component{
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(PlaceStore,["place"]);
 		this.changeListener.add(ScopeStore,["scopes"]);
 		this.responseListener.add(ScopeStore);
@@ -130,7 +132,7 @@ class ConfigMetadataPlace extends Component{
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 		this.responseListener.clean();
 	}

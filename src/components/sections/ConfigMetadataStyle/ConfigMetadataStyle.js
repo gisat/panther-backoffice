@@ -79,7 +79,9 @@ class ConfigMetadataStyle extends Component{
 						valueTopic: style.topic ? [style.topic.key] : []
 					};
 					newState.savedState = utils.deepClone(newState);
-					thisComponent.setState(newState);
+					if(thisComponent.mounted) {
+						thisComponent.setState(newState);
+					}
 				});
 			}
 		}
@@ -122,7 +124,7 @@ class ConfigMetadataStyle extends Component{
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(StyleStore, ["style"]);
 		this.changeListener.add(TopicStore, ["topics"]);
 		this.responseListener.add(TopicStore);
@@ -130,7 +132,7 @@ class ConfigMetadataStyle extends Component{
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 		this.responseListener.clean();
 	}

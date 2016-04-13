@@ -70,7 +70,9 @@ class ConfigMetadataLayerGroup extends Component{
 						valueOrder: layerGroup.order
 					};
 					newState.savedState = utils.deepClone(newState);
-					thisComponent.setState(newState);
+					if(thisComponent.mounted) {
+						thisComponent.setState(newState);
+					}
 				});
 			}
 		}
@@ -80,12 +82,12 @@ class ConfigMetadataLayerGroup extends Component{
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		LayerGroupStore.addChangeListener(this._onStoreChange.bind(this,["layerGroup"]));
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		LayerGroupStore.removeChangeListener(this._onStoreChange.bind(this,["layerGroup"]));
 	}
 

@@ -193,7 +193,7 @@ class LinkTableVectorByScopePlace extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 
 		this.changeListener.add(VectorLayerStore, ["scopeLayerTemplates"]);
 		this.changeListener.add(VectorLayerStore, ["scopeAttributeSets"]);
@@ -214,7 +214,7 @@ class LinkTableVectorByScopePlace extends Component {
 		});
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

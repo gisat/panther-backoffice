@@ -56,7 +56,7 @@ function withStyles(styles) {
       }
     }
 
-    componentWillUnmount() {
+    componentWillUnmount() { this.mounted = false;
       styles.unuse();
       if (this.styleId) {
         this.refCount--;
