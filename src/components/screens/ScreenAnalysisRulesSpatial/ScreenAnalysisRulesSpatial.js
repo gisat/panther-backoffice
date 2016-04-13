@@ -213,7 +213,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		//this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(VectorLayerStore, ["featureLayer"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSetsResult"]); // todo attributeSetsLayer
@@ -223,7 +223,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 		this.responseListener.clean();
 	}
@@ -359,7 +359,9 @@ class ScreenAnalysisRulesSpatial extends Component{
 					valueFilterAttSetAtt: [selectorValueAttSetAtt]
 				};
 				_.assign(newState,ret);
-				thisComponent.setState(newState);
+				if(thisComponent.mounted) {
+					thisComponent.setState(newState);
+				}
 			});
 
 		} else {

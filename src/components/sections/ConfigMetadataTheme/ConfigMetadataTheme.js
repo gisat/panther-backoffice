@@ -82,7 +82,9 @@ class ConfigMetadataTheme extends Component{
 						valuesPeriods: utils.getModelsKeys(theme.periods)
 					};
 					newState.savedState = utils.deepClone(newState);
-					thisComponent.setState(newState);
+					if(thisComponent.mounted) {
+						thisComponent.setState(newState);
+					}
 
 				});
 			}
@@ -133,7 +135,7 @@ class ConfigMetadataTheme extends Component{
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		ThemeStore.addChangeListener(this._onStoreChange.bind(this,["theme"]));
 		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
 		ScopeStore.addResponseListener(this._onStoreResponse.bind(this));
@@ -143,7 +145,7 @@ class ConfigMetadataTheme extends Component{
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["theme"]));
 		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
 		ScopeStore.removeResponseListener(this._onStoreResponse.bind(this));

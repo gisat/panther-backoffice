@@ -171,12 +171,14 @@ class ConfigDataLayer extends Component {
 				let stateKey = responseData.stateKey;
 				let values = utils.deepClone(thisComponent.state[stateKey]);
 				values.push(result[0].key);
-				thisComponent.setState({
-					[stateKey]: values
-				},
-				function () {
-					//console.log("_onStoreResponse updated state:", thisComponent.state);
-				});
+				if(thisComponent.mounted) {
+					thisComponent.setState({
+							[stateKey]: values
+						},
+						function () {
+							//console.log("_onStoreResponse updated state:", thisComponent.state);
+						});
+				}
 				var screenObjectType;
 				switch(stateKey){
 					case "valueVLTemplate":
@@ -220,7 +222,7 @@ class ConfigDataLayer extends Component {
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(ScopeStore, ["scopes"]);
 		this.responseListener.add(ScopeStore);
 		this.changeListener.add(VectorLayerStore, ["vectorLayerTemplates"]);
@@ -241,7 +243,7 @@ class ConfigDataLayer extends Component {
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 		this.responseListener.clean();
 	}

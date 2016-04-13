@@ -74,7 +74,9 @@ class ConfigMetadataAULevel extends Component{
 						valueName: layer.name
 					};
 					newState.savedState = utils.deepClone(newState);
-					thisComponent.setState(newState);
+					if(thisComponent.mounted) {
+						thisComponent.setState(newState);
+					}
 				});
 			}
 		}
@@ -84,12 +86,12 @@ class ConfigMetadataAULevel extends Component{
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(AULevelStore, ["layer"]);
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

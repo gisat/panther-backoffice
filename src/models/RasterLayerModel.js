@@ -82,6 +82,13 @@ class RasterLayerModel extends Model {
 				},
 				transformForServer: this.getKey,
 				isPromise: true
+			},
+			justVisualization: {
+				serverName: 'justVisualization',
+				sendToServer: true,
+				transformForServer: function(){
+					return true;
+				}
 			}
 		};
 	}

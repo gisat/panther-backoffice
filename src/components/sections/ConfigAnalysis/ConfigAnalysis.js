@@ -93,7 +93,9 @@ class ConfigAnalysis extends Component {
 							valueTopics: utils.getModelsKeys(analysis.topics)
 						};
 						newState.savedState = utils.deepClone(newState);
-						thisComponent.setState(newState);
+						if(thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					});
 				});
 			}
@@ -137,7 +139,7 @@ class ConfigAnalysis extends Component {
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(AnalysisRunStore, ["runs"]);
 		this.changeListener.add(TopicStore, ["topics"]);
@@ -146,7 +148,7 @@ class ConfigAnalysis extends Component {
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 		this.responseListener.clean();
 	}
@@ -162,9 +164,11 @@ class ConfigAnalysis extends Component {
 		if (this.state.valueTopics && (oldState.valueTopics != this.state.valueTopics)) {
 			var thisComponent = this;
 			utils.getThemesForTopics(this.state.valueTopics).then(function(themes){
-				thisComponent.setState({
-					topicThemes: themes
-				});
+				if(thisComponent.mounted) {
+					thisComponent.setState({
+						topicThemes: themes
+					});
+				}
 			});
 		}
 	}

@@ -130,73 +130,94 @@ class ConfigPlaceDataSourceAULevel extends Component {
 		let promises = [];
 		let dataLayers = [];
 		let valueDataLayer = null;
-		for (let relation of thisComponent.state.relations) { // todo clear form if no relations
+		if (this.state.relations.length) {
+			for (let relation of thisComponent.state.relations) { // todo clear form if no relations
 
-			if (relation.dataSourceOrigin=="geonode") {
-				(function (relation) { // todo is this needed with let instead of var?
+				if (relation.dataSourceOrigin == "geonode") {
+					(function (relation) { // todo is this needed with let instead of var?
 
-					let valueRelationDataLayer = relation.dataSourceString;
-					//if (state.relationsState[relation.key]) {
-					//	valueDataLayer = state.relationsState[relation.key].valueDataLayer;
-					//}
-					dataLayers.push(valueRelationDataLayer);
-					let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(valueRelationDataLayer);
-					promises.push(dataLayerColumnsPromise);
-					if(dataLayerColumnsPromise) {
-						dataLayerColumnsPromise.then(function (dataLayerColumns) {
-							let columns = [];
-							_.each(dataLayerColumns, function (column) {
-								if (column.hasOwnProperty("name")) {
-									columns.push({
-										key: column.name,
-										name: column.name
-									});
-								}
+						let valueRelationDataLayer = relation.dataSourceString;
+						//if (state.relationsState[relation.key]) {
+						//	valueDataLayer = state.relationsState[relation.key].valueDataLayer;
+						//}
+						dataLayers.push(valueRelationDataLayer);
+						//let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(valueRelationDataLayer);
+						let dataLayerColumnsPromise = thisComponent.getDataLayerColumns(valueRelationDataLayer);
+						promises.push(dataLayerColumnsPromise);
+						if (dataLayerColumnsPromise) {
+							dataLayerColumnsPromise.then(function (dataLayerColumns) {
+								//let columns = [];
+								//_.each(dataLayerColumns, function (column) {
+								//	if (column.hasOwnProperty("name")) {
+								//		columns.push({
+								//			key: column.name,
+								//			name: column.name
+								//		});
+								//	}
+								//});
+								console.log("then getDataLayerColumns", dataLayerColumns);
+								relationsState[relation.key] = {
+									//columns: columns,
+									columns: dataLayerColumns,
+									valuesColumnMap: relation.columnMap,
+									//valueDataLayer: valueRelationDataLayer,
+									valueFidColumn: relation.fidColumn,
+									valueNameColumn: relation.nameColumn,
+									valueParentColumn: relation.parentColumn
+								};
 							});
-							relationsState[relation.key] = {
-								columns: columns,
-								valuesColumnMap: relation.columnMap,
-								//valueDataLayer: valueRelationDataLayer,
-								valueFidColumn: relation.fidColumn,
-								valueNameColumn: relation.nameColumn,
-								valueParentColumn: relation.parentColumn
-							};
-						});
-					}
+						}
 
-				})(relation);
+					})(relation);
+				}
 			}
-		}
-		Promise.all(promises).then(function(){
+			Promise.all(promises).then(function () {
 
-			valueDataLayer = dataLayers[0]; // todo check all
-			let columns = relationsState[thisComponent.state.relations[0].key].columns;
+				valueDataLayer = dataLayers[0]; // todo check all
+				let columns = relationsState[thisComponent.state.relations[0].key].columns;
+				let savedState = {
+					valueDataLayer: valueDataLayer,
+					valueFidColumn: thisComponent.state.relations[0].fidColumn,
+					valueNameColumn: thisComponent.state.relations[0].nameColumn,
+					valueParentColumn: thisComponent.state.relations[0].parentColumn
+				};
+				let newState = {
+					relationsState: {$set: relationsState},
+					valueDataLayer: {$set: valueDataLayer},
+					valueFidColumn: {$set: thisComponent.state.relations[0].fidColumn},
+					valueNameColumn: {$set: thisComponent.state.relations[0].nameColumn},
+					valueParentColumn: {$set: thisComponent.state.relations[0].parentColumn},
+					savedState: {$merge: savedState},
+					columns: {$set: columns}
+				};
+				thisComponent.context.setStateDeep.call(thisComponent, newState);
+
+			});
+		} else {
 			let savedState = {
-				valueDataLayer: valueDataLayer,
-				valueFidColumn: thisComponent.state.relations[0].fidColumn,
-				valueNameColumn: thisComponent.state.relations[0].nameColumn,
-				valueParentColumn: thisComponent.state.relations[0].parentColumn
+				valueDataLayer: null,
+				valueFidColumn: null,
+				valueNameColumn: null,
+				valueParentColumn: null
 			};
 			let newState = {
-				relationsState: {$merge: relationsState},
-				valueDataLayer: {$set: valueDataLayer},
-				valueFidColumn: {$set: thisComponent.state.relations[0].fidColumn},
-				valueNameColumn: {$set: thisComponent.state.relations[0].nameColumn},
-				valueParentColumn: {$set: thisComponent.state.relations[0].parentColumn},
+				relationsState: {$set: {}},
+				valueDataLayer: {$set: null},
+				valueFidColumn: {$set: null},
+				valueNameColumn: {$set: null},
+				valueParentColumn: {$set: null},
 				savedState: {$merge: savedState},
-				columns: {$set: columns}
+				columns: {$set: []}
 			};
 			thisComponent.context.setStateDeep.call(thisComponent, newState);
-
-		});
-
+		}
 	}
 
 	_onStoreChange(keys) {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(PlaceStore, ["place"]);
 		this.changeListener.add(AULevelStore, ["auLevel"]);
 		this.changeListener.add(DataLayerStore, ["dataLayers"]);
@@ -205,7 +226,7 @@ class ConfigPlaceDataSourceAULevel extends Component {
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 
@@ -260,13 +281,16 @@ class ConfigPlaceDataSourceAULevel extends Component {
 
 
 	saveForm() {
+
+		var actionData = [];
+
 		if (
-			this.state.relations &&
+			this.state.relations.length &&
 			this.state.valueDataLayer &&
 			this.state.valueFidColumn
 		) {
+			// updating
 
-			var actionData = [];
 			var relations = utils.clone(this.state.relations);
 
 			for (let relation of relations) {
@@ -293,16 +317,91 @@ class ConfigPlaceDataSourceAULevel extends Component {
 				actionData.push({type: "update", model: model});
 
 			}
+		} else if (
+			this.state.valueDataLayer &&
+			this.state.valueFidColumn &&
+			(
+				// this is the uppermost level, or parent column is filled in
+				this.state.place.scope.levels[0].key == this.props.selectorValueAULevel ||
+				this.state.valueParentColumn
+			)
+		) {
+			// saving new relations
 
-			//console.log("relations to save:", actionData);
-			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
+			let scopePeriods = this.state.place.scope.periods;
+			//let scopePeriodsPromise = utils.getPeriodsForScope(this.state.place.scope);
+			for (let period of scopePeriods) {
+
+				let dataSource = _.findWhere(this.state.dataLayers, {key: this.state.valueDataLayer});
+
+				let object = {
+					active: true,
+					period: period,
+					layerObject: this.state.auLevel,
+					place: this.state.place,
+					placeKey: this.state.place.key, // temp - todo remove when unneded
+					isOfAttributeSet: false,
+					dataSource: dataSource,
+					dataSourceString: dataSource.key, // temp - todo remove when unneded
+					dataSourceOrigin: "geonode",
+					fidColumn: this.state.valueFidColumn
+				};
+				if (this.state.valueNameColumn) {
+					object.nameColumn = this.state.valueNameColumn;
+				} else if (this.state.savedState.valueNameColumn) {
+					object.nameColumn = null;
+				}
+				if (this.state.valueParentColumn) {
+					object.parentColumn = this.state.valueParentColumn;
+				} else if (this.state.savedState.valueParentColumn) {
+					object.parentColumn = null;
+				}
+
+				let model = new Model[ObjectTypes.OBJECT_RELATION](object);
+				actionData.push({type: "create", model: model});
+
+			}
 		}
+
+		if (actionData.length) {
+			//console.log("relations to save:", actionData);
+			ActionCreator.handleObjects(actionData, ObjectTypes.OBJECT_RELATION);
+		}
+
+	}
+
+	getDataLayerColumns (dataLayerKey) {
+		return new Promise ( function (resolve,reject) {
+			let dataLayerColumnsPromise = DataLayerColumnsStore.getByDataSource(dataLayerKey);
+			if(dataLayerColumnsPromise) {
+				dataLayerColumnsPromise.then(function (dataLayerColumns) {
+					let columns = [];
+					_.each(dataLayerColumns, function (column) {
+						if (column.hasOwnProperty("name")) {
+							columns.push({
+								key: column.name,
+								name: column.name
+							});
+						}
+					});
+					resolve (columns);
+				});
+			}
+		});
+
 	}
 
 
 	onChangeDataLayer(value, values) {
-		this.setState({
-			valueDataLayer: value
+		let thisComponent = this;
+		let columnsPromise = this.getDataLayerColumns(value);
+		columnsPromise.then( function (columns) {
+			if(thisComponent.mounted) {
+				thisComponent.setState({
+					valueDataLayer: value,
+					columns: columns
+				});
+			}
 		});
 	}
 

@@ -23,7 +23,7 @@ class Store extends EventEmitter {
 		//});
 		this.changeListener = new ListenerHandler(this, this.reload, 'addChangeListener', 'removeChangeListener');
 		this.registerListeners();
-		this._maxListeners = 20; // increase listener limit a bit, but todo fix removeListeners
+		this._maxListeners = 40; // increase listener limit a bit, but todo fix removeListeners
 	}
 
 	/**

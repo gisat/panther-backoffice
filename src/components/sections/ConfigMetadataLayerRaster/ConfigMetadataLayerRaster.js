@@ -86,7 +86,9 @@ class ConfigMetadataLayerRaster extends Component{
 						valuesStyles: utils.getModelsKeys(layer.styles)
 					};
 					newState.savedState = utils.deepClone(newState);
-					thisComponent.setState(newState);
+					if(thisComponent.mounted) {
+						thisComponent.setState(newState);
+					}
 				});
 			}
 		}
@@ -135,7 +137,7 @@ class ConfigMetadataLayerRaster extends Component{
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(RasterLayerStore, ["layer"]);
 		this.changeListener.add(TopicStore, ["topics"]);
 		this.responseListener.add(TopicStore);
@@ -147,7 +149,7 @@ class ConfigMetadataLayerRaster extends Component{
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 		this.responseListener.clean();
 	}
@@ -163,9 +165,11 @@ class ConfigMetadataLayerRaster extends Component{
 		if (this.state.valueTopic && (oldState.valueTopic != this.state.valueTopic)) {
 			var thisComponent = this;
 			utils.getThemesForTopics(this.state.valueTopic).then(function(themes){
-				thisComponent.setState({
-					topicThemes: themes
-				});
+				if(thisComponent.mounted) {
+					thisComponent.setState({
+						topicThemes: themes
+					});
+				}
 			});
 		}
 	}

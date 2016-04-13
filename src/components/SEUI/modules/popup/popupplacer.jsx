@@ -40,7 +40,7 @@ export class PopupPlacer extends React.Component {
 				this.initialRender = true;
 		}
 
-		componentDidMount() {
+		componentDidMount() { this.mounted = true;
 				// calculate various positions on the screen
 				this.setCalculations();
 

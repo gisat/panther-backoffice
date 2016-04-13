@@ -68,7 +68,9 @@ class ConfigMetadataTopic extends Component{
 						valueName: topic.name
 					};
 					newState.savedState = utils.deepClone(newState);
-					thisComponent.setState(newState);
+					if(thisComponent.mounted) {
+						thisComponent.setState(newState);
+					}
 				});
 			}
 		}
@@ -78,12 +80,12 @@ class ConfigMetadataTopic extends Component{
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topic"]));
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topic"]));
 	}
 

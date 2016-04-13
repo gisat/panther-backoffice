@@ -63,7 +63,7 @@ export class Grid extends React.Component {
 				}
 		}
 
-		componentDidMount() {
+		componentDidMount() { this.mounted = true;
 				this.forceUpdate();
 		}
 

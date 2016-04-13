@@ -151,35 +151,34 @@ export default {
 			scopePromise.then(function(scopeModel){
 				ThemeStore.getFiltered({scope: scopeModel}).then(function(themeModels){
 
-					if(!themeModels.length){
-						return reject("getLayerTemplatesForScope: themes with filter {scope: "+scope+"} not found.");
-					}
-
 					var retKeys = [];
 					var retModels = [];
 					var promises = [];
 
-					for(let theme of themeModels){
-						if(!theme.hasOwnProperty("topics")){
-							return reject("getLayerTemplatesForScope: no topics property in theme!");
-						}
-						for(let topic of theme.topics){
+					if(themeModels.length) {
 
-							var layersPromise = layerStore.getFiltered({topic: topic});
-							promises.push(layersPromise);
-							layersPromise.then(function(layers){
+						for (let theme of themeModels) {
+							if (!theme.hasOwnProperty("topics")) {
+								return reject("getLayerTemplatesForScope: no topics property in theme!");
+							}
+							for (let topic of theme.topics) {
 
-								for(let layer of layers){
-									retKeys.push(layer.key);
-									retModels.push(layer);
-								}
+								var layersPromise = layerStore.getFiltered({topic: topic});
+								promises.push(layersPromise);
+								layersPromise.then(function (layers) {
 
-							}, function(){
+									for (let layer of layers) {
+										retKeys.push(layer.key);
+										retModels.push(layer);
+									}
 
-								reject("getLayerTemplatesForScope: layers with filter {topic: " + topic + "} not resolved.");
+								}, function () {
 
-							});
+									reject("getLayerTemplatesForScope: layers with filter {topic: " + topic + "} not resolved.");
 
+								});
+
+							}
 						}
 					}
 
@@ -214,35 +213,34 @@ export default {
 			scopePromise.then(function(scopeModel){
 				ThemeStore.getFiltered({scope: scopeModel}).then(function(themeModels){
 
-					if(!themeModels.length){
-						return reject("getAttSetsForScope: themes with filter {scope: "+scope+"} not found.");
-					}
-
 					var attSetKeys = [];
 					var attSetModels = [];
 					var promises = [];
 
-					for(let theme of themeModels){
-						if(!theme.hasOwnProperty("topics")){
-							return reject("getAttSetsForScope: no topics property in theme!");
-						}
-						for(let topic of theme.topics){
+					if(themeModels.length) {
 
-							var attSetPromise = AttributeSetStore.getFiltered({topic: topic});
-							promises.push(attSetPromise);
-							attSetPromise.then(function(attributeSets){
+						for (let theme of themeModels) {
+							if (!theme.hasOwnProperty("topics")) {
+								return reject("getAttSetsForScope: no topics property in theme!");
+							}
+							for (let topic of theme.topics) {
 
-								for(let attSet of attributeSets){
-									attSetKeys.push(attSet.key);
-									attSetModels.push(attSet);
-								}
+								var attSetPromise = AttributeSetStore.getFiltered({topic: topic});
+								promises.push(attSetPromise);
+								attSetPromise.then(function (attributeSets) {
 
-							}, function(){
+									for (let attSet of attributeSets) {
+										attSetKeys.push(attSet.key);
+										attSetModels.push(attSet);
+									}
 
-								reject("getAttSetsForScope: attributeSets with filter {topic: " + topic + "} not resolved.");
+								}, function () {
 
-							});
+									reject("getAttSetsForScope: attributeSets with filter {topic: " + topic + "} not resolved.");
 
+								});
+
+							}
 						}
 					}
 

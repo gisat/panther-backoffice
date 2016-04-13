@@ -81,7 +81,9 @@ class ConfigMetadataAttributeSet extends Component{
 						valuesAttributes: utils.getModelsKeys(attributeSet.attributes)
 					};
 					newState.savedState = utils.deepClone(newState);
-					thisComponent.setState(newState);
+					if(thisComponent.mounted) {
+						thisComponent.setState(newState);
+					}
 				});
 			}
 		}
@@ -127,7 +129,7 @@ class ConfigMetadataAttributeSet extends Component{
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(AttributeSetStore, ["attributeSet"]);
 		this.changeListener.add(TopicStore, ["attributeSet"]);
 		this.responseListener.add(TopicStore);
@@ -137,7 +139,7 @@ class ConfigMetadataAttributeSet extends Component{
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 		this.responseListener.clean();
 	}
@@ -153,9 +155,11 @@ class ConfigMetadataAttributeSet extends Component{
 		if (this.state.valueTopic && (oldState.valueTopic != this.state.valueTopic)) {
 			var thisComponent = this;
 			utils.getThemesForTopics(this.state.valueTopic).then(function(themes){
-				thisComponent.setState({
-					topicThemes: themes
-				});
+				if(thisComponent.mounted) {
+					thisComponent.setState({
+						topicThemes: themes
+					});
+				}
 			});
 		}
 	}

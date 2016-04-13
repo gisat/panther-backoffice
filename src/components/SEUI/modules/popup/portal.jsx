@@ -6,7 +6,7 @@ export class Portal extends React.Component {
 				children: React.PropTypes.node
 		};
 
-		componentDidMount() {
+		componentDidMount() { this.mounted = true;
 				this.bodyChild = document.createElement('div');
 				document.body.appendChild(this.bodyChild);
 				this.mounted = false;
@@ -17,7 +17,7 @@ export class Portal extends React.Component {
 				this.renderBody();
 		}
 
-		componentWillUnmount() {
+		componentWillUnmount() { this.mounted = false;
 				ReactDOM.unmountComponentAtNode(this.bodyChild);
 				document.body.removeChild(this.bodyChild);
 		}

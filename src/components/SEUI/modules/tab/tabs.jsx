@@ -36,7 +36,7 @@ export class Tabs extends React.Component {
 				}
 		}
 
-		componentDidMount() {
+		componentDidMount() { this.mounted = true;
 				React.Children.forEach(this.props.children, (child, index) => {
 						if (child.type === Tab && child.props.active) {
 								/* eslint-disable react/no-did-mount-set-state */

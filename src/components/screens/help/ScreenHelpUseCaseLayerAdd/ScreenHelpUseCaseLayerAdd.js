@@ -74,11 +74,18 @@ class ScreenHelpUseCaseLayerAdd extends Component {
 						<li>Navigate to <b>Data layers</b> page at Back Office.</li>
 						<li>Select the layer with analytical units.</li>
 						<li>Set <b>Layer type</b> to Analytical units layer.</li>
-						<li>Add a <b>Scope</b>.</li>
-						<li>Add one or more <b>Places</b>.</li>
-						<li>Add <b>Level</b>.</li>
+						<li>
+							Add a <b>Scope</b>.<br/>
+							Add existing Scope or create a new one by typing its name and pressing Enter. New empty Scope will be created and its panel appears on the right side.
+						</li>
+						<li>Add one or more existing or new <b>Places</b>.</li>
+						<li>Add an existing or a new one <b>Level</b>.</li>
 						<li>In the Tabular data section, set the column containg ids to <b>FID (feature identifier)</b>. For all but the topmost level, choose <b>Parent feature identifier</b> column. Optionally, choose <b>Feature name</b> column.</li>
-						<li>Other columns can be loaded into <b>Attributes</b> for selected <b>Periods</b>.</li>
+						<li>
+							Other columns can be loaded into <b>Attributes</b> for selected <b>Periods</b>. <br/>
+							If new attribute is needed to create, go to <b>Metadata structures</b> page and create needed attributes and attributesets.<br/>
+							Periods available to use are only the ones listed both in the Scope and in the Theme.
+						</li>
 						<li>Save the form with Save button and wait until its label changes to Saved.</li>
 					</ol>
 					<iframe

@@ -138,7 +138,7 @@ class ScreenMetadataBase extends Component{
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(ScopeStore, ["scopes"]);
 		this.responseListener.add(ScopeStore);
 		this.changeListener.add(VectorLayerStore, ["vectorLayerTemplates"]);
@@ -167,7 +167,7 @@ class ScreenMetadataBase extends Component{
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 		this.responseListener.clean();
 	}
