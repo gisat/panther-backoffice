@@ -4,12 +4,27 @@ import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
 import AnalysisModel from '../models/AnalysisModel';
 
+//import UserStore from './UserStore';
+import TopicStore from './TopicStore';
+import GeneralLayerStore from './GeneralLayerStore';
+import AttributeSetStore from './AttributeSetStore';
+import AttributeStore from './AttributeStore';
+
 
 class AnalysisStore extends Store {
 
 	getApiUrl(){
 		return "/rest/analysis";
 	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
+		this.changeListener.add(TopicStore);
+		this.changeListener.add(GeneralLayerStore);
+		this.changeListener.add(AttributeSetStore);
+		this.changeListener.add(AttributeStore);
+	}
+
 	getInstance(options,data){
 		return new AnalysisModel(options,data);
 	}

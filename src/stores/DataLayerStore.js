@@ -2,26 +2,24 @@ import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import DataLayerModel from '../models/DataLayerModel';
-import ObjectRelationStore from '../stores/ObjectRelationStore';
+
+import ObjectRelationStore from './ObjectRelationStore';
 
 
 class DataLayerStore extends Store {
 
-	constructor(props){
-		super(props);
-		ObjectRelationStore.addChangeListener(this._onObjectRelationStoreChange.bind(this));
-	}
-
-	_onObjectRelationStoreChange(){
-		this.reload();
-	}
-
 	getApiUrl(){
 		return "api/layers/getLayers";
 	}
+
 	getApiLoadMethod(){
 		return "POST";
 	}
+
+	registerListeners(){
+		this.changeListener.add(ObjectRelationStore);
+	}
+
 	getInstance(options,data){
 		if(data && data.isWms) {
 			return null;

@@ -3,10 +3,17 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import TopicModel from '../models/TopicModel';
 
+//import UserStore from './UserStore';
+
+
 class TopicStore extends Store {
 
 	getApiUrl(){
 		return "/rest/topic";
+	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
 	}
 
 	getInstance(options,data){

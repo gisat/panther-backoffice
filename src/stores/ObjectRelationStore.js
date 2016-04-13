@@ -3,11 +3,33 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import ObjectRelationModel from '../models/ObjectRelationModel';
 
+//import UserStore from './UserStore';
+import GeneralLayerStore from './GeneralLayerStore';
+import AttributeSetStore from './AttributeSetStore';
+//import DataLayerStore from './DataLayerStore';
+import PlaceStore from './PlaceStore';
+import PeriodStore from './PeriodStore';
+import AttributeStore from './AttributeStore';
+import AnalysisRunStore from './AnalysisRunStore';
+
+
 class ObjectRelationStore extends Store {
 
 	getApiUrl(){
 		return "/rest/layerref";
 	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
+		this.changeListener.add(GeneralLayerStore);
+		this.changeListener.add(AttributeSetStore);
+		//this.changeListener.add(DataLayerStore); // loop - todo solve
+		this.changeListener.add(PlaceStore);
+		this.changeListener.add(PeriodStore);
+		this.changeListener.add(AttributeStore);
+		this.changeListener.add(AnalysisRunStore);
+	}
+
 	getInstance(options,data){
 		return new ObjectRelationModel(options,data);
 	}

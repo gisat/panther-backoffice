@@ -3,11 +3,25 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import RasterLayerModel from '../models/RasterLayerModel';
 
+import UserStore from './UserStore';
+import LayerGroupStore from './LayerGroupStore';
+import StyleStore from './StyleStore';
+import TopicStore from './TopicStore';
+
+
 class RasterLayerStore extends Store {
 
 	getApiUrl(){
 		return "/rest/areatemplate";
 	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
+		this.changeListener.add(LayerGroupStore);
+		this.changeListener.add(StyleStore);
+		this.changeListener.add(TopicStore);
+	}
+
 	getInstance(options,data){
 		// areaTemplates on server with "justVisualization": true are RasterLayers on local
 		//if(data && data.justVisualization) {

@@ -3,11 +3,21 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import PlaceModel from '../models/PlaceModel';
 
+//import UserStore from './UserStore';
+import ScopeStore from './ScopeStore';
+
+
 class PlaceStore extends Store {
 
 	getApiUrl(){
 		return "/rest/location";
 	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
+		this.changeListener.add(ScopeStore);
+	}
+
 	getInstance(options,data){
 		return new PlaceModel(options,data);
 	}

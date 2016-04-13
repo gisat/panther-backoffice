@@ -3,10 +3,23 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import ThemeModel from '../models/ThemeModel';
 
+//import UserStore from './UserStore';
+import ScopeStore from './ScopeStore';
+import PeriodStore from './PeriodStore';
+import TopicStore from './TopicStore';
+
+
 class ThemeStore extends Store {
 
 	getApiUrl(){
 		return "/rest/theme";
+	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
+		this.changeListener.add(ScopeStore);
+		this.changeListener.add(PeriodStore);
+		this.changeListener.add(TopicStore);
 	}
 
 	getInstance(options,data){

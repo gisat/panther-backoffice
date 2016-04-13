@@ -8,6 +8,12 @@ import AULevelStore from './AULevelStore';
 
 class GeneralLayerStore extends Store {
 
+	registerListeners(){
+		this.changeListener.add(VectorLayerStore);
+		this.changeListener.add(RasterLayerStore);
+		this.changeListener.add(AULevelStore);
+	}
+
 	load() {
 		return new Promise(function(resolve,reject) {
 			var vectorLayers = VectorLayerStore.getAll();
@@ -18,6 +24,10 @@ class GeneralLayerStore extends Store {
 				resolve(allLayers);
 			});
 		});
+	}
+
+	reload() {
+		this.emitChange();
 	}
 
 	getById(id) {
@@ -44,8 +54,6 @@ class GeneralLayerStore extends Store {
 			});
 		});
 	}
-
-	// todo getFiltered()
 
 }
 

@@ -4,12 +4,19 @@ import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
 import PeriodModel from '../models/PeriodModel';
 
+//import UserStore from './UserStore';
+
 
 class PeriodStore extends Store {
 
 	getApiUrl(){
 		return "/rest/year";
 	}
+
+	registerListeners(){
+		//this.changeListener.add(UserStore);
+	}
+
 	getInstance(options,data){
 		return new PeriodModel(options,data);
 	}

@@ -5,6 +5,8 @@ import path from 'path';
 import _ from 'underscore';
 import async from 'async';
 
+import ListenerHandler from '../core/ListenerHandler';
+
 import DataLayerModel from '../models/DataLayerModel';
 import EventTypes from '../constants/EventTypes';
 
@@ -19,6 +21,8 @@ class Store extends EventEmitter {
 		//Promise.resolve(this._models).then(function(models){
 		//	console.log("Store > constructor > _models",models);
 		//});
+		this.changeListener = new ListenerHandler(this, this.reload, 'addChangeListener', 'removeChangeListener');
+		this.registerListeners();
 		this._maxListeners = 40; // increase listener limit a bit, but todo fix removeListeners
 	}
 
@@ -32,6 +36,8 @@ class Store extends EventEmitter {
 	getApiLoadMethod(){
 		return "GET";
 	}
+
+	registerListeners(){}
 
 	getInstance(options,data){
 		console.error("getInstance not overridden");
@@ -61,6 +67,7 @@ class Store extends EventEmitter {
 	}
 
 	reload() {
+		console.log("========== STORE RELOAD ==========");
 		var thisStore = this;
 		this._models = this.load();
 		this._models.then(function(){
