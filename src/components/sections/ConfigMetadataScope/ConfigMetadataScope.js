@@ -101,9 +101,11 @@ class ConfigMetadataScope extends Component{
 				let stateKey = responseData.stateKey;
 				let values = utils.deepClone(thisComponent.state[stateKey]);
 				values.push(result[0].key);
-				thisComponent.setState({
+				if(thisComponent.mounted) {
+					thisComponent.setState({
 						[stateKey]: values
 					});
+				}
 				var screenObjectType;
 				switch(stateKey){
 					case "valuesAULevels":

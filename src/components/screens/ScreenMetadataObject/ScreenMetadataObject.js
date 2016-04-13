@@ -23,6 +23,7 @@ import ConfigMetadataTopic from '../../sections/ConfigMetadataTopic';
 import ConfigMetadataTheme from '../../sections/ConfigMetadataTheme';
 import ConfigMetadataLayerGroup from '../../sections/ConfigMetadataLayerGroup';
 import ConfigMetadataStyle from '../../sections/ConfigMetadataStyle';
+import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	scopes: [],
@@ -58,6 +59,9 @@ class ScreenMetadataObject extends Component{
 		if(this.props.data && this.props.data.objectKey) {
 			this.state.selectorValue = this.props.data.objectKey;
 		}
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	getUrl() {
@@ -79,7 +83,7 @@ class ScreenMetadataObject extends Component{
 
 	_onStoreResponse(result,responseData,stateHash) {
 		if (stateHash === this.getStateHash()) {
-			if (result) {
+			if (result && this.mounted) {
 				this.setState({
 					selectorValue: result[0].key
 				});
@@ -120,15 +124,12 @@ class ScreenMetadataObject extends Component{
 		if(!props) {
 			props = this.props;
 		}
-		Store[props.data.objectType].addChangeListener(this._onStoreChange.bind(this));
-		Store[props.data.objectType].addResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.add(Store[props.data.objectType]);
+		this.responseListener.add(Store[props.data.objectType]);
 	}
-	removeListeners(props) {
-		if(!props) {
-			props = this.props;
-		}
-		Store[props.data.objectType].removeChangeListener(this._onStoreChange.bind(this));
-		Store[props.data.objectType].removeResponseListener(this._onStoreResponse.bind(this));
+	removeListeners() {
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	/**
