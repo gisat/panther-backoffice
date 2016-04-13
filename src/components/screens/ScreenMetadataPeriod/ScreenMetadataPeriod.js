@@ -51,12 +51,12 @@ class ScreenMetadataPeriod extends Component{
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(PeriodStore);
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

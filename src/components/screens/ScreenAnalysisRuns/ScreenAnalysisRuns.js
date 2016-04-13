@@ -72,7 +72,7 @@ class ScreenAnalysisRuns extends Component {
 		this.setStateFromStores(this.props, keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(ScopeStore, ["scopes"]);
 		this.changeListener.add(PlaceStore, ["places"]);
@@ -81,7 +81,7 @@ class ScreenAnalysisRuns extends Component {
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

@@ -43,7 +43,7 @@ export class Column extends React.Component {
 				}
 		}
 
-		componentDidMount() {
+		componentDidMount() { this.mounted = true;
 				this.forceUpdate();
 		}
 

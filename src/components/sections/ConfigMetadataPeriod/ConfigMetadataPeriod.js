@@ -62,10 +62,12 @@ class ConfigMetadataPeriod extends Component{
 			// if stores changed, overrides user input - todo fix
 
 			store2state.period.then(function(period) {
-				thisComponent.setState({
-					valueActive: period.active,
-					valueName: period.name
-				});
+				if(thisComponent.mounted) {
+					thisComponent.setState({
+						valueActive: period.active,
+						valueName: period.name
+					});
+				}
 			});
 		}
 
@@ -75,13 +77,13 @@ class ConfigMetadataPeriod extends Component{
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(PeriodStore, ["period"]);
 
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

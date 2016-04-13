@@ -88,7 +88,9 @@ class ConfigMetadataAttribute extends Component{
 						valueColor: attribute.color
 					};
 					newState.savedState = utils.deepClone(newState);
-					thisComponent.setState(newState);
+					if(thisComponent.mounted) {
+						thisComponent.setState(newState);
+					}
 				});
 			}
 		}
@@ -98,13 +100,13 @@ class ConfigMetadataAttribute extends Component{
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(AttributeStore, ["attribute"]);
 
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

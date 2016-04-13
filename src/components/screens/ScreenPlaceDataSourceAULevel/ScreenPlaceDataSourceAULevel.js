@@ -88,14 +88,14 @@ class ScreenPlaceDataSourceAULevel extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(AULevelStore);
 
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 

@@ -49,7 +49,7 @@ module.exports.Animate = Animator.extend(class Animate extends Component {
 				}
 		}
 
-		componentDidMount() {
+		componentDidMount() { this.mounted = true;
 				// we check if this component is ever going to do a slideUp or slideDown animation
 				// it would be vastly better to simply not have a value in here if it is already
 				// zero.

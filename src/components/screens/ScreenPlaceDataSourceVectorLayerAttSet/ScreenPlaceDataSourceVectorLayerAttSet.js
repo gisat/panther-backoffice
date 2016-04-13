@@ -94,7 +94,7 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(VectorLayerStore, ["layers"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
@@ -103,7 +103,7 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 		this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 	}
 
@@ -175,11 +175,13 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 				selectorValueAttSet = layerAttSets[0].key;
 			}
 			//console.log(layerAttSets);
-			thisComponent.setState({
-				selectorValueLayer: value,
-				attributeSets: layerAttSets,
-				selectorValueAttSet: selectorValueAttSet
-			});
+			if(thisComponent.mounted) {
+				thisComponent.setState({
+					selectorValueLayer: value,
+					attributeSets: layerAttSets,
+					selectorValueAttSet: selectorValueAttSet
+				});
+			}
 		});
 	}
 

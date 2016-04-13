@@ -71,13 +71,14 @@ class ScreenAnalysisConfig extends Component{
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
+		this.mounted = true;
 		this.changeListener.add(AnalysisStore);
 		this.responseListener.add(AnalysisStore);
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 		this.responseListener.clean();
 	}

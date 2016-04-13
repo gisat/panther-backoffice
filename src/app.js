@@ -20,7 +20,11 @@ var activePageKey = null;
 const context = {
 	setStateDeep: function(updatePath){
 		//console.log("@ setStateDeep this", this);
-		this.setState(update(this.state, updatePath));
+		if(this.mounted) {
+			this.setState(update(this.state, updatePath));
+		} else {
+			console.log("Tries to update deep state " + updatePath);
+		}
 	},
 	onSetTitle: value => document.title = value,
 	activePageKey: function(newKey){
@@ -72,7 +76,12 @@ const context = {
 			for(var i in storeNames){
 				storeObject[storeNames[i]] = data[i];
 			}
-			component.setState(storeObject);
+			if(component.mounted) {
+				component.setState(storeObject);
+			} else {
+				console.log("Component is already unmounted." + component);
+				component.render();
+			}
 		});
 	}
 };

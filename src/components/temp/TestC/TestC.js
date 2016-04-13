@@ -31,7 +31,8 @@ class TestC extends Component{
 		);
 	}
 
-	componentDidMount() {
+	componentDidMount() { 
+		this.mounted = true;
 		//$(".screen").click(function() {
 		//  if ( $(this).hasClass("retracted") ) {
 		//    if ( !$(this).hasClass("limited") ) {

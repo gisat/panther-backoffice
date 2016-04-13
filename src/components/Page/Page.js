@@ -63,14 +63,14 @@ class Page extends Component {
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		if(this.props.screenSet) {
 			this.changeListener.add(ScreenStore);
 			this.context.setStateFromStores.call(this, this.store2state());
 		}
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		if(this.props.screenSet) {
 			this.changeListener.clean();
 		}

@@ -87,14 +87,14 @@ class ScreenMetadataObject extends Component{
 		}
 	}
 
-	componentDidMount() {
+	componentDidMount() { this.mounted = true;
 		if(this.props.data.objectType) {
 			this.addListeners();
 			this.context.setStateFromStores.call(this, this.store2state());
 		}
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount() { this.mounted = false;
 		if(this.props.data.objectType) {
 			this.removeListeners();
 		}

@@ -82,7 +82,9 @@ class ConfigMetadataScope extends Component{
 						valuesPeriods: utils.getModelsKeys(scope.periods)
 					};
 					newState.savedState = utils.deepClone(newState);
-					thisComponent.setState(newState);
+					if(thisComponent.mounted) {
+						thisComponent.setState(newState);
+					}
 				});
 			}
 		}
@@ -129,6 +131,7 @@ class ConfigMetadataScope extends Component{
 	}
 
 	componentDidMount() {
+		this.mounted = true;
 		this.changeListener.add(ScopeStore, ["scope"]);
 		this.changeListener.add(AULevelStore, ["auLevels"]);
 		this.responseListener.add(AULevelStore);
@@ -139,6 +142,7 @@ class ConfigMetadataScope extends Component{
 	}
 
 	componentWillUnmount() {
+		this.mounted = false;
 		this.changeListener.clean();
 		this.responseListener.clean();
 	}
