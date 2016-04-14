@@ -50,6 +50,7 @@ class ConfigMetadataScope extends Component{
 
 	constructor(props) {
 		super(props);
+		this.acceptChange = true;
 		this.state = utils.deepClone(initialState);
 
 		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
@@ -76,15 +77,18 @@ class ConfigMetadataScope extends Component{
 
 			if(!keys || keys.indexOf("scope")!=-1) {
 				store2state.scope.then(function (scope) {
-					let newState = {
-						valueActive: scope.active,
-						valueName: scope.name,
-						valuesAULevels: utils.getModelsKeys(scope.levels),
-						valuesPeriods: utils.getModelsKeys(scope.periods)
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: scope.active,
+							valueName: scope.name,
+							valuesAULevels: utils.getModelsKeys(scope.levels),
+							valuesPeriods: utils.getModelsKeys(scope.periods)
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -195,6 +199,7 @@ class ConfigMetadataScope extends Component{
 	}
 
 	saveForm() {
+		this.acceptChange = true;
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.scope);
 		modelData.active = this.state.valueActive;
