@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -20,7 +21,7 @@ import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 import ListenerHandler from '../../../core/ListenerHandler';
 
 
-class ConfigAnalysisRulesMath extends Component {
+class ConfigAnalysisRulesMath extends PantherComponent {
 
 	static propTypes = {
 		disabled: PropTypes.bool,

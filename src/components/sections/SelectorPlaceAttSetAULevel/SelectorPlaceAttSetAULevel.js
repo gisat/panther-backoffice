@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import styles from './SelectorPlaceAttSetAULevel.css';
 import withStyles from '../../../decorators/withStyles';
 
@@ -12,7 +13,7 @@ import SingleValuePlace from '../../atoms/UICustomSelect/SingleValuePlace';
 
 
 @withStyles(styles)
-class SelectorPlaceAttSetAULevel extends Component{
+class SelectorPlaceAttSetAULevel extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,

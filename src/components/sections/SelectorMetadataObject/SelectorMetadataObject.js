@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 //import styles from './SelectorMetadataObject.css';
 //import withStyles from '../../../decorators/withStyles';
 
@@ -10,7 +11,7 @@ import SingleValueKeyName from '../../atoms/UICustomSelect/SingleValueKeyName';
 
 
 //@withStyles(styles)
-class SelectorMetadataObject extends Component{
+class SelectorMetadataObject extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,

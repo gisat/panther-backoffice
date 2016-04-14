@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -31,7 +32,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataLayerRaster extends Component{
+class ConfigMetadataLayerRaster extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,

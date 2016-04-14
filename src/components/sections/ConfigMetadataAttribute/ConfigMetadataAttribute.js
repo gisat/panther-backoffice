@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import Select from 'react-select';
 
 import utils from '../../../utils/utils';
@@ -34,7 +35,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataAttribute extends Component{
+class ConfigMetadataAttribute extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,

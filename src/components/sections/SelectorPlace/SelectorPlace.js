@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import styles from './SelectorPlace.css';
 import withStyles from '../../../decorators/withStyles';
 
@@ -11,7 +12,7 @@ import SingleValuePlace from '../../atoms/UICustomSelect/SingleValuePlace';
 
 
 @withStyles(styles)
-class SelectorPlace extends Component{
+class SelectorPlace extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,

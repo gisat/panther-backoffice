@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 
 import { Button, Input, Icon } from '../../SEUI/elements';
 import Select from 'react-select';
@@ -9,7 +10,7 @@ import OptionPlace from '../../atoms/UICustomSelect/OptionPlace';
 import SingleValuePlace from '../../atoms/UICustomSelect/SingleValuePlace';
 
 
-class SelectorPlaceAULevel extends Component{
+class SelectorPlaceAULevel extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,

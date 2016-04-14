@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 
 import _ from 'underscore';
 import classNames from 'classnames';
@@ -39,7 +40,7 @@ var initialState = {
 };
 
 
-class ConfigPlaceDataSourceAULevel extends Component {
+class ConfigPlaceDataSourceAULevel extends PantherComponent {
 
 
 	static propTypes = {

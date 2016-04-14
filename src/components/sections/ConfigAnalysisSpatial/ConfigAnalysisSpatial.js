@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import styles from './ConfigAnalysisSpatial.css';
 import withStyles from '../../../decorators/withStyles';
 
@@ -34,7 +35,7 @@ const THEMES = [
 
 
 @withStyles(styles)
-class ConfigAnalysisSpatial extends Component{
+class ConfigAnalysisSpatial extends PantherComponent{
 
 	constructor(props) {
 		super(props);

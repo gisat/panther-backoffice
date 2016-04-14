@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import styles from './ConfigPlaceDataSource.css';
 import withStyles from '../../../decorators/withStyles';
 
@@ -26,7 +27,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ConfigPlaceDataSource extends Component {
+class ConfigPlaceDataSource extends PantherComponent {
 
 	static propTypes = {
 		disabled: PropTypes.bool,

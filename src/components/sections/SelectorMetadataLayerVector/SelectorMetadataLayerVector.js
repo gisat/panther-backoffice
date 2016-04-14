@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import styles from './SelectorMetadataLayerVector.css';
 import withStyles from '../../../decorators/withStyles';
 
@@ -18,7 +19,7 @@ const LAYERTEMPLATES = [
 		];
 
 @withStyles(styles)
-class SelectorMetadataLayerVector extends Component{
+class SelectorMetadataLayerVector extends PantherComponent{
 
 	static contextTypes = {
 		onInteraction: PropTypes.func.isRequired
