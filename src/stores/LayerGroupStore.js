@@ -4,7 +4,7 @@ import ActionTypes from '../constants/ActionTypes';
 import LayerGroupModel from '../models/LayerGroupModel';
 
 //import UserStore from './UserStore';
-
+import logger from '../core/Logger';
 
 class LayerGroupStore extends Store {
 
@@ -24,6 +24,7 @@ class LayerGroupStore extends Store {
 let storeInstance = new LayerGroupStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("LayerGroupStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.LAYER_GROUP_CREATE_RESPOND:

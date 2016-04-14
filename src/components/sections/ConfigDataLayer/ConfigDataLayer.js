@@ -800,8 +800,6 @@ class ConfigDataLayer extends Component {
 
 		}
 
-		logger.trace("ConfigDataLayer# render(), Current state: ", this.state);
-
 		return (
 			<div>
 

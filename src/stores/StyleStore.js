@@ -5,7 +5,7 @@ import StyleModel from '../models/StyleModel';
 
 //import UserStore from './UserStore';
 import TopicStore from './TopicStore';
-
+import logger from '../core/Logger';
 
 class StyleStore extends Store {
 

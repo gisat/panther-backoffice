@@ -44,8 +44,8 @@ class ObjectRelationStore extends Store {
 let storeInstance = new ObjectRelationStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
-
 	logger.info("ObjectRelationStore# dispatchToken(), Action:", action);
+	
 	switch(action.type) {
 		case ActionTypes.OBJECT_RELATION_CREATE:
 			storeInstance.create(action.model);

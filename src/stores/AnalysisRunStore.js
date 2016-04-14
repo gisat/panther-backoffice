@@ -11,6 +11,7 @@ import ScopeStore from './ScopeStore';
 import PlaceStore from './PlaceStore';
 import PeriodStore from './PeriodStore';
 
+import logger from '../core/Logger';
 
 class AnalysisRunStore extends Store {
 
@@ -36,6 +37,7 @@ class AnalysisRunStore extends Store {
 let storeInstance = new AnalysisRunStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("AnalysisRunStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.ANALYSIS_RUN_CREATE_RESPOND:

@@ -7,7 +7,7 @@ import AULevelModel from '../models/AULevelModel';
 import LayerGroupStore from './LayerGroupStore';
 import StyleStore from './StyleStore';
 import TopicStore from './TopicStore';
-
+import logger from '../core/Logger';
 
 class AULevelStore extends Store {
 
@@ -41,6 +41,7 @@ class AULevelStore extends Store {
 let storeInstance = new AULevelStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("AULevelStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.AU_LEVEL_CREATE_RESPOND:

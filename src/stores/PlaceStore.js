@@ -5,7 +5,7 @@ import PlaceModel from '../models/PlaceModel';
 
 //import UserStore from './UserStore';
 import ScopeStore from './ScopeStore';
-
+import logger from '../core/Logger';
 
 class PlaceStore extends Store {
 
@@ -26,6 +26,7 @@ class PlaceStore extends Store {
 let storeInstance = new PlaceStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("PlaceStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.PLACE_CREATE_RESPOND:

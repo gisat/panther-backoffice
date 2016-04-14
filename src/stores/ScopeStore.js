@@ -6,6 +6,7 @@ import ScopeModel from '../models/ScopeModel';
 //import UserStore from './UserStore';
 import AULevelStore from './AULevelStore';
 import PeriodStore from './PeriodStore';
+import logger from '../core/Logger';
 
 
 class ScopeStore extends Store {
@@ -28,6 +29,7 @@ class ScopeStore extends Store {
 let storeInstance = new ScopeStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("ScopeStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.SCOPE_CREATE_RESPOND:

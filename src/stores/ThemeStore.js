@@ -7,7 +7,7 @@ import ThemeModel from '../models/ThemeModel';
 import ScopeStore from './ScopeStore';
 import PeriodStore from './PeriodStore';
 import TopicStore from './TopicStore';
-
+import logger from '../core/Logger';
 
 class ThemeStore extends Store {
 
@@ -30,6 +30,7 @@ class ThemeStore extends Store {
 let storeInstance = new ThemeStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("ThemeStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.THEME_CREATE_RESPOND:

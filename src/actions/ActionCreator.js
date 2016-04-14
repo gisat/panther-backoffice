@@ -12,6 +12,7 @@ export default {
 			responseData: responseData,
 			stateHash: stateHash
 		};
+		logger.trace("ActionCreator# createObjectAndRespond(), Object type:", objectType, ", model: ", model);
 		let actionType = objectType+"_CREATE_RESPOND";
 		if(ActionTypes[actionType]) {
 			action.type = ActionTypes[actionType];
@@ -35,7 +36,7 @@ export default {
 			type: null,
 			model: model
 		};
-		logger.trace("ActionCreator# createObject()", objectType);
+		logger.trace("ActionCreator# createObject(), Object type:", objectType);
 		switch (objectType) {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_CREATE;
@@ -51,7 +52,7 @@ export default {
 			type: null,
 			model: model
 		};
-		logger.trace("ActionCreator# updateObject()", objectType);
+		logger.trace("ActionCreator# updateObject(), Object type:", objectType);
 		switch (objectType) {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_UPDATE;
@@ -67,7 +68,7 @@ export default {
 			type: null,
 			model: model
 		};
-		logger.trace("ActionCreator# deleteObject()", objectType);
+		logger.trace("ActionCreator# deleteObject(), Object type:", objectType);
 		switch (objectType) {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_DELETE;
@@ -83,7 +84,7 @@ export default {
 			type: null,
 			data: data
 		};
-		logger.trace("ActionCreator# handleObjects()");
+		logger.trace("ActionCreator# handleObjects(), Object type:", objectType);
 		switch (objectType) {
 			case ObjectTypes.SCOPE:
 				action.type = ActionTypes.SCOPE_HANDLE;

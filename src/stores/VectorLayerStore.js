@@ -7,7 +7,7 @@ import VectorLayerModel from '../models/VectorLayerModel';
 import LayerGroupStore from './LayerGroupStore';
 import StyleStore from './StyleStore';
 import TopicStore from './TopicStore';
-
+import logger from '../core/Logger';
 
 class VectorLayerStore extends Store {
 
@@ -43,6 +43,7 @@ class VectorLayerStore extends Store {
 let storeInstance = new VectorLayerStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("VectorLayerStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.VECTOR_LAYER_TEMPLATE_CREATE_RESPOND:

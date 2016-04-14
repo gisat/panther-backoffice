@@ -5,7 +5,7 @@ import EventTypes from '../constants/EventTypes';
 import PeriodModel from '../models/PeriodModel';
 
 //import UserStore from './UserStore';
-
+import logger from '../core/Logger';
 
 class PeriodStore extends Store {
 
@@ -26,6 +26,7 @@ class PeriodStore extends Store {
 let storeInstance = new PeriodStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("PeriodStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.PERIOD_CREATE_RESPOND:

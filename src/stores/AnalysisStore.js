@@ -10,6 +10,7 @@ import GeneralLayerStore from './GeneralLayerStore';
 import AttributeSetStore from './AttributeSetStore';
 import AttributeStore from './AttributeStore';
 
+import logger from '../core/Logger';
 
 class AnalysisStore extends Store {
 
@@ -34,6 +35,7 @@ class AnalysisStore extends Store {
 let storeInstance = new AnalysisStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("AnalysisStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.ANALYSIS_SPATIAL_CREATE_RESPOND:

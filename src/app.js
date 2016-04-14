@@ -20,11 +20,11 @@ const appContainer = document.getElementById('app');
 var activePageKey = null;
 const context = {
 	setStateDeep: function(updatePath){
-		logger.trace("context# setStateDeep(), Current this: ", this);
+		logger.trace("context# setStateDeep(), Current this: ", this, ", updatePath: ", updatePath);
 		if(this.mounted) {
 			this.setState(update(this.state, updatePath));
 		} else {
-			logger.warn("context# setStateDeep(), Tries to update deep state ", updatePath);
+			logger.warn("context# setStateDeep(), Tries to update deep state of unmounted component.", updatePath);
 		}
 	},
 	onSetTitle: value => document.title = value,
@@ -76,7 +76,7 @@ const context = {
 				storeObject[storeNames[i]] = data[i];
 			}
 			if(component.mounted) {
-				logger.info("context# setStateFromStores(), Stores to set: ", storeObject, ", Current Component: ", component);
+				logger.trace("context# setStateFromStores(), Stores to set: ", storeObject, ", Current Component: ", component);
 				component.setState(storeObject);
 			} else {
 				logger.info("context# setStateFromStores(), Component is already unmounted." + component);

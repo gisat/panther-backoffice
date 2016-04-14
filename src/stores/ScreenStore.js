@@ -721,6 +721,7 @@ class ScreenStore extends Store {
 let storeInstance = new ScreenStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("ScreenStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.SCREEN_CREATE_OPEN:
