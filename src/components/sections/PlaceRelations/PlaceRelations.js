@@ -230,7 +230,7 @@ class PlaceRelations extends Component {
 							addRelationLayer(ret.relationsRaster,rel);
 							break;
 						default:
-							logger.error("PlaceRelations# relations2state(), Relation has layerobject of invalid layerref",rel);
+							logger.error("PlaceRelations# relations2state(), Relation has layerobject of invalid layerType",rel);
 					}
 				} else {
 					logger.error("PlaceRelations# relations2state(), Relation has no layerobject",rel);
