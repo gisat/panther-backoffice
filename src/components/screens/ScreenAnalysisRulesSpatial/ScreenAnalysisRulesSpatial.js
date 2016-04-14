@@ -154,7 +154,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 			attributeSetsLayer: utils.getAttSetsForLayers(props.data.analysis.layerObject.key),
 			valueFeatureLayer: [props.data.analysis.layerObject.key],
 			valueResultAttSet: [props.data.analysis.attributeSet.key],
-			valueFilterAttSetAtt: [props.data.analysis.filterAttributeSet.key + "-" + props.data.analysis.filterAttribute.key]
+			valueFilterAttSetAtt: props.data.analysis.filterAttribute ? [props.data.analysis.filterAttributeSet.key + "-" + props.data.analysis.filterAttribute.key] : []
 		};
 	}
 
