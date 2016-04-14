@@ -94,7 +94,7 @@ function render(state) {
 				window.scrollTo(0, 0);
 			}
 
-			// Remove the pre-rendered CSS because it's n///////////////////////////////////////////////////////////////////////////////o longer used
+			// Remove the pre-rendered CSS because it's no longer used
 			// after the React app is launched
 			if (cssContainer) {
 				cssContainer.parentNode.removeChild(cssContainer);
