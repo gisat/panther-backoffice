@@ -109,6 +109,7 @@ var initialState = {
 	valueFeatureLayer: [],
 	valueResultAttSet: [],
 	valueFilterAttSetAtt: [],
+	valueAttributeMaps: {},
 	themesString: ""
 };
 
@@ -168,6 +169,15 @@ class ScreenAnalysisRulesSpatial extends Component{
 				store2state.attributeSetsLayer.then(function(attributeSets) {
 					thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
 				});
+			}
+			if(!keys || keys.indexOf("valueResultAttSet")!=-1) {
+				let attributeMaps = {
+					[props.data.analysis.attributeSet.key]: props.data.analysis.attributeMap
+				};
+				let newState = {
+					valueAttributeMaps: {$merge: attributeMaps}
+				};
+				thisComponent.context.setStateDeep.call(thisComponent, newState);
 			}
 		}
 	}
@@ -407,6 +417,123 @@ class ScreenAnalysisRulesSpatial extends Component{
 
 
 	render() {
+		let ruleTableRowsInsert = [];
+		if (
+			this.state.featureLayers.length &&
+			this.state.attributeSetsResult.length &&
+			this.state.attributeSetsLayer.length &&
+			this.state.filterDestinations
+		) {
+			//let ruleTableRowsInsert = [];
+			let operations = _.values(analysisOperationsMetadata.SPATIAL);
+			let resultAttSet = _.findWhere(this.state.attributeSetsResult, {key: this.state.valueResultAttSet[0]});
+			for (let attribute of resultAttSet.attributes) {
+				let attributeMap = this.state.valueAttributeMaps[this.state.valueResultAttSet];
+				let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute});
+				let operationCellInsert = (
+					<td className="allowOverflow resetui">
+						<label className="container">
+							Operation
+							<Select
+								//onChange={this.onChangeAttSet.bind(this)}
+								//loadOptions={this.getPlaces}
+								options={operations}
+								valueKey="key"
+								labelKey="name"
+								//inputProps={selectInputProps}
+								value={attributeMapRow.operationType}
+							/>
+						</label>
+					</td>
+				);
+				let insertValueCell = false,
+					insertWeightingCell = false,
+					optionCellsInsert = null;
+				switch (attributeMapRow.operationType) {
+					case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.SUM_ATTRIBUTE].key:
+					case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.AVG_ATTRIBUTE_WEIGHT_AREA].key:
+						insertValueCell = true;
+						break;
+					case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.AVG_ATTRIBUTE_WEIGHT_ATTRIBUTE].key:
+						insertValueCell = true;
+						insertWeightingCell = true;
+						break;
+				}
+				if (!insertValueCell && !insertWeightingCell) {
+					optionCellsInsert = (
+						<td colSpan="2"></td>
+					);
+				} else {
+					optionCellsInsert = [];
+					optionCellsInsert.push((
+						<td className="allowOverflow resetui">
+							<label className="container">
+								Attribute to average
+								<Select
+									//onChange={this.onChangeFilterAttSetAtt.bind(this)}
+									options={this.state.filterDestinations}
+									optionComponent={OptionDestination}
+									singleValueComponent={SingleValueDestination}
+									valueKey="key"
+									labelKey="name"
+									className={["435-432"].length ? "multiline" : ""}
+									value={this.state.filterDestinations && this.state.filterDestinations.length ? ["435-432"] : []}
+								/>
+							</label>
+						</td>
+					));
+					if (insertWeightingCell) {
+						optionCellsInsert.push((
+							<td className="allowOverflow resetui">
+								<label className="container">
+									Weighting attribute
+									<Select
+										//onChange={this.onChangeFilterAttSetAtt.bind(this)}
+										options={this.state.filterDestinations}
+										optionComponent={OptionDestination}
+										singleValueComponent={SingleValueDestination}
+										valueKey="key"
+										labelKey="name"
+										className={["435-432"].length ? "multiline" : ""}
+										value={this.state.filterDestinations && this.state.filterDestinations.length ? ["435-432"] : []}
+									/>
+								</label>
+							</td>
+						));
+					}
+				}
+				let filterCellInsert = (
+					<td className="allowOverflow resetui">
+						<label className="container">
+							Code:
+							<Input
+								type="text"
+								name="name"
+								placeholder=" "
+								defaultValue="112" // remove
+								value={attributeMapRow.filterValue}
+								//onChange={this.onChangeWhatever.bind(this)}
+							/>
+						</label>
+					</td>
+				);
+				let rowInsert = (
+					<tbody className="internal row">
+					<tr className="row-header">
+						<td colSpan="4" className="resetui">{attribute.name}</td>
+					</tr>
+					<tr>
+						{operationCellInsert}
+						{optionCellsInsert}
+						{filterCellInsert}
+					</tr>
+					</tbody>
+				);
+				ruleTableRowsInsert.push(rowInsert);
+			}
+		}
+
+
 		return (
 			<div>
 				<div className="screen-content-only"><div>
@@ -468,9 +595,10 @@ class ScreenAnalysisRulesSpatial extends Component{
 							<th>Filter</th>
 						</tr>
 					</thead>
-					<tbody>
+					{ruleTableRowsInsert}
+					{/*<tbody>
 
-						<tr className="row-header">
+					<tr className="row-header">
 							<td colSpan="4" className="resetui">Continuous Urban Fabric (S.L. > 80%)</td>
 						</tr>
 						<tr>
@@ -480,11 +608,12 @@ class ScreenAnalysisRulesSpatial extends Component{
 									<Select
 										//onChange={this.onChangeAttSet.bind(this)}
 										//loadOptions={this.getPlaces}
-										options={OPERATIONS}
+										//options={OPERATIONS}
+										options={_.values(analysisOperationsMetadata.SPATIAL)}
 										valueKey="key"
 										labelKey="name"
 										//inputProps={selectInputProps}
-										value="SUM"
+										value="sumarea"
 									/>
 								</label>
 							</td>
@@ -623,7 +752,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 						</tr>
 
 
-					</tbody>
+					</tbody>*/}
 				</Table>
 
 					<SaveButton saved />
