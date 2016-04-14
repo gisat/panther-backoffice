@@ -5,6 +5,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
 import DataLayerColumnsModel from '../models/DataLayerColumnsModel';
+import logger from '../core/Logger';
 
 class DataLayerColumnsStore extends Store {
 
@@ -28,13 +29,13 @@ class DataLayerColumnsStore extends Store {
 	}
 
 	getFiltered(){
-		console.error("Don't use getFiltered on DataLayerColumnStore");
+		logger.error("DataLayerColumnsStore# getFiltered(), Don't use getFiltered on DataLayerColumnStore");
 	}
 	getAll(){
-		console.error("Don't use getAll on DataLayerColumnStore");
+		logger.error("DataLayerColumnsStore# getAll(), Don't use getAll on DataLayerColumnStore");
 	}
 	getById(){
-		console.error("Don't use getById on DataLayerColumnStore");
+		logger.error("DataLayerColumnsStore# getById(), Don't use getById on DataLayerColumnStore");
 	}
 
 

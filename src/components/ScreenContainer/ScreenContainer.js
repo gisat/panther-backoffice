@@ -12,6 +12,7 @@ import ScreenStore from '../../stores/ScreenStore';
 import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
 import ListenerHandler from '../../core/ListenerHandler';
+import logger from '../../core/Logger'
 
 var initialState = {
 	isFocused: false
@@ -60,9 +61,12 @@ class ScreenContainer extends Component{
 				return function() {
 					var page = this.context.activePageKey();
 					var removed = [];
-					//console.log("SCREEN-INTERACTION " + page + "/" + this.props.screenState.key);
-					//console.log("ONSCREENINTERACTIVITY\nfuncToRunAfter:", funcToRunAfter, "\nthis:", this);
-					if(funcToRunAfter) funcToRunAfter();
+					logger.trace("ScreenContainer# onInteraction(), Screen interaction: ", page, "Current props: ",
+						this.props, ", funcToRunAfter:", funcToRunAfter, ", Current this: ", this);
+
+					if(funcToRunAfter) {
+						funcToRunAfter();
+					}
 				}.bind(this); // binds to ScreenContainer
 			}.bind(this) // binds to ScreenContainer
 		};
@@ -73,14 +77,14 @@ class ScreenContainer extends Component{
 			if(this._domSelf) {
 				this._domSelf.focus();
 			} else {
-				console.log(screenKey + " _domSelf is null" + this);
+				logger.warn("ScreenContainer# _focusScreen(), ", screenKey, " _domSelf is null", this);
 			}
 		}
 	}
 
-	componentDidMount() { 
+	componentDidMount() {
 		this.mounted = true;
-		console.log(ScreenStore);
+		logger.trace("ScreenContainer# componentDidMount(), ScreenStore: ",ScreenStore);
 		this.focusListener.add(ScreenStore);
 	}
 

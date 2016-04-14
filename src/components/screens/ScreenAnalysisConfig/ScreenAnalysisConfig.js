@@ -15,6 +15,8 @@ import ConfigAnalysis from '../../sections/ConfigAnalysis';
 import AnalysisStore from '../../../stores/AnalysisStore';
 import AnalysisModel from '../../../models/AnalysisModel';
 
+import logger from '../../../core/Logger';
+
 var initialState = {
 	analyses: [],
 	selectorValue: null
@@ -124,10 +126,9 @@ class ScreenAnalysisConfig extends Component{
 	}
 
 	onNewEmptyObject () {
-		console.log("onNewEmptyObject");
 		let objectType = this.props.data.objectType;
 		let model = new AnalysisModel({active:false});
-		console.log(model);
+		logger.trace("ScreenAnalysisConfig# onNewEmptyObject(), Model", model);
 		ActionCreator.createObjectAndRespond(model, objectType, {}, this.getStateHash());
 	}
 

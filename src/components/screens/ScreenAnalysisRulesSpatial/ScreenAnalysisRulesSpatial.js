@@ -24,6 +24,8 @@ import AnalysisModel from '../../../models/AnalysisModel';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 
+import logger from '../../../core/Logger';
+
 const OPERATIONS = [
 			{ key: "COUNT", name: "COUNT"	},
 			{ key: "SUM", name: "SUM (area/length)" },
@@ -361,7 +363,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 				if (layerAttSets.length == 1 && layerAttSets[0].attributes.length == 1) {
 					selectorValueAttSetAtt = layerAttSets[0].key + "-" + layerAttSets[0].attributes[0].key;
 				}
-				//console.log(layerAttSets);
+				logger.trace("ScreenAnalysisRulesSpatial# onChangeFeatureLayer(), Layer attribute sets: ", layerAttSets);
 				let ret = thisComponent.atts2state(layerAttSets);
 				let newState = {
 					valueFeatureLayer: newValue,

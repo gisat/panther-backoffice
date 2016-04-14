@@ -25,6 +25,8 @@ import ConfigMetadataLayerGroup from '../../sections/ConfigMetadataLayerGroup';
 import ConfigMetadataStyle from '../../sections/ConfigMetadataStyle';
 import ListenerHandler from '../../../core/ListenerHandler';
 
+import logger from '../../../core/Logger';
+
 var initialState = {
 	scopes: [],
 	vectorLayerTemplates: [],
@@ -158,10 +160,9 @@ class ScreenMetadataObject extends Component{
 	}
 
 	onNewEmptyObject () {
-		console.log("onNewEmptyObject");
 		let objectType = this.props.data.objectType;
 		let model = new Model[objectType]({active:false});
-		console.log(model);
+		logger.trace("ScreenMetadataObject# onNewEmptyObject(), Model: ", model);
 		ActionCreator.createObjectAndRespond(model, objectType, {}, this.getStateHash());
 	}
 

@@ -30,6 +30,7 @@ import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 import DataLayerStore from '../../../stores/DataLayerStore';
 import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
+import logger from '../../../core/Logger';
 
 var initialState = {
 	place: null,
@@ -440,7 +441,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 
 			}
 
-			console.log("relations to save:", actionData);
+			logger.info("ConfigPlaceDataSourcePeriod# saveForm(), Relations to save:", actionData);
 			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
 		}
 	}

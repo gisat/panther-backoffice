@@ -16,7 +16,7 @@ import SelectorPlaceVectorLayerAttSet from '../../sections/SelectorPlaceVectorLa
 import ConfigPlaceDataSource from '../../sections/ConfigPlaceDataSource';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	scope: null,
@@ -174,7 +174,7 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 			if (layerAttSets.length == 1) {
 				selectorValueAttSet = layerAttSets[0].key;
 			}
-			//console.log(layerAttSets);
+			logger.trace("ScreenPlaceDataSourceVectorLayerAttSet# onChangeLayer(), Layer attribute sets: ",layerAttSets);
 			if(thisComponent.mounted) {
 				thisComponent.setState({
 					selectorValueLayer: value,

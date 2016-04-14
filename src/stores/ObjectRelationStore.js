@@ -12,6 +12,7 @@ import PeriodStore from './PeriodStore';
 import AttributeStore from './AttributeStore';
 import AnalysisRunStore from './AnalysisRunStore';
 
+import logger from '../core/Logger';
 
 class ObjectRelationStore extends Store {
 
@@ -44,9 +45,9 @@ let storeInstance = new ObjectRelationStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 
+	logger.info("ObjectRelationStore# dispatchToken(), Action:", action);
 	switch(action.type) {
 		case ActionTypes.OBJECT_RELATION_CREATE:
-			console.log("ObjectRelationStore OBJECT_RELATION_CREATE action");
 			storeInstance.create(action.model);
 			// todo something like this:
 			// let req = storeInstance.create(action.objectData);
@@ -56,15 +57,12 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			//});
 			break;
 		case ActionTypes.OBJECT_RELATION_UPDATE:
-			console.log("ObjectRelationStore OBJECT_RELATION_UPDATE action");
 			storeInstance.update(action.model);
 			break;
 		case ActionTypes.OBJECT_RELATION_DELETE:
-			console.log("ObjectRelationStore OBJECT_RELATION_DELETE action");
 			storeInstance.delete(action.model);
 			break;
 		case ActionTypes.OBJECT_RELATION_HANDLE:
-			console.log("ObjectRelationStore OBJECT_RELATION_HANDLE action");
 			//storeInstance.handle(action.data);
 			storeInstance.handle(action.data);
 			break;

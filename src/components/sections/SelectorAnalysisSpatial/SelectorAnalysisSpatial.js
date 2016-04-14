@@ -8,6 +8,8 @@ import Select from 'react-select';
 import OptionKeyName from '../../atoms/UICustomSelect/OptionKeyName';
 import SingleValueKeyName from '../../atoms/UICustomSelect/SingleValueKeyName';
 
+import logger from '../../../core/Logger';
+
 const ANALYSES = [
 			{ key: 1, name: 'Land cover status' },
 			{ key: 2, name: 'Land cover status aggregated' },
@@ -29,7 +31,7 @@ class SelectorAnalysisSpatial extends Component{
 			data: this.props.data
 		};
 
-		console.log("Selector constructor");
+		logger.trace("SelectorAnalysisSpatial# constructor(), Props:", props);
 
 	}
 

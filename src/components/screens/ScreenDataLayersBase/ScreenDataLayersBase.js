@@ -11,6 +11,7 @@ import SelectorDataLayer from '../../sections/SelectorDataLayer';
 import ConfigDataLayer from '../../sections/ConfigDataLayer';
 
 import ListenerHandler from '../../../core/ListenerHandler';
+import logger from '../../../core/Logger';
 
 var initialState = {
 	dataLayers: [],
@@ -67,8 +68,8 @@ class ScreenDataLayersBase extends Component {
 	}
 
 	onSelectorChange (value) {
-		console.log("onSelectorChange");
-		
+		logger.trace("ScreenDataLayersBase# onSelectorChange(), Value: ", value);
+
 		this.setState({
 			selectorValue: value
 		});

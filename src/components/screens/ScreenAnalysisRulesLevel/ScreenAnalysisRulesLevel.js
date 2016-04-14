@@ -8,6 +8,7 @@ import { Table } from '../../SEUI/collections';
 import Select from 'react-select';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
+import logger from '../../../core/Logger';
 
 const OPERATIONS = [
 			{ key: "SUMATT", name: "SUM" },
@@ -99,7 +100,7 @@ class ScreenAnalysisRulesLevel extends Component{
 
 
 	onObjectClick (value, event) {
-		console.log("yay! " + value["key"]);
+		logger.trace("ScreenAnalysisRulesLevel# onObjectClick(), Value: ", value["key"]);
 	}
 
 

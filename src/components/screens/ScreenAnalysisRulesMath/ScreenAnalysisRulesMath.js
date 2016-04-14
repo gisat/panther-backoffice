@@ -11,6 +11,7 @@ import SaveButton from '../../atoms/SaveButton';
 
 import utils from '../../../utils/utils';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
+import logger from '../../../core/Logger';
 
 const ATTSETS = [
 			{ key: 352, name: "Land Cover classes L3" },
@@ -83,7 +84,7 @@ class ScreenAnalysisRulesMath extends Component{
 
 
 	onObjectClick (value, event) {
-		console.log("yay! " + value["key"]);
+		logger.trace("ScreenAnalysisRulesMath# onObjectClick(), Value: ", value["key"]);
 	}
 
 

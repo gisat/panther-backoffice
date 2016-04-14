@@ -15,6 +15,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 import ObjectList from '../../elements/ObjectList';
 import ScreenAnalysisConfig from '../../screens/ScreenAnalysisConfig';
 
+import logger from '../../../core/Logger';
 
 var initialState = {
 	spatialAnalyses: [],
@@ -87,10 +88,7 @@ class ScreenAnalysesBase extends Component{
 	_onStoreResponse(result,responseData,stateHash) {
 		//var thisComponent = this;
 		if (stateHash === this.getStateHash()) {
-			// console.info("_onStoreResponse()");
-			// console.log("result",result);
-			// console.log("responseData",responseData);
-			// console.log("stateHash",stateHash);
+			logger.trace("ScreenAnalysisBase# _onStoreResponse(), result", result, ", Response data", responseData, ", State hash", stateHash);
 			if (result) {
 				var screenName = this.props.screenKey + "-ScreenAnalysis" + responseData.objectType;
 				let options = {

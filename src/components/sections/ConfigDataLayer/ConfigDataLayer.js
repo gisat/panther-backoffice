@@ -32,6 +32,7 @@ import PeriodStore from '../../../stores/PeriodStore';
 import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
+import logger from '../../../core/Logger';
 
 const LAYERTYPES = [
 	{key: "vector", name: "Vector layer"},
@@ -155,19 +156,17 @@ class ConfigDataLayer extends Component {
 	}
 
 	_onStoreChange(keys) {
-		//console.log("_onStoreChange() ===============");
+		logger.trace("ConfigDataLayer# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
 		var thisComponent = this;
 		if (stateHash === this.getStateHash()) {
-			//console.info("_onStoreResponse()");
-			//console.log("result",result);
-			//console.log("responseData",responseData);
-			//console.log("stateHash",stateHash);
+			logger.info("ConfigDataLayer# _onStoreResponse(), Result:", result, ", Response data:", responseData,
+				", State hash:", stateHash);
 			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
-				//console.log("_onStoreResponse set state: periods:", thisComponent.state.periods);
+				logger.trace("ConfigDataLayer# _onStoreResponse(), Set state - periods:", thisComponent.state.periods);
 				let stateKey = responseData.stateKey;
 				let values = utils.deepClone(thisComponent.state[stateKey]);
 				values.push(result[0].key);
@@ -176,7 +175,7 @@ class ConfigDataLayer extends Component {
 							[stateKey]: values
 						},
 						function () {
-							//console.log("_onStoreResponse updated state:", thisComponent.state);
+							logger.info("ConfigDataLayer# _onStoreResponse(), Updated state:", thisComponent.state);
 						});
 				}
 				var screenObjectType;
@@ -265,9 +264,9 @@ class ConfigDataLayer extends Component {
 		if(this.state.hasOwnProperty("savedState")){
 			if(this.state.layerType==this.state.savedState.layerType) {
 				// todo could be universal? compare whatever properties savedState has?
-				//console.log("isStateUnchanged layerType");
+				logger.trace("ConfigDataLayer# isStateUnchanged(), layerType");
 				if(this.state.layerType=="vector" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("vector")) {
-					//console.log("isStateUnchanged vector");
+					logger.trace("ConfigDataLayer# isStateUnchanged(), vector");
 					isIt = (
 						_.isEqual(this.state.valueVLTemplate,this.state.savedState.valueVLTemplate) &&
 						_.isEqual(this.state.valueVLScope,this.state.savedState.valueVLScope) &&
@@ -276,7 +275,7 @@ class ConfigDataLayer extends Component {
 						_.isEqual(this.state.columnMaps.vector,this.state.savedState.columnMaps.vector)
 					);
 				} else if(this.state.layerType=="raster") {
-					//console.log("isStateUnchanged raster");
+					logger.trace("ConfigDataLayer# isStateUnchanged(), raster");
 					isIt = (
 						_.isEqual(this.state.valueRLTemplate,this.state.savedState.valueRLTemplate) &&
 						_.isEqual(this.state.valueRLScope,this.state.savedState.valueRLScope) &&
@@ -284,7 +283,7 @@ class ConfigDataLayer extends Component {
 						_.isEqual(this.state.valuesRLPeriods,this.state.savedState.valuesRLPeriods)
 					);
 				} else if(this.state.layerType=="au" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("au")) {
-					//console.log("isStateUnchanged au");
+					logger.trace("ConfigDataLayer# isStateUnchanged(), Analytical units (au)");
 					isIt = (
 						_.isEqual(this.state.valueAULevel,this.state.savedState.valueAULevel) &&
 						_.isEqual(this.state.valueAUScope,this.state.savedState.valueAUScope) &&
@@ -298,7 +297,7 @@ class ConfigDataLayer extends Component {
 		} else {
 			isIt = false;
 		}
-		//console.log("isIt",isIt);
+		logger.trace("ConfigDataLayer# isStateUnchanged(), isIt: ",isIt);
 		return isIt;
 	}
 
@@ -383,7 +382,7 @@ class ConfigDataLayer extends Component {
 			}
 		}, this);
 
-		//console.log("_________ columns2state returns _________:\n", ret);
+		logger.trace("ConfigDataLayer# columns2state(), Returns:", ret);
 
 		let savedState = {};
 		_.assign(savedState, ret);
@@ -404,7 +403,7 @@ class ConfigDataLayer extends Component {
 		if(relation && relation.hasOwnProperty("period") && relation.period!==null) {
 			period = relation.period.key;
 		}else if(relation){
-			console.log("======================================\n====== RELATION.period IS MISSING ======\n======================================");
+			logger.warn("ConfigDataLayer# addRelationToColumnMap(), Relation period is missing.");
 		}
 		columnMap.columnMaps.au[column].valueUseAs =
 			_.union(columnMap.columnMaps.au[column].valueUseAs, [value]);
@@ -444,8 +443,7 @@ class ConfigDataLayer extends Component {
 		// 	return item.isOfAttributeSet;
 		// });
 		if(relations.length > 0) {
-			//console.log("store2state relations2state():");
-			//console.log(relations);
+			logger.trace("ConfigDataLayer# relations2state(): Relations", relations);
 			var layerType = relations[0].layerObject.layerType;
 			ret.layerType = layerType;
 			var values = {};
@@ -625,8 +623,8 @@ class ConfigDataLayer extends Component {
 			}, thisComponent);
 			columnMapPeriods = _.uniq(columnMapPeriods);
 			columnMapAttSets = _.uniq(columnMapAttSets);
-			//console.log("columnMapPeriods", columnMapPeriods);
-			//console.log("columnMapAttSets", columnMapAttSets);
+			logger.trace("ConfigDataLayer# saveForm(), Column map periods", columnMapPeriods, "Column map attribute sets",
+				columnMapAttSets);
 			// get all columnMaps attributeSets
 
 			// columnMap
@@ -658,7 +656,7 @@ class ConfigDataLayer extends Component {
 								}
 							}
 						}, thisComponent);
-						//console.log("ColumnMap: ", columnMap);
+						logger.trace("ConfigDataLayer# saveForm(), ColumnMap: ", columnMap);
 
 						if (columnMap.length) {
 							let existingModel = _.find(relations, function (obj) {
@@ -706,7 +704,7 @@ class ConfigDataLayer extends Component {
 		relations.map(function(unusedModel){
 			actionData[1].push({type:"delete",model:unusedModel});
 		});
-		//console.log("handleObjects() actionData", actionData);
+		logger.trace("ConfigDataLayer# saveForm(), Action data:", actionData);
 		ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
 
 	}
@@ -726,7 +724,7 @@ class ConfigDataLayer extends Component {
 	}
 
 	onObjectClick (itemType, value, event) {
-		console.log("yay! " + value.key);
+		logger.trace("ConfigDataLayer# onObjectClick(), Value" + value);
 		this.context.onInteraction().call();
 		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
 		let options = {
@@ -759,10 +757,7 @@ class ConfigDataLayer extends Component {
 
 
 	render() {
-
-		//console.log("------------ CONFIG-DATA-LAYER RENDER -----------");
-		//console.log("this.state", this.state);
-		//console.log("this.state.relationsState", this.state.relationsState);
+		logger.trace("ConfigDataLayer# render(), This state: ", this.state, ", Relations state: ", this.state.relationsState);
 
 		var saveButton = " ";
 		if (this.state.layerType) {
@@ -809,9 +804,7 @@ class ConfigDataLayer extends Component {
 
 		}
 
-		//console.log("state DLC", this.state.dataLayerColumns);
-		//console.log("state vecCM", this.state.columnMaps.vector);
-		//console.log("state auCM", this.state.columnMaps.au);
+		logger.trace("ConfigDataLayer# render(), Current state: ", this.state);
 
 		return (
 			<div>

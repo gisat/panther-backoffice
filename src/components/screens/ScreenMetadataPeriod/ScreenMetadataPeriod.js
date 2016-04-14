@@ -11,6 +11,8 @@ import SelectorMetadataPeriod from '../../sections/SelectorMetadataPeriod'; // t
 import ConfigMetadataPeriod from '../../sections/ConfigMetadataPeriod';
 import ListenerHandler from '../../../core/ListenerHandler';
 
+import logger from '../../../core/Logger';
+
 var initialState = {
 	periods: [],
 	selectorValue: null
@@ -61,11 +63,9 @@ class ScreenMetadataPeriod extends Component{
 	}
 
 	componentWillReceiveProps(newProps) {
-		console.log("SMP cWRP newProps",newProps.data.initialKey);
-		console.log("SMP cWRP nrewPops",this.props.data.initialKey);
+		logger.trace("ScreenMetadataPeriod# componentWillReceiveProps(), New props:",newProps, ", Current props:", this.props);
 		if(this.props.data.initialKey != newProps.data.initialKey) {
 			this.state.selectorValue = newProps.data.initialKey;
-			console.log("smefifuu");
 		}
 		//this.context.setStateFromStores.call(this, this.store2state(newProps));
 	}

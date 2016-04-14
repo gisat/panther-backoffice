@@ -9,6 +9,7 @@ import ActionCreator from '../../../../actions/ActionCreator';
 
 import { Icon } from '../../../SEUI/elements';
 import { Table } from '../../../SEUI/collections';
+import logger from '../../../../core/Logger';
 
 import UISVG from '../../../atoms/UISVG';
 
@@ -38,7 +39,7 @@ class ScreenHelpTopicBackOfficeInterface extends Component {
 			};
 			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
 		} else {
-			console.error("Unknown help screen.");
+			logger.error("ScreenHelpTopicBackOfficeInterface# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
 		}
 	}
 

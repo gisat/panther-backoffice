@@ -14,3 +14,11 @@ export const geonodeHost = "37.205.9.78";
 export const frontOfficeProtocol = "http://";
 export const frontOfficeHost = "37.205.9.78";
 export const frontOfficeExplorationUrl = "tool/";
+
+// 0 means TRACE and higher. Use when you want to see all messages.
+// 1 means INFO and higher
+// 2 means WARN and higher
+// 3 means ERROR only
+// 4 means nothing from our application will be displayed. This should be default for production use.
+// Any other or none means INFO as this is default logging level.
+export const loggingLevel = 0;

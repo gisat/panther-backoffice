@@ -9,9 +9,10 @@ import { addEventListener, removeEventListener } from './utils/DOMUtils';
 import ga from 'react-ga';
 import update from 'react-addons-update';
 
-import { googleAnalyticsId } from './config';
+import { googleAnalyticsId, loggingLevel } from './config';
 
 import utils from './utils/utils';
+import logger from './core/Logger';
 
 let cssContainer = document.getElementById('css');
 const appContainer = document.getElementById('app');
@@ -19,11 +20,11 @@ const appContainer = document.getElementById('app');
 var activePageKey = null;
 const context = {
 	setStateDeep: function(updatePath){
-		//console.log("@ setStateDeep this", this);
+		logger.trace("context# setStateDeep(), Current this: ", this);
 		if(this.mounted) {
 			this.setState(update(this.state, updatePath));
 		} else {
-			console.log("Tries to update deep state " + updatePath);
+			logger.warn("context# setStateDeep(), Tries to update deep state ", updatePath);
 		}
 	},
 	onSetTitle: value => document.title = value,
@@ -48,29 +49,24 @@ const context = {
 
 
 	setStateFromStores: function(store2state,keys){
-		//console.log("88888888888888888888888888888888888888");
-		//console.log("setStateFromStores()");
+		logger.trace("context# setStateFromStores(), Current this: ", this, ", keys:", keys);
 		var setAll = false;
-		//console.log("keys:",keys);
 		if(!keys){
 			keys = [];
 			setAll = true;
 		}
-		//console.log("keys:",keys);
 		var component = this;
 		var storeLoads = [];
 		var storeNames = [];
 		for(var name in store2state){
 			if(setAll || (keys.indexOf(name)!=-1)) {
-				//console.log("name:",name);
-				//console.log(keys.indexOf(name));
+				logger.trace("context# setStateFromStores(), Name: ",name, ", Is key present: ", keys.indexOf(name) != -1);
 				storeLoads.push(store2state[name]);
 				// todo to clone or not to clone, that is the question
 				//storeLoads.push(utils.deepClone(store2state[name]));
 				storeNames.push(name);
 			}
 		}
-		//console.log("88888888888888888888888888888888888888");
 		return Promise.all(storeLoads).then(function(data){
 			var storeObject = {};
 			for(var i in storeNames){
@@ -79,7 +75,7 @@ const context = {
 			if(component.mounted) {
 				component.setState(storeObject);
 			} else {
-				console.log("Component is already unmounted." + component);
+				logger.info("context# setStateFromStores(), Component is already unmounted." + component);
 				component.render();
 			}
 		});
@@ -89,7 +85,7 @@ const context = {
 
 function render(state) {
 	Router.dispatch(state, (newState, component) => {
-		//console.log("newState: ", newState);
+		logger.info("Router# dispatch, New state: ", newState);
 		ReactDOM.render(component, appContainer, () => {
 			// Restore the scroll position if it was saved into the state
 			if (state.scrollY !== undefined) {
@@ -115,6 +111,8 @@ function run() {
 	var gaOptions = { debug: true };
 	ga.initialize(googleAnalyticsId, gaOptions);
 
+	logger.setLevel(loggingLevel);
+
 	// Make taps on links and buttons work fast on mobiles
 	FastClick.attach(document.body);
 
@@ -128,7 +126,7 @@ function run() {
 			search: location.search,
 			context
 		});
-		//console.log("currentState: ", currentState);
+		logger.info("app# Location change, Current state: ", currentState);
 		render(currentState);
 	});
 
