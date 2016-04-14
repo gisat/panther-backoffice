@@ -49,7 +49,7 @@ const context = {
 
 
 	setStateFromStores: function(store2state,keys){
-		logger.trace("context# setStateFromStores(), Current this: ", this);
+		logger.trace("context# setStateFromStores(), Current this: ", this, ", keys:", keys);
 		var setAll = false;
 		if(!keys){
 			keys = [];
