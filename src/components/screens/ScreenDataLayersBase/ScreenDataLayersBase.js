@@ -46,7 +46,7 @@ class ScreenDataLayersBase extends Component {
 	}
 
 	_onStoreChange() {
-		logger.trace("ScreenDataLayersBase# _onStoreChange(), Keys:", keys);
+		logger.trace("ScreenDataLayersBase# _onStoreChange()");
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 

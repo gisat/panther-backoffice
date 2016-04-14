@@ -61,7 +61,7 @@ class Page extends Component {
 	}
 
 	_onStoreChange() {
-		logger.trace("Page# _onStoreChange(), Keys:", keys);
+		logger.trace("Page# _onStoreChange()");
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 

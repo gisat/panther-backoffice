@@ -80,7 +80,7 @@ class ScreenMetadataObject extends Component{
 	}
 
 	_onStoreChange() {
-		logger.trace("ScreenMetadataObject# _onStoreChange(), Keys:", keys);
+		logger.trace("ScreenMetadataObject# _onStoreChange()");
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 

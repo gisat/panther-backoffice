@@ -60,7 +60,7 @@ class ScreenAnalysisConfig extends Component{
 	}
 
 	_onStoreChange() {
-		logger.trace("ScreenAnalysisConfig# _onStoreChange(), Keys:", keys);
+		logger.trace("ScreenAnalysisConfig# _onStoreChange()");
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 

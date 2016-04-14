@@ -55,7 +55,7 @@ class ScreenPlacesBase extends Component{
 	}
 
 	_onStoreChange() {
-		logger.trace("ScreenPlacesBase# _onStoreChange(), Keys:", keys);
+		logger.trace("ScreenPlacesBase# _onStoreChange()");
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
