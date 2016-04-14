@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import styles from './TestC.css';
 import withStyles from '../../../decorators/withStyles';
-
+import logger from '../../../core/Logger';
 
 @withStyles(styles)
 class TestC extends Component{
@@ -31,7 +31,7 @@ class TestC extends Component{
 		);
 	}
 
-	componentDidMount() { 
+	componentDidMount() {
 		this.mounted = true;
 		//$(".screen").click(function() {
 		//  if ( $(this).hasClass("retracted") ) {
@@ -53,7 +53,7 @@ class TestC extends Component{
 	}
 
 	setPosition(position){
-		console.log("[" + this.props.text + "] Nastavuji se na ", position);
+		logger.info("[" + this.props.text + "] Nastavuji se na ", position);
 	}
 
 }

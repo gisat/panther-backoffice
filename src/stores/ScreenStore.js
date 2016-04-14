@@ -22,7 +22,7 @@ import ScreenMetadataLayerVector from '../components/screens/ScreenMetadataLayer
 
 import ScreenPlacesBase from '../components/screens/ScreenPlacesBase';
 import ScreenPlaceDataSourceAttSet from '../components/screens/ScreenPlaceDataSourceAttSet';
-
+import logger from '../core/Logger';
 
 var initialScreenSets = {
 	analyses: {
@@ -539,7 +539,7 @@ class ScreenStore extends Store {
 			var windowWidth = window.innerWidth / remSize;
 			var screenCount = historyStack.length;
 			var availableWidth = windowWidth - menuWidth - (screenCount * retractedWidth);
-			//console.log("        =init innerWidth:" + window.innerWidth / remSize + " availableWidth:"+availableWidth);
+			logger.trace("ScreenStore# setScreenPosition(), Inner width:" , window.innerWidth / remSize , ", Available width:"+availableWidth);
 
 			var retractAllFurther = false;
 			var retractAllLeftFrom = 0;
@@ -555,7 +555,7 @@ class ScreenStore extends Store {
 
 				var screenSize = record.screen.size || record.screen.contentSize || normalWidth;
 				var realScreenSize = screenSize + constPlus - retractedWidth;
-				//console.log("        =record "+record.key+"-"+record.screen.position+"    size:"+screenState.size+"->"+screenSize+"->"+realScreenSize);
+				logger.trace("ScreenStore# record()", record, "screenSize:", screenSize, "realScreenSize", realScreenSize);
 				switch (positionClass) {
 					case "open":
 						if (record.screen.position == "open") {
@@ -665,7 +665,7 @@ class ScreenStore extends Store {
 
 				if (current) record.userDidThat = true;
 				if (~record.screen.position.indexOf("open")) availableWidth -= realScreenSize;
-				//console.log("         ======= availableWidth:"+availableWidth);
+				logger.trace("ScreenStore# setScreenPosition(), Available width:", availableWidth);
 				current = false;
 			});
 

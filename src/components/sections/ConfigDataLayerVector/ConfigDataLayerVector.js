@@ -12,7 +12,7 @@ import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
 import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
 import ColumnTableRow from '../../elements/ColumnTableRow/ColumnTableRow';
 
-
+import logger from '../../../core/Logger';
 
 class ConfigDataLayerVector extends Component{
 
@@ -59,7 +59,7 @@ class ConfigDataLayerVector extends Component{
 					destination = null;
 					column.valuesPeriods = null;
 					// destinationValue = "[" + (column.valueUseAs[0]) + "]";
-					console.error("Attribute "+ column.valueUseAs[0] +" doesn't exist in Vector destinations!");
+					logger.error("ConfigataLayer# render(), Attribute "+ column.valueUseAs[0] +" doesn't exist in Vector destinations!");
 				}
 			}
 

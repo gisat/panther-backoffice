@@ -29,6 +29,7 @@ import ScreenAnalysisRulesSpatial from '../../screens/ScreenAnalysisRulesSpatial
 import ScreenAnalysisRulesLevel from '../../screens/ScreenAnalysisRulesLevel';
 import ScreenAnalysisRulesMath from '../../screens/ScreenAnalysisRulesMath';
 
+import logger from '../../../core/Logger';
 
 var initialState = {
 	analysis: null,
@@ -233,7 +234,7 @@ class ConfigAnalysis extends Component {
 
 		let modelObj = new AnalysisModel(modelData);
 		actionData.push({type:"update",model:modelObj});
-		console.log("save analysis:", actionData);
+		logger.info("ConfigAnalysis# saveForm(), Save analysis:", actionData);
 		ActionCreator.handleObjects(actionData,objectType);
 	}
 

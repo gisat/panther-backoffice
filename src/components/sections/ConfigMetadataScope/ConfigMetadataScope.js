@@ -19,6 +19,7 @@ import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 
+import logger from '../../../core/Logger';
 
 var initialState = {
 	scope: null,
@@ -252,7 +253,7 @@ class ConfigMetadataScope extends Component{
 				}
 			}
 
-			console.log("handleRelations actionData",actionData); // todo clear relations for removed periods
+			logger.info("ConfigMetadataScope# handleRelations(), Action data",actionData); // todo clear relations for removed periods
 			ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
 
 		});

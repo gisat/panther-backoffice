@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import logger from '../core/Logger';
 
 class Model {
 	/**
@@ -141,7 +142,7 @@ class Model {
 				serializedObject[key] = value;
 			}
 		});
-		//console.log("serializedObject",serializedObject);
+		logger.trace("Model# serializeModel(), Serialized object:",serializedObject);
 		return serializedObject;
 	}
 

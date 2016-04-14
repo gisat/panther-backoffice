@@ -17,7 +17,7 @@ import PlaceStore from '../../../stores/PlaceStore';
 import PeriodStore from '../../../stores/PeriodStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	analysis: null,
@@ -77,7 +77,7 @@ class ScreenAnalysisRuns extends Component {
 		this.changeListener.add(ScopeStore, ["scopes"]);
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(PeriodStore, ["periods"]);
-		
+
 		this.setStateFromStores();
 	}
 
@@ -140,7 +140,7 @@ class ScreenAnalysisRuns extends Component {
 	}
 
 	onObjectClick (value, event) {
-		console.log("yay! " + value["key"]);
+		logger.trace("ScreenAnalysisRun# onObjectClick(), Value: ", value["key"]);
 	}
 
 

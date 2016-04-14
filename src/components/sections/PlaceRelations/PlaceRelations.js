@@ -34,6 +34,8 @@ import AttributeSetStore from '../../../stores/AttributeSetStore';
 import PeriodStore from '../../../stores/PeriodStore';
 import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
+import logger from '../../../core/Logger';
+
 import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
@@ -228,10 +230,10 @@ class PlaceRelations extends Component {
 							addRelationLayer(ret.relationsRaster,rel);
 							break;
 						default:
-							console.error("RELATION HAS LAYEROBJECT OF INVALID LAYERTYPE",rel);
+							logger.error("PlaceRelations# relations2state(), Relation has layerobject of invalid layerType",rel);
 					}
 				} else {
-					console.error("RELATION HAS NO LAYEROBJECT",rel);
+					logger.error("PlaceRelations# relations2state(), Relation has no layerobject",rel);
 				}
 			}
 		}
