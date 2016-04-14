@@ -11,6 +11,7 @@ import ScreenContainer from '../ScreenContainer';
 import ScreenStore from '../../stores/ScreenStore';
 
 import ListenerHandler from '../../core/ListenerHandler';
+import logger from '../../core/Logger';
 
 var initialState = {
 	key: null,
@@ -60,6 +61,7 @@ class Page extends Component {
 	}
 
 	_onStoreChange() {
+		logger.trace("Page# _onStoreChange(), Keys:", keys);
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 

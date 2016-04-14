@@ -47,9 +47,13 @@ const context = {
 		document.getElementsByTagName('head')[0].appendChild(meta);
 	},
 
-
+	/**
+	 * @param store2state
+	 * @param keys It should limit the stores, which are being loaded.
+	 * @returns {Promise.<TResult>}
+	 */
 	setStateFromStores: function(store2state,keys){
-		logger.trace("context# setStateFromStores(), Current this: ", this, ", keys:", keys);
+		logger.trace("context# setStateFromStores(), Current this: ", this, ", keys:", keys, ", store2state: ", store2state);
 		var setAll = false;
 		if(!keys){
 			keys = [];
@@ -60,7 +64,6 @@ const context = {
 		var storeNames = [];
 		for(var name in store2state){
 			if(setAll || (keys.indexOf(name)!=-1)) {
-				logger.trace("context# setStateFromStores(), Name: ",name, ", Is key present: ", keys.indexOf(name) != -1);
 				storeLoads.push(store2state[name]);
 				// todo to clone or not to clone, that is the question
 				//storeLoads.push(utils.deepClone(store2state[name]));
@@ -73,6 +76,7 @@ const context = {
 				storeObject[storeNames[i]] = data[i];
 			}
 			if(component.mounted) {
+				logger.info("context# setStateFromStores(), Stores to set: ", storeObject, ", Current Component: ", component);
 				component.setState(storeObject);
 			} else {
 				logger.info("context# setStateFromStores(), Component is already unmounted." + component);

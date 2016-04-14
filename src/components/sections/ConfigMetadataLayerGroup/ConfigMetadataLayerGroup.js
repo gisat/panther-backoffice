@@ -14,6 +14,7 @@ import LayerGroupStore from '../../../stores/LayerGroupStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
+import logger from '../../../core/Logger';
 
 var initialState = {
 	layerGroup: null,
@@ -79,6 +80,7 @@ class ConfigMetadataLayerGroup extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataLayerGroup# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

@@ -50,6 +50,7 @@ class ScreenMetadataPeriod extends Component{
 	}
 
 	_onStoreChange() {
+		logger.trace("ScreenMetadataPeriod# _onStoreChange(), Keys:", keys);
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 

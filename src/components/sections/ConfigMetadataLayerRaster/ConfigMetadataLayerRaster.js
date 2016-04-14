@@ -18,7 +18,7 @@ import StyleStore from '../../../stores/StyleStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	style: null,
@@ -95,6 +95,7 @@ class ConfigMetadataLayerRaster extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataLayerRaster# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

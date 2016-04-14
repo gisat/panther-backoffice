@@ -15,6 +15,7 @@ import AttributeSetStore from '../../../stores/AttributeSetStore';
 import AULevelStore from '../../../stores/AULevelStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
+import logger from '../../../core/Logger';
 
 var initialState = {
 	place: null,
@@ -109,6 +110,7 @@ class ConfigPlaceDataSource extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigPlaceDataSource# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

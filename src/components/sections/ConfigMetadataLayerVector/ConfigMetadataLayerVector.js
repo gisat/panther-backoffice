@@ -19,7 +19,7 @@ import AttributeSetStore from '../../../stores/AttributeSetStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	style: null,
@@ -102,6 +102,7 @@ class ConfigMetadataLayerVector extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataLayerVector# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

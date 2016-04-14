@@ -92,6 +92,7 @@ class ConfigMetadataScope extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataScope# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

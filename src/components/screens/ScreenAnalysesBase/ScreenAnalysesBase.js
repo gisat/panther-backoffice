@@ -82,6 +82,7 @@ class ScreenAnalysesBase extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ScreenAnalysesBase# _onStoreChange(), Keys:", keys);
 		this.context.setStateFromStores.call(this, this.store2state(), keys);
 	}
 

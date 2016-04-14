@@ -104,6 +104,7 @@ class ConfigAnalysis extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigAnalysis# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

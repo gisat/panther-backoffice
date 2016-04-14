@@ -16,7 +16,7 @@ import ScopeStore from '../../../stores/ScopeStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	place: null,
@@ -88,6 +88,7 @@ class ConfigMetadataPlace extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataPlace# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

@@ -25,6 +25,7 @@ import LayerGroupStore from '../../../stores/LayerGroupStore';
 import StyleStore from '../../../stores/StyleStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
+import logger from '../../../core/Logger';
 
 var initialState = {
 	scopes: [],
@@ -117,6 +118,7 @@ class ScreenMetadataBase extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ScreenMetadataBase# _onStoreChange(), Keys:", keys);
 		this.context.setStateFromStores.call(this, this.store2state(), keys);
 	}
 

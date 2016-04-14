@@ -298,6 +298,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigPlaceDataSourcePeriod# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

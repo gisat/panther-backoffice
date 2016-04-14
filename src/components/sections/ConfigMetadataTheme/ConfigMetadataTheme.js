@@ -16,7 +16,7 @@ import ScopeStore from '../../../stores/ScopeStore';
 import PeriodStore from '../../../stores/PeriodStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	style: null,
@@ -92,6 +92,7 @@ class ConfigMetadataTheme extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataTheme# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

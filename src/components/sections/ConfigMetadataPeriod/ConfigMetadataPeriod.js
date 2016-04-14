@@ -12,7 +12,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 import PeriodStore from '../../../stores/PeriodStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	period: null,
@@ -74,6 +74,7 @@ class ConfigMetadataPeriod extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataPeriod# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

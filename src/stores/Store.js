@@ -67,7 +67,7 @@ class Store extends EventEmitter {
 	}
 
 	reload() {
-		logger.info("Store# reload()");
+		logger.trace("Store# reload(), Current store: ", this);
 		var thisStore = this;
 		this._models = this.load();
 		this._models.then(function(){

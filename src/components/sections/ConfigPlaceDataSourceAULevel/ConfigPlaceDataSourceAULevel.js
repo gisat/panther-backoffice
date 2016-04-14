@@ -215,6 +215,7 @@ class ConfigPlaceDataSourceAULevel extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigPlaceDataSourceAULevel# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

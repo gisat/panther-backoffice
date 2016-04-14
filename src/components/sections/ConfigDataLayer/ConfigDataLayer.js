@@ -264,9 +264,7 @@ class ConfigDataLayer extends Component {
 		if(this.state.hasOwnProperty("savedState")){
 			if(this.state.layerType==this.state.savedState.layerType) {
 				// todo could be universal? compare whatever properties savedState has?
-				logger.trace("ConfigDataLayer# isStateUnchanged(), layerType");
 				if(this.state.layerType=="vector" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("vector")) {
-					logger.trace("ConfigDataLayer# isStateUnchanged(), vector");
 					isIt = (
 						_.isEqual(this.state.valueVLTemplate,this.state.savedState.valueVLTemplate) &&
 						_.isEqual(this.state.valueVLScope,this.state.savedState.valueVLScope) &&
@@ -275,7 +273,6 @@ class ConfigDataLayer extends Component {
 						_.isEqual(this.state.columnMaps.vector,this.state.savedState.columnMaps.vector)
 					);
 				} else if(this.state.layerType=="raster") {
-					logger.trace("ConfigDataLayer# isStateUnchanged(), raster");
 					isIt = (
 						_.isEqual(this.state.valueRLTemplate,this.state.savedState.valueRLTemplate) &&
 						_.isEqual(this.state.valueRLScope,this.state.savedState.valueRLScope) &&
@@ -283,7 +280,6 @@ class ConfigDataLayer extends Component {
 						_.isEqual(this.state.valuesRLPeriods,this.state.savedState.valuesRLPeriods)
 					);
 				} else if(this.state.layerType=="au" && this.state.savedState.hasOwnProperty("columnMaps") && this.state.savedState.columnMaps.hasOwnProperty("au")) {
-					logger.trace("ConfigDataLayer# isStateUnchanged(), Analytical units (au)");
 					isIt = (
 						_.isEqual(this.state.valueAULevel,this.state.savedState.valueAULevel) &&
 						_.isEqual(this.state.valueAUScope,this.state.savedState.valueAUScope) &&
@@ -297,7 +293,7 @@ class ConfigDataLayer extends Component {
 		} else {
 			isIt = false;
 		}
-		logger.trace("ConfigDataLayer# isStateUnchanged(), isIt: ",isIt);
+		logger.trace("ConfigDataLayer# isStateUnchanged(), Current state: ", this.state, ", It isn't changed: ", isIt);
 		return isIt;
 	}
 

@@ -19,7 +19,7 @@ import TopicStore from '../../../stores/TopicStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	attribute: null,
@@ -97,6 +97,7 @@ class ConfigMetadataAttribute extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataAttribute# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

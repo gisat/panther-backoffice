@@ -101,6 +101,7 @@ class PlaceRelations extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("PlaceRelations# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

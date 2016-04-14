@@ -13,7 +13,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 import TopicStore from '../../../stores/TopicStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	topic: null,
@@ -77,6 +77,7 @@ class ConfigMetadataTopic extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataTopic# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
