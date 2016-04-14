@@ -390,9 +390,34 @@ class ScreenAnalysisRulesSpatial extends Component{
 
 	onChangeResultAttSet (value, values) {
 		let newValue = utils.handleNewObjects(values, this.getAnalysisType(), {stateKey: "valueResultAttSet"}, this.getStateHash());
-		this.setState({
-			valueResultAttSet: newValue
-		});
+		if (!newValue[0] || this.state.valueAttributeMaps.hasOwnProperty(newValue[0])) {
+			this.setState({
+				valueResultAttSet: newValue
+			});
+		} else {
+			let attributeSet = _.findWhere(this.state.attributeSetsResult, {key: newValue [0]});
+			let attributeMap = [];
+			for (let attribute of attributeSet.attributes) {
+				attributeMap.push({
+					attribute: attribute,
+					attributeSet: attributeSet,
+					valueAttribute: null,
+					valueAttributeSet: null,
+					filterValue: null,
+					weightingAttribute: null,
+					weightingAttributeSet: null,
+					operationType: null
+				});
+			}
+			let attributeMaps = {
+				[attributeSet.key]: attributeMap
+			};
+			let newState = {
+				valueAttributeMaps: {$merge: attributeMaps},
+				valueResultAttSet: {$set: newValue}
+			};
+			this.context.setStateDeep.call(this, newState);
+		}
 	}
 
 	onChangeFilterAttSetAtt (value, values) {
@@ -419,14 +444,15 @@ class ScreenAnalysisRulesSpatial extends Component{
 
 
 	render() {
-		let ruleTableRowsInsert = [];
+		let ruleTableInsert = null;
 		if (
 			this.state.featureLayers.length &&
 			this.state.attributeSetsResult.length &&
+			this.state.valueResultAttSet[0] &&
 			this.state.attributeSetsLayer.length &&
 			this.state.filterDestinations
 		) {
-			//let ruleTableRowsInsert = [];
+			let ruleTableRowsInsert = [];
 			let operations = _.values(analysisOperationsMetadata.SPATIAL);
 			let resultAttSet = _.findWhere(this.state.attributeSetsResult, {key: this.state.valueResultAttSet[0]});
 			for (let attribute of resultAttSet.attributes) {
@@ -450,16 +476,29 @@ class ScreenAnalysisRulesSpatial extends Component{
 				);
 				let insertValueCell = false,
 					insertWeightingCell = false,
-					optionCellsInsert = null;
+					optionCellsInsert = null,
+					valueCellCaption = "",
+					valueDestination = null,
+					weightingDestination = null;
 				switch (attributeMapRow.operationType) {
 					case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.SUM_ATTRIBUTE].key:
+						insertValueCell = true;
+						valueCellCaption = "Attribute to sum";
+						break;
 					case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.AVG_ATTRIBUTE_WEIGHT_AREA].key:
 						insertValueCell = true;
+						valueCellCaption = "Attribute to average";
 						break;
 					case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.AVG_ATTRIBUTE_WEIGHT_ATTRIBUTE].key:
 						insertValueCell = true;
 						insertWeightingCell = true;
 						break;
+				}
+				if (attributeMapRow.valueAttributeSet && attributeMapRow.valueAttribute) {
+					valueDestination = attributeMapRow.valueAttributeSet.key + "-" + attributeMapRow.valueAttribute.key;
+				}
+				if (attributeMapRow.weightingAttributeSet && attributeMapRow.weightingAttribute) {
+					weightingDestination = attributeMapRow.weightingAttributeSet.key + "-" + attributeMapRow.weightingAttribute.key;
 				}
 				if (!insertValueCell && !insertWeightingCell) {
 					optionCellsInsert = (
@@ -470,7 +509,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 					optionCellsInsert.push((
 						<td className="allowOverflow resetui">
 							<label className="container">
-								Attribute to average
+								{valueCellCaption}
 								<Select
 									//onChange={this.onChangeFilterAttSetAtt.bind(this)}
 									options={this.state.filterDestinations}
@@ -478,8 +517,8 @@ class ScreenAnalysisRulesSpatial extends Component{
 									singleValueComponent={SingleValueDestination}
 									valueKey="key"
 									labelKey="name"
-									className={["435-432"].length ? "multiline" : ""}
-									value={this.state.filterDestinations && this.state.filterDestinations.length ? ["435-432"] : []}
+									className={valueDestination ? "multiline" : ""}
+									value={valueDestination}
 								/>
 							</label>
 						</td>
@@ -496,8 +535,8 @@ class ScreenAnalysisRulesSpatial extends Component{
 										singleValueComponent={SingleValueDestination}
 										valueKey="key"
 										labelKey="name"
-										className={["435-432"].length ? "multiline" : ""}
-										value={this.state.filterDestinations && this.state.filterDestinations.length ? ["435-432"] : []}
+										className={weightingDestination ? "multiline" : ""}
+										value={weightingDestination}
 									/>
 								</label>
 							</td>
@@ -508,21 +547,32 @@ class ScreenAnalysisRulesSpatial extends Component{
 						));
 					}
 				}
-				let filterCellInsert = (
-					<td className="allowOverflow resetui">
-						<label className="container">
-							Code:
-							<Input
-								type="text"
-								name="name"
-								placeholder=" "
-								defaultValue="112" // remove
-								value={attributeMapRow.filterValue}
-								//onChange={this.onChangeWhatever.bind(this)}
-							/>
-						</label>
-					</td>
-				);
+				let filterCellInsert = null;
+				if (this.state.valueFilterAttSetAtt[0]) {
+					let filterKeys = this.state.valueFilterAttSetAtt[0].split("-");
+					let filterAttributeSet = _.findWhere(this.state.attributeSetsLayer,{key: +filterKeys[0]});
+					let filterAttribute = _.findWhere(filterAttributeSet.attributes,{key: +filterKeys[1]});
+					filterCellInsert = (
+						<td className="allowOverflow resetui">
+							<label className="container">
+								{filterAttribute.name + ":"}
+								<Input
+									type="text"
+									name="name"
+									placeholder=" "
+									//defaultValue="112" // remove
+									value={attributeMapRow.filterValue}
+									//onChange={this.onChangeWhatever.bind(this)}
+								/>
+							</label>
+						</td>
+					);
+				} else {
+					filterCellInsert = (
+						<td></td>
+					);
+				}
+
 				let rowInsert = (
 					<tbody className="internal row">
 					<tr className="row-header">
@@ -537,6 +587,18 @@ class ScreenAnalysisRulesSpatial extends Component{
 				);
 				ruleTableRowsInsert.push(rowInsert);
 			}
+			ruleTableInsert = (
+				<Table celled className="fixed" id="AnalysisSpatialRuleTable">
+					<thead>
+					<tr>
+						<th>Operation</th>
+						<th colSpan="2"></th>
+						<th>Filter</th>
+					</tr>
+					</thead>
+					{ruleTableRowsInsert}
+				</Table>
+			);
 		}
 
 
@@ -577,7 +639,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 						</label>
 					</div>
 
-				<div className="frame-input-wrapper">
+					<div className="frame-input-wrapper">
 						<label className="container">
 							Filter attribute
 							<Select
@@ -591,175 +653,9 @@ class ScreenAnalysisRulesSpatial extends Component{
 								value={this.state.valueFilterAttSetAtt}
 							/>
 						</label>
-				</div>
+					</div>
 
-				<Table celled className="fixed" id="AnalysisSpatialRuleTable">
-					<thead>
-						<tr>
-							<th>Operation</th>
-							<th colSpan="2"></th>
-							<th>Filter</th>
-						</tr>
-					</thead>
-					{ruleTableRowsInsert}
-					{/*<tbody>
-
-					<tr className="row-header">
-							<td colSpan="4" className="resetui">Continuous Urban Fabric (S.L. > 80%)</td>
-						</tr>
-						<tr>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Operation
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										//options={OPERATIONS}
-										options={_.values(analysisOperationsMetadata.SPATIAL)}
-										valueKey="key"
-										labelKey="name"
-										//inputProps={selectInputProps}
-										value="sumarea"
-									/>
-								</label>
-							</td>
-							<td colSpan="2"></td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Code:
-									<Input
-										type="text"
-										name="name"
-										placeholder=" "
-										defaultValue="111" // remove
-										//value={this.state.valueWhatever}
-										//onChange={this.onChangeWhatever.bind(this)}
-									/>
-								</label>
-							</td>
-						</tr>
-
-					</tbody>
-					<tbody className="internal row">
-
-						<tr className="row-header">
-							<td colSpan="4" className="resetui">Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)</td>
-						</tr>
-						<tr>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Operation
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={OPERATIONS}
-										valueKey="key"
-										labelKey="name"
-										//inputProps={selectInputProps}
-										value="AVGATTATT"
-									/>
-								</label>
-							</td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Attribute to average
-									<Select
-										//onChange={this.onChangeFilterAttSetAtt.bind(this)}
-										options={this.state.filterDestinations}
-										optionComponent={OptionDestination}
-										singleValueComponent={SingleValueDestination}
-										valueKey="key"
-										labelKey="name"
-										className={["435-432"].length ? "multiline" : ""}
-										value={this.state.filterDestinations && this.state.filterDestinations.length ? ["435-432"] : []}
-									/>
-								</label>
-							</td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Weighting attribute
-									<Select
-										//onChange={this.onChangeFilterAttSetAtt.bind(this)}
-										options={this.state.filterDestinations}
-										optionComponent={OptionDestination}
-										singleValueComponent={SingleValueDestination}
-										valueKey="key"
-										labelKey="name"
-										className={["435-432"].length ? "multiline" : ""}
-										value={this.state.filterDestinations && this.state.filterDestinations.length ? ["435-432"] : []}
-									/>
-								</label>
-							</td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Code:
-									<Input
-										type="text"
-										name="name"
-										placeholder=" "
-										defaultValue="112" // remove
-										//value={this.state.valueWhatever}
-										//onChange={this.onChangeWhatever.bind(this)}
-									/>
-								</label>
-							</td>
-						</tr>
-
-					</tbody>
-					<tbody className="internal row">
-
-						<tr className="row-header">
-							<td colSpan="4" className="resetui">Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)</td>
-						</tr>
-						<tr>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Operation
-									<Select
-										//onChange={this.onChangeAttSet.bind(this)}
-										//loadOptions={this.getPlaces}
-										options={OPERATIONS}
-										valueKey="key"
-										labelKey="name"
-										//inputProps={selectInputProps}
-										value="SUMATT"
-									/>
-								</label>
-							</td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Attribute to sum
-									<Select
-										//onChange={this.onChangeFilterAttSetAtt.bind(this)}
-										options={this.state.filterDestinations}
-										optionComponent={OptionDestination}
-										singleValueComponent={SingleValueDestination}
-										valueKey="key"
-										labelKey="name"
-										className={["435-432"].length ? "multiline" : ""}
-										value={this.state.filterDestinations && this.state.filterDestinations.length ? ["435-432"] : []}
-									/>
-								</label>
-							</td>
-							<td></td>
-							<td className="allowOverflow resetui">
-								<label className="container">
-									Code:
-									<Input
-										type="text"
-										name="name"
-										placeholder=" "
-										defaultValue="113" // remove
-										//value={this.state.valueWhatever}
-										//onChange={this.onChangeWhatever.bind(this)}
-									/>
-								</label>
-							</td>
-						</tr>
-
-
-					</tbody>*/}
-				</Table>
+					{ruleTableInsert}
 
 					<SaveButton saved />
 
