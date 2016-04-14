@@ -5,7 +5,7 @@ import ObjectTypes, {Model, objectTypesMetadata} from '../../../../constants/Obj
 import ActionCreator from '../../../../actions/ActionCreator';
 
 import { Icon } from '../../../SEUI/elements';
-
+import logger from '../../../../core/Logger';
 
 class ScreenHelpUseCaseLayerAdd extends Component {
 
@@ -31,7 +31,7 @@ class ScreenHelpUseCaseLayerAdd extends Component {
 			};
 			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
 		} else {
-			console.error("Unknown help screen.");
+			logger.error("ScreenHelpUseCaseLayerAdd# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
 		}
 	}
 

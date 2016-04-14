@@ -4,6 +4,7 @@ import utils from '../../../utils/utils';
 
 import { Input, Button, Icon } from '../../SEUI/elements';
 import { Table } from '../../SEUI/collections';
+import logger from '../../../core/Logger';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
@@ -41,7 +42,7 @@ class ConfigAnalysisRulesMath extends Component {
 			for (let index in this.props.analysis.attributeSets) {
 
 				let operationRow = null;
-				console.log("index",index);
+				logger.info("ConfigAnalysisRulesMath# render(), Index:", index);
 				if (index != 0) {
 					operationRow = (
 						<div>

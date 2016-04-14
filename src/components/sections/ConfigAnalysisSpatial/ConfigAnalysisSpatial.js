@@ -12,6 +12,7 @@ import Select from 'react-select';
 import _ from 'underscore';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 
+import logger from '../../../core/Logger';
 
 const TOPICS = [
 			{ key: 7, topic: 'Land cover structure', themes: [18,23,32] },
@@ -104,7 +105,7 @@ class ConfigAnalysisSpatial extends Component{
 
 
 	onObjectClick (value, event) {
-		console.log("yay! " + value["key"]);
+		logger.trace("ConfigAnalysisSpatial# onObjectClick(), Value:" + value["key"]);
 	}
 
 
@@ -127,7 +128,7 @@ class ConfigAnalysisSpatial extends Component{
 	}
 
 	onChangeName(){
-		console.log("name changed");
+		logger.trace("ConfigAnalysisSpatial# onChangeName(), Name changed");
 	}
 
 	render() {

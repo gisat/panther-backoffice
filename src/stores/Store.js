@@ -11,7 +11,7 @@ import DataLayerModel from '../models/DataLayerModel';
 import EventTypes from '../constants/EventTypes';
 
 import { apiProtocol, apiHost, apiPath } from '../config';
-
+import logger from '../core/Logger';
 
 class Store extends EventEmitter {
 
@@ -30,7 +30,7 @@ class Store extends EventEmitter {
 	 * To be overridden
 	 */
 	getApiUrl(){
-		console.error("getApiUrl not overridden");
+		logger.error("Store# getApiUrl(), getApiUrl not overridden");
 	}
 
 	getApiLoadMethod(){
@@ -40,7 +40,7 @@ class Store extends EventEmitter {
 	registerListeners(){}
 
 	getInstance(options,data){
-		console.error("getInstance not overridden");
+		logger.error("Store# getInstance(options, data), getInstance not overridden", options, data);
 		return {};
 	}
 
@@ -67,7 +67,7 @@ class Store extends EventEmitter {
 	}
 
 	reload() {
-		console.log("========== STORE RELOAD ==========");
+		logger.info("Store# reload()");
 		var thisStore = this;
 		this._models = this.load();
 		this._models.then(function(){
@@ -119,7 +119,7 @@ class Store extends EventEmitter {
 			// this is the iterator
 			// it works synchronous in async.eachSeries - it's waiting for each cycle to be finished
 			function(batch, callback){
-				console.log("BATCH", batch); // todo remove log
+				logger.trace("Store# handle(), Batch", batch);
 				var promises = [];
 				batch.forEach(function(action){
 					switch (action.type) {
@@ -135,16 +135,16 @@ class Store extends EventEmitter {
 					}
 				}, this);
 				Promise.all(promises).then(function(){
-					console.log("BATCH FINISHED"); // todo remove log
+					logger.trace("Store# handle(), Batch finished");
 					callback(); // this is how one cycle says it's finished
 				});
 			}.bind(this),
 
 			// this is the final callback of async.eachSeries
 			function(err){
-				console.log("FINAL CALLBACK", err); // todo remove log
+				logger.trace("Store# handle(), Final callback", err);
 				if(err){
-					return console.error(err);
+					return logger.error("Store# handle(), Error: ", err);
 				}
 				this.reload();
 			}.bind(this)
@@ -153,7 +153,7 @@ class Store extends EventEmitter {
 	}
 
 	createObjectAndRespond(model,responseData,responseStateHash) {
-		//console.log("PeriodStore createObject responseData",responseData);
+		logger.trace("Store# createObjectAndRespond(), Response data",responseData);
 		// todo ? Model.resolveForServer ?
 		//var object = {
 		//	name: objectData.name,
@@ -181,7 +181,7 @@ class Store extends EventEmitter {
 			var url = apiProtocol + apiHost + path.join(apiPath, thisStore.getApiUrl()).replace(/\\/g, "/");
 			var communicationObject = superagent(method.toUpperCase(), url);
 			communicationObject._callback = function(){
-				console.log(arguments[0]);
+				logger.info("Store# request(), Argument: ",arguments[0]);
 			};
 				communicationObject.send(object)
 				.withCredentials()

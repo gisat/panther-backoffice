@@ -1,6 +1,7 @@
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import ActionTypes from '../constants/ActionTypes'
 import ObjectTypes from '../constants/ObjectTypes'
+import logger from '../core/Logger'
 
 export default {
 
@@ -16,7 +17,7 @@ export default {
 			action.type = ActionTypes[actionType];
 			AppDispatcher.dispatch(action);
 		} else {
-			console.error("UNKNOWN ACTION TYPE",actionType);
+			logger.error("ActionCreator# createObjectAndRespond(), Unknown action types",actionType);
 		}
 		//switch (objectType) {
 		//	case ObjectTypes.SCOPE:
@@ -34,11 +35,10 @@ export default {
 			type: null,
 			model: model
 		};
-		//console.log("ActionCreator createObject()");
+		logger.trace("ActionCreator# createObject()", objectType);
 		switch (objectType) {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_CREATE;
-				//console.log("action type",action.type);
 				break;
 			default:
 				return;
@@ -51,11 +51,10 @@ export default {
 			type: null,
 			model: model
 		};
-		//console.log("ActionCreator updateObject()");
+		logger.trace("ActionCreator# updateObject()", objectType);
 		switch (objectType) {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_UPDATE;
-				//console.log("action type",action.type);
 				break;
 			default:
 				return;
@@ -68,11 +67,10 @@ export default {
 			type: null,
 			model: model
 		};
-		//console.log("ActionCreator deleteObject()");
+		logger.trace("ActionCreator# deleteObject()", objectType);
 		switch (objectType) {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_DELETE;
-				//console.log("action type",action.type);
 				break;
 			default:
 				return;
@@ -85,7 +83,7 @@ export default {
 			type: null,
 			data: data
 		};
-		//console.log("ActionCreator handleObjects()");
+		logger.trace("ActionCreator# handleObjects()");
 		switch (objectType) {
 			case ObjectTypes.SCOPE:
 				action.type = ActionTypes.SCOPE_HANDLE;

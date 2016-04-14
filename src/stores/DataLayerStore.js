@@ -4,7 +4,7 @@ import ActionTypes from '../constants/ActionTypes';
 import DataLayerModel from '../models/DataLayerModel';
 
 import ObjectRelationStore from './ObjectRelationStore';
-
+import logger from '../core/Logger';
 
 class DataLayerStore extends Store {
 
@@ -34,6 +34,7 @@ class DataLayerStore extends Store {
 let storeInstance = new DataLayerStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.info("DataLayerStore# dispatchToken(), Action:", action);
 
 	switch(action.type) {
 		//case ActionTypes.APP_INITIALIZED:
@@ -42,7 +43,6 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 		case ActionTypes.LAYER_ADD: //todo
 			//appState.page = action.page;
 			//appState.path = action.path;
-			console.log("Action: LAYER_ADD");
 			break;
 
 		// case ActionTypes.APP_RESET:

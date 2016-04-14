@@ -9,6 +9,7 @@ import Router from './routes';
 import Html from './components/Html';
 
 import {publicPath, serverPort} from './config';
+import logger from './core/Logger';
 
 const server = global.server = express();
 
@@ -55,7 +56,7 @@ server.get('*', async (req, res, next) => {
 
 server.listen(server.get('port'), () => {
 	/* eslint-disable no-console */
-	console.log('The server is running at http://localhost:' + server.get('port'));
+	logger.info('server# listen(), The server is running at http://localhost:' + server.get('port'));
 	if (process.send) {
 		process.send('online');
 	}

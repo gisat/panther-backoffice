@@ -14,6 +14,7 @@ import ScreenHelpTopicMetadata from '../help/ScreenHelpTopicMetadata';
 import ScreenHelpTopicBackOfficeInterface from '../help/ScreenHelpTopicBackOfficeInterface';
 import ScreenHelpUseCaseLayerAdd from '../help/ScreenHelpUseCaseLayerAdd';
 
+import logger from '../../../core/Logger';
 
 @withStyles(styles)
 class ScreenHelpIndex extends Component {
@@ -51,7 +52,7 @@ class ScreenHelpIndex extends Component {
 			};
 			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
 		} else {
-			console.error("Unknown help screen.");
+			logger.error("ScreenHelpIndex# onHelpLinkClick(), Unknown help screen. ", helpScreenKey);
 		}
 	}
 

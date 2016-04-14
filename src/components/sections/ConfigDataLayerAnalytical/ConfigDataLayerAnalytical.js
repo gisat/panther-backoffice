@@ -12,7 +12,7 @@ import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
 import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
 import ColumnTableRow from '../../elements/ColumnTableRow/ColumnTableRow';
 
-
+import logger from '../../../core/Logger';
 
 class ConfigDataLayerAnalytical extends Component{
 
@@ -59,7 +59,7 @@ class ConfigDataLayerAnalytical extends Component{
 					destination = null;
 					column.valuesPeriods = null;
 					// destinationValue = "[" + (column.valueUseAs[0]) + "]";
-					console.error("Attribute "+ column.valueUseAs[0] +" doesn't exist in AU destinations!");
+					logger.error("ConfigDataLayerAnalytical# render(), Attribute "+ column.valueUseAs[0] +" doesn't exist in AU destinations!");
 				}
 			}
 
