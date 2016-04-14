@@ -502,6 +502,10 @@ class ScreenAnalysisRulesSpatial extends Component{
 								</label>
 							</td>
 						));
+					} else {
+						optionCellsInsert.push((
+							<td></td>
+						));
 					}
 				}
 				let filterCellInsert = (
