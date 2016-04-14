@@ -505,7 +505,7 @@ class ScreenStore extends Store {
 			// remove previous records for the same screen
 			//var allowRetract = (newScreens[0].key != screenKey); // Zatim nepouzivane, mozna to nebude potreba.
 			historyStack.map(function(record, i){
-				if(record.screen.key == screenKey){
+				if(record.screen && (record.screen.key == screenKey)){
 					//allowRetract = record.allowRetract;
 					historyStack.splice(i, 1);
 				}
