@@ -14,6 +14,7 @@ import TopicStore from '../../../stores/TopicStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 import logger from '../../../core/Logger';
+import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	topic: null,
@@ -43,6 +44,7 @@ class ConfigMetadataTopic extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -82,12 +84,12 @@ class ConfigMetadataTopic extends Component{
 	}
 
 	componentDidMount() { this.mounted = true;
-		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topic"]));
+		this.changeListener.add(TopicStore, ["topic"]);
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() { this.mounted = false;
-		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topic"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

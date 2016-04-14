@@ -15,6 +15,7 @@ import LayerGroupStore from '../../../stores/LayerGroupStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import logger from '../../../core/Logger';
+import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	layerGroup: null,
@@ -45,6 +46,7 @@ class ConfigMetadataLayerGroup extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -85,12 +87,12 @@ class ConfigMetadataLayerGroup extends Component{
 	}
 
 	componentDidMount() { this.mounted = true;
-		LayerGroupStore.addChangeListener(this._onStoreChange.bind(this,["layerGroup"]));
+		this.changeListener.add(LayerGroupStore, ["layerGroup"]);
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() { this.mounted = false;
-		LayerGroupStore.removeChangeListener(this._onStoreChange.bind(this,["layerGroup"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

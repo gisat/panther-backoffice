@@ -17,6 +17,7 @@ import PeriodStore from '../../../stores/PeriodStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 import logger from '../../../core/Logger';
+import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	style: null,
@@ -50,6 +51,9 @@ class ConfigMetadataTheme extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -137,22 +141,19 @@ class ConfigMetadataTheme extends Component{
 	}
 
 	componentDidMount() { this.mounted = true;
-		ThemeStore.addChangeListener(this._onStoreChange.bind(this,["theme"]));
-		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		ScopeStore.addResponseListener(this._onStoreResponse.bind(this));
-		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.addResponseListener(this._onStoreResponse.bind(this));
-		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.add(ThemeStore, ["theme"]);
+		this.changeListener.add(ScopeStore, ["scopes"]);
+		this.changeListener.add(TopicStore, ["topics"]);
+		this.responseListener.add(ScopeStore);
+		this.responseListener.add(TopicStore);
+		this.responseListener.add(PeriodStore);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() { this.mounted = false;
-		ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["theme"]));
-		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		ScopeStore.removeResponseListener(this._onStoreResponse.bind(this));
-		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.removeResponseListener(this._onStoreResponse.bind(this));
-		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
