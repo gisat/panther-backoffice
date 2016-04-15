@@ -53,7 +53,7 @@ const context = {
 	 * @returns {Promise.<TResult>}
 	 */
 	setStateFromStores: function(store2state,keys){
-		logger.trace("context# setStateFromStores(), Current this: ", this, ", keys:", keys, ", store2state: ", store2state);
+		logger.trace("context# setStateFromStores(), Current this: ", this, "\n keys:", keys, "\n store2state: ", store2state);
 		var setAll = false;
 		if(!keys){
 			keys = [];
