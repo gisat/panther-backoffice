@@ -68,12 +68,18 @@ class Store extends EventEmitter {
 	}
 
 	reload() {
+		logger.trace("Store# reload(), In progress: ", this.reloadInProgress);
+		if(this.reloadInProgress) {
+			return;
+		}
+		this.reloadInProgress = true;
 		var guid = util.guid();
 		logger.trace("Store# reload(), GUID: ", guid, ",Current store: ", this);
 		var thisStore = this;
 		this._models = this.load();
 		this._models.then(function(){
 			logger.trace("Store# reload(), Models loading finished, GUID: ", guid, ", Current store: ", thisStore);
+			thisStore.reloadInProgress = false;
 			thisStore.emitChange();
 		});
 		return this._models;
