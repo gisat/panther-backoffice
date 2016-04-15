@@ -162,6 +162,8 @@ class ConfigMetadataLayerVector extends PantherComponent{
 		this.responseListener.add(LayerGroupStore);
 		this.changeListener.add(StyleStore, ["styles"]);
 		this.responseListener.add(StyleStore);
+		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
+		this.responseListener.add(AttributeSetStore);
 
 		this.setStateFromStores();
 	}
