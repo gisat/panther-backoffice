@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -18,7 +19,7 @@ import StyleStore from '../../../stores/StyleStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	style: null,
@@ -27,7 +28,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataAULevel extends Component{
+class ConfigMetadataAULevel extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -69,13 +70,16 @@ class ConfigMetadataAULevel extends Component{
 
 			if(!keys || keys.indexOf("layer")!=-1) {
 				store2state.layer.then(function (layer) {
-					let newState = {
-						valueActive: layer.active,
-						valueName: layer.name
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: layer.active,
+							valueName: layer.name
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -83,6 +87,7 @@ class ConfigMetadataAULevel extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataAULevel# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -136,7 +141,8 @@ class ConfigMetadataAULevel extends Component{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.layer);
 		modelData.active = this.state.valueActive;

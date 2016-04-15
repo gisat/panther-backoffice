@@ -505,7 +505,7 @@ class ScreenStore extends Store {
 			// remove previous records for the same screen
 			//var allowRetract = (newScreens[0].key != screenKey); // Zatim nepouzivane, mozna to nebude potreba.
 			historyStack.map(function(record, i){
-				if(record.screen.key == screenKey){
+				if(record.screen && (record.screen.key == screenKey)){
 					//allowRetract = record.allowRetract;
 					historyStack.splice(i, 1);
 				}
@@ -721,6 +721,7 @@ class ScreenStore extends Store {
 let storeInstance = new ScreenStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("ScreenStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.SCREEN_CREATE_OPEN:

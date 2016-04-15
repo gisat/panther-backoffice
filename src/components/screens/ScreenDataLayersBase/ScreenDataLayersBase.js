@@ -46,10 +46,13 @@ class ScreenDataLayersBase extends Component {
 	}
 
 	_onStoreChange() {
+		logger.trace("ScreenDataLayersBase# _onStoreChange()");
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		logger.trace("ScreenDataLayersBase# componentDidMount()");
+		this.mounted = true;
 		this.changeListener.add(DataLayerStore);
 
 		this.context.setStateFromStores.call(this, this.store2state());
@@ -60,10 +63,12 @@ class ScreenDataLayersBase extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
+		logger.trace("ScreenDataLayersBase# componentWillReceiveProps(), Props:", newProps);
 		this.context.setStateFromStores.call(this, this.store2state(newProps));
 	}
 
 	onSelectorFocus(){
+		logger.trace("ScreenDataLayersBase# onSelectorFocus()");
 		DataLayerStore.reload();
 	}
 

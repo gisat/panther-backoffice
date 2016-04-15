@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -14,6 +15,8 @@ import LayerGroupStore from '../../../stores/LayerGroupStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
+import logger from '../../../core/Logger';
+import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	layerGroup: null,
@@ -23,7 +26,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataLayerGroup extends Component{
+class ConfigMetadataLayerGroup extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -44,6 +47,7 @@ class ConfigMetadataLayerGroup extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -64,14 +68,17 @@ class ConfigMetadataLayerGroup extends Component{
 
 			if(!keys || keys.indexOf("layerGroup")!=-1) {
 				store2state.layerGroup.then(function (layerGroup) {
-					let newState = {
-						valueActive: layerGroup.active,
-						valueName: layerGroup.name,
-						valueOrder: layerGroup.order
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: layerGroup.active,
+							valueName: layerGroup.name,
+							valueOrder: layerGroup.order
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -79,16 +86,17 @@ class ConfigMetadataLayerGroup extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataLayerGroup# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
 	componentDidMount() { this.mounted = true;
-		LayerGroupStore.addChangeListener(this._onStoreChange.bind(this,["layerGroup"]));
+		this.changeListener.add(LayerGroupStore, ["layerGroup"]);
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() { this.mounted = false;
-		LayerGroupStore.removeChangeListener(this._onStoreChange.bind(this,["layerGroup"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -133,7 +141,8 @@ class ConfigMetadataLayerGroup extends Component{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.layerGroup);
 		modelData.active = this.state.valueActive;

@@ -16,6 +16,7 @@ import RasterLayerStore from '../../../stores/RasterLayerStore';
 import PeriodStore from '../../../stores/PeriodStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
+import logger from '../../../core/Logger';
 
 var initialState = {
 	example: "Nothing is happening.",
@@ -72,6 +73,7 @@ class LinkTableRasterByScopePlace extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("LinkTableRasterByScopePlace# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

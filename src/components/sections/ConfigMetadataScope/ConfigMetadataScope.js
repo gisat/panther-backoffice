@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -30,7 +31,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataScope extends Component{
+class ConfigMetadataScope extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -65,6 +66,8 @@ class ConfigMetadataScope extends Component{
 	}
 
 	setStateFromStores(props,keys) {
+		super.setStateFromStores(props,keys);
+
 		if(!props){
 			props = this.props;
 		}
@@ -72,19 +75,21 @@ class ConfigMetadataScope extends Component{
 			var thisComponent = this;
 			let store2state = this.store2state(props);
 			this.context.setStateFromStores.call(this, store2state, keys);
-			// if stores changed, overrides user input - todo fix
 
 			if(!keys || keys.indexOf("scope")!=-1) {
 				store2state.scope.then(function (scope) {
-					let newState = {
-						valueActive: scope.active,
-						valueName: scope.name,
-						valuesAULevels: utils.getModelsKeys(scope.levels),
-						valuesPeriods: utils.getModelsKeys(scope.periods)
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: scope.active,
+							valueName: scope.name,
+							valuesAULevels: utils.getModelsKeys(scope.levels),
+							valuesPeriods: utils.getModelsKeys(scope.periods)
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -92,6 +97,7 @@ class ConfigMetadataScope extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataScope# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -193,7 +199,9 @@ class ConfigMetadataScope extends Component{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		  		
+		super.saveForm();
+
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.scope);
 		modelData.active = this.state.valueActive;

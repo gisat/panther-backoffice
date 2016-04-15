@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -18,7 +19,7 @@ import StyleStore from '../../../stores/StyleStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	style: null,
@@ -31,7 +32,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataLayerRaster extends Component{
+class ConfigMetadataLayerRaster extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -78,16 +79,19 @@ class ConfigMetadataLayerRaster extends Component{
 
 			if(!keys || keys.indexOf("layer")!=-1) {
 				store2state.layer.then(function (layer) {
-					let newState = {
-						valueActive: layer.active,
-						valueName: layer.name,
-						valueTopic: layer.topic ? [layer.topic.key] : [],
-						valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
-						valuesStyles: utils.getModelsKeys(layer.styles)
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: layer.active,
+							valueName: layer.name,
+							valueTopic: layer.topic ? [layer.topic.key] : [],
+							valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
+							valuesStyles: utils.getModelsKeys(layer.styles)
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -95,6 +99,7 @@ class ConfigMetadataLayerRaster extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataLayerRaster# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -211,7 +216,8 @@ class ConfigMetadataLayerRaster extends Component{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.layer);
 		modelData.active = this.state.valueActive;

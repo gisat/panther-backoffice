@@ -18,6 +18,7 @@ import ThemeStore from '../../../stores/ThemeStore';
 import TopicStore from '../../../stores/TopicStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
+import logger from '../../../core/Logger';
 
 var initialState = {
 	example: "Nothing is happening.",
@@ -350,6 +351,7 @@ class LinkTableByScopePlace extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("LinkTableByScopePlace# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

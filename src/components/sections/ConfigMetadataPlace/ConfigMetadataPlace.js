@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -16,7 +17,7 @@ import ScopeStore from '../../../stores/ScopeStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	place: null,
@@ -27,7 +28,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataPlace extends Component{
+class ConfigMetadataPlace extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -72,15 +73,18 @@ class ConfigMetadataPlace extends Component{
 
 			if(!keys || keys.indexOf("place")!=-1) {
 				store2state.place.then(function (place) {
-					let newState = {
-						valueActive: place.active,
-						valueName: place.name,
-						valueBoundingBox: place.boundingBox,
-						valueScope: place.scope ? [place.scope.key] : []
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: place.active,
+							valueName: place.name,
+							valueBoundingBox: place.boundingBox,
+							valueScope: place.scope ? [place.scope.key] : []
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -88,6 +92,7 @@ class ConfigMetadataPlace extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataPlace# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -180,7 +185,8 @@ class ConfigMetadataPlace extends Component{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.place);
 		modelData.active = this.state.valueActive;

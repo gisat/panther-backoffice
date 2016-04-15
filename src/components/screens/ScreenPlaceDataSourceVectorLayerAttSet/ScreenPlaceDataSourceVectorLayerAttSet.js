@@ -90,7 +90,7 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 	}
 
 	_onStoreChange(keys) {
-		//this.context.setStateFromStores.call(this, this.store2state(), keys);
+		logger.trace("ScreenPlaceDataSourceVectorLayerAttSet# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

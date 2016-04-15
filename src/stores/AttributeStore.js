@@ -3,6 +3,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import AttributeModel from '../models/AttributeModel';
 
+import logger from '../core/Logger';
 //import UserStore from './UserStore';
 
 
@@ -24,6 +25,7 @@ class AttributeStore extends Store {
 let storeInstance = new AttributeStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("AttributeStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.ATTRIBUTE_CREATE_RESPOND:

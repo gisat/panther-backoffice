@@ -69,6 +69,7 @@ class ScreenAnalysisRuns extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ScreenAnalysisRuns# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props, keys);
 	}
 

@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import styles from './ConfigDataLayerRaster.css';
 import withStyles from '../../../decorators/withStyles';
 
@@ -10,7 +11,7 @@ import UIObjectSelect from '../../atoms/UIObjectSelect';
 
 
 @withStyles(styles)
-class ConfigDataLayerRaster extends Component{
+class ConfigDataLayerRaster extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,

@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -24,7 +25,7 @@ const OPERATIONS = [
 	{ key: "avgattr", name: "AVERAGE, weighted by attribute" }
 ];
 
-class ConfigAnalysisRulesLevel extends Component {
+class ConfigAnalysisRulesLevel extends PantherComponent {
 
 	static propTypes = {
 		disabled: PropTypes.bool,

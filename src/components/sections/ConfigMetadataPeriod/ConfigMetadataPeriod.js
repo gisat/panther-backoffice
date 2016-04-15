@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -12,7 +13,7 @@ import ActionCreator from '../../../actions/ActionCreator';
 import PeriodStore from '../../../stores/PeriodStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	period: null,
@@ -21,7 +22,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataPeriod extends Component{
+class ConfigMetadataPeriod extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -62,11 +63,14 @@ class ConfigMetadataPeriod extends Component{
 			// if stores changed, overrides user input - todo fix
 
 			store2state.period.then(function(period) {
-				if(thisComponent.mounted) {
-					thisComponent.setState({
-						valueActive: period.active,
-						valueName: period.name
-					});
+				if(thisComponent.acceptChange) {
+					thisComponent.acceptChange = false;
+					if (thisComponent.mounted) {
+						thisComponent.setState({
+							valueActive: period.active,
+							valueName: period.name
+						});
+					}
 				}
 			});
 		}
@@ -74,6 +78,7 @@ class ConfigMetadataPeriod extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataPeriod# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -128,7 +133,8 @@ class ConfigMetadataPeriod extends Component{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.period);
 		modelData.active = this.state.valueActive;

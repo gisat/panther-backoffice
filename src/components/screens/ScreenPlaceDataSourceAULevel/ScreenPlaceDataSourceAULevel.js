@@ -16,7 +16,7 @@ import SelectorPlaceAULevel from '../../sections/SelectorPlaceAULevel';
 import ConfigPlaceDataSourceAULevel from '../../sections/ConfigPlaceDataSourceAULevel';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	scope: null,
@@ -85,6 +85,7 @@ class ScreenPlaceDataSourceAULevel extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ScreenPlaceDataSourceAULevel# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import styles from './ConfigPlaceDataSource.css';
 import withStyles from '../../../decorators/withStyles';
 
@@ -15,6 +16,7 @@ import AttributeSetStore from '../../../stores/AttributeSetStore';
 import AULevelStore from '../../../stores/AULevelStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
+import logger from '../../../core/Logger';
 
 var initialState = {
 	place: null,
@@ -25,7 +27,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ConfigPlaceDataSource extends Component {
+class ConfigPlaceDataSource extends PantherComponent {
 
 	static propTypes = {
 		disabled: PropTypes.bool,
@@ -109,6 +111,7 @@ class ConfigPlaceDataSource extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigPlaceDataSource# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

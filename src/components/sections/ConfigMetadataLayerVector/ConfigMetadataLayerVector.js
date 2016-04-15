@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -19,7 +20,7 @@ import AttributeSetStore from '../../../stores/AttributeSetStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	style: null,
@@ -33,7 +34,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataLayerVector extends Component{
+class ConfigMetadataLayerVector extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -81,27 +82,31 @@ class ConfigMetadataLayerVector extends Component{
 
 			if(!keys || keys.indexOf("layer")!=-1) {
 				store2state.layer.then(function (layer) {
-					let attSetPromise = utils.getAttSetsForLayers(layer);
-					attSetPromise.then(function(attSets){
-						let newState = {
-							valueActive: layer.active,
-							valueName: layer.name,
-							valueTopic: layer.topic ? [layer.topic.key] : [],
-							valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
-							valuesStyles: utils.getModelsKeys(layer.styles),
-							valuesAttSets: utils.getModelsKeys(attSets)
-						};
-						newState.savedState = utils.deepClone(newState);
-						if(thisComponent.mounted) {
-							thisComponent.setState(newState);
-						}
-					});
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let attSetPromise = utils.getAttSetsForLayers(layer);
+						attSetPromise.then(function (attSets) {
+							let newState = {
+								valueActive: layer.active,
+								valueName: layer.name,
+								valueTopic: layer.topic ? [layer.topic.key] : [],
+								valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
+								valuesStyles: utils.getModelsKeys(layer.styles),
+								valuesAttSets: utils.getModelsKeys(attSets)
+							};
+							newState.savedState = utils.deepClone(newState);
+							if (thisComponent.mounted) {
+								thisComponent.setState(newState);
+							}
+						});
+					}
 				});
 			}
 		}
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataLayerVector# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -112,9 +117,11 @@ class ConfigMetadataLayerVector extends Component{
 				let stateKey = responseData.stateKey;
 				let values = utils.deepClone(thisComponent.state[stateKey]);
 				values.push(result[0].key);
-				thisComponent.setState({
-					[stateKey]: values
-				});
+				if(thisComponent.mounted) {
+					thisComponent.setState({
+						[stateKey]: values
+					});
+				}
 				var screenObjectType;
 				switch(stateKey){
 					case "valueTopic":
@@ -155,6 +162,8 @@ class ConfigMetadataLayerVector extends Component{
 		this.responseListener.add(LayerGroupStore);
 		this.changeListener.add(StyleStore, ["styles"]);
 		this.responseListener.add(StyleStore);
+		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
+		this.responseListener.add(AttributeSetStore);
 
 		this.setStateFromStores();
 	}
@@ -223,6 +232,7 @@ class ConfigMetadataLayerVector extends Component{
 	}
 
 	saveForm() {
+		super.saveForm();
 		var thisComponent = this;
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.layer);
@@ -270,22 +280,28 @@ class ConfigMetadataLayerVector extends Component{
 	}
 
 	onChangeActive() {
-		this.setState({
-			valueActive: !this.state.valueActive
-		});
+		if(this.mounted) {
+			this.setState({
+				valueActive: !this.state.valueActive
+			});
+		}
 	}
 
 	onChangeName(e) {
-		this.setState({
-			valueName: e.target.value
-		});
+		if(this.mounted) {
+			this.setState({
+				valueName: e.target.value
+			});
+		}
 	}
 
 	onChangeObjectSelect (stateKey, objectType, value, values) {
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
 		newState[stateKey] = newValues;
-		this.setState(newState);
+		if(this.mounted) {
+			this.setState(newState);
+		}
 	}
 
 	onObjectClick (itemType, value, event) {

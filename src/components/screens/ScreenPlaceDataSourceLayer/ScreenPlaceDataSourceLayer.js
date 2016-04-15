@@ -15,7 +15,7 @@ import SelectorPlaceLayer from '../../sections/SelectorPlaceLayer';
 import ConfigPlaceDataSource from '../../sections/ConfigPlaceDataSource';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	scope: null,
@@ -91,6 +91,7 @@ class ScreenPlaceDataSourceLayer extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ScreenPlaceDataSourceLayer# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

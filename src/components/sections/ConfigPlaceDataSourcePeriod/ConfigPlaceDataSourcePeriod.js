@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import styles from './ConfigPlaceDataSourcePeriod.css';
 import withStyles from '../../../decorators/withStyles';
 
@@ -47,7 +48,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ConfigPlaceDataSourcePeriod extends Component {
+class ConfigPlaceDataSourcePeriod extends PantherComponent {
 
 
 	static propTypes = {
@@ -298,6 +299,7 @@ class ConfigPlaceDataSourcePeriod extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigPlaceDataSourcePeriod# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

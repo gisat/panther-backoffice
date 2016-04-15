@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import _ from 'underscore';
 import utils from '../../../utils/utils';
@@ -39,7 +40,7 @@ var initialState = {
 };
 
 
-class ConfigAnalysis extends Component {
+class ConfigAnalysis extends PantherComponent {
 
 	static propTypes = {
 		disabled: PropTypes.bool,
@@ -104,6 +105,7 @@ class ConfigAnalysis extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigAnalysis# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -13,7 +14,8 @@ import ActionCreator from '../../../actions/ActionCreator';
 import TopicStore from '../../../stores/TopicStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
-
+import logger from '../../../core/Logger';
+import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	topic: null,
@@ -22,7 +24,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataTopic extends Component{
+class ConfigMetadataTopic extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -43,6 +45,7 @@ class ConfigMetadataTopic extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -63,13 +66,16 @@ class ConfigMetadataTopic extends Component{
 
 			if(!keys || keys.indexOf("topic")!=-1) {
 				store2state.topic.then(function (topic) {
-					let newState = {
-						valueActive: topic.active,
-						valueName: topic.name
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: topic.active,
+							valueName: topic.name
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -77,16 +83,17 @@ class ConfigMetadataTopic extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataTopic# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
 	componentDidMount() { this.mounted = true;
-		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topic"]));
+		this.changeListener.add(TopicStore, ["topic"]);
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() { this.mounted = false;
-		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topic"]));
+		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -131,6 +138,7 @@ class ConfigMetadataTopic extends Component{
 	}
 
 	saveForm() {
+		super.saveForm();
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.topic);
 		modelData.active = this.state.valueActive;

@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import Select from 'react-select';
 
 import utils from '../../../utils/utils';
@@ -19,7 +20,7 @@ import TopicStore from '../../../stores/TopicStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	attribute: null,
@@ -34,7 +35,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataAttribute extends Component{
+class ConfigMetadataAttribute extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -77,19 +78,22 @@ class ConfigMetadataAttribute extends Component{
 
 			if(!keys || keys.indexOf("attribute")!=-1) {
 				store2state.attribute.then(function (attribute) {
-					let newState = {
-						valueActive: attribute.active,
-						valueName: attribute.name,
-						valueCode: attribute.code,
-						//valueType: attribute.type ? [attribute.type] : [],
-						valueType: attribute.type,
-						valueUnitsStandard: attribute.standardUnits,
-						valueUnitsCustom: attribute.customUnits,
-						valueColor: attribute.color
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: attribute.active,
+							valueName: attribute.name,
+							valueCode: attribute.code,
+							//valueType: attribute.type ? [attribute.type] : [],
+							valueType: attribute.type,
+							valueUnitsStandard: attribute.standardUnits,
+							valueUnitsCustom: attribute.customUnits,
+							valueColor: attribute.color
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -97,6 +101,7 @@ class ConfigMetadataAttribute extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataAttribute# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -157,6 +162,7 @@ class ConfigMetadataAttribute extends Component{
 	}
 
 	saveForm() {
+		super.saveForm();
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.attribute);
 		modelData.active = this.state.valueActive;

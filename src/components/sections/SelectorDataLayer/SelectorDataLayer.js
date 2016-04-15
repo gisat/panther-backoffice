@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import styles from './SelectorDataLayer.css';
 import withStyles from '../../../decorators/withStyles';
 
@@ -10,7 +11,7 @@ import SingleValueDataLayer from '../../atoms/UICustomSelect/SingleValueDataLaye
 
 
 @withStyles(styles)
-class SelectorDataLayer extends Component {
+class SelectorDataLayer extends PantherComponent {
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,

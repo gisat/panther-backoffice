@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -17,6 +18,7 @@ import TopicStore from '../../../stores/TopicStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
+import logger from '../../../core/Logger';
 
 var initialState = {
 	attributeSet: null,
@@ -28,7 +30,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataAttributeSet extends Component{
+class ConfigMetadataAttributeSet extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -74,15 +76,18 @@ class ConfigMetadataAttributeSet extends Component{
 
 			if(!keys || keys.indexOf("attributeSet")!=-1) {
 				store2state.attributeSet.then(function (attributeSet) {
-					let newState = {
-						valueActive: attributeSet.active,
-						valueName: attributeSet.name,
-						valueTopic: attributeSet.topic ? [attributeSet.topic.key] : [],
-						valuesAttributes: utils.getModelsKeys(attributeSet.attributes)
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: attributeSet.active,
+							valueName: attributeSet.name,
+							valueTopic: attributeSet.topic ? [attributeSet.topic.key] : [],
+							valuesAttributes: utils.getModelsKeys(attributeSet.attributes)
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -90,6 +95,7 @@ class ConfigMetadataAttributeSet extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataAttributeSet# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -131,9 +137,9 @@ class ConfigMetadataAttributeSet extends Component{
 
 	componentDidMount() { this.mounted = true;
 		this.changeListener.add(AttributeSetStore, ["attributeSet"]);
-		this.changeListener.add(TopicStore, ["attributeSet"]);
+		this.changeListener.add(TopicStore, ["topics"]);
 		this.responseListener.add(TopicStore);
-		this.changeListener.add(AttributeStore, ["attributeSet"]);
+		this.changeListener.add(AttributeStore, ["attributes"]);
 		this.responseListener.add(AttributeStore);
 
 		this.setStateFromStores();
@@ -201,6 +207,7 @@ class ConfigMetadataAttributeSet extends Component{
 	}
 
 	saveForm() {
+		super.saveForm();
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.attributeSet);
 		modelData.active = this.state.valueActive;

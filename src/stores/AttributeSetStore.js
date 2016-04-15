@@ -7,7 +7,7 @@ import AttributeSetModel from '../models/AttributeSetModel';
 import AttributeStore from './AttributeStore';
 import VectorLayerStore from './VectorLayerStore';
 import TopicStore from './TopicStore';
-
+import logger from '../core/Logger';
 
 class AttributeSetStore extends Store {
 
@@ -30,6 +30,7 @@ class AttributeSetStore extends Store {
 let storeInstance = new AttributeSetStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("AttributeSetStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.ATTRIBUTE_SET_CREATE_RESPOND:

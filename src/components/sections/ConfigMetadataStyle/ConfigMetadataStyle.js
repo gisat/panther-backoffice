@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -16,7 +17,7 @@ import TopicStore from '../../../stores/TopicStore';
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	style: null,
@@ -27,7 +28,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataStyle extends Component{
+class ConfigMetadataStyle extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -72,15 +73,18 @@ class ConfigMetadataStyle extends Component{
 
 			if(!keys || keys.indexOf("style")!=-1) {
 				store2state.style.then(function (style) {
-					let newState = {
-						valueActive: style.active,
-						valueName: style.name,
-						valueServerName: style.serverName,
-						valueTopic: style.topic ? [style.topic.key] : []
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: style.active,
+							valueName: style.name,
+							valueServerName: style.serverName,
+							valueTopic: style.topic ? [style.topic.key] : []
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -88,6 +92,7 @@ class ConfigMetadataStyle extends Component{
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataStyle# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -180,7 +185,8 @@ class ConfigMetadataStyle extends Component{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.style);
 		modelData.active = this.state.valueActive;

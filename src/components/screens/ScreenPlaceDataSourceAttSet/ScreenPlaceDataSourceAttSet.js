@@ -16,7 +16,7 @@ import SelectorPlaceAttSetAULevel from '../../sections/SelectorPlaceAttSetAULeve
 import ConfigPlaceDataSource from '../../sections/ConfigPlaceDataSource';
 
 import ListenerHandler from '../../../core/ListenerHandler';
-
+import logger from '../../../core/Logger';
 
 var initialState = {
 	scope: null,
@@ -89,6 +89,7 @@ class ScreenPlaceDataSourceAttSet extends Component {
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ScreenPlaceDataSourceAttSet# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 

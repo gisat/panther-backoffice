@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import styles from './SelectorAnalysisSpatial.css';
 import withStyles from '../../../decorators/withStyles';
 
@@ -21,7 +22,7 @@ const ANALYSES = [
 		];
 
 @withStyles(styles)
-class SelectorAnalysisSpatial extends Component{
+class SelectorAnalysisSpatial extends PantherComponent{
 
 	constructor(props) {
 		super(props);

@@ -16,6 +16,7 @@ import SelectorPlace from '../../sections/SelectorPlace';
 import PlaceRelations from '../../sections/PlaceRelations';
 
 import ListenerHandler from '../../../core/ListenerHandler';
+import logger from '../../../core/Logger';
 
 var initialState = {
 	places: [],
@@ -54,6 +55,7 @@ class ScreenPlacesBase extends Component{
 	}
 
 	_onStoreChange() {
+		logger.trace("ScreenPlacesBase# _onStoreChange()");
 		this.context.setStateFromStores.call(this, this.store2state());
 	}
 

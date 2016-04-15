@@ -4,7 +4,7 @@ import ActionTypes from '../constants/ActionTypes';
 import TopicModel from '../models/TopicModel';
 
 //import UserStore from './UserStore';
-
+import logger from '../core/Logger';
 
 class TopicStore extends Store {
 
@@ -24,6 +24,7 @@ class TopicStore extends Store {
 let storeInstance = new TopicStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("TopicStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.TOPIC_CREATE_RESPOND:

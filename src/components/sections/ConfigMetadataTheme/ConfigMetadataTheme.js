@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
@@ -16,7 +17,8 @@ import ScopeStore from '../../../stores/ScopeStore';
 import PeriodStore from '../../../stores/PeriodStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
-
+import logger from '../../../core/Logger';
+import ListenerHandler from '../../../core/ListenerHandler';
 
 var initialState = {
 	style: null,
@@ -29,7 +31,7 @@ var initialState = {
 };
 
 
-class ConfigMetadataTheme extends Component{
+class ConfigMetadataTheme extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -50,6 +52,9 @@ class ConfigMetadataTheme extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -72,26 +77,29 @@ class ConfigMetadataTheme extends Component{
 
 			if(!keys || keys.indexOf("theme")!=-1) {
 				store2state.theme.then(function (theme) {
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
 
-					let newState = {
-						valueActive: theme.active,
-						valueName: theme.name,
-						valueScope: theme.scope ? [theme.scope.key] : [],
-						valuesTopics: utils.getModelsKeys(theme.topics),
-						valuesTopicsPreferential: utils.getModelsKeys(theme.topicsPreferential),
-						valuesPeriods: utils.getModelsKeys(theme.periods)
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+						let newState = {
+							valueActive: theme.active,
+							valueName: theme.name,
+							valueScope: theme.scope ? [theme.scope.key] : [],
+							valuesTopics: utils.getModelsKeys(theme.topics),
+							valuesTopicsPreferential: utils.getModelsKeys(theme.topicsPreferential),
+							valuesPeriods: utils.getModelsKeys(theme.periods)
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
-
 				});
 			}
 		}
 	}
 
 	_onStoreChange(keys) {
+		logger.trace("ConfigMetadataTheme# _onStoreChange(), Keys:", keys);
 		this.setStateFromStores(this.props,keys);
 	}
 
@@ -136,22 +144,19 @@ class ConfigMetadataTheme extends Component{
 	}
 
 	componentDidMount() { this.mounted = true;
-		ThemeStore.addChangeListener(this._onStoreChange.bind(this,["theme"]));
-		ScopeStore.addChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		ScopeStore.addResponseListener(this._onStoreResponse.bind(this));
-		TopicStore.addChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.addResponseListener(this._onStoreResponse.bind(this));
-		PeriodStore.addResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.add(ThemeStore, ["theme"]);
+		this.changeListener.add(ScopeStore, ["scopes"]);
+		this.changeListener.add(TopicStore, ["topics"]);
+		this.responseListener.add(ScopeStore);
+		this.responseListener.add(TopicStore);
+		this.responseListener.add(PeriodStore);
+
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() { this.mounted = false;
-		ThemeStore.removeChangeListener(this._onStoreChange.bind(this,["theme"]));
-		ScopeStore.removeChangeListener(this._onStoreChange.bind(this,["scopes"]));
-		ScopeStore.removeResponseListener(this._onStoreResponse.bind(this));
-		TopicStore.removeChangeListener(this._onStoreChange.bind(this,["topics"]));
-		TopicStore.removeResponseListener(this._onStoreResponse.bind(this));
-		PeriodStore.removeResponseListener(this._onStoreResponse.bind(this));
+		this.changeListener.clean();
+		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -200,6 +205,7 @@ class ConfigMetadataTheme extends Component{
 	}
 
 	saveForm() {
+		super.saveForm();
 		var thisComponent = this;
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.theme);
@@ -321,7 +327,9 @@ class ConfigMetadataTheme extends Component{
 		var periodsOptions = [];
 		if(this.state.valueScope[0]) {
 			var selectedScope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
-			periodsOptions = selectedScope.periods;
+			if(selectedScope) {
+				periodsOptions = selectedScope.periods;
+			}
 		}
 
 
@@ -414,8 +422,6 @@ class ConfigMetadataTheme extends Component{
 							onChange={this.onChangeObjectSelect.bind(this, "valuesPeriods", ObjectTypes.PERIOD)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.PERIOD)}
 							options={periodsOptions}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.state.valuesPeriods}

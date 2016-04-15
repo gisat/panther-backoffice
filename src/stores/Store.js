@@ -12,6 +12,7 @@ import EventTypes from '../constants/EventTypes';
 
 import { apiProtocol, apiHost, apiPath } from '../config';
 import logger from '../core/Logger';
+import util from '../utils/utils';
 
 class Store extends EventEmitter {
 
@@ -67,10 +68,12 @@ class Store extends EventEmitter {
 	}
 
 	reload() {
-		logger.info("Store# reload()");
+		var guid = util.guid();
+		logger.trace("Store# reload(), GUID: ", guid, ",Current store: ", this);
 		var thisStore = this;
 		this._models = this.load();
 		this._models.then(function(){
+			logger.trace("Store# reload(), Models loading finished, GUID: ", guid, ", Current store: ", thisStore);
 			thisStore.emitChange();
 		});
 		return this._models;
@@ -153,7 +156,8 @@ class Store extends EventEmitter {
 	}
 
 	createObjectAndRespond(model,responseData,responseStateHash) {
-		logger.trace("Store# createObjectAndRespond(), Response data",responseData);
+		let guid = util.guid();
+		logger.trace("Store# createObjectAndRespond(), Response data",responseData, ", GUID: ", guid);
 		// todo ? Model.resolveForServer ?
 		//var object = {
 		//	name: objectData.name,
@@ -163,7 +167,9 @@ class Store extends EventEmitter {
 		var resultPromise = this.create(model);
 
 		resultPromise.then(function(result){
+			logger.trace("Store# createObjectAndRespond(), Promise resolved - Result", result, ", Current store: ", thisStore, ", GUID: ", guid);
 			thisStore.reload().then(function(){
+				logger.trace("Store# createObjectAndRespond(), Reload finished", result, ", GUID: ", guid);
 				thisStore.emitChange();
 				thisStore.emit(EventTypes.OBJECT_CREATED,result,responseData,responseStateHash);
 			});

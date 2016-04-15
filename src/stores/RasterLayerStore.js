@@ -8,6 +8,8 @@ import LayerGroupStore from './LayerGroupStore';
 import StyleStore from './StyleStore';
 import TopicStore from './TopicStore';
 
+import logger from '../core/Logger';
+
 
 class RasterLayerStore extends Store {
 
@@ -43,6 +45,7 @@ class RasterLayerStore extends Store {
 let storeInstance = new RasterLayerStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
+	logger.trace("RasterLayerStore# received(), Action: ", action);
 
 	switch(action.type) {
 		case ActionTypes.RASTER_LAYER_TEMPLATE_CREATE_RESPOND:

@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
+import PantherComponent from '../../common/PantherComponent';
 import _ from 'underscore';
 import Select from 'react-select';
 
@@ -14,7 +15,7 @@ import ColumnTableRow from '../../elements/ColumnTableRow/ColumnTableRow';
 
 import logger from '../../../core/Logger';
 
-class ConfigDataLayerAnalytical extends Component{
+class ConfigDataLayerAnalytical extends PantherComponent{
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
