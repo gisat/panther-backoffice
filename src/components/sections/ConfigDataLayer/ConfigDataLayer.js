@@ -152,10 +152,7 @@ class ConfigDataLayer extends PantherComponent {
 		}
 		if(!keys || keys.indexOf("layerRelations")!=-1 || keys.indexOf("dataLayerColumns")!=-1) {
 			Promise.all([store2state.layerRelations, store2state.dataLayerColumns]).then(function([relations, columns]) {
-				if(thisComponent.acceptChange) {
-					thisComponent.acceptChange = false;
-					thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.columns2state(columns, relations));
-				}
+				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.columns2state(columns, relations));
 			});
 		}
 	}
