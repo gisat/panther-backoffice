@@ -152,7 +152,10 @@ class ConfigDataLayer extends PantherComponent {
 		}
 		if(!keys || keys.indexOf("layerRelations")!=-1 || keys.indexOf("dataLayerColumns")!=-1) {
 			Promise.all([store2state.layerRelations, store2state.dataLayerColumns]).then(function([relations, columns]) {
-				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.columns2state(columns, relations));
+				if(thisComponent.acceptChange) {
+					thisComponent.acceptChange = false;
+					thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.columns2state(columns, relations));
+				}
 			});
 		}
 	}
@@ -502,7 +505,7 @@ class ConfigDataLayer extends PantherComponent {
 
 
 	saveForm() {
-
+		super.saveForm();
 		var AUPeriods = null;
 		if(this.state.layerType == "au" && this.state.valueAUScope[0]){
 			let scope = _.findWhere(this.state.scopes,{key: this.state.valueAUScope[0]});

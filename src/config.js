@@ -21,4 +21,4 @@ export const frontOfficeExplorationUrl = "tool/";
 // 3 means ERROR only
 // 4 means nothing from our application will be displayed. This should be default for production use.
 // Any other or none means INFO as this is default logging level.
-export const loggingLevel = 1;
+export const loggingLevel = 0;

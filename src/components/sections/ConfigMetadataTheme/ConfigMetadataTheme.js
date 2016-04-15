@@ -422,8 +422,6 @@ class ConfigMetadataTheme extends PantherComponent{
 							onChange={this.onChangeObjectSelect.bind(this, "valuesPeriods", ObjectTypes.PERIOD)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.PERIOD)}
 							options={periodsOptions}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.state.valuesPeriods}

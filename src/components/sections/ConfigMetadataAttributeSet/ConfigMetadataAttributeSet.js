@@ -137,9 +137,9 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 
 	componentDidMount() { this.mounted = true;
 		this.changeListener.add(AttributeSetStore, ["attributeSet"]);
-		this.changeListener.add(TopicStore, ["attributeSet"]);
+		this.changeListener.add(TopicStore, ["topics"]);
 		this.responseListener.add(TopicStore);
-		this.changeListener.add(AttributeStore, ["attributeSet"]);
+		this.changeListener.add(AttributeStore, ["attributes"]);
 		this.responseListener.add(AttributeStore);
 
 		this.setStateFromStores();
@@ -206,7 +206,7 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {  		
+	saveForm() {
 		super.saveForm();
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.attributeSet);
