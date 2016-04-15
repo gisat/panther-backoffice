@@ -283,7 +283,8 @@ class ConfigPlaceDataSourceAULevel extends PantherComponent {
 	}
 
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm();
 
 		var actionData = [];
 

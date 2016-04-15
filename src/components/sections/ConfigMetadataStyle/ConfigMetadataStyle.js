@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -73,15 +73,18 @@ class ConfigMetadataStyle extends PantherComponent{
 
 			if(!keys || keys.indexOf("style")!=-1) {
 				store2state.style.then(function (style) {
-					let newState = {
-						valueActive: style.active,
-						valueName: style.name,
-						valueServerName: style.serverName,
-						valueTopic: style.topic ? [style.topic.key] : []
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: style.active,
+							valueName: style.name,
+							valueServerName: style.serverName,
+							valueTopic: style.topic ? [style.topic.key] : []
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -182,7 +185,8 @@ class ConfigMetadataStyle extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.style);
 		modelData.active = this.state.valueActive;

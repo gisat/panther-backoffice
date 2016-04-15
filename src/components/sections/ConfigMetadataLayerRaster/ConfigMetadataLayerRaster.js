@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -79,16 +79,19 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 
 			if(!keys || keys.indexOf("layer")!=-1) {
 				store2state.layer.then(function (layer) {
-					let newState = {
-						valueActive: layer.active,
-						valueName: layer.name,
-						valueTopic: layer.topic ? [layer.topic.key] : [],
-						valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
-						valuesStyles: utils.getModelsKeys(layer.styles)
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: layer.active,
+							valueName: layer.name,
+							valueTopic: layer.topic ? [layer.topic.key] : [],
+							valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
+							valuesStyles: utils.getModelsKeys(layer.styles)
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -213,7 +216,8 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.layer);
 		modelData.active = this.state.valueActive;

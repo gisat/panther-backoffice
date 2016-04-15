@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -73,15 +73,18 @@ class ConfigMetadataPlace extends PantherComponent{
 
 			if(!keys || keys.indexOf("place")!=-1) {
 				store2state.place.then(function (place) {
-					let newState = {
-						valueActive: place.active,
-						valueName: place.name,
-						valueBoundingBox: place.boundingBox,
-						valueScope: place.scope ? [place.scope.key] : []
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: place.active,
+							valueName: place.name,
+							valueBoundingBox: place.boundingBox,
+							valueScope: place.scope ? [place.scope.key] : []
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -182,7 +185,8 @@ class ConfigMetadataPlace extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.place);
 		modelData.active = this.state.valueActive;

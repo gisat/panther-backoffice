@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -76,15 +76,18 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 
 			if(!keys || keys.indexOf("attributeSet")!=-1) {
 				store2state.attributeSet.then(function (attributeSet) {
-					let newState = {
-						valueActive: attributeSet.active,
-						valueName: attributeSet.name,
-						valueTopic: attributeSet.topic ? [attributeSet.topic.key] : [],
-						valuesAttributes: utils.getModelsKeys(attributeSet.attributes)
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: attributeSet.active,
+							valueName: attributeSet.name,
+							valueTopic: attributeSet.topic ? [attributeSet.topic.key] : [],
+							valuesAttributes: utils.getModelsKeys(attributeSet.attributes)
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -203,7 +206,8 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm();
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.attributeSet);
 		modelData.active = this.state.valueActive;

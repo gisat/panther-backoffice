@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -77,20 +77,22 @@ class ConfigMetadataTheme extends PantherComponent{
 
 			if(!keys || keys.indexOf("theme")!=-1) {
 				store2state.theme.then(function (theme) {
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
 
-					let newState = {
-						valueActive: theme.active,
-						valueName: theme.name,
-						valueScope: theme.scope ? [theme.scope.key] : [],
-						valuesTopics: utils.getModelsKeys(theme.topics),
-						valuesTopicsPreferential: utils.getModelsKeys(theme.topicsPreferential),
-						valuesPeriods: utils.getModelsKeys(theme.periods)
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+						let newState = {
+							valueActive: theme.active,
+							valueName: theme.name,
+							valueScope: theme.scope ? [theme.scope.key] : [],
+							valuesTopics: utils.getModelsKeys(theme.topics),
+							valuesTopicsPreferential: utils.getModelsKeys(theme.topicsPreferential),
+							valuesPeriods: utils.getModelsKeys(theme.periods)
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
-
 				});
 			}
 		}
@@ -203,6 +205,7 @@ class ConfigMetadataTheme extends PantherComponent{
 	}
 
 	saveForm() {
+		super.saveForm();
 		var thisComponent = this;
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.theme);
@@ -324,7 +327,9 @@ class ConfigMetadataTheme extends PantherComponent{
 		var periodsOptions = [];
 		if(this.state.valueScope[0]) {
 			var selectedScope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
-			periodsOptions = selectedScope.periods;
+			if(selectedScope) {
+				periodsOptions = selectedScope.periods;
+			}
 		}
 
 

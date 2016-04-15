@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -63,11 +63,14 @@ class ConfigMetadataPeriod extends PantherComponent{
 			// if stores changed, overrides user input - todo fix
 
 			store2state.period.then(function(period) {
-				if(thisComponent.mounted) {
-					thisComponent.setState({
-						valueActive: period.active,
-						valueName: period.name
-					});
+				if(thisComponent.acceptChange) {
+					thisComponent.acceptChange = false;
+					if (thisComponent.mounted) {
+						thisComponent.setState({
+							valueActive: period.active,
+							valueName: period.name
+						});
+					}
 				}
 			});
 		}
@@ -130,7 +133,8 @@ class ConfigMetadataPeriod extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.period);
 		modelData.active = this.state.valueActive;

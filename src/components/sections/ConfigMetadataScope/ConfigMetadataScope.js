@@ -51,7 +51,6 @@ class ConfigMetadataScope extends PantherComponent{
 
 	constructor(props) {
 		super(props);
-		this.acceptChange = true;
 		this.state = utils.deepClone(initialState);
 
 		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
@@ -76,7 +75,6 @@ class ConfigMetadataScope extends PantherComponent{
 			var thisComponent = this;
 			let store2state = this.store2state(props);
 			this.context.setStateFromStores.call(this, store2state, keys);
-			// if stores changed, overrides user input - todo fix
 
 			if(!keys || keys.indexOf("scope")!=-1) {
 				store2state.scope.then(function (scope) {
@@ -201,8 +199,9 @@ class ConfigMetadataScope extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {
-		this.acceptChange = true;
+	saveForm() {  		  		
+		super.saveForm();
+
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.scope);
 		modelData.active = this.state.valueActive;

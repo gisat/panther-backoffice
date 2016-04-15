@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -68,14 +68,17 @@ class ConfigMetadataLayerGroup extends PantherComponent{
 
 			if(!keys || keys.indexOf("layerGroup")!=-1) {
 				store2state.layerGroup.then(function (layerGroup) {
-					let newState = {
-						valueActive: layerGroup.active,
-						valueName: layerGroup.name,
-						valueOrder: layerGroup.order
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: layerGroup.active,
+							valueName: layerGroup.name,
+							valueOrder: layerGroup.order
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -138,7 +141,8 @@ class ConfigMetadataLayerGroup extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.layerGroup);
 		modelData.active = this.state.valueActive;

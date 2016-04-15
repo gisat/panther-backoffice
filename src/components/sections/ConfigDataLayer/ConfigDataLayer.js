@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import styles from './ConfigDataLayer.css';
 import withStyles from '../../../decorators/withStyles';
@@ -131,6 +131,7 @@ class ConfigDataLayer extends PantherComponent {
 	}
 
 	setStateFromStores(props,keys) {
+		logger.trace("ConfigDataLayer# setStateFromStores(), Props: ", props, ", Keys: ", keys);
 		if(!props){
 			props = this.props;
 		}
@@ -436,9 +437,6 @@ class ConfigDataLayer extends PantherComponent {
 			valuesAUPlaces: [],
 			valueAULevel: []
 		};
-		// relations = _.reject(relations, function (item) {
-		// 	return item.isOfAttributeSet;
-		// });
 		if(relations.length > 0) {
 			logger.trace("ConfigDataLayer# relations2state(): Relations", relations);
 			var layerType = relations[0].layerObject.layerType;

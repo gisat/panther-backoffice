@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -70,13 +70,16 @@ class ConfigMetadataAULevel extends PantherComponent{
 
 			if(!keys || keys.indexOf("layer")!=-1) {
 				store2state.layer.then(function (layer) {
-					let newState = {
-						valueActive: layer.active,
-						valueName: layer.name
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: layer.active,
+							valueName: layer.name
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -138,7 +141,8 @@ class ConfigMetadataAULevel extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {
+	saveForm() {  		
+		super.saveForm(); 
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.layer);
 		modelData.active = this.state.valueActive;

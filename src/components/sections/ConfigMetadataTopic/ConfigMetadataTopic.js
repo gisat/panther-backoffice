@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -66,13 +66,16 @@ class ConfigMetadataTopic extends PantherComponent{
 
 			if(!keys || keys.indexOf("topic")!=-1) {
 				store2state.topic.then(function (topic) {
-					let newState = {
-						valueActive: topic.active,
-						valueName: topic.name
-					};
-					newState.savedState = utils.deepClone(newState);
-					if(thisComponent.mounted) {
-						thisComponent.setState(newState);
+					if(thisComponent.acceptChange) {
+						thisComponent.acceptChange = false;
+						let newState = {
+							valueActive: topic.active,
+							valueName: topic.name
+						};
+						newState.savedState = utils.deepClone(newState);
+						if (thisComponent.mounted) {
+							thisComponent.setState(newState);
+						}
 					}
 				});
 			}
@@ -135,6 +138,7 @@ class ConfigMetadataTopic extends PantherComponent{
 	}
 
 	saveForm() {
+		super.saveForm();
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.topic);
 		modelData.active = this.state.valueActive;
