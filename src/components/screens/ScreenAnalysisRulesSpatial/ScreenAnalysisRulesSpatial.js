@@ -5,6 +5,7 @@ import path from "path";
 
 import _ from 'underscore';
 import utils from '../../../utils/utils';
+import logger from '../../../core/Logger';
 import ActionCreator from '../../../actions/ActionCreator';
 import ListenerHandler from '../../../core/ListenerHandler';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
@@ -24,84 +25,6 @@ import AnalysisModel from '../../../models/AnalysisModel';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 
-import logger from '../../../core/Logger';
-
-const OPERATIONS = [
-			{ key: "COUNT", name: "COUNT"	},
-			{ key: "SUM", name: "SUM (area/length)" },
-			{ key: "SUMATT", name: "SUM (attribute)" },
-			{ key: "AVG", name: "AVERAGE (area/length)" },
-			{ key: "AVGATT", name: "AVERAGE (attribute)" },
-			{ key: "AVGATTATT", name: "AVERAGE (attribute), weighted by attribute" }
-		];
-const ATTRIBUTES = [
-			{
-				key: 135,
-				attset: "Land cover classes",
-				name: "Continuous Urban Fabric (S.L. > 80%)"
-			}, {
-				key: 136,
-				attset: "Land cover classes",
-				name: "Discontinuous High Dense Urban Fabric (S.L. 50% - 80%)"
-			}, {
-				key: 137,
-				attset: "Land cover classes",
-				name: "Discontinuous Low Dense Urban Fabric (S.L.: 10% - 50%)"
-			}, {
-				key: 138,
-				attset: "Land cover classes",
-				name: "Industrial, Commercial and Transport Units"
-			}, {
-				key: 139,
-				attset: "Land cover classes",
-				name: "Construction sites"
-			}, {
-				key: 140,
-				attset: "Land cover classes",
-				name: "Urban greenery"
-			}, {
-				key: 160,
-				attset: "Land cover feature data",
-				name: "Population"
-			}, {
-				key: 162,
-				attset: "Land cover feature data",
-				name: "Drawing a blank"
-			}
-		];
-const STATUSCODES = [
-			{
-				key: 111
-			}, {
-				key: 112
-			}, {
-				key: 113
-			}, {
-				key: 120
-			}, {
-				key: 130
-			}, {
-				key: 140
-			}, {
-				key: 200
-			}, {
-				key: 310
-			}, {
-				key: 320
-			}, {
-				key: 330
-			}, {
-				key: 510
-			}, {
-				key: 520
-			}
-];
-const ATTSETS = [
-			{ key: 352, name: "Land Cover classes L3" },
-			{ key: 623, name: "Aggregated LC Classes Formation" },
-			{ key: 18, name: "Populations1" },
-			{ key: 28, name: "Status code" },
-		];
 
 var initialState = {
 	featureLayers: [],
@@ -236,6 +159,25 @@ class ScreenAnalysisRulesSpatial extends Component{
 		this.setStateFromStores();
 	}
 
+	componentWillReceiveProps(newProps) {
+		logger.trace("ScreenAnalysisRulesSpatial# componentWillReceiveProps()");
+		console.log("old key",this.props.data.analysis.key);
+		console.log("new key",newProps.data.analysis.key);
+		console.log("old changed",this.props.data.analysis.changed);
+		console.log("new changed",newProps.data.analysis.changed);
+		if (
+			(this.props.data.analysis.key != newProps.data.analysis.key) ||
+			(this.props.data.analysis.changed != newProps.data.analysis.changed)
+		) {
+			// analysis was switched or updated outside
+			if (this.isStateUnchanged()) {
+				// form was not edited, it's okay to reload
+				logger.trace("ScreenAnalysisRulesSpatial# received props and will reload");
+				this.setStateFromStores();
+			}
+		}
+	}
+
 	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
 		this.responseListener.clean();
@@ -246,16 +188,18 @@ class ScreenAnalysisRulesSpatial extends Component{
 	 * Check if state is the same as it was when loaded from stores
 	 * @returns {boolean}
 	 */
-	//isStateUnchanged() {
-	//	var isIt = true;
-	//	if(this.state.analysis) {
-	//		isIt = (
-	//			this.state.valueName == this.state.analysis.name &&
-	//			_.isEqual(this.state.valueTopics,this.state.savedState.valueTopics)
-	//		);
-	//	}
-	//	return isIt;
-	//}
+	isStateUnchanged() {
+		var isIt = true;
+		if(this.props.data.analysis) {
+			isIt = (
+				this.state.valueFeatureLayer[0] == this.props.data.analysis.layerObject.key &&
+				this.state.valueResultAttSet[0] == this.props.data.analysis.attributeSet.key &&
+				this.state.valueFilterAttSetAtt[0] == this.props.data.analysis.filterAttributeSet.key + "-" + this.props.data.analysis.filterAttribute.key &&
+					_.isEqual(this.state.valueAttributeMaps[this.props.data.analysis.attributeSet.key], this.props.data.analysis.attributeMap)
+			);
+		}
+		return isIt;
+	}
 
 	/**
 	 * Prepare options for data table selects
@@ -445,6 +389,15 @@ class ScreenAnalysisRulesSpatial extends Component{
 
 
 	render() {
+
+		var saveButton = (
+			<SaveButton
+				saved={this.isStateUnchanged()}
+				className="save-button"
+				//onClick={this.saveForm.bind(this)}
+			/>
+		);
+
 		let ruleTableInsert = null;
 		if (
 			this.state.featureLayers.length &&
@@ -658,7 +611,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 
 					{ruleTableInsert}
 
-					<SaveButton saved />
+					{saveButton}
 
 			</div></div></div>
 		);
