@@ -173,7 +173,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 			if (this.isStateUnchanged()) {
 				// form was not edited, it's okay to reload
 				logger.trace("ScreenAnalysisRulesSpatial# received props and will reload");
-				this.setStateFromStores();
+				this.setStateFromStores(newProps);
 			}
 		}
 	}
@@ -194,7 +194,14 @@ class ScreenAnalysisRulesSpatial extends Component{
 			isIt = (
 				this.state.valueFeatureLayer[0] == this.props.data.analysis.layerObject.key &&
 				this.state.valueResultAttSet[0] == this.props.data.analysis.attributeSet.key &&
-				this.state.valueFilterAttSetAtt[0] == this.props.data.analysis.filterAttributeSet.key + "-" + this.props.data.analysis.filterAttribute.key &&
+				(
+					(!this.state.valueFilterAttSetAtt && !this.props.data.analysis.filterAttribute) ||
+					(
+						this.props.data.analysis.filterAttribute &&
+						this.props.data.analysis.filterAttributeSet &&
+						(this.state.valueFilterAttSetAtt[0] == this.props.data.analysis.filterAttributeSet.key + "-" + this.props.data.analysis.filterAttribute.key)
+					)
+				) &&
 					_.isEqual(this.state.valueAttributeMaps[this.props.data.analysis.attributeSet.key], this.props.data.analysis.attributeMap)
 			);
 		}
