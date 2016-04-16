@@ -106,7 +106,7 @@ class ScreenDashboardBase extends Component {
 							</a>
 						</div>
 
-						<div className="frame-wrapper flexchild">
+						{/*<div className="frame-wrapper flexchild">
 							<span className="row">GeoServer</span>
 							<a
 								className="row right-icon"
@@ -116,7 +116,7 @@ class ScreenDashboardBase extends Component {
 								<span>Manage styles</span>
 								<Icon name="external" className="right"/>
 							</a>
-						</div>
+						</div>*/}
 
 						<div className="frame-wrapper flexchild">
 							<span className="row left-icon">
