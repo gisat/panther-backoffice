@@ -351,6 +351,7 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 						Attributes
 						<UIObjectSelect
 							multi
+							className="template"
 							onChange={this.onChangeObjectSelect.bind(this, "valuesAttributes", ObjectTypes.ATTRIBUTE)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.ATTRIBUTE)}
 							options={this.state.attributes}
