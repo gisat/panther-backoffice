@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import _ from 'underscore';
 import Select from 'react-select';
@@ -88,7 +88,6 @@ class ConfigDataLayerVector extends PantherComponent{
 							Layer template (Name)
 							<UIObjectSelect
 								onChange={this.props.onChangeTemplate}
-								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.VECTOR_LAYER_TEMPLATE)}
 								options={this.props.layerTemplates}
 								valueKey="key"
 								labelKey="name"
@@ -103,7 +102,6 @@ class ConfigDataLayerVector extends PantherComponent{
 							Scope
 							<UIObjectSelect
 								onChange={this.props.onChangeScope}
-								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.SCOPE)}
 								options={this.props.scopes}
 								valueKey="key"
 								labelKey="name"
@@ -118,7 +116,6 @@ class ConfigDataLayerVector extends PantherComponent{
 							<UIObjectSelect
 								multi
 								onChange={this.props.onChangePlaces}
-								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PLACE)}
 								options={this.props.places}
 								valueKey="key"
 								labelKey="name"
@@ -133,7 +130,6 @@ class ConfigDataLayerVector extends PantherComponent{
 							<UIObjectSelect
 								multi
 								onChange={this.props.onChangePeriods.bind(this)}
-								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PERIOD)}
 								options={this.props.periods}
 								valueKey="key"
 								labelKey="name"

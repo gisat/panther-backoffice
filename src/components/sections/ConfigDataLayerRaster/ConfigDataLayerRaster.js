@@ -43,7 +43,6 @@ class ConfigDataLayerRaster extends PantherComponent{
 						Layer template (Name)
 						<UIObjectSelect
 							onChange={this.props.onChangeTemplate}
-							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.RASTER_LAYER_TEMPLATE)}
 							options={this.props.layerTemplates}
 							valueKey="key"
 							labelKey="name"
@@ -58,7 +57,6 @@ class ConfigDataLayerRaster extends PantherComponent{
 						Scope
 						<UIObjectSelect
 							onChange={this.props.onChangeScope}
-							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.SCOPE)}
 							options={this.props.scopes}
 							valueKey="key"
 							labelKey="name"
@@ -73,7 +71,6 @@ class ConfigDataLayerRaster extends PantherComponent{
 						<UIObjectSelect
 							multi
 							onChange={this.props.onChangePlaces}
-							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PLACE)}
 							options={this.props.places}
 							valueKey="key"
 							labelKey="name"
@@ -88,7 +85,6 @@ class ConfigDataLayerRaster extends PantherComponent{
 						<UIObjectSelect
 							multi
 							onChange={this.props.onChangePeriods.bind(this)}
-							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PERIOD)}
 							options={this.props.periods}
 							valueKey="key"
 							labelKey="name"

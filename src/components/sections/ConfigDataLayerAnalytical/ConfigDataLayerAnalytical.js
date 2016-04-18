@@ -88,7 +88,6 @@ class ConfigDataLayerAnalytical extends PantherComponent{
 						Scope
 						<UIObjectSelect
 							onChange={this.props.onChangeScope}
-							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.SCOPE)}
 							options={this.props.scopes}
 							valueKey="key"
 							labelKey="name"
@@ -103,7 +102,6 @@ class ConfigDataLayerAnalytical extends PantherComponent{
 						<UIObjectSelect
 							multi
 							onChange={this.props.onChangePlaces}
-							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PLACE)}
 							options={this.props.places}
 							valueKey="key"
 							labelKey="name"
@@ -117,7 +115,6 @@ class ConfigDataLayerAnalytical extends PantherComponent{
 						Level
 						<UIObjectSelect
 							onChange={this.props.onChangeLevel}
-							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.AU_LEVEL)}
 							options={this.props.levels}
 							valueKey="key"
 							labelKey="name"
