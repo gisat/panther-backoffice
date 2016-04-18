@@ -1177,6 +1177,25 @@ todo hex colours, button icons */
 	margin-bottom: 1.5rem;
 	box-shadow: .05rem .05rem .2rem 0 rgba(0,0,0,.07);
 	max-width: 50rem;
+
+	position: relative;
+}
+.frame-input-wrapper.required {
+	border-color: #7f7f7f;
+}
+.frame-input-wrapper.required::after {
+	position: absolute;
+	top:0;
+	right:1rem;
+	display: block;
+	content: "Required";
+
+	background: #a0a0a0;
+	font-size: .875rem;
+	line-height: 1.5rem;
+	padding: 0 .5rem;
+	border-radius: 0 0 .2rem .2rem;
+	color: #d8d8d8;
 }
 .frame-input-wrapper > label {
 	padding: .875rem;
