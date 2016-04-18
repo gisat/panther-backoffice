@@ -421,6 +421,9 @@ class ConfigMetadataLayerVector extends PantherComponent{
 							value={this.state.valueLayerGroup}
 						/>
 					</label>
+					<div className="frame-input-wrapper-info">
+						Category in Data Exploration layer selection.
+					</div>
 				</div>
 
 				<div className="frame-input-wrapper">
@@ -438,6 +441,9 @@ class ConfigMetadataLayerVector extends PantherComponent{
 							value={this.state.valuesStyles}
 						/>
 					</label>
+					<div className="frame-input-wrapper-info">
+						Display symbologies. For each assigned style, a variant of the layer is available in Data Exploration.
+					</div>
 				</div>
 
 				<div className="frame-input-wrapper">
@@ -455,6 +461,9 @@ class ConfigMetadataLayerVector extends PantherComponent{
 							value={this.state.valuesAttSets}
 						/>
 					</label>
+					<div className="frame-input-wrapper-info">
+						Attribute sets for attributes usually contained in the data layers using the template.
+					</div>
 				</div>
 
 				{saveButton}

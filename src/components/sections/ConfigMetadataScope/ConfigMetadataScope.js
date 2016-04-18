@@ -199,7 +199,7 @@ class ConfigMetadataScope extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {  		  		
+	saveForm() {
 		super.saveForm();
 
 		var actionData = [], modelData = {};
@@ -369,6 +369,9 @@ class ConfigMetadataScope extends PantherComponent{
 							value={this.state.valuesAULevels}
 						/>
 					</label>
+					<div className="frame-input-wrapper-info">
+						Hierarchy of analytical units, common for all places in the scope. Ordered from largest areas to most detailed division.
+					</div>
 				</div>
 
 				<div className="frame-input-wrapper">
@@ -386,6 +389,9 @@ class ConfigMetadataScope extends PantherComponent{
 							value={this.state.valuesPeriods}
 						/>
 					</label>
+					<div className="frame-input-wrapper-info">
+						Periods available for the scope. Can be narrowed down per theme.
+					</div>
 				</div>
 
 				{saveButton}

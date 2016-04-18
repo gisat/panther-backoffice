@@ -185,8 +185,8 @@ class ConfigMetadataStyle extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {  		
-		super.saveForm(); 
+	saveForm() {
+		super.saveForm();
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.style);
 		modelData.active = this.state.valueActive;
@@ -301,6 +301,9 @@ class ConfigMetadataStyle extends PantherComponent{
 							onChange={this.onChangeServerName.bind(this)}
 						/>
 					</label>
+					<div className="frame-input-wrapper-info">
+						Geoserver style ID.
+					</div>
 				</div>
 
 				<div className="frame-input-wrapper">

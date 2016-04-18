@@ -395,6 +395,9 @@ class ConfigMetadataTheme extends PantherComponent{
 							value={this.state.valuesTopics}
 						/>
 					</label>
+					<div className="frame-input-wrapper-info">
+						Topics connect the theme to metadata templates (layers and attributes).
+					</div>
 				</div>
 
 				<div className="frame-input-wrapper">
@@ -412,6 +415,9 @@ class ConfigMetadataTheme extends PantherComponent{
 							value={this.state.valuesTopicsPreferential}
 						/>
 					</label>
+					<div className="frame-input-wrapper-info">
+						Preferential topics are displayed first and with the attribute tree expanded in Data Exploration attributes selections.
+					</div>
 				</div>
 
 				<div className="frame-input-wrapper">
@@ -427,6 +433,9 @@ class ConfigMetadataTheme extends PantherComponent{
 							value={this.state.valuesPeriods}
 						/>
 					</label>
+					<div className="frame-input-wrapper-info">
+						Periods available for the theme in Data Exploration. Only periods assigned to corresponding scope can be selected. (All of the scope's periods selected by default.)
+					</div>
 				</div>
 
 				{saveButton}

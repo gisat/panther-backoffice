@@ -216,8 +216,8 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {  		
-		super.saveForm(); 
+	saveForm() {
+		super.saveForm();
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.layer);
 		modelData.active = this.state.valueActive;
@@ -370,6 +370,9 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 							value={this.state.valueLayerGroup}
 						/>
 					</label>
+					<div className="frame-input-wrapper-info">
+						Category in Data Exploration layer selection.
+					</div>
 				</div>
 
 				<div className="frame-input-wrapper">
