@@ -390,11 +390,38 @@ class ScreenAnalysisRulesSpatial extends Component{
 	}
 
 
-	onChangeOperation(attribute, value, values) {
+	onChangeInRow(type, attribute, value, values) {
 		let attributeMap = utils.clone(this.state.valueAttributeMaps[this.state.valueResultAttSet]);
 		let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute});
-		attributeMapRow.operationType = value;
-		console.log("onChangeOperation",attributeMap);
+		switch (type) {
+			case "operation":
+				attributeMapRow.operationType = value;
+				break;
+			case "valueAttribute":
+				let valueAttributeSet = null;
+				let valueAttribute = null;
+				if (value) {
+					valueAttributeSet = _.findWhere(this.state.attributeSetsLayer, {key: values[0].attributeSetKey});
+					valueAttribute = _.findWhere(valueAttributeSet.attributes, {key: values[0].attributeKey});
+				}
+				attributeMapRow.valueAttributeSet = valueAttributeSet;
+				attributeMapRow.valueAttribute = valueAttribute;
+				break;
+			case "weightingAttribute":
+				let weightingAttributeSet = null;
+				let weightingAttribute = null;
+				if (value) {
+					weightingAttributeSet = _.findWhere(this.state.attributeSetsLayer, {key: values[0].attributeSetKey});
+					weightingAttribute = _.findWhere(weightingAttributeSet.attributes, {key: values[0].attributeKey});
+				}
+				attributeMapRow.weightingAttributeSet = weightingAttributeSet;
+				attributeMapRow.weightingAttribute = weightingAttribute;
+				break;
+			case "filter":
+				attributeMapRow.filterValue = value.target.value; // value actually event
+				break;
+		}
+		console.log("onChangeInRow",type,attributeMap);
 		let attributeMaps = {
 			[this.state.valueResultAttSet]: attributeMap
 		};
@@ -434,13 +461,12 @@ class ScreenAnalysisRulesSpatial extends Component{
 						<label className="container">
 							Operation
 							<Select
-								onChange={this.onChangeOperation.bind(this,attribute)}
-								//loadOptions={this.getPlaces}
+								onChange={this.onChangeInRow.bind(this,"operation",attribute)}
 								options={operations}
 								valueKey="key"
 								labelKey="name"
-								//inputProps={selectInputProps}
 								value={attributeMapRow.operationType}
+								clearable={false}
 							/>
 						</label>
 					</td>
@@ -483,7 +509,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 							<label className="container">
 								{valueCellCaption}
 								<Select
-									//onChange={this.onChangeFilterAttSetAtt.bind(this)}
+									onChange={this.onChangeInRow.bind(this,"valueAttribute",attribute)}
 									options={this.state.filterDestinations}
 									optionComponent={OptionDestination}
 									singleValueComponent={SingleValueDestination}
@@ -501,7 +527,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 								<label className="container">
 									Weighting attribute
 									<Select
-										//onChange={this.onChangeFilterAttSetAtt.bind(this)}
+										onChange={this.onChangeInRow.bind(this,"weightingAttribute",attribute)}
 										options={this.state.filterDestinations}
 										optionComponent={OptionDestination}
 										singleValueComponent={SingleValueDestination}
@@ -534,6 +560,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 									placeholder=" "
 									//defaultValue="112" // remove
 									value={attributeMapRow.filterValue}
+									onChange={this.onChangeInRow.bind(this,"filter",attribute)}
 									//onChange={this.onChangeWhatever.bind(this)}
 								/>
 							</label>
