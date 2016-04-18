@@ -152,6 +152,7 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 
 	componentWillReceiveProps(newProps) {
 		if(newProps.selectorValue!=this.props.selectorValue) {
+			this.acceptChange = true;
 			this.setStateFromStores(newProps);
 			this.updateStateHash(newProps);
 		}
