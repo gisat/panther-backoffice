@@ -870,7 +870,8 @@ todo hex colours, button icons */
 
 
 .frame-wrapper {
-	border: 1px solid #999;
+	/*border: 1px solid #999;*/
+	border: 1px solid #a5a5a5;
 	border-radius: .2rem;
 	margin-bottom: 1.5rem;
 	box-shadow: .05rem .05rem .2rem 0 rgba(0,0,0,.07);
@@ -1172,7 +1173,8 @@ todo hex colours, button icons */
 }
 
 .frame-input-wrapper {
-	border: 1px solid #999;
+	/*border: 1px solid #999;*/
+	border: 1px solid #a5a5a5;
 	border-radius: .2rem;
 	margin-bottom: 1.5rem;
 	box-shadow: .05rem .05rem .2rem 0 rgba(0,0,0,.07);
@@ -1181,7 +1183,9 @@ todo hex colours, button icons */
 	position: relative;
 }
 .frame-input-wrapper.required {
-	border-color: #7f7f7f;
+	/*border-color: #7f7f7f;*/
+	/*border-color: #888;*/
+	border-color: #999;
 }
 .frame-input-wrapper.required::after {
 	position: absolute;
@@ -1190,7 +1194,8 @@ todo hex colours, button icons */
 	display: block;
 	content: "Required";
 
-	background: #a0a0a0;
+	/*background: #a0a0a0;*/
+	background: #a7a7a7;
 	font-size: .875rem;
 	line-height: 1.5rem;
 	padding: 0 .5rem;
