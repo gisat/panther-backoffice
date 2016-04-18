@@ -160,11 +160,6 @@ class ScreenAnalysisRulesSpatial extends Component{
 	}
 
 	componentWillReceiveProps(newProps) {
-		logger.trace("ScreenAnalysisRulesSpatial# componentWillReceiveProps()");
-		console.log("old key",this.props.data.analysis.key);
-		console.log("new key",newProps.data.analysis.key);
-		console.log("old changed",this.props.data.analysis.changed);
-		console.log("new changed",newProps.data.analysis.changed);
 		if (
 			(this.props.data.analysis.key != newProps.data.analysis.key) ||
 			(this.props.data.analysis.changed != newProps.data.analysis.changed)
@@ -395,6 +390,21 @@ class ScreenAnalysisRulesSpatial extends Component{
 	}
 
 
+	onChangeOperation(attribute, value, values) {
+		let attributeMap = utils.clone(this.state.valueAttributeMaps[this.state.valueResultAttSet]);
+		let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute});
+		attributeMapRow.operationType = value;
+		console.log("onChangeOperation",attributeMap);
+		let attributeMaps = {
+			[this.state.valueResultAttSet]: attributeMap
+		};
+		let newState = {
+			valueAttributeMaps: {$merge: attributeMaps}
+		};
+		this.context.setStateDeep.call(this, newState);
+	}
+
+
 	render() {
 
 		var saveButton = (
@@ -424,7 +434,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 						<label className="container">
 							Operation
 							<Select
-								//onChange={this.onChangeAttSet.bind(this)}
+								onChange={this.onChangeOperation.bind(this,attribute)}
 								//loadOptions={this.getPlaces}
 								options={operations}
 								valueKey="key"
@@ -452,6 +462,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 						break;
 					case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.AVG_ATTRIBUTE_WEIGHT_ATTRIBUTE].key:
 						insertValueCell = true;
+						valueCellCaption = "Attribute to average";
 						insertWeightingCell = true;
 						break;
 				}
