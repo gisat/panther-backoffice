@@ -141,8 +141,8 @@ class ConfigMetadataLayerGroup extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {  		
-		super.saveForm(); 
+	saveForm() {
+		super.saveForm();
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.layerGroup);
 		modelData.active = this.state.valueActive;
@@ -210,7 +210,7 @@ class ConfigMetadataLayerGroup extends PantherComponent{
 					</div>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Name
 						<Input
@@ -223,7 +223,7 @@ class ConfigMetadataLayerGroup extends PantherComponent{
 					</label>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Order
 						<Input

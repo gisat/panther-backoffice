@@ -326,7 +326,7 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 					</div>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Name
 						<Input
@@ -339,7 +339,7 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 					</label>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Topic
 						<UIObjectSelect
@@ -356,7 +356,7 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 					{topicInfoInsert}
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Layer group
 						<UIObjectSelect

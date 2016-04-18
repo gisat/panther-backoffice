@@ -133,8 +133,8 @@ class ConfigMetadataPeriod extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {  		
-		super.saveForm(); 
+	saveForm() {
+		super.saveForm();
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.period);
 		modelData.active = this.state.valueActive;
@@ -195,7 +195,7 @@ class ConfigMetadataPeriod extends PantherComponent{
 					</div>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Name
 						<Input

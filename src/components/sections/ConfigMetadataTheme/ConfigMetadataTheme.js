@@ -351,7 +351,7 @@ class ConfigMetadataTheme extends PantherComponent{
 					</div>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Name
 						<Input
@@ -364,7 +364,7 @@ class ConfigMetadataTheme extends PantherComponent{
 					</label>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Scope
 						<UIObjectSelect
@@ -380,7 +380,7 @@ class ConfigMetadataTheme extends PantherComponent{
 					</label>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Topics
 						<UIObjectSelect
@@ -420,7 +420,7 @@ class ConfigMetadataTheme extends PantherComponent{
 					</div>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Periods
 						<UIObjectSelect
