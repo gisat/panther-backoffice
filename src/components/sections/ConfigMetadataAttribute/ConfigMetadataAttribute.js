@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import Select from 'react-select';
 
@@ -290,7 +290,7 @@ class ConfigMetadataAttribute extends PantherComponent{
 					</div>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Name
 						<Input
@@ -319,7 +319,7 @@ class ConfigMetadataAttribute extends PantherComponent{
 					</div>
 				</div>*/}
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Type
 						<Select
@@ -362,7 +362,8 @@ class ConfigMetadataAttribute extends PantherComponent{
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
-						All other units. (%, hectares, inhabitants, beds, meters/km2, etc.)
+						All other units. (%, hectares, inhabitants, beds, meters/km2, etc.)<br/>
+						Only if no standard units are applied.
 					</div>
 				</div>
 

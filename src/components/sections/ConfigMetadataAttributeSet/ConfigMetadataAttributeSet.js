@@ -316,7 +316,7 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 					</div>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Name
 						<Input
@@ -329,7 +329,7 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 					</label>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Topic
 						<UIObjectSelect
@@ -346,7 +346,7 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 					{topicInfoInsert}
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Attributes
 						<UIObjectSelect

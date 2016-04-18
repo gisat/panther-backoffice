@@ -278,7 +278,7 @@ class ConfigMetadataStyle extends PantherComponent{
 					</div>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Name
 						<Input
@@ -291,7 +291,7 @@ class ConfigMetadataStyle extends PantherComponent{
 					</label>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Server name
 						<Input

@@ -186,8 +186,8 @@ class ConfigMetadataPlace extends PantherComponent{
 		return this._stateHash;
 	}
 
-	saveForm() {  		
-		super.saveForm(); 
+	saveForm() {
+		super.saveForm();
 		var actionData = [], modelData = {};
 		_.assign(modelData, this.state.place);
 		modelData.active = this.state.valueActive;
@@ -278,7 +278,7 @@ class ConfigMetadataPlace extends PantherComponent{
 					</div>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Name
 						<Input
@@ -291,7 +291,7 @@ class ConfigMetadataPlace extends PantherComponent{
 					</label>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Scope
 						<UIObjectSelect

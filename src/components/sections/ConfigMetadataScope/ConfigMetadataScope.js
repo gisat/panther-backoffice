@@ -341,7 +341,7 @@ class ConfigMetadataScope extends PantherComponent{
 					</div>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Name
 						<Input
@@ -354,7 +354,7 @@ class ConfigMetadataScope extends PantherComponent{
 					</label>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Analytical units Levels
 						<UIObjectSelect
@@ -375,7 +375,7 @@ class ConfigMetadataScope extends PantherComponent{
 					</div>
 				</div>
 
-				<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Imaging/reference periods
 						<UIObjectSelect
