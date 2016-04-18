@@ -72,16 +72,16 @@ class ScreenMetadataBase extends Component{
 		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 
 		this._tabs = [
+			{ data: "places", dataType: ObjectTypes.PLACE },
 			{ data: "scopes", dataType: ObjectTypes.SCOPE },
+			{ data: "auLevels", dataType: ObjectTypes.AU_LEVEL },
+			{ data: "periods", dataType: ObjectTypes.PERIOD},
 			{ header: true, key: "header-templates", name: "Templates" },
 			{ data: "vectorLayerTemplates", dataType: ObjectTypes.VECTOR_LAYER_TEMPLATE },
 			{ data: "rasterLayerTemplates", dataType: ObjectTypes.RASTER_LAYER_TEMPLATE },
-			{ data: "auLevels", dataType: ObjectTypes.AU_LEVEL },
 			{ data: "attributeSets", dataType: ObjectTypes.ATTRIBUTE_SET },
 			{ data: "attributes", dataType: ObjectTypes.ATTRIBUTE },
-			{ header: true, key: "header-metadata", name: "Metadata" },
-			{ data: "places", dataType: ObjectTypes.PLACE },
-			{ data: "periods", dataType: ObjectTypes.PERIOD},
+			{ header: true, key: "header-filters", name: "Themes" },
 			{ data: "themes", dataType: ObjectTypes.THEME },
 			{ data: "topics", dataType: ObjectTypes.TOPIC },
 			{ header: true, key: "header-display", name: "Display"  },
