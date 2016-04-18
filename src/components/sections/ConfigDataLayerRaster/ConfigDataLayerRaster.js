@@ -45,8 +45,6 @@ class ConfigDataLayerRaster extends PantherComponent{
 							onChange={this.props.onChangeTemplate}
 							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.RASTER_LAYER_TEMPLATE)}
 							options={this.props.layerTemplates}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valueTemplate}
@@ -62,8 +60,6 @@ class ConfigDataLayerRaster extends PantherComponent{
 							onChange={this.props.onChangeScope}
 							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.SCOPE)}
 							options={this.props.scopes}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valueScope}
@@ -79,8 +75,6 @@ class ConfigDataLayerRaster extends PantherComponent{
 							onChange={this.props.onChangePlaces}
 							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PLACE)}
 							options={this.props.places}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valuesPlaces}
@@ -96,8 +90,6 @@ class ConfigDataLayerRaster extends PantherComponent{
 							onChange={this.props.onChangePeriods.bind(this)}
 							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PERIOD)}
 							options={this.props.periods}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valuesPeriods}

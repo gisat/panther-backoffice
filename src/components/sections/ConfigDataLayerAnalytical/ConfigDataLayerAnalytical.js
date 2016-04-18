@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import _ from 'underscore';
 import Select from 'react-select';
@@ -90,8 +90,6 @@ class ConfigDataLayerAnalytical extends PantherComponent{
 							onChange={this.props.onChangeScope}
 							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.SCOPE)}
 							options={this.props.scopes}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valueScope}
@@ -107,8 +105,6 @@ class ConfigDataLayerAnalytical extends PantherComponent{
 							onChange={this.props.onChangePlaces}
 							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PLACE)}
 							options={this.props.places}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valuesPlaces}
@@ -123,8 +119,6 @@ class ConfigDataLayerAnalytical extends PantherComponent{
 							onChange={this.props.onChangeLevel}
 							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.AU_LEVEL)}
 							options={this.props.levels}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valueLevel}
