@@ -452,6 +452,7 @@ class ConfigMetadataLayerVector extends PantherComponent{
 						Attribute sets
 						<UIObjectSelect
 							multi
+							className="template"
 							onChange={this.onChangeObjectSelect.bind(this, "valuesAttSets", ObjectTypes.ATTRIBUTE_SET)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.ATTRIBUTE_SET)}
 							options={this.state.attributeSets}
