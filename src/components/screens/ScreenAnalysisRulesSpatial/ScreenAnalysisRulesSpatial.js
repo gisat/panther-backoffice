@@ -90,7 +90,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 			let store2state = this.store2state(props);
 			this.context.setStateFromStores.call(this, store2state, keys);
 			// if stores changed, overrides user input - todo fix
-			if(store2state.attributeSetsLayer.length && (!keys || keys.indexOf("attributeSetsLayer")!=-1)) {
+			if(props.data.analysis.layerObject && (!keys || keys.indexOf("attributeSetsLayer")!=-1)) {
 				store2state.attributeSetsLayer.then(function(attributeSets) {
 					thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
 				});
@@ -264,35 +264,35 @@ class ScreenAnalysisRulesSpatial extends Component{
 		return this._stateHash;
 	}
 
-	//saveForm() {
-	//	var thisComponent = this;
-	//	let objectType = null;
-	//	switch(this.state.analysis.analysisType) {
-	//		case "spatial":
-	//			objectType = ObjectTypes.ANALYSIS_SPATIAL;
-	//			break;
-	//		case "level":
-	//			objectType = ObjectTypes.ANALYSIS_LEVEL;
-	//			break;
-	//		case "math":
-	//			objectType = ObjectTypes.ANALYSIS_MATH;
-	//			break;
-	//	}
-	//	var actionData = [], modelData = {};
-	//	//_.assign(modelData, this.state.analysis);
-	//	modelData.key = this.state.analysis.key;
-	//	modelData.name = this.state.valueName;
-	//	modelData.topics = [];
-	//	for (let key of this.state.valueTopics) {
-	//		let topic = _.findWhere(this.state.topics, {key: key});
-	//		modelData.topics.push(topic);
-	//	}
-	//
-	//	let modelObj = new AnalysisModel(modelData);
-	//	actionData.push({type:"update",model:modelObj});
-	//	console.log("save analysis:", actionData);
-	//	ActionCreator.handleObjects(actionData,objectType);
-	//}
+	saveForm() {
+		let objectType = null;
+		switch(this.props.data.analysis.analysisType) {
+			case "spatial":
+				objectType = ObjectTypes.ANALYSIS_SPATIAL;
+				break;
+			case "level":
+				objectType = ObjectTypes.ANALYSIS_LEVEL;
+				break;
+			case "math":
+				objectType = ObjectTypes.ANALYSIS_MATH;
+				break;
+		}
+		var actionData = [], modelData = {};
+		modelData.key = this.props.data.analysis.key;
+		modelData.layerObject = _.findWhere(this.state.featureLayers, {key: this.state.valueFeatureLayer[0]});
+		modelData.attributeSet = _.findWhere(this.state.attributeSetsResult, {key: this.state.valueResultAttSet[0]});
+		let filterKeys = this.state.valueFilterAttSetAtt[0].split("-");
+		let filterAttributeSet = _.findWhere(this.state.attributeSetsLayer,{key: +filterKeys[0]});
+		let filterAttribute = _.findWhere(filterAttributeSet.attributes,{key: +filterKeys[1]});
+		modelData.filterAttributeSet = filterAttributeSet;
+		modelData.filterAttribute = filterAttribute;
+		modelData.attributeMap = utils.clone(this.state.valueAttributeMaps[this.state.valueResultAttSet[0]]);
+
+		let modelObj = new AnalysisModel(modelData);
+		actionData.push({type:"update",model:modelObj});
+		logger.info("ScreenAnalysisRulesSpatial# saveForm(), Save analysis:", actionData);
+		ActionCreator.handleObjects(actionData,objectType);
+	}
 
 
 	getUrl() {
@@ -449,7 +449,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 			<SaveButton
 				saved={this.isStateUnchanged()}
 				className="save-button"
-				//onClick={this.saveForm.bind(this)}
+				onClick={this.saveForm.bind(this)}
 			/>
 		);
 
