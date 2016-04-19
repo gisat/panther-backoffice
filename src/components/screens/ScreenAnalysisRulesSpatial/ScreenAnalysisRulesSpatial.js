@@ -166,7 +166,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 	}
 
 	componentDidMount() { this.mounted = true;
-		//this.changeListener.add(AnalysisStore, ["analysis"]);
+		this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(VectorLayerStore, ["featureLayer"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSetsResult"]); // todo attributeSetsLayer
 		this.responseListener.add(VectorLayerStore);
