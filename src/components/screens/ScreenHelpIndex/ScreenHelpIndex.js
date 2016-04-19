@@ -13,6 +13,7 @@ import ScreenHelpTopicArchitecture from '../help/ScreenHelpTopicArchitecture';
 import ScreenHelpTopicMetadata from '../help/ScreenHelpTopicMetadata';
 import ScreenHelpTopicBackOfficeInterface from '../help/ScreenHelpTopicBackOfficeInterface';
 import ScreenHelpUseCaseLayerAdd from '../help/ScreenHelpUseCaseLayerAdd';
+import ScreenHelpCreatePlace from '../help/ScreenHelpCreatePlace';
 
 import logger from '../../../core/Logger';
 
@@ -42,6 +43,9 @@ class ScreenHelpIndex extends Component {
 				break;
 			case 'UseCaseLayerAdd':
 				component = ScreenHelpUseCaseLayerAdd;
+				break;
+			case 'CreatePlace':
+				component = ScreenHelpCreatePlace;
 				break;
 		}
 		if (component) {
@@ -117,6 +121,17 @@ class ScreenHelpIndex extends Component {
 						</span>
 						<span className="description">
 							Uploading, describing and displaying layers
+						</span>
+					</a>
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'CreatePlace')}
+					>
+						<span>
+							Create new place
+						</span>
+						<span className="description">
+							Create new place and associated layers.
 						</span>
 					</a>
 					{/*
