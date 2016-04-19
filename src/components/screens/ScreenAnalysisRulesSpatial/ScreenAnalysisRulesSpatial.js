@@ -74,9 +74,9 @@ class ScreenAnalysisRulesSpatial extends Component{
 		return {
 			featureLayers: VectorLayerStore.getAll(), // filter by topics?
 			attributeSetsResult: AttributeSetStore.getAll(), // filter by topics?
-			attributeSetsLayer: utils.getAttSetsForLayers(props.data.analysis.layerObject.key),
-			valueFeatureLayer: [props.data.analysis.layerObject.key],
-			valueResultAttSet: [props.data.analysis.attributeSet.key],
+			attributeSetsLayer: props.data.analysis.layerObject ? utils.getAttSetsForLayers(props.data.analysis.layerObject.key) : [],
+			valueFeatureLayer: props.data.analysis.layerObject ? [props.data.analysis.layerObject.key] : [],
+			valueResultAttSet: props.data.analysis.attributeSet ? [props.data.analysis.attributeSet.key] : [],
 			valueFilterAttSetAtt: props.data.analysis.filterAttribute ? [props.data.analysis.filterAttributeSet.key + "-" + props.data.analysis.filterAttribute.key] : []
 		};
 	}
@@ -90,12 +90,12 @@ class ScreenAnalysisRulesSpatial extends Component{
 			let store2state = this.store2state(props);
 			this.context.setStateFromStores.call(this, store2state, keys);
 			// if stores changed, overrides user input - todo fix
-			if(!keys || keys.indexOf("attributeSetsLayer")!=-1) {
+			if(store2state.attributeSetsLayer.length && (!keys || keys.indexOf("attributeSetsLayer")!=-1)) {
 				store2state.attributeSetsLayer.then(function(attributeSets) {
 					thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
 				});
 			}
-			if(!keys || keys.indexOf("valueResultAttSet")!=-1) {
+			if(props.data.analysis.attributeSet && props.data.analysis.attributeMap && (!keys || keys.indexOf("valueResultAttSet")!=-1)) {
 				let attributeMaps = {
 					[props.data.analysis.attributeSet.key]: props.data.analysis.attributeMap
 				};
@@ -187,8 +187,20 @@ class ScreenAnalysisRulesSpatial extends Component{
 		var isIt = true;
 		if(this.props.data.analysis) {
 			isIt = (
-				this.state.valueFeatureLayer[0] == this.props.data.analysis.layerObject.key &&
-				this.state.valueResultAttSet[0] == this.props.data.analysis.attributeSet.key &&
+				(
+					(!this.state.valueFeatureLayer.length && !this.props.data.analysis.layerObject) ||
+					(
+						this.props.data.analysis.layerObject &&
+						(this.state.valueFeatureLayer[0] == this.props.data.analysis.layerObject.key)
+					)
+				) &&
+				(
+					(!this.state.valueResultAttSet.length && !this.props.data.analysis.attributeSet) ||
+					(
+						this.props.data.analysis.attributeSet &&
+						(this.state.valueResultAttSet[0] == this.props.data.analysis.attributeSet.key)
+					)
+				) &&
 				(
 					(!this.state.valueFilterAttSetAtt && !this.props.data.analysis.filterAttribute) ||
 					(
@@ -421,7 +433,6 @@ class ScreenAnalysisRulesSpatial extends Component{
 				attributeMapRow.filterValue = value.target.value; // value actually event
 				break;
 		}
-		console.log("onChangeInRow",type,attributeMap);
 		let attributeMaps = {
 			[this.state.valueResultAttSet]: attributeMap
 		};
