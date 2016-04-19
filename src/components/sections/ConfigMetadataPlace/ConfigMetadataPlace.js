@@ -161,7 +161,7 @@ class ConfigMetadataPlace extends PantherComponent{
 			isIt = (
 					this.state.valueActive == this.state.place.active &&
 					this.state.valueName == this.state.place.name &&
-					//this.state.valueBoundingBox == this.state.place.boundingBox &&
+					this.state.valueBoundingBox == this.state.place.boundingBox &&
 					_.isEqual(this.state.valueScope,this.state.savedState.valueScope)
 			);
 		}
@@ -192,7 +192,7 @@ class ConfigMetadataPlace extends PantherComponent{
 		_.assign(modelData, this.state.place);
 		modelData.active = this.state.valueActive;
 		modelData.name = this.state.valueName;
-		//modelData.boundingBox = this.state.valueBoundingBox;
+		modelData.boundingBox = this.state.valueBoundingBox; // Use Bounding Box from CSV.
 		modelData.scope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
 		let modelObj = new Model[ObjectTypes.PLACE](modelData);
 		actionData.push({type:"update",model:modelObj});
@@ -307,7 +307,7 @@ class ConfigMetadataPlace extends PantherComponent{
 					</label>
 				</div>
 
-				{/*<div className="frame-input-wrapper">
+				<div className="frame-input-wrapper required">
 					<label className="container">
 						Bounding box
 						<Input
@@ -318,7 +318,7 @@ class ConfigMetadataPlace extends PantherComponent{
 							onChange={this.onChangeBoundingBox.bind(this)}
 						/>
 					</label>
-				</div>*/}
+				</div>
 
 				{saveButton}
 

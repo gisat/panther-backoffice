@@ -56,7 +56,7 @@ class PlaceModel extends Model {
 			},
 			boundingBox: {
 				serverName: 'bbox',
-				sendToServer: false //for now
+				sendToServer: true
 			},
 			center: {
 				serverName: 'center',
