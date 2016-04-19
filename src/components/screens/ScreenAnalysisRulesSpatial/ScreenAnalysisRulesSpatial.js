@@ -72,6 +72,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 
 	store2state(props) {
 		return {
+			analysis: props.data.analysis,
 			featureLayers: VectorLayerStore.getAll(), // filter by topics?
 			attributeSetsResult: AttributeSetStore.getAll(), // filter by topics?
 			attributeSetsLayer: props.data.analysis.layerObject ? utils.getAttSetsForLayers(props.data.analysis.layerObject.key) : [],
@@ -90,14 +91,14 @@ class ScreenAnalysisRulesSpatial extends Component{
 			let store2state = this.store2state(props);
 			this.context.setStateFromStores.call(this, store2state, keys);
 			// if stores changed, overrides user input - todo fix
-			if(props.data.analysis.layerObject && (!keys || keys.indexOf("attributeSetsLayer")!=-1)) {
+			if(store2state.analysis.layerObject && (!keys || keys.indexOf("attributeSetsLayer")!=-1)) {
 				store2state.attributeSetsLayer.then(function(attributeSets) {
 					thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
 				});
 			}
-			if(props.data.analysis.attributeSet && props.data.analysis.attributeMap && (!keys || keys.indexOf("valueResultAttSet")!=-1)) {
+			if(store2state.analysis.attributeSet && store2state.analysis.attributeMap && (!keys || keys.indexOf("valueResultAttSet")!=-1)) {
 				let attributeMaps = {
-					[props.data.analysis.attributeSet.key]: props.data.analysis.attributeMap
+					[store2state.analysis.attributeSet.key]: store2state.analysis.attributeMap
 				};
 				let newState = {
 					valueAttributeMaps: {$merge: attributeMaps}
@@ -161,8 +162,8 @@ class ScreenAnalysisRulesSpatial extends Component{
 
 	componentWillReceiveProps(newProps) {
 		if (
-			(this.props.data.analysis.key != newProps.data.analysis.key) ||
-			(this.props.data.analysis.changed != newProps.data.analysis.changed)
+			(this.state.analysis.key != newProps.data.analysis.key) ||
+			(this.state.analysis.changed != newProps.data.analysis.changed)
 		) {
 			// analysis was switched or updated outside
 			if (this.isStateUnchanged()) {
@@ -185,31 +186,31 @@ class ScreenAnalysisRulesSpatial extends Component{
 	 */
 	isStateUnchanged() {
 		var isIt = true;
-		if(this.props.data.analysis) {
+		if(this.state.analysis) {
 			isIt = (
 				(
-					(!this.state.valueFeatureLayer.length && !this.props.data.analysis.layerObject) ||
+					(!this.state.valueFeatureLayer.length && !this.state.analysis.layerObject) ||
 					(
-						this.props.data.analysis.layerObject &&
-						(this.state.valueFeatureLayer[0] == this.props.data.analysis.layerObject.key)
+						this.state.analysis.layerObject &&
+						(this.state.valueFeatureLayer[0] == this.state.analysis.layerObject.key)
 					)
 				) &&
 				(
-					(!this.state.valueResultAttSet.length && !this.props.data.analysis.attributeSet) ||
+					(!this.state.valueResultAttSet.length && !this.state.analysis.attributeSet) ||
 					(
-						this.props.data.analysis.attributeSet &&
-						(this.state.valueResultAttSet[0] == this.props.data.analysis.attributeSet.key)
+						this.state.analysis.attributeSet &&
+						(this.state.valueResultAttSet[0] == this.state.analysis.attributeSet.key)
 					)
 				) &&
 				(
-					(!this.state.valueFilterAttSetAtt && !this.props.data.analysis.filterAttribute) ||
+					(!this.state.valueFilterAttSetAtt && !this.state.analysis.filterAttribute) ||
 					(
-						this.props.data.analysis.filterAttribute &&
-						this.props.data.analysis.filterAttributeSet &&
-						(this.state.valueFilterAttSetAtt[0] == this.props.data.analysis.filterAttributeSet.key + "-" + this.props.data.analysis.filterAttribute.key)
+						this.state.analysis.filterAttribute &&
+						this.state.analysis.filterAttributeSet &&
+						(this.state.valueFilterAttSetAtt[0] == this.state.analysis.filterAttributeSet.key + "-" + this.state.analysis.filterAttribute.key)
 					)
 				) &&
-					_.isEqual(this.state.valueAttributeMaps[this.props.data.analysis.attributeSet.key], this.props.data.analysis.attributeMap)
+					_.isEqual(this.state.valueAttributeMaps[this.state.analysis.attributeSet.key], this.state.analysis.attributeMap)
 			);
 		}
 		return isIt;
@@ -255,7 +256,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 			props = this.props;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(props.data.analysis.key.toString());
+		this._stateHash = utils.stringHash(this.state.analysis.key.toString());
 	}
 	getStateHash() {
 		if(!this._stateHash) {
@@ -266,7 +267,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 
 	saveForm() {
 		let objectType = null;
-		switch(this.props.data.analysis.analysisType) {
+		switch(this.state.analysis.analysisType) {
 			case "spatial":
 				objectType = ObjectTypes.ANALYSIS_SPATIAL;
 				break;
@@ -278,7 +279,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 				break;
 		}
 		var actionData = [], modelData = {};
-		modelData.key = this.props.data.analysis.key;
+		modelData.key = this.state.analysis.key;
 		modelData.layerObject = _.findWhere(this.state.featureLayers, {key: this.state.valueFeatureLayer[0]});
 		modelData.attributeSet = _.findWhere(this.state.attributeSetsResult, {key: this.state.valueResultAttSet[0]});
 		let filterKeys = this.state.valueFilterAttSetAtt[0].split("-");
@@ -300,7 +301,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 	}
 
 	getAnalysisType() {
-		switch(this.props.data.analysis.analysisType) {
+		switch(this.state.analysis.analysisType) {
 			case "spatial":
 				return ObjectTypes.ANALYSIS_SPATIAL;
 			case "level":
@@ -616,7 +617,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 			<div>
 				<div className="screen-content-only"><div>
 
-					<h2>Spatial analysis operations: {this.props.data.analysis.name}</h2>
+					<h2>Spatial analysis operations: {this.state.analysis.name}</h2>
 
 					<div className="frame-input-wrapper">
 						<label className="container">
