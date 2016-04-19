@@ -47,6 +47,7 @@ class Store extends EventEmitter {
 
 
 	emitChange() {
+		logger.trace("Store# emitChange()");
 		this.emit(EventTypes.STORE_CHANGE);
 	}
 

@@ -22,6 +22,7 @@ import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
 import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
 
 import AnalysisModel from '../../../models/AnalysisModel';
+import AnalysisStore from '../../../stores/AnalysisStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 
@@ -70,14 +71,18 @@ class ScreenAnalysisRulesSpatial extends Component{
 		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
-	store2state(props) {
+	store2state(props, analysis) {
+		if (!analysis) {
+			analysis = props.data.analysis;
+		}
 		return {
+			analysis: analysis,
 			featureLayers: VectorLayerStore.getAll(), // filter by topics?
 			attributeSetsResult: AttributeSetStore.getAll(), // filter by topics?
-			attributeSetsLayer: utils.getAttSetsForLayers(props.data.analysis.layerObject.key),
-			valueFeatureLayer: [props.data.analysis.layerObject.key],
-			valueResultAttSet: [props.data.analysis.attributeSet.key],
-			valueFilterAttSetAtt: props.data.analysis.filterAttribute ? [props.data.analysis.filterAttributeSet.key + "-" + props.data.analysis.filterAttribute.key] : []
+			attributeSetsLayer: analysis.layerObject ? utils.getAttSetsForLayers(analysis.layerObject.key) : [],
+			valueFeatureLayer: analysis.layerObject ? [analysis.layerObject.key] : [],
+			valueResultAttSet: analysis.attributeSet ? [analysis.attributeSet.key] : [],
+			valueFilterAttSetAtt: analysis.filterAttribute ? [analysis.filterAttributeSet.key + "-" + analysis.filterAttribute.key] : []
 		};
 	}
 
@@ -87,23 +92,34 @@ class ScreenAnalysisRulesSpatial extends Component{
 		}
 		if(props.data.analysis) {
 			var thisComponent = this;
-			let store2state = this.store2state(props);
-			this.context.setStateFromStores.call(this, store2state, keys);
-			// if stores changed, overrides user input - todo fix
-			if(!keys || keys.indexOf("attributeSetsLayer")!=-1) {
-				store2state.attributeSetsLayer.then(function(attributeSets) {
-					thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
-				});
+			let analysisPromise = null;
+			if (!keys || keys.indexOf("analysis")!=-1) {
+				analysisPromise = AnalysisStore.getById(props.data.analysis.key);
+			} else {
+				analysisPromise = Promise.resolve(this.state.analysis);
 			}
-			if(!keys || keys.indexOf("valueResultAttSet")!=-1) {
-				let attributeMaps = {
-					[props.data.analysis.attributeSet.key]: props.data.analysis.attributeMap
-				};
-				let newState = {
-					valueAttributeMaps: {$merge: attributeMaps}
-				};
-				thisComponent.context.setStateDeep.call(thisComponent, newState);
-			}
+			analysisPromise.then(function(analysis){
+
+				let store2state = thisComponent.store2state(props,analysis);
+				thisComponent.context.setStateFromStores.call(thisComponent, store2state, keys);
+				// if stores changed, overrides user input - todo fix
+				if(!keys || keys.indexOf("attributeSetsLayer")!=-1) {
+					store2state.attributeSetsLayer.then(function(attributeSets) {
+						thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
+					});
+				}
+				if(analysis.attributeSet && analysis.attributeMap && (!keys || keys.indexOf("valueResultAttSet")!=-1)) {
+					let attributeMaps = {
+						[analysis.attributeSet.key]: analysis.attributeMap
+					};
+					let newState = {
+						valueAttributeMaps: {$merge: attributeMaps}
+					};
+					thisComponent.context.setStateDeep.call(thisComponent, newState);
+				}
+
+			});
+
 		}
 	}
 
@@ -150,7 +166,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 	}
 
 	componentDidMount() { this.mounted = true;
-		//this.changeListener.add(AnalysisStore, ["analysis"]);
+		this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(VectorLayerStore, ["featureLayer"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSetsResult"]); // todo attributeSetsLayer
 		this.responseListener.add(VectorLayerStore);
@@ -160,14 +176,12 @@ class ScreenAnalysisRulesSpatial extends Component{
 	}
 
 	componentWillReceiveProps(newProps) {
-		logger.trace("ScreenAnalysisRulesSpatial# componentWillReceiveProps()");
-		console.log("old key",this.props.data.analysis.key);
-		console.log("new key",newProps.data.analysis.key);
-		console.log("old changed",this.props.data.analysis.changed);
-		console.log("new changed",newProps.data.analysis.changed);
 		if (
-			(this.props.data.analysis.key != newProps.data.analysis.key) ||
-			(this.props.data.analysis.changed != newProps.data.analysis.changed)
+			this.state.analysis &&
+			(
+				(this.state.analysis.key != newProps.data.analysis.key) ||
+				(this.state.analysis.changed != newProps.data.analysis.changed)
+			)
 		) {
 			// analysis was switched or updated outside
 			if (this.isStateUnchanged()) {
@@ -190,19 +204,31 @@ class ScreenAnalysisRulesSpatial extends Component{
 	 */
 	isStateUnchanged() {
 		var isIt = true;
-		if(this.props.data.analysis) {
+		if(this.state.analysis) {
 			isIt = (
-				this.state.valueFeatureLayer[0] == this.props.data.analysis.layerObject.key &&
-				this.state.valueResultAttSet[0] == this.props.data.analysis.attributeSet.key &&
 				(
-					(!this.state.valueFilterAttSetAtt && !this.props.data.analysis.filterAttribute) ||
+					(!this.state.valueFeatureLayer.length && !this.state.analysis.layerObject) ||
 					(
-						this.props.data.analysis.filterAttribute &&
-						this.props.data.analysis.filterAttributeSet &&
-						(this.state.valueFilterAttSetAtt[0] == this.props.data.analysis.filterAttributeSet.key + "-" + this.props.data.analysis.filterAttribute.key)
+						this.state.analysis.layerObject &&
+						(this.state.valueFeatureLayer[0] == this.state.analysis.layerObject.key)
 					)
 				) &&
-					_.isEqual(this.state.valueAttributeMaps[this.props.data.analysis.attributeSet.key], this.props.data.analysis.attributeMap)
+				(
+					(!this.state.valueResultAttSet.length && !this.state.analysis.attributeSet) ||
+					(
+						this.state.analysis.attributeSet &&
+						(this.state.valueResultAttSet[0] == this.state.analysis.attributeSet.key)
+					)
+				) &&
+				(
+					(!this.state.valueFilterAttSetAtt && !this.state.analysis.filterAttribute) ||
+					(
+						this.state.analysis.filterAttribute &&
+						this.state.analysis.filterAttributeSet &&
+						(this.state.valueFilterAttSetAtt[0] == this.state.analysis.filterAttributeSet.key + "-" + this.state.analysis.filterAttribute.key)
+					)
+				) &&
+					_.isEqual(this.state.valueAttributeMaps[this.state.analysis.attributeSet.key], this.state.analysis.attributeMap)
 			);
 		}
 		return isIt;
@@ -248,7 +274,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 			props = this.props;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(props.data.analysis.key.toString());
+		this._stateHash = utils.stringHash(this.state.analysis.key.toString());
 	}
 	getStateHash() {
 		if(!this._stateHash) {
@@ -257,35 +283,35 @@ class ScreenAnalysisRulesSpatial extends Component{
 		return this._stateHash;
 	}
 
-	//saveForm() {
-	//	var thisComponent = this;
-	//	let objectType = null;
-	//	switch(this.state.analysis.analysisType) {
-	//		case "spatial":
-	//			objectType = ObjectTypes.ANALYSIS_SPATIAL;
-	//			break;
-	//		case "level":
-	//			objectType = ObjectTypes.ANALYSIS_LEVEL;
-	//			break;
-	//		case "math":
-	//			objectType = ObjectTypes.ANALYSIS_MATH;
-	//			break;
-	//	}
-	//	var actionData = [], modelData = {};
-	//	//_.assign(modelData, this.state.analysis);
-	//	modelData.key = this.state.analysis.key;
-	//	modelData.name = this.state.valueName;
-	//	modelData.topics = [];
-	//	for (let key of this.state.valueTopics) {
-	//		let topic = _.findWhere(this.state.topics, {key: key});
-	//		modelData.topics.push(topic);
-	//	}
-	//
-	//	let modelObj = new AnalysisModel(modelData);
-	//	actionData.push({type:"update",model:modelObj});
-	//	console.log("save analysis:", actionData);
-	//	ActionCreator.handleObjects(actionData,objectType);
-	//}
+	saveForm() {
+		let objectType = null;
+		switch(this.state.analysis.analysisType) {
+			case "spatial":
+				objectType = ObjectTypes.ANALYSIS_SPATIAL;
+				break;
+			case "level":
+				objectType = ObjectTypes.ANALYSIS_LEVEL;
+				break;
+			case "math":
+				objectType = ObjectTypes.ANALYSIS_MATH;
+				break;
+		}
+		var actionData = [], modelData = {};
+		modelData.key = this.state.analysis.key;
+		modelData.layerObject = _.findWhere(this.state.featureLayers, {key: this.state.valueFeatureLayer[0]});
+		modelData.attributeSet = _.findWhere(this.state.attributeSetsResult, {key: this.state.valueResultAttSet[0]});
+		let filterKeys = this.state.valueFilterAttSetAtt[0].split("-");
+		let filterAttributeSet = _.findWhere(this.state.attributeSetsLayer,{key: +filterKeys[0]});
+		let filterAttribute = _.findWhere(filterAttributeSet.attributes,{key: +filterKeys[1]});
+		modelData.filterAttributeSet = filterAttributeSet;
+		modelData.filterAttribute = filterAttribute;
+		modelData.attributeMap = utils.clone(this.state.valueAttributeMaps[this.state.valueResultAttSet[0]]);
+
+		let modelObj = new AnalysisModel(modelData);
+		actionData.push({type:"update",model:modelObj});
+		logger.info("ScreenAnalysisRulesSpatial# saveForm(), Save analysis:", actionData);
+		ActionCreator.handleObjects(actionData,objectType);
+	}
 
 
 	getUrl() {
@@ -293,7 +319,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 	}
 
 	getAnalysisType() {
-		switch(this.props.data.analysis.analysisType) {
+		switch(this.state.analysis.analysisType) {
 			case "spatial":
 				return ObjectTypes.ANALYSIS_SPATIAL;
 			case "level":
@@ -395,233 +421,285 @@ class ScreenAnalysisRulesSpatial extends Component{
 	}
 
 
+	onChangeInRow(type, attribute, value, values) {
+		let attributeMap = utils.clone(this.state.valueAttributeMaps[this.state.valueResultAttSet]);
+		let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute});
+		switch (type) {
+			case "operation":
+				attributeMapRow.operationType = value;
+				break;
+			case "valueAttribute":
+				let valueAttributeSet = null;
+				let valueAttribute = null;
+				if (value) {
+					valueAttributeSet = _.findWhere(this.state.attributeSetsLayer, {key: values[0].attributeSetKey});
+					valueAttribute = _.findWhere(valueAttributeSet.attributes, {key: values[0].attributeKey});
+				}
+				attributeMapRow.valueAttributeSet = valueAttributeSet;
+				attributeMapRow.valueAttribute = valueAttribute;
+				break;
+			case "weightingAttribute":
+				let weightingAttributeSet = null;
+				let weightingAttribute = null;
+				if (value) {
+					weightingAttributeSet = _.findWhere(this.state.attributeSetsLayer, {key: values[0].attributeSetKey});
+					weightingAttribute = _.findWhere(weightingAttributeSet.attributes, {key: values[0].attributeKey});
+				}
+				attributeMapRow.weightingAttributeSet = weightingAttributeSet;
+				attributeMapRow.weightingAttribute = weightingAttribute;
+				break;
+			case "filter":
+				attributeMapRow.filterValue = value.target.value; // value actually event
+				break;
+		}
+		let attributeMaps = {
+			[this.state.valueResultAttSet]: attributeMap
+		};
+		let newState = {
+			valueAttributeMaps: {$merge: attributeMaps}
+		};
+		this.context.setStateDeep.call(this, newState);
+	}
+
+
 	render() {
 
-		var saveButton = (
-			<SaveButton
-				saved={this.isStateUnchanged()}
-				className="save-button"
-				//onClick={this.saveForm.bind(this)}
-			/>
-		);
+		let ret = null;
+		if (this.state.analysis) {
 
-		let ruleTableInsert = null;
-		if (
-			this.state.featureLayers.length &&
-			this.state.attributeSetsResult.length &&
-			this.state.valueResultAttSet[0] &&
-			this.state.attributeSetsLayer.length &&
-			this.state.filterDestinations
-		) {
-			let ruleTableRowsInsert = [];
-			let operations = _.values(analysisOperationsMetadata.SPATIAL);
-			let resultAttSet = _.findWhere(this.state.attributeSetsResult, {key: this.state.valueResultAttSet[0]});
-			for (let attribute of resultAttSet.attributes) {
-				let attributeMap = this.state.valueAttributeMaps[this.state.valueResultAttSet];
-				let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute});
-				let operationCellInsert = (
-					<td className="allowOverflow resetui">
-						<label className="container">
-							Operation
-							<Select
-								//onChange={this.onChangeAttSet.bind(this)}
-								//loadOptions={this.getPlaces}
-								options={operations}
-								valueKey="key"
-								labelKey="name"
-								//inputProps={selectInputProps}
-								value={attributeMapRow.operationType}
-							/>
-						</label>
-					</td>
-				);
-				let insertValueCell = false,
-					insertWeightingCell = false,
-					optionCellsInsert = null,
-					valueCellCaption = "",
-					valueDestination = null,
-					weightingDestination = null;
-				switch (attributeMapRow.operationType) {
-					case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.SUM_ATTRIBUTE].key:
-						insertValueCell = true;
-						valueCellCaption = "Attribute to sum";
-						break;
-					case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.AVG_ATTRIBUTE_WEIGHT_AREA].key:
-						insertValueCell = true;
-						valueCellCaption = "Attribute to average";
-						break;
-					case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.AVG_ATTRIBUTE_WEIGHT_ATTRIBUTE].key:
-						insertValueCell = true;
-						insertWeightingCell = true;
-						break;
-				}
-				if (attributeMapRow.valueAttributeSet && attributeMapRow.valueAttribute) {
-					valueDestination = attributeMapRow.valueAttributeSet.key + "-" + attributeMapRow.valueAttribute.key;
-				}
-				if (attributeMapRow.weightingAttributeSet && attributeMapRow.weightingAttribute) {
-					weightingDestination = attributeMapRow.weightingAttributeSet.key + "-" + attributeMapRow.weightingAttribute.key;
-				}
-				if (!insertValueCell && !insertWeightingCell) {
-					optionCellsInsert = (
-						<td colSpan="2"></td>
-					);
-				} else {
-					optionCellsInsert = [];
-					optionCellsInsert.push((
+			var saveButton = (
+				<SaveButton
+					saved={this.isStateUnchanged()}
+					className="save-button"
+					onClick={this.saveForm.bind(this)}
+				/>
+			);
+
+			let ruleTableInsert = null;
+			if (
+				this.state.featureLayers.length &&
+				this.state.attributeSetsResult.length &&
+				this.state.valueResultAttSet[0] &&
+				this.state.attributeSetsLayer.length &&
+				this.state.filterDestinations
+			) {
+				let ruleTableRowsInsert = [];
+				let operations = _.values(analysisOperationsMetadata.SPATIAL);
+				let resultAttSet = _.findWhere(this.state.attributeSetsResult, {key: this.state.valueResultAttSet[0]});
+				for (let attribute of resultAttSet.attributes) {
+					let attributeMap = this.state.valueAttributeMaps[this.state.valueResultAttSet];
+					let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute});
+					let operationCellInsert = (
 						<td className="allowOverflow resetui">
 							<label className="container">
-								{valueCellCaption}
+								Operation
 								<Select
-									//onChange={this.onChangeFilterAttSetAtt.bind(this)}
-									options={this.state.filterDestinations}
-									optionComponent={OptionDestination}
-									singleValueComponent={SingleValueDestination}
+									onChange={this.onChangeInRow.bind(this,"operation",attribute)}
+									options={operations}
 									valueKey="key"
 									labelKey="name"
-									className={valueDestination ? "multiline" : ""}
-									value={valueDestination}
+									value={attributeMapRow.operationType}
+									clearable={false}
 								/>
 							</label>
 						</td>
-					));
-					if (insertWeightingCell) {
+					);
+					let insertValueCell = false,
+						insertWeightingCell = false,
+						optionCellsInsert = null,
+						valueCellCaption = "",
+						valueDestination = null,
+						weightingDestination = null;
+					switch (attributeMapRow.operationType) {
+						case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.SUM_ATTRIBUTE].key:
+							insertValueCell = true;
+							valueCellCaption = "Attribute to sum";
+							break;
+						case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.AVG_ATTRIBUTE_WEIGHT_AREA].key:
+							insertValueCell = true;
+							valueCellCaption = "Attribute to average";
+							break;
+						case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.AVG_ATTRIBUTE_WEIGHT_ATTRIBUTE].key:
+							insertValueCell = true;
+							valueCellCaption = "Attribute to average";
+							insertWeightingCell = true;
+							break;
+					}
+					if (attributeMapRow.valueAttributeSet && attributeMapRow.valueAttribute) {
+						valueDestination = attributeMapRow.valueAttributeSet.key + "-" + attributeMapRow.valueAttribute.key;
+					}
+					if (attributeMapRow.weightingAttributeSet && attributeMapRow.weightingAttribute) {
+						weightingDestination = attributeMapRow.weightingAttributeSet.key + "-" + attributeMapRow.weightingAttribute.key;
+					}
+					if (!insertValueCell && !insertWeightingCell) {
+						optionCellsInsert = (
+							<td colSpan="2"></td>
+						);
+					} else {
+						optionCellsInsert = [];
 						optionCellsInsert.push((
 							<td className="allowOverflow resetui">
 								<label className="container">
-									Weighting attribute
+									{valueCellCaption}
 									<Select
-										//onChange={this.onChangeFilterAttSetAtt.bind(this)}
+										onChange={this.onChangeInRow.bind(this,"valueAttribute",attribute)}
 										options={this.state.filterDestinations}
 										optionComponent={OptionDestination}
 										singleValueComponent={SingleValueDestination}
 										valueKey="key"
 										labelKey="name"
-										className={weightingDestination ? "multiline" : ""}
-										value={weightingDestination}
+										className={valueDestination ? "multiline" : ""}
+										value={valueDestination}
 									/>
 								</label>
 							</td>
 						));
-					} else {
-						optionCellsInsert.push((
-							<td></td>
-						));
+						if (insertWeightingCell) {
+							optionCellsInsert.push((
+								<td className="allowOverflow resetui">
+									<label className="container">
+										Weighting attribute
+										<Select
+											onChange={this.onChangeInRow.bind(this,"weightingAttribute",attribute)}
+											options={this.state.filterDestinations}
+											optionComponent={OptionDestination}
+											singleValueComponent={SingleValueDestination}
+											valueKey="key"
+											labelKey="name"
+											className={weightingDestination ? "multiline" : ""}
+											value={weightingDestination}
+										/>
+									</label>
+								</td>
+							));
+						} else {
+							optionCellsInsert.push((
+								<td></td>
+							));
+						}
 					}
-				}
-				let filterCellInsert = null;
-				if (this.state.valueFilterAttSetAtt[0]) {
-					let filterKeys = this.state.valueFilterAttSetAtt[0].split("-");
-					let filterAttributeSet = _.findWhere(this.state.attributeSetsLayer,{key: +filterKeys[0]});
-					let filterAttribute = _.findWhere(filterAttributeSet.attributes,{key: +filterKeys[1]});
-					filterCellInsert = (
-						<td className="allowOverflow resetui">
-							<label className="container">
-								{filterAttribute.name + ":"}
-								<Input
-									type="text"
-									name="name"
-									placeholder=" "
-									//defaultValue="112" // remove
-									value={attributeMapRow.filterValue}
-									//onChange={this.onChangeWhatever.bind(this)}
-								/>
-							</label>
-						</td>
-					);
-				} else {
-					filterCellInsert = (
-						<td></td>
-					);
-				}
+					let filterCellInsert = null;
+					if (this.state.valueFilterAttSetAtt[0]) {
+						let filterKeys = this.state.valueFilterAttSetAtt[0].split("-");
+						let filterAttributeSet = _.findWhere(this.state.attributeSetsLayer, {key: +filterKeys[0]});
+						let filterAttribute = _.findWhere(filterAttributeSet.attributes, {key: +filterKeys[1]});
+						filterCellInsert = (
+							<td className="allowOverflow resetui">
+								<label className="container">
+									{filterAttribute.name + ":"}
+									<Input
+										type="text"
+										name="name"
+										placeholder=" "
+										//defaultValue="112" // remove
+										value={attributeMapRow.filterValue}
+										onChange={this.onChangeInRow.bind(this,"filter",attribute)}
+										//onChange={this.onChangeWhatever.bind(this)}
+									/>
+								</label>
+							</td>
+						);
+					} else {
+						filterCellInsert = (
+							<td></td>
+						);
+					}
 
-				let rowInsert = (
-					<tbody className="internal row">
-					<tr className="row-header">
-						<td colSpan="4" className="resetui">{attribute.name}</td>
-					</tr>
-					<tr>
-						{operationCellInsert}
-						{optionCellsInsert}
-						{filterCellInsert}
-					</tr>
-					</tbody>
+					let rowInsert = (
+						<tbody className="internal row">
+						<tr className="row-header">
+							<td colSpan="4" className="resetui">{attribute.name}</td>
+						</tr>
+						<tr>
+							{operationCellInsert}
+							{optionCellsInsert}
+							{filterCellInsert}
+						</tr>
+						</tbody>
+					);
+					ruleTableRowsInsert.push(rowInsert);
+				}
+				ruleTableInsert = (
+					<Table celled className="fixed" id="AnalysisSpatialRuleTable">
+						<thead>
+						<tr>
+							<th>Operation</th>
+							<th colSpan="2"></th>
+							<th>Filter</th>
+						</tr>
+						</thead>
+						{ruleTableRowsInsert}
+					</Table>
 				);
-				ruleTableRowsInsert.push(rowInsert);
 			}
-			ruleTableInsert = (
-				<Table celled className="fixed" id="AnalysisSpatialRuleTable">
-					<thead>
-					<tr>
-						<th>Operation</th>
-						<th colSpan="2"></th>
-						<th>Filter</th>
-					</tr>
-					</thead>
-					{ruleTableRowsInsert}
-				</Table>
+
+
+			ret = (
+				<div>
+					<div className="screen-content-only">
+						<div>
+
+							<h2>Spatial analysis operations: {this.state.analysis.name}</h2>
+
+							<div className="frame-input-wrapper">
+								<label className="container">
+									Feature layer (vector layer template)
+									<UIObjectSelect
+										onChange={this.onChangeFeatureLayer.bind(this)}
+										onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.VECTOR_LAYER_TEMPLATE)}
+										options={this.state.featureLayers}
+										valueKey="key"
+										labelKey="name"
+										value={this.state.valueFeatureLayer}
+										className="template"
+									/>
+								</label>
+							</div>
+
+							<div className="frame-input-wrapper">
+								<label className="container">
+									Result attribute set
+									<UIObjectSelect
+										onChange={this.onChangeResultAttSet.bind(this)}
+										onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.ATTRIBUTE_SET)}
+										//options={ATTSETS}
+										options={this.state.attributeSetsResult}
+										valueKey="key"
+										labelKey="name"
+										value={this.state.valueResultAttSet}
+										className="template"
+									/>
+								</label>
+							</div>
+
+							<div className="frame-input-wrapper">
+								<label className="container">
+									Filter attribute
+									<Select
+										onChange={this.onChangeFilterAttSetAtt.bind(this)}
+										options={this.state.filterDestinations}
+										optionComponent={OptionDestination}
+										singleValueComponent={SingleValueDestination}
+										valueKey="key"
+										labelKey="name"
+										className={this.state.valueFilterAttSetAtt.length ? "multiline" : ""}
+										value={this.state.valueFilterAttSetAtt}
+									/>
+								</label>
+							</div>
+
+							{ruleTableInsert}
+
+							{saveButton}
+
+						</div>
+					</div>
+				</div>
 			);
+
 		}
 
-
-		return (
-			<div>
-				<div className="screen-content-only"><div>
-
-					<h2>Spatial analysis operations: {this.props.data.analysis.name}</h2>
-
-					<div className="frame-input-wrapper">
-						<label className="container">
-							Feature layer (vector layer template)
-							<UIObjectSelect
-								onChange={this.onChangeFeatureLayer.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.VECTOR_LAYER_TEMPLATE)}
-								options={this.state.featureLayers}
-								valueKey="key"
-								labelKey="name"
-								value={this.state.valueFeatureLayer}
-								className="template"
-							/>
-						</label>
-					</div>
-
-					<div className="frame-input-wrapper">
-						<label className="container">
-							Result attribute set
-							<UIObjectSelect
-								onChange={this.onChangeResultAttSet.bind(this)}
-								onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.ATTRIBUTE_SET)}
-								//options={ATTSETS}
-								options={this.state.attributeSetsResult}
-								valueKey="key"
-								labelKey="name"
-								value={this.state.valueResultAttSet}
-								className="template"
-							/>
-						</label>
-					</div>
-
-					<div className="frame-input-wrapper">
-						<label className="container">
-							Filter attribute
-							<Select
-								onChange={this.onChangeFilterAttSetAtt.bind(this)}
-								options={this.state.filterDestinations}
-								optionComponent={OptionDestination}
-								singleValueComponent={SingleValueDestination}
-								valueKey="key"
-								labelKey="name"
-								className={this.state.valueFilterAttSetAtt.length ? "multiline" : ""}
-								value={this.state.valueFilterAttSetAtt}
-							/>
-						</label>
-					</div>
-
-					{ruleTableInsert}
-
-					{saveButton}
-
-			</div></div></div>
-		);
+		return ret;
 
 	}
 }
