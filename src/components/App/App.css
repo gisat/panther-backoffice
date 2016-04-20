@@ -943,6 +943,13 @@ todo hex colours, button icons */
 	/*transform: translateY(-44.444444444%);*/
 }
 
+.prod {
+	padding-top:2rem;
+	text-align: center;
+	font-size: 1rem;
+	color: #999;
+}
+
 
 /*
 .ui.labeled.icon.button.puma-screen-button > .icon,

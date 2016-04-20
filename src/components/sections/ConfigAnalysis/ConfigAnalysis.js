@@ -29,6 +29,7 @@ import ConfigAnalysisRulesMath from '../../sections/ConfigAnalysisRulesMath';
 import ScreenAnalysisRulesSpatial from '../../screens/ScreenAnalysisRulesSpatial';
 import ScreenAnalysisRulesLevel from '../../screens/ScreenAnalysisRulesLevel';
 import ScreenAnalysisRulesMath from '../../screens/ScreenAnalysisRulesMath';
+import ScreenAnalysisRuns from '../../screens/ScreenAnalysisRuns';
 
 import logger from '../../../core/Logger';
 
@@ -299,6 +300,20 @@ class ConfigAnalysis extends PantherComponent {
 		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
+	onOpenRunAddClick () {
+		this.context.onInteraction().call();
+		var screenName = this.props.screenKey + "-ScreenAnalysisRuns";
+		let options = {
+			component: ScreenAnalysisRuns,
+			parentUrl: this.props.parentUrl,
+			size: 40,
+			data: {
+				analysis: this.state.analysis
+			}
+		};
+		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+	}
+
 
 	render() {
 
@@ -461,10 +476,13 @@ class ConfigAnalysis extends PantherComponent {
 
 					<div className="section-header">
 						<h3>Runs</h3>
-						{/*<UIScreenButton basic>
+						<UIScreenButton
+							basic
+							onClick={this.onOpenRunAddClick.bind(this)}
+						>
 							<Icon name="plus" />
-							New run
-						</UIScreenButton>*/}
+							Add runs
+						</UIScreenButton>
 					</div>
 
 					{runsTable}
