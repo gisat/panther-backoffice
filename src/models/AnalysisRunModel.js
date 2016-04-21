@@ -1,6 +1,6 @@
 import Model from './Model';
 import UserStore from '../stores/UserStore';
-import GeneralLayerStore from '../stores/GeneralLayerStore';
+import AULevelStore from '../stores/AULevelStore';
 import AnalysisStore from '../stores/AnalysisStore';
 import ScopeStore from '../stores/ScopeStore';
 import PlaceStore from '../stores/PlaceStore';
@@ -64,16 +64,6 @@ class AnalysisRunModel extends Model {
 				isPromise: true,
 				isArray: true
 			},
-			layers: {
-				serverName: 'featureLayerTemplates', //ids
-				sendToServer: true,
-				transformForLocal: function (data) {
-					return GeneralLayerStore.getFiltered({key: data})
-				},
-				transformForServer: this.getKeys,
-				isPromise: true,
-				isArray: true
-			},
 			scope: {
 				serverName: 'dataset', //id
 				sendToServer: true,
@@ -101,6 +91,16 @@ class AnalysisRunModel extends Model {
 					return PeriodStore.getById(data)
 				},
 				transformForServer: this.getKey,
+				isPromise: true,
+				isArray: true
+			},
+			levels: {
+				serverName: 'featureLayerTemplates', //ids
+				sendToServer: true,
+				transformForLocal: function (data) {
+					return AULevelStore.getFiltered({key: data})
+				},
+				transformForServer: this.getKeys,
 				isPromise: true,
 				isArray: true
 			},
