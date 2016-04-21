@@ -376,7 +376,7 @@ class ConfigAnalysis extends PantherComponent {
 
 				// create AU Levels string
 				var auLevels = [];
-				_.each(analysisRunModel.layers, function(auLevelModel){
+				_.each(analysisRunModel.levels, function(auLevelModel){
 					auLevels.push(auLevelModel.name);
 				}, this);
 
