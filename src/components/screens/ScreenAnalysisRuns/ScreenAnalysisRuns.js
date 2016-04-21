@@ -158,8 +158,35 @@ class ScreenAnalysisRuns extends Component {
 	}
 
 	saveForm() {
+		let actionData = [], levels = [];
 
+		for (let levelKey of this.state.valuesAULevels) {
+			let level = _.findWhere(this.state.levels,{key: levelKey});
+			levels.push(level);
+		}
+
+		for (let placeKey of this.state.valuesPlaces) {
+			for (let periodKey of this.state.valuesPeriods) {
+
+				let place = _.findWhere(this.state.places,{key: placeKey});
+				let period = _.findWhere(this.state.scopePeriods.models,{key: periodKey});
+
+				let modelData = {};
+				modelData.analysis = this.state.analysis;
+				modelData.place = place;
+				modelData.period = period;
+				modelData.levels = levels;
+
+				let modelObj = new AnalysisRunModel(modelData);
+				actionData.push({type:"create",model:modelObj});
+
+			}
+		}
+
+		logger.info("ScreenAnalysisRuns# saveForm(), Add analysis runs:", actionData);
+		//ActionCreator.handleObjects(actionData,ObjectTypes.ANALYSIS_RUN);
 	}
+
 
 	onChangeObjectSelect (stateKey, objectType, value, values) {
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
