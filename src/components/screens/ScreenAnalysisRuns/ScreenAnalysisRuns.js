@@ -13,6 +13,7 @@ import { Input, Button, IconButton } from '../../SEUI/elements';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
 
+import AnalysisRunModel from '../../../models/AnalysisRunModel';
 import AnalysisStore from '../../../stores/AnalysisStore';
 //import AULevelStore from '../../../stores/AULevelStore';
 import ScopeStore from '../../../stores/ScopeStore';
@@ -24,7 +25,7 @@ var initialState = {
 	analysis: null,
 	valueScope: [],
 	valuesAULevels: [],
-	valuesSPlaces: [],
+	valuesPlaces: [],
 	valuesPeriods: []
 };
 
@@ -183,7 +184,7 @@ class ScreenAnalysisRuns extends Component {
 			this.setState({
 				valueScope: newValue,
 				valuesAULevels: [],
-				valuesSPlaces: [],
+				valuesPlaces: [],
 				valuesPeriods: []
 			});
 
