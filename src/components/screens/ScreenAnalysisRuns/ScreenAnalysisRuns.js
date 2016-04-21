@@ -171,19 +171,6 @@ class ScreenAnalysisRuns extends Component {
 		let newValue = utils.handleNewObjects(values, ObjectTypes.SCOPE, {stateKey: "valueScope"}, this.getStateHash());
 		if (newValue.length) {
 
-			//var thisComponent = this;
-			//var scopePeriodsPromise = utils.getPeriodsForScope(newValue);
-			//scopePeriodsPromise.then(function (scopePeriods) {
-			//
-			//	let newState = {
-			//		valueScope: newValue,
-			//		periods: scopePeriods.models
-			//	};
-			//	if(thisComponent.mounted) {
-			//		thisComponent.setState(newState);
-			//	}
-			//});
-
 			let scope = _.findWhere(this.state.scopes,{key: newValue[0]});
 			let keys = ['levels','places','scopePeriods','valueScope'];
 			let store2state = this.store2state(this.props, scope);
@@ -291,7 +278,7 @@ class ScreenAnalysisRuns extends Component {
 
 			} else {
 				selectsInsert.push((
-					<div className="prod">
+					<div className="prod" key="0">
 						Select a scope
 					</div>
 				));
