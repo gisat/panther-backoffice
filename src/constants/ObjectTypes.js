@@ -14,6 +14,7 @@ import LayerGroupModel from '../models/LayerGroupModel';
 import StyleModel from '../models/StyleModel';
 import ObjectRelationModel from '../models/ObjectRelationModel';
 import AnalysisModel from '../models/AnalysisModel';
+import AnalysisRunModel from '../models/AnalysisRunModel';
 
 import ScopeStore from '../stores/ScopeStore';
 import PlaceStore from '../stores/PlaceStore';
@@ -30,6 +31,7 @@ import LayerGroupStore from '../stores/LayerGroupStore';
 import StyleStore from '../stores/StyleStore';
 import ObjectRelationStore from '../stores/ObjectRelationStore';
 import AnalysisStore from '../stores/AnalysisStore';
+import AnalysisRunStore from '../stores/AnalysisRunStore';
 
 export const Store = {
 	SCOPE: ScopeStore,
@@ -48,7 +50,8 @@ export const Store = {
 	OBJECT_RELATION: ObjectRelationStore,
 	ANALYSIS_SPATIAL: AnalysisStore,
 	ANALYSIS_LEVEL: AnalysisStore,
-	ANALYSIS_MATH: AnalysisStore
+	ANALYSIS_MATH: AnalysisStore,
+	ANALYSIS_RUN: AnalysisRunStore
 };
 
 export const Model = {
@@ -68,7 +71,8 @@ export const Model = {
 	OBJECT_RELATION: ObjectRelationModel,
 	ANALYSIS_SPATIAL: AnalysisModel,
 	ANALYSIS_LEVEL: AnalysisModel,
-	ANALYSIS_MATH: AnalysisModel
+	ANALYSIS_MATH: AnalysisModel,
+	ANALYSIS_RUN: AnalysisRunModel
 };
 
 export default keyMirror(Model);
@@ -146,5 +150,9 @@ export const objectTypesMetadata = {
 	ANALYSIS_MATH: {
 		name: "Math",
 		url: "math"
+	},
+	ANALYSIS_RUN: {
+		name: null,
+		url: null
 	}
 };
