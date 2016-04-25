@@ -19,6 +19,10 @@ class AnalysisRunStore extends Store {
 		return "/rest/performedanalysis";
 	}
 
+	getCreateApiUrl() {
+		return "/api/analysis/create";
+	}
+
 	registerListeners(){
 		//this.changeListener.add(UserStore);
 		this.changeListener.add(AnalysisStore);
