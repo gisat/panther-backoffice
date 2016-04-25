@@ -34,6 +34,10 @@ class Store extends EventEmitter {
 		logger.error("Store# getApiUrl(), getApiUrl not overridden");
 	}
 
+	getCreateApiUrl() {
+		return this.getApiUrl();
+	}
+
 	getApiLoadMethod(){
 		return "GET";
 	}
@@ -95,7 +99,7 @@ class Store extends EventEmitter {
 	create(model) {
 		var object = model.serialize();
 		var method = "POST";
-		return this.request(method, {data: object});
+		return this.request(method, {data: object}, this.getCreateApiUrl());
 	}
 
 	update(model) {
@@ -183,7 +187,7 @@ class Store extends EventEmitter {
 		});
 	}
 
-	request(method, object){
+	request(method, object, apiUrl){
 		object = object || {};
 
 		//shouldReturnData parameter removed. Respectively never commited.
@@ -191,7 +195,8 @@ class Store extends EventEmitter {
 
 		var thisStore = this;
 		return new Promise(function (resolve, reject) {
-			var url = apiProtocol + apiHost + path.join(apiPath, thisStore.getApiUrl()).replace(/\\/g, "/");
+			apiUrl = apiUrl || thisStore.getApiUrl();
+			var url = apiProtocol + apiHost + path.join(apiPath, apiUrl).replace(/\\/g, "/");
 			var communicationObject = superagent(method.toUpperCase(), url);
 			communicationObject._callback = function(){
 				logger.info("Store# request(), Argument: ",arguments[0]);
