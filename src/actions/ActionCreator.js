@@ -134,6 +134,9 @@ export default {
 			case ObjectTypes.ANALYSIS_MATH:
 				action.type = ActionTypes.ANALYSIS_MATH_HANDLE;
 				break;
+			case ObjectTypes.ANALYSIS_RUN:
+				action.type = ActionTypes.ANALYSIS_RUN_HANDLE;
+				break;
 			default:
 				return;
 		}
