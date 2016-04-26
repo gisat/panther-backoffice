@@ -280,7 +280,7 @@ class ScreenAnalysisRulesLevel extends Component{
 		});
 		modelData.attributeMap = [];
 		for (let attSetKey of this.state.valueAttSets) {
-			_.union(modelData.attributeMap, utils.clone(this.state.valueAttributeMaps[attSetKey]));
+			modelData.attributeMap = _.union(modelData.attributeMap, utils.clone(this.state.valueAttributeMaps[attSetKey]));
 		}
 
 		let modelObj = new AnalysisModel(modelData);
@@ -325,12 +325,11 @@ class ScreenAnalysisRulesLevel extends Component{
 				attributeMaps[attributeSet.key] = attributeMap;
 			}
 		}
-		if (!newValue.length || !attributeMaps.length) {
+		if (!newValue.length || !Object.keys(attributeMaps).length) {
 			this.setState({
 				valueAttSets: newValue
 			});
 		} else {
-
 			let newState = {
 				valueAttributeMaps: {$merge: attributeMaps},
 				valueAttSets: {$set: newValue}
@@ -356,6 +355,7 @@ class ScreenAnalysisRulesLevel extends Component{
 
 
 	onChangeInRow(type, attributeSet, attribute, value, values) {
+		logger.trace("ScreenAnalysisRulesLevel# onChangeInRow type",type,", attributeSet",attributeSet,", attribute",attribute,", value",value,", values",values);
 		let attributeMap = utils.clone(this.state.valueAttributeMaps[attributeSet.key]);
 		let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute});
 		switch (type) {
@@ -366,7 +366,6 @@ class ScreenAnalysisRulesLevel extends Component{
 				let weightingAttributeSet = null;
 				let weightingAttribute = null;
 				if (value) {
-					logger.info("ScreenAnalysisRulesLevel# onChangeInRow value",value,", values",values);
 					weightingAttributeSet = _.findWhere(this.state.attributeSets, {key: values[0].attributeSetKey});
 					weightingAttribute = _.findWhere(weightingAttributeSet.attributes, {key: values[0].attributeKey});
 				}
@@ -448,7 +447,7 @@ class ScreenAnalysisRulesLevel extends Component{
 									<label className="container">
 										Weighting attribute
 										<Select
-											onChange={this.onChangeInRow.bind(this,"weightingAttribute",attribute)}
+											onChange={this.onChangeInRow.bind(this,"weightingAttribute",attributeSet,attribute)}
 											options={this.state.destinations}
 											optionComponent={OptionDestination}
 											singleValueComponent={SingleValueDestination}
