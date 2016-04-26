@@ -286,7 +286,7 @@ class ScreenAnalysisRulesLevel extends Component{
 		let modelObj = new AnalysisModel(modelData);
 		actionData.push({type:"update",model:modelObj});
 		logger.info("ScreenAnalysisRulesLevel# saveForm(), Save analysis:", actionData);
-		//ActionCreator.handleObjects(actionData,objectType);
+		ActionCreator.handleObjects(actionData,objectType);
 	}
 
 
