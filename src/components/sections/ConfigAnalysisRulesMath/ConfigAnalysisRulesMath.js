@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -36,60 +36,68 @@ class ConfigAnalysisRulesMath extends PantherComponent {
 
 		let ret = null;
 		if (this.props.analysis) {
+			if (this.props.analysis.attributeSet) {
 
-			let rowsInsert = [];
+				let rowsInsert = [];
 
-			let operationInsert = [];
-			for (let index in this.props.analysis.attributeSets) {
+				let operationInsert = [];
+				for (let index in this.props.analysis.attributeSets) {
 
-				let operationRow = null;
-				logger.info("ConfigAnalysisRulesMath# render(), Index:", index);
-				if (index != 0) {
-					operationRow = (
-						<div>
-							<Icon
-								name="minus"
+					let operationRow = null;
+					logger.info("ConfigAnalysisRulesMath# render(), Index:", index);
+					if (index != 0) {
+						operationRow = (
+							<div>
+								<Icon
+									name="minus"
 								/>
-							{this.props.analysis.attributeSets[index].name}
-						</div>
-					);
-				} else {
-					operationRow = (
-						<div>
-							<span className="ptr-analysis-placeholder"></span>
-							{this.props.analysis.attributeSets[index].name}
-						</div>
-					);
+								{this.props.analysis.attributeSets[index].name}
+							</div>
+						);
+					} else {
+						operationRow = (
+							<div>
+								<span className="ptr-analysis-placeholder"></span>
+								{this.props.analysis.attributeSets[index].name}
+							</div>
+						);
+					}
+					operationInsert.push(operationRow);
 				}
-				operationInsert.push(operationRow);
-			}
 
-			let row = (
-				<tr>
-					<td>{this.props.analysis.attributeSet.name}</td>
-					<td>{operationInsert}</td>
-				</tr>
-			);
-
-			rowsInsert.push(row);
-
-
-
-			ret = (
-				<Table celled className="fixed">
-					<thead>
+				let row = (
 					<tr>
-						<th>Result attribute set</th>
-						<th>Operation</th>
+						<td>{this.props.analysis.attributeSet.name}</td>
+						<td>{operationInsert}</td>
 					</tr>
-					</thead>
-					<tbody>
+				);
 
-					{rowsInsert}
+				rowsInsert.push(row);
 
-					</tbody>
-				</Table>
-			);
+
+				ret = (
+					<Table celled className="fixed">
+						<thead>
+						<tr>
+							<th>Result attribute set</th>
+							<th>Operation</th>
+						</tr>
+						</thead>
+						<tbody>
+
+						{rowsInsert}
+
+						</tbody>
+					</Table>
+				);
+
+			} else {
+				ret = (
+					<div className="prod">
+						Not configured
+					</div>
+				);
+			}
 
 		}
 
