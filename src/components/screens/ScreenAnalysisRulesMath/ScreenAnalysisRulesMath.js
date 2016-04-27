@@ -360,12 +360,6 @@ class ScreenAnalysisRulesMath extends Component{
 					operation: this.state.analysis.useSum ? 'plus' : 'minus'
 				});
 			}
-			//for (let attSet of attributeSets) {
-			//	attributeSetMap[attributeSet.key].push({
-			//		attributeSet: attSet,
-			//		operation: analysis.useSum ? 'plus' : 'minus'
-			//	});
-			//}
 			let newState = {
 				valueAttributeSetMap: {$merge: attributeSetMap},
 				valueResultAttSet: {$set: newValue}
