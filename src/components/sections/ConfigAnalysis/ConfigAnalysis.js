@@ -370,57 +370,68 @@ class ConfigAnalysis extends PantherComponent {
 					break;
 			}
 
+			var runsTable = null;
+			if (this.state.runs.length) {
+				var runsTableRows = [];
+				_.each(this.state.runs, function (analysisRunModel) {
 
-			var runsTableRows = [];
-			_.each(this.state.runs, function(analysisRunModel){
+					// create AU Levels string
+					var auLevels = [];
+					_.each(analysisRunModel.levels, function (auLevelModel) {
+						auLevels.push(auLevelModel.name);
+					}, this);
 
-				// create AU Levels string
-				var auLevels = [];
-				_.each(analysisRunModel.levels, function(auLevelModel){
-					auLevels.push(auLevelModel.name);
-				}, this);
+					// create Finished string
+					var finished = "";
+					var finishedTooltip = analysisRunModel.status;
 
-				// create Finished string
-				var finished = "";
-				var finishedTooltip = analysisRunModel.status;
-
-				if(typeof analysisRunModel.finished == "undefined"){
-					finished = "running&hellip;";
-				} else {
-					if(typeof analysisRunModel.status != "undefined" && analysisRunModel.status.substr(0,8) == "Failed. ") {
-						finished = "failed";
+					if (typeof analysisRunModel.finished == "undefined") {
+						finished = "running&hellip;";
 					} else {
-						if (analysisRunModel.finished instanceof Date) {
-							finished = analysisRunModel.finished.getFullYear() + "-" + analysisRunModel.finished.getMonth() + "-" + analysisRunModel.finished.getDate();
+						if (typeof analysisRunModel.status != "undefined" && analysisRunModel.status.substr(0, 8) == "Failed. ") {
+							finished = "failed";
 						} else {
-							finished = analysisRunModel.finished;
+							if (analysisRunModel.finished instanceof Date) {
+								finished = analysisRunModel.finished.getFullYear() + "-" + analysisRunModel.finished.getMonth() + "-" + analysisRunModel.finished.getDate();
+							} else {
+								finished = analysisRunModel.finished;
+							}
 						}
 					}
-				}
 
-				var row = (
-					<tr>
-						<td>{analysisRunModel.place.name}</td>
-						<td>{analysisRunModel.period.name}</td>
-						<td>{auLevels.join(", ")}</td>
-						<td title={finishedTooltip}>{finished}</td>
-					</tr>
+					var row = (
+						<tr>
+							<td>{analysisRunModel.place.name}</td>
+							<td>{analysisRunModel.period.name}</td>
+							<td>{auLevels.join(", ")}</td>
+							<td title={finishedTooltip}>{finished}</td>
+						</tr>
+					);
+					runsTableRows.push(row);
+				}, this);
+
+				runsTable = (
+					<Table basic="very" className="fixed">
+						<thead>
+						<tr>
+							<th>Place</th>
+							<th>Period</th>
+							<th>AU levels</th>
+							<th>Finished</th>
+						</tr>
+						</thead>
+						<tbody>
+						{runsTableRows}
+						</tbody>
+					</Table>
 				);
-				runsTableRows.push(row);
-			}, this);
-			var runsTable = (<Table basic="very" className="fixed">
-				<thead>
-					<tr>
-						<th>Place</th>
-						<th>Period</th>
-						<th>AU levels</th>
-						<th>Finished</th>
-					</tr>
-				</thead>
-				<tbody>
-					{runsTableRows}
-				</tbody>
-			</Table>);
+			} else {
+				runsTable = (
+					<div className="prod">
+						No runs
+					</div>
+				);
+			}
 
 
 			ret = (
