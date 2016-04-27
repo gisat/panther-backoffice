@@ -433,6 +433,26 @@ class ConfigAnalysis extends PantherComponent {
 				);
 			}
 
+			let operationsHeader = null;
+			if (!this.state.runs.length) {
+				operationsHeader = (
+					<UIScreenButton
+						disabled={this.props.disabled}
+						basic
+						onClick={this.onOpenConfigClick.bind(this)}
+					>
+						<Icon name="configure" />
+						Configure
+					</UIScreenButton>
+				);
+			} else {
+				operationsHeader = (
+					<span className="note">
+						Configuration locked after run
+					</span>
+				);
+			}
+
 
 			ret = (
 				<div>
@@ -473,13 +493,7 @@ class ConfigAnalysis extends PantherComponent {
 
 					<div className="section-header">
 						<h3>Operations</h3>
-						<UIScreenButton
-							basic
-							onClick={this.onOpenConfigClick.bind(this)}
-						>
-							<Icon name="configure" />
-							Configure
-						</UIScreenButton>
+						{operationsHeader}
 					</div>
 
 					{configComponent}
