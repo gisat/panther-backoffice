@@ -30,7 +30,8 @@ import AttributeSetStore from '../../../stores/AttributeSetStore';
 var initialState = {
 	attributeSets: [],
 	valueResultAttSet: [],
-	valueAttributeSetMap: {}
+	valueAttributeSetMap: {},
+	attSetCount: 2
 };
 
 
@@ -98,7 +99,7 @@ class ScreenAnalysisRulesMath extends Component{
 					let attributeSetMap = {
 						[analysis.attributeSet.key]: []
 					};
-					let mapLength = Math.max(2,analysis.attributeSets.length);
+					let mapLength = Math.max(thisComponent.state.attSetCount,analysis.attributeSets.length);
 					for (let i = 0; i < mapLength; i++) {
 						attributeSetMap[analysis.attributeSet.key].push({
 							attributeSet: analysis.attributeSets[i],
@@ -353,7 +354,7 @@ class ScreenAnalysisRulesMath extends Component{
 			let attributeSetMap = {
 				[attributeSet.key]: []
 			};
-			let mapLength = Math.max(2,attributeSets.length);
+			let mapLength = Math.max(this.state.attSetCount,attributeSets.length);
 			for (let i = 0; i < mapLength; i++) {
 				attributeSetMap[attributeSet.key].push({
 					attributeSet: attributeSets[i],
