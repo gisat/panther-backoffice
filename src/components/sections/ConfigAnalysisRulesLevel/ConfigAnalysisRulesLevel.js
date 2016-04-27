@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -40,38 +40,46 @@ class ConfigAnalysisRulesLevel extends PantherComponent {
 
 		let ret = null;
 		if (this.props.analysis) {
+			if (this.props.analysis.attributeMap.length) {
 
-			let rowsInsert = [];
-			for (let record of this.props.analysis.attributeMap) {
+				let rowsInsert = [];
+				for (let record of this.props.analysis.attributeMap) {
 
-				let operation = _.findWhere(OPERATIONS,{key: record.operationType});
+					let operation = _.findWhere(OPERATIONS, {key: record.operationType});
 
-				let row = (
-					<tr>
-						<td>{record.attribute.name}</td>
-						<td>{operation.name}</td>
-					</tr>
+					let row = (
+						<tr>
+							<td>{record.attribute.name}</td>
+							<td>{operation.name}</td>
+						</tr>
+					);
+
+					rowsInsert.push(row);
+
+				}
+
+				ret = (
+					<Table celled className="fixed">
+						<thead>
+						<tr>
+							<th>Result attribute</th>
+							<th>Operation</th>
+						</tr>
+						</thead>
+						<tbody>
+
+						{rowsInsert}
+
+						</tbody>
+					</Table>
 				);
-
-				rowsInsert.push(row);
-
+			} else {
+				ret = (
+					<div className="prod">
+						Not configured
+					</div>
+				);
 			}
-
-			ret = (
-				<Table celled className="fixed">
-					<thead>
-					<tr>
-						<th>Result attribute</th>
-						<th>Operation</th>
-					</tr>
-					</thead>
-					<tbody>
-
-					{rowsInsert}
-
-					</tbody>
-				</Table>
-			);
 
 		}
 
