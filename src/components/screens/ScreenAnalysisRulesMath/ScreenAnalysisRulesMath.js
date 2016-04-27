@@ -201,6 +201,8 @@ class ScreenAnalysisRulesMath extends Component{
 					)
 				) &&
 				(
+					this.state.valueResultAttSet &&
+					this.state.analysis.attributeSet &&
 					_.isEqual(this.state.valueAttributeSetMap[this.state.valueResultAttSet],this.state.savedAttributeSetMap[this.state.analysis.attributeSet.key])
 				)
 			);
@@ -248,14 +250,14 @@ class ScreenAnalysisRulesMath extends Component{
 	validateForm() {
 		let ret = {
 			all: true,
-			resultAttSetSelected: true, // todo
+			resultAttSetSelected: !!this.state.valueResultAttSet.length,
 			atLeastTwoAttSets: true,
 			allFormatsEqual: true
 		};
 
 		if (
 			this.state.attributeSets &&
-			this.state.valueResultAttSet.length &&
+			ret.resultAttSetSelected &&
 			this.state.valueAttributeSetMap.hasOwnProperty(this.state.valueResultAttSet[0])
 		) {
 			let resultAttributeSet = _.findWhere(this.state.attributeSets, {key: this.state.valueResultAttSet[0]});
@@ -265,8 +267,8 @@ class ScreenAnalysisRulesMath extends Component{
 			}
 
 			// at least two attribute sets selected
-			for (let attributeSet of attributeSets) {
-				ret.atLeastTwoAttSets = ret.atLeastTwoAttSets && !!attributeSet;
+			for (let record of this.state.valueAttributeSetMap[this.state.valueResultAttSet[0]]) {
+				ret.atLeastTwoAttSets = ret.atLeastTwoAttSets && !!record.attributeSet;
 			}
 
 			// formats
@@ -280,10 +282,10 @@ class ScreenAnalysisRulesMath extends Component{
 				}
 			}
 
-			_.each(ret, function(indicator){
-				ret.all = ret.all && indicator;
-			});
 		}
+		_.each(ret, function(indicator){
+			ret.all = ret.all && indicator;
+		});
 		return ret;
 	}
 
@@ -418,23 +420,26 @@ class ScreenAnalysisRulesMath extends Component{
 
 		let validationMessagesInsert = null;
 		let validation = this.validateForm();
+		logger.trace("ScreenAnalysisRulesMath# render() validation:",validation);
 		if (!validation.all) {
 			validationMessagesInsert = [];
+			if (!validation.resultAttSetSelected) {
+				validationMessagesInsert.push((
+					<div className="prod" key="resultAttSetSelected">
+						Select result attribute set
+					</div>
+				));
+			}
 			if (!validation.atLeastTwoAttSets) {
 				validationMessagesInsert.push((
-					<div className="ui warning message">
-						<div className="header">
-							Incomplete source
-						</div>
-						<div>
-							Selected two attribute sets to be combined.
-						</div>
+					<div className="prod" key="atLeastTwoAttSets">
+						Select two attribute sets to be combined.
 					</div>
 				));
 			}
 			if (!validation.allFormatsEqual) {
 				validationMessagesInsert.push((
-					<div className="ui warning message">
+					<div className="ui warning message" key="allFormatsEqual">
 						<div className="header">
 							Incompatible attribute sets
 						</div>
@@ -461,7 +466,9 @@ class ScreenAnalysisRulesMath extends Component{
 			let ruleTableInsert = null;
 			if (
 				this.state.attributeSets.length &&
-				Object.keys(this.state.valueAttributeSetMap).length
+				Object.keys(this.state.valueAttributeSetMap).length &&
+				this.state.valueResultAttSet.length &&
+				this.state.valueAttributeSetMap.hasOwnProperty(this.state.valueResultAttSet[0])
 			) {
 				let ruleTableRowsInsert = [];
 				let operations = _.values(analysisOperationsMetadata.LEVEL);
