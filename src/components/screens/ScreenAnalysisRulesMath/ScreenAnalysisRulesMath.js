@@ -81,7 +81,10 @@ class ScreenAnalysisRulesMath extends Component{
 		if(!props){
 			props = this.props;
 		}
-		if(props.data.analysis) {
+		if(
+			this.mounted &&
+			props.data.analysis
+		) {
 			var thisComponent = this;
 			let analysisPromise = null;
 			if (!keys || keys.indexOf("analysis")!=-1) {
@@ -95,7 +98,10 @@ class ScreenAnalysisRulesMath extends Component{
 				thisComponent.context.setStateFromStores.call(thisComponent, store2state, keys);
 				// if stores changed, overrides user input - todo fix
 
-				if(analysis.attributeSets.length && (!keys || keys.indexOf("valueResultAttSet")!=-1)) {
+				if(
+					analysis.attributeSet &&
+					(!keys || keys.indexOf("valueResultAttSet")!=-1 || keys.indexOf("analysis")!=-1)
+				) {
 					let attributeSetMap = {
 						[analysis.attributeSet.key]: []
 					};
@@ -106,10 +112,17 @@ class ScreenAnalysisRulesMath extends Component{
 							operation: analysis.useSum ? 'plus' : 'minus'
 						});
 					}
-					let newState = {
-						savedAttributeSetMap: {$set: attributeSetMap},
-						valueAttributeSetMap: {$merge: attributeSetMap} // todo do not replace?
-					};
+					let newState = {};
+					if (thisComponent.state.valueAttributeSetMap.hasOwnProperty(analysis.attributeSet.key)) {
+						newState = {
+							savedAttributeSetMap: {$set: attributeSetMap}
+						};
+					} else {
+						newState = {
+							savedAttributeSetMap: {$set: attributeSetMap},
+							valueAttributeSetMap: {$merge: attributeSetMap} // todo do not replace?
+						};
+					}
 					thisComponent.context.setStateDeep.call(thisComponent, newState);
 				}
 
@@ -164,22 +177,22 @@ class ScreenAnalysisRulesMath extends Component{
 		this.setStateFromStores();
 	}
 
-	componentWillReceiveProps(newProps) {
-		if (
-			this.state.analysis &&
-			(
-				(this.state.analysis.key != newProps.data.analysis.key) ||
-				(this.state.analysis.changed != newProps.data.analysis.changed)
-			)
-		) {
-			// analysis was switched or updated outside
-			if (this.isStateUnchanged()) {
-				// form was not edited, it's okay to reload
-				logger.trace("ScreenAnalysisRulesMath# received props and will reload");
-				this.setStateFromStores(newProps);
-			}
-		}
-	}
+	//componentWillReceiveProps(newProps) {
+	//	if (
+	//		this.state.analysis &&
+	//		(
+	//			(this.state.analysis.key != newProps.data.analysis.key) ||
+	//			(this.state.analysis.changed != newProps.data.analysis.changed)
+	//		)
+	//	) {
+	//		// analysis was switched or updated outside
+	//		if (this.isStateUnchanged()) {
+	//			// form was not edited, it's okay to reload
+	//			logger.trace("ScreenAnalysisRulesMath# received props and will reload");
+	//			this.setStateFromStores(newProps);
+	//		}
+	//	}
+	//}
 
 	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
@@ -205,6 +218,7 @@ class ScreenAnalysisRulesMath extends Component{
 				(
 					this.state.valueResultAttSet &&
 					this.state.analysis.attributeSet &&
+					this.state.savedAttributeSetMap &&
 					_.isEqual(this.state.valueAttributeSetMap[this.state.valueResultAttSet],this.state.savedAttributeSetMap[this.state.analysis.attributeSet.key])
 				)
 			);
@@ -238,7 +252,7 @@ class ScreenAnalysisRulesMath extends Component{
 	getAttributeSetFormat(attributeSet) {
 		let ret = [];
 		for (let attribute of attributeSet.attributes) {
-			ret.push(attribute.type);
+			ret.push(attribute.type); // todo units?
 		}
 		return ret;
 	}
@@ -321,7 +335,7 @@ class ScreenAnalysisRulesMath extends Component{
 		let modelObj = new AnalysisModel(modelData);
 		actionData.push({type:"update",model:modelObj});
 		logger.info("ScreenAnalysisRulesMath# saveForm(), Save analysis:", actionData);
-		//ActionCreator.handleObjects(actionData,objectType);
+		ActionCreator.handleObjects(actionData,objectType);
 	}
 
 
