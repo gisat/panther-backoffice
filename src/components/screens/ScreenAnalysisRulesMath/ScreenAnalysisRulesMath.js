@@ -98,9 +98,10 @@ class ScreenAnalysisRulesMath extends Component{
 					let attributeSetMap = {
 						[analysis.attributeSet.key]: []
 					};
-					for (let attSet of analysis.attributeSets) {
+					let mapLength = Math.max(2,analysis.attributeSets.length);
+					for (let i = 0; i < mapLength; i++) {
 						attributeSetMap[analysis.attributeSet.key].push({
-							attributeSet: attSet,
+							attributeSet: analysis.attributeSets[i],
 							operation: analysis.useSum ? 'plus' : 'minus'
 						});
 					}
@@ -352,12 +353,19 @@ class ScreenAnalysisRulesMath extends Component{
 			let attributeSetMap = {
 				[attributeSet.key]: []
 			};
-			for (let attSet of attributeSets) {
+			let mapLength = Math.max(2,attributeSets.length);
+			for (let i = 0; i < mapLength; i++) {
 				attributeSetMap[attributeSet.key].push({
-					attributeSet: attSet,
-					operation: analysis.useSum ? 'plus' : 'minus'
+					attributeSet: attributeSets[i],
+					operation: this.state.analysis.useSum ? 'plus' : 'minus'
 				});
 			}
+			//for (let attSet of attributeSets) {
+			//	attributeSetMap[attributeSet.key].push({
+			//		attributeSet: attSet,
+			//		operation: analysis.useSum ? 'plus' : 'minus'
+			//	});
+			//}
 			let newState = {
 				valueAttributeSetMap: {$merge: attributeSetMap},
 				valueResultAttSet: {$set: newValue}
