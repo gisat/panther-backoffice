@@ -160,6 +160,8 @@ class ScreenAnalysisRuns extends Component {
 	saveForm() {
 		let actionData = [], levels = [];
 
+		let scope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
+
 		for (let levelKey of this.state.valuesAULevels) {
 			let level = _.findWhere(this.state.levels,{key: levelKey});
 			levels.push(level);
@@ -176,6 +178,7 @@ class ScreenAnalysisRuns extends Component {
 				modelData.place = place;
 				modelData.period = period;
 				modelData.levels = levels;
+				modelData.scope = scope;
 
 				let modelObj = new AnalysisRunModel(modelData);
 				actionData.push({type:"create",model:modelObj});
@@ -184,7 +187,7 @@ class ScreenAnalysisRuns extends Component {
 		}
 
 		logger.info("ScreenAnalysisRuns# saveForm(), Add analysis runs:", actionData);
-		//ActionCreator.handleObjects(actionData,ObjectTypes.ANALYSIS_RUN);
+		ActionCreator.handleObjects(actionData,ObjectTypes.ANALYSIS_RUN);
 	}
 
 

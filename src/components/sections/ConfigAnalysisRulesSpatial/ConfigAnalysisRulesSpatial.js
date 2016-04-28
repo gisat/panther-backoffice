@@ -1,23 +1,24 @@
 import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
+import _ from 'underscore';
 import utils from '../../../utils/utils';
+import logger from '../../../core/Logger';
+import ActionCreator from '../../../actions/ActionCreator';
+import ListenerHandler from '../../../core/ListenerHandler';
+import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
+import AnalysisOperations, {analysisOperationsMetadata} from '../../../constants/AnalysisOperations';
 
 import { Input, Button } from '../../SEUI/elements';
 import { Table } from '../../SEUI/collections';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
-import _ from 'underscore';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
 
-import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
 import PlaceStore from '../../../stores/PlaceStore';
 import ScopeStore from '../../../stores/ScopeStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
-
-import ListenerHandler from '../../../core/ListenerHandler';
 
 const OPERATIONS = [
 	{ key: "count", name: "COUNT"	},
@@ -48,17 +49,65 @@ class ConfigAnalysisRulesSpatial extends PantherComponent {
 				let rowsInsert = [];
 				for (let record of this.props.analysis.attributeMap) {
 
-					let operation = _.findWhere(OPERATIONS, {key: record.operationType});
+					let operationCellInsert = null;
+					let filter = null;
+					if (record.operationType) {
+						let operation = _.findWhere(OPERATIONS, {key: record.operationType});
 
-					let filter = "";
-					if (this.props.analysis.filterAttribute) {
-						filter = this.props.analysis.filterAttribute.name + ": " + record.filterValue;
+						if (this.props.analysis.filterAttribute) {
+							filter = this.props.analysis.filterAttribute.name + ": " + record.filterValue;
+						}
+
+						let operationDetails = false,
+							weightingInsert = null,
+							operationName = "";
+						switch (record.operationType) {
+							case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.SUM_ATTRIBUTE].key:
+								operationDetails = true;
+								operationName = "SUM";
+								break;
+							case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.AVG_ATTRIBUTE_WEIGHT_AREA].key:
+								operationDetails = true;
+								operationName = "AVERAGE";
+								weightingInsert = (
+									<span>
+									<br/>
+									weighted by area/length
+								</span>
+								);
+								break;
+							case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.AVG_ATTRIBUTE_WEIGHT_ATTRIBUTE].key:
+								operationDetails = true;
+								operationName = "AVERAGE";
+								weightingInsert = (
+									<span>
+									<br/>
+									weighted by
+									<br/>
+										{record.weightingAttribute.name}
+								</span>
+								);
+								break;
+						}
+						if (!operationDetails) {
+							operationCellInsert = operation.name;
+						} else {
+							operationCellInsert = (
+								<span>
+								{operationName}
+									<br/>
+								(<b>{record.valueAttribute.name}</b>)
+									{weightingInsert}
+							</span>
+							);
+
+						}
 					}
 
 					let row = (
 						<tr>
 							<td>{record.attribute.name}</td>
-							<td>{operation.name}</td>
+							<td>{operationCellInsert}</td>
 							<td>{filter}</td>
 						</tr>
 					);

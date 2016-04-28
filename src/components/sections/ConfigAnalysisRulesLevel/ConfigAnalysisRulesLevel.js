@@ -1,23 +1,24 @@
 import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
+import _ from 'underscore';
 import utils from '../../../utils/utils';
+import logger from '../../../core/Logger';
+import ActionCreator from '../../../actions/ActionCreator';
+import ListenerHandler from '../../../core/ListenerHandler';
+import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
+import AnalysisOperations, {analysisOperationsMetadata} from '../../../constants/AnalysisOperations';
 
 import { Input, Button } from '../../SEUI/elements';
 import { Table } from '../../SEUI/collections';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
-import _ from 'underscore';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
 
-import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
 import PlaceStore from '../../../stores/PlaceStore';
 import ScopeStore from '../../../stores/ScopeStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
-
-import ListenerHandler from '../../../core/ListenerHandler';
 
 const OPERATIONS = [
 	{ key: "sum", name: "SUM" },
@@ -45,12 +46,56 @@ class ConfigAnalysisRulesLevel extends PantherComponent {
 				let rowsInsert = [];
 				for (let record of this.props.analysis.attributeMap) {
 
-					let operation = _.findWhere(OPERATIONS, {key: record.operationType});
+					let operationCellInsert = null;
+					if (record.operationType) {
+
+						let operation = _.findWhere(OPERATIONS, {key: record.operationType});
+
+						let operationDetails = false,
+							weightingInsert = null,
+							operationName = "";
+						switch (record.operationType) {
+							case analysisOperationsMetadata.LEVEL[AnalysisOperations.LEVEL.AVG_WEIGHT_AREA].key:
+								operationDetails = true;
+								operationName = "AVERAGE";
+								weightingInsert = (
+									<span>
+										<br/>
+										weighted by area/length
+									</span>
+								);
+								break;
+							case analysisOperationsMetadata.LEVEL[AnalysisOperations.LEVEL.AVG_WEIGHT_ATTRIBUTE].key:
+								operationDetails = true;
+								operationName = "AVERAGE";
+								weightingInsert = (
+									<span>
+										<br/>
+										weighted by
+										<br/>
+										{record.weightingAttribute.name}
+									</span>
+								);
+								break;
+						}
+						if (!operationDetails) {
+							operationCellInsert = operation.name;
+						} else {
+							operationCellInsert = (
+								<span>
+									{operationName}
+									{weightingInsert}
+								</span>
+							);
+
+						}
+
+					}
 
 					let row = (
 						<tr>
 							<td>{record.attribute.name}</td>
-							<td>{operation.name}</td>
+							<td>{operationCellInsert}</td>
 						</tr>
 					);
 
