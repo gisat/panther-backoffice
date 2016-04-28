@@ -44,7 +44,7 @@ class ConfigAnalysisRulesLevel extends PantherComponent {
 					let operationCellInsert = null;
 					if (record.operationType) {
 
-						let operation = _.findWhere(_.values(analysisOperationsMetadata.LEVEL), {key: record.operationType});
+						let operation = _.findWhere(analysisOperationsMetadata.LEVEL, {key: record.operationType});
 
 						let operationDetails = false,
 							weightingInsert = null,
