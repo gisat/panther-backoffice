@@ -56,6 +56,17 @@ class Menu extends Component {
 					</li>
 					<li>
 						<a
+							href={publicPath + "/analyses"}
+							onClick={Link.handleClick}
+							tabIndex="-1"
+							className={this.props.activeScreenSet == "analyses" ? "current" : ""}
+						>
+							<UISVG src='icon-analyses.isvg' />
+							<span>Analyses</span>
+						</a>
+					</li>
+					<li>
+						<a
 							href={publicPath + "/metadata"}
 							onClick={Link.handleClick}
 							tabIndex="-1"
