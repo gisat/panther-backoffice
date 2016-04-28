@@ -255,6 +255,11 @@ td.selectable.selected::after {
 	background: #e0ecff;
 }
 
+.ui.button:disabled, .ui.buttons .disabled.button, .ui.disabled.active.button, .ui.disabled.button, .ui.disabled.button:hover {
+	box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset!important;
+}
+
+
 
 .ui.checkbox label::before{
 	border: 1px solid #888;

@@ -29,6 +29,7 @@ import ConfigAnalysisRulesMath from '../../sections/ConfigAnalysisRulesMath';
 import ScreenAnalysisRulesSpatial from '../../screens/ScreenAnalysisRulesSpatial';
 import ScreenAnalysisRulesLevel from '../../screens/ScreenAnalysisRulesLevel';
 import ScreenAnalysisRulesMath from '../../screens/ScreenAnalysisRulesMath';
+import ScreenAnalysisRuns from '../../screens/ScreenAnalysisRuns';
 
 import logger from '../../../core/Logger';
 
@@ -299,6 +300,20 @@ class ConfigAnalysis extends PantherComponent {
 		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
+	onOpenRunAddClick () {
+		this.context.onInteraction().call();
+		var screenName = this.props.screenKey + "-ScreenAnalysisRuns";
+		let options = {
+			component: ScreenAnalysisRuns,
+			parentUrl: this.props.parentUrl,
+			size: 40,
+			data: {
+				analysis: this.state.analysis
+			}
+		};
+		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+	}
+
 
 	render() {
 
@@ -355,57 +370,88 @@ class ConfigAnalysis extends PantherComponent {
 					break;
 			}
 
+			var runsTable = null;
+			if (this.state.runs.length) {
+				var runsTableRows = [];
+				_.each(this.state.runs, function (analysisRunModel) {
 
-			var runsTableRows = [];
-			_.each(this.state.runs, function(analysisRunModel){
+					// create AU Levels string
+					var auLevels = [];
+					_.each(analysisRunModel.levels, function (auLevelModel) {
+						auLevels.push(auLevelModel.name);
+					}, this);
 
-				// create AU Levels string
-				var auLevels = [];
-				_.each(analysisRunModel.layers, function(auLevelModel){
-					auLevels.push(auLevelModel.name);
-				}, this);
+					// create Finished string
+					var finished = "";
+					var finishedTooltip = analysisRunModel.status;
 
-				// create Finished string
-				var finished = "";
-				var finishedTooltip = analysisRunModel.status;
-
-				if(typeof analysisRunModel.finished == "undefined"){
-					finished = "running&hellip;";
-				} else {
-					if(typeof analysisRunModel.status != "undefined" && analysisRunModel.status.substr(0,8) == "Failed. ") {
-						finished = "failed";
+					if (typeof analysisRunModel.finished == "undefined") {
+						finished = "running&hellip;";
 					} else {
-						if (analysisRunModel.finished instanceof Date) {
-							finished = analysisRunModel.finished.getFullYear() + "-" + analysisRunModel.finished.getMonth() + "-" + analysisRunModel.finished.getDate();
+						if (typeof analysisRunModel.status != "undefined" && analysisRunModel.status.substr(0, 8) == "Failed. ") {
+							finished = "failed";
 						} else {
-							finished = analysisRunModel.finished;
+							if (analysisRunModel.finished instanceof Date) {
+								finished = analysisRunModel.finished.getFullYear() + "-" + analysisRunModel.finished.getMonth() + "-" + analysisRunModel.finished.getDate();
+							} else {
+								finished = analysisRunModel.finished;
+							}
 						}
 					}
-				}
 
-				var row = (
-					<tr>
-						<td>{analysisRunModel.place.name}</td>
-						<td>{analysisRunModel.period.name}</td>
-						<td>{auLevels.join(", ")}</td>
-						<td title={finishedTooltip}>{finished}</td>
-					</tr>
+					var row = (
+						<tr>
+							<td>{analysisRunModel.place.name}</td>
+							<td>{analysisRunModel.period.name}</td>
+							<td>{auLevels.join(", ")}</td>
+							<td title={finishedTooltip}>{finished}</td>
+						</tr>
+					);
+					runsTableRows.push(row);
+				}, this);
+
+				runsTable = (
+					<Table basic="very" className="fixed">
+						<thead>
+						<tr>
+							<th>Place</th>
+							<th>Period</th>
+							<th>AU levels</th>
+							<th>Finished</th>
+						</tr>
+						</thead>
+						<tbody>
+						{runsTableRows}
+						</tbody>
+					</Table>
 				);
-				runsTableRows.push(row);
-			}, this);
-			var runsTable = (<Table basic="very" className="fixed">
-				<thead>
-					<tr>
-						<th>Place</th>
-						<th>Period</th>
-						<th>AU levels</th>
-						<th>Finished</th>
-					</tr>
-				</thead>
-				<tbody>
-					{runsTableRows}
-				</tbody>
-			</Table>);
+			} else {
+				runsTable = (
+					<div className="prod">
+						No runs
+					</div>
+				);
+			}
+
+			let operationsHeader = null;
+			if (!this.state.runs.length) {
+				operationsHeader = (
+					<UIScreenButton
+						disabled={this.props.disabled}
+						basic
+						onClick={this.onOpenConfigClick.bind(this)}
+					>
+						<Icon name="configure" />
+						Configure
+					</UIScreenButton>
+				);
+			} else {
+				operationsHeader = (
+					<span className="note">
+						Configuration locked after run
+					</span>
+				);
+			}
 
 
 			ret = (
@@ -447,13 +493,7 @@ class ConfigAnalysis extends PantherComponent {
 
 					<div className="section-header">
 						<h3>Operations</h3>
-						<UIScreenButton
-							basic
-							onClick={this.onOpenConfigClick.bind(this)}
-						>
-							<Icon name="configure" />
-							Configure
-						</UIScreenButton>
+						{operationsHeader}
 					</div>
 
 					{configComponent}
@@ -461,10 +501,13 @@ class ConfigAnalysis extends PantherComponent {
 
 					<div className="section-header">
 						<h3>Runs</h3>
-						{/*<UIScreenButton basic>
+						<UIScreenButton
+							basic
+							onClick={this.onOpenRunAddClick.bind(this)}
+						>
 							<Icon name="plus" />
-							New run
-						</UIScreenButton>*/}
+							Add runs
+						</UIScreenButton>
 					</div>
 
 					{runsTable}

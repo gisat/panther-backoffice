@@ -35,8 +35,7 @@ var initialState = {
 	valueFeatureLayer: [],
 	valueResultAttSet: [],
 	valueFilterAttSetAtt: [],
-	valueAttributeMaps: {},
-	themesString: ""
+	valueAttributeMaps: {}
 };
 
 
@@ -284,18 +283,19 @@ class ScreenAnalysisRulesSpatial extends Component{
 	}
 
 	saveForm() {
-		let objectType = null;
-		switch(this.state.analysis.analysisType) {
-			case "spatial":
-				objectType = ObjectTypes.ANALYSIS_SPATIAL;
-				break;
-			case "level":
-				objectType = ObjectTypes.ANALYSIS_LEVEL;
-				break;
-			case "math":
-				objectType = ObjectTypes.ANALYSIS_MATH;
-				break;
-		}
+		let objectType = ObjectTypes.ANALYSIS_SPATIAL;
+		//let objectType = null;
+		//switch(this.state.analysis.analysisType) {
+		//	case "spatial":
+		//		objectType = ObjectTypes.ANALYSIS_SPATIAL;
+		//		break;
+		//	case "level":
+		//		objectType = ObjectTypes.ANALYSIS_LEVEL;
+		//		break;
+		//	case "math":
+		//		objectType = ObjectTypes.ANALYSIS_MATH;
+		//		break;
+		//}
 		var actionData = [], modelData = {};
 		modelData.key = this.state.analysis.key;
 		modelData.layerObject = _.findWhere(this.state.featureLayers, {key: this.state.valueFeatureLayer[0]});

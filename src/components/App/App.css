@@ -187,6 +187,12 @@ label.container {
 .section-header h3 {
 	float: left;
 }
+.section-header .note {
+	display: inline-block;
+	padding-top: .2rem;
+	font-size: 1rem;
+	color: #999;
+}
 
 .isvg {
 	display: inline-block;
@@ -941,6 +947,13 @@ todo hex colours, button icons */
 	top: 50%;
 	transform: translateY(-50%);
 	/*transform: translateY(-44.444444444%);*/
+}
+
+.prod {
+	padding-top:2rem;
+	text-align: center;
+	font-size: 1rem;
+	color: #999;
 }
 
 

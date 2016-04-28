@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
@@ -43,45 +43,53 @@ class ConfigAnalysisRulesSpatial extends PantherComponent {
 
 		let ret = null;
 		if (this.props.analysis) {
+			if (this.props.analysis.attributeMap.length) {
 
-			let rowsInsert = [];
-			for (let record of this.props.analysis.attributeMap) {
+				let rowsInsert = [];
+				for (let record of this.props.analysis.attributeMap) {
 
-				let operation = _.findWhere(OPERATIONS,{key: record.operationType});
+					let operation = _.findWhere(OPERATIONS, {key: record.operationType});
 
-				let filter = "";
-				if (this.props.analysis.filterAttribute) {
-					filter = this.props.analysis.filterAttribute.name + ": " + record.filterValue;
+					let filter = "";
+					if (this.props.analysis.filterAttribute) {
+						filter = this.props.analysis.filterAttribute.name + ": " + record.filterValue;
+					}
+
+					let row = (
+						<tr>
+							<td>{record.attribute.name}</td>
+							<td>{operation.name}</td>
+							<td>{filter}</td>
+						</tr>
+					);
+
+					rowsInsert.push(row);
+
 				}
 
-				let row = (
-					<tr>
-						<td>{record.attribute.name}</td>
-						<td>{operation.name}</td>
-						<td>{filter}</td>
-					</tr>
+				ret = (
+					<Table celled className="fixed">
+						<thead>
+						<tr>
+							<th>Result attribute</th>
+							<th>Operation</th>
+							<th>Filter</th>
+						</tr>
+						</thead>
+						<tbody>
+
+						{rowsInsert}
+
+						</tbody>
+					</Table>
 				);
-
-				rowsInsert.push(row);
-
+			} else {
+				ret = (
+					<div className="prod">
+						Not configured
+					</div>
+				);
 			}
-
-			ret = (
-				<Table celled className="fixed">
-					<thead>
-					<tr>
-						<th>Result attribute</th>
-						<th>Operation</th>
-						<th>Filter</th>
-					</tr>
-					</thead>
-					<tbody>
-
-					{rowsInsert}
-
-					</tbody>
-				</Table>
-			);
 
 		}
 

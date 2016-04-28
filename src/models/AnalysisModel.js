@@ -96,7 +96,7 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
-			attributeSet: { // for spatial
+			attributeSet: { // for spatial and math
 				serverName: 'attributeSet', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
@@ -132,7 +132,7 @@ class AnalysisModel extends Model {
 				transformForServer: this.getKey,
 				isPromise: true
 			},
-			useSum: {
+			useSum: { // for math
 				serverName: 'useSum', //boolean
 				sendToServer: true
 			},
@@ -200,7 +200,7 @@ class AnalysisModel extends Model {
 						isPromise: true
 					},
 					operationType: { // todo rename to something more accurate?
-						serverName: 'type', // 'sum' 'sumarea' 'avgarea' 'avgattrarea' + ?? (2 more)
+						serverName: 'type', // possible values below
 						sendToServer: true
 					}
 				}
