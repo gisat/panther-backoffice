@@ -20,14 +20,6 @@ import ScopeStore from '../../../stores/ScopeStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
-const OPERATIONS = [
-	{ key: "count", name: "COUNT"	},
-	{ key: "sumarea", name: "SUM (area/length)" },
-	{ key: "sumattr", name: "SUM (attribute)" },
-	{ key: "avgarea", name: "AVERAGE (area/length)" },
-	{ key: "avgattrarea", name: "AVERAGE (attribute), weighted by area/length" },
-	{ key: "avgattrattr", name: "AVERAGE (attribute), weighted by attribute" }
-];
 
 class ConfigAnalysisRulesSpatial extends PantherComponent {
 
@@ -52,7 +44,7 @@ class ConfigAnalysisRulesSpatial extends PantherComponent {
 					let operationCellInsert = null;
 					let filter = null;
 					if (record.operationType) {
-						let operation = _.findWhere(OPERATIONS, {key: record.operationType});
+						let operation = _.findWhere(analysisOperationsMetadata.SPATIAL, {key: record.operationType});
 
 						if (this.props.analysis.filterAttribute) {
 							filter = this.props.analysis.filterAttribute.name + ": " + record.filterValue;

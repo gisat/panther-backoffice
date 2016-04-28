@@ -20,11 +20,6 @@ import ScopeStore from '../../../stores/ScopeStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
-const OPERATIONS = [
-	{ key: "sum", name: "SUM" },
-	{ key: "avgarea", name: "AVERAGE, weighted by area/length" },
-	{ key: "avgattr", name: "AVERAGE, weighted by attribute" }
-];
 
 class ConfigAnalysisRulesLevel extends PantherComponent {
 
@@ -49,7 +44,7 @@ class ConfigAnalysisRulesLevel extends PantherComponent {
 					let operationCellInsert = null;
 					if (record.operationType) {
 
-						let operation = _.findWhere(OPERATIONS, {key: record.operationType});
+						let operation = _.findWhere(_.values(analysisOperationsMetadata.LEVEL), {key: record.operationType});
 
 						let operationDetails = false,
 							weightingInsert = null,
