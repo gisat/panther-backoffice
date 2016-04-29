@@ -54,7 +54,7 @@ class ScreenAnalysesBase extends Component{
 		this._tabs = [
 			{ data: "spatialAnalyses", dataType: ObjectTypes.ANALYSIS_SPATIAL, analysisType: "spatial" },
 			{ data: "levelAnalyses", dataType: ObjectTypes.ANALYSIS_LEVEL, analysisType: "level" },
-			{ data: "mathAnalyses", dataType: ObjectTypes.ANALYSIS_MATH, analysisType: "math" }
+			//{ data: "mathAnalyses", dataType: ObjectTypes.ANALYSIS_MATH, analysisType: "math" }
 		];
 		for (var tab of this._tabs) {
 			if(!tab.header) {
@@ -108,11 +108,7 @@ class ScreenAnalysesBase extends Component{
 	}
 
 	componentDidMount() { this.mounted = true;
-		this.changeListener.add(AnalysisStore, ["spatialAnalyses"]);
-		this.responseListener.add(AnalysisStore);
-		this.changeListener.add(AnalysisStore, ["fidAnalyses"]);
-		this.responseListener.add(AnalysisStore);
-		this.changeListener.add(AnalysisStore, ["mathAnalyses"]);
+		this.changeListener.add(AnalysisStore, ["spatialAnalyses","fidAnalyses","mathAnalyses"]);
 		this.responseListener.add(AnalysisStore);
 
 		this.context.setStateFromStores.call(this, this.store2state());
