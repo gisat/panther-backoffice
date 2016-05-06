@@ -25,7 +25,7 @@ class Logger {
 	}
 
 	trace(message) {
-		return this.log('trace', this.LEVEL_TRACE, arguments);
+		return this.log('log', this.LEVEL_TRACE, arguments);
 	}
 
 	info(message) {
