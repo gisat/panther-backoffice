@@ -300,9 +300,13 @@ class ScreenAnalysisRulesSpatial extends Component{
 		modelData.key = this.state.analysis.key;
 		modelData.layerObject = _.findWhere(this.state.featureLayers, {key: this.state.valueFeatureLayer[0]});
 		modelData.attributeSet = _.findWhere(this.state.attributeSetsResult, {key: this.state.valueResultAttSet[0]});
-		let filterKeys = this.state.valueFilterAttSetAtt[0].split("-");
-		let filterAttributeSet = _.findWhere(this.state.attributeSetsLayer,{key: +filterKeys[0]});
-		let filterAttribute = _.findWhere(filterAttributeSet.attributes,{key: +filterKeys[1]});
+
+		let filterAttributeSet = null, filterAttribute = null;
+		if (this.state.valueFilterAttSetAtt.length) {
+			let filterKeys = this.state.valueFilterAttSetAtt[0].split("-");
+			filterAttributeSet = _.findWhere(this.state.attributeSetsLayer, {key: +filterKeys[0]});
+			filterAttribute = _.findWhere(filterAttributeSet.attributes, {key: +filterKeys[1]});
+		}
 		modelData.filterAttributeSet = filterAttributeSet;
 		modelData.filterAttribute = filterAttribute;
 		modelData.attributeMap = utils.clone(this.state.valueAttributeMaps[this.state.valueResultAttSet[0]]);
