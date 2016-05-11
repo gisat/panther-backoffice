@@ -88,6 +88,13 @@ class AttributeModel extends Model {
 					} else {
 						return data;
 					}
+				},
+				transformForServer: function (data, localObject) {
+					if (localObject.standardUnits) {
+						return localObject.standardUnits;
+					} else {
+						return data;
+					}
 				}
 			},
 			color: {
