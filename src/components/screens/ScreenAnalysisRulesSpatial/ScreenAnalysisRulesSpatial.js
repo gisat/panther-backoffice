@@ -301,15 +301,22 @@ class ScreenAnalysisRulesSpatial extends Component{
 		modelData.layerObject = _.findWhere(this.state.featureLayers, {key: this.state.valueFeatureLayer[0]});
 		modelData.attributeSet = _.findWhere(this.state.attributeSetsResult, {key: this.state.valueResultAttSet[0]});
 
+		modelData.attributeMap = utils.clone(this.state.valueAttributeMaps[this.state.valueResultAttSet[0]]);
+
 		let filterAttributeSet = null, filterAttribute = null;
-		if (this.state.valueFilterAttSetAtt.length) {
+		let isAtLeastOneFilterSet = false;
+		for (let record of modelData.attributeMap) {
+			if (record.filterValue) {
+				isAtLeastOneFilterSet = true;
+			}
+		}
+		if (this.state.valueFilterAttSetAtt.length && isAtLeastOneFilterSet) {
 			let filterKeys = this.state.valueFilterAttSetAtt[0].split("-");
 			filterAttributeSet = _.findWhere(this.state.attributeSetsLayer, {key: +filterKeys[0]});
 			filterAttribute = _.findWhere(filterAttributeSet.attributes, {key: +filterKeys[1]});
 		}
 		modelData.filterAttributeSet = filterAttributeSet;
 		modelData.filterAttribute = filterAttribute;
-		modelData.attributeMap = utils.clone(this.state.valueAttributeMaps[this.state.valueResultAttSet[0]]);
 
 		let modelObj = new AnalysisModel(modelData);
 		actionData.push({type:"update",model:modelObj});
