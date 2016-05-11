@@ -360,6 +360,10 @@ class ConfigMetadataLayerVector extends PantherComponent{
 			);
 		}
 
+		var optionsAttSets = _.filter(this.state.attributeSets,function(attributeSet){
+			return _.contains(this.state.valueTopic,attributeSet.topic.key);
+		},this);
+
 		return (
 			<div>
 
@@ -455,7 +459,7 @@ class ConfigMetadataLayerVector extends PantherComponent{
 							className="template"
 							onChange={this.onChangeObjectSelect.bind(this, "valuesAttSets", ObjectTypes.ATTRIBUTE_SET)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.ATTRIBUTE_SET)}
-							options={this.state.attributeSets}
+							options={optionsAttSets}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
@@ -464,7 +468,7 @@ class ConfigMetadataLayerVector extends PantherComponent{
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
-						Attribute sets for attributes usually contained in the data layers using the template.
+						Attribute sets for attributes usually contained in the data layers using the template.<br/>Only attribute sets with the same topic as the template can be selected.
 					</div>
 				</div>
 
