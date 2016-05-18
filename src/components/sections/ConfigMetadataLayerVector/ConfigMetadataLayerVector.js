@@ -361,7 +361,11 @@ class ConfigMetadataLayerVector extends PantherComponent{
 		}
 
 		var optionsAttSets = _.filter(this.state.attributeSets,function(attributeSet){
-			return _.contains(this.state.valueTopic,attributeSet.topic.key);
+			if (attributeSet.topic) {
+				return _.contains(this.state.valueTopic,attributeSet.topic.key)
+			} else {
+				return false;
+			}
 		},this);
 
 		return (
