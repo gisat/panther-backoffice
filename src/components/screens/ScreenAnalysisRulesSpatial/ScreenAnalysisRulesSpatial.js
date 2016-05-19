@@ -78,7 +78,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 			analysis: analysis,
 			featureLayers: VectorLayerStore.getAll(), // filter by topics?
 			attributeSetsResult: AttributeSetStore.getAll(), // filter by topics?
-			attributeSetsLayer: analysis.layerObject ? utils.getAttSetsForLayers(analysis.layerObject.key) : [],
+			attributeSetsLayer: analysis.layerObject ? utils.getAttSetsForLayers(analysis.layerObject.key) : Promise.resolve([]),
 			valueFeatureLayer: analysis.layerObject ? [analysis.layerObject.key] : [],
 			valueResultAttSet: analysis.attributeSet ? [analysis.attributeSet.key] : [],
 			valueFilterAttSetAtt: analysis.filterAttribute ? [analysis.filterAttributeSet.key + "-" + analysis.filterAttribute.key] : []
