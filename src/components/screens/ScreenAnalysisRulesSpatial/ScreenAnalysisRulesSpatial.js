@@ -357,7 +357,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 				let newState = {
 					valueFeatureLayer: newValue,
 					attributeSetsLayer: layerAttSets,
-					valueFilterAttSetAtt: [selectorValueAttSetAtt]
+					valueFilterAttSetAtt: selectorValueAttSetAtt ? [selectorValueAttSetAtt] : []
 				};
 				_.assign(newState,ret);
 				if(thisComponent.mounted) {
