@@ -1,23 +1,13 @@
-//class AppDispatcher{
-//
-//
-//
-//	register() {
-//
-//	}
-//
-//	dispatch() {
-//
-//	}
-//
-//}
-//
-//export default AppDispatcher;
-//
-
 import { Dispatcher } from 'flux';
-//var AppDispatcher = require('flux').Dispatcher;
 
-var AppDispatcher = new Dispatcher();
+class SafeDispatcher extends Dispatcher {
+	dispatch(payload) {
+		setTimeout(function(){
+			super.dispatch(payload)
+		}, 1);
+	}
+}
+
+var AppDispatcher = new SafeDispatcher();
 
 export default AppDispatcher;
