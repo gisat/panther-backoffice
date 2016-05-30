@@ -491,7 +491,6 @@ class ScreenAnalysisRulesSpatial extends Component{
 				this.state.featureLayers.length &&
 				this.state.attributeSetsResult.length &&
 				this.state.valueResultAttSet[0] &&
-				this.state.attributeSetsLayer.length &&
 				this.state.filterDestinations
 			) {
 				let ruleTableRowsInsert = [];
@@ -590,7 +589,7 @@ class ScreenAnalysisRulesSpatial extends Component{
 						}
 					}
 					let filterCellInsert = null;
-					if (this.state.valueFilterAttSetAtt[0]) {
+					if (this.state.attributeSetsLayer.length && this.state.valueFilterAttSetAtt[0]) {
 						let filterKeys = this.state.valueFilterAttSetAtt[0].split("-");
 						let filterAttributeSet = _.findWhere(this.state.attributeSetsLayer, {key: +filterKeys[0]});
 						let filterAttribute = _.findWhere(filterAttributeSet.attributes, {key: +filterKeys[1]});
