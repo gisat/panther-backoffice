@@ -52,12 +52,16 @@ class Model {
 				} else {
 					ret[key] = [];
 				}
-			//}	else if (keyProps.isNested) {
-			//	let nestedPromise = self.resolveForLocal(data[keyProps.serverName], model[key].model, self);
-			//	nestedPromise.then(function(transformedNestedData){
-			//		self[key] = transformedNestedData;
-			//	});
-			//	promises.push(nestedPromise);
+			}	else if (keyProps.isNested) {
+				if(data[keyProps.serverName]) {
+					let nestedPromise = self.resolveForLocal(data[keyProps.serverName], model[key].model, self);
+					nestedPromise.then(function(transformedNestedData){
+						ret[key] = transformedNestedData;
+					});
+					promises.push(nestedPromise);
+				} else {
+					ret[key] = null;
+				}
 			} else {
 				if (keyProps.isPromise) {
 					let promise = keyProps.transformForLocal(data[keyProps.serverName], data);
@@ -131,10 +135,12 @@ class Model {
 		var serializedObject = {};
 		_.each(object, function (value, key) {
 			if(key!=="ready" && model[key].sendToServer) {
-				if(model[key].hasOwnProperty("isArrayOfNested") && model[key].isArrayOfNested){
-					for(var i in value){
-						value[i] = self.serializeModel(value[i],model[key].model);
+				if(model[key].hasOwnProperty("isArrayOfNested") && model[key].isArrayOfNested) {
+					for (var i in value) {
+						value[i] = self.serializeModel(value[i], model[key].model);
 					}
+				} else if (model[key].hasOwnProperty("isNested") && model[key].isNested) {
+					value = self.serializeModel(value, model[key].model);
 				} else if (model[key].hasOwnProperty("transformForServer")){
 					value = model[key].transformForServer(value, object);
 				}
