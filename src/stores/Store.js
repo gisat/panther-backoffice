@@ -212,6 +212,11 @@ class Store extends EventEmitter {
 						return;
 					}
 
+					if(!res.text) {
+						logger.warn("Store#request No data was returned.");
+						return resolve();
+					}
+
 					var responseJson = JSON.parse(res.text);
 
 					// if there is no data attribute in the response
