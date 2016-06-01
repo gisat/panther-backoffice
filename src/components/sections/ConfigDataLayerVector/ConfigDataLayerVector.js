@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component } from 'react'; 
 import PantherComponent from '../../common/PantherComponent';
 import _ from 'underscore';
 import Select from 'react-select';
@@ -88,7 +88,10 @@ class ConfigDataLayerVector extends PantherComponent{
 							Layer template (Name)
 							<UIObjectSelect
 								onChange={this.props.onChangeTemplate}
+								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.VECTOR_LAYER_TEMPLATE)}
 								options={this.props.layerTemplates}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
 								labelKey="name"
 								value={this.props.valueTemplate}
@@ -102,7 +105,10 @@ class ConfigDataLayerVector extends PantherComponent{
 							Scope
 							<UIObjectSelect
 								onChange={this.props.onChangeScope}
+								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.SCOPE)}
 								options={this.props.scopes}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
 								labelKey="name"
 								value={this.props.valueScope}
@@ -116,7 +122,10 @@ class ConfigDataLayerVector extends PantherComponent{
 							<UIObjectSelect
 								multi
 								onChange={this.props.onChangePlaces}
+								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PLACE)}
 								options={this.props.places}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
 								labelKey="name"
 								value={this.props.valuesPlaces}
@@ -130,7 +139,10 @@ class ConfigDataLayerVector extends PantherComponent{
 							<UIObjectSelect
 								multi
 								onChange={this.props.onChangePeriods.bind(this)}
+								onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PERIOD)}
 								options={this.props.periods}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
 								labelKey="name"
 								value={this.props.valuesPeriods}
