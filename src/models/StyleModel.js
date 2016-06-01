@@ -87,7 +87,7 @@ class StyleModel extends Model {
 						//	return AttributeStore.getById(data);
 						//},
 						//transformForServer: this.getKey,
-						isPromise: true
+						//isPromise: true
 					},
 					filterAttributeSet: {
 						serverName: 'filterAttributeSet', //id
@@ -96,7 +96,7 @@ class StyleModel extends Model {
 						//	return AttributeSetStore.getById(data);
 						//},
 						//transformForServer: this.getKey,
-						isPromise: true
+						//isPromise: true
 					},
 					rules: {
 						serverName: 'rules',
