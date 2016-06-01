@@ -193,6 +193,48 @@ class ConfigMetadataStyle extends PantherComponent{
 		modelData.active = this.state.valueActive;
 		modelData.name = this.state.valueName;
 		modelData.serverName = this.state.valueServerName;
+
+		//modelData.source = 'definition';
+		//modelData.definition = {
+		//	type: 'polygon',
+		//	filterAttribute: 666666,
+		//	filterAttributeSet: 666667,
+		//	rules: [
+		//		{
+		//			name: 'Urban fabric',
+		//			title: 'Urban fabric',
+		//			filter: '111,112,113',
+		//			appearance: {
+		//				fillColour: '#D0091D'
+		//			}
+		//		},
+		//		{
+		//			name: 'Non-urban artificial areas',
+		//			title: 'Non-urban artificial areas',
+		//			filter: '120,121,130,140',
+		//			appearance: {
+		//				fillColour: '#AE0214'
+		//			}
+		//		},
+		//		{
+		//			name: 'Natural and semi-natural areas',
+		//			title: 'Natural and semi-natural areas',
+		//			filter: '310,320,330',
+		//			appearance: {
+		//				fillColour: '#59B642'
+		//			}
+		//		},
+		//		{
+		//			name: 'Water',
+		//			title: 'Water',
+		//			filter: '510,512,520',
+		//			appearance: {
+		//				fillColour: '#56C8EE'
+		//			}
+		//		}
+		//	]
+		//};
+
 		modelData.topic = _.findWhere(this.state.topics, {key: this.state.valueTopic[0]});
 		let modelObj = new Model[ObjectTypes.STYLE](modelData);
 		actionData.push({type:"update",model:modelObj});
