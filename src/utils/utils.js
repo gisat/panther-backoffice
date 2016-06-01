@@ -123,6 +123,41 @@ export default {
 		});
 	},
 
+	getThemesForScope(scope){
+		var self = this;
+		return new Promise(function(resolve, reject){
+
+			var scopePromise = null;
+			if(scope instanceof ScopeModel) {
+				//scopePromise = Promise.resolve(scope);
+				scopePromise = ScopeStore.getById(scope.key);
+			}else{
+				scopePromise = ScopeStore.getById(scope);
+			}
+
+			scopePromise.then(function(scopeModel){
+				ThemeStore.getFiltered({scope: scopeModel}).then(function (themeModels) {
+
+					if (!themeModels.length) {
+						return reject("getThemesForScope: themes with filter {scope: " + scope + "} not find.");
+					}
+
+					var themeKeys = _.pluck(themeModels, "key");
+
+					resolve({
+						keys: _.uniq(themeKeys),
+						models: _.uniq(themeModels)
+					});
+
+				}, function () {
+
+					reject("getThemesForScope: theme with filter {scope: " + scope + "} not resolved.");
+
+				});
+			});
+		});
+	},
+
 	// todo merge with getAttSetsForScope
 	getLayerTemplatesForScope: function(scope,layerType) {
 		return new Promise(function(resolve, reject){
