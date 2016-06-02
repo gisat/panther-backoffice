@@ -35,9 +35,7 @@ import logger from '../../../core/Logger';
 
 var initialState = {
 	analysis: null,
-	valueName: "",
-	valueTopics: [],
-	topicThemes: []
+	valueName: ""
 };
 
 
@@ -71,8 +69,7 @@ class ConfigAnalysis extends PantherComponent {
 
 	store2state(props) {
 		return {
-			analysis: AnalysisStore.getById(props.selectorValue),
-			topics: TopicStore.getAll()
+			analysis: AnalysisStore.getById(props.selectorValue)
 		};
 	}
 
@@ -92,8 +89,7 @@ class ConfigAnalysis extends PantherComponent {
 					runsPromise.then(function(runs){
 						let newState = {
 							runs: runs,
-							valueName: analysis.name,
-							valueTopics: utils.getModelsKeys(analysis.topics)
+							valueName: analysis.name
 						};
 						newState.savedState = utils.deepClone(newState);
 						if(thisComponent.mounted) {
@@ -110,70 +106,21 @@ class ConfigAnalysis extends PantherComponent {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	_onStoreResponse(result,responseData,stateHash) {
-		var thisComponent = this;
-		if (stateHash === this.getStateHash()) {
-			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
-				let stateKey = responseData.stateKey;
-				let values = utils.deepClone(thisComponent.state[stateKey]);
-				values.push(result[0].key);
-				thisComponent.setState({
-					[stateKey]: values
-				});
-				var screenObjectType;
-				switch(stateKey){
-					case "valueTopics":
-						screenObjectType = ObjectTypes.TOPIC;
-						break;
-				}
-				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
-				if(screenObjectType) {
-					let options = {
-						component: ScreenMetadataObject,
-						parentUrl: this.props.parentUrl,
-						size: 40,
-						data: {
-							objectType: screenObjectType,
-							objectKey: result[0].key
-						}
-					};
-					ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
-				}
-			}
-		}
-	}
-
 	componentDidMount() { this.mounted = true;
 		this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(AnalysisRunStore, ["runs"]);
-		this.changeListener.add(TopicStore, ["topics"]);
-		this.responseListener.add(TopicStore);
 
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
-		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
 		if(newProps.selectorValue!=this.props.selectorValue) {
 			this.setStateFromStores(newProps);
 			this.updateStateHash(newProps);
-		}
-	}
-
-	componentDidUpdate(oldProps, oldState) {
-		if (this.state.valueTopics && (oldState.valueTopics != this.state.valueTopics)) {
-			var thisComponent = this;
-			utils.getThemesForTopics(this.state.valueTopics).then(function(themes){
-				if(thisComponent.mounted) {
-					thisComponent.setState({
-						topicThemes: themes
-					});
-				}
-			});
 		}
 	}
 
@@ -186,8 +133,7 @@ class ConfigAnalysis extends PantherComponent {
 		var isIt = true;
 		if(this.state.analysis) {
 			isIt = (
-				this.state.valueName == this.state.analysis.name &&
-				_.isEqual(this.state.valueTopics,this.state.savedState.valueTopics)
+				this.state.valueName == this.state.analysis.name
 			);
 		}
 		return isIt;
@@ -229,11 +175,6 @@ class ConfigAnalysis extends PantherComponent {
 		//_.assign(modelData, this.state.analysis);
 		modelData.key = this.state.analysis.key;
 		modelData.name = this.state.valueName;
-		modelData.topics = [];
-		for (let key of this.state.valueTopics) {
-			let topic = _.findWhere(this.state.topics, {key: key});
-			modelData.topics.push(topic);
-		}
 
 		let modelObj = new AnalysisModel(modelData);
 		actionData.push({type:"update",model:modelObj});
@@ -246,28 +187,6 @@ class ConfigAnalysis extends PantherComponent {
 		this.setState({
 			valueName: e.target.value
 		});
-	}
-
-	onChangeObjectSelect (stateKey, objectType, value, values) {
-		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
-		var newState = {};
-		newState[stateKey] = newValues;
-		this.setState(newState);
-	}
-
-	onObjectClick (itemType, value, event) {
-		this.context.onInteraction().call();
-		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
-		let options = {
-			component: ScreenMetadataObject,
-			parentUrl: this.props.parentUrl,
-			size: 40,
-			data: {
-				objectType: itemType,
-				objectKey: value.key
-			}
-		};
-		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
 	onOpenConfigClick () {
@@ -331,25 +250,6 @@ class ConfigAnalysis extends PantherComponent {
 						className="save-button"
 						onClick={this.saveForm.bind(this)}
 					/>
-				);
-			}
-
-			var topicInfoInsert = null;
-			if(this.state.valueTopics && this.state.valueTopics.length) {
-				let themesString = "";
-				if(this.state.topicThemes) {
-					for (let theme of this.state.topicThemes) {
-						if (themesString) {
-							themesString += ", ";
-						}
-						themesString += theme.name
-					}
-				}
-				topicInfoInsert = (
-					<div className="frame-input-wrapper-info">
-						<b>{this.state.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
-						{this.state.topicThemes.length ? themesString : "No themes"}
-					</div>
 				);
 			}
 
@@ -468,24 +368,6 @@ class ConfigAnalysis extends PantherComponent {
 								onChange={this.onChangeName.bind(this)}
 							/>
 						</label>
-					</div>
-
-					<div className="frame-input-wrapper">
-						<label className="container">
-							Topic
-							<UIObjectSelect
-								multi
-								onChange={this.onChangeObjectSelect.bind(this, "valueTopics", ObjectTypes.TOPIC)}
-								onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.TOPIC)}
-								options={this.state.topics}
-								allowCreate
-								newOptionCreator={utils.keyNameOptionFactory}
-								valueKey="key"
-								labelKey="name"
-								value={this.state.valueTopics}
-							/>
-						</label>
-						{topicInfoInsert}
 					</div>
 
 					{saveButton}
