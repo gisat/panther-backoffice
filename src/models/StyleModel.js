@@ -80,23 +80,31 @@ class StyleModel extends Model {
 						serverName: 'type', //string - polygon/line/point
 						sendToServer: true
 					},
-					filterAttribute: {
+					//filterAttribute: {
+					//	serverName: 'filterAttribute', //id
+					//	sendToServer: true,
+					//	transformForLocal: function (data) {
+					//		return AttributeStore.getById(data);
+					//	},
+					//	transformForServer: this.getKey,
+					//	isPromise: true
+					//},
+					//filterAttributeSet: {
+					//	serverName: 'filterAttributeSet', //id
+					//	sendToServer: true,
+					//	transformForLocal: function (data) {
+					//		return AttributeSetStore.getById(data);
+					//	},
+					//	transformForServer: this.getKey,
+					//	isPromise: true
+					//},
+					filterAttributeKey: {
 						serverName: 'filterAttribute', //id
-						sendToServer: true,
-						//transformForLocal: function (data) {
-						//	return AttributeStore.getById(data);
-						//},
-						//transformForServer: this.getKey,
-						//isPromise: true
+						sendToServer: true
 					},
-					filterAttributeSet: {
+					filterAttributeSetKey: {
 						serverName: 'filterAttributeSet', //id
-						sendToServer: true,
-						//transformForLocal: function (data) {
-						//	return AttributeSetStore.getById(data);
-						//},
-						//transformForServer: this.getKey,
-						//isPromise: true
+						sendToServer: true
 					},
 					rules: {
 						serverName: 'rules',
