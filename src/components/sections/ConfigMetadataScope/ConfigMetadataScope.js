@@ -220,7 +220,24 @@ class ConfigMetadataScope extends PantherComponent{
 		let modelObj = new Model[ObjectTypes.SCOPE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		this.handleRelations(modelObj.periods, this.state.scope.periods);
+		this.handleThemePeriods(modelObj.periods);
 		ActionCreator.handleObjects(actionData,ObjectTypes.SCOPE);
+	}
+
+	handleThemePeriods(newPeriods) {
+		utils.getThemesForScope(this.state.scope).then(function(themes){
+			let actionData = [];
+
+			themes.models.forEach(function(model){
+				let modelData = utils.clone(model);
+				modelData.periods = newPeriods;
+				let modelObj = new Model[ObjectTypes.THEME](modelData);
+				actionData.push({type:"update",model:modelObj});
+			});
+
+			logger.info("ConfigMetadataScope# handleThemePeriods(), Action data",actionData);
+			ActionCreator.handleObjects(actionData,ObjectTypes.THEME);
+		});
 	}
 
 	/**

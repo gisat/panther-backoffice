@@ -223,14 +223,7 @@ class ConfigMetadataTheme extends PantherComponent{
 			let topic = _.findWhere(this.state.topics, {key: key});
 			modelData.topicsPreferential.push(topic);
 		}
-		modelData.periods = [];
-		if (modelData.scope) {
-			for (let key of this.state.valuesPeriods) {
-				let period = _.findWhere(modelData.scope.periods, {key: key});
-				modelData.periods.push(period);
-			}
-		}
-
+		
 		let modelObj = new Model[ObjectTypes.THEME](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.THEME);
@@ -418,24 +411,6 @@ class ConfigMetadataTheme extends PantherComponent{
 					</label>
 					<div className="frame-input-wrapper-info">
 						Preferential topics are displayed first and with the attribute tree expanded in Data Exploration attributes selections.
-					</div>
-				</div>
-
-				<div className="frame-input-wrapper required">
-					<label className="container">
-						Periods
-						<UIObjectSelect
-							multi
-							onChange={this.onChangeObjectSelect.bind(this, "valuesPeriods", ObjectTypes.PERIOD)}
-							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.PERIOD)}
-							options={periodsOptions}
-							valueKey="key"
-							labelKey="name"
-							value={this.state.valuesPeriods}
-						/>
-					</label>
-					<div className="frame-input-wrapper-info">
-						Periods available for the theme in Data Exploration. Only periods assigned to corresponding scope can be selected. (All of the scope's periods selected by default.)
 					</div>
 				</div>
 

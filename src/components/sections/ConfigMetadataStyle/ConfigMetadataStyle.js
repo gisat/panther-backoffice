@@ -23,8 +23,7 @@ var initialState = {
 	style: null,
 	valueActive: false,
 	valueName: "",
-	valueServerName: "",
-	valueTopic: []
+	valueServerName: ""
 };
 
 
@@ -56,8 +55,7 @@ class ConfigMetadataStyle extends PantherComponent{
 
 	store2state(props) {
 		return {
-			style: StyleStore.getById(props.selectorValue),
-			topics: TopicStore.getAll()
+			style: StyleStore.getById(props.selectorValue)
 		};
 	}
 
@@ -78,8 +76,7 @@ class ConfigMetadataStyle extends PantherComponent{
 						let newState = {
 							valueActive: style.active,
 							valueName: style.name,
-							valueServerName: style.serverName,
-							valueTopic: style.topic ? [style.topic.key] : []
+							valueServerName: style.serverName
 						};
 						newState.savedState = utils.deepClone(newState);
 						if (thisComponent.mounted) {
@@ -131,15 +128,12 @@ class ConfigMetadataStyle extends PantherComponent{
 
 	componentDidMount() { this.mounted = true;
 		this.changeListener.add(StyleStore, ["style"]);
-		this.changeListener.add(TopicStore, ["topics"]);
-		this.responseListener.add(TopicStore);
 
 		this.setStateFromStores();
 	}
 
 	componentWillUnmount() { this.mounted = false;
 		this.changeListener.clean();
-		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -161,8 +155,7 @@ class ConfigMetadataStyle extends PantherComponent{
 			isIt = (
 					this.state.valueActive == this.state.style.active &&
 					this.state.valueName == this.state.style.name &&
-					this.state.valueServerName == this.state.style.serverName &&
-					_.isEqual(this.state.valueTopic,this.state.savedState.valueTopic)
+					this.state.valueServerName == this.state.style.serverName
 			);
 		}
 		return isIt;
@@ -347,22 +340,6 @@ class ConfigMetadataStyle extends PantherComponent{
 					<div className="frame-input-wrapper-info">
 						Geoserver style ID.
 					</div>
-				</div>
-
-				<div className="frame-input-wrapper">
-					<label className="container">
-						Topic
-						<UIObjectSelect
-							onChange={this.onChangeObjectSelect.bind(this, "valueTopic", ObjectTypes.TOPIC)}
-							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.TOPIC)}
-							options={this.state.topics}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
-							valueKey="key"
-							labelKey="name"
-							value={this.state.valueTopic}
-						/>
-					</label>
 				</div>
 
 				{saveButton}

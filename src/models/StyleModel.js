@@ -1,6 +1,5 @@
 import Model from './Model';
 import UserStore from '../stores/UserStore';
-import TopicStore from '../stores/TopicStore';
 //import AttributeStore from '../stores/AttributeStore';
 //import AttributeSetStore from '../stores/AttributeSetStore';
 
@@ -45,15 +44,6 @@ class StyleModel extends Model {
 				transformForLocal: function (data) {
 					return UserStore.getById(data)
 				},
-				isPromise: true
-			},
-			topic: {
-				serverName: 'topic', //id
-				sendToServer: true,
-				transformForLocal: function (data) {
-					return TopicStore.getById(data)
-				},
-				transformForServer: this.getKey,
 				isPromise: true
 			},
 			source: {

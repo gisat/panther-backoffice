@@ -1,6 +1,5 @@
 import Model from './Model';
 import UserStore from '../stores/UserStore';
-import TopicStore from '../stores/TopicStore';
 import GeneralLayerStore from '../stores/GeneralLayerStore';
 import AttributeSetStore from '../stores/AttributeSetStore';
 import AttributeStore from '../stores/AttributeStore';
@@ -42,16 +41,6 @@ class AnalysisModel extends Model {
 					return UserStore.getById(data);
 				},
 				isPromise: true
-			},
-			topics: { // for all
-				serverName: 'topics', //ids
-				sendToServer: true,
-				transformForLocal: function (data) {
-					return TopicStore.getFiltered({key: data});
-				},
-				transformForServer: this.getKeys,
-				isPromise: true,
-				isArray: true
 			},
 			analysisType: { // for all
 				serverName: 'type', // spatial, fid, math
