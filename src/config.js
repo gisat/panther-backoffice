@@ -9,10 +9,10 @@ export const apiHost = "localhost:4000";
 export const apiPath = "/";
 
 export const geonodeProtocol = "http://";
-export const geonodeHost = "37.205.9.78";
+export const geonodeHost = "localhost";
 
 export const frontOfficeProtocol = "http://";
-export const frontOfficeHost = "37.205.9.78";
+export const frontOfficeHost = "localhost";
 export const frontOfficeExplorationUrl = "tool/";
 
 // 0 means TRACE and higher. Use when you want to see all messages.
