@@ -12,15 +12,14 @@ import { Table } from '../../../SEUI/collections';
 import logger from '../../../../core/Logger';
 
 import UISVG from '../../../atoms/UISVG';
+import PantherComponent from "../../../common/PantherComponent";
 
 
 @withStyles(styles)
-class ScreenHelpTopicBackOfficeInterface extends Component {
+class ScreenHelpTopicBackOfficeInterface extends PantherComponent {
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 

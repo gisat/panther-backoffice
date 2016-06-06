@@ -48,7 +48,6 @@ class ConfigMetadataAttribute extends PantherComponent{
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
@@ -73,7 +72,7 @@ class ConfigMetadataAttribute extends PantherComponent{
 		if(props.selectorValue) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
-			this.context.setStateFromStores.call(this, store2state, keys);
+			super.setStateFromStores.call(this, store2state, keys);
 			// if stores changed, overrides user input - todo fix
 
 			if(!keys || keys.indexOf("attribute")!=-1) {

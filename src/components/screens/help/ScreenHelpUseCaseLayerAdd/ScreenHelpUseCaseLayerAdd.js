@@ -6,13 +6,12 @@ import ActionCreator from '../../../../actions/ActionCreator';
 
 import { Icon } from '../../../SEUI/elements';
 import logger from '../../../../core/Logger';
+import PantherComponent from "../../../common/PantherComponent";
 
-class ScreenHelpUseCaseLayerAdd extends Component {
+class ScreenHelpUseCaseLayerAdd extends PantherComponent {
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 

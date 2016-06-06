@@ -19,6 +19,7 @@ import TopicStore from '../../../stores/TopicStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	example: "Nothing is happening.",
@@ -28,7 +29,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class LinkTableByScopePlace extends Component {
+class LinkTableByScopePlace extends PantherComponent {
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -43,9 +44,7 @@ class LinkTableByScopePlace extends Component {
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		onSetTitle: PropTypes.func.isRequired
 	};
 
@@ -346,7 +345,7 @@ class LinkTableByScopePlace extends Component {
 		}
 		if(props.place && props.place.scope) {
 			let store2state = this.store2state(props);
-			this.context.setStateFromStores.call(this, store2state, keys);
+			super.setStateFromStores(store2state, keys);
 		}
 	}
 

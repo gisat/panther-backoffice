@@ -44,7 +44,6 @@ class ConfigMetadataScope extends PantherComponent{
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
@@ -66,15 +65,13 @@ class ConfigMetadataScope extends PantherComponent{
 	}
 
 	setStateFromStores(props,keys) {
-		super.setStateFromStores(props,keys);
-
 		if(!props){
 			props = this.props;
 		}
 		if(props.selectorValue) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
-			this.context.setStateFromStores.call(this, store2state, keys);
+			super.setStateFromStores(store2state, keys);
 
 			if(!keys || keys.indexOf("scope")!=-1) {
 				store2state.scope.then(function (scope) {

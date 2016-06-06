@@ -60,17 +60,21 @@ var initialState = {
 	auLevels: [],
 	attributes: [],
 	periods: [],
+
 	valueVLTemplate: [],
 	valueVLScope: [],
 	valuesVLPlaces: [],
 	valuesVLPeriods: [],
+
 	valueRLTemplate: [],
 	valueRLScope: [],
 	valuesRLPlaces: [],
 	valuesRLPeriods: [],
+
 	valueAUScope: [],
 	valuesAUPlaces: [],
 	valueAULevel: [],
+
 	dataLayerColumns: [],
 	columnMaps: {
 		au: {},
@@ -97,9 +101,7 @@ class ConfigDataLayer extends PantherComponent {
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
@@ -130,29 +132,29 @@ class ConfigDataLayer extends PantherComponent {
 		};
 	}
 
-	setStateFromStores(props,keys) {
+	setStateFromStores(props, keys) {
 		logger.trace("ConfigDataLayer# setStateFromStores(), Props: ", props, ", Keys: ", keys);
 		if(!props){
 			props = this.props;
 		}
 		var thisComponent = this;
 		let store2state = this.store2state(props);
-		this.context.setStateFromStores.call(this, store2state, keys);
+		super.setStateFromStores(store2state, keys);
 		// if stores changed, overrides user input - todo fix
 		// todo determine from keys, if the following needs to be done
 		if(!keys || keys.indexOf("layerRelations")!=-1) {
 			store2state.layerRelations.then(function(relations) {
-				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations));
+				super.setStateFromStores(thisComponent.relations2state(relations));
 			});
 		}
 		if(!keys || keys.indexOf("attributeSets")!=-1) {
 			store2state.attributeSets.then(function(attributeSets) {
-				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
+				super.setStateFromStores(thisComponent.atts2state(attributeSets));
 			});
 		}
 		if(!keys || keys.indexOf("layerRelations")!=-1 || keys.indexOf("dataLayerColumns")!=-1) {
 			Promise.all([store2state.layerRelations, store2state.dataLayerColumns]).then(function([relations, columns]) {
-				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.columns2state(columns, relations));
+				super.setStateFromStores(thisComponent.columns2state(columns, relations));
 			});
 		}
 	}
@@ -384,7 +386,7 @@ class ConfigDataLayer extends PantherComponent {
 
 		let savedState = {};
 		_.assign(savedState, ret);
-		this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
+		super.setStateDeep({savedState: {$merge: savedState}}); // save store state for comparison with changed local
 		return ret;
 		//return mock;
 	}
@@ -477,7 +479,7 @@ class ConfigDataLayer extends PantherComponent {
 		}
 		let savedState = {};
 		_.assign(savedState, ret);
-		this.context.setStateDeep.call(this, {savedState: {$merge: savedState}}); // save store state for comparison with changed local
+		super.setStateDeep({savedState: {$merge: savedState}}); // save store state for comparison with changed local
 		return ret;
 	}
 
@@ -739,7 +741,7 @@ class ConfigDataLayer extends PantherComponent {
 		for(let o of values) {
 			valueForState.push(o.key);
 		}
-		this.context.setStateDeep.call(this, {
+		super.setStateDeep({
 			columnMaps: {
 				[layerType]: {
 					[column]: {

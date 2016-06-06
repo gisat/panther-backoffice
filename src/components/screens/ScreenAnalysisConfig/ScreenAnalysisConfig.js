@@ -16,6 +16,7 @@ import AnalysisStore from '../../../stores/AnalysisStore';
 import AnalysisModel from '../../../models/AnalysisModel';
 
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	analyses: [],
@@ -24,12 +25,10 @@ var initialState = {
 
 
 //@withStyles(styles)
-class ScreenAnalysisConfig extends Component{
+class ScreenAnalysisConfig extends PantherComponent{
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
@@ -61,7 +60,7 @@ class ScreenAnalysisConfig extends Component{
 
 	_onStoreChange() {
 		logger.trace("ScreenAnalysisConfig# _onStoreChange()");
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -78,7 +77,7 @@ class ScreenAnalysisConfig extends Component{
 		this.mounted = true;
 		this.changeListener.add(AnalysisStore);
 		this.responseListener.add(AnalysisStore);
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
 	componentWillUnmount() { this.mounted = false;
@@ -96,7 +95,7 @@ class ScreenAnalysisConfig extends Component{
 			this.setState({
 				objectType: newProps.data.objectType
 			});
-			this.context.setStateFromStores.call(this, this.store2state(newProps));
+			super.setStateFromStores(this.store2state(newProps));
 		}
 	}
 

@@ -26,6 +26,7 @@ import ConfigMetadataStyle from '../../sections/ConfigMetadataStyle';
 import ListenerHandler from '../../../core/ListenerHandler';
 
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	scopes: [],
@@ -45,11 +46,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenMetadataObject extends Component{
-
-	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired
-	};
+class ScreenMetadataObject extends PantherComponent{
 
 	constructor(props) {
 		super(props);
@@ -81,7 +78,7 @@ class ScreenMetadataObject extends Component{
 
 	_onStoreChange() {
 		logger.trace("ScreenMetadataObject# _onStoreChange()");
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -97,7 +94,7 @@ class ScreenMetadataObject extends Component{
 	componentDidMount() { this.mounted = true;
 		if(this.props.data.objectType) {
 			this.addListeners();
-			this.context.setStateFromStores.call(this, this.store2state());
+			super.setStateFromStores(this.store2state());
 		}
 	}
 
@@ -119,7 +116,7 @@ class ScreenMetadataObject extends Component{
 			this.setState({
 				objectType: newProps.data.objectType
 			});
-			this.context.setStateFromStores.call(this, this.store2state(newProps));
+			super.setStateFromStores(this.store2state(newProps));
 		}
 	}
 

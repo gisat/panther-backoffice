@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import styles from './ConfigPlaceDataSource.css';
 import withStyles from '../../../decorators/withStyles';
@@ -48,7 +48,6 @@ class ConfigPlaceDataSource extends PantherComponent {
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired
 	};
 
@@ -99,13 +98,13 @@ class ConfigPlaceDataSource extends PantherComponent {
 		if(condition) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
-			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
+			let setStatePromise = super.setStateFromStores(store2state, keys);
 
 			setStatePromise.then(function () {
 				let periods2state = {
 					scopePeriods: utils.getPeriodsForScope(thisComponent.state.place.scope)
 				};
-				thisComponent.context.setStateFromStores.call(thisComponent, periods2state);
+				super.setStateFromStores(periods2state);
 			});
 		}
 	}

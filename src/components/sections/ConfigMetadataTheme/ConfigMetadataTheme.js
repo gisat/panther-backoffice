@@ -44,7 +44,6 @@ class ConfigMetadataTheme extends PantherComponent{
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
@@ -72,7 +71,7 @@ class ConfigMetadataTheme extends PantherComponent{
 		if(props.selectorValue) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
-			this.context.setStateFromStores.call(this, store2state, keys);
+			super.setStateFromStores(store2state, keys);
 			// if stores changed, overrides user input - todo fix
 
 			if(!keys || keys.indexOf("theme")!=-1) {
@@ -223,7 +222,7 @@ class ConfigMetadataTheme extends PantherComponent{
 			let topic = _.findWhere(this.state.topics, {key: key});
 			modelData.topicsPreferential.push(topic);
 		}
-		
+
 		let modelObj = new Model[ObjectTypes.THEME](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.THEME);

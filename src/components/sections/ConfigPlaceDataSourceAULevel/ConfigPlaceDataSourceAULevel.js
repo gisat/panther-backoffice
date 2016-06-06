@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import _ from 'underscore';
@@ -58,9 +58,7 @@ class ConfigPlaceDataSourceAULevel extends PantherComponent {
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
-		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired
+		onInteraction: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
@@ -91,11 +89,11 @@ class ConfigPlaceDataSourceAULevel extends PantherComponent {
 		) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
-			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
+			let setStatePromise = super.setStateFromStores(store2state, keys);
 
 			setStatePromise.then(function () {
 
-				let relations2statePromise = thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(props,thisComponent.state,keys));
+				let relations2statePromise = super.setStateFromStores(thisComponent.relations2state(props,thisComponent.state,keys));
 
 				relations2statePromise.then(function(){
 
@@ -283,7 +281,7 @@ class ConfigPlaceDataSourceAULevel extends PantherComponent {
 	}
 
 
-	saveForm() {  		
+	saveForm() {
 		super.saveForm();
 
 		var actionData = [];

@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import styles from './PlaceRelations.css';
 import withStyles from '../../../decorators/withStyles';
@@ -62,9 +62,7 @@ class PlaceRelations extends PantherComponent {
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
@@ -92,11 +90,11 @@ class PlaceRelations extends PantherComponent {
 		}
 		var thisComponent = this;
 		let store2state = this.store2state(props);
-		this.context.setStateFromStores.call(this, store2state, keys);
+		super.setStateFromStores(store2state, keys);
 		// if stores changed, overrides user input - todo fix
 		if(!keys || keys.indexOf("placeRelations")!=-1) {
 			store2state.placeRelations.then(function(relations){
-				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations));
+				super.setStateFromStores(thisComponent.relations2state(relations));
 			});
 		}
 	}

@@ -12,6 +12,7 @@ import ConfigDataLayer from '../../sections/ConfigDataLayer';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	dataLayers: [],
@@ -20,11 +21,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenDataLayersBase extends Component {
-
-	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired
-	};
+class ScreenDataLayersBase extends PantherComponent {
 
 	constructor(props) {
 		super(props);
@@ -47,7 +44,7 @@ class ScreenDataLayersBase extends Component {
 
 	_onStoreChange() {
 		logger.trace("ScreenDataLayersBase# _onStoreChange()");
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
 	componentDidMount() {
@@ -55,7 +52,7 @@ class ScreenDataLayersBase extends Component {
 		this.mounted = true;
 		this.changeListener.add(DataLayerStore);
 
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
 	componentWillUnmount() { this.mounted = false;
@@ -64,7 +61,7 @@ class ScreenDataLayersBase extends Component {
 
 	componentWillReceiveProps(newProps) {
 		logger.trace("ScreenDataLayersBase# componentWillReceiveProps(), Props:", newProps);
-		this.context.setStateFromStores.call(this, this.store2state(newProps));
+		super.setStateFromStores(this.store2state(newProps));
 	}
 
 	onSelectorFocus(){

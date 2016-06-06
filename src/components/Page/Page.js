@@ -12,6 +12,7 @@ import ScreenStore from '../../stores/ScreenStore';
 
 import ListenerHandler from '../../core/ListenerHandler';
 import logger from '../../core/Logger';
+import PantherComponent from '../common/PantherComponent';
 
 var initialState = {
 	key: null,
@@ -22,24 +23,20 @@ var initialState = {
 
 
 @withStyles(styles)
-class Page extends Component {
+class Page extends PantherComponent {
 
 
 	static contextTypes = {
 		onSetTitle: PropTypes.func.isRequired,
-		activePageKey: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
-		setStateFromStores: PropTypes.func.isRequired
+		activePageKey: PropTypes.func.isRequired
 	};
 
 	static childContextTypes = {
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string
 	};
 
 	getChildContext(){
 		return {
-			setStateDeep: this.context.setStateDeep,
 			screenSetKey: this.props.screenSet
 		};
 	}
@@ -62,13 +59,13 @@ class Page extends Component {
 
 	_onStoreChange() {
 		logger.trace("Page# _onStoreChange()");
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
 	componentDidMount() { this.mounted = true;
 		if(this.props.screenSet) {
 			this.changeListener.add(ScreenStore);
-			this.context.setStateFromStores.call(this, this.store2state());
+			super.setStateFromStores(this.store2state());
 		}
 	}
 
@@ -80,7 +77,7 @@ class Page extends Component {
 
 	componentWillReceiveProps(newProps) {
 		if (newProps.screenSet != this.state.screenSet.key) {
-			this.context.setStateFromStores.call(this, this.store2state(newProps));
+			super.setStateFromStores(this.store2state(newProps));
 		}
 	}
 

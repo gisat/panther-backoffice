@@ -26,6 +26,7 @@ import StyleStore from '../../../stores/StyleStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	scopes: [],
@@ -46,7 +47,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenMetadataBase extends Component{
+class ScreenMetadataBase extends PantherComponent {
 
 	static propTypes = {
 		disabled: PropTypes.bool,
@@ -58,9 +59,7 @@ class ScreenMetadataBase extends Component{
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
@@ -119,7 +118,7 @@ class ScreenMetadataBase extends Component{
 
 	_onStoreChange(keys) {
 		logger.trace("ScreenMetadataBase# _onStoreChange(), Keys:", keys);
-		this.context.setStateFromStores.call(this, this.store2state(), keys);
+		super.setStateFromStores(this.store2state(), keys);
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -166,7 +165,7 @@ class ScreenMetadataBase extends Component{
 		this.changeListener.add(StyleStore, ["styles"]);
 		this.responseListener.add(StyleStore);
 
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
 	componentWillUnmount() { this.mounted = false;

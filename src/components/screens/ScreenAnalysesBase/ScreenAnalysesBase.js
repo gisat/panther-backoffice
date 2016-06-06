@@ -16,6 +16,7 @@ import ObjectList from '../../elements/ObjectList';
 import ScreenAnalysisConfig from '../../screens/ScreenAnalysisConfig';
 
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	spatialAnalyses: [],
@@ -26,7 +27,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenAnalysesBase extends Component{
+class ScreenAnalysesBase extends PantherComponent{
 
 	static propTypes = {
 		disabled: PropTypes.bool,
@@ -38,7 +39,6 @@ class ScreenAnalysesBase extends Component{
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
@@ -83,7 +83,7 @@ class ScreenAnalysesBase extends Component{
 
 	_onStoreChange(keys) {
 		logger.trace("ScreenAnalysesBase# _onStoreChange(), Keys:", keys);
-		this.context.setStateFromStores.call(this, this.store2state(), keys);
+		super.setStateFromStores(this.store2state(), keys);
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -111,7 +111,7 @@ class ScreenAnalysesBase extends Component{
 		this.changeListener.add(AnalysisStore, ["spatialAnalyses","fidAnalyses","mathAnalyses"]);
 		this.responseListener.add(AnalysisStore);
 
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 		this.mounted = true;
 	}
 

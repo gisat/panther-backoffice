@@ -19,6 +19,7 @@ import AnalysisStore from '../../../stores/AnalysisStore';
 import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
 import PeriodStore from '../../../stores/PeriodStore';
+import PantherComponent from "../../common/PantherComponent";
 
 
 var initialState = {
@@ -31,7 +32,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenAnalysisRuns extends Component {
+class ScreenAnalysisRuns extends PantherComponent {
 
 	static propTypes = {
 		disabled: React.PropTypes.bool
@@ -42,7 +43,6 @@ class ScreenAnalysisRuns extends Component {
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired
 	};
 
@@ -77,7 +77,7 @@ class ScreenAnalysisRuns extends Component {
 			scopePromise.then(function(scope){
 
 				if (thisComponent.mounted) {
-					thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.store2state(props, scope), keys);
+					super.setStateFromStores(thisComponent.store2state(props, scope), keys);
 				}
 
 			});
@@ -206,7 +206,7 @@ class ScreenAnalysisRuns extends Component {
 			let keys = ['levels','places','scopePeriods','valueScope'];
 			let store2state = this.store2state(this.props, scope);
 			store2state.valueScope = newValue;
-			this.context.setStateFromStores.call(this, store2state, keys);
+			super.setStateFromStores(store2state, keys);
 
 
 		} else {
