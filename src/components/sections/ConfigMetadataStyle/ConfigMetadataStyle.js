@@ -6,6 +6,7 @@ import utils from '../../../utils/utils';
 import { Input, Button } from '../../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
+import Select from 'react-select';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import SaveButton from '../../atoms/SaveButton';
 
@@ -173,7 +174,11 @@ class ConfigMetadataStyle extends PantherComponent{
 		if(this.state.style) {
 
 			var definitionIsIt = true;
-			if (this.state.valueSource=="definition") {
+			if (
+				this.state.valueSource=="definition" &&
+				this.state.style.definition &&
+				this.state.style.definition.hasOwnProperty("type")
+			) {
 				definitionIsIt = this.state.valueFeaturesType == this.state.style.definition.type;
 			}
 			else if (this.state.valueSource=="geoserver") {
