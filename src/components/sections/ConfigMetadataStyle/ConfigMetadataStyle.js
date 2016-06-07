@@ -3,7 +3,7 @@ import PantherComponent from '../../common/PantherComponent';
 
 import utils from '../../../utils/utils';
 
-import { Input, Button } from '../../SEUI/elements';
+import { Input, Button, Icon } from '../../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
 import Select from 'react-select';
@@ -370,6 +370,12 @@ class ConfigMetadataStyle extends PantherComponent{
 		});
 	}
 
+	onChangeRemoveRule(ruleIndex) {
+		this.context.setStateDeep.call(this, {
+			valueDefinitionRules: {$splice: [[ruleIndex,1]]}
+		});
+	}
+
 	onChangeServerName(e) {
 		this.setState({
 			valueServerName: e.target.value
@@ -431,6 +437,17 @@ class ConfigMetadataStyle extends PantherComponent{
 			for (let ruleIndex in this.state.valueDefinitionRules) {
 				rulesInsert.push(
 					<div className="frame-input-wrapper">
+						<div className="frame-wrapper-header">
+							{this.state.valueDefinitionRules[ruleIndex].name}
+							<div
+								className="frame-wrapper-header-remove"
+								onClick={this.onChangeRemoveRule.bind(this,ruleIndex)}
+							>
+								<Icon
+									name="remove"
+								/>
+							</div>
+						</div>
 						<label className="container">
 							Name
 							<Input

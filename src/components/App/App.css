@@ -1225,6 +1225,31 @@ todo hex colours, button icons */
 .frame-input-wrapper > .label > .frame-input-wrapper {
 	margin-top: .5rem;
 }
+.frame-wrapper .frame-wrapper-header,
+.frame-input-wrapper .frame-wrapper-header {
+	font-size: 1.125rem;
+	line-height: 2.125rem;
+	padding: 0 1rem;
+	/*background-color: #859BB1;*/
+	background-color: #9CA7B3;
+	color: #ddd;
+
+	position: relative;
+}
+.frame-wrapper-header > .frame-wrapper-header-remove {
+	position: absolute;
+	top:0;
+	right: 0;
+	width: 2.125rem;
+	height: 2.125rem;
+	cursor: pointer;
+	line-height: 2rem;
+	text-align: center;
+	color: #c1c1c1;
+}
+.frame-wrapper-header > .frame-wrapper-header-remove:hover {
+	color:#EAB5B5;
+}
 .frame-input-wrapper-info {
 	border-top: 1px solid rgba(0,0,0,.08);
 	padding: .5rem 1rem;
