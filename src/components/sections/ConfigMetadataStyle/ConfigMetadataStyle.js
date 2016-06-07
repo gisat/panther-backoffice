@@ -23,8 +23,21 @@ var initialState = {
 	style: null,
 	valueActive: false,
 	valueName: "",
-	valueServerName: ""
+	valueServerName: "",
+	valueSource: "definition",
+	valueFeaturesType: "polygon"
 };
+
+const SOURCES = [
+	{key: "definition", name: "Definition (Back Office)"},
+	{key: "geoserver", name: "GeoServer"}
+];
+
+const FEATURESTYPES = [
+	{key: "polygon", name: "Polygon"},
+	{key: "line", name: "Line"},
+	{key: "point", name: "Point"}
+];
 
 
 class ConfigMetadataStyle extends PantherComponent{
@@ -76,8 +89,14 @@ class ConfigMetadataStyle extends PantherComponent{
 						let newState = {
 							valueActive: style.active,
 							valueName: style.name,
-							valueServerName: style.serverName
+							valueSource: style.source
 						};
+						if (style.source=="definition") {
+							newState.valueFeaturesType = style.definition.type;
+						}
+						else if (style.source=="geoserver") {
+							newState.valueServerName = style.serverName;
+						}
 						newState.savedState = utils.deepClone(newState);
 						if (thisComponent.mounted) {
 							thisComponent.setState(newState);
@@ -152,10 +171,19 @@ class ConfigMetadataStyle extends PantherComponent{
 	isStateUnchanged() {
 		var isIt = true;
 		if(this.state.style) {
+
+			var definitionIsIt = true;
+			if (this.state.valueSource=="definition") {
+				definitionIsIt = this.state.valueFeaturesType == this.state.style.definition.type;
+			}
+			else if (this.state.valueSource=="geoserver") {
+				definitionIsIt = this.state.valueServerName == this.state.style.serverName;
+			}
+
 			isIt = (
 					this.state.valueActive == this.state.style.active &&
 					this.state.valueName == this.state.style.name &&
-					this.state.valueServerName == this.state.style.serverName
+					definitionIsIt
 			);
 		}
 		return isIt;
@@ -185,50 +213,53 @@ class ConfigMetadataStyle extends PantherComponent{
 		_.assign(modelData, this.state.style);
 		modelData.active = this.state.valueActive;
 		modelData.name = this.state.valueName;
-		modelData.serverName = this.state.valueServerName;
+		modelData.source = this.state.valueSource;
 
-		//modelData.source = 'definition';
-		//modelData.definition = {
-		//	type: 'polygon',
-		//	filterAttribute: 666666,
-		//	filterAttributeSet: 666667,
-		//	rules: [
-		//		{
-		//			name: 'Urban fabric',
-		//			title: 'Urban fabric',
-		//			filter: '111,112,113',
-		//			appearance: {
-		//				fillColour: '#D0091D'
-		//			}
-		//		},
-		//		{
-		//			name: 'Non-urban artificial areas',
-		//			title: 'Non-urban artificial areas',
-		//			filter: '120,121,130,140',
-		//			appearance: {
-		//				fillColour: '#AE0214'
-		//			}
-		//		},
-		//		{
-		//			name: 'Natural and semi-natural areas',
-		//			title: 'Natural and semi-natural areas',
-		//			filter: '310,320,330',
-		//			appearance: {
-		//				fillColour: '#59B642'
-		//			}
-		//		},
-		//		{
-		//			name: 'Water',
-		//			title: 'Water',
-		//			filter: '510,512,520',
-		//			appearance: {
-		//				fillColour: '#56C8EE'
-		//			}
-		//		}
-		//	]
-		//};
+		if (this.state.valueSource=="definition") {
+			//modelData.definition = {
+			//	type: 'polygon',
+			//	filterAttribute: 666666,
+			//	filterAttributeSet: 666667,
+			//	rules: [
+			//		{
+			//			name: 'Urban fabric',
+			//			title: 'Urban fabric',
+			//			filter: '111,112,113',
+			//			appearance: {
+			//				fillColour: '#D0091D'
+			//			}
+			//		},
+			//		{
+			//			name: 'Non-urban artificial areas',
+			//			title: 'Non-urban artificial areas',
+			//			filter: '120,121,130,140',
+			//			appearance: {
+			//				fillColour: '#AE0214'
+			//			}
+			//		},
+			//		{
+			//			name: 'Natural and semi-natural areas',
+			//			title: 'Natural and semi-natural areas',
+			//			filter: '310,320,330',
+			//			appearance: {
+			//				fillColour: '#59B642'
+			//			}
+			//		},
+			//		{
+			//			name: 'Water',
+			//			title: 'Water',
+			//			filter: '510,512,520',
+			//			appearance: {
+			//				fillColour: '#56C8EE'
+			//			}
+			//		}
+			//	]
+			//};
+		}
+		else if (this.state.valueSource=="geoserver") {
+			modelData.serverName = this.state.valueServerName;
+		}
 
-		modelData.topic = _.findWhere(this.state.topics, {key: this.state.valueTopic[0]});
 		let modelObj = new Model[ObjectTypes.STYLE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.STYLE);
@@ -243,6 +274,18 @@ class ConfigMetadataStyle extends PantherComponent{
 	onChangeName(e) {
 		this.setState({
 			valueName: e.target.value
+		});
+	}
+
+	onChangeSource(value, values) {
+		this.setState({
+			valueSource: value
+		});
+	}
+
+	onChangeFeaturesType(value, values) {
+		this.setState({
+			valueFeaturesType: value
 		});
 	}
 
@@ -295,6 +338,56 @@ class ConfigMetadataStyle extends PantherComponent{
 			isActiveClasses = "activeness-indicator active";
 		}
 
+		let sourceForm = null;
+		if (this.state.valueSource=="definition") {
+
+			sourceForm = (
+				<div>
+					<span className="todo">Definition form</span>
+
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Features type
+							<Select
+								onChange={this.onChangeFeaturesType.bind(this)}
+								options={FEATURESTYPES}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.valueFeaturesType}
+								clearable={false}
+							/>
+						</label>
+						<div className="frame-input-wrapper-info">
+							Type of the layers the style will be applied to.
+						</div>
+					</div>
+
+				</div>
+			);
+
+		}
+		else if (this.state.valueSource=="geoserver") {
+
+			sourceForm = (
+				<div className="frame-input-wrapper required">
+					<label className="container">
+						Server name
+						<Input
+							type="text"
+							name="serverName"
+							placeholder=" "
+							value={this.state.valueServerName}
+							onChange={this.onChangeServerName.bind(this)}
+						/>
+					</label>
+					<div className="frame-input-wrapper-info">
+						Geoserver style ID.
+					</div>
+				</div>
+			);
+
+		}
+
 		return (
 			<div>
 
@@ -328,19 +421,22 @@ class ConfigMetadataStyle extends PantherComponent{
 
 				<div className="frame-input-wrapper required">
 					<label className="container">
-						Server name
-						<Input
-							type="text"
-							name="serverName"
-							placeholder=" "
-							value={this.state.valueServerName}
-							onChange={this.onChangeServerName.bind(this)}
+						Source
+						<Select
+							onChange={this.onChangeSource.bind(this)}
+							options={SOURCES}
+							valueKey="key"
+							labelKey="name"
+							value={this.state.valueSource}
+							clearable={false}
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
-						Geoserver style ID.
+						Style can be defined locally in Back Office or loaded from another system.
 					</div>
 				</div>
+
+				{sourceForm}
 
 				{saveButton}
 
