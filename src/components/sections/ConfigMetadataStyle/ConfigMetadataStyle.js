@@ -376,6 +376,18 @@ class ConfigMetadataStyle extends PantherComponent{
 		});
 	}
 
+	onChangeAddRule() {
+		this.context.setStateDeep.call(this, {
+			valueDefinitionRules: {$push: [{
+				name: "",
+				filter: "",
+				appearance: {
+					fillColour: "" // todo create more general (w/o appearance options)
+				}
+			}]}
+		});
+	}
+
 	onChangeServerName(e) {
 		this.setState({
 			valueServerName: e.target.value
@@ -436,7 +448,10 @@ class ConfigMetadataStyle extends PantherComponent{
 			var rulesInsert = [];
 			for (let ruleIndex in this.state.valueDefinitionRules) {
 				rulesInsert.push(
-					<div className="frame-input-wrapper">
+					<div
+						key={"rule-frame-" + ruleIndex}
+						className="frame-input-wrapper"
+					>
 						<div className="frame-wrapper-header">
 							{this.state.valueDefinitionRules[ruleIndex].name}
 							<div
@@ -481,6 +496,16 @@ class ConfigMetadataStyle extends PantherComponent{
 					</div>
 				);
 			}
+			rulesInsert.push(
+				<a
+					className="ptr-item simple add"
+					href="#"
+					onClick={this.onChangeAddRule.bind(this)}
+					key="rule-add"
+				>
+					<span><Icon name="plus"/></span>
+				</a>
+			);
 
 			sourceForm = (
 				<div>
