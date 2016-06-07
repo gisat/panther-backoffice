@@ -1233,8 +1233,12 @@ a.ptr-item {
 }
 .frame-input-wrapper > label > .Select,
 .frame-input-wrapper > .label > .Select,
-.frame-input-wrapper > .label > .frame-input-wrapper {
+.frame-input-wrapper > .label > .frame-input-wrapper,
+.frame-input-wrapper > .label > .ptr-item:first-of-type {
 	margin-top: .5rem;
+}
+.frame-input-wrapper > .label > .frame-input-wrapper.singleclass {
+	margin-bottom: 0;
 }
 .frame-wrapper .frame-wrapper-header,
 .frame-input-wrapper .frame-wrapper-header {
