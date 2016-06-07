@@ -1215,11 +1215,14 @@ todo hex colours, button icons */
 	border-radius: 0 0 .2rem .2rem;
 	color: #d8d8d8;
 }
-.frame-input-wrapper > label {
+.frame-input-wrapper > label,
+.frame-input-wrapper > .label {
 	padding: .875rem;
 	margin: 0;
 }
-.frame-input-wrapper > label > .Select {
+.frame-input-wrapper > label > .Select,
+.frame-input-wrapper > .label > .Select,
+.frame-input-wrapper > .label > .frame-input-wrapper {
 	margin-top: .5rem;
 }
 .frame-input-wrapper-info {

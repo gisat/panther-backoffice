@@ -58,6 +58,7 @@ class ConfigMetadataStyle extends PantherComponent{
 	static contextTypes = {
 		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
+		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
@@ -99,6 +100,7 @@ class ConfigMetadataStyle extends PantherComponent{
 							newState.valueFeaturesType = style.definition.type;
 							newState.valueFilterAttributeSet = style.definition.filterAttributeSetKey;
 							newState.valueFilterAttribute = style.definition.filterAttributeKey;
+							newState.valueDefinitionRules = style.definition.rules;
 						}
 						else if (style.source=="geoserver") {
 							newState.valueServerName = style.serverName;
@@ -346,6 +348,28 @@ class ConfigMetadataStyle extends PantherComponent{
 		});
 	}
 
+	onChangeRule(ruleIndex,key,e) {
+		this.context.setStateDeep.call(this, {
+			valueDefinitionRules: {
+				[ruleIndex]: {
+					[key]: {$set: e.target.value}
+				}
+			}
+		});
+	}
+
+	onChangeRuleAppearance(ruleIndex,key,e) {
+		this.context.setStateDeep.call(this, {
+			valueDefinitionRules: {
+				[ruleIndex]: {
+					appearance: {
+						[key]: {$set: e.target.value}
+					}
+				}
+			}
+		});
+	}
+
 	onChangeServerName(e) {
 		this.setState({
 			valueServerName: e.target.value
@@ -403,8 +427,48 @@ class ConfigMetadataStyle extends PantherComponent{
 				filterDestination = this.state.valueFilterAttributeSet + "-" + this.state.valueFilterAttribute;
 			}
 
+			var rulesInsert = [];
+			for (let ruleIndex in this.state.valueDefinitionRules) {
+				rulesInsert.push(
+					<div className="frame-input-wrapper">
+						<label className="container">
+							Name
+							<Input
+								type="text"
+								name={"valueName" + ruleIndex}
+								placeholder=" "
+								value={this.state.valueDefinitionRules[ruleIndex].name}
+								onChange={this.onChangeRule.bind(this,ruleIndex,"name")}
+							/>
+						</label>
+						<label className="container">
+							Filter
+							<Input
+								type="text"
+								name={"valueFilter" + ruleIndex}
+								placeholder=" "
+								value={this.state.valueDefinitionRules[ruleIndex].filter}
+								onChange={this.onChangeRule.bind(this,ruleIndex,"filter")}
+							/>
+						</label>
+						<label className="container">
+							Fill colour
+							<Input
+								type="text"
+								name={"valueFillColour" + ruleIndex}
+								placeholder=" "
+								value={this.state.valueDefinitionRules[ruleIndex].appearance.fillColour}
+								onChange={this.onChangeRuleAppearance.bind(this,ruleIndex,"fillColour")}
+							/>
+						</label>
+					</div>
+				);
+			}
+
 			sourceForm = (
 				<div>
+
+					<h3>Definition</h3>
 
 					<div className="frame-input-wrapper required">
 						<label className="container">
@@ -423,7 +487,7 @@ class ConfigMetadataStyle extends PantherComponent{
 						</div>
 					</div>
 
-					<div className="frame-input-wrapper required">
+					<div className="frame-input-wrapper">
 						<label className="container">
 							Filter attribute
 							<Select
@@ -442,7 +506,12 @@ class ConfigMetadataStyle extends PantherComponent{
 						</div>
 					</div>
 
-					<span className="todo">Classes (Rules) table</span>
+					<div className="frame-input-wrapper required">
+						<div className="label">
+							Classes
+							{rulesInsert}
+						</div>
+					</div>
 
 				</div>
 			);
