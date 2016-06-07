@@ -8,12 +8,14 @@ import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
 import Select from 'react-select';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
+import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
+import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
 import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 import StyleStore from '../../../stores/StyleStore';
-import TopicStore from '../../../stores/TopicStore';
+import AttributeSetStore from '../../../stores/AttributeSetStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
@@ -69,7 +71,8 @@ class ConfigMetadataStyle extends PantherComponent{
 
 	store2state(props) {
 		return {
-			style: StyleStore.getById(props.selectorValue)
+			style: StyleStore.getById(props.selectorValue),
+			attributeSets: AttributeSetStore.getAll()
 		};
 	}
 
@@ -94,6 +97,8 @@ class ConfigMetadataStyle extends PantherComponent{
 						};
 						if (style.source=="definition") {
 							newState.valueFeaturesType = style.definition.type;
+							newState.valueFilterAttributeSet = style.definition.filterAttributeSetKey;
+							newState.valueFilterAttribute = style.definition.filterAttributeKey;
 						}
 						else if (style.source=="geoserver") {
 							newState.valueServerName = style.serverName;
@@ -103,6 +108,11 @@ class ConfigMetadataStyle extends PantherComponent{
 							thisComponent.setState(newState);
 						}
 					}
+				});
+			}
+			if(!keys || keys.indexOf("attributeSets")!=-1) {
+				store2state.attributeSets.then(function(attributeSets) {
+					thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
 				});
 			}
 		}
@@ -148,7 +158,7 @@ class ConfigMetadataStyle extends PantherComponent{
 
 	componentDidMount() { this.mounted = true;
 		this.changeListener.add(StyleStore, ["style"]);
-
+		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 		this.setStateFromStores();
 	}
 
@@ -179,7 +189,11 @@ class ConfigMetadataStyle extends PantherComponent{
 				this.state.style.definition &&
 				this.state.style.definition.hasOwnProperty("type")
 			) {
-				definitionIsIt = this.state.valueFeaturesType == this.state.style.definition.type;
+				definitionIsIt = (
+					this.state.valueFeaturesType == this.state.style.definition.type &&
+					this.state.valueFilterAttributeSet == this.state.style.definition.filterAttributeSetKey &&
+					this.state.valueFilterAttribute == this.state.style.definition.filterAttributeKey
+				);
 			}
 			else if (this.state.valueSource=="geoserver") {
 				definitionIsIt = this.state.valueServerName == this.state.style.serverName;
@@ -192,6 +206,37 @@ class ConfigMetadataStyle extends PantherComponent{
 			);
 		}
 		return isIt;
+	}
+
+	/**
+	 * Prepare options for data table selects
+	 * Called in store2state().
+	 * @param attributeSets
+	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
+	 */
+	atts2state(attributeSets) {
+		var ret = {
+			filterDestinations: null
+		};
+		if (attributeSets) {
+			ret.filterDestinations = [];
+			for (let attset of attributeSets) {
+				if(attset.attributes) {
+					for (let att of attset.attributes) {
+						let object = {
+							key: attset.key + "-" + att.key,
+							name: attset.name + " " + att.name,
+							attributeName: att.name,
+							attributeSetName: attset.name,
+							attributeKey: att.key,
+							attributeSetKey: attset.key
+						};
+						ret.filterDestinations.push(object);
+					}
+				}
+			}
+		}
+		return ret;
 	}
 
 	/**
@@ -221,10 +266,10 @@ class ConfigMetadataStyle extends PantherComponent{
 		modelData.source = this.state.valueSource;
 
 		if (this.state.valueSource=="definition") {
-			//modelData.definition = {
-			//	type: 'polygon',
-			//	filterAttribute: 666666,
-			//	filterAttributeSet: 666667,
+			modelData.definition = {
+				type: this.state.valueFeaturesType,
+				filterAttributeKey: this.state.valueFilterAttribute,
+				filterAttributeSetKey: this.state.valueFilterAttributeSet,
 			//	rules: [
 			//		{
 			//			name: 'Urban fabric',
@@ -259,7 +304,7 @@ class ConfigMetadataStyle extends PantherComponent{
 			//			}
 			//		}
 			//	]
-			//};
+			};
 		}
 		else if (this.state.valueSource=="geoserver") {
 			modelData.serverName = this.state.valueServerName;
@@ -291,6 +336,13 @@ class ConfigMetadataStyle extends PantherComponent{
 	onChangeFeaturesType(value, values) {
 		this.setState({
 			valueFeaturesType: value
+		});
+	}
+
+	onChangeFilterDestination(value, values) {
+		this.setState({
+			valueFilterAttributeSet: values[0].attributeSetKey,
+			valueFilterAttribute: values[0].attributeKey
 		});
 	}
 
@@ -346,9 +398,13 @@ class ConfigMetadataStyle extends PantherComponent{
 		let sourceForm = null;
 		if (this.state.valueSource=="definition") {
 
+			var filterDestination = null;
+			if (this.state.valueFilterAttributeSet && this.state.valueFilterAttribute) {
+				filterDestination = this.state.valueFilterAttributeSet + "-" + this.state.valueFilterAttribute;
+			}
+
 			sourceForm = (
 				<div>
-					<span className="todo">Definition form</span>
 
 					<div className="frame-input-wrapper required">
 						<label className="container">
@@ -366,6 +422,27 @@ class ConfigMetadataStyle extends PantherComponent{
 							Type of the layers the style will be applied to.
 						</div>
 					</div>
+
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Filter attribute
+							<Select
+								onChange={this.onChangeFilterDestination.bind(this)}
+								options={this.state.filterDestinations}
+								optionComponent={OptionDestination}
+								singleValueComponent={SingleValueDestination}
+								valueKey="key"
+								labelKey="name"
+								className={filterDestination ? "multiline" : ""}
+								value={filterDestination}
+							/>
+						</label>
+						<div className="frame-input-wrapper-info">
+							Attribute containing the values used to differentiate the style classes.
+						</div>
+					</div>
+
+					<span className="todo">Classes (Rules) table</span>
 
 				</div>
 			);
