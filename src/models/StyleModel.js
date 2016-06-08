@@ -96,6 +96,10 @@ class StyleModel extends Model {
 						serverName: 'filterAttributeSet', //id
 						sendToServer: true
 					},
+					filterType: {
+						serverName: 'filterType', // attributeCsv / attributeInterval / ...
+						sendToServer: true
+					},
 					rules: {
 						serverName: 'rules',
 						sendToServer: true,
@@ -110,8 +114,41 @@ class StyleModel extends Model {
 								sendToServer: true
 							},
 							filter: {
-								serverName: 'filter', //string - csv
-								sendToServer: true
+								serverName: 'filter',
+								sendToServer: true,
+								isNested: true,
+								model: {
+									attributeCsv: {
+										serverName: 'attributeCsv',
+										sendToServer: true,
+										isNested: true,
+										model: {
+											values: {
+												serverName: 'values', //string - csv
+												sendToServer: true
+											}
+										}
+									},
+									attributeInterval: {
+										serverName: 'attributeInterval',
+										sendToServer: true,
+										isNested: true,
+										model: {
+											start: {
+												serverName: 'intervalStart', //number
+												sendToServer: true
+											},
+											end: {
+												serverName: 'intervalEnd', //number
+												sendToServer: true
+											}
+										}
+									},
+									logicalAnd: {
+										serverName: 'logicalAnd',
+										sendToServer: true
+									}
+								}
 							},
 							appearance: {
 								serverName: 'appearance',
@@ -141,6 +178,20 @@ class StyleModel extends Model {
 				}
 			}
 		};
+	}
+
+	prepareModel(options) {
+		// assign default values
+		if (!options.source) {
+			options.source = "definition";
+			if (!options.definition) {
+				options.definition = {
+					type: 'polygon',
+					filterType: 'attributeCsv' //todo no common filter? (once/if per-class filters are possible)
+				}
+			}
+		}
+		return options;
 	}
 
 }

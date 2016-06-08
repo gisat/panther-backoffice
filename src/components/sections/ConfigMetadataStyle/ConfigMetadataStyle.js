@@ -29,6 +29,7 @@ var initialState = {
 	valueServerName: "",
 	valueSource: "definition",
 	valueFeaturesType: "polygon",
+	valueFilterType: "attributeCsv",
 	valueDefinitionRules: [],
 	valueDefinitionSingleRule: {
 		name: "",
@@ -47,6 +48,11 @@ const FEATURESTYPES = [
 	{key: "polygon", name: "Polygon"},
 	{key: "line", name: "Line"},
 	{key: "point", name: "Point"}
+];
+
+const FILTERTYPES = [
+	{key: "attributeCsv", name: "Attribute: Values"},
+	{key: "attributeInterval", name: "Attribute: Interval"}
 ];
 
 
@@ -105,10 +111,16 @@ class ConfigMetadataStyle extends PantherComponent{
 						};
 						if (style.source=="definition") {
 							newState.valueFeaturesType = style.definition.type;
+							newState.valueFilterType = style.definition.filterType;
 							newState.valueFilterAttributeSet = style.definition.filterAttributeSetKey;
 							newState.valueFilterAttribute = style.definition.filterAttributeKey;
 							newState.valueDefinitionRules = utils.clone(style.definition.rules);
-							newState.valueDefinitionSingleRule = utils.clone(style.definition.rules[0]);
+							if (
+								style.definition.rules &&
+								style.definition.rules.length
+							) {
+								newState.valueDefinitionSingleRule = utils.clone(style.definition.rules[0]);
+							}
 						}
 						else if (style.source=="geoserver") {
 							newState.valueServerName = style.serverName;
@@ -199,22 +211,32 @@ class ConfigMetadataStyle extends PantherComponent{
 				this.state.style.definition &&
 				this.state.style.definition.hasOwnProperty("type")
 			) {
-				definitionIsIt = (
-					this.state.valueFeaturesType == this.state.style.definition.type &&
-					this.state.valueFilterAttributeSet == this.state.style.definition.filterAttributeSetKey &&
-					this.state.valueFilterAttribute == this.state.style.definition.filterAttributeKey
-				);
-				if (this.state.valueFilterAttributeSet && this.state.valueFilterAttribute) {
-					definitionIsIt = (
-						definitionIsIt &&
-						_.isEqual(this.state.valueDefinitionRules, this.state.style.definition.rules)
-					);
+				if (this.state.style.definition.filterType==this.state.valueFilterType) {
+					if (
+						this.state.valueFilterType == "attributeCsv" ||
+						this.state.valueFilterType == "attributeInterval"
+					) {
+						definitionIsIt = (
+							this.state.valueFeaturesType == this.state.style.definition.type &&
+							this.state.valueFilterAttributeSet == this.state.style.definition.filterAttributeSetKey &&
+							this.state.valueFilterAttribute == this.state.style.definition.filterAttributeKey
+						);
+						if (this.state.valueFilterAttributeSet && this.state.valueFilterAttribute) {
+							definitionIsIt = (
+								definitionIsIt &&
+								_.isEqual(this.state.valueDefinitionRules, this.state.style.definition.rules)
+							);
+						}
+						else {
+							definitionIsIt = (
+								definitionIsIt &&
+								_.isEqual(this.state.valueDefinitionSingleRule, this.state.style.definition.rules[0])
+							);
+						}
+					}
 				}
 				else {
-					definitionIsIt = (
-						definitionIsIt &&
-						_.isEqual(this.state.valueDefinitionSingleRule, this.state.style.definition.rules[0])
-					);
+					definitionIsIt = false;
 				}
 			}
 			else if (this.state.valueSource=="geoserver") {
@@ -289,22 +311,32 @@ class ConfigMetadataStyle extends PantherComponent{
 
 		if (this.state.valueSource=="definition") {
 			modelData.definition = {
-				type: this.state.valueFeaturesType
+				type: this.state.valueFeaturesType,
+				filterType: this.state.valueFilterType
 			};
 			if (
-				this.state.valueFilterAttributeSet &&
-				this.state.valueFilterAttribute
+				this.state.valueFilterType=="attributeCsv" ||
+				this.state.valueFilterType=="attributeInterval"
 			) {
-				// filter set -> standard rule set
-				modelData.definition.filterAttributeKey = this.state.valueFilterAttribute;
-				modelData.definition.filterAttributeSetKey = this.state.valueFilterAttributeSet;
-				modelData.definition.rules = utils.clone(this.state.valueDefinitionRules);
+				if (
+					this.state.valueFilterAttributeSet &&
+					this.state.valueFilterAttribute
+				) {
+					// filter set -> standard rule set
+					modelData.definition.filterAttributeKey = this.state.valueFilterAttribute;
+					modelData.definition.filterAttributeSetKey = this.state.valueFilterAttributeSet;
+					modelData.definition.rules = utils.clone(this.state.valueDefinitionRules);
+				}
+				else {
+					// no filter -> single rule for all features
+					modelData.definition.filterAttributeKey = null;
+					modelData.definition.filterAttributeSetKey = null;
+					modelData.definition.rules = [utils.clone(this.state.valueDefinitionSingleRule)];
+				}
 			}
 			else {
-				// no filter -> single rule for all features
-				modelData.definition.filterAttributeKey = null;
-				modelData.definition.filterAttributeSetKey = null;
-				modelData.definition.rules = [utils.clone(this.state.valueDefinitionSingleRule)];
+				// no filter type - filters vary
+				modelData.definition.rules = utils.clone(this.state.valueDefinitionRules);
 			}
 		}
 		else if (this.state.valueSource=="geoserver") {
@@ -337,6 +369,12 @@ class ConfigMetadataStyle extends PantherComponent{
 	onChangeFeaturesType(value, values) {
 		this.setState({
 			valueFeaturesType: value
+		});
+	}
+
+	onChangeFilterType(value, values) {
+		this.setState({
+			valueFilterType: value
 		});
 	}
 
@@ -394,17 +432,47 @@ class ConfigMetadataStyle extends PantherComponent{
 		}
 	}
 
+	onChangeRuleFilter(ruleIndex,filterType,key,e) {
+		if (ruleIndex) {
+			this.context.setStateDeep.call(this, {
+				valueDefinitionRules: {
+					[ruleIndex]: {
+						filter: {
+							[filterType]: {
+								[key]: {$set: e.target.value}
+							}
+						}
+					}
+				}
+			});
+		} else {
+			this.context.setStateDeep.call(this, {
+				valueDefinitionSingleRule: {
+					filter: {
+						[filterType]: {
+							[key]: {$set: e.target.value}
+						}
+					}
+				}
+			});
+		}
+	}
+
 	onChangeRemoveRule(ruleIndex) {
 		this.context.setStateDeep.call(this, {
 			valueDefinitionRules: {$splice: [[ruleIndex,1]]}
 		});
 	}
 
-	onChangeAddRule() {
+	onChangeAddRule(filterType) {
+		var filter = {};
+		if (filterType) {
+			filter[filterType] = {};
+		}
 		this.context.setStateDeep.call(this, {
 			valueDefinitionRules: {$push: [{
 				name: "",
-				filter: "",
+				filter: filter,
 				appearance: {
 					fillColour: "" // todo create more general (w/o appearance options)
 				}
@@ -464,125 +532,160 @@ class ConfigMetadataStyle extends PantherComponent{
 		let sourceForm = null;
 		if (this.state.valueSource=="definition") {
 
-			var filterDestination = null;
-			if (this.state.valueFilterAttributeSet && this.state.valueFilterAttribute) {
-				filterDestination = this.state.valueFilterAttributeSet + "-" + this.state.valueFilterAttribute;
-			}
+			var classesInsert = null, commonFilterConfigInsert = null;
+			if (this.state.valueFilterType=="attributeCsv") {
 
-			var rulesInsert = [],classesInsert = null;
-			if (this.state.valueFilterAttribute) {
-				for (let ruleIndex in this.state.valueDefinitionRules) {
+				var filterDestination = null;
+				if (this.state.valueFilterAttributeSet && this.state.valueFilterAttribute) {
+					filterDestination = this.state.valueFilterAttributeSet + "-" + this.state.valueFilterAttribute;
+				}
+
+				commonFilterConfigInsert = (
+					<div className="frame-input-wrapper">
+						<label className="container">
+							Filter attribute
+							<Select
+								onChange={this.onChangeFilterDestination.bind(this)}
+								options={this.state.filterDestinations}
+								optionComponent={OptionDestination}
+								singleValueComponent={SingleValueDestination}
+								valueKey="key"
+								labelKey="name"
+								className={filterDestination ? "multiline" : ""}
+								value={filterDestination}
+							/>
+						</label>
+						<div className="frame-input-wrapper-info">
+							Attribute containing the values used to differentiate the style classes.
+						</div>
+					</div>
+				);
+
+				var rulesInsert = [];
+				if (this.state.valueFilterAttribute) {
+					for (let ruleIndex in this.state.valueDefinitionRules) {
+
+						var filterValues = "";
+						if (
+							this.state.valueDefinitionRules[ruleIndex].filter &&
+							this.state.valueDefinitionRules[ruleIndex].filter.attributeCsv &&
+							this.state.valueDefinitionRules[ruleIndex].filter.attributeCsv.hasOwnProperty("values")
+						) {
+							filterValues = this.state.valueDefinitionRules[ruleIndex].filter.attributeCsv.values;
+						}
+
+						rulesInsert.push(
+							<div
+								key={"rule-frame-" + ruleIndex}
+								className="frame-input-wrapper"
+							>
+								<div className="frame-wrapper-header">
+									{this.state.valueDefinitionRules[ruleIndex].name}
+									<div
+										className="frame-wrapper-header-remove"
+										onClick={this.onChangeRemoveRule.bind(this,ruleIndex)}
+									>
+										<Icon
+											name="remove"
+										/>
+									</div>
+								</div>
+								<label className="container">
+									Name
+									<Input
+										type="text"
+										name={"valueName" + ruleIndex}
+										placeholder=" "
+										value={this.state.valueDefinitionRules[ruleIndex].name}
+										onChange={this.onChangeRule.bind(this,ruleIndex,"name")}
+									/>
+								</label>
+								<label className="container">
+									Filter
+									<Input
+										type="text"
+										name={"valueFilter" + ruleIndex}
+										placeholder=" "
+										value={filterValues}
+										onChange={this.onChangeRuleFilter.bind(this,ruleIndex,"attributeCsv","values")}
+									/>
+								</label>
+								<label className="container">
+									Fill colour
+									<Input
+										type="text"
+										name={"valueFillColour" + ruleIndex}
+										placeholder=" "
+										value={this.state.valueDefinitionRules[ruleIndex].appearance.fillColour}
+										onChange={this.onChangeRuleAppearance.bind(this,ruleIndex,"fillColour")}
+									/>
+								</label>
+							</div>
+						);
+					}
+					rulesInsert.push(
+						<a
+							className="ptr-item simple add"
+							href="#"
+							onClick={this.onChangeAddRule.bind(this,"attributeCsv")}
+							key="rule-add"
+						>
+							<span><Icon name="plus"/></span>
+						</a>
+					);
+					classesInsert = (
+						<div className="frame-input-wrapper required">
+							<div className="label">
+								Classes
+								{rulesInsert}
+							</div>
+						</div>
+					);
+				}
+				else {
+					// no filter attribute set -> single class
 					rulesInsert.push(
 						<div
-							key={"rule-frame-" + ruleIndex}
-							className="frame-input-wrapper"
+							key="rule-frame-singlerule"
+							className="frame-input-wrapper singleclass"
 						>
 							<div className="frame-wrapper-header">
-								{this.state.valueDefinitionRules[ruleIndex].name}
-								<div
-									className="frame-wrapper-header-remove"
-									onClick={this.onChangeRemoveRule.bind(this,ruleIndex)}
-								>
-									<Icon
-										name="remove"
-									/>
-								</div>
+								{this.state.valueDefinitionSingleRule.name}
 							</div>
 							<label className="container">
 								Name
 								<Input
 									type="text"
-									name={"valueName" + ruleIndex}
+									name="valueName-singlerule"
 									placeholder=" "
-									value={this.state.valueDefinitionRules[ruleIndex].name}
-									onChange={this.onChangeRule.bind(this,ruleIndex,"name")}
-								/>
-							</label>
-							<label className="container">
-								Filter
-								<Input
-									type="text"
-									name={"valueFilter" + ruleIndex}
-									placeholder=" "
-									value={this.state.valueDefinitionRules[ruleIndex].filter}
-									onChange={this.onChangeRule.bind(this,ruleIndex,"filter")}
+									value={this.state.valueDefinitionSingleRule.name}
+									onChange={this.onChangeRule.bind(this,false,"name")}
 								/>
 							</label>
 							<label className="container">
 								Fill colour
 								<Input
 									type="text"
-									name={"valueFillColour" + ruleIndex}
+									name="valueFillColour-singlerule"
 									placeholder=" "
-									value={this.state.valueDefinitionRules[ruleIndex].appearance.fillColour}
-									onChange={this.onChangeRuleAppearance.bind(this,ruleIndex,"fillColour")}
+									value={this.state.valueDefinitionSingleRule.appearance.fillColour}
+									onChange={this.onChangeRuleAppearance.bind(this,false,"fillColour")}
 								/>
 							</label>
 						</div>
 					);
+					classesInsert = (
+						<div className="frame-input-wrapper required">
+							<div className="label">
+								Single class (all features)
+								{rulesInsert}
+							</div>
+							<div className="frame-input-wrapper-info">
+								No filter attribute selected, only all features can be styled.
+							</div>
+						</div>
+					);
 				}
-				rulesInsert.push(
-					<a
-						className="ptr-item simple add"
-						href="#"
-						onClick={this.onChangeAddRule.bind(this)}
-						key="rule-add"
-					>
-						<span><Icon name="plus"/></span>
-					</a>
-				);
-				classesInsert = (
-					<div className="frame-input-wrapper required">
-						<div className="label">
-							Classes
-							{rulesInsert}
-						</div>
-					</div>
-				);
-			}
-			else {
-				// no filter attribute set -> single class
-				rulesInsert.push(
-					<div
-						key="rule-frame-singlerule"
-						className="frame-input-wrapper singleclass"
-					>
-						<div className="frame-wrapper-header">
-							{this.state.valueDefinitionSingleRule.name}
-						</div>
-						<label className="container">
-							Name
-							<Input
-								type="text"
-								name="valueName-singlerule"
-								placeholder=" "
-								value={this.state.valueDefinitionSingleRule.name}
-								onChange={this.onChangeRule.bind(this,false,"name")}
-							/>
-						</label>
-						<label className="container">
-							Fill colour
-							<Input
-								type="text"
-								name="valueFillColour-singlerule"
-								placeholder=" "
-								value={this.state.valueDefinitionSingleRule.appearance.fillColour}
-								onChange={this.onChangeRuleAppearance.bind(this,false,"fillColour")}
-							/>
-						</label>
-					</div>
-				);
-				classesInsert = (
-					<div className="frame-input-wrapper required">
-						<div className="label">
-							Single class (all features)
-							{rulesInsert}
-						</div>
-						<div className="frame-input-wrapper-info">
-							No filter attribute selected, only all features can be styled.
-						</div>
-					</div>
-				);
 			}
 
 			sourceForm = (
@@ -609,22 +712,22 @@ class ConfigMetadataStyle extends PantherComponent{
 
 					<div className="frame-input-wrapper">
 						<label className="container">
-							Filter attribute
+							Filter type
 							<Select
-								onChange={this.onChangeFilterDestination.bind(this)}
-								options={this.state.filterDestinations}
-								optionComponent={OptionDestination}
-								singleValueComponent={SingleValueDestination}
+								onChange={this.onChangeFilterType.bind(this)}
+								options={FILTERTYPES}
 								valueKey="key"
 								labelKey="name"
-								className={filterDestination ? "multiline" : ""}
-								value={filterDestination}
+								value={this.state.valueFilterType}
+								clearable={false}
 							/>
 						</label>
 						<div className="frame-input-wrapper-info">
-							Attribute containing the values used to differentiate the style classes.
+							How will the features be divided into classes.
 						</div>
 					</div>
+
+					{commonFilterConfigInsert}
 
 					{classesInsert}
 
