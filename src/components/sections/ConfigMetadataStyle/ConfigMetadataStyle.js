@@ -107,8 +107,8 @@ class ConfigMetadataStyle extends PantherComponent{
 							newState.valueFeaturesType = style.definition.type;
 							newState.valueFilterAttributeSet = style.definition.filterAttributeSetKey;
 							newState.valueFilterAttribute = style.definition.filterAttributeKey;
-							newState.valueDefinitionRules = style.definition.rules;
-							newState.valueDefinitionSingleRule = style.definition.rules[0];
+							newState.valueDefinitionRules = utils.clone(style.definition.rules);
+							newState.valueDefinitionSingleRule = utils.clone(style.definition.rules[0]);
 						}
 						else if (style.source=="geoserver") {
 							newState.valueServerName = style.serverName;
@@ -204,6 +204,18 @@ class ConfigMetadataStyle extends PantherComponent{
 					this.state.valueFilterAttributeSet == this.state.style.definition.filterAttributeSetKey &&
 					this.state.valueFilterAttribute == this.state.style.definition.filterAttributeKey
 				);
+				if (this.state.valueFilterAttributeSet && this.state.valueFilterAttribute) {
+					definitionIsIt = (
+						definitionIsIt &&
+						_.isEqual(this.state.valueDefinitionRules, this.state.style.definition.rules)
+					);
+				}
+				else {
+					definitionIsIt = (
+						definitionIsIt &&
+						_.isEqual(this.state.valueDefinitionSingleRule, this.state.style.definition.rules[0])
+					);
+				}
 			}
 			else if (this.state.valueSource=="geoserver") {
 				definitionIsIt = this.state.valueServerName == this.state.style.serverName;
@@ -277,44 +289,23 @@ class ConfigMetadataStyle extends PantherComponent{
 
 		if (this.state.valueSource=="definition") {
 			modelData.definition = {
-				type: this.state.valueFeaturesType,
-				filterAttributeKey: this.state.valueFilterAttribute,
-				filterAttributeSetKey: this.state.valueFilterAttributeSet,
-			//	rules: [
-			//		{
-			//			name: 'Urban fabric',
-			//			title: 'Urban fabric',
-			//			filter: '111,112,113',
-			//			appearance: {
-			//				fillColour: '#D0091D'
-			//			}
-			//		},
-			//		{
-			//			name: 'Non-urban artificial areas',
-			//			title: 'Non-urban artificial areas',
-			//			filter: '120,121,130,140',
-			//			appearance: {
-			//				fillColour: '#AE0214'
-			//			}
-			//		},
-			//		{
-			//			name: 'Natural and semi-natural areas',
-			//			title: 'Natural and semi-natural areas',
-			//			filter: '310,320,330',
-			//			appearance: {
-			//				fillColour: '#59B642'
-			//			}
-			//		},
-			//		{
-			//			name: 'Water',
-			//			title: 'Water',
-			//			filter: '510,512,520',
-			//			appearance: {
-			//				fillColour: '#56C8EE'
-			//			}
-			//		}
-			//	]
+				type: this.state.valueFeaturesType
 			};
+			if (
+				this.state.valueFilterAttributeSet &&
+				this.state.valueFilterAttribute
+			) {
+				// filter set -> standard rule set
+				modelData.definition.filterAttributeKey = this.state.valueFilterAttribute;
+				modelData.definition.filterAttributeSetKey = this.state.valueFilterAttributeSet;
+				modelData.definition.rules = utils.clone(this.state.valueDefinitionRules);
+			}
+			else {
+				// no filter -> single rule for all features
+				modelData.definition.filterAttributeKey = null;
+				modelData.definition.filterAttributeSetKey = null;
+				modelData.definition.rules = [utils.clone(this.state.valueDefinitionSingleRule)];
+			}
 		}
 		else if (this.state.valueSource=="geoserver") {
 			modelData.serverName = this.state.valueServerName;
