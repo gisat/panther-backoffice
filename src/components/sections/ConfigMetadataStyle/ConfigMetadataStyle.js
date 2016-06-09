@@ -208,36 +208,65 @@ class ConfigMetadataStyle extends PantherComponent{
 
 			var definitionIsIt = true;
 			if (
-				this.state.valueSource=="definition" &&
-				this.state.style.definition &&
-				this.state.style.definition.hasOwnProperty("type")
+				this.state.valueSource=="definition"
 			) {
-				if (this.state.style.definition.filterType==this.state.valueFilterType) {
-					if (
-						this.state.valueFilterType == "attributeCsv" ||
-						this.state.valueFilterType == "attributeInterval"
-					) {
-						definitionIsIt = (
-							this.state.valueFeaturesType == this.state.style.definition.type &&
-							this.state.valueFilterAttributeSet == this.state.style.definition.filterAttributeSetKey &&
-							this.state.valueFilterAttribute == this.state.style.definition.filterAttributeKey
-						);
-						if (this.state.valueFilterAttributeSet && this.state.valueFilterAttribute) {
+				if (
+					this.state.style.definition &&
+					this.state.style.definition.hasOwnProperty("type")
+				) {
+					if (this.state.style.definition.filterType == this.state.valueFilterType) {
+						if (
+							this.state.valueFilterType == "attributeCsv" ||
+							this.state.valueFilterType == "attributeInterval"
+						) {
 							definitionIsIt = (
-								definitionIsIt &&
-								_.isEqual(this.state.valueDefinitionRules, this.state.style.definition.rules)
+								this.state.valueFeaturesType == this.state.style.definition.type &&
+								this.state.valueFilterAttributeSet == this.state.style.definition.filterAttributeSetKey &&
+								this.state.valueFilterAttribute == this.state.style.definition.filterAttributeKey
 							);
+							if (this.state.valueFilterAttributeSet && this.state.valueFilterAttribute) {
+								definitionIsIt = (
+									definitionIsIt &&
+									_.isEqual(this.state.valueDefinitionRules, this.state.style.definition.rules)
+								);
+							}
+						}
+						else {
+							// no filter -> single rule
+							if (this.state.style.definition.rules.length) {
+								definitionIsIt = (
+									_.isEqual(this.state.valueDefinitionSingleRule, this.state.style.definition.rules[0])
+								);
+							}
+							else {
+								//todo could we just not have empty keys?
+								var appearanceSet = false;
+								if(this.state.valueDefinitionSingleRule.hasOwnProperty("appearance")) {
+									_.each(this.state.valueDefinitionSingleRule.appearance, function(value, key){
+										appearanceSet = appearanceSet || !!value;
+									});
+								}
+								definitionIsIt = !(
+									this.state.valueDefinitionSingleRule.name ||
+									appearanceSet
+								);
+							}
 						}
 					}
 					else {
-						// no filter -> single rule
-						definitionIsIt = (
-							_.isEqual(this.state.valueDefinitionSingleRule, this.state.style.definition.rules[0])
-						);
+						// filter types differ
+						definitionIsIt = false;
 					}
 				}
 				else {
-					definitionIsIt = false;
+					// source is definition but there isn't one
+					definitionIsIt = !(
+						this.state.valueFilterType ||
+						this.state.valueFeaturesType ||
+						this.state.valueFilterAttributeSet ||
+						this.state.valueFilterAttribute ||
+						this.state.valueDefinitionRules.length
+					);
 				}
 			}
 			else if (this.state.valueSource=="geoserver") {
