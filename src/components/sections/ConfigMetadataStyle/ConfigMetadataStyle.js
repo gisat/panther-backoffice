@@ -51,6 +51,7 @@ const FEATURESTYPES = [
 ];
 
 const FILTERTYPES = [
+	{key: "no", name: "No filter"},
 	{key: "attributeCsv", name: "Attribute: Values"},
 	{key: "attributeInterval", name: "Attribute: Interval"}
 ];
@@ -227,12 +228,12 @@ class ConfigMetadataStyle extends PantherComponent{
 								_.isEqual(this.state.valueDefinitionRules, this.state.style.definition.rules)
 							);
 						}
-						else {
-							definitionIsIt = (
-								definitionIsIt &&
-								_.isEqual(this.state.valueDefinitionSingleRule, this.state.style.definition.rules[0])
-							);
-						}
+					}
+					else {
+						// no filter -> single rule
+						definitionIsIt = (
+							_.isEqual(this.state.valueDefinitionSingleRule, this.state.style.definition.rules[0])
+						);
 					}
 				}
 				else {
@@ -335,7 +336,7 @@ class ConfigMetadataStyle extends PantherComponent{
 				}
 			}
 			else {
-				// no filter type - filters vary
+				// no filter type - no filter / filters vary
 				modelData.definition.rules = utils.clone(this.state.valueDefinitionRules);
 			}
 		}
@@ -562,6 +563,7 @@ class ConfigMetadataStyle extends PantherComponent{
 				);
 
 				var rulesInsert = [];
+
 				if (this.state.valueFilterAttribute) {
 					for (let ruleIndex in this.state.valueDefinitionRules) {
 
@@ -643,50 +645,56 @@ class ConfigMetadataStyle extends PantherComponent{
 					);
 				}
 				else {
-					// no filter attribute set -> single class
-					rulesInsert.push(
-						<div
-							key="rule-frame-singlerule"
-							className="frame-input-wrapper singleclass"
-						>
-							<div className="frame-wrapper-header">
-								{this.state.valueDefinitionSingleRule.name}
-							</div>
-							<label className="container">
-								Name
-								<Input
-									type="text"
-									name="valueName-singlerule"
-									placeholder=" "
-									value={this.state.valueDefinitionSingleRule.name}
-									onChange={this.onChangeRule.bind(this,false,"name")}
-								/>
-							</label>
-							<label className="container">
-								Fill colour
-								<Input
-									type="text"
-									name="valueFillColour-singlerule"
-									placeholder=" "
-									value={this.state.valueDefinitionSingleRule.appearance.fillColour}
-									onChange={this.onChangeRuleAppearance.bind(this,false,"fillColour")}
-								/>
-							</label>
-						</div>
-					);
+					//filter needs attribute, but none is selected
 					classesInsert = (
-						<div className="frame-input-wrapper required">
-							<div className="label">
-								Single class (all features)
-								{rulesInsert}
-							</div>
-							<div className="frame-input-wrapper-info">
-								No filter attribute selected, only all features can be styled.
-							</div>
+						<div className="prod">
+							Select a filter attribute
 						</div>
 					);
 				}
 			}
+			else {
+				// no filter set -> single class (for now?)
+				classesInsert = (
+					<div className="frame-input-wrapper required">
+						<div className="label">
+							Single class (all features)
+							<div
+								key="rule-frame-singlerule"
+								className="frame-input-wrapper singleclass"
+							>
+								<div className="frame-wrapper-header">
+									{this.state.valueDefinitionSingleRule.name}
+								</div>
+								<label className="container">
+									Name
+									<Input
+										type="text"
+										name="valueName-singlerule"
+										placeholder=" "
+										value={this.state.valueDefinitionSingleRule.name}
+										onChange={this.onChangeRule.bind(this,false,"name")}
+									/>
+								</label>
+								<label className="container">
+									Fill colour
+									<Input
+										type="text"
+										name="valueFillColour-singlerule"
+										placeholder=" "
+										value={this.state.valueDefinitionSingleRule.appearance.fillColour}
+										onChange={this.onChangeRuleAppearance.bind(this,false,"fillColour")}
+									/>
+								</label>
+							</div>
+						</div>
+						<div className="frame-input-wrapper-info">
+							No filter attribute selected, only all features can be styled.
+						</div>
+					</div>
+				);
+			}
+
 
 			sourceForm = (
 				<div>
