@@ -54,9 +54,6 @@ class ConfigMetadataLayerVector extends PantherComponent{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -153,7 +150,8 @@ class ConfigMetadataLayerVector extends PantherComponent{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(VectorLayerStore, ["layer"]);
 		this.changeListener.add(TopicStore, ["topics"]);
 		this.responseListener.add(TopicStore);
@@ -165,11 +163,6 @@ class ConfigMetadataLayerVector extends PantherComponent{
 		this.responseListener.add(AttributeSetStore);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

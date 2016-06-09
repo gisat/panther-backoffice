@@ -35,9 +35,7 @@ class ScreenAnalysisConfig extends PantherComponent{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
-
+		
 		if(this.props.data && this.props.data.objectType) {
 			this.state.objectType = this.props.data.objectType;
 		}
@@ -73,16 +71,11 @@ class ScreenAnalysisConfig extends PantherComponent{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
-		this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(AnalysisStore);
 		this.responseListener.add(AnalysisStore);
 		super.setStateFromStores(this.store2state());
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -109,7 +102,7 @@ class ScreenAnalysisConfig extends PantherComponent{
 			state = this.state;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(state.selectorValue);
+		this._stateHash = utils.stringHash("ScreenAnalysisConfig"+state.selectorValue);
 	}
 	getStateHash() {
 		if(!this._stateHash) {

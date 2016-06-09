@@ -51,9 +51,6 @@ class ConfigMetadataTheme extends PantherComponent{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -142,7 +139,8 @@ class ConfigMetadataTheme extends PantherComponent{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() { 
+		super.componentDidMount();
 		this.changeListener.add(ThemeStore, ["theme"]);
 		this.changeListener.add(ScopeStore, ["scopes"]);
 		this.changeListener.add(TopicStore, ["topics"]);
@@ -151,11 +149,6 @@ class ConfigMetadataTheme extends PantherComponent{
 		this.responseListener.add(PeriodStore);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

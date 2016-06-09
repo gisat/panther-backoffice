@@ -26,7 +26,6 @@ class ScreenMetadataPeriod extends PantherComponent{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, "addChangeListener", "removeChangeListener");
 
 		if(this.props.data && this.props.data.initialKey) {
 			this.state.selectorValue = this.props.data.initialKey;
@@ -51,13 +50,11 @@ class ScreenMetadataPeriod extends PantherComponent{
 		super.setStateFromStores(this.store2state());
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() { 
+		super.componentDidMount();
+		
 		this.changeListener.add(PeriodStore);
 		super.setStateFromStores(this.store2state());
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

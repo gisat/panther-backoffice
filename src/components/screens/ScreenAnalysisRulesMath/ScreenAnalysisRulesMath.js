@@ -168,7 +168,8 @@ class ScreenAnalysisRulesMath extends PantherComponent {
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 		this.responseListener.add(AttributeSetStore);
@@ -192,11 +193,6 @@ class ScreenAnalysisRulesMath extends PantherComponent {
 	//		}
 	//	}
 	//}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
-	}
 
 
 	/**
@@ -234,7 +230,7 @@ class ScreenAnalysisRulesMath extends PantherComponent {
 			props = this.props;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(this.state.analysis.key.toString());
+		this._stateHash = utils.stringHash("ScreenAnalysisRulesMath" + this.state.analysis.key.toString());
 	}
 	getStateHash() {
 		if(!this._stateHash) {

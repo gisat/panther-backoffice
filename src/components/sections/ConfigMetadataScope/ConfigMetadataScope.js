@@ -137,7 +137,8 @@ class ConfigMetadataScope extends PantherComponent{
 	}
 
 	componentDidMount() {
-		this.mounted = true;
+		super.componentDidMount();
+		
 		this.changeListener.add(ScopeStore, ["scope"]);
 		this.changeListener.add(AULevelStore, ["auLevels"]);
 		this.responseListener.add(AULevelStore);

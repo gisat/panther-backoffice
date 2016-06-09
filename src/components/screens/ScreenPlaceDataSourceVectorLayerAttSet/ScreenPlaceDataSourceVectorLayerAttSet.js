@@ -91,17 +91,15 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends PantherComponent {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() { 
+		super.componentDidMount();
+		
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(VectorLayerStore, ["layers"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 
 		//this.context.setStateFromStores.call(this, this.store2state());
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

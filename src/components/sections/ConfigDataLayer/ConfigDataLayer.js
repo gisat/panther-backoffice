@@ -108,9 +108,6 @@ class ConfigDataLayer extends PantherComponent {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -225,7 +222,8 @@ class ConfigDataLayer extends PantherComponent {
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(ScopeStore, ["scopes"]);
 		this.responseListener.add(ScopeStore);
 		this.changeListener.add(VectorLayerStore, ["vectorLayerTemplates"]);
@@ -244,11 +242,6 @@ class ConfigDataLayer extends PantherComponent {
 		this.changeListener.add(DataLayerColumnsStore,["dataLayerColumns"]);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -492,7 +485,7 @@ class ConfigDataLayer extends PantherComponent {
 			props = this.props;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(props.selectorValue);
+		this._stateHash = utils.stringHash("ConfigDataLayer" + props.selectorValue);
 	}
 	getStateHash() {
 		if(!this._stateHash) {

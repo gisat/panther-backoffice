@@ -47,9 +47,6 @@ class ConfigMetadataStyle extends PantherComponent{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -125,14 +122,11 @@ class ConfigMetadataStyle extends PantherComponent{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(StyleStore, ["style"]);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

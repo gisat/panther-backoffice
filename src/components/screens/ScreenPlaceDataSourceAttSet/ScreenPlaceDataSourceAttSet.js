@@ -35,7 +35,6 @@ class ScreenPlaceDataSourceAttSet extends PantherComponent {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, "addChangeListener", "removeChangeListener");
 
 		if(this.props.data) {
 			if (this.props.data.placeKey) {
@@ -90,16 +89,14 @@ class ScreenPlaceDataSourceAttSet extends PantherComponent {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() { 
+		super.componentDidMount();
+		
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 		this.changeListener.add(AULevelStore, ["auLevels"]);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -129,7 +126,7 @@ class ScreenPlaceDataSourceAttSet extends PantherComponent {
 			state = this.state;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(state.selectorValuePlace + state.selectorValueAttSet + state.selectorValueAULevel);
+		this._stateHash = utils.stringHash("ScreenPlaceDataSourceAttSet" + state.selectorValuePlace + state.selectorValueAttSet + state.selectorValueAULevel);
 	}
 	getStateHash() {
 		if(!this._stateHash) {

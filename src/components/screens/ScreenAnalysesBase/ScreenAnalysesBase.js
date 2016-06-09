@@ -107,18 +107,12 @@ class ScreenAnalysesBase extends PantherComponent{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(AnalysisStore, ["spatialAnalyses","fidAnalyses","mathAnalyses"]);
 		this.responseListener.add(AnalysisStore);
 
 		super.setStateFromStores(this.store2state());
-		this.mounted = true;
-	}
-
-	componentWillUnmount() {
-		this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
 	}
 
 	componentWillUpdate(newProps, newState) {
@@ -136,7 +130,7 @@ class ScreenAnalysesBase extends PantherComponent{
 			state = this.state;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(state.activeAnalysesType);
+		this._stateHash = utils.stringHash("ScreenAnalysesBase" + state.activeAnalysesType);
 	}
 	getStateHash() {
 		if(!this._stateHash) {

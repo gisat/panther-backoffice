@@ -113,7 +113,7 @@ class ScreenAnalysisRulesSpatial extends PantherComponent {
 					let newState = {
 						valueAttributeMaps: {$merge: attributeMaps}
 					};
-					thisComponent.context.setStateDeep.call(thisComponent, newState);
+					super.setStateDeep(newState);
 				}
 
 			});
@@ -163,7 +163,8 @@ class ScreenAnalysisRulesSpatial extends PantherComponent {
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(VectorLayerStore, ["featureLayer"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSetsResult"]); // todo attributeSetsLayer
@@ -189,12 +190,6 @@ class ScreenAnalysisRulesSpatial extends PantherComponent {
 			}
 		}
 	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
-	}
-
 
 	/**
 	 * Check if state is the same as it was when loaded from stores
@@ -272,7 +267,7 @@ class ScreenAnalysisRulesSpatial extends PantherComponent {
 			props = this.props;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(this.state.analysis.key.toString());
+		this._stateHash = utils.stringHash("ScreenAnalysisRulesSpatial" + this.state.analysis.key.toString());
 	}
 	getStateHash() {
 		if(!this._stateHash) {

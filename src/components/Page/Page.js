@@ -62,14 +62,16 @@ class Page extends PantherComponent {
 		super.setStateFromStores(this.store2state());
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		if(this.props.screenSet) {
 			this.changeListener.add(ScreenStore);
 			super.setStateFromStores(this.store2state());
 		}
 	}
 
-	componentWillUnmount() { this.mounted = false;
+	componentWillUnmount() {
+		super.componentWillUnmount();
 		if(this.props.screenSet) {
 			this.changeListener.clean();
 		}

@@ -48,15 +48,11 @@ class ScreenDataLayersBase extends PantherComponent {
 	}
 
 	componentDidMount() {
-		logger.trace("ScreenDataLayersBase# componentDidMount()");
-		this.mounted = true;
+		super.componentDidMount();
+		
 		this.changeListener.add(DataLayerStore);
 
 		super.setStateFromStores(this.store2state());
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

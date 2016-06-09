@@ -89,7 +89,8 @@ class ScreenAnalysisRuns extends PantherComponent {
 		this.setStateFromStores(this.props, keys);
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(AnalysisStore, ["analysis"]);
 		//this.changeListener.add(AULevelStore, ["levels"]);
 		this.changeListener.add(ScopeStore, ["scopes"]);
@@ -97,10 +98,6 @@ class ScreenAnalysisRuns extends PantherComponent {
 		//this.changeListener.add(PeriodStore, ["scopePeriods"]);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -148,7 +145,7 @@ class ScreenAnalysisRuns extends PantherComponent {
 			props = this.props;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(props.data.analysis);
+		this._stateHash = utils.stringHash("ScreenAnalysisRuns" + props.data.analysis);
 	}
 	getStateHash() {
 		if(!this._stateHash) {

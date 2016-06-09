@@ -5,10 +5,11 @@ import Link from '../Link';
 import UISVG from '../atoms/UISVG';
 
 import { publicPath } from '../../config';
+import PantherComponent from "../common/PantherComponent";
 
 
 @withStyles(styles)
-class Menu extends Component {
+class Menu extends PantherComponent {
 
 	static propTypes = {
 		activeScreenSet: PropTypes.string,
@@ -81,8 +82,8 @@ class Menu extends Component {
 		);
 	}
 
-	componentDidMount() { this.mounted = true;
-
+	componentDidMount() {
+		super.componentDidMount();
 		$("#menu").focusin(function() {
 			$(this).addClass("open");
 		});

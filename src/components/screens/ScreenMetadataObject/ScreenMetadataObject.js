@@ -58,9 +58,6 @@ class ScreenMetadataObject extends PantherComponent{
 		if(this.props.data && this.props.data.objectKey) {
 			this.state.selectorValue = this.props.data.objectKey;
 		}
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	getUrl() {
@@ -91,16 +88,12 @@ class ScreenMetadataObject extends PantherComponent{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
+
 		if(this.props.data.objectType) {
 			this.addListeners();
 			super.setStateFromStores(this.store2state());
-		}
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		if(this.props.data.objectType) {
-			this.removeListeners();
 		}
 	}
 
@@ -141,7 +134,7 @@ class ScreenMetadataObject extends PantherComponent{
 			state = this.state;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(state.selectorValue);
+		this._stateHash = utils.stringHash("ScreenMetadataObject" + state.selectorValue);
 	}
 	getStateHash() {
 		if(!this._stateHash) {

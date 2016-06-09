@@ -55,8 +55,6 @@ class ConfigMetadataAttribute extends PantherComponent{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -104,14 +102,11 @@ class ConfigMetadataAttribute extends PantherComponent{
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(AttributeStore, ["attribute"]);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

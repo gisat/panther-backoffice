@@ -79,16 +79,13 @@ class ScreenPlacesBase extends PantherComponent{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() { 
+		super.componentDidMount();
+		
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.responseListener.add(PlaceStore);
 
 		super.setStateFromStores(this.store2state());
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
 	}
 
 	/**

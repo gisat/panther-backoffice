@@ -3,12 +3,18 @@ import React, { PropTypes, Component } from 'react';
 import logger from '../../core/Logger';
 import update from 'react-addons-update';
 
+import ListenerHandler from '../../core/ListenerHandler';
+
 class PantherComponent extends Component {
 	constructor(props) {
 		super(props);
 
 		this.acceptChange = true;
 		logger.info("PantherComponent# constructor(), Props: ", props);
+
+		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
+		this.focusListener = new ListenerHandler(this, this._focusScreen, 'addFocusListener', 'removeFocusListener');
 	}
 
 	setStateFromStores(props, keys) {
@@ -53,6 +59,43 @@ class PantherComponent extends Component {
 			logger.warn("context# setStateDeep(), Tries to update deep state of unmounted component.", updatePath);
 		}
 	}
+
+	componentDidMount() {
+		this.mounted = true;
+	}
+
+	componentWillUpdate() {
+		this.mounted = true;
+	}
+
+	componentWillUnmount() {
+		this.mounted = false;
+
+		this.changeListener.clean();
+		this.responseListener.clean();
+		this.focusListener.clean();
+	}
+
+	/**
+	 * Hook. This method is called whenever any change occur to store, which this component listens to.
+	 * To be overridden by descendants.
+	 * @private
+	 */
+	_onStoreChange() {}
+
+	/**
+	 * Hook. This method is called whenever store responds to action, which this component listens to.
+	 * To be overridden by descendants.
+	 * @private
+	 */
+	_onStoreResponse() {}
+
+
+	/**
+	 * Hook. This method is called whenever focused screen changes.
+	 * @private
+	 */
+	_focusScreen() {}
 
 	saveForm() {
 		this.acceptChange = true;
