@@ -29,7 +29,7 @@ var initialState = {
 	valueServerName: "",
 	valueSource: "definition",
 	valueFeaturesType: "polygon",
-	valueFilterType: "attributeCsv",
+	valueFilterType: "no",
 	valueDefinitionRules: [],
 	valueDefinitionSingleRule: {
 		name: "",

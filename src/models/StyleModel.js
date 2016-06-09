@@ -187,7 +187,7 @@ class StyleModel extends Model {
 			if (!options.definition) {
 				options.definition = {
 					type: 'polygon',
-					filterType: 'attributeCsv' //todo no common filter? (once/if per-class filters are possible)
+					filterType: 'no'
 				}
 			}
 		}
