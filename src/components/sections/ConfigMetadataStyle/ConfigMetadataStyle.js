@@ -571,7 +571,7 @@ class ConfigMetadataStyle extends PantherComponent{
 				}
 
 				commonFilterConfigInsert = (
-					<div className="frame-input-wrapper">
+					<div className="frame-input-wrapper required">
 						<label className="container">
 							Filter attribute
 							<Select
@@ -747,7 +747,7 @@ class ConfigMetadataStyle extends PantherComponent{
 						</div>
 					</div>
 
-					<div className="frame-input-wrapper">
+					<div className="frame-input-wrapper required">
 						<label className="container">
 							Filter type
 							<Select
