@@ -608,7 +608,7 @@ class ConfigMetadataStyle extends PantherComponent{
 						rulesInsert.push(
 							<div
 								key={"rule-frame-" + ruleIndex}
-								className="frame-input-wrapper"
+								className="frame-wrapper-object"
 							>
 								<div className="frame-wrapper-header">
 									{this.state.valueDefinitionRules[ruleIndex].name}
@@ -690,7 +690,7 @@ class ConfigMetadataStyle extends PantherComponent{
 							Single class (all features)
 							<div
 								key="rule-frame-singlerule"
-								className="frame-input-wrapper singleclass"
+								className="frame-wrapper-object singleclass"
 							>
 								<div className="frame-wrapper-header">
 									{this.state.valueDefinitionSingleRule.name}

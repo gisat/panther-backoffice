@@ -1237,35 +1237,7 @@ a.ptr-item {
 .frame-input-wrapper > .label > .ptr-item:first-of-type {
 	margin-top: .5rem;
 }
-.frame-input-wrapper > .label > .frame-input-wrapper.singleclass {
-	margin-bottom: 0;
-}
-.frame-wrapper .frame-wrapper-header,
-.frame-input-wrapper .frame-wrapper-header {
-	height: 2.125rem;
-	line-height: 2.125rem;
-	font-size: 1.125rem;
-	padding: 0 1rem;
-	/*background-color: #859BB1;*/
-	background-color: #9CA7B3;
-	color: #ddd;
 
-	position: relative;
-}
-.frame-wrapper-header > .frame-wrapper-header-remove {
-	position: absolute;
-	top:0;
-	right: 0;
-	width: 2.125rem;
-	height: 2.125rem;
-	cursor: pointer;
-	line-height: 2rem;
-	text-align: center;
-	color: #c1c1c1;
-}
-.frame-wrapper-header > .frame-wrapper-header-remove:hover {
-	color:#EAB5B5;
-}
 .frame-input-wrapper-info {
 	border-top: 1px solid rgba(0,0,0,.08);
 	padding: .5rem 1rem;
@@ -1295,6 +1267,56 @@ a.ptr-item {
 	line-height: 1.5rem;
 	color: #666;
 }
+
+
+.frame-wrapper-object {
+	border: 2px solid #9CA7B3;
+	/*border: 2px solid #909DAB;*/
+	border-radius: .25rem;
+	margin-bottom: 1.5rem;
+	/*box-shadow: .05rem .05rem .2rem 0 rgba(0,0,0,.07);*/
+	max-width: 50rem;
+
+	position: relative;
+}
+.frame-wrapper-object > label,
+.frame-wrapper-object > .label {
+	padding: .875rem;
+	margin: 0;
+}
+.frame-input-wrapper > .label > .frame-wrapper-object {
+	margin-top: .5rem;
+}
+.frame-input-wrapper > .label > .frame-wrapper-object.singleclass {
+	margin-bottom: 0;
+}
+.frame-wrapper-object .frame-wrapper-header,
+.frame-input-wrapper .frame-wrapper-header {
+	height: 2.125rem;
+	line-height: 2.125rem;
+	font-size: 1.125rem;
+	padding: 0 1rem;
+	/*background-color: #859BB1;*/
+	background-color: #9CA7B3;
+	color: #ddd;
+
+	position: relative;
+}
+.frame-wrapper-header > .frame-wrapper-header-remove {
+	position: absolute;
+	top:0;
+	right: 0;
+	width: 2.125rem;
+	height: 2.125rem;
+	cursor: pointer;
+	line-height: 2rem;
+	text-align: center;
+	color: #c1c1c1;
+}
+.frame-wrapper-header > .frame-wrapper-header-remove:hover {
+	color:#EAB5B5;
+}
+
 
 .activeness-indicator {
 	display: inline-block;
