@@ -17,6 +17,7 @@ import ConfigPlaceDataSource from '../../sections/ConfigPlaceDataSource';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	scope: null,
@@ -29,11 +30,7 @@ var initialState = {
 };
 
 
-class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
-
-	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired
-	};
+class ScreenPlaceDataSourceVectorLayerAttSet extends PantherComponent {
 
 	constructor(props) {
 		super(props);
@@ -77,14 +74,14 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 		) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
-			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
+			let setStatePromise = super.setStateFromStores(store2state, keys);
 
 			setStatePromise.then(function () {
 				let next2state = {
 					places: PlaceStore.getFiltered({scope: thisComponent.state.scope}),
 					layers: utils.getLayerTemplatesForScope(thisComponent.state.scope, "vector")
 				};
-				thisComponent.context.setStateFromStores.call(thisComponent, next2state);
+				super.setStateFromStores(next2state);
 			});
 		}
 	}
@@ -94,17 +91,15 @@ class ScreenPlaceDataSourceVectorLayerAttSet extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() { 
+		super.componentDidMount();
+		
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(VectorLayerStore, ["layers"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 
 		//this.context.setStateFromStores.call(this, this.store2state());
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

@@ -45,7 +45,6 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
@@ -53,9 +52,6 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -74,7 +70,7 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 		if(props.selectorValue) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
-			this.context.setStateFromStores.call(this, store2state, keys);
+			super.setStateFromStores(store2state, keys);
 			// if stores changed, overrides user input - todo fix
 
 			if(!keys || keys.indexOf("layer")!=-1) {
@@ -142,7 +138,8 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(RasterLayerStore, ["layer"]);
 		this.changeListener.add(TopicStore, ["topics"]);
 		this.responseListener.add(TopicStore);
@@ -152,11 +149,6 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 		this.responseListener.add(StyleStore);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

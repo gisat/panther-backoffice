@@ -17,6 +17,7 @@ import PlaceRelations from '../../sections/PlaceRelations';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	places: [],
@@ -25,12 +26,10 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenPlacesBase extends Component{
+class ScreenPlacesBase extends PantherComponent{
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
@@ -56,7 +55,7 @@ class ScreenPlacesBase extends Component{
 
 	_onStoreChange() {
 		logger.trace("ScreenPlacesBase# _onStoreChange()");
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -80,16 +79,13 @@ class ScreenPlacesBase extends Component{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() { 
+		super.componentDidMount();
+		
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.responseListener.add(PlaceStore);
 
-		this.context.setStateFromStores.call(this, this.store2state());
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
+		super.setStateFromStores(this.store2state());
 	}
 
 	/**

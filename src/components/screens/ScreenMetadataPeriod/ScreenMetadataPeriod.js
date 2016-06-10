@@ -12,6 +12,7 @@ import ConfigMetadataPeriod from '../../sections/ConfigMetadataPeriod';
 import ListenerHandler from '../../../core/ListenerHandler';
 
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	periods: [],
@@ -20,16 +21,11 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenMetadataPeriod extends Component{
-
-	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired
-	};
+class ScreenMetadataPeriod extends PantherComponent{
 
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, "addChangeListener", "removeChangeListener");
 
 		if(this.props.data && this.props.data.initialKey) {
 			this.state.selectorValue = this.props.data.initialKey;
@@ -51,16 +47,14 @@ class ScreenMetadataPeriod extends Component{
 
 	_onStoreChange() {
 		logger.trace("ScreenMetadataPeriod# _onStoreChange()");
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() { 
+		super.componentDidMount();
+		
 		this.changeListener.add(PeriodStore);
-		this.context.setStateFromStores.call(this, this.store2state());
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
+		super.setStateFromStores(this.store2state());
 	}
 
 	componentWillReceiveProps(newProps) {

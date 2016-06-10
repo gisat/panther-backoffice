@@ -26,6 +26,7 @@ import ConfigMetadataStyle from '../../sections/ConfigMetadataStyle';
 import ListenerHandler from '../../../core/ListenerHandler';
 
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	scopes: [],
@@ -45,11 +46,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenMetadataObject extends Component{
-
-	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired
-	};
+class ScreenMetadataObject extends PantherComponent{
 
 	constructor(props) {
 		super(props);
@@ -61,9 +58,6 @@ class ScreenMetadataObject extends Component{
 		if(this.props.data && this.props.data.objectKey) {
 			this.state.selectorValue = this.props.data.objectKey;
 		}
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	getUrl() {
@@ -81,7 +75,7 @@ class ScreenMetadataObject extends Component{
 
 	_onStoreChange() {
 		logger.trace("ScreenMetadataObject# _onStoreChange()");
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -94,16 +88,12 @@ class ScreenMetadataObject extends Component{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
+
 		if(this.props.data.objectType) {
 			this.addListeners();
-			this.context.setStateFromStores.call(this, this.store2state());
-		}
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		if(this.props.data.objectType) {
-			this.removeListeners();
+			super.setStateFromStores(this.store2state());
 		}
 	}
 
@@ -119,7 +109,7 @@ class ScreenMetadataObject extends Component{
 			this.setState({
 				objectType: newProps.data.objectType
 			});
-			this.context.setStateFromStores.call(this, this.store2state(newProps));
+			super.setStateFromStores(this.store2state(newProps));
 		}
 	}
 
@@ -144,7 +134,7 @@ class ScreenMetadataObject extends Component{
 			state = this.state;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(state.selectorValue);
+		this._stateHash = utils.stringHash("ScreenMetadataObject" + state.selectorValue);
 	}
 	getStateHash() {
 		if(!this._stateHash) {

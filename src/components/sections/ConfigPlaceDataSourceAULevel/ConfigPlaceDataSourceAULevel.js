@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 
 import _ from 'underscore';
@@ -58,16 +58,12 @@ class ConfigPlaceDataSourceAULevel extends PantherComponent {
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
-		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired
+		onInteraction: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -91,11 +87,11 @@ class ConfigPlaceDataSourceAULevel extends PantherComponent {
 		) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
-			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
+			let setStatePromise = super.setStateFromStores(store2state, keys);
 
 			setStatePromise.then(function () {
 
-				let relations2statePromise = thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(props,thisComponent.state,keys));
+				let relations2statePromise = super.setStateFromStores(thisComponent.relations2state(props,thisComponent.state,keys));
 
 				relations2statePromise.then(function(){
 
@@ -220,17 +216,14 @@ class ConfigPlaceDataSourceAULevel extends PantherComponent {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(PlaceStore, ["place"]);
 		this.changeListener.add(AULevelStore, ["auLevel"]);
 		this.changeListener.add(DataLayerStore, ["dataLayers"]);
 		this.changeListener.add(ObjectRelationStore, ["relations"]);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -283,7 +276,7 @@ class ConfigPlaceDataSourceAULevel extends PantherComponent {
 	}
 
 
-	saveForm() {  		
+	saveForm() {
 		super.saveForm();
 
 		var actionData = [];

@@ -25,6 +25,7 @@ import AnalysisModel from '../../../models/AnalysisModel';
 import AnalysisStore from '../../../stores/AnalysisStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
+import PantherComponent from "../../common/PantherComponent";
 
 
 var initialState = {
@@ -36,7 +37,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenAnalysisRulesMath extends Component{
+class ScreenAnalysisRulesMath extends PantherComponent {
 
 	static propTypes = {
 		disabled: PropTypes.bool,
@@ -52,9 +53,7 @@ class ScreenAnalysisRulesMath extends Component{
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
@@ -95,7 +94,7 @@ class ScreenAnalysisRulesMath extends Component{
 			analysisPromise.then(function(analysis){
 
 				let store2state = thisComponent.store2state(props,analysis);
-				thisComponent.context.setStateFromStores.call(thisComponent, store2state, keys);
+				super.setStateFromStores(store2state, keys);
 				// if stores changed, overrides user input - todo fix
 
 				if(
@@ -169,7 +168,8 @@ class ScreenAnalysisRulesMath extends Component{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 		this.responseListener.add(AttributeSetStore);
@@ -193,11 +193,6 @@ class ScreenAnalysisRulesMath extends Component{
 	//		}
 	//	}
 	//}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
-	}
 
 
 	/**
@@ -235,7 +230,7 @@ class ScreenAnalysisRulesMath extends Component{
 			props = this.props;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(this.state.analysis.key.toString());
+		this._stateHash = utils.stringHash("ScreenAnalysisRulesMath" + this.state.analysis.key.toString());
 	}
 	getStateHash() {
 		if(!this._stateHash) {
@@ -379,7 +374,7 @@ class ScreenAnalysisRulesMath extends Component{
 				valueAttributeSetMap: {$merge: attributeSetMap},
 				valueResultAttSet: {$set: newValue}
 			};
-			this.context.setStateDeep.call(this, newState);
+			super.setStateDeep(newState);
 
 		}
 	}
@@ -396,7 +391,7 @@ class ScreenAnalysisRulesMath extends Component{
 		let newState = {
 			valueAttributeSetMap: {$merge: attributeSetMap}
 		};
-		this.context.setStateDeep.call(this,newState);
+		super.setStateDeep(newState);
 	}
 
 	onChangeOperation (resultAttSetKey) {
@@ -411,7 +406,7 @@ class ScreenAnalysisRulesMath extends Component{
 		let newState = {
 			valueAttributeSetMap: {$merge: attributeSetMap}
 		};
-		this.context.setStateDeep.call(this,newState);
+		super.setStateDeep(newState);
 	}
 
 

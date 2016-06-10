@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import styles from './PlaceRelations.css';
 import withStyles from '../../../decorators/withStyles';
@@ -62,17 +62,13 @@ class PlaceRelations extends PantherComponent {
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -92,11 +88,11 @@ class PlaceRelations extends PantherComponent {
 		}
 		var thisComponent = this;
 		let store2state = this.store2state(props);
-		this.context.setStateFromStores.call(this, store2state, keys);
+		super.setStateFromStores(store2state, keys);
 		// if stores changed, overrides user input - todo fix
 		if(!keys || keys.indexOf("placeRelations")!=-1) {
 			store2state.placeRelations.then(function(relations){
-				thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.relations2state(relations));
+				super.setStateFromStores(thisComponent.relations2state(relations));
 			});
 		}
 	}
@@ -106,16 +102,13 @@ class PlaceRelations extends PantherComponent {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(ScopeStore, ["scopes"]);
 		this.changeListener.add(PlaceStore, ["place"]);
 		this.changeListener.add(ObjectRelationStore, ["placeRelations"]);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

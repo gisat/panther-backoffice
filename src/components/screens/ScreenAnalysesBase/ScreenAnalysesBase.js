@@ -16,6 +16,7 @@ import ObjectList from '../../elements/ObjectList';
 import ScreenAnalysisConfig from '../../screens/ScreenAnalysisConfig';
 
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	spatialAnalyses: [],
@@ -26,7 +27,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenAnalysesBase extends Component{
+class ScreenAnalysesBase extends PantherComponent{
 
 	static propTypes = {
 		disabled: PropTypes.bool,
@@ -38,7 +39,6 @@ class ScreenAnalysesBase extends Component{
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
@@ -83,7 +83,7 @@ class ScreenAnalysesBase extends Component{
 
 	_onStoreChange(keys) {
 		logger.trace("ScreenAnalysesBase# _onStoreChange(), Keys:", keys);
-		this.context.setStateFromStores.call(this, this.store2state(), keys);
+		super.setStateFromStores(this.store2state(), keys);
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -107,18 +107,12 @@ class ScreenAnalysesBase extends Component{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(AnalysisStore, ["spatialAnalyses","fidAnalyses","mathAnalyses"]);
 		this.responseListener.add(AnalysisStore);
 
-		this.context.setStateFromStores.call(this, this.store2state());
-		this.mounted = true;
-	}
-
-	componentWillUnmount() {
-		this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
+		super.setStateFromStores(this.store2state());
 	}
 
 	componentWillUpdate(newProps, newState) {
@@ -136,7 +130,7 @@ class ScreenAnalysesBase extends Component{
 			state = this.state;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(state.activeAnalysesType);
+		this._stateHash = utils.stringHash("ScreenAnalysesBase" + state.activeAnalysesType);
 	}
 	getStateHash() {
 		if(!this._stateHash) {

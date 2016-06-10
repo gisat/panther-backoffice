@@ -25,6 +25,7 @@ import AnalysisModel from '../../../models/AnalysisModel';
 import AnalysisStore from '../../../stores/AnalysisStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
+import PantherComponent from "../../common/PantherComponent";
 
 
 var initialState = {
@@ -36,7 +37,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenAnalysisRulesLevel extends Component{
+class ScreenAnalysisRulesLevel extends PantherComponent {
 
 	static propTypes = {
 		disabled: PropTypes.bool,
@@ -52,9 +53,7 @@ class ScreenAnalysisRulesLevel extends Component{
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
@@ -92,11 +91,11 @@ class ScreenAnalysisRulesLevel extends Component{
 			analysisPromise.then(function(analysis){
 
 				let store2state = thisComponent.store2state(props,analysis);
-				thisComponent.context.setStateFromStores.call(thisComponent, store2state, keys);
+				super.setStateFromStores(store2state, keys);
 				// if stores changed, overrides user input - todo fix
 				if(!keys || keys.indexOf("attributeSets")!=-1) {
 					store2state.attributeSets.then(function(attributeSets) {
-						thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
+						super.setStateFromStores(thisComponent.atts2state(attributeSets));
 					});
 				}
 				if(analysis.attributeSets.length && analysis.attributeMap && (!keys || keys.indexOf("valueAttSets")!=-1)) {
@@ -153,7 +152,8 @@ class ScreenAnalysisRulesLevel extends Component{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 		this.responseListener.add(AttributeSetStore);
@@ -177,12 +177,6 @@ class ScreenAnalysisRulesLevel extends Component{
 			}
 		}
 	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
-	}
-
 
 	/**
 	 * Check if state is the same as it was when loaded from stores
@@ -249,7 +243,7 @@ class ScreenAnalysisRulesLevel extends Component{
 			props = this.props;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(this.state.analysis.key.toString());
+		this._stateHash = utils.stringHash("ScreenAnalysisRulesLevel" + this.state.analysis.key.toString());
 	}
 	getStateHash() {
 		if(!this._stateHash) {
@@ -334,7 +328,7 @@ class ScreenAnalysisRulesLevel extends Component{
 				valueAttributeMaps: {$merge: attributeMaps},
 				valueAttSets: {$set: newValue}
 			};
-			this.context.setStateDeep.call(this, newState);
+			super.setStateDeep(newState);
 		}
 	}
 
@@ -379,7 +373,7 @@ class ScreenAnalysisRulesLevel extends Component{
 		let newState = {
 			valueAttributeMaps: {$merge: attributeMaps}
 		};
-		this.context.setStateDeep.call(this, newState);
+		super.setStateDeep(newState);
 	}
 
 

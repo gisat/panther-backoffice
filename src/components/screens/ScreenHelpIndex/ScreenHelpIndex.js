@@ -16,14 +16,13 @@ import ScreenHelpUseCaseLayerAdd from '../help/ScreenHelpUseCaseLayerAdd';
 import ScreenHelpCreatePlace from '../help/ScreenHelpCreatePlace';
 
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 @withStyles(styles)
-class ScreenHelpIndex extends Component {
+class ScreenHelpIndex extends PantherComponent {
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 

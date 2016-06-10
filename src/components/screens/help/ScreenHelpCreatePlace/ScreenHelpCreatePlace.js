@@ -3,13 +3,12 @@ import React, { PropTypes, Component } from 'react';
 import ActionCreator from '../../../../actions/ActionCreator';
 
 import logger from '../../../../core/Logger';
+import PantherComponent from "../../../common/PantherComponent";
 
-class ScreenHelpCreatePlace extends Component {
+class ScreenHelpCreatePlace extends PantherComponent {
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 

@@ -70,7 +70,6 @@ class ConfigMetadataStyle extends PantherComponent{
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
 		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
@@ -79,9 +78,6 @@ class ConfigMetadataStyle extends PantherComponent{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 	}
 
 	store2state(props) {
@@ -98,7 +94,7 @@ class ConfigMetadataStyle extends PantherComponent{
 		if(props.selectorValue) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
-			this.context.setStateFromStores.call(this, store2state, keys);
+			super.setStateFromStores(store2state, keys);
 			// if stores changed, overrides user input - todo fix
 
 			if(!keys || keys.indexOf("style")!=-1) {
@@ -179,14 +175,11 @@ class ConfigMetadataStyle extends PantherComponent{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(StyleStore, ["style"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

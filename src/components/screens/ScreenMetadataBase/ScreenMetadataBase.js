@@ -26,6 +26,7 @@ import StyleStore from '../../../stores/StyleStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	scopes: [],
@@ -46,7 +47,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class ScreenMetadataBase extends Component{
+class ScreenMetadataBase extends PantherComponent {
 
 	static propTypes = {
 		disabled: PropTypes.bool,
@@ -58,9 +59,7 @@ class ScreenMetadataBase extends Component{
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
@@ -68,8 +67,6 @@ class ScreenMetadataBase extends Component{
 		super(props);
 
 		this.state = utils.deepClone(initialState);
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 
 		this._tabs = [
 			{ data: "places", dataType: ObjectTypes.PLACE },
@@ -119,7 +116,7 @@ class ScreenMetadataBase extends Component{
 
 	_onStoreChange(keys) {
 		logger.trace("ScreenMetadataBase# _onStoreChange(), Keys:", keys);
-		this.context.setStateFromStores.call(this, this.store2state(), keys);
+		super.setStateFromStores(this.store2state(), keys);
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -140,7 +137,9 @@ class ScreenMetadataBase extends Component{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
+
 		this.changeListener.add(ScopeStore, ["scopes"]);
 		this.responseListener.add(ScopeStore);
 		this.changeListener.add(VectorLayerStore, ["vectorLayerTemplates"]);
@@ -166,15 +165,10 @@ class ScreenMetadataBase extends Component{
 		this.changeListener.add(StyleStore, ["styles"]);
 		this.responseListener.add(StyleStore);
 
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
-	}
-
-	//componentWillReceiveProps(newProps) {
+		//componentWillReceiveProps(newProps) {
 	//	// no props we need to react to
 	//}
 
@@ -198,7 +192,7 @@ class ScreenMetadataBase extends Component{
 			state = this.state;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(state.activeMenuItem);
+		this._stateHash = utils.stringHash("ScreenMetadataBase" + state.activeMenuItem);
 	}
 	getStateHash() {
 		if(!this._stateHash) {

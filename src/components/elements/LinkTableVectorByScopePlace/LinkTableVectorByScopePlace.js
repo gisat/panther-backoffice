@@ -20,6 +20,7 @@ import TopicStore from '../../../stores/TopicStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	example: "Nothing is happening.",
@@ -30,7 +31,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class LinkTableVectorByScopePlace extends Component {
+class LinkTableVectorByScopePlace extends PantherComponent {
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -44,16 +45,13 @@ class LinkTableVectorByScopePlace extends Component {
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		onSetTitle: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	//constructor(props) {
@@ -186,7 +184,7 @@ class LinkTableVectorByScopePlace extends Component {
 		}
 		if(props.place && props.place.scope) {
 			let store2state = this.store2state(props);
-			this.context.setStateFromStores.call(this, store2state, keys);
+			super.setStateFromStores(store2state, keys);
 		}
 	}
 
@@ -195,8 +193,8 @@ class LinkTableVectorByScopePlace extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { this.mounted = true;
-
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(VectorLayerStore, ["scopeLayerTemplates"]);
 		this.changeListener.add(VectorLayerStore, ["scopeAttributeSets"]);
 		this.changeListener.add(VectorLayerStore, ["scopePeriods"]);
@@ -214,10 +212,6 @@ class LinkTableVectorByScopePlace extends Component {
 				$(this).removeClass("focus");
 			});
 		});
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

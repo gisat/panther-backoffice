@@ -16,6 +16,7 @@ import ConfigPlaceDataSource from '../../sections/ConfigPlaceDataSource';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	scope: null,
@@ -26,7 +27,7 @@ var initialState = {
 };
 
 
-class ScreenPlaceDataSourceLayer extends Component {
+class ScreenPlaceDataSourceLayer extends PantherComponent {
 
 	static propTypes = {
 		data: PropTypes.shape({
@@ -34,14 +35,9 @@ class ScreenPlaceDataSourceLayer extends Component {
 		})
 	};
 
-	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired
-	};
-
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, "addChangeListener", "removeChangeListener");
 
 		if(this.props.data) {
 			if (this.props.data.objectType) {
@@ -79,13 +75,13 @@ class ScreenPlaceDataSourceLayer extends Component {
 		) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
-			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
+			let setStatePromise = super.setStateFromStores(store2state, keys);
 			setStatePromise.then(function () {
 				let next2state = {
 					places: PlaceStore.getFiltered({scope: thisComponent.state.scope}),
 					layers: utils.getLayerTemplatesForScope(thisComponent.state.scope, thisComponent.props.data.objectType)
 				};
-				thisComponent.context.setStateFromStores.call(thisComponent, next2state);
+				super.setStateFromStores(next2state);
 			});
 		}
 	}
@@ -95,15 +91,13 @@ class ScreenPlaceDataSourceLayer extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() { 
+		super.componentDidMount();
+		
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(Store[this.props.data.objectType], ["layers"]);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

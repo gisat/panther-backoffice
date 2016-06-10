@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import styles from './ConfigPlaceDataSource.css';
 import withStyles from '../../../decorators/withStyles';
@@ -48,15 +48,12 @@ class ConfigPlaceDataSource extends PantherComponent {
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -99,13 +96,13 @@ class ConfigPlaceDataSource extends PantherComponent {
 		if(condition) {
 			var thisComponent = this;
 			let store2state = this.store2state(props);
-			let setStatePromise = this.context.setStateFromStores.call(this, store2state, keys);
+			let setStatePromise = super.setStateFromStores(store2state, keys);
 
 			setStatePromise.then(function () {
 				let periods2state = {
 					scopePeriods: utils.getPeriodsForScope(thisComponent.state.place.scope)
 				};
-				thisComponent.context.setStateFromStores.call(thisComponent, periods2state);
+				super.setStateFromStores(periods2state);
 			});
 		}
 	}
@@ -115,16 +112,13 @@ class ConfigPlaceDataSource extends PantherComponent {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(PlaceStore, ["place"]);
 		this.changeListener.add(AttributeSetStore, ["attSet"]);
 		this.changeListener.add(AULevelStore, ["auLevel"]);
 
 		this.setStateFromStores();
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {

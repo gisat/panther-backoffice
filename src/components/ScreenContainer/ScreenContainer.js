@@ -13,6 +13,7 @@ import { Icon, IconButton, Buttons } from '../SEUI/elements';
 
 import ListenerHandler from '../../core/ListenerHandler';
 import logger from '../../core/Logger'
+import PantherComponent from "../common/PantherComponent";
 
 var initialState = {
 	isFocused: false
@@ -20,7 +21,7 @@ var initialState = {
 
 
 //@withStyles(styles)
-class ScreenContainer extends Component{
+class ScreenContainer extends PantherComponent {
 
 	//static propTypes = {
 	//  classes: PropTypes.string,
@@ -38,8 +39,6 @@ class ScreenContainer extends Component{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-
-		this.focusListener = new ListenerHandler(this, this._focusScreen, 'addFocusListener', 'removeFocusListener');
 	}
 
 	getChildContext(){
@@ -83,13 +82,9 @@ class ScreenContainer extends Component{
 	}
 
 	componentDidMount() {
-		this.mounted = true;
+		super.componentDidMount();
 		logger.trace("ScreenContainer# componentDidMount(), ScreenStore: ",ScreenStore);
 		this.focusListener.add(ScreenStore);
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.focusListener.clean();
 	}
 
 	onPanelFocus() {

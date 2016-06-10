@@ -16,6 +16,7 @@ import AnalysisStore from '../../../stores/AnalysisStore';
 import AnalysisModel from '../../../models/AnalysisModel';
 
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	analyses: [],
@@ -24,21 +25,17 @@ var initialState = {
 
 
 //@withStyles(styles)
-class ScreenAnalysisConfig extends Component{
+class ScreenAnalysisConfig extends PantherComponent{
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
-
+		
 		if(this.props.data && this.props.data.objectType) {
 			this.state.objectType = this.props.data.objectType;
 		}
@@ -61,7 +58,7 @@ class ScreenAnalysisConfig extends Component{
 
 	_onStoreChange() {
 		logger.trace("ScreenAnalysisConfig# _onStoreChange()");
-		this.context.setStateFromStores.call(this, this.store2state());
+		super.setStateFromStores(this.store2state());
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -74,16 +71,11 @@ class ScreenAnalysisConfig extends Component{
 		}
 	}
 
-	componentDidMount() { this.mounted = true;
-		this.mounted = true;
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(AnalysisStore);
 		this.responseListener.add(AnalysisStore);
-		this.context.setStateFromStores.call(this, this.store2state());
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
+		super.setStateFromStores(this.store2state());
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -96,7 +88,7 @@ class ScreenAnalysisConfig extends Component{
 			this.setState({
 				objectType: newProps.data.objectType
 			});
-			this.context.setStateFromStores.call(this, this.store2state(newProps));
+			super.setStateFromStores(this.store2state(newProps));
 		}
 	}
 
@@ -110,7 +102,7 @@ class ScreenAnalysisConfig extends Component{
 			state = this.state;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(state.selectorValue);
+		this._stateHash = utils.stringHash("ScreenAnalysisConfig"+state.selectorValue);
 	}
 	getStateHash() {
 		if(!this._stateHash) {

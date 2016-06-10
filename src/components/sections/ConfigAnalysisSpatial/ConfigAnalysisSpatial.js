@@ -46,7 +46,6 @@ class ConfigAnalysisSpatial extends PantherComponent{
 			themesString: "",
 			data: this.props.data
 		};
-
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -121,12 +120,6 @@ class ConfigAnalysisSpatial extends PantherComponent{
 		return newOption;
 	}
 
-
-	componentDidMount() { this.mounted = true;
-
-
-
-	}
 
 	onChangeName(){
 		logger.trace("ConfigAnalysisSpatial# onChangeName(), Name changed");

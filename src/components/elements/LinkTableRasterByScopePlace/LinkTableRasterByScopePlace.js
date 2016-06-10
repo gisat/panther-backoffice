@@ -17,6 +17,7 @@ import PeriodStore from '../../../stores/PeriodStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import PantherComponent from "../../common/PantherComponent";
 
 var initialState = {
 	example: "Nothing is happening.",
@@ -26,7 +27,7 @@ var initialState = {
 
 
 @withStyles(styles)
-class LinkTableRasterByScopePlace extends Component {
+class LinkTableRasterByScopePlace extends PantherComponent {
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -40,16 +41,13 @@ class LinkTableRasterByScopePlace extends Component {
 	};
 
 	static contextTypes = {
-		setStateFromStores: PropTypes.func.isRequired,
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		onSetTitle: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
 
 	store2state(props) {
@@ -68,7 +66,7 @@ class LinkTableRasterByScopePlace extends Component {
 		}
 		if(props.place && props.place.scope) {
 			let store2state = this.store2state(props);
-			this.context.setStateFromStores.call(this, store2state, keys);
+			super.setStateFromStores(store2state, keys);
 		}
 	}
 
@@ -77,8 +75,8 @@ class LinkTableRasterByScopePlace extends Component {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { this.mounted = true;
-
+	componentDidMount() {
+		super.componentDidMount();
 		this.changeListener.add(RasterLayerStore, ["scopeLayerTemplates"]);
 		this.changeListener.add(PeriodStore, ["scopePeriods"]);
 		this.setStateFromStores();
@@ -92,10 +90,6 @@ class LinkTableRasterByScopePlace extends Component {
 				$(this).removeClass("focus");
 			});
 		});
-	}
-
-	componentWillUnmount() { this.mounted = false;
-		this.changeListener.clean();
 	}
 
 	componentWillReceiveProps(newProps) {
