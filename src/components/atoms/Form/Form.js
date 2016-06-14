@@ -29,9 +29,11 @@ class Form extends PantherComponent {
 		let changed = false, valid = true;
 		let children = React.Children.map(this.props.children,
 			(child) => {
-				changed = changed || child.props.changed;
-				valid = valid && child.props.valid;
-				React.cloneElement(child, {
+				if (child.props.active) {
+					changed = changed || child.props.changed;
+					valid = valid && child.props.valid;
+				}
+				return React.cloneElement(child, {
 					disabled: this.props.disabled || child.props.disabled
 				})
 			}
