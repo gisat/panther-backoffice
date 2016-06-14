@@ -9,10 +9,20 @@ import utils from '../../../utils/utils';
 import ObjectTypes, {Model, objectTypesMetadata} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 
-import { Icon } from '../../SEUI/elements';
+import { Icon, Input } from '../../SEUI/elements';
 
 import ScreenHelpIndex from '../../screens/ScreenHelpIndex';
 import PantherComponent from "../../common/PantherComponent";
+
+import Form from '../../atoms/Form/Form';
+import FormField from '../../atoms/FormField/FormField';
+import Select from 'react-select';
+
+
+var initialState = {
+	valueName: "Robert",
+	valueNickname: "Bob"
+};
 
 
 @withStyles(styles)
@@ -23,6 +33,11 @@ class ScreenDashboardBase extends PantherComponent {
 		screenSetKey: PropTypes.string.isRequired
 	};
 
+	constructor(props) {
+		super(props);
+		this.state = utils.deepClone(initialState);
+	}
+
 	onOpenHelp() {
 		var screenName = this.props.screenKey + "-ScreenHelpIndex";
 		let options = {
@@ -31,6 +46,18 @@ class ScreenDashboardBase extends PantherComponent {
 			contentSize: 40
 		};
 		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+	}
+
+	onChangeName(e) {
+		this.setState({
+			valueName: e.target.value
+		});
+	}
+
+	onChangeNickname(e) {
+		this.setState({
+			valueNickname: e.target.value
+		});
 	}
 
 	render() {
@@ -151,6 +178,48 @@ class ScreenDashboardBase extends PantherComponent {
 					</div>
 
 				</div></div>
+
+				<Form>
+
+					<FormField
+						//disabled={this.props.disabled}
+						name="name"
+						required={true}
+						active={true}
+						valid={this.state.valueName.length > 2}
+						changed={this.state.valueName != "Robert"}
+						contentLabel="Name"
+					>
+						<Input
+							type="text"
+							name="name"
+							placeholder=" "
+							value={this.state.valueName}
+							onChange={this.onChangeName.bind(this)}
+						/>
+					</FormField>
+
+					<FormField
+						//disabled={this.props.disabled}
+						name="nickname"
+						required={true}
+						active={true}
+						valid={this.state.valueNickname != this.state.valueName}
+						changed={this.state.valueNickname != "Bob"}
+						contentLabel="Nickname"
+						contentInfo="Has to be different than name"
+					>
+						<Input
+							type="text"
+							name="nickname"
+							placeholder=" "
+							value={this.state.valueNickname}
+							onChange={this.onChangeNickname.bind(this)}
+						/>
+					</FormField>
+
+				</Form>
+
 			</div>
 		);
 
