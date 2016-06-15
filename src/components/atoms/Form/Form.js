@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import utils from '../../../utils/utils';
 import logger from '../../../core/Logger';
 
+import FormField from '../FormField/FormField';
 import SaveButton from '../SaveButton/SaveButton';
 
 
@@ -29,13 +30,18 @@ class Form extends PantherComponent {
 		let changed = false, valid = true;
 		let children = React.Children.map(this.props.children,
 			(child) => {
-				if (child.props.active) {
-					changed = changed || child.props.changed;
-					valid = valid && child.props.valid;
+				if (child instanceof FormField) {
+					if (child.props.active) {
+						changed = changed || child.props.changed;
+						valid = valid && child.props.valid;
+					}
+					return React.cloneElement(child, {
+						disabled: this.props.disabled || child.props.disabled
+					})
 				}
-				return React.cloneElement(child, {
-					disabled: this.props.disabled || child.props.disabled
-				})
+				else {
+					return child;
+				}
 			}
 		);
 
