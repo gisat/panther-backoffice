@@ -56,12 +56,22 @@ class FormField extends PantherComponent {
 			})
 		);
 
-		return (
-			<div className={frameClasses}>
+		let fieldInsert = null;
+		if (this.props.contentLabel) {
+			fieldInsert = (
 				<label className="container">
 					{this.props.contentLabel}
 					{children}
 				</label>
+			);
+		}
+		else {
+			fieldInsert = children;
+		}
+
+		return (
+			<div className={frameClasses}>
+				{fieldInsert}
 				{infoInsert}
 			</div>
 		);

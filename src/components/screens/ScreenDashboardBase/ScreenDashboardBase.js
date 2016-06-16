@@ -16,12 +16,14 @@ import PantherComponent from "../../common/PantherComponent";
 
 import Form from '../../atoms/Form/Form';
 import FormField from '../../atoms/FormField/FormField';
+import FormFieldActivation from '../../atoms/FormFieldActivation/FormFieldActivation';
 import Select from 'react-select';
 
 
 var initialState = {
 	valueName: "Robert",
-	valueNickname: "Bob"
+	valueNickname: "Bob",
+	valueActive: true
 };
 
 
@@ -57,6 +59,12 @@ class ScreenDashboardBase extends PantherComponent {
 	onChangeNickname(e) {
 		this.setState({
 			valueNickname: e.target.value
+		});
+	}
+
+	onChangeActive() {
+		this.setState({
+			valueActive: !this.state.valueActive
 		});
 	}
 
@@ -180,6 +188,19 @@ class ScreenDashboardBase extends PantherComponent {
 				</div></div>
 
 				<Form>
+
+					<FormField
+						//disabled={this.props.disabled}
+						name="active"
+						valid={typeof(this.state.valueActive)=='boolean'}
+						changed={!this.state.valueActive}
+					>
+						<FormFieldActivation
+							value={this.state.valueActive}
+							savedValue={true}
+							onChange={this.onChangeActive.bind(this)}
+						/>
+					</FormField>
 
 					<FormField
 						//disabled={this.props.disabled}
