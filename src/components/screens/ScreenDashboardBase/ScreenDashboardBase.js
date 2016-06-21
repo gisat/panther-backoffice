@@ -3,7 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenDashboardBase.css';
 import withStyles from '../../../decorators/withStyles';
 
-import { geonodeProtocol, geonodeHost, frontOfficeProtocol, frontOfficeHost, frontOfficeExplorationUrl } from '../../../config';
+import { geonodeProtocol, geonodeAddress, geoserverProtocol, geoserverAddress, frontOfficeProtocol, frontOfficeAddress, frontOfficeExplorationPath } from '../../../config';
 
 import utils from '../../../utils/utils';
 import ObjectTypes, {Model, objectTypesMetadata} from '../../../constants/ObjectTypes';
@@ -35,9 +35,9 @@ class ScreenDashboardBase extends PantherComponent {
 
 	render() {
 
-		var frontOfficeAddress = frontOfficeProtocol + frontOfficeHost + "/";
-		var geoNodeAddress = geonodeProtocol + geonodeHost + "/";
-		var geoServerAddress = geoNodeAddress + "geoserver/";
+		var frontOfficeURL = frontOfficeProtocol + frontOfficeAddress + "/";
+		var geoNodeURL = geonodeProtocol + geonodeAddress + "/";
+		var geoServerURL = geoserverProtocol + geoserverAddress + "/";
 
 		return (
 			<div>
@@ -54,7 +54,7 @@ class ScreenDashboardBase extends PantherComponent {
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={frontOfficeAddress + frontOfficeExplorationUrl}
+								href={frontOfficeURL + frontOfficeExplorationPath}
 							>
 								<span>Data Exploration</span>
 								<Icon name="external" className="right"/>
@@ -62,7 +62,7 @@ class ScreenDashboardBase extends PantherComponent {
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={frontOfficeAddress}
+								href={frontOfficeURL}
 							>
 								<span>Project homepage</span>
 								<Icon name="external" className="right"/>
@@ -70,7 +70,7 @@ class ScreenDashboardBase extends PantherComponent {
 							{/*<a
 								className="row right-icon"
 								target="_blank"
-								href={frontOfficeAddress+"downloads"}
+								href={frontOfficeURL+"downloads"}
 							>
 								<span>Downloads</span>
 								<Icon name="external" className="right"/>
@@ -82,7 +82,7 @@ class ScreenDashboardBase extends PantherComponent {
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={geoNodeAddress+"layers/upload"}
+								href={geoNodeURL+"layers/upload"}
 							>
 								<span>Upload data layers</span>
 								<Icon name="external" className="right"/>
@@ -90,7 +90,7 @@ class ScreenDashboardBase extends PantherComponent {
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={geoNodeAddress+"layers"}
+								href={geoNodeURL+"layers"}
 							>
 								<span>Data layers</span>
 								<Icon name="external" className="right"/>
@@ -98,7 +98,7 @@ class ScreenDashboardBase extends PantherComponent {
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={geoNodeAddress+"people"}
+								href={geoNodeURL+"people"}
 							>
 								<span>Users</span>
 								<Icon name="external" className="right"/>
@@ -110,7 +110,7 @@ class ScreenDashboardBase extends PantherComponent {
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={geoServerAddress+"web/?wicket:bookmarkablePage=:org.geoserver.wms.web.data.StylePage"}
+								href={geoServerURL+"web/?wicket:bookmarkablePage=:org.geoserver.wms.web.data.StylePage"}
 							>
 								<span>Manage styles</span>
 								<Icon name="external" className="right"/>
@@ -133,7 +133,7 @@ class ScreenDashboardBase extends PantherComponent {
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={frontOfficeAddress+"help"}
+								href={frontOfficeURL+"help"}
 							>
 								Front office help
 								<Icon name="external" className="right"/>
@@ -141,7 +141,7 @@ class ScreenDashboardBase extends PantherComponent {
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={geoNodeAddress+"help-with-geonode/"}
+								href={geoNodeURL+"help-with-geonode/"}
 							>
 								<span>GeoNode help</span>
 								<Icon name="external" className="right"/>
