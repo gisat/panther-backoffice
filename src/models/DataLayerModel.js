@@ -10,6 +10,12 @@ class DataLayerModel extends Model {
 			},
 			referenced: {
 				serverName: 'referenced' //boolean
+			},
+			geoserverWorkspace: {
+				serverName: 'name', //string
+				transformForLocal: function (data) {
+					return data.split(":",2)[0];
+				}
 			}
 			// todo ? WMS ?
 			// todo ? layerref data ?
