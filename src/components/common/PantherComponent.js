@@ -17,33 +17,45 @@ class PantherComponent extends Component {
 		this.focusListener = new ListenerHandler(this, this._focusScreen, 'addFocusListener', 'removeFocusListener');
 	}
 
-	setStateFromStores(props, keys) {
-		logger.info("PantherComponent# setStateFromStores(), Props: ", props, ", keys:", keys);
+	setStateFromStores(map, limitKeys) {
+		this.setStateFromPromise(this.getStateFromStores(map, limitKeys));
+	}
 
-		var setAll = false;
-		if(!keys){
-			keys = [];
-			setAll = true;
-		}
+	getStateFromStores(map, limitKeys) {
+		logger.info("PantherComponent# getStateFromStores(), Data: ", map, ", limited to keys:", limitKeys);
+
+		return new Promise ( function (resolve, reject) {
+			var setAll = false;
+			if(!limitKeys){
+				limitKeys = [];
+				setAll = true;
+			}
+			var loads = [];
+			var keys = [];
+			for(var key in map){
+				if(setAll || (limitKeys.indexOf(key)!=-1)) {
+					loads.push(map[key]);
+					// todo to clone or not to clone, that is the question
+					//loads.push(utils.deepClone(store2state[key]));
+					keys.push(key);
+				}
+			}
+			Promise.all(loads).then(function(data){
+				var ret = {};
+				for(var i in keys){
+					ret[keys[i]] = data[i];
+				}
+				resolve(ret);
+			});
+		});
+	}
+
+	setStateFromPromise(promise) {
 		var component = this;
-		var storeLoads = [];
-		var storeNames = [];
-		for(var name in props){
-			if(setAll || (keys.indexOf(name)!=-1)) {
-				storeLoads.push(props[name]);
-				// todo to clone or not to clone, that is the question
-				//storeLoads.push(utils.deepClone(store2state[name]));
-				storeNames.push(name);
-			}
-		}
-		return Promise.all(storeLoads).then(function(data){
-			var storeObject = {};
-			for(var i in storeNames){
-				storeObject[storeNames[i]] = data[i];
-			}
+		promise.then(function(map){
 			if(component.mounted) {
-				logger.trace("PantherComponent# setStateFromStores(), Stores to set: ", storeObject, ", Current Component: ", component);
-				component.setState(storeObject);
+				logger.trace("PantherComponent# setStateFromStores(), Data to set: ", map, ", Current Component: ", component);
+				component.setState(map);
 			} else {
 				logger.info("PantherComponent# setStateFromStores(), Component is already unmounted." + component);
 				component.render();
