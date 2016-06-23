@@ -214,6 +214,7 @@ class Store extends EventEmitter {
 
 					if(!res.text) {
 						logger.warn("Store#request No data was returned.");
+						utils.displayMessage("Internal Error: no data returned.");
 						return resolve();
 					}
 
