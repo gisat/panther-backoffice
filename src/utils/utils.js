@@ -443,6 +443,14 @@ export default {
 		return keyArray;
 	},
 
+	/**
+	 * Display message to the user.
+	 * @param message
+	 */
+	displayMessage(message){
+		alert(message);
+	},
+
 	guid() {
 		function s4() {
 			return Math.floor((1 + Math.random()) * 0x10000)
