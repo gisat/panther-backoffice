@@ -12,7 +12,7 @@ import EventTypes from '../constants/EventTypes';
 
 import { apiProtocol, apiHost, apiPath } from '../config';
 import logger from '../core/Logger';
-import util from '../utils/utils';
+import utils from '../utils/utils';
 
 class Store extends EventEmitter {
 
@@ -78,7 +78,7 @@ class Store extends EventEmitter {
 			return;
 		}
 		this.reloadInProgress = true;
-		var guid = util.guid();
+		var guid = utils.guid();
 		logger.trace("Store# reload(), GUID: ", guid, ",Current store: ", this);
 		var thisStore = this;
 		this._models = this.load();
@@ -167,7 +167,7 @@ class Store extends EventEmitter {
 	}
 
 	createObjectAndRespond(model,responseData,responseStateHash) {
-		let guid = util.guid();
+		let guid = utils.guid();
 		logger.trace("Store# createObjectAndRespond(), Response data",responseData, ", GUID: ", guid);
 		// todo ? Model.resolveForServer ?
 		//var object = {
