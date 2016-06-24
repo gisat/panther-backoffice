@@ -188,7 +188,7 @@ class ConfigPlaceDataSourceAULevel extends PantherComponent {
 					savedState: {$merge: savedState},
 					columns: {$set: columns}
 				};
-				thisComponent.context.setStateDeep.call(thisComponent, newState);
+				super.setStateDeep.call(thisComponent, newState);
 
 			});
 		} else {
@@ -207,7 +207,7 @@ class ConfigPlaceDataSourceAULevel extends PantherComponent {
 				savedState: {$merge: savedState},
 				columns: {$set: []}
 			};
-			thisComponent.context.setStateDeep.call(thisComponent, newState);
+			super.setStateDeep.call(thisComponent, newState);
 		}
 	}
 

@@ -122,7 +122,7 @@ class ScreenAnalysisRulesMath extends PantherComponent {
 							valueAttributeSetMap: {$merge: attributeSetMap} // todo do not replace?
 						};
 					}
-					thisComponent.context.setStateDeep.call(thisComponent, newState);
+					super.setStateDeep.call(thisComponent, newState);
 				}
 
 			});
