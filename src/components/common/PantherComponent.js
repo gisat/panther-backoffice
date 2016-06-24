@@ -17,6 +17,31 @@ class PantherComponent extends Component {
 		this.focusListener = new ListenerHandler(this, this._focusScreen, 'addFocusListener', 'removeFocusListener');
 	}
 
+	componentDidMount() {
+		this.mounted = true;
+		let statePromise = this.getStateFromStores();
+		statePromise.then(function(newState){
+			this.setState({
+				current: newState,
+				saved: newState
+			});
+		});
+	}
+
+	componentWillUpdate() {
+		this.mounted = true;
+	}
+
+	componentWillUnmount() {
+		this.mounted = false;
+
+		this.changeListener.clean();
+		this.responseListener.clean();
+		this.focusListener.clean();
+	}
+
+
+
 	setStateFromStores(map, limitKeys) {
 		this.setStateFromPromise(this.getStateFromStores(map, limitKeys));
 	}
@@ -98,29 +123,6 @@ class PantherComponent extends Component {
 			updatePath.current[key] = {$set: map[key]};
 		}
 		this.setStateDeep(updatePath,callback);
-	}
-
-	componentDidMount() {
-		this.mounted = true;
-		let statePromise = this.getStateFromStores();
-		statePromise.then(function(newState){
-			this.setState({
-				current: newState,
-				saved: newState
-			});
-		});
-	}
-
-	componentWillUpdate() {
-		this.mounted = true;
-	}
-
-	componentWillUnmount() {
-		this.mounted = false;
-
-		this.changeListener.clean();
-		this.responseListener.clean();
-		this.focusListener.clean();
 	}
 
 	/**
