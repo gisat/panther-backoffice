@@ -91,9 +91,9 @@ class ScreenPlaceDataSourceLayer extends PantherComponent {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { 
+	componentDidMount() {
 		super.componentDidMount();
-		
+
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(Store[this.props.data.objectType], ["layers"]);
 
@@ -171,31 +171,35 @@ class ScreenPlaceDataSourceLayer extends PantherComponent {
 				break;
 		}
 
-		return (
-			<div>
-				<div className="screen-setter"><div>
-					<h2>Data source selection: {layerTypeInsert}</h2>
-					<SelectorPlaceLayer
-						disabled={this.props.disabled}
-						layerType={this.props.data.objectType}
-						dataPlace={selectorDataPlace}
-						dataLayer={this.state.layers.models} // todo filter by scope of selected place
-						valuePlace={this.state.selectorValuePlace}
-						valueLayer={this.state.selectorValueLayer}
-						onChange={this.onSelectorChange.bind(this)}
-					/>
-				</div></div>
-				<div className="screen-content"><div>
-					<ConfigPlaceDataSource
-						disabled={this.props.disabled}
-						screenKey={this.props.screenKey}
-						relationsContext={context}
-						selectorValuePlace={this.state.selectorValuePlace}
-						selectorValueLayer={this.state.selectorValueLayer}
-					/>
-				</div></div>
-			</div>
-		);
+		let ret = null;
+		if(this.state.layers.models){
+			ret = (
+				<div>
+					<div className="screen-setter"><div>
+						<h2>Data source selection: {layerTypeInsert}</h2>
+						<SelectorPlaceLayer
+							disabled={this.props.disabled}
+							layerType={this.props.data.objectType}
+							dataPlace={selectorDataPlace}
+							dataLayer={this.state.layers.models} // todo filter by scope of selected place
+							valuePlace={this.state.selectorValuePlace}
+							valueLayer={this.state.selectorValueLayer}
+							onChange={this.onSelectorChange.bind(this)}
+						/>
+					</div></div>
+					<div className="screen-content"><div>
+						<ConfigPlaceDataSource
+							disabled={this.props.disabled}
+							screenKey={this.props.screenKey}
+							relationsContext={context}
+							selectorValuePlace={this.state.selectorValuePlace}
+							selectorValueLayer={this.state.selectorValueLayer}
+						/>
+					</div></div>
+				</div>
+			);
+		}
+		return ret;
 	}
 }
 
