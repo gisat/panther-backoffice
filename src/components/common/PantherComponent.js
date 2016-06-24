@@ -25,7 +25,10 @@ var initialState = {
 	built: false
 };
 
+// todo reload state.saved (when invalid, probably after user prompt)
+
 class PantherComponent extends Component {
+
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState); //descendants MUST NOT set state (only merge) in constructor
