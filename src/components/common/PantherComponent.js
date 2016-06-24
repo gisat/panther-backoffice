@@ -189,7 +189,7 @@ class PantherComponent extends Component {
 	}
 
 	/**
-	 * Helper for setting 'current' (=one level deep) state same way as setState is used.
+	 * Helpers for setting second level state same way as setState is used.
 	 * @param map
 	 * @param callback
 	 */
@@ -199,6 +199,15 @@ class PantherComponent extends Component {
 		};
 		for (var key in map) {
 			updatePath.current[key] = {$set: map[key]};
+		}
+		this.setStateDeep(updatePath,callback);
+	}
+	setUIState(map,callback) {
+		let updatePath = {
+			ui: {}
+		};
+		for (var key in map) {
+			updatePath.ui[key] = {$set: map[key]};
 		}
 		this.setStateDeep(updatePath,callback);
 	}
