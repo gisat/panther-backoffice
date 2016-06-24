@@ -187,26 +187,24 @@ class PantherComponent extends Component {
 
 	/**
 	 * Helpers for setting second level state same way as setState is used.
-	 * @param map
+	 * @param subState - key under which the second level state is stored
+	 * @param map - data to save into state
 	 * @param callback
 	 */
-	setCurrentState(map,callback) {
+	setSecondLevelState(subState,map,callback) {
 		let updatePath = {
-			current: {}
+			[subState]: {}
 		};
 		for (var key in map) {
-			updatePath.current[key] = {$set: map[key]};
+			updatePath[subState][key] = {$set: map[key]};
 		}
 		this.setStateDeep(updatePath,callback);
 	}
+	setCurrentState(map,callback) {
+		this.setSecondLevelState('current',map,callback);
+	}
 	setUIState(map,callback) {
-		let updatePath = {
-			ui: {}
-		};
-		for (var key in map) {
-			updatePath.ui[key] = {$set: map[key]};
-		}
-		this.setStateDeep(updatePath,callback);
+		this.setSecondLevelState('ui',map,callback);
 	}
 
 	/**
