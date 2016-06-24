@@ -110,7 +110,17 @@ class PantherComponent extends Component {
 	 * @param limitKeys
 	 */
 	setStateFromStores(map, limitKeys) {
-		this.setStateFromPromise(this.getStateFromStores(map, limitKeys));
+		let statePromise = this.getStateFromStores(map, limitKeys);
+		var component = this;
+		statePromise.then(function(map){
+			if(component.mounted) {
+				logger.trace("PantherComponent# setStateFromStores(), Data to set: ", map, ", Current Component: ", component);
+				component.setState(map);
+			} else {
+				logger.info("PantherComponent# setStateFromStores(), Component is already unmounted." + component);
+				component.render();
+			}
+		});
 	}
 
 	getStateFromStores(map, limitKeys) {
@@ -143,19 +153,6 @@ class PantherComponent extends Component {
 				}
 				resolve(ret);
 			});
-		});
-	}
-
-	setStateFromPromise(promise) {
-		var component = this;
-		promise.then(function(map){
-			if(component.mounted) {
-				logger.trace("PantherComponent# setStateFromStores(), Data to set: ", map, ", Current Component: ", component);
-				component.setState(map);
-			} else {
-				logger.info("PantherComponent# setStateFromStores(), Component is already unmounted." + component);
-				component.render();
-			}
 		});
 	}
 
