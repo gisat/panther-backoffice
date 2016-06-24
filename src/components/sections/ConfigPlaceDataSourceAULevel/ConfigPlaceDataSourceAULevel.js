@@ -58,8 +58,7 @@ class ConfigPlaceDataSourceAULevel extends PantherComponent {
 	};
 
 	static contextTypes = {
-		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired
+		onInteraction: PropTypes.func.isRequired
 	};
 
 	constructor(props) {
