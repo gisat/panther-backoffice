@@ -5,9 +5,29 @@ import update from 'react-addons-update';
 
 import ListenerHandler from '../../core/ListenerHandler';
 
+/**
+ * STATE:
+ * current: (data) current data state as changed by the component
+ * saved: (data) saved data state loaded on mount - current before being changed by the component
+ * next: (data) saved data state changed outside of component after mount
+ * ui: interface state not determined by data (rather by user actions)
+ * invalid: bool - if data state was changed outside of component after mount
+ * built: bool - some current data state is ready
+ */
+
+var initialState = {
+	current: {},
+	saved: {},
+	next: {},
+	ui: {},
+	invalid: false,
+	built: false
+};
+
 class PantherComponent extends Component {
 	constructor(props) {
 		super(props);
+		this.state = utils.deepClone(initialState); //descendants MUST NOT set state (only merge) in constructor
 
 		this.acceptChange = true;
 		logger.info("PantherComponent# constructor(), Props: ", props);
@@ -19,11 +39,12 @@ class PantherComponent extends Component {
 
 	componentDidMount() {
 		this.mounted = true;
-		let statePromise = this.getStateFromStores();
+		let statePromise = this.buildState();
 		statePromise.then(function(newState){
-			this.setState({
-				current: newState,
-				saved: newState
+			this.setStateDeep({
+				current: {$merge: newState},
+				saved: {$merge: newState},
+				built: true
 			});
 		});
 	}
@@ -41,7 +62,11 @@ class PantherComponent extends Component {
 	}
 
 
-
+	/**
+	 * legacy setting (first-level state)
+	 * @param map
+	 * @param limitKeys
+	 */
 	setStateFromStores(map, limitKeys) {
 		this.setStateFromPromise(this.getStateFromStores(map, limitKeys));
 	}
@@ -90,6 +115,17 @@ class PantherComponent extends Component {
 				component.render();
 			}
 		});
+	}
+
+	/**
+	 * Hook. Base version enough for independent loads (single step)
+	 * To be overriden by descendants for interdependent loads.
+	 * @param map
+	 * @param limitKeys
+	 * @returns promise of state object (second level)
+	 */
+	buildState(map, limitKeys) {
+		return this.getStateFromStores(map, limitKeys);
 	}
 
 	/**
@@ -159,23 +195,31 @@ class PantherComponent extends Component {
 	 * @private
 	 */
 	_onStoreChange(limitKeys) {
-		let newState = this.getStateFromStores(null, limitKeys);
-		if (this._equalStates(this.state.current,this.state.saved,limitKeys)) {
-			//state was not changed from saved - can be replaced with new
-			this.setState({
-				current: newState,
-				saved: newState
-			});
-		}
-		else {
-			//state was changed - todo what to do?
-			//for now, set invalid state flag and save next state
-			//todo next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
-			this.setState({
-				next: newState,
-				invalid: true
-			});
-		}
+		let newStatePromise = this.buildState(null, limitKeys);
+		let thisComponent = this;
+		newStatePromise.then(function(newState){
+			if (thisComponent.mounted) {
+				if (this._equalStates(this.state.current, this.state.saved, limitKeys)) {
+					//state was not changed from saved - can be replaced with new
+					this.setStateDeep({
+						current: {$merge: newState},
+						saved: {$merge: newState}
+					});
+				}
+				else {
+					//state was changed - todo what to do?
+					//for now, set invalid state flag and save next state
+					//todo next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
+					this.setState({
+						next: {$merge: newState},
+						invalid: true
+					});
+				}
+			}
+			else {
+				//component not mounted
+			}
+		});
 	}
 
 	/**
