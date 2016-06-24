@@ -61,6 +61,48 @@ class PantherComponent extends Component {
 		this.focusListener.clean();
 	}
 
+	/**
+	 * Hook. This method is called whenever any change occur to store, which this component listens to.
+	 * To be overridden by descendants.
+	 * @private
+	 */
+	_onStoreChange(limitKeys) {
+		let newStatePromise = this.buildState(null, limitKeys);
+		let thisComponent = this;
+		newStatePromise.then(function(newState){
+			if (thisComponent.mounted) {
+				if (this._equalStates(this.state.current, this.state.saved, limitKeys)) {
+					//state was not changed from saved - can be replaced with new
+					this.setStateDeep({
+						current: {$merge: newState},
+						saved: {$merge: newState}
+					});
+				}
+				else {
+					//state was changed - todo what to do?
+					//for now, set invalid state flag and save next state
+					//todo next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
+					this.setState({
+						next: {$merge: newState},
+						invalid: true
+					});
+				}
+			}
+			else {
+				//component not mounted
+			}
+		});
+	}
+
+	/**
+	 * Hook. This method is called whenever store responds to action, which this component listens to.
+	 * To be overridden by descendants.
+	 * @private
+	 */
+	_onStoreResponse() {}
+
+
+
 
 	/**
 	 * legacy setting (first-level state)
@@ -188,46 +230,6 @@ class PantherComponent extends Component {
 		}
 		return _.isEqual(one,two);
 	}
-
-	/**
-	 * Hook. This method is called whenever any change occur to store, which this component listens to.
-	 * To be overridden by descendants.
-	 * @private
-	 */
-	_onStoreChange(limitKeys) {
-		let newStatePromise = this.buildState(null, limitKeys);
-		let thisComponent = this;
-		newStatePromise.then(function(newState){
-			if (thisComponent.mounted) {
-				if (this._equalStates(this.state.current, this.state.saved, limitKeys)) {
-					//state was not changed from saved - can be replaced with new
-					this.setStateDeep({
-						current: {$merge: newState},
-						saved: {$merge: newState}
-					});
-				}
-				else {
-					//state was changed - todo what to do?
-					//for now, set invalid state flag and save next state
-					//todo next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
-					this.setState({
-						next: {$merge: newState},
-						invalid: true
-					});
-				}
-			}
-			else {
-				//component not mounted
-			}
-		});
-	}
-
-	/**
-	 * Hook. This method is called whenever store responds to action, which this component listens to.
-	 * To be overridden by descendants.
-	 * @private
-	 */
-	_onStoreResponse() {}
 
 
 	/**
