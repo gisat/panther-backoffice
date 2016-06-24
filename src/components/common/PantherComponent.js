@@ -22,6 +22,10 @@ class PantherComponent extends Component {
 	}
 
 	getStateFromStores(map, limitKeys) {
+		// default loads - todo will we need any other?
+		if (!map) {
+			map = this._getStoreLoads();
+		}
 		logger.info("PantherComponent# getStateFromStores(), Data: ", map, ", limited to keys:", limitKeys);
 
 		return new Promise ( function (resolve, reject) {
@@ -63,17 +67,48 @@ class PantherComponent extends Component {
 		});
 	}
 
-	setStateDeep(updatePath) {
+	/**
+	 * Hook. This method is called to load data into state by getStateFromStores().
+	 * To be overridden by descendants.
+	 * @private
+	 */
+	_getStoreLoads() {
+		return {};
+	}
+
+	setStateDeep(updatePath, callback) {
 		logger.trace("context# setStateDeep(), Current this: ", this, ", updatePath: ", updatePath);
 		if(this.mounted) {
-			this.setState(update(this.state, updatePath));
+			this.setState(update(this.state, updatePath), callback);
 		} else {
 			logger.warn("context# setStateDeep(), Tries to update deep state of unmounted component.", updatePath);
 		}
 	}
 
+	/**
+	 * Helper for setting 'current' (=one level deep) state same way as setState is used.
+	 * @param map
+	 * @param callback
+	 */
+	setCurrentState(map,callback) {
+		let updatePath = {
+			current: {}
+		};
+		for (var key in map) {
+			updatePath.current[key] = {$set: map[key]};
+		}
+		this.setStateDeep(updatePath,callback);
+	}
+
 	componentDidMount() {
 		this.mounted = true;
+		let statePromise = this.getStateFromStores();
+		statePromise.then(function(newState){
+			this.setState({
+				current: newState,
+				saved: newState
+			});
+		});
 	}
 
 	componentWillUpdate() {
@@ -89,11 +124,57 @@ class PantherComponent extends Component {
 	}
 
 	/**
+	 * compare states (e.g. current with saved)
+	 * @param firstState
+	 * @param secondState
+	 * @param limitKeys
+	 * @private
+	 */
+	_equalStates(firstState,secondState,limitKeys) {
+		let one = {}, two = {};
+		if(limitKeys) {
+			for (var key in firstState) {
+				if(limitKeys.indexOf(key)!=-1) {
+					one[key] = firstState[key];
+				}
+			}
+			for (var key in secondState) {
+				if(limitKeys.indexOf(key)!=-1) {
+					two[key] = secondState[key];
+				}
+			}
+		}
+		else {
+			one = firstState;
+			two = secondState;
+		}
+		return _.isEqual(one,two);
+	}
+
+	/**
 	 * Hook. This method is called whenever any change occur to store, which this component listens to.
 	 * To be overridden by descendants.
 	 * @private
 	 */
-	_onStoreChange() {}
+	_onStoreChange(limitKeys) {
+		let newState = this.getStateFromStores(null, limitKeys);
+		if (this._equalStates(this.state.current,this.state.saved,limitKeys)) {
+			//state was not changed from saved - can be replaced with new
+			this.setState({
+				current: newState,
+				saved: newState
+			});
+		}
+		else {
+			//state was changed - todo what to do?
+			//for now, set invalid state flag and save next state
+			//todo next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
+			this.setState({
+				next: newState,
+				invalid: true
+			});
+		}
+	}
 
 	/**
 	 * Hook. This method is called whenever store responds to action, which this component listens to.
