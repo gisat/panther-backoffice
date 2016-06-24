@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
+import utils from '../../utils/utils';
 import logger from '../../core/Logger';
 import update from 'react-addons-update';
 
@@ -39,12 +40,13 @@ class PantherComponent extends Component {
 
 	componentDidMount() {
 		this.mounted = true;
+		let thisComponent = this;
 		let statePromise = this.buildState();
 		statePromise.then(function(newState){
-			this.setStateDeep({
+			thisComponent.setStateDeep({
 				current: {$merge: newState},
 				saved: {$merge: newState},
-				built: true
+				built: {$set: true}
 			});
 		});
 	}
@@ -73,7 +75,7 @@ class PantherComponent extends Component {
 			if (thisComponent.mounted) {
 				if (this._equalStates(this.state.current, this.state.saved, limitKeys)) {
 					//state was not changed from saved - can be replaced with new
-					this.setStateDeep({
+					thisComponent.setStateDeep({
 						current: {$merge: newState},
 						saved: {$merge: newState}
 					});
@@ -82,9 +84,9 @@ class PantherComponent extends Component {
 					//state was changed - todo what to do?
 					//for now, set invalid state flag and save next state
 					//todo next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
-					this.setState({
+					this.setStateDeep({
 						next: {$merge: newState},
-						invalid: true
+						invalid: {$set: true}
 					});
 				}
 			}
