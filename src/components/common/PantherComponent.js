@@ -76,7 +76,7 @@ class PantherComponent extends Component {
 		let thisComponent = this;
 		newStatePromise.then(function(newState){
 			if (thisComponent.mounted) {
-				if (this._equalStates(this.state.current, this.state.saved, limitKeys)) {
+				if (thisComponent._equalStates(thisComponent.state.current, thisComponent.state.saved, limitKeys)) {
 					//state was not changed from saved - can be replaced with new
 					thisComponent.setStateDeep({
 						current: {$merge: newState},
@@ -87,7 +87,7 @@ class PantherComponent extends Component {
 					//state was changed - todo what to do?
 					//for now, set invalid state flag and save next state
 					//todo next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
-					this.setStateDeep({
+					thisComponent.setStateDeep({
 						next: {$merge: newState},
 						invalid: {$set: true}
 					});
