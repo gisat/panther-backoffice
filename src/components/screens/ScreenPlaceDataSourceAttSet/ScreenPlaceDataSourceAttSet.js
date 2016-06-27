@@ -79,7 +79,7 @@ class ScreenPlaceDataSourceAttSet extends PantherComponent {
 					places: PlaceStore.getFiltered({scope: thisComponent.state.scope}),
 					attributeSets: utils.getAttSetsForScope(thisComponent.state.scope)
 				};
-				super.setStateFromStores(thisComponent, next2state);
+				super.setStateFromStores(next2state);
 			});
 		}
 	}
@@ -89,9 +89,9 @@ class ScreenPlaceDataSourceAttSet extends PantherComponent {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { 
+	componentDidMount() {
 		super.componentDidMount();
-		
+
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
 		this.changeListener.add(AULevelStore, ["auLevels"]);
