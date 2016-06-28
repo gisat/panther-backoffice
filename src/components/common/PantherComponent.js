@@ -151,7 +151,7 @@ class PantherComponent extends Component {
 			var loads = [];
 			var keys = [];
 			for(var key in map){
-				if(setAll || (limitKeys.indexOf(key)!=-1)) {
+				if(map.hasOwnProperty(key) && (setAll || (limitKeys.indexOf(key)!=-1))) {
 					loads.push(map[key]);
 					// todo to clone or not to clone, that is the question
 					//loads.push(utils.deepClone(store2state[key]));
@@ -161,7 +161,9 @@ class PantherComponent extends Component {
 			Promise.all(loads).then(function(data){
 				var ret = {};
 				for(var i in keys){
-					ret[keys[i]] = data[i];
+					if (keys.hasOwnProperty(i)) {
+						ret[keys[i]] = data[i];
+					}
 				}
 				resolve(ret);
 			});
@@ -243,7 +245,9 @@ class PantherComponent extends Component {
 			[subState]: {}
 		};
 		for (var key in map) {
-			updatePath[subState][key] = {$set: map[key]};
+			if (map.hasOwnProperty(key)) {
+				updatePath[subState][key] = {$set: map[key]};
+			}
 		}
 		this.setStateDeep(updatePath,callback);
 	}
@@ -264,14 +268,14 @@ class PantherComponent extends Component {
 	_equalStates(firstState,secondState,limitKeys) {
 		let one = {}, two = {};
 		if(limitKeys) {
-			for (var key in firstState) {
-				if(limitKeys.indexOf(key)!=-1) {
-					one[key] = firstState[key];
+			for (var keyOne in firstState) {
+				if(firstState.hasOwnProperty(keyOne) && limitKeys.indexOf(keyOne)!=-1) {
+					one[keyOne] = firstState[keyOne];
 				}
 			}
-			for (var key in secondState) {
-				if(limitKeys.indexOf(key)!=-1) {
-					two[key] = secondState[key];
+			for (var keyTwo in secondState) {
+				if(secondState.hasOwnProperty(keyTwo) && limitKeys.indexOf(keyTwo)!=-1) {
+					two[keyTwo] = secondState[keyTwo];
 				}
 			}
 		}
