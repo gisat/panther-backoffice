@@ -14,6 +14,7 @@ import ListenerHandler from '../../core/ListenerHandler';
  * ui: interface state not determined by data (rather by user actions)
  * invalid: bool - if data state was changed outside of component after mount
  * built: bool - some current data state is ready
+ * updated: bool - current data state was updated automatically to reflect outside changes
  */
 
 var initialState = {
@@ -22,7 +23,8 @@ var initialState = {
 	next: {},
 	ui: {},
 	invalid: false,
-	built: false
+	built: false,
+	updated: false
 };
 
 // todo reload state.saved (when invalid, probably after user prompt)
@@ -68,7 +70,7 @@ class PantherComponent extends Component {
 
 	/**
 	 * Hook. This method is called whenever any change occur to store, which this component listens to.
-	 * To be overridden by descendants.
+	 * Can be overridden by descendants. - todo will it need to be?
 	 * @private
 	 */
 	_onStoreChange(limitKeys) {
@@ -80,7 +82,8 @@ class PantherComponent extends Component {
 					//state was not changed from saved - can be replaced with new
 					thisComponent.setStateDeep({
 						current: {$merge: newState},
-						saved: {$merge: newState}
+						saved: {$merge: newState},
+						updated: {$set: true}
 					});
 				}
 				else {
@@ -128,6 +131,12 @@ class PantherComponent extends Component {
 		});
 	}
 
+	/**
+	 * Load data from stores. Actually limits loads to specified keys and calls default loads if not specified.
+	 * @param map
+	 * @param limitKeys
+	 * @returns {Promise} of (possibly partial) state object
+	 */
 	getStateFromStores(map, limitKeys) {
 		// default loads - todo will we need any other?
 		if (!map) {
@@ -162,11 +171,41 @@ class PantherComponent extends Component {
 	}
 
 	/**
-	 * Hook. Base version enough for independent loads (single step)
+	 * Reload state to reflect outside changes. To be run on demand.
+	 * @param reloadCurrent - bool - replace current data state too (discard user changes)
+	 * 	- if not true, only saved state is reloaded
+	 */
+	reloadState(reloadCurrent) {
+		if (this.mounted) {
+			let thisComponent = this;
+			let statePromise = this.buildState();
+			statePromise.then(function (newState) {
+				if (reloadCurrent) {
+					thisComponent.setStateDeep({
+						current: {$merge: newState},
+						saved: {$merge: newState},
+						built: {$set: true}
+					});
+				}
+				else {
+					thisComponent.setStateDeep({
+						saved: {$merge: newState},
+						built: {$set: true}
+					});
+				}
+			});
+		}
+		else {
+			logger.info("PantherComponent# reloadState(), Component is already unmounted." + this);
+		}
+	}
+
+	/**
+	 * Hook. Build data state structure. Base version enough for independent loads (single step)
 	 * To be overriden by descendants for interdependent loads.
-	 * @param map
-	 * @param limitKeys
-	 * @returns promise of state object (second level)
+	 * @param map - {key: value} - loads object. If not specified, getStateFromStores will call _getStoreLoads()
+	 * @param limitKeys - string array - limit loads object to specified keys
+	 * @returns Promise of state object (second level)
 	 */
 	buildState(map, limitKeys) {
 		return this.getStateFromStores(map, limitKeys);
@@ -181,6 +220,11 @@ class PantherComponent extends Component {
 		return {};
 	}
 
+	/**
+	 * Checks if component mounted and sets state using react-addons-update
+	 * @param updatePath
+	 * @param callback
+	 */
 	setStateDeep(updatePath, callback) {
 		logger.trace("context# setStateDeep(), Current this: ", this, ", updatePath: ", updatePath);
 		if(this.mounted) {
