@@ -27,8 +27,6 @@ var initialState = {
 	updated: false
 };
 
-// todo reload state.saved (when invalid, probably after user prompt)
-
 class PantherComponent extends Component {
 
 	constructor(props) {
