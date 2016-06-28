@@ -50,13 +50,11 @@ class ConfigMetadataScope extends PantherComponent{
 
 	constructor(props) {
 		super(props);
-		this.state = utils.deepClone(initialState);
-
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
+		this.state.current = _.assign(this.state.current, utils.deepClone(initialState));
+		this.state.saved = utils.clone(this.state.current);
 	}
 
-	store2state(props) {
+	_getStoreLoads(props) {
 		return {
 			scope: ScopeStore.getById(props.selectorValue),
 			auLevels: AULevelStore.getAll(),
@@ -64,39 +62,50 @@ class ConfigMetadataScope extends PantherComponent{
 		};
 	}
 
-	setStateFromStores(props,keys) {
+	buildState(props, map, keys) {
 		if(!props){
 			props = this.props;
 		}
-		if(props.selectorValue) {
-			var thisComponent = this;
-			let store2state = this.store2state(props);
-			super.setStateFromStores(store2state, keys);
+		var thisComponent = this;
+		return new Promise ( function (resolve, reject) {
+			if (props.selectorValue) {
+				let store2state = this._getStoreLoads(props);
+				//super.setStateFromStores(store2state, keys);
 
-			if(!keys || keys.indexOf("scope")!=-1) {
-				store2state.scope.then(function (scope) {
-					if(thisComponent.acceptChange) {
-						thisComponent.acceptChange = false;
-						let newState = {
-							valueActive: scope.active,
-							valueName: scope.name,
-							valuesAULevels: utils.getModelsKeys(scope.levels),
-							valuesPeriods: utils.getModelsKeys(scope.periods)
-						};
-						newState.savedState = utils.deepClone(newState);
-						if (thisComponent.mounted) {
-							thisComponent.setState(newState);
+				if(!keys || keys.indexOf("scope")!=-1) {
+					store2state.scope.then(function (scope) {
+						if(thisComponent.acceptChange) {
+							thisComponent.acceptChange = false;
+							let newState = {
+								valueActive: scope.active,
+								valueName: scope.name,
+								valuesAULevels: utils.getModelsKeys(scope.levels),
+								valuesPeriods: utils.getModelsKeys(scope.periods)
+							};
+							store2state = _.assign(store2state,newState);
+							//newState.savedState = utils.deepClone(newState);
+							//if (thisComponent.mounted) {
+							//	thisComponent.setState(newState);
+							//}
+							resolve(store2state);
 						}
-					}
-				});
+					});
+				}
+				else {
+					resolve(store2state);
+				}
+
 			}
-		}
+			else {
+				resolve({});
+			}
+		});
 	}
 
-	_onStoreChange(keys) {
-		logger.trace("ConfigMetadataScope# _onStoreChange(), Keys:", keys);
-		this.setStateFromStores(this.props,keys);
-	}
+	//_onStoreChange(keys) {
+	//	logger.trace("ConfigMetadataScope# _onStoreChange(), Keys:", keys);
+	//	this.setStateFromStores(this.props,keys);
+	//}
 
 	_onStoreResponse(result,responseData,stateHash) {
 		var thisComponent = this;
@@ -106,7 +115,7 @@ class ConfigMetadataScope extends PantherComponent{
 				let values = utils.deepClone(thisComponent.state[stateKey]);
 				values.push(result[0].key);
 				if(thisComponent.mounted) {
-					thisComponent.setState({
+					thisComponent.setCurrentState({
 						[stateKey]: values
 					});
 				}
@@ -138,26 +147,27 @@ class ConfigMetadataScope extends PantherComponent{
 
 	componentDidMount() {
 		super.componentDidMount();
-		
+
 		this.changeListener.add(ScopeStore, ["scope"]);
 		this.changeListener.add(AULevelStore, ["auLevels"]);
 		this.responseListener.add(AULevelStore);
 		this.changeListener.add(PeriodStore, ["periods"]);
 		this.responseListener.add(PeriodStore);
 
-		this.setStateFromStores();
+		//this.setStateFromStores();
 	}
 
-	componentWillUnmount() {
-		this.mounted = false;
-		this.changeListener.clean();
-		this.responseListener.clean();
-	}
+	//componentWillUnmount() {
+	//	this.mounted = false;
+	//	this.changeListener.clean();
+	//	this.responseListener.clean();
+	//}
 
 	componentWillReceiveProps(newProps) {
 		if(newProps.selectorValue!=this.props.selectorValue) {
 			this.acceptChange = true;
-			this.setStateFromStores(newProps);
+			//this.setStateFromStores(newProps);
+			this.reloadState(newProps, true);
 			this.updateStateHash(newProps);
 		}
 	}

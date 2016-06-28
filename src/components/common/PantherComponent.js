@@ -72,7 +72,7 @@ class PantherComponent extends Component {
 	 * @private
 	 */
 	_onStoreChange(limitKeys) {
-		let newStatePromise = this.buildState(null, limitKeys);
+		let newStatePromise = this.buildState(null, null, limitKeys);
 		let thisComponent = this;
 		newStatePromise.then(function(newState){
 			if (thisComponent.mounted) {
@@ -116,6 +116,10 @@ class PantherComponent extends Component {
 	 * @param limitKeys
 	 */
 	setStateFromStores(map, limitKeys) {
+		// default loads - todo will we need any other?
+		if (!map) {
+			map = this._getStoreLoads();
+		}
 		let statePromise = this.getStateFromStores(map, limitKeys);
 		var component = this;
 		statePromise.then(function(map){
@@ -130,16 +134,12 @@ class PantherComponent extends Component {
 	}
 
 	/**
-	 * Load data from stores. Actually limits loads to specified keys and calls default loads if not specified.
+	 * Load data from stores. Actually limits loads to specified keys.
 	 * @param map
 	 * @param limitKeys
 	 * @returns {Promise} of (possibly partial) state object
 	 */
 	getStateFromStores(map, limitKeys) {
-		// default loads - todo will we need any other?
-		if (!map) {
-			map = this._getStoreLoads();
-		}
 		logger.info("PantherComponent# getStateFromStores(), Data: ", map, ", limited to keys:", limitKeys);
 
 		return new Promise ( function (resolve, reject) {
@@ -172,13 +172,14 @@ class PantherComponent extends Component {
 
 	/**
 	 * Reload state to reflect outside changes. To be run on demand.
+	 * @param props - props object to pass to buildState (optional in buildState)
 	 * @param reloadCurrent - bool - replace current data state too (discard user changes)
 	 * 	- if not true, only saved state is reloaded
 	 */
-	reloadState(reloadCurrent) {
+	reloadState(props, reloadCurrent) {
 		if (this.mounted) {
 			let thisComponent = this;
-			let statePromise = this.buildState();
+			let statePromise = this.buildState(props);
 			statePromise.then(function (newState) {
 				if (reloadCurrent) {
 					thisComponent.setStateDeep({
@@ -203,11 +204,16 @@ class PantherComponent extends Component {
 	/**
 	 * Hook. Build data state structure. Base version enough for independent loads (single step)
 	 * To be overriden by descendants for interdependent loads.
-	 * @param map - {key: value} - loads object. If not specified, getStateFromStores will call _getStoreLoads()
+	 * @param props - props object to use
+	 * @param map - {key: value} - loads object. If not specified, will call _getStoreLoads()
 	 * @param limitKeys - string array - limit loads object to specified keys
 	 * @returns Promise of state object (second level)
 	 */
-	buildState(map, limitKeys) {
+	buildState(props, map, limitKeys) {
+		// default loads - todo will we need any other?
+		if (!map) {
+			map = this._getStoreLoads(props);
+		}
 		return this.getStateFromStores(map, limitKeys);
 	}
 
