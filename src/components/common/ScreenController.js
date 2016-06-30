@@ -69,8 +69,7 @@ class ScreenController extends Component {
 	// ON-DEMAND / HELPERS //////////////////////////////////////////
 
 	/**
-	 * Build data state structure. Base version enough for independent loads (single step)
-	 * To be overriden by descendants for interdependent loads.
+	 * Build data state structure.
 	 * @param props - props object to use
 	 * @param limitKeys - string array - limit loads object to specified keys
 	 * @returns Promise of state object (second level)
