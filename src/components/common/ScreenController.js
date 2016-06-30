@@ -153,6 +153,25 @@ class ScreenController extends Component {
 	}
 
 
+	// RENDERING ////////////////////////////////////////////////////
+
+	render() {
+		let ret = null;
+		if (this.state.ready) {
+			ret = (
+				<div>
+					{this.props.children}
+				</div>
+			);
+		}
+		else {
+			ret = (
+				<div class="component-loading"></div>
+			);
+		}
+		return ret;
+	}
+
 }
 
 export default ScreenController;
