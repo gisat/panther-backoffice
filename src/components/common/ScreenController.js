@@ -1,3 +1,7 @@
+/**
+ * Components extending ScreenController are responsible for loading data from stores.
+ *
+ */
 import React, { PropTypes, Component } from 'react';
 
 import utils from '../../utils/utils';
@@ -145,12 +149,24 @@ class ScreenController extends Component {
 
 	// RENDERING ////////////////////////////////////////////////////
 
+	/**
+	 * render - will mostly be overriden
+	 * @returns {*}
+	 */
 	render() {
 		let ret = null;
 		if (this.state.ready) {
+			let children = React.Children.map(this.props.children,
+				(child) => {
+					return React.cloneElement(child, {
+						disabled: this.props.disabled || child.props.disabled,
+						store: this.state.store
+					})
+				}
+			);
 			ret = (
 				<div>
-					{this.props.children}
+					{children}
 				</div>
 			);
 		}
