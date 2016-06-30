@@ -43,14 +43,11 @@ class ControllerComponent extends PantherComponent {
 
 	componentDidMount() {
 		this.mounted = true;
-		let thisComponent = this;
-		let statePromise = this.buildState();
-		statePromise.then(function(newState){
-			thisComponent.setStateDeep({
-				current: {$merge: newState},
-				saved: {$merge: newState},
-				built: {$set: true}
-			});
+		let state = this.buildState();
+		this.setStateDeep({
+			current: {$merge: state},
+			saved: {$merge: state},
+			built: {$set: true}
 		});
 	}
 
