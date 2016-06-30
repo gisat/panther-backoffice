@@ -3,10 +3,10 @@
  *
  */
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from "./PantherComponent";
 
 import utils from '../../utils/utils';
 import logger from '../../core/Logger';
-import update from 'react-addons-update';
 
 import ListenerHandler from '../../core/ListenerHandler';
 
@@ -21,7 +21,7 @@ var initialState = {
 	ready: false
 };
 
-class ScreenController extends Component {
+class ScreenController extends PantherComponent {
 
 	// LIFECYCLE / HOOKS /////////////////////////////////////////////
 
@@ -130,20 +130,6 @@ class ScreenController extends Component {
 				resolve(ret);
 			});
 		});
-	}
-
-	/**
-	 * Checks if component mounted and sets state using react-addons-update
-	 * @param updatePath
-	 * @param callback
-	 */
-	setStateDeep(updatePath, callback) {
-		logger.trace("context# setStateDeep(), Current this: ", this, ", updatePath: ", updatePath);
-		if(this.mounted) {
-			this.setState(update(this.state, updatePath), callback);
-		} else {
-			logger.warn("context# setStateDeep(), Tries to update deep state of unmounted component.", updatePath);
-		}
 	}
 
 

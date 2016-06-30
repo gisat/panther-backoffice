@@ -6,36 +6,17 @@ import update from 'react-addons-update';
 
 import ListenerHandler from '../../core/ListenerHandler';
 
-/**
- * STATE:
- * current: (data) current data state as changed by the component
- * saved: (data) saved data state loaded on mount - current before being changed by the component
- * next: (data) saved data state changed outside of component after mount
- * ui: interface state not determined by data (rather by user actions)
- * invalid: bool - if data state was changed outside of component after mount
- * built: bool - some current data state is ready
- * updated: bool - current data state was updated automatically to reflect outside changes
- */
-
-var initialState = {
-	current: {},
-	saved: {},
-	next: {},
-	ui: {},
-	invalid: false,
-	built: false,
-	updated: false
-};
 
 class PantherComponent extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = utils.deepClone(initialState); //descendants MUST NOT set state (only merge) in constructor
 
+		// todo legacy
 		this.acceptChange = true;
 		logger.info("PantherComponent# constructor(), Props: ", props);
 
+		// todo legacy, remove after all components moved to ScreenController or ControllerComponent
 		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
 		this.focusListener = new ListenerHandler(this, this._focusScreen, 'addFocusListener', 'removeFocusListener');
@@ -43,15 +24,6 @@ class PantherComponent extends Component {
 
 	componentDidMount() {
 		this.mounted = true;
-		let thisComponent = this;
-		let statePromise = this.buildState();
-		statePromise.then(function(newState){
-			thisComponent.setStateDeep({
-				current: {$merge: newState},
-				saved: {$merge: newState},
-				built: {$set: true}
-			});
-		});
 	}
 
 	componentWillUpdate() {
@@ -61,43 +33,21 @@ class PantherComponent extends Component {
 	componentWillUnmount() {
 		this.mounted = false;
 
+		// todo legacy
+		this.changeListener.clean();
 		this.responseListener.clean();
+		this.focusListener.clean();
 	}
 
+	// todo legacy
 	/**
 	 * Hook. This method is called whenever any change occur to store, which this component listens to.
-	 * Can be overridden by descendants. - todo will it need to be?
+	 * To be overridden by descendants.
 	 * @private
 	 */
-	_onStoreChange(limitKeys) {
-		let newStatePromise = this.buildState(null, null, limitKeys);
-		let thisComponent = this;
-		newStatePromise.then(function(newState){
-			if (thisComponent.mounted) {
-				if (thisComponent._equalStates(thisComponent.state.current, thisComponent.state.saved, limitKeys)) {
-					//state was not changed from saved - can be replaced with new
-					thisComponent.setStateDeep({
-						current: {$merge: newState},
-						saved: {$merge: newState},
-						updated: {$set: true}
-					});
-				}
-				else {
-					//state was changed - todo what to do?
-					//for now, set invalid state flag and save next state
-					//todo next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
-					thisComponent.setStateDeep({
-						next: {$merge: newState},
-						invalid: {$set: true}
-					});
-				}
-			}
-			else {
-				//component not mounted
-			}
-		});
-	}
+	_onStoreChange() {}
 
+	// todo legacy
 	/**
 	 * Hook. This method is called whenever store responds to action, which this component listens to.
 	 * To be overridden by descendants.
@@ -107,7 +57,7 @@ class PantherComponent extends Component {
 
 
 
-
+	// todo legacy
 	/**
 	 * legacy setting (first-level state)
 	 * @param map
@@ -116,7 +66,7 @@ class PantherComponent extends Component {
 	setStateFromStores(map, limitKeys) {
 		// default loads - todo will we need any other?
 		if (!map) {
-			map = this._getStoreLoads();
+			map = this.store2state();
 		}
 		let statePromise = this.getStateFromStores(map, limitKeys);
 		var component = this;
@@ -131,6 +81,7 @@ class PantherComponent extends Component {
 		});
 	}
 
+	// todo legacy
 	/**
 	 * Load data from stores. Actually limits loads to specified keys.
 	 * @param map
@@ -169,77 +120,21 @@ class PantherComponent extends Component {
 	}
 
 	/**
-	 * Reload state to reflect outside changes. To be run on demand.
-	 * @param props - props object to pass to buildState (optional in buildState)
-	 * @param reloadCurrent - bool - replace current data state too (discard user changes)
-	 * 	- if not true, only saved state is reloaded
-	 */
-	reloadState(props, reloadCurrent) {
-		if (this.mounted) {
-			let thisComponent = this;
-			let statePromise = this.buildState(props);
-			statePromise.then(function (newState) {
-				if (reloadCurrent) {
-					thisComponent.setStateDeep({
-						current: {$merge: newState},
-						saved: {$merge: newState},
-						built: {$set: true}
-					});
-				}
-				else {
-					thisComponent.setStateDeep({
-						saved: {$merge: newState},
-						built: {$set: true}
-					});
-				}
-			});
-		}
-		else {
-			logger.info("PantherComponent# reloadState(), Component is already unmounted." + this);
-		}
-	}
-
-	/**
-	 * Hook. Build data state structure. Base version enough for independent loads (single step)
-	 * To be overriden by descendants for interdependent loads.
-	 * @param props - props object to use
-	 * @param map - {key: value} - loads object. If not specified, will call _getStoreLoads()
-	 * @param limitKeys - string array - limit loads object to specified keys
-	 * @returns Promise of state object (second level)
-	 */
-	buildState(props, map, limitKeys) {
-		// default loads - todo will we need any other?
-		if (!map) {
-			map = this._getStoreLoads(props);
-		}
-		return this.getStateFromStores(map, limitKeys);
-	}
-
-	/**
-	 * Hook. This method is called to load data into state by getStateFromStores().
-	 * To be overridden by descendants.
-	 * @private
-	 */
-	_getStoreLoads() {
-		return {};
-	}
-
-	/**
 	 * Checks if component mounted and sets state using react-addons-update
 	 * @param updatePath
 	 * @param callback
 	 */
 	setStateDeep(updatePath, callback) {
-		logger.trace("context# setStateDeep(), Current this: ", this, ", updatePath: ", updatePath);
+		logger.trace("PantherComponent# setStateDeep(), Current this: ", this, ", updatePath: ", updatePath);
 		if(this.mounted) {
 			this.setState(update(this.state, updatePath), callback);
 		} else {
-			logger.warn("context# setStateDeep(), Tries to update deep state of unmounted component.", updatePath);
+			logger.warn("PantherComponent# setStateDeep(), Tries to update deep state of unmounted component.", updatePath);
 		}
 	}
 
 	/**
-	 * Helpers for setting second level state same way as setState is used.
+	 * Helper for setting second level state same way as setState is used.
 	 * @param subState - key under which the second level state is stored
 	 * @param map - data to save into state
 	 * @param callback
@@ -255,51 +150,7 @@ class PantherComponent extends Component {
 		}
 		this.setStateDeep(updatePath,callback);
 	}
-	setCurrentState(map,callback) {
-		this.setSecondLevelState('current',map,callback);
-	}
-	setUIState(map,callback) {
-		this.setSecondLevelState('ui',map,callback);
-	}
 
-	/**
-	 * compare states (e.g. current with saved)
-	 * @param firstState
-	 * @param secondState
-	 * @param limitKeys
-	 * @private
-	 */
-	_equalStates(firstState,secondState,limitKeys) {
-		let one = {}, two = {};
-		if(limitKeys) {
-			for (var keyOne in firstState) {
-				if(firstState.hasOwnProperty(keyOne) && limitKeys.indexOf(keyOne)!=-1) {
-					one[keyOne] = firstState[keyOne];
-				}
-			}
-			for (var keyTwo in secondState) {
-				if(secondState.hasOwnProperty(keyTwo) && limitKeys.indexOf(keyTwo)!=-1) {
-					two[keyTwo] = secondState[keyTwo];
-				}
-			}
-		}
-		else {
-			one = firstState;
-			two = secondState;
-		}
-		return _.isEqual(one,two);
-	}
-
-
-	/**
-	 * Hook. This method is called whenever focused screen changes.
-	 * @private
-	 */
-	_focusScreen() {}
-
-	saveForm() {
-		this.acceptChange = true;
-	}
 }
 
 export default PantherComponent;
