@@ -61,9 +61,7 @@ class PantherComponent extends Component {
 	componentWillUnmount() {
 		this.mounted = false;
 
-		this.changeListener.clean();
 		this.responseListener.clean();
-		this.focusListener.clean();
 	}
 
 	/**

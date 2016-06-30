@@ -28,7 +28,6 @@ class ScreenController extends Component {
 		logger.info("ScreenController# constructor(), Props: ", props);
 
 		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
-		this.focusListener = new ListenerHandler(this, this._focusScreen, 'addFocusListener', 'removeFocusListener');
 	}
 
 	componentDidMount() {
@@ -52,17 +51,9 @@ class ScreenController extends Component {
 		this.mounted = true;
 	}
 
-	/**
-	 * Hook. This method is called whenever focused screen changes.
-	 * @private
-	 */
-	_focusScreen() {}
-
 	componentWillUnmount() {
 		this.mounted = false;
-
 		this.changeListener.clean();
-		this.focusListener.clean();
 	}
 
 

@@ -39,6 +39,8 @@ class ScreenContainer extends PantherComponent {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.focusListener = new ListenerHandler(this, this._focusScreen, 'addFocusListener', 'removeFocusListener');
 	}
 
 	getChildContext(){
@@ -85,6 +87,11 @@ class ScreenContainer extends PantherComponent {
 		super.componentDidMount();
 		logger.trace("ScreenContainer# componentDidMount(), ScreenStore: ",ScreenStore);
 		this.focusListener.add(ScreenStore);
+	}
+
+	componentWillUnmount() {
+		super.componentWillUnmount();
+		this.focusListener.clean();
 	}
 
 	onPanelFocus() {
