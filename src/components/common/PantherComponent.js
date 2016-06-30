@@ -19,7 +19,6 @@ class PantherComponent extends Component {
 		// todo legacy, remove after all components moved to ScreenController or ControllerComponent
 		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
-		this.focusListener = new ListenerHandler(this, this._focusScreen, 'addFocusListener', 'removeFocusListener');
 	}
 
 	componentDidMount() {
@@ -36,7 +35,6 @@ class PantherComponent extends Component {
 		// todo legacy
 		this.changeListener.clean();
 		this.responseListener.clean();
-		this.focusListener.clean();
 	}
 
 	// todo legacy
