@@ -18,16 +18,27 @@ class App extends Component {
 		error: PropTypes.object
 	};
 
+	constructor(props) {
+		super(props);
+		this.state = {
+			scope: null
+		}
+	}
+
 	render() {
 		let ret = "";
 		if(this.props.children.type===Page) {
 			let activeScreenSetKey = this.props.children.props.screenSet;
+			let page = React.Children.only(this.props.children);
 			ret = (
 				<div>
 					<Menu
 						activeScreenSet={activeScreenSetKey}
+						scope={this.state.scope || null}
 					/>
-					{this.props.children}
+					{React.cloneElement(page, {
+						scope: this.state.scope || null
+					})}
 				</div>
 			);
 		} else {
