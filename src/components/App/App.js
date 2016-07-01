@@ -24,6 +24,7 @@ class App extends Component {
 			let activeScreenSetKey = this.props.children.props.screenSet;
 			ret = (
 				<div>
+					<div id="loading-overlay"></div>
 					<Menu
 						activeScreenSet={activeScreenSetKey}
 					/>
