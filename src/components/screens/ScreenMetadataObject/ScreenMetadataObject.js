@@ -9,7 +9,20 @@ import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants
 
 import ActionCreator from '../../../actions/ActionCreator';
 
-//import PeriodStore from '../../../stores/PeriodStore';
+import AttributeSetStore from '../../../stores/AttributeSetStore';
+import AttributeStore from '../../../stores/AttributeStore';
+import AULevelStore from '../../../stores/AULevelStore';
+import LayerGroupStore from '../../../stores/LayerGroupStore';
+import ObjectRelationStore from '../../../stores/ObjectRelationStore';
+import PeriodStore from '../../../stores/PeriodStore';
+import PlaceStore from '../../../stores/PlaceStore';
+import RasterLayerStore from '../../../stores/RasterLayerStore';
+import ScopeStore from '../../../stores/ScopeStore';
+import StyleStore from '../../../stores/StyleStore';
+import ThemeStore from '../../../stores/ThemeStore';
+import TopicStore from '../../../stores/TopicStore';
+import VectorLayerStore from '../../../stores/VectorLayerStore';
+
 import SelectorMetadataObject from '../../sections/SelectorMetadataObject';
 import ConfigMetadataScope from '../../sections/ConfigMetadataScope';
 import ConfigMetadataPlace from '../../sections/ConfigMetadataPlace';
@@ -26,90 +39,117 @@ import ConfigMetadataStyle from '../../sections/ConfigMetadataStyle';
 import ListenerHandler from '../../../core/ListenerHandler';
 
 import logger from '../../../core/Logger';
-import PantherComponent from "../../common/PantherComponent";
+import ScreenController from "../../common/ScreenController";
 
-var initialState = {
-	scopes: [],
-	vectorLayerTemplates: [],
-	rasterLayerTemplates: [],
-	auLevels: [],
-	attributeSets: [],
-	attributes: [],
-	places: [],
-	periods: [],
-	themes: [],
-	topics: [],
-	layerGroups: [],
-	styles: [],
-	selectorValue: null
-};
-
+import ScreenMetadataObjectController from "../ScreenMetadataObjectController";
 
 @withStyles(styles)
-class ScreenMetadataObject extends PantherComponent{
+class ScreenMetadataObject extends ScreenController {
 
-	constructor(props) {
-		super(props);
-		this.state = utils.deepClone(initialState);
 
-		if(this.props.data && this.props.data.objectType) {
-			this.state.objectType = this.props.data.objectType;
+	_getStoreLoads(props) {
+		let storeloads = {};
+		switch (props.data.objectType) {
+			case ObjectTypes.SCOPE:
+				storeloads = {
+					//scope: function(){return ScopeStore.getById(props.selectorValue)},
+					scopes: function(){return ScopeStore.getAll()},
+					auLevels: function(){return AULevelStore.getAll()},
+					periods: function(){return PeriodStore.getAll()}
+				};
+				break;
+			case ObjectTypes.PLACE:
+				storeloads = {
+					//place: function(){return PlaceStore.getById(props.selectorValue)},
+					places: function(){return PlaceStore.getAll()},
+					scopes: function(){return ScopeStore.getAll()}
+				};
+				break;
+			case ObjectTypes.PERIOD:
+				storeloads = {
+					//period: function(){return PeriodStore.getById(props.selectorValue)},
+					periods: function(){return PeriodStore.getAll()}
+				};
+				break;
+			case ObjectTypes.VECTOR_LAYER_TEMPLATE:
+				storeloads = {
+					//layer: function(){return VectorLayerStore.getById(props.selectorValue)},
+					layers: function(){return VectorLayerStore.getAll()},
+					topics: function(){return TopicStore.getAll()},
+					layerGroups: function(){return LayerGroupStore.getAll()},
+					styles: function(){return StyleStore.getAll()},
+					attributeSets: function(){return AttributeSetStore.getAll()}
+				};
+				break;
+			case ObjectTypes.RASTER_LAYER_TEMPLATE:
+				storeloads = {
+					//layer: function(){return RasterLayerStore.getById(props.selectorValue)},
+					layers: function(){return RasterLayerStore.getAll()},
+					topics: function(){return TopicStore.getAll()},
+					layerGroups: function(){return LayerGroupStore.getAll()},
+					styles: function(){return StyleStore.getAll()}
+				};
+				break;
+			case ObjectTypes.AU_LEVEL:
+				storeloads = {
+					//layer: function(){return AULevelStore.getById(props.selectorValue)},
+					layers: function(){return AULevelStore.getAll()}
+				};
+				break;
+			case ObjectTypes.ATTRIBUTE:
+				storeloads = {
+					//attribute: function(){return AttributeStore.getById(props.selectorValue)},
+					attributes: function(){return AttributeStore.getAll()}
+				};
+				break;
+			case ObjectTypes.ATTRIBUTE_SET:
+				storeloads = {
+					//attributeSet: function(){return AttributeSetStore.getById(props.selectorValue)},
+					attributeSets: function(){return AttributeSetStore.getAll()},
+					topics: function(){return TopicStore.getAll()},
+					attributes: function(){return AttributeStore.getAll()}
+				};
+				break;
+			case ObjectTypes.TOPIC:
+				storeloads = {
+					//topic: function(){return TopicStore.getById(props.selectorValue)},
+					topics: function(){return TopicStore.getAll()}
+				};
+				break;
+			case ObjectTypes.THEME:
+				storeloads = {
+					//theme: function(){return ThemeStore.getById(props.selectorValue)},
+					themes: function(){return ThemeStore.getAll()},
+					scopes: function(){return ScopeStore.getAll()},
+					topics: function(){return TopicStore.getAll()}
+				};
+				break;
+			case ObjectTypes.LAYER_GROUP:
+				storeloads = {
+					//layerGroup: function(){return LayerGroupStore.getById(props.selectorValue)},
+					layerGroups: function(){return LayerGroupStore.getAll()}
+				};
+				break;
+			case ObjectTypes.STYLE:
+				storeloads = {
+					//style: function(){return StyleStore.getById(props.selectorValue)},
+					styles: function(){return StyleStore.getAll()}
+				};
+				break;
 		}
-		if(this.props.data && this.props.data.objectKey) {
-			this.state.selectorValue = this.props.data.objectKey;
-		}
+		storeloads.selectorData = function(){return Store[props.data.objectType].getAll()};
+		return storeloads;
 	}
 
-	getUrl() {
-		return path.join(this.props.parentUrl, "metadata/" + this.state.selectorValue); // todo
-	}
-
-	store2state(props) {
-		if (!props) {
-			props = this.props;
-		}
-		return {
-			selectorData: Store[props.data.objectType].getAll()
-		};
-	}
-
-	_onStoreChange() {
-		logger.trace("ScreenMetadataObject# _onStoreChange()");
-		super.setStateFromStores(this.store2state());
-	}
-
-	_onStoreResponse(result,responseData,stateHash) {
-		if (stateHash === this.getStateHash()) {
-			if (result && this.mounted) {
-				this.setState({
-					selectorValue: result[0].key
-				});
-			}
-		}
-	}
+	//getUrl() {
+	//	return path.join(this.props.parentUrl, "metadata/" + this.state.selectorValue); // todo
+	//}
 
 	componentDidMount() {
 		super.componentDidMount();
 
 		if(this.props.data.objectType) {
 			this.addListeners();
-			super.setStateFromStores(this.store2state());
-		}
-	}
-
-	componentWillReceiveProps(newProps) {
-		if(this.props.data.objectKey != newProps.data.objectKey) {
-			this.setState({
-				selectorValue: newProps.data.objectKey
-			});
-		}
-		if(this.props.data.objectType != newProps.data.objectType) {
-			this.removeChangeListener();
-			this.addChangeListener(newProps);
-			this.setState({
-				objectType: newProps.data.objectType
-			});
-			super.setStateFromStores(this.store2state(newProps));
 		}
 	}
 
@@ -118,122 +158,29 @@ class ScreenMetadataObject extends PantherComponent{
 			props = this.props;
 		}
 		this.changeListener.add(Store[props.data.objectType]);
-		this.responseListener.add(Store[props.data.objectType]);
 	}
 	removeListeners() {
 		this.changeListener.clean();
-		this.responseListener.clean();
-	}
-
-	/**
-	 * Differentiate between states
-	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
-	 */
-	updateStateHash(state) {
-		if(!state){
-			state = this.state;
-		}
-		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash("ScreenMetadataObject" + state.selectorValue);
-	}
-	getStateHash() {
-		if(!this._stateHash) {
-			this.updateStateHash();
-		}
-		return this._stateHash;
-	}
-
-
-	onSelectorChange (value) {
-		this.setState({
-			selectorValue: value
-		});
-	}
-
-	onNewEmptyObject () {
-		let objectType = this.props.data.objectType;
-		let model = new Model[objectType]({active:false});
-		logger.trace("ScreenMetadataObject# onNewEmptyObject(), Model: ", model);
-		ActionCreator.createObjectAndRespond(model, objectType, {}, this.getStateHash());
 	}
 
 	render() {
 
-		let ret = null;
-		var configComponent = "";
-		var headline = "";
-		if (this.props.data.objectType && this.state.selectorData) {
-			headline = objectTypesMetadata[this.props.data.objectType].name;
-			if(objectTypesMetadata[this.props.data.objectType].isTemplate) {
-				headline = headline + " (template)";
-			}
-
-			var props = {
-				disabled: this.props.disabled,
-				selectorValue: this.state.selectorValue,
-				parentUrl: this.getUrl()
-			};
-			switch (this.props.data.objectType) {
-				case ObjectTypes.SCOPE:
-					configComponent = <ConfigMetadataScope {...props} />;
-					break;
-				case ObjectTypes.PLACE:
-					configComponent = <ConfigMetadataPlace {...props} />;
-					break;
-				case ObjectTypes.PERIOD:
-					configComponent = <ConfigMetadataPeriod {...props} />;
-					break;
-				case ObjectTypes.VECTOR_LAYER_TEMPLATE:
-					configComponent = <ConfigMetadataLayerVector {...props} />;
-					break;
-				case ObjectTypes.RASTER_LAYER_TEMPLATE:
-					configComponent = <ConfigMetadataLayerRaster {...props} />;
-					break;
-				case ObjectTypes.AU_LEVEL:
-					configComponent = <ConfigMetadataAULevel {...props} />;
-					break;
-				case ObjectTypes.ATTRIBUTE:
-					configComponent = <ConfigMetadataAttribute {...props} />;
-					break;
-				case ObjectTypes.ATTRIBUTE_SET:
-					configComponent = <ConfigMetadataAttributeSet {...props} />;
-					break;
-				case ObjectTypes.TOPIC:
-					configComponent = <ConfigMetadataTopic {...props} />;
-					break;
-				case ObjectTypes.THEME:
-					configComponent = <ConfigMetadataTheme {...props} />;
-					break;
-				case ObjectTypes.LAYER_GROUP:
-					configComponent = <ConfigMetadataLayerGroup {...props} />;
-					break;
-				case ObjectTypes.STYLE:
-					configComponent = <ConfigMetadataStyle {...props} />;
-					break;
-			}
-
-			ret = (
-				<div>
-					<div className="screen-setter"><div>
-						<h2>{headline}</h2>
-						<SelectorMetadataObject
-							disabled={this.props.disabled}
-							data={this.state.selectorData}
-							value={this.state.selectorValue}
-							onChange={this.onSelectorChange.bind(this)}
-							onNew={this.onNewEmptyObject.bind(this)}
-						/>
-					</div></div>
-					<div className="screen-content"><div>
-						{configComponent}
-					</div></div>
-				</div>
-			);
-
+		if (this.state.ready) {
+			//return (
+			//	<div>
+			//		<ScreenMetadataObjectController store={this.state.store} {...this.props} />
+			//	</div>
+			//);
+			let props = utils.clone(this.props);
+			//let props = {};
+			props.store = this.state.store;
+			return React.createElement(ScreenMetadataObjectController, props);
 		}
-
-
-		return ret;
+		else {
+			return (
+				<div className="component-loading"></div>
+			);
+		}
 
 	}
 }
