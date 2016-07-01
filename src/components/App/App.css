@@ -1616,7 +1616,6 @@ ol.list-steps > li::before {
 
 
 #loading-overlay{
-	display: none;
 	position: fixed;
 	top: 0;
 	bottom: 0;
