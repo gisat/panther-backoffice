@@ -3,6 +3,7 @@ import PantherComponent from "./PantherComponent";
 
 import utils from '../../utils/utils';
 import logger from '../../core/Logger';
+import _ from 'underscore';
 
 import ListenerHandler from '../../core/ListenerHandler';
 

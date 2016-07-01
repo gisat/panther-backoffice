@@ -135,34 +135,34 @@ class ScreenController extends PantherComponent {
 
 	// RENDERING ////////////////////////////////////////////////////
 
-	/**
-	 * render - will mostly be overriden
-	 * @returns {*}
-	 */
-	render() {
-		let ret = null;
-		if (this.state.ready) {
-			let children = React.Children.map(this.props.children,
-				(child) => {
-					return React.cloneElement(child, {
-						disabled: this.props.disabled || child.props.disabled,
-						store: this.state.store
-					})
-				}
-			);
-			ret = (
-				<div>
-					{children}
-				</div>
-			);
-		}
-		else {
-			ret = (
-				<div class="component-loading"></div>
-			);
-		}
-		return ret;
-	}
+	///**
+	// * render - will mostly be overriden
+	// * @returns {*}
+	// */
+	//render() {
+	//	let ret = null;
+	//	if (this.state.ready) {
+	//		let children = React.Children.map(this.props.children,
+	//			(child) => {
+	//				return React.cloneElement(child, {
+	//					disabled: this.props.disabled || child.props.disabled,
+	//					store: this.state.store
+	//				})
+	//			}
+	//		);
+	//		ret = (
+	//			<div>
+	//				{children}
+	//			</div>
+	//		);
+	//	}
+	//	else {
+	//		ret = (
+	//			<div className="component-loading"></div>
+	//		);
+	//	}
+	//	return ret;
+	//}
 
 }
 

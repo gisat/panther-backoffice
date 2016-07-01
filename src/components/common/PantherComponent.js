@@ -117,6 +117,11 @@ class PantherComponent extends Component {
 		});
 	}
 
+	//todo legacy
+	saveForm() {
+		this.acceptChange = true;
+	}
+
 	/**
 	 * Checks if component mounted and sets state using react-addons-update
 	 * @param updatePath
