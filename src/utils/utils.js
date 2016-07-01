@@ -12,7 +12,6 @@ import GeneralModel from '../models/Model';
 import ScopeModel from '../models/ScopeModel';
 import VectorLayerModel from '../models/VectorLayerModel';
 import TopicModel from '../models/TopicModel';
-import LoadingCounter from './LoadingCounter';
 import _ from 'underscore';
 
 export default {
@@ -463,26 +462,6 @@ export default {
 
 		return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
 			s4() + '-' + s4() + s4() + s4();
-	},
-
-	increaseLoadingCounter(){
-		let count = LoadingCounter.increase();
-
-		if(count > 0){
-			$('#loading-overlay').show();
-		}
-	},
-
-	decreaseLoadingCounter(){
-		let count = LoadingCounter.decrease();
-
-		if(count <= 0){
-			$('#loading-overlay').hide();
-		}
-	},
-	
-	getOperationsCount(){
-		return LoadingCounter.getCount();
 	}
 
 }
