@@ -288,7 +288,7 @@ class ConfigPlaceDataSourcePeriod extends PantherComponent {
 				selected: {$set: selected},
 				savedState: {$merge: savedState}
 			};
-			thisComponent.context.setStateDeep.call(thisComponent, newState);
+			super.setStateDeep.call(thisComponent, newState);
 
 		});
 

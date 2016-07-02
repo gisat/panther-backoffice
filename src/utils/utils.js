@@ -94,7 +94,8 @@ export default {
 					ThemeStore.getFiltered({scope: scopeModel}).then(function (themeModels) {
 
 						if (!themeModels.length) {
-							return reject("getPeriodsForScope: themes with filter {scope: " + scope + "} not find.");
+							var errorScopeIdentifier = scope.hasOwnProperty('name') ? scope.name : scope;
+							return reject("getPeriodsForScope: themes with filter {scope: " + errorScopeIdentifier + "} not found.");
 						}
 
 						for (let theme of themeModels) {
@@ -113,8 +114,8 @@ export default {
 						});
 
 					}, function () {
-
-						reject("getPeriodsForScope: theme with filter {scope: " + scope + "} not resolved.");
+						var errorScopeIdentifier = scope.hasOwnProperty('name') ? scope.name : scope;
+						reject("getPeriodsForScope: theme with filter {scope: " + errorScopeIdentifier + "} not resolved.");
 
 					});
 
@@ -139,7 +140,8 @@ export default {
 				ThemeStore.getFiltered({scope: scopeModel}).then(function (themeModels) {
 
 					if (!themeModels.length) {
-						return reject("getThemesForScope: themes with filter {scope: " + scope + "} not find.");
+						var errorScopeIdentifier = scope.hasOwnProperty('name') ? scope.name : scope;
+						return reject("getThemesForScope: themes with filter {scope: " + errorScopeIdentifier + "} not found.");
 					}
 
 					var themeKeys = _.pluck(themeModels, "key");
@@ -150,8 +152,8 @@ export default {
 					});
 
 				}, function () {
-
-					reject("getThemesForScope: theme with filter {scope: " + scope + "} not resolved.");
+					var errorScopeIdentifier = scope.hasOwnProperty('name') ? scope.name : scope;
+					reject("getThemesForScope: theme with filter {scope: " + errorScopeIdentifier + "} not resolved.");
 
 				});
 			});
@@ -441,6 +443,14 @@ export default {
 			keyArray.push(model.key);
 		});
 		return keyArray;
+	},
+
+	/**
+	 * Display message to the user.
+	 * @param message
+	 */
+	displayMessage(message){
+		alert(message);
 	},
 
 	guid() {

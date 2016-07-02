@@ -106,7 +106,7 @@ class ScreenAnalysisRulesLevel extends PantherComponent {
 					let newState = {
 						valueAttributeMaps: {$merge: attributeMaps}
 					};
-					thisComponent.context.setStateDeep.call(thisComponent, newState);
+					super.setStateDeep.call(thisComponent, newState);
 				}
 
 			});

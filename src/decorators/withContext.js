@@ -14,8 +14,7 @@ function withContext(ComposedComponent) {
         onPageNotFound: PropTypes.func,
         activePageKey: PropTypes.func,
         page: PropTypes.object,
-				setStateFromStores: PropTypes.func,
-				setStateDeep: PropTypes.func
+				setStateFromStores: PropTypes.func
       })
     };
 
@@ -26,8 +25,7 @@ function withContext(ComposedComponent) {
       onPageNotFound: PropTypes.func.isRequired,
 			setStateFromStores: PropTypes.func.isRequired,
       activePageKey: PropTypes.func.isRequired,
-      page: PropTypes.object.isRequired,
-			setStateDeep: PropTypes.func.isRequired
+      page: PropTypes.object.isRequired
     };
 
     getChildContext() {
@@ -39,8 +37,7 @@ function withContext(ComposedComponent) {
         onPageNotFound: context.onPageNotFound || emptyFunction,
 				setStateFromStores: context.setStateFromStores || emptyFunction,
         activePageKey: context.activePageKey || emptyFunction,
-        page: {},
-				setStateDeep: context.setStateDeep || emptyFunction
+        page: {}
 			};
     }
 

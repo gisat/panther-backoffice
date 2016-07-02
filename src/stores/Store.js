@@ -12,7 +12,7 @@ import EventTypes from '../constants/EventTypes';
 
 import { apiProtocol, apiHost, apiPath } from '../config';
 import logger from '../core/Logger';
-import util from '../utils/utils';
+import utils from '../utils/utils';
 
 class Store extends EventEmitter {
 
@@ -78,7 +78,7 @@ class Store extends EventEmitter {
 			return;
 		}
 		this.reloadInProgress = true;
-		var guid = util.guid();
+		var guid = utils.guid();
 		logger.trace("Store# reload(), GUID: ", guid, ",Current store: ", this);
 		var thisStore = this;
 		this._models = this.load();
@@ -167,7 +167,7 @@ class Store extends EventEmitter {
 	}
 
 	createObjectAndRespond(model,responseData,responseStateHash) {
-		let guid = util.guid();
+		let guid = utils.guid();
 		logger.trace("Store# createObjectAndRespond(), Response data",responseData, ", GUID: ", guid);
 		// todo ? Model.resolveForServer ?
 		//var object = {
@@ -207,17 +207,44 @@ class Store extends EventEmitter {
 				.set('Access-Control-Allow-Origin', 'true')
 				.set('Access-Control-Allow-Credentials', 'true')
 				.end(function(err, res){
-					if(err || typeof res == 'undefined'){
+
+					// No response
+					if(typeof res == 'undefined'){
+						let errorMessage = err ? "Server request failed\nError message: " + err : "Error: Empty response";
+						logger.error("Store#request " + errorMessage);
+						utils.displayMessage(errorMessage);
 						reject(err);
 						return;
 					}
 
+					// Response present, but with empty text
 					if(!res.text) {
 						logger.warn("Store#request No data was returned.");
-						return resolve();
+						resolve();
+						return;
 					}
 
-					var responseJson = JSON.parse(res.text);
+					// Parse response.text JSON
+					try {
+						var responseJson = JSON.parse(res.text);
+					}catch(e){
+						let errorMessage = "Error: Failed to parse server response.";
+						logger.error("Store#request JSON parse: " + errorMessage);
+						utils.displayMessage(errorMessage);
+						reject(e);
+						return;
+					}
+
+					// ajax request returned as error
+					if(err){
+						let responseMessage = "";
+						if(responseJson.hasOwnProperty('message')){
+							responseMessage = responseJson.message;
+						}
+						utils.displayMessage(err + "\n" + responseMessage);
+						reject(err);
+						return;
+					}
 
 					// if there is no data attribute in the response
 					if (!responseJson.hasOwnProperty('data')) {

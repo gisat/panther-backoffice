@@ -188,6 +188,23 @@ export default {
 			screenKey: screenKey
 		};
 		AppDispatcher.dispatch(action);
+	},
+
+	addOperation(id, operation) {
+		var action = {
+			type: ActionTypes.ADD_OPERATION,
+			id: id,
+			operation: operation
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	removeOperation(id) {
+		var action = {
+			type: ActionTypes.REMOVE_OPERATION,
+			id: id
+		};
+		AppDispatcher.dispatch(action);
 	}
 
 };

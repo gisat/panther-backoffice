@@ -9,14 +9,14 @@ export const apiHost = "localhost:4000"; //host + port
 export const apiPath = "/";
 
 export const geonodeProtocol = "http://";
-export const geonodeAddress = "localhost"; //address - host + port + base path
+export const geonodeAddress = "localhost/geonode"; //address - host + port + base path
 
 export const geoserverProtocol = "http://";
 export const geoserverAddress = "localhost/geoserver"; //address - host + port + base path
 
 export const frontOfficeProtocol = "http://";
 export const frontOfficeAddress = "localhost"; //address - host + port + base path
-export const frontOfficeExplorationPath = "tool/";
+export const frontOfficeExplorationPath = "";
 
 // 0 means TRACE and higher. Use when you want to see all messages.
 // 1 means INFO and higher
