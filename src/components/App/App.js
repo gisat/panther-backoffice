@@ -1,16 +1,17 @@
-
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import styles from './App.css';
+import PantherComponent from '../common/PantherComponent';
+import OperationStore from '../../stores/OperationStore';
 import withContext from '../../decorators/withContext';
 import withStyles from '../../decorators/withStyles';
-
+import logger from '../../core/Logger';
 import Menu from '../Menu';
 import Page from '../Page';
 
 
 @withContext
 @withStyles(styles)
-class App extends Component {
+class App extends PantherComponent {
 
 
 	static propTypes = {
@@ -18,16 +19,49 @@ class App extends Component {
 		error: PropTypes.object
 	};
 
+	constructor(props) {
+		super(props);
+		this.state = {
+			loading: 0
+		};
+	}
+
+	componentDidMount(){
+		super.componentDidMount();
+		this.changeListener.add(OperationStore);
+	}
+
+	_onStoreChange() {
+		logger.trace("ReallyNotOperationStore# _onStoreChange()");
+		let operations = OperationStore.getAll();
+		let count = Object.keys(operations).length;
+		this.setState({
+			loading: count
+		});
+	}
+
 	render() {
 		let ret = "";
 		if(this.props.children.type===Page) {
 			let activeScreenSetKey = this.props.children.props.screenSet;
+			let page = React.Children.only(this.props.children);
+
+			let loadingOverlay = null;
+			if(this.state.loading){
+				loadingOverlay = (
+					<div id="loading-overlay"></div>
+				);
+			}
+
 			ret = (
 				<div>
+					{loadingOverlay}
 					<Menu
 						activeScreenSet={activeScreenSetKey}
 					/>
-					{this.props.children}
+					{React.cloneElement(page, {
+						disabled: !!this.state.loading
+					})}
 				</div>
 			);
 		} else {
