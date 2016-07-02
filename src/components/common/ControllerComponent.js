@@ -56,11 +56,16 @@ class ControllerComponent extends PantherComponent {
 		let nextState = this.buildState(nextProps);
 
 		if (this.mounted) {
-			if (this.equalStates(this.state.current, this.state.saved)) {
+			if (
+				this.equalStates(this.state.current, nextState) ||
+				this.equalStates(this.state.current, this.state.saved)
+			) {
+				//new state is the same as current, can be used (we probably saved) OR
 				//state was not changed from saved - can be replaced with new
 				this.setStateDeep({
 					current: {$merge: nextState},
 					saved: {$merge: nextState},
+					built: {$set: true},
 					updated: {$set: true}
 				});
 			}
