@@ -56,7 +56,7 @@ class ControllerComponent extends PantherComponent {
 		let nextState = this.buildState(nextProps);
 
 		if (this.mounted) {
-			if (this._equalStates(this.state.current, this.state.saved)) {
+			if (this.equalStates(this.state.current, this.state.saved)) {
 				//state was not changed from saved - can be replaced with new
 				this.setStateDeep({
 					current: {$merge: nextState},
@@ -157,9 +157,8 @@ class ControllerComponent extends PantherComponent {
 	 * @param firstState
 	 * @param secondState
 	 * @param limitKeys
-	 * @private
 	 */
-	_equalStates(firstState,secondState,limitKeys) {
+	equalStates(firstState,secondState,limitKeys) {
 		let one = {}, two = {};
 		if(limitKeys) {
 			for (var keyOne in firstState) {
