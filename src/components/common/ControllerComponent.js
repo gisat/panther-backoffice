@@ -16,6 +16,7 @@ import ListenerHandler from '../../core/ListenerHandler';
  * invalid: bool - if data state was changed outside of component after mount
  * built: bool - some current data state is ready
  * updated: bool - current data state was updated automatically to reflect outside changes
+ * saving: bool - saving underway
  */
 
 var initialState = {
@@ -25,7 +26,8 @@ var initialState = {
 	ui: {},
 	invalid: false,
 	built: false,
-	updated: false
+	updated: false,
+	saving: false
 };
 
 class ControllerComponent extends PantherComponent {
@@ -66,7 +68,8 @@ class ControllerComponent extends PantherComponent {
 					current: {$merge: nextState},
 					saved: {$merge: nextState},
 					built: {$set: true},
-					updated: {$set: true}
+					updated: {$set: true},
+					saving: {$set: false}
 				});
 			}
 			else {
@@ -185,6 +188,9 @@ class ControllerComponent extends PantherComponent {
 	}
 
 	saveForm() {
+		this.setState({
+			saving: true
+		});
 		this.acceptChange = true;
 	}
 }
