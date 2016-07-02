@@ -9,6 +9,8 @@ import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants
 
 import ActionCreator from '../../../actions/ActionCreator';
 
+import ScopeModel from '../../../models/ScopeModel';
+
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 import AttributeStore from '../../../stores/AttributeStore';
 import AULevelStore from '../../../stores/AULevelStore';
@@ -52,93 +54,94 @@ class ScreenMetadataObject extends ScreenController {
 		switch (props.data.objectType) {
 			case ObjectTypes.SCOPE:
 				storeloads = {
-					//scope: function(){return ScopeStore.getById(props.selectorValue)},
-					scopes: function(){return ScopeStore.getAll()},
-					auLevels: function(){return AULevelStore.getAll()},
-					periods: function(){return PeriodStore.getAll()}
+					scopes: this._load(ScopeStore),
+					auLevels: this._load(AULevelStore),
+					periods: this._load(PeriodStore)
 				};
 				break;
 			case ObjectTypes.PLACE:
 				storeloads = {
-					//place: function(){return PlaceStore.getById(props.selectorValue)},
-					places: function(){return PlaceStore.getAll()},
-					scopes: function(){return ScopeStore.getAll()}
+					places: this._load(PlaceStore),
+					scopes: this._load(ScopeStore)
 				};
 				break;
 			case ObjectTypes.PERIOD:
 				storeloads = {
-					//period: function(){return PeriodStore.getById(props.selectorValue)},
-					periods: function(){return PeriodStore.getAll()}
+					periods: this._load(PeriodStore)
 				};
 				break;
 			case ObjectTypes.VECTOR_LAYER_TEMPLATE:
 				storeloads = {
-					//layer: function(){return VectorLayerStore.getById(props.selectorValue)},
-					layers: function(){return VectorLayerStore.getAll()},
-					topics: function(){return TopicStore.getAll()},
-					layerGroups: function(){return LayerGroupStore.getAll()},
-					styles: function(){return StyleStore.getAll()},
-					attributeSets: function(){return AttributeSetStore.getAll()}
+					layers: this._load(VectorLayerStore),
+					topics: this._load(TopicStore),
+					layerGroups: this._load(LayerGroupStore),
+					styles: this._load(StyleStore),
+					attributeSets: this._load(AttributeSetStore)
 				};
 				break;
 			case ObjectTypes.RASTER_LAYER_TEMPLATE:
 				storeloads = {
-					//layer: function(){return RasterLayerStore.getById(props.selectorValue)},
-					layers: function(){return RasterLayerStore.getAll()},
-					topics: function(){return TopicStore.getAll()},
-					layerGroups: function(){return LayerGroupStore.getAll()},
-					styles: function(){return StyleStore.getAll()}
+					layers: this._load(RasterLayerStore),
+					topics: this._load(TopicStore),
+					layerGroups: this._load(LayerGroupStore),
+					styles: this._load(StyleStore)
 				};
 				break;
 			case ObjectTypes.AU_LEVEL:
 				storeloads = {
-					//layer: function(){return AULevelStore.getById(props.selectorValue)},
-					layers: function(){return AULevelStore.getAll()}
+					layers: this._load(AULevelStore)
 				};
 				break;
 			case ObjectTypes.ATTRIBUTE:
 				storeloads = {
-					//attribute: function(){return AttributeStore.getById(props.selectorValue)},
-					attributes: function(){return AttributeStore.getAll()}
+					attributes: this._load(AttributeStore)
 				};
 				break;
 			case ObjectTypes.ATTRIBUTE_SET:
 				storeloads = {
-					//attributeSet: function(){return AttributeSetStore.getById(props.selectorValue)},
-					attributeSets: function(){return AttributeSetStore.getAll()},
-					topics: function(){return TopicStore.getAll()},
-					attributes: function(){return AttributeStore.getAll()}
+					attributeSets: this._load(AttributeSetStore),
+					topics: this._load(TopicStore),
+					attributes: this._load(AttributeStore)
 				};
 				break;
 			case ObjectTypes.TOPIC:
 				storeloads = {
-					//topic: function(){return TopicStore.getById(props.selectorValue)},
-					topics: function(){return TopicStore.getAll()}
+					topics: this._load(TopicStore)
 				};
 				break;
 			case ObjectTypes.THEME:
 				storeloads = {
-					//theme: function(){return ThemeStore.getById(props.selectorValue)},
-					themes: function(){return ThemeStore.getAll()},
-					scopes: function(){return ScopeStore.getAll()},
-					topics: function(){return TopicStore.getAll()}
+					themes: this._load(ThemeStore),
+					scopes: this._load(ScopeStore),
+					topics: this._load(TopicStore)
 				};
 				break;
 			case ObjectTypes.LAYER_GROUP:
 				storeloads = {
-					//layerGroup: function(){return LayerGroupStore.getById(props.selectorValue)},
-					layerGroups: function(){return LayerGroupStore.getAll()}
+					layerGroups: this._load(LayerGroupStore)
 				};
 				break;
 			case ObjectTypes.STYLE:
 				storeloads = {
-					//style: function(){return StyleStore.getById(props.selectorValue)},
-					styles: function(){return StyleStore.getAll()}
+					styles: this._load(StyleStore)
 				};
 				break;
 		}
 		storeloads.selectorData = function(){return Store[props.data.objectType].getAll()};
 		return storeloads;
+	}
+
+	_load(store) {
+		if (
+			this.props.scope &&
+			this.props.scope instanceof ScopeModel &&
+			!(store instanceof ScopeStore)
+		) {
+			return function(){return store.getFiltered({scope: this.props.scope})};
+		}
+		else {
+			return function(){return store.getAll()};
+		}
 	}
 
 	//getUrl() {
