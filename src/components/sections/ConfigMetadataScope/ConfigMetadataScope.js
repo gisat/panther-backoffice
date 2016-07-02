@@ -281,6 +281,7 @@ class ConfigMetadataScope extends ControllerComponent {
 			saveButton = (
 				<SaveButton
 					saved={this.equalStates(this.state.current,this.state.saved)}
+					saving={this.state.saving}
 					className="save-button"
 					onClick={this.saveForm.bind(this)}
 				/>
