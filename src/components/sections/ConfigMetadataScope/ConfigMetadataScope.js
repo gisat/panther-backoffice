@@ -25,7 +25,6 @@ import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
 
 var initialState = {
-	scope: null,
 	valueActive: false,
 	valueName: "",
 	valuesAULevels: [],
@@ -72,7 +71,6 @@ class ConfigMetadataScope extends ControllerComponent {
 		if(props.selectorValue) {
 			let scope = _.findWhere(props.store.scopes, {key: props.selectorValue});
 			nextState = {
-				scope: scope,
 				valueActive: scope.active,
 				valueName: scope.name,
 				valuesAULevels: utils.getModelsKeys(scope.levels),
@@ -155,7 +153,8 @@ class ConfigMetadataScope extends ControllerComponent {
 		super.saveForm();
 
 		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.current.scope);
+		let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
+		_.assign(modelData, scope);
 		modelData.active = this.state.current.valueActive;
 		modelData.name = this.state.current.valueName;
 		modelData.levels = [];
@@ -170,13 +169,14 @@ class ConfigMetadataScope extends ControllerComponent {
 		}
 		let modelObj = new Model[ObjectTypes.SCOPE](modelData);
 		actionData.push({type:"update",model:modelObj});
-		this.handleRelations(modelObj.periods, this.state.current.scope.periods);
+		this.handleRelations(modelObj.periods, scope.periods);
 		this.handleThemePeriods(modelObj.periods);
 		ActionCreator.handleObjects(actionData,ObjectTypes.SCOPE);
 	}
 
 	handleThemePeriods(newPeriods) {
-		utils.getThemesForScope(this.state.current.scope).then(function(themes){
+		let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
+		utils.getThemesForScope(scope).then(function(themes){
 			let actionData = [];
 
 			themes.models.forEach(function(model){
@@ -197,7 +197,8 @@ class ConfigMetadataScope extends ControllerComponent {
 	handleRelations(newPeriods, oldPeriods) {
 		let thisComponent = this;
 		let actionData = [], promises = [];
-		for (let level of this.state.current.scope.levels) {
+		let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
+		for (let level of scope.levels) {
 			let levelRelationsPromise = ObjectRelationStore.getFiltered({layerObject: level});
 			promises.push(levelRelationsPromise);
 		}
@@ -210,7 +211,7 @@ class ConfigMetadataScope extends ControllerComponent {
 			}
 			places = _.uniq(places);
 
-			for (let level of thisComponent.state.current.scope.levels) {
+			for (let level of scope.levels) {
 				for (let place of places) {
 					let firstLevelPlaceRelation = _.findWhere(relations,{layerObject:level, place:place});
 					if (firstLevelPlaceRelation) {
@@ -273,8 +274,10 @@ class ConfigMetadataScope extends ControllerComponent {
 
 	render() {
 
+		let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
+
 		var saveButton = " ";
-		if (this.state.current.scope) {
+		if (this.state.built) {
 			saveButton = (
 				<SaveButton
 					saved={this.equalStates(this.state.current,this.state.saved)}
@@ -286,7 +289,7 @@ class ConfigMetadataScope extends ControllerComponent {
 
 		var isActiveText = "inactive";
 		var isActiveClasses = "activeness-indicator";
-		if(this.state.current.scope && this.state.current.scope.active){
+		if(scope && scope.active){
 			isActiveText = "active";
 			isActiveClasses = "activeness-indicator active";
 		}
