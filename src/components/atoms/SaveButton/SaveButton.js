@@ -7,6 +7,8 @@ import { IconButton } from '../../SEUI/elements';
 class SaveButton extends Component{
 
 	static propTypes = {
+		saved: PropTypes.bool,
+		saving: PropTypes.bool,
 		children: React.PropTypes.node,
 		className: React.PropTypes.string
 	};
@@ -18,11 +20,17 @@ class SaveButton extends Component{
 	render() {
 		var label = "";
 		var isDisabled = this.props.disabled;
-		if (this.props.saved){
-			label = "Saved";
+		if (this.props.saving) {
+			label = "Saving";
 			isDisabled = true;
-		} else {
-			label = "Save";
+		}
+		else {
+			if (this.props.saved) {
+				label = "Saved";
+				isDisabled = true;
+			} else {
+				label = "Save";
+			}
 		}
 		var { saved, name, color, basic, disabled, ...other } = this.props;
 		return (
@@ -32,6 +40,7 @@ class SaveButton extends Component{
 				basic
 				color="blue"
 				disabled={isDisabled}
+				loading={this.props.saving}
 			>
 				{label}
 			</IconButton>
