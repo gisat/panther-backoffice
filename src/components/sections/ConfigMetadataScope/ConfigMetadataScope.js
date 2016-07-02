@@ -11,7 +11,9 @@ import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
-import ScopeStore from '../../../stores/ScopeStore';
+import ScopeModel from '../../../models/ScopeModel';
+import AULevelModel from '../../../models/AULevelModel';
+import PeriodModel from '../../../models/PeriodModel';
 import AULevelStore from '../../../stores/AULevelStore';
 import PeriodStore from '../../../stores/PeriodStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
@@ -35,11 +37,18 @@ class ConfigMetadataScope extends ControllerComponent {
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
+		scope: PropTypes.instanceOf(ScopeModel),
+		store: PropTypes.shape({
+			scopes: PropTypes.arrayOf(PropTypes.instanceOf(ScopeModel)),
+			auLevels: PropTypes.arrayOf(PropTypes.instanceOf(AULevelModel)),
+			periods: PropTypes.arrayOf(PropTypes.instanceOf(PeriodModel))
+		}).isRequired,
 		selectorValue: React.PropTypes.any
 	};
 
 	static defaultProps = {
 		disabled: false,
+		scope: null,
 		selectorValue: null
 	};
 
@@ -54,58 +63,25 @@ class ConfigMetadataScope extends ControllerComponent {
 		this.state.saved = utils.clone(this.state.current);
 	}
 
-	_getStoreLoads(props) {
-		return {
-			scope: ScopeStore.getById(props.selectorValue),
-			auLevels: AULevelStore.getAll(),
-			periods: PeriodStore.getAll()
-		};
-	}
 
-	buildState(props, map, keys) {
+	buildState(props) {
 		if(!props){
 			props = this.props;
 		}
-		var thisComponent = this;
-		return new Promise ( function (resolve, reject) {
-			if (props.selectorValue) {
-				let store2state = this._getStoreLoads(props);
-				//super.setStateFromStores(store2state, keys);
-
-				if(!keys || keys.indexOf("scope")!=-1) {
-					store2state.scope.then(function (scope) {
-						if(thisComponent.acceptChange) {
-							thisComponent.acceptChange = false;
-							let newState = {
-								valueActive: scope.active,
-								valueName: scope.name,
-								valuesAULevels: utils.getModelsKeys(scope.levels),
-								valuesPeriods: utils.getModelsKeys(scope.periods)
-							};
-							store2state = _.assign(store2state,newState);
-							//newState.savedState = utils.deepClone(newState);
-							//if (thisComponent.mounted) {
-							//	thisComponent.setState(newState);
-							//}
-							resolve(store2state);
-						}
-					});
-				}
-				else {
-					resolve(store2state);
-				}
-
-			}
-			else {
-				resolve({});
-			}
-		});
+		let nextState = {};
+		if(props.selectorValue) {
+			let scope = _.findWhere(props.store.scopes, {key: props.selectorValue});
+			nextState = {
+				scope: scope,
+				valueActive: scope.active,
+				valueName: scope.name,
+				valuesAULevels: utils.getModelsKeys(scope.levels),
+				valuesPeriods: utils.getModelsKeys(scope.periods)
+			};
+		}
+		return nextState;
 	}
 
-	//_onStoreChange(keys) {
-	//	logger.trace("ConfigMetadataScope# _onStoreChange(), Keys:", keys);
-	//	this.setStateFromStores(this.props,keys);
-	//}
 
 	_onStoreResponse(result,responseData,stateHash) {
 		var thisComponent = this;
@@ -148,46 +124,13 @@ class ConfigMetadataScope extends ControllerComponent {
 	componentDidMount() {
 		super.componentDidMount();
 
-		this.changeListener.add(ScopeStore, ["scope"]);
-		this.changeListener.add(AULevelStore, ["auLevels"]);
 		this.responseListener.add(AULevelStore);
-		this.changeListener.add(PeriodStore, ["periods"]);
 		this.responseListener.add(PeriodStore);
-
-		//this.setStateFromStores();
 	}
-
-	//componentWillUnmount() {
-	//	this.mounted = false;
-	//	this.changeListener.clean();
-	//	this.responseListener.clean();
-	//}
 
 	componentWillReceiveProps(newProps) {
-		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.acceptChange = true;
-			//this.setStateFromStores(newProps);
-			this.reloadState(newProps, true);
-			this.updateStateHash(newProps);
-		}
-	}
-
-
-	/**
-	 * Check if state is the same as it was when loaded from stores
-	 * @returns {boolean}
-	 */
-	isStateUnchanged() {
-		var isIt = true;
-		if(this.state.scope) {
-			isIt = (
-					this.state.valueActive == this.state.scope.active &&
-					this.state.valueName == this.state.scope.name &&
-					_.isEqual(this.state.valuesAULevels,this.state.savedState.valuesAULevels) &&
-					_.isEqual(this.state.valuesPeriods,this.state.savedState.valuesPeriods)
-			);
-		}
-		return isIt;
+		super.componentWillReceiveProps(newProps);
+		this.updateStateHash(newProps);
 	}
 
 	/**
@@ -212,28 +155,28 @@ class ConfigMetadataScope extends ControllerComponent {
 		super.saveForm();
 
 		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.scope);
-		modelData.active = this.state.valueActive;
-		modelData.name = this.state.valueName;
+		_.assign(modelData, this.state.current.scope);
+		modelData.active = this.state.current.valueActive;
+		modelData.name = this.state.current.valueName;
 		modelData.levels = [];
-		for (let key of this.state.valuesAULevels) {
-			let level = _.findWhere(this.state.auLevels, {key: key});
+		for (let key of this.state.current.valuesAULevels) {
+			let level = _.findWhere(this.props.store.auLevels, {key: key});
 			modelData.levels.push(level);
 		}
 		modelData.periods = [];
-		for (let key of this.state.valuesPeriods) {
-			let period = _.findWhere(this.state.periods, {key: key});
+		for (let key of this.state.current.valuesPeriods) {
+			let period = _.findWhere(this.props.store.periods, {key: key});
 			modelData.periods.push(period);
 		}
 		let modelObj = new Model[ObjectTypes.SCOPE](modelData);
 		actionData.push({type:"update",model:modelObj});
-		this.handleRelations(modelObj.periods, this.state.scope.periods);
+		this.handleRelations(modelObj.periods, this.state.current.scope.periods);
 		this.handleThemePeriods(modelObj.periods);
 		ActionCreator.handleObjects(actionData,ObjectTypes.SCOPE);
 	}
 
 	handleThemePeriods(newPeriods) {
-		utils.getThemesForScope(this.state.scope).then(function(themes){
+		utils.getThemesForScope(this.state.current.scope).then(function(themes){
 			let actionData = [];
 
 			themes.models.forEach(function(model){
@@ -254,7 +197,7 @@ class ConfigMetadataScope extends ControllerComponent {
 	handleRelations(newPeriods, oldPeriods) {
 		let thisComponent = this;
 		let actionData = [], promises = [];
-		for (let level of this.state.scope.levels) {
+		for (let level of this.state.current.scope.levels) {
 			let levelRelationsPromise = ObjectRelationStore.getFiltered({layerObject: level});
 			promises.push(levelRelationsPromise);
 		}
@@ -267,7 +210,7 @@ class ConfigMetadataScope extends ControllerComponent {
 			}
 			places = _.uniq(places);
 
-			for (let level of thisComponent.state.scope.levels) {
+			for (let level of thisComponent.state.current.scope.levels) {
 				for (let place of places) {
 					let firstLevelPlaceRelation = _.findWhere(relations,{layerObject:level, place:place});
 					if (firstLevelPlaceRelation) {
@@ -294,13 +237,13 @@ class ConfigMetadataScope extends ControllerComponent {
 	}
 
 	onChangeActive() {
-		this.setState({
-			valueActive: !this.state.valueActive
+		this.setCurrentState({
+			valueActive: !this.state.current.valueActive
 		});
 	}
 
 	onChangeName(e) {
-		this.setState({
+		this.setCurrentState({
 			valueName: e.target.value
 		});
 	}
@@ -309,7 +252,7 @@ class ConfigMetadataScope extends ControllerComponent {
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
 		newState[stateKey] = newValues;
-		this.setState(newState);
+		this.setCurrentState(newState);
 	}
 
 	onObjectClick (itemType, value, event) {
@@ -331,10 +274,10 @@ class ConfigMetadataScope extends ControllerComponent {
 	render() {
 
 		var saveButton = " ";
-		if (this.state.scope) {
+		if (this.state.current.scope) {
 			saveButton = (
 				<SaveButton
-					saved={this.isStateUnchanged()}
+					saved={this.equalStates(this.state.current,this.state.saved)}
 					className="save-button"
 					onClick={this.saveForm.bind(this)}
 				/>
@@ -343,7 +286,7 @@ class ConfigMetadataScope extends ControllerComponent {
 
 		var isActiveText = "inactive";
 		var isActiveClasses = "activeness-indicator";
-		if(this.state.scope && this.state.scope.active){
+		if(this.state.current.scope && this.state.current.scope.active){
 			isActiveText = "active";
 			isActiveClasses = "activeness-indicator active";
 		}
@@ -354,7 +297,7 @@ class ConfigMetadataScope extends ControllerComponent {
 				<div className="frame-input-wrapper">
 					<div className="container activeness">
 						<Checkbox
-							checked={this.state.valueActive}
+							checked={this.state.current.valueActive}
 							onClick={this.onChangeActive.bind(this)}
 						>
 							<span>Active</span>
@@ -373,7 +316,7 @@ class ConfigMetadataScope extends ControllerComponent {
 							type="text"
 							name="name"
 							placeholder=" "
-							value={this.state.valueName}
+							value={this.state.current.valueName}
 							onChange={this.onChangeName.bind(this)}
 						/>
 					</label>
@@ -388,12 +331,12 @@ class ConfigMetadataScope extends ControllerComponent {
 							className="template"
 							onChange={this.onChangeObjectSelect.bind(this, "valuesAULevels", ObjectTypes.AU_LEVEL)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.AU_LEVEL)}
-							options={this.state.auLevels}
+							options={this.props.store.auLevels}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valuesAULevels}
+							value={this.state.current.valuesAULevels}
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
@@ -408,12 +351,12 @@ class ConfigMetadataScope extends ControllerComponent {
 							multi
 							onChange={this.onChangeObjectSelect.bind(this, "valuesPeriods", ObjectTypes.PERIOD)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.PERIOD)}
-							options={this.state.periods}
+							options={this.props.store.periods}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valuesPeriods}
+							value={this.state.current.valuesPeriods}
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
