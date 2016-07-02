@@ -127,7 +127,7 @@ class ScreenMetadataObject extends ScreenController {
 				};
 				break;
 		}
-		storeloads.selectorData = function(){return Store[props.data.objectType].getAll()};
+		storeloads.selectorData = this._load(Store[props.data.objectType]);
 		return storeloads;
 	}
 
