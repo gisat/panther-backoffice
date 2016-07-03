@@ -1,11 +1,19 @@
 import React, { PropTypes, Component } from 'react';
+import PantherComponent from "../common/PantherComponent";
+import { publicPath } from '../../config';
+
 import styles from './Menu.css';
 import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
 import UISVG from '../atoms/UISVG';
+import classNames from 'classnames';
+import utils from '../../utils/utils';
 
-import { publicPath } from '../../config';
-import PantherComponent from "../common/PantherComponent";
+var initialState = {
+	isFocused: false,
+	isHovered: false,
+	forceClose: false
+};
 
 
 @withStyles(styles)
@@ -16,16 +24,68 @@ class Menu extends PantherComponent {
 		className: PropTypes.string
 	};
 
+	constructor(props) {
+		super(props);
+		this.state = utils.deepClone(initialState);
+	}
+
+
+	onFocus() {
+		this.setState({
+			isFocused: true
+		});
+	}
+
+	onBlur() {
+		this.setState({
+			isFocused: false
+		});
+	}
+
+	onMouseEnter() {
+		this.setState({
+			isHovered: true
+		});
+	}
+
+	onMouseLeave() {
+		this.setState({
+			isHovered: false,
+			forceClose: false
+		});
+	}
+
+	onLinkClick(e) {
+		this.setState({
+			forceClose: true
+		});
+		Link.handleClick(e);
+	}
 
 	//  className="current"
 	render() {
+
+		let classes = classNames(
+			this.props.className,
+		{
+			'open': !this.state.forceClose && this.state.isFocused,
+			'hover': !this.state.forceClose && this.state.isHovered
+		});
+
 		return (
-			<nav id="menu" className={this.props.className} >
+			<nav
+				id="menu"
+				className={classes}
+				onFocus={this.onFocus.bind(this)}
+				onBlur={this.onBlur.bind(this)}
+				onMouseEnter={this.onMouseEnter.bind(this)}
+				onMouseLeave={this.onMouseLeave.bind(this)}
+			>
 				<ul>
 					<li>
 						<a
 							href={publicPath + "/"}
-							onClick={Link.handleClick}
+							onClick={this.onLinkClick.bind(this)}
 							tabIndex="-1"
 							className={this.props.activeScreenSet == "dashboard" ? "current" : ""}
 						>
@@ -36,7 +96,7 @@ class Menu extends PantherComponent {
 					<li>
 						<a
 							href={publicPath + "/places"}
-							onClick={Link.handleClick}
+							onClick={this.onLinkClick.bind(this)}
 							tabIndex="-1"
 							className={this.props.activeScreenSet == "places" ? "current" : ""}
 						>
@@ -47,7 +107,7 @@ class Menu extends PantherComponent {
 					<li>
 						<a
 							href={publicPath + "/datalayers"}
-							onClick={Link.handleClick}
+							onClick={this.onLinkClick.bind(this)}
 							tabIndex="-1"
 							className={this.props.activeScreenSet == "dataLayers" ? "current" : ""}
 						>
@@ -58,7 +118,7 @@ class Menu extends PantherComponent {
 					<li>
 						<a
 							href={publicPath + "/analyses"}
-							onClick={Link.handleClick}
+							onClick={this.onLinkClick.bind(this)}
 							tabIndex="-1"
 							className={this.props.activeScreenSet == "analyses" ? "current" : ""}
 						>
@@ -69,7 +129,7 @@ class Menu extends PantherComponent {
 					<li>
 						<a
 							href={publicPath + "/metadata"}
-							onClick={Link.handleClick}
+							onClick={this.onLinkClick.bind(this)}
 							tabIndex="-1"
 							className={this.props.activeScreenSet == "metadata" ? "current" : ""}
 						>
@@ -80,16 +140,6 @@ class Menu extends PantherComponent {
 				</ul>
 			</nav>
 		);
-	}
-
-	componentDidMount() {
-		super.componentDidMount();
-		$("#menu").focusin(function() {
-			$(this).addClass("open");
-		});
-		$("#menu").focusout(function() {
-			$(this).removeClass("open");
-		});
 	}
 
 }

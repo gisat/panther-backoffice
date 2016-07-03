@@ -400,10 +400,10 @@ todo hex colours, button icons */
 		transition: width .3s .2s ease-in-out, height .3s .5s ease-in-out;
 		/* height added for responsive resizing */
 	}
-	#menu:hover, #menu.open {
+	#menu.hover, #menu.open {
 		width: 17rem;
 	}
-	#menu:hover {
+	#menu.hover {
 		transition-delay: 1.2s;
 	}
 	#menu.open {
