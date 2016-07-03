@@ -48,7 +48,7 @@ class ScreenController extends PantherComponent {
 	 * @private
 	 */
 	_onStoreChange(limitKeys) {
-		let nextStatePromise = this.loadState(null, limitKeys);
+		let nextStatePromise = this.loadState(null, null, limitKeys);
 	}
 
 	componentWillUpdate() {
@@ -66,15 +66,16 @@ class ScreenController extends PantherComponent {
 	/**
 	 * Build data state structure.
 	 * @param props - props object to use
+	 * @param options - options object (internal props)
 	 * @param limitKeys - string array - limit loads object to specified keys
 	 * @returns Promise of state object (second level)
 	 */
-	loadState(props, limitKeys) {
+	loadState(props, options, limitKeys) {
 		let thisComponent = this;
 		if (!props) {
 			props = this.props;
 		}
-		let statePromise = this.getStateFromStores(this._getStoreLoads(props), limitKeys);
+		let statePromise = this.getStateFromStores(this._getStoreLoads(props, options), limitKeys);
 		statePromise.then(function(newState){
 			if (thisComponent.mounted) {
 				thisComponent.setStateDeep({
@@ -90,10 +91,11 @@ class ScreenController extends PantherComponent {
 	 * Hook. This method is called to load data into state by getStateFromStores().
 	 * To be overridden by descendants.
 	 * @param props - react props - this.props or nextProps
+	 * @param options - options object (internal props)
 	 * @returns object of functions, which will return data on execution
 	 * @private
 	 */
-	_getStoreLoads(props) {
+	_getStoreLoads(props, options) {
 		return {};
 	}
 
