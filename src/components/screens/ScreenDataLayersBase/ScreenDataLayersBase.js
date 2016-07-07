@@ -86,7 +86,8 @@ class ScreenDataLayersBase extends ScreenController {
 		logger.trace("ScreenDataLayersBase# onSelectorChange(), Value: ", value);
 
 		this.setState({
-			selectorValue: value
+			selectorValue: value,
+			ready: false
 		},this.loadState);
 	}
 
