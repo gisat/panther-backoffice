@@ -9,6 +9,8 @@ import utils from '../../utils/utils';
 import logger from '../../core/Logger';
 
 import ListenerHandler from '../../core/ListenerHandler';
+import ScopeModel from '../../models/ScopeModel';
+import ScopeStore from '../../stores/ScopeStore';
 
 /**
  * STATE:
@@ -97,6 +99,43 @@ class ScreenController extends PantherComponent {
 	 */
 	_getStoreLoads(props, options) {
 		return {};
+	}
+
+	/**
+	 * Returns function, returning promise of data from store.
+	 * @param store
+	 * @returns {Function}
+	 * @private
+	 */
+	_load(store) {
+		if (
+			this.props.scope &&
+			this.props.scope instanceof ScopeModel &&
+			!(store instanceof ScopeStore)
+		) {
+			return function(){return store.getFiltered({scope: this.props.scope})};
+		}
+		else {
+			return function(){return store.getAll()};
+		}
+	}
+
+	/**
+	 * Returns function, returning promise of data from store.
+	 * @param store
+	 * @param filter - object of keys and values to find
+	 * @returns {Function}
+	 * @private
+	 */
+	_loadWhere(store, filter) {
+		if (
+			this.props.scope &&
+			this.props.scope instanceof ScopeModel &&
+			!(store instanceof ScopeStore)
+		) {
+			filter = _.assign(filter,{scope: this.props.scope});
+		}
+		return function(){return store.getFiltered(filter)};
 	}
 
 	/**

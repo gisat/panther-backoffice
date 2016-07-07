@@ -131,19 +131,6 @@ class ScreenMetadataObject extends ScreenController {
 		return storeloads;
 	}
 
-	_load(store) {
-		if (
-			this.props.scope &&
-			this.props.scope instanceof ScopeModel &&
-			!(store instanceof ScopeStore)
-		) {
-			return function(){return store.getFiltered({scope: this.props.scope})};
-		}
-		else {
-			return function(){return store.getAll()};
-		}
-	}
-
 	//getUrl() {
 	//	return path.join(this.props.parentUrl, "metadata/" + this.state.selectorValue); // todo
 	//}
