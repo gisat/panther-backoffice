@@ -615,12 +615,13 @@ class ConfigDataLayer extends ControllerComponent {
 		let destinations = this.prepareDestinations(this.props.store.attributeSets);
 
 		var saveButton = " ";
-		if (this.state.layerType) {
+		if (this.state.current.layerType) {
 			saveButton = (
 				<SaveButton
-					saved={this.isStateUnchanged()}
+					saved={this.equalStates(this.state.current,this.state.saved)}
+					saving={this.state.saving}
 					className="save-button"
-					onClick={this.saveForm.bind(this)}
+					//onClick={this.saveForm.bind(this)}
 				/>
 			);
 		}
