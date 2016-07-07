@@ -1,63 +1,80 @@
 import React, { PropTypes, Component } from 'react';
+import ScreenController from "../../common/ScreenController";
 import styles from './ScreenDataLayersBase.css';
 import withStyles from '../../../decorators/withStyles';
 
-import path from "path";
-
 import utils from '../../../utils/utils';
+import logger from '../../../core/Logger';
+
+import ListenerHandler from '../../../core/ListenerHandler';
+
+import path from "path";
+import _ from "underscore";
 
 import DataLayerStore from '../../../stores/DataLayerStore';
+import ObjectRelationStore from '../../../stores/ObjectRelationStore';
+import ScopeStore from '../../../stores/ScopeStore';
+import PlaceStore from '../../../stores/PlaceStore';
+import VectorLayerStore from '../../../stores/VectorLayerStore';
+import RasterLayerStore from '../../../stores/RasterLayerStore';
+import AULevelStore from '../../../stores/AULevelStore';
+import AttributeStore from '../../../stores/AttributeStore';
+import AttributeSetStore from '../../../stores/AttributeSetStore';
+import PeriodStore from '../../../stores/PeriodStore';
+import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
+
 import SelectorDataLayer from '../../sections/SelectorDataLayer';
 import ConfigDataLayer from '../../sections/ConfigDataLayer';
 
-import ListenerHandler from '../../../core/ListenerHandler';
-import logger from '../../../core/Logger';
-import PantherComponent from "../../common/PantherComponent";
-
 var initialState = {
-	dataLayers: [],
 	selectorValue: null
 };
 
 
 @withStyles(styles)
-class ScreenDataLayersBase extends PantherComponent {
+class ScreenDataLayersBase extends ScreenController {
 
 	constructor(props) {
 		super(props);
-		this.state = utils.deepClone(initialState);
-		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
+		this.state = _.assign(this.state, utils.deepClone(initialState));
 	}
 
-	getUrl() {
-		return path.join(this.props.parentUrl, "datalayers/" + this.state.selectorValue);
-	}
+	//getUrl() {
+	//	return path.join(this.props.parentUrl, "datalayers/" + this.state.selectorValue);
+	//}
 
-	store2state(props) {
-		//if(!props){
-		//	props = this.props;
-		//}
+	_getStoreLoads() {
+		let selectorValue = this.state.selectorValue;
 		return {
-			dataLayers: DataLayerStore.getAll()
+			dataLayers: this._load(DataLayerStore),
+			dataLayer: this._loadWhere(DataLayerStore,{key: selectorValue}),
+			relations: this._loadWhere(ObjectRelationStore,{dataSourceString: selectorValue}),
+			dataLayerColumns: function(){return DataLayerColumnsStore.getByDataSource(selectorValue)},
+			scopes: this._load(ScopeStore),
+			places: this._load(PlaceStore),
+			vectorLayerTemplates: this._load(VectorLayerStore),
+			rasterLayerTemplates: this._load(RasterLayerStore),
+			auLevels: this._load(AULevelStore),
+			attributeSets: this._load(AttributeSetStore),
+			attributes: this._load(AttributeStore),
+			periods: this._load(PeriodStore)
 		};
-	}
-
-	_onStoreChange() {
-		logger.trace("ScreenDataLayersBase# _onStoreChange()");
-		super.setStateFromStores(this.store2state());
 	}
 
 	componentDidMount() {
 		super.componentDidMount();
-		
+
 		this.changeListener.add(DataLayerStore);
-
-		super.setStateFromStores(this.store2state());
-	}
-
-	componentWillReceiveProps(newProps) {
-		logger.trace("ScreenDataLayersBase# componentWillReceiveProps(), Props:", newProps);
-		super.setStateFromStores(this.store2state(newProps));
+		this.changeListener.add(ScopeStore, ["scopes"]);
+		this.changeListener.add(VectorLayerStore, ["vectorLayerTemplates"]);
+		this.changeListener.add(RasterLayerStore, ["rasterLayerTemplates"]);
+		this.changeListener.add(AULevelStore, ["auLevels"]);
+		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
+		this.changeListener.add(AttributeStore, ["attributes"]);
+		this.changeListener.add(PlaceStore, ["places"]);
+		this.changeListener.add(PeriodStore, ["periods"]);
+		this.changeListener.add(ObjectRelationStore,["relations"]);
+		this.changeListener.add(DataLayerColumnsStore,["dataLayerColumns"]);
 	}
 
 	onSelectorFocus(){
@@ -70,41 +87,45 @@ class ScreenDataLayersBase extends PantherComponent {
 
 		this.setState({
 			selectorValue: value
-		});
+		},this.loadState);
 	}
 
 	render() {
-		var selectorData = this.state.dataLayers;
-		selectorData.sort(function(a, b) {
-			if(a.referenced && !b.referenced) return 1;
-			if(!a.referenced && b.referenced) return -1;
-			if(a.key > b.key) return 1;
-			if(a.key < b.key) return -1;
-			return 0;
-		});
 
-		return (
-			<div>
-				<div className="screen-setter"><div>
-					<SelectorDataLayer
-						disabled={this.props.disabled}
-						data={selectorData}
-						value={this.state.selectorValue}
-						onChange={this.onSelectorChange.bind(this)}
-						onFocus={this.onSelectorFocus.bind(this)}
-					/>
-				</div></div>
-				<div className="screen-content"><div>
-					<ConfigDataLayer
-						disabled={this.props.disabled}
-						selectorValue={this.state.selectorValue}
-						dataLayers={this.state.dataLayers}
-						screenKey={this.props.screenKey}
-						parentUrl={this.getUrl()}
-					/>
-				</div></div>
-			</div>
-		);
+		let ret = null;
+
+		if (this.state.ready) {
+			ret = (
+				<div>
+					<div className="screen-setter">
+						<div>
+							<SelectorDataLayer
+								disabled={this.props.disabled}
+								store={this.state.store}
+								data={this.state.store.dataLayers}
+								value={this.state.selectorValue}
+								onChange={this.onSelectorChange.bind(this)}
+								onFocus={this.onSelectorFocus.bind(this)}
+							/>
+						</div>
+					</div>
+					<div className="screen-content">
+						<div>
+							<ConfigDataLayer
+								disabled={this.props.disabled}
+								store={this.state.store}
+								selectorValue={this.state.selectorValue}
+								dataLayers={this.state.store.dataLayers} // todo remove
+								screenKey={this.props.screenKey}
+								//parentUrl={this.getUrl()}
+							/>
+						</div>
+					</div>
+				</div>
+			);
+		}
+
+		return ret;
 
 	}
 }

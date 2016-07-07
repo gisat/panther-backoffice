@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import styles from './SelectorDataLayer.css';
 import withStyles from '../../../decorators/withStyles';
@@ -35,6 +35,16 @@ class SelectorDataLayer extends PantherComponent {
 	}
 
 	render() {
+
+		var selectorData = this.props.store.dataLayers;
+		selectorData.sort(function(a, b) {
+			if(a.referenced && !b.referenced) return 1;
+			if(!a.referenced && b.referenced) return -1;
+			if(a.key > b.key) return 1;
+			if(a.key < b.key) return -1;
+			return 0;
+		});
+
 		return (
 			<div>
 				<div className="selector">
@@ -44,7 +54,7 @@ class SelectorDataLayer extends PantherComponent {
 							<Select
 								onChange={this.onChange.bind(this)}
 								onFocus={this.onFocus.bind(this)}
-								options={this.props.data}
+								options={selectorData}
 								optionComponent={OptionDataLayer}
 								singleValueComponent={SingleValueDataLayer}
 								valueKey="key"
