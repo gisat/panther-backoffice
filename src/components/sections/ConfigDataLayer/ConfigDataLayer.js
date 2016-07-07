@@ -578,7 +578,7 @@ class ConfigDataLayer extends ControllerComponent {
 	 * Prepare options for data table selects
 	 * Called in store2state().
 	 * @param attributeSets
-	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
+	 * @returns {[]}
 	 */
 	prepareDestinations(attributeSets) {
 		var ret = [];
@@ -600,10 +600,10 @@ class ConfigDataLayer extends ControllerComponent {
 				}
 			}
 		}
-		if (this.state.layerType=="vector") {
+		if (this.state.current.layerType=="vector") {
 			ret = _.union(VLDESTINATIONS, attsetatts);
 		}
-		else if (this.state.layerType=="au") {
+		else if (this.state.current.layerType=="au") {
 			ret = _.union(AUDESTINATIONS, attsetatts);
 		}
 		return ret;
