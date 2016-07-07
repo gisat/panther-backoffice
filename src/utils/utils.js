@@ -37,6 +37,7 @@ export default {
 	 */
 	handleNewObjects: function(values, objectType, responseData, stateHash) {
 		var newValues = [];
+		responseData = _.assign(responseData, {objectType: objectType});
 		for (var singleValue of this.deepClone(values)) {
 			if(singleValue.create){
 				delete singleValue.create; // discard new object bit
