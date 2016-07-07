@@ -20,7 +20,8 @@ import ScopeStore from '../../stores/ScopeStore';
 
 var initialState = {
 	store: {},
-	ready: false
+	ready: false,
+	initialized: false
 };
 
 class ScreenController extends PantherComponent {
@@ -82,7 +83,8 @@ class ScreenController extends PantherComponent {
 			if (thisComponent.mounted) {
 				thisComponent.setStateDeep({
 					store: {$merge: newState},
-					ready: {$set: true}
+					ready: {$set: true},
+					initialized: {$set: true}
 				});
 			}
 		});

@@ -94,8 +94,22 @@ class ScreenDataLayersBase extends ScreenController {
 	render() {
 
 		let ret = null;
+		let configInsert = null;
 
 		if (this.state.ready) {
+			configInsert = (
+				<ConfigDataLayer
+					disabled={this.props.disabled}
+					store={this.state.store}
+					selectorValue={this.state.selectorValue}
+					dataLayers={this.state.store.dataLayers} // todo remove
+					screenKey={this.props.screenKey}
+					//parentUrl={this.getUrl()}
+				/>
+			);
+		}
+
+		if (this.state.initialized) {
 			ret = (
 				<div>
 					<div className="screen-setter">
@@ -112,14 +126,7 @@ class ScreenDataLayersBase extends ScreenController {
 					</div>
 					<div className="screen-content">
 						<div>
-							<ConfigDataLayer
-								disabled={this.props.disabled}
-								store={this.state.store}
-								selectorValue={this.state.selectorValue}
-								dataLayers={this.state.store.dataLayers} // todo remove
-								screenKey={this.props.screenKey}
-								//parentUrl={this.getUrl()}
-							/>
+							{configInsert}
 						</div>
 					</div>
 				</div>
