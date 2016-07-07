@@ -3,6 +3,8 @@ import styles from './LoginPage.css';
 import withStyles from '../../../decorators/withStyles';
 import {login} from '../../../models/UserModel';
 import Location from '../../../core/Location';
+import ActionCreator from '../../../actions/ActionCreator';
+import utils from '../../../utils/utils';
 import {publicPath} from '../../../config';
 
 import {Input, Button} from '../../SEUI/elements';
@@ -25,10 +27,13 @@ class LoginPage extends Component {
 
 	onClick() {
 		this.setState({error: ''});
-		login(this.state.valueName, this.state.valuePassword, this.requestEnd.bind(this));
+		let id = utils.guid();
+		ActionCreator.addOperation(id, {});
+		login(this.state.valueName, this.state.valuePassword, this.requestEnd.bind(this, id));
 	}
 
-	requestEnd(result) {
+	requestEnd(operationId, result) {
+		ActionCreator.removeOperation(operationId);
 		if(result.err) {
 			this.setState({error: "Invalid login information"});
 		} else {
