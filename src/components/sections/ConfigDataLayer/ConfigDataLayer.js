@@ -50,7 +50,7 @@ const AUDESTINATIONS = [
 	{key: "P", special: true, name: 'Parent feature identifier'}
 ];
 
-var initialSecondLevelState = {
+var initialState = {
 	layerType: null,
 	valueTemplate: [],
 	valueScope: [],
@@ -59,23 +59,18 @@ var initialSecondLevelState = {
 	columnMap: {}
 };
 
-var initialState = {
-
-	current: utils.clone(initialSecondLevelState),
-
-	alt: {
-		vector: {
-			current: utils.clone(initialSecondLevelState),
-			saved: utils.clone(initialSecondLevelState)
-		},
-		raster: {
-			current: utils.clone(initialSecondLevelState),
-			saved: utils.clone(initialSecondLevelState)
-		},
-		au: {
-			current: utils.clone(initialSecondLevelState),
-			saved: utils.clone(initialSecondLevelState)
-		}
+var initialAltState = {
+	vector: {
+		current: utils.clone(initialState),
+		saved: utils.clone(initialState)
+	},
+	raster: {
+		current: utils.clone(initialState),
+		saved: utils.clone(initialState)
+	},
+	au: {
+		current: utils.clone(initialState),
+		saved: utils.clone(initialState)
 	}
 };
 
@@ -102,7 +97,8 @@ class ConfigDataLayer extends ControllerComponent {
 
 	constructor(props) {
 		super(props);
-		this.state = _.assign(this.state, utils.deepClone(initialState));
+		this.state.current = _.assign(this.state.current, utils.deepClone(initialState));
+		this._altState = utils.deepClone(initialAltState);
 	}
 
 	buildState(props) {
@@ -213,7 +209,7 @@ class ConfigDataLayer extends ControllerComponent {
 			}
 		}, this);
 
-		logger.trace("ConfigDataLayer# columns2state(), Returns:", ret);
+		logger.trace("ConfigDataLayer# columns2state(), props:",this.props.store.dataLayerColumns," Returns:", ret);
 
 		return ret;
 		//return mock;
@@ -516,19 +512,24 @@ class ConfigDataLayer extends ControllerComponent {
 		let currentType = this.state.current.layerType;
 		let nextType = value;
 		if (currentType != nextType) {
-			let altStates = this.state.alt;
-			altStates[currentType] = {
+
+			this._altState[currentType] = {
 				current: this.state.current,
 				saved: this.state.saved
 			};
 
-			let nextStates = this.state.alt[nextType];
+			let nextStates = this._altState[nextType];
 			nextStates.current.layerType = nextType;
+
+			if(!Object.keys(nextStates.current.columnMap).length) {
+				let columnMap = this.columns2state(nextType, this.props.store.dataLayerColumns, this.props.store.relations);
+				nextStates.current.columnMap = utils.clone(columnMap);
+				nextStates.saved.columnMap = utils.clone(columnMap);
+			}
 
 			this.setState({
 				current: nextStates.current,
-				saved: nextStates.saved,
-				alt: altStates
+				saved: nextStates.saved
 			});
 		}
 	}
