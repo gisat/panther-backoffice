@@ -58,10 +58,16 @@ class ControllerComponent extends PantherComponent {
 		let nextState = this.buildState(nextProps);
 
 		if (this.mounted) {
-			if (
-				this.equalStates(this.state.current, nextState) ||
-				this.equalStates(this.state.current, this.state.saved)
-			) {
+			if (this.equalStates(this.state.current, nextState)) {
+				//new state is the same as current, can be used (we probably saved) OR
+				//state was not changed from saved - can be replaced with new
+				this.setStateDeep({
+					current: {$merge: nextState},
+					saved: {$merge: nextState},
+					built: {$set: true},
+					saving: {$set: false}
+				});
+			} else if (this.equalStates(this.state.current, this.state.saved)) {
 				//new state is the same as current, can be used (we probably saved) OR
 				//state was not changed from saved - can be replaced with new
 				this.setStateDeep({
@@ -71,8 +77,7 @@ class ControllerComponent extends PantherComponent {
 					updated: {$set: true},
 					saving: {$set: false}
 				});
-			}
-			else {
+			} else {
 				//state was changed - todo what to do?
 				//for now, set invalid state flag and save next state
 				//todo next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
