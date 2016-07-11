@@ -86,7 +86,7 @@ class ConfigMetadataScope extends ControllerComponent {
 		if (stateHash === this.getStateHash()) {
 			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
 				let stateKey = responseData.stateKey;
-				let values = utils.deepClone(thisComponent.state[stateKey]);
+				let values = utils.deepClone(thisComponent.state.current[stateKey]);
 				values.push(result[0].key);
 				if(thisComponent.mounted) {
 					thisComponent.setCurrentState({
