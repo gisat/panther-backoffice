@@ -123,17 +123,14 @@ class ConfigMetadataScope extends ControllerComponent {
 		this.responseListener.add(AULevelStore);
 		this.responseListener.add(PeriodStore);
 	}
-	
+
 	/**
 	 * Differentiate between states
 	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
 	 */
-	updateStateHash(props) {
-		if(!props){
-			props = this.props;
-		}
+	updateStateHash() {
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(props.selectorValue);
+		this._stateHash = utils.stringHash(this.props.selectorValue);
 	}
 
 	saveForm() {
