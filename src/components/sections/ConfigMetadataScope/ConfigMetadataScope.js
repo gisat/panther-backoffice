@@ -20,8 +20,6 @@ import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
-import ListenerHandler from '../../../core/ListenerHandler';
-
 import logger from '../../../core/Logger';
 
 var initialState = {
@@ -125,12 +123,7 @@ class ConfigMetadataScope extends ControllerComponent {
 		this.responseListener.add(AULevelStore);
 		this.responseListener.add(PeriodStore);
 	}
-
-	componentWillReceiveProps(newProps) {
-		super.componentWillReceiveProps(newProps);
-		this.updateStateHash(newProps);
-	}
-
+	
 	/**
 	 * Differentiate between states
 	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
@@ -141,12 +134,6 @@ class ConfigMetadataScope extends ControllerComponent {
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
 		this._stateHash = utils.stringHash(props.selectorValue);
-	}
-	getStateHash() {
-		if(!this._stateHash) {
-			this.updateStateHash();
-		}
-		return this._stateHash;
 	}
 
 	saveForm() {

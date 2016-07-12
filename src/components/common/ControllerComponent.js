@@ -84,6 +84,7 @@ class ControllerComponent extends PantherComponent {
 					invalid: {$set: true}
 				});
 			}
+			this.updateStateHash(newProps);
 		}
 		else {
 			//component not mounted
@@ -189,6 +190,20 @@ class ControllerComponent extends PantherComponent {
 		}
 		return _.isEqual(one,two);
 	}
+
+	/**
+	 * Differentiate between states
+	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
+	 */
+	updateStateHash(props){}
+
+	getStateHash() {
+		if(!this._stateHash) {
+			this.updateStateHash();
+		}
+		return this._stateHash;
+	}
+
 
 	saveForm() {
 		this.setState({
