@@ -293,21 +293,6 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 		return (
 			<div>
 
-				<div className="frame-input-wrapper">
-					<div className="container activeness">
-						<Checkbox
-							checked={this.state.valueActive}
-							onClick={this.onChangeActive.bind(this)}
-						>
-							<span>Active</span>
-						</Checkbox>
-						<div className="frame-input-pull-right">
-							{isActiveText}
-							<div className={isActiveClasses}></div>
-						</div>
-					</div>
-				</div>
-
 				<div className="frame-input-wrapper required">
 					<label className="container">
 						Name
