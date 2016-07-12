@@ -340,7 +340,7 @@ class ConfigMetadataScope extends PantherComponent{
 
 		return (
 			<div>
-				
+
 				<div className="frame-input-wrapper">
 					<div className="container activeness">
 						<Checkbox
@@ -387,7 +387,7 @@ class ConfigMetadataScope extends PantherComponent{
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
-						Hierarchy of analytical units, common for all places in the scope. Ordered from largest areas to most detailed division.
+						Hierarchy of analytical units, common for all places in the scope. Ordered from largest areas to most detailed division. In order to see the +/- signs and correct areas on the side, it is necessary to upload data layers for each level for every place in the scope. 
 					</div>
 				</div>
 
