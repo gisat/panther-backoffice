@@ -76,21 +76,21 @@ class ScreenMetadataObjectController extends ControllerComponent {
 			});
 		}
 		if(this.props.data.objectType != newProps.data.objectType) {
-			this.removeChangeListener();
-			this.addChangeListener(newProps);
+			this.removeListeners();
+			this.addListeners(newProps);
 		}
-		super.componentWillReceiveProps();
+		super.componentWillReceiveProps(newProps);
 	}
 
 	addListeners(props) {
 		if(!props) {
 			props = this.props;
 		}
-		this.changeListener.add(Store[props.data.objectType]);
+		//this.changeListener.add(Store[props.data.objectType]);
 		this.responseListener.add(Store[props.data.objectType]);
 	}
 	removeListeners() {
-		this.changeListener.clean();
+		//this.changeListener.clean();
 		this.responseListener.clean();
 	}
 
@@ -103,7 +103,7 @@ class ScreenMetadataObjectController extends ControllerComponent {
 			state = this.state;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash("ScreenMetadataObject" + state.selectorValue);
+		this._stateHash = utils.stringHash("ScreenMetadataObject" + state.ui.selectorValue);
 	}
 	getStateHash() {
 		if(!this._stateHash) {
