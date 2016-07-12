@@ -1626,12 +1626,12 @@ ol.list-steps > li::before {
 	height: 100%;
 	background-image: url(./backoffice-loading.gif); /* fallback */
 	background: rgba(224,221,213,0.3);
-	background: -moz-radial-gradient(center, ellipse cover, rgba(224,221,213,0.3) 0%, rgba(163,163,163,0.1) 100%);
-	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(224,221,213,0.4)), color-stop(100%, rgba(163,163,163,0.2)));
-	background: -webkit-radial-gradient(center, ellipse cover, rgba(224,221,213,0.4) 0%, rgba(163,163,163,0.2) 100%);
-	background: -o-radial-gradient(center, ellipse cover, rgba(224,221,213,0.4) 0%, rgba(163,163,163,0.2) 100%);
-	background: -ms-radial-gradient(center, ellipse cover, rgba(224,221,213,0.4) 0%, rgba(163,163,163,0.2) 100%);
-	background-image: url(./backoffice-loading.gif), radial-gradient(ellipse at center, rgba(224,221,213,0.4) 0%, rgba(163,163,163,0.2) 100%);
+	background: -moz-radial-gradient(center, ellipse cover, rgba(224,221,213,0.65) 0%, rgba(163,163,163,0.5) 100%);
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(224,221,213,0.6)), color-stop(100%, rgba(163,163,163,0.2)));
+	background: -webkit-radial-gradient(center, ellipse cover, rgba(224,221,213,0.75) 0%, rgba(163,163,163,0.6) 100%);
+	background: -o-radial-gradient(center, ellipse cover, rgba(224,221,213,0.75) 0%, rgba(163,163,163,0.6) 100%);
+	background: -ms-radial-gradient(center, ellipse cover, rgba(224,221,213,0.75) 0%, rgba(163,163,163,0.6) 100%);
+	background-image: url(./backoffice-loading.gif), radial-gradient(ellipse at center, rgba(224,221,213,0.75) 0%, rgba(163,163,163,0.6) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0ddd5', endColorstr='#a3a3a3', GradientType=1 );
 	background-repeat: no-repeat;
 	background-attachment: fixed;

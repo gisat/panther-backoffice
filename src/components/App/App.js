@@ -42,16 +42,17 @@ class App extends PantherComponent {
 
 	render() {
 		let ret = "";
+
+		let loadingOverlay = null;
+		if(this.state.loading){
+			loadingOverlay = (
+				<div id="loading-overlay"></div>
+			);
+		}
+
 		if(this.props.children.type===Page) {
 			let activeScreenSetKey = this.props.children.props.screenSet;
 			let page = React.Children.only(this.props.children);
-
-			let loadingOverlay = null;
-			if(this.state.loading){
-				loadingOverlay = (
-					<div id="loading-overlay"></div>
-				);
-			}
 
 			ret = (
 				<div>
@@ -65,7 +66,12 @@ class App extends PantherComponent {
 				</div>
 			);
 		} else {
-			ret = this.props.children;
+			ret = (
+				<div>
+					{loadingOverlay}
+					{this.props.children}
+				</div>
+			);
 		}
 		return ret;
 	}
