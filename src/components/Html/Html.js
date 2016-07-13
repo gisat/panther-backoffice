@@ -30,7 +30,6 @@ class Html extends Component {
 				<link rel="apple-touch-icon" href="apple-touch-icon.png" />
 				<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
 				<style id="css" dangerouslySetInnerHTML={{__html: this.props.css}} />
-				<script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.17.1/ol-debug.js" type="text/javascript"></script>
 			</head>
 			<body>
 				<div id="app" dangerouslySetInnerHTML={{__html: this.props.body}} />
