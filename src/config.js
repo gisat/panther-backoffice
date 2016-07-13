@@ -5,17 +5,17 @@ export const publicPath = ""; ///// don't forget leading slash. like this: /back
 export const serverPort = 5555;
 
 export const apiProtocol = "http://";
-export const apiHost = "localhost:4000"; //host + port
+export const apiHost = "urban-tep.gisat.cz"; //host + port
 export const apiPath = "/";
 
 export const geonodeProtocol = "http://";
-export const geonodeAddress = "localhost/geonode"; //address - host + port + base path
+export const geonodeAddress = "urban-tep.gisat.cz/geonode"; //address - host + port + base path
 
 export const geoserverProtocol = "http://";
-export const geoserverAddress = "localhost/geoserver"; //address - host + port + base path
+export const geoserverAddress = "urban-tep.gisat.cz/geoserver"; //address - host + port + base path
 
 export const frontOfficeProtocol = "http://";
-export const frontOfficeAddress = "localhost"; //address - host + port + base path
+export const frontOfficeAddress = "urban-tep.gisat.cz"; //address - host + port + base path
 export const frontOfficeExplorationPath = "";
 
 // 0 means TRACE and higher. Use when you want to see all messages.
