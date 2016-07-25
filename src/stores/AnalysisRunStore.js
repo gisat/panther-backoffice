@@ -64,6 +64,11 @@ function reloadThisStoreUntilAllFinished() {
 	logger.info("AnalysisRunStore#reloadThisStoreUntilAllFinished Issue new request for reload. Current time: ", new Date());
 
 	let promisesOfLoad = storeInstance.reload();
+	if(!promisesOfLoad) {
+		setTimeout(reloadThisStoreUntilAllFinished, 500);
+		return;
+	}
+
 	promisesOfLoad.then(function(models){
 		let containsInformation = true;
 		models.forEach(function(model){
