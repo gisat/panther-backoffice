@@ -61,6 +61,8 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
  * It is used for querying the state of on demand information. Based on this state it either issues new demand or deems itself successful.
  */
 function reloadThisStoreUntilAllFinished() {
+	logger.info("AnalysisRunStore# Issue new request for reload. Current time: ", new Date());
+
 	let promisesOfLoad = storeInstance.reload();
 	promisesOfLoad.then(function(models){
 		let containsInformation = true;
