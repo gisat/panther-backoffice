@@ -71,7 +71,6 @@ class ConfigMetadataStyle extends PantherComponent{
 
 	static contextTypes = {
 		onInteraction: PropTypes.func.isRequired,
-		setStateDeep: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
 
@@ -417,7 +416,7 @@ class ConfigMetadataStyle extends PantherComponent{
 
 	onChangeRule(ruleIndex,key,e) {
 		if(ruleIndex) {
-			this.context.setStateDeep.call(this, {
+			this.setStateDeep({
 				valueDefinitionRules: {
 					[ruleIndex]: {
 						[key]: {$set: e.target.value}
@@ -425,7 +424,7 @@ class ConfigMetadataStyle extends PantherComponent{
 				}
 			});
 		} else {
-			this.context.setStateDeep.call(this, {
+			this.setStateDeep({
 				valueDefinitionSingleRule: {
 					[key]: {$set: e.target.value}
 				}
@@ -435,7 +434,7 @@ class ConfigMetadataStyle extends PantherComponent{
 
 	onChangeRuleAppearance(ruleIndex,key,e) {
 		if (ruleIndex) {
-			this.context.setStateDeep.call(this, {
+			this.setStateDeep({
 				valueDefinitionRules: {
 					[ruleIndex]: {
 						appearance: {
@@ -445,7 +444,7 @@ class ConfigMetadataStyle extends PantherComponent{
 				}
 			});
 		} else {
-			this.context.setStateDeep.call(this, {
+			this.setStateDeep({
 				valueDefinitionSingleRule: {
 					appearance: {
 						[key]: {$set: e.target.value}
@@ -457,7 +456,7 @@ class ConfigMetadataStyle extends PantherComponent{
 
 	onChangeRuleFilter(ruleIndex,filterType,key,e) {
 		if (ruleIndex) {
-			this.context.setStateDeep.call(this, {
+			this.setStateDeep({
 				valueDefinitionRules: {
 					[ruleIndex]: {
 						filter: {
@@ -469,7 +468,7 @@ class ConfigMetadataStyle extends PantherComponent{
 				}
 			});
 		} else {
-			this.context.setStateDeep.call(this, {
+			this.setStateDeep({
 				valueDefinitionSingleRule: {
 					filter: {
 						[filterType]: {
@@ -482,7 +481,7 @@ class ConfigMetadataStyle extends PantherComponent{
 	}
 
 	onChangeRemoveRule(ruleIndex) {
-		this.context.setStateDeep.call(this, {
+		this.setStateDeep({
 			valueDefinitionRules: {$splice: [[ruleIndex,1]]}
 		});
 	}
@@ -492,7 +491,7 @@ class ConfigMetadataStyle extends PantherComponent{
 		if (filterType) {
 			filter[filterType] = {};
 		}
-		this.context.setStateDeep.call(this, {
+		this.setStateDeep({
 			valueDefinitionRules: {$push: [{
 				name: "",
 				filter: filter,
