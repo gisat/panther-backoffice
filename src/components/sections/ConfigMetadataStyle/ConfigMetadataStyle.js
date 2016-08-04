@@ -130,7 +130,7 @@ class ConfigMetadataStyle extends PantherComponent{
 			}
 			if(!keys || keys.indexOf("attributeSets")!=-1) {
 				store2state.attributeSets.then(function(attributeSets) {
-					thisComponent.context.setStateFromStores.call(thisComponent, thisComponent.atts2state(attributeSets));
+					super.setStateFromStores(thisComponent.atts2state(attributeSets));
 				});
 			}
 		}
@@ -358,7 +358,11 @@ class ConfigMetadataStyle extends PantherComponent{
 			}
 			else {
 				// no filter type - no filter / filters vary
-				modelData.definition.rules = utils.clone(this.state.valueDefinitionRules);
+				if(this.state.valueDefinitionSingleRule) {
+					modelData.definition.rules = [utils.clone(this.state.valueDefinitionSingleRule)];
+				} else {
+					modelData.definition.rules = utils.clone(this.state.valueDefinitionRules);
+				}
 			}
 		}
 		else if (this.state.valueSource=="geoserver") {
