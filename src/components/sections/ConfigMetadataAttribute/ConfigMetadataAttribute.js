@@ -21,6 +21,7 @@ import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import {SliderPicker} from 'react-color';
 
 var initialState = {
 	attribute: null,
@@ -222,6 +223,11 @@ class ConfigMetadataAttribute extends PantherComponent{
 		});
 	}
 
+	onChangeColorSlider(color) {
+		this.setState({
+			valueColor: color.hex
+		});
+	}
 
 	render() {
 
@@ -355,6 +361,10 @@ class ConfigMetadataAttribute extends PantherComponent{
 							placeholder=" "
 							value={this.state.valueColor}
 							onChange={this.onChangeColor.bind(this)}
+						/>
+						<SliderPicker
+							color={this.state.valueColor}
+							onChange={this.onChangeColorSlider.bind(this)}
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
