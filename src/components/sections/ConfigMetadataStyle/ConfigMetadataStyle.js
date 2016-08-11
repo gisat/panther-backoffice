@@ -21,6 +21,7 @@ import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import {SliderPicker} from 'react-color';
 
 var initialState = {
 	style: null,
@@ -437,12 +438,20 @@ class ConfigMetadataStyle extends PantherComponent{
 	}
 
 	onChangeRuleAppearance(ruleIndex,key,e) {
+		this.onChangeRuleAppearanceWithValue(ruleIndex, key, e.target.value);
+	}
+
+	onChangeColorAppearance(ruleIndex, color) {
+		this.onChangeRuleAppearanceWithValue(ruleIndex, 'fillColour', color.hex);
+	}
+
+	onChangeRuleAppearanceWithValue(ruleIndex, key, value) {
 		if (ruleIndex) {
 			this.setStateDeep({
 				valueDefinitionRules: {
 					[ruleIndex]: {
 						appearance: {
-							[key]: {$set: e.target.value}
+							[key]: {$set: value}
 						}
 					}
 				}
@@ -451,7 +460,7 @@ class ConfigMetadataStyle extends PantherComponent{
 			this.setStateDeep({
 				valueDefinitionSingleRule: {
 					appearance: {
-						[key]: {$set: e.target.value}
+						[key]: {$set: value}
 					}
 				}
 			});
@@ -646,6 +655,10 @@ class ConfigMetadataStyle extends PantherComponent{
 										value={this.state.valueDefinitionRules[ruleIndex].appearance.fillColour}
 										onChange={this.onChangeRuleAppearance.bind(this,ruleIndex,"fillColour")}
 									/>
+									<SliderPicker
+										color={this.state.valueDefinitionRules[ruleIndex].appearance.fillColour || '#0000ff'}
+										onChangeComplete={this.onChangeColorAppearance.bind(this,ruleIndex)}
+									/>
 								</label>
 							</div>
 						);
@@ -710,6 +723,12 @@ class ConfigMetadataStyle extends PantherComponent{
 										value={this.state.valueDefinitionSingleRule.appearance.fillColour}
 										onChange={this.onChangeRuleAppearance.bind(this,false,"fillColour")}
 									/>
+									<div className="picker-wrapper">
+										<SliderPicker
+											color={this.state.valueDefinitionSingleRule.appearance.fillColour || '#0000ff'}
+											onChangeComplete={this.onChangeColorAppearance.bind(this,false)}
+										/>
+									</div>
 								</label>
 							</div>
 						</div>
