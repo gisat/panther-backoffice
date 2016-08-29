@@ -257,6 +257,10 @@ class ConfigMetadataAttribute extends PantherComponent{
 			{
 				key: "text",
 				name: "Text"
+			},
+			{
+				key: "boolean",
+				name: "Boolean"
 			}
 		];
 		var standardUnits = [
