@@ -13,6 +13,7 @@ import ScopeModel from '../models/ScopeModel';
 import VectorLayerModel from '../models/VectorLayerModel';
 import TopicModel from '../models/TopicModel';
 import _ from 'underscore';
+import logger from '../core/Logger';
 
 export default {
 	stringHash: function(str) {
@@ -142,7 +143,8 @@ export default {
 
 					if (!themeModels.length) {
 						var errorScopeIdentifier = scope.hasOwnProperty('name') ? scope.name : scope;
-						return reject("getThemesForScope: themes with filter {scope: " + errorScopeIdentifier + "} not found.");
+						logger.warn("getThemesForScope: themes with filter {scope: " + errorScopeIdentifier + "} not found.");
+						return resolve(null);
 					}
 
 					var themeKeys = _.pluck(themeModels, "key");

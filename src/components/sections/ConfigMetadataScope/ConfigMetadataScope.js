@@ -161,6 +161,10 @@ class ConfigMetadataScope extends ControllerComponent {
 	handleThemePeriods(newPeriods) {
 		let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
 		utils.getThemesForScope(scope).then(function(themes){
+			if(themes == null) {
+				return;
+			}
+
 			let actionData = [];
 
 			themes.models.forEach(function(model){

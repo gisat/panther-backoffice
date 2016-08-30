@@ -112,7 +112,7 @@ class ConfigDataLayer extends ControllerComponent {
 			valueTemplate: relations2state.valueTemplate,
 			valueScope: relations2state.valueScope,
 			valuePlaces: relations2state.valuePlaces,
-			valuePeriods: relations2state.layerType=='au' ? null : relations2state.valuePeriods,
+			valuePeriods: relations2state.layerType=='au' ? [] : relations2state.valuePeriods,
 			columnMap: columnMap
 		}
 	}
