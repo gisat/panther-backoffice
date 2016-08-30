@@ -1,4 +1,4 @@
-import ApiStore from './ApiStore';
+import Store from './Store';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
@@ -101,10 +101,11 @@ var initialScreenSets = {
 };
 
 
-class ScreenStore extends ApiStore {
+class ScreenStore extends Store {
 
 	constructor() {
-		super();		//this._models = this.load();
+		super();
+		this._models = this.load();
 		let thisStore = this;
 		this._models.then(function(){
 			thisStore._historyStacks = thisStore.generateHistoryStacks();
@@ -224,6 +225,21 @@ class ScreenStore extends ApiStore {
 
 	request(method, object){
 		return null;
+	}
+
+	getById(screenSetKey) {
+		return new Promise(function (resolve, reject) {
+			this._models.then(function(models){
+				let result = _.findWhere(models, {key: screenSetKey});
+				if(result.length){
+					resolve(result[0]);
+				} else {
+					resolve(null);
+				}
+			}, function (err) {
+				reject(err);
+			});
+		});
 	}
 
 	/**
