@@ -1,5 +1,5 @@
 //import React from 'react';
-import EventEmitter from 'events';
+import Store from './BaseStore';
 import superagent from 'superagent';
 import path from 'path';
 import _ from 'underscore';
@@ -14,7 +14,7 @@ import { apiProtocol, apiHost, apiPath } from '../config';
 import logger from '../core/Logger';
 import utils from '../utils/utils';
 
-class Store extends EventEmitter {
+class ApiStore extends Store {
 
 	constructor() {
 		super();
@@ -50,18 +50,6 @@ class Store extends EventEmitter {
 	}
 
 
-	emitChange() {
-		logger.trace("Store# emitChange()");
-		this.emit(EventTypes.STORE_CHANGE);
-	}
-
-	addChangeListener(callback) {
-		this.on(EventTypes.STORE_CHANGE, callback);
-	}
-
-	removeChangeListener(callback) {
-		this.removeListener(EventTypes.STORE_CHANGE, callback);
-	}
 
 	addResponseListener(callback) {
 		this.on(EventTypes.OBJECT_CREATED, callback);
@@ -358,6 +346,4 @@ class Store extends EventEmitter {
 
 }
 
-Store.dispatchToken = null;
-
-export default Store;
+export default ApiStore;
