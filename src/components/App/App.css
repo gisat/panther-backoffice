@@ -802,7 +802,10 @@ todo hex colours, button icons */
 /* ===== elements ===== */
 
 
-.puma-item, a.puma-item {
+.puma-item,
+a.puma-item,
+.ptr-item,
+a.ptr-item {
 	display: block;
 	border-radius: .25rem;
 	border: 2px solid #95A6C7;
@@ -815,14 +818,17 @@ todo hex colours, button icons */
 
 	position: relative;
 }
-.puma-item span {
+.puma-item span,
+.ptr-item span {
 	line-height: 1.875rem;
 }
-.puma-item:hover {
+.puma-item:hover,
+.ptr-item:hover {
 	border-color: #4d8aff;
 }
 
-.puma-item::after {
+.puma-item::after,
+.ptr-item:not(.simple)::after {
 	content: "\f101";
 	font-family: Icons;
 	font-size: 1.25rem;
@@ -834,21 +840,25 @@ todo hex colours, button icons */
 	color: #859FBF;
 }
 
-.puma-item.template {
+.puma-item.template,
+.ptr-item.template {
 /*	background: transparent;*/
 	background: #bebebe;
 }
-.puma-item.add {
+.puma-item.add,
+.ptr-item.add {
 	border-style: dashed;
 	border-color: #9c9c9c;
 	color: #8e8e8e;
 	background: transparent;
 }
-.puma-item.add:hover {
+.puma-item.add:hover,
+.ptr-item.add:hover {
 	border-color: #4d8aff;
 	color: #797979;
 }
-.puma-item.add::after {
+.puma-item.add::after,
+.ptr-item.add::after {
 	color: #a2a2a2;
 }
 
@@ -856,14 +866,15 @@ todo hex colours, button icons */
 	border-color: #ffff00;
 	background: rgba(255, 255, 0, 0.2);
 }
-@keyframes puma-item-screen-opener {
+@keyframes ptr-item-screen-opener {
 	0% { right: .4rem; }
 	50% { right: .2rem; }
 	100% { right: .4rem; }
 }
-.puma-item.screen-opener::after {
+.puma-item.screen-opener::after,
+.ptr-item.screen-opener:not(.simple)::after {
 	color: #ff0;
-	animation-name: puma-item-screen-opener;
+	animation-name: ptr-item-screen-opener;
 	animation-duration: 1s;
 	animation-iteration-count: 3;
 }
@@ -1215,13 +1226,18 @@ todo hex colours, button icons */
 	border-radius: 0 0 .2rem .2rem;
 	color: #d8d8d8;
 }
-.frame-input-wrapper > label {
+.frame-input-wrapper > label,
+.frame-input-wrapper > .label {
 	padding: .875rem;
 	margin: 0;
 }
-.frame-input-wrapper > label > .Select {
+.frame-input-wrapper > label > .Select,
+.frame-input-wrapper > .label > .Select,
+.frame-input-wrapper > .label > .frame-input-wrapper,
+.frame-input-wrapper > .label > .ptr-item:first-of-type {
 	margin-top: .5rem;
 }
+
 .frame-input-wrapper-info {
 	border-top: 1px solid rgba(0,0,0,.08);
 	padding: .5rem 1rem;
@@ -1251,6 +1267,56 @@ todo hex colours, button icons */
 	line-height: 1.5rem;
 	color: #666;
 }
+
+
+.frame-wrapper-object {
+	border: 2px solid #9CA7B3;
+	/*border: 2px solid #909DAB;*/
+	border-radius: .25rem;
+	margin-bottom: 1.5rem;
+	/*box-shadow: .05rem .05rem .2rem 0 rgba(0,0,0,.07);*/
+	max-width: 50rem;
+
+	position: relative;
+}
+.frame-wrapper-object > label,
+.frame-wrapper-object > .label {
+	padding: .875rem;
+	margin: 0;
+}
+.frame-input-wrapper > .label > .frame-wrapper-object {
+	margin-top: .5rem;
+}
+.frame-input-wrapper > .label > .frame-wrapper-object.singleclass {
+	margin-bottom: 0;
+}
+.frame-wrapper-object .frame-wrapper-header,
+.frame-input-wrapper .frame-wrapper-header {
+	height: 2.125rem;
+	line-height: 2.125rem;
+	font-size: 1.125rem;
+	padding: 0 1rem;
+	/*background-color: #859BB1;*/
+	background-color: #9CA7B3;
+	color: #ddd;
+
+	position: relative;
+}
+.frame-wrapper-header > .frame-wrapper-header-remove {
+	position: absolute;
+	top:0;
+	right: 0;
+	width: 2.125rem;
+	height: 2.125rem;
+	cursor: pointer;
+	line-height: 2rem;
+	text-align: center;
+	color: #c1c1c1;
+}
+.frame-wrapper-header > .frame-wrapper-header-remove:hover {
+	color:#EAB5B5;
+}
+
 
 .activeness-indicator {
 	display: inline-block;

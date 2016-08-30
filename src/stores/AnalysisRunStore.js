@@ -49,11 +49,38 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			break;
 		case ActionTypes.ANALYSIS_RUN_HANDLE:
 			storeInstance.handle(action.data);
+			setTimeout(reloadThisStoreUntilAllFinished, 500);
 			break;
 		default:
 			return;
 	}
 
 });
+
+/**
+ * It is used for querying the state of on demand information. Based on this state it either issues new demand or deems itself successful.
+ */
+function reloadThisStoreUntilAllFinished() {
+	logger.info("AnalysisRunStore#reloadThisStoreUntilAllFinished Issue new request for reload. Current time: ", new Date());
+
+	let promisesOfLoad = storeInstance.reload();
+	if(!promisesOfLoad) {
+		setTimeout(reloadThisStoreUntilAllFinished, 500);
+		return;
+	}
+
+	promisesOfLoad.then(function(models){
+		let containsInformation = true;
+		models.forEach(function(model){
+			if(!model.finished) {
+				containsInformation = false;
+			}
+		});
+
+		if(!containsInformation) {
+			setTimeout(reloadThisStoreUntilAllFinished, 500);
+		}
+	});
+}
 
 export default storeInstance;
