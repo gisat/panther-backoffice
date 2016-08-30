@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import ThemeModel from '../models/ThemeModel';
@@ -9,7 +9,7 @@ import PeriodStore from './PeriodStore';
 import TopicStore from './TopicStore';
 import logger from '../core/Logger';
 
-class ThemeStore extends Store {
+class ThemeStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/theme";

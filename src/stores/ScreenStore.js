@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
@@ -101,7 +101,7 @@ var initialScreenSets = {
 };
 
 
-class ScreenStore extends Store {
+class ScreenStore extends ApiStore {
 
 	constructor() {
 		super();		//this._models = this.load();

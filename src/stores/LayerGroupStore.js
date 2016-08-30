@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import LayerGroupModel from '../models/LayerGroupModel';
@@ -6,7 +6,7 @@ import LayerGroupModel from '../models/LayerGroupModel';
 //import UserStore from './UserStore';
 import logger from '../core/Logger';
 
-class LayerGroupStore extends Store {
+class LayerGroupStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/layergroup";

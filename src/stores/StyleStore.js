@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import StyleModel from '../models/StyleModel';
@@ -7,7 +7,7 @@ import StyleModel from '../models/StyleModel';
 import TopicStore from './TopicStore';
 import logger from '../core/Logger';
 
-class StyleStore extends Store {
+class StyleStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/symbology";

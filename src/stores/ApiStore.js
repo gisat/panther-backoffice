@@ -1,5 +1,5 @@
 //import React from 'react';
-import Store from './BaseStore';
+import Store from './Store';
 import superagent from 'superagent';
 import path from 'path';
 import _ from 'underscore';

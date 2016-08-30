@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import DataLayerModel from '../models/DataLayerModel';
@@ -6,7 +6,7 @@ import DataLayerModel from '../models/DataLayerModel';
 import ObjectRelationStore from './ObjectRelationStore';
 import logger from '../core/Logger';
 
-class DataLayerStore extends Store {
+class DataLayerStore extends ApiStore {
 
 	getApiUrl(){
 		return "api/layers/getLayers";

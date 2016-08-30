@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import PlaceModel from '../models/PlaceModel';
@@ -7,7 +7,7 @@ import PlaceModel from '../models/PlaceModel';
 import ScopeStore from './ScopeStore';
 import logger from '../core/Logger';
 
-class PlaceStore extends Store {
+class PlaceStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/location";

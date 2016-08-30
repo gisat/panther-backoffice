@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
@@ -13,7 +13,7 @@ import PeriodStore from './PeriodStore';
 
 import logger from '../core/Logger';
 
-class AnalysisRunStore extends Store {
+class AnalysisRunStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/performedanalysis";

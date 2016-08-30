@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import ScopeModel from '../models/ScopeModel';
@@ -9,7 +9,7 @@ import PeriodStore from './PeriodStore';
 import logger from '../core/Logger';
 
 
-class ScopeStore extends Store {
+class ScopeStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/dataset";
