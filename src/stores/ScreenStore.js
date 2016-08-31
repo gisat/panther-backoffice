@@ -228,11 +228,12 @@ class ScreenStore extends Store {
 	}
 
 	getById(screenSetKey) {
+		let thisStore = this;
 		return new Promise(function (resolve, reject) {
-			this._models.then(function(models){
+			thisStore._models.then(function(models){
 				let result = _.findWhere(models, {key: screenSetKey});
-				if(result.length){
-					resolve(result[0]);
+				if(result){
+					resolve(result);
 				} else {
 					resolve(null);
 				}
