@@ -109,20 +109,28 @@ class ConfigAnalysisRulesSpatial extends PantherComponent {
 				}
 
 				ret = (
-					<Table celled className="fixed">
-						<thead>
-						<tr>
-							<th>Result attribute</th>
-							<th>Operation</th>
-							<th>Filter</th>
-						</tr>
-						</thead>
-						<tbody>
+					<div>
+						<div className="ptr-analysis-operations-details">
+							<div className="label">Feature layer</div>
+							<div>{this.props.analysis.layerObject.key + "\xa0" + this.props.analysis.layerObject.name}</div>
+							<div className="label">Result attribute set</div>
+							<div>{this.props.analysis.attributeSet.key + "\xa0" + this.props.analysis.attributeSet.name}</div>
+						</div>
+						<Table celled className="fixed">
+							<thead>
+							<tr>
+								<th>Result attribute</th>
+								<th>Operation</th>
+								<th>Filter</th>
+							</tr>
+							</thead>
+							<tbody>
 
-						{rowsInsert}
+							{rowsInsert}
 
-						</tbody>
-					</Table>
+							</tbody>
+						</Table>
+					</div>
 				);
 			} else {
 				ret = (

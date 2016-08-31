@@ -1632,6 +1632,14 @@ a.ptr-item {
 	width: 1.3rem;
 }
 
+.ptr-analysis-operations-details > div {
+	font-size: 1rem;
+}
+.ptr-analysis-operations-details > div.label {
+	font-size: .875rem;
+	font-weight: bold;
+}
+
 ul.list-steps,
 ol.list-steps {
 	margin-left: 1rem;
