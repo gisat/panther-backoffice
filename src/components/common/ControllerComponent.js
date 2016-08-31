@@ -84,7 +84,6 @@ class ControllerComponent extends PantherComponent {
 					invalid: {$set: true}
 				});
 			}
-			this.updateStateHash(nextProps);
 		}
 		else {
 			//component not mounted
@@ -101,6 +100,7 @@ class ControllerComponent extends PantherComponent {
 
 	componentWillUpdate() {
 		this.mounted = true;
+		this.updateStateHash();
 	}
 
 	componentWillUnmount() {

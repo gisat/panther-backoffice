@@ -8,20 +8,14 @@ import _ from 'underscore';
 import ga from 'react-ga';
 
 import ScreenAnalysesBase from '../components/screens/ScreenAnalysesBase';
-import ScreenAnalysisSpatial from '../components/screens/ScreenAnalysisSpatial';
-import ScreenAnalysisRulesSpatial from '../components/screens/ScreenAnalysisRulesSpatial';
-import ScreenAnalysisRulesLevel from '../components/screens/ScreenAnalysisRulesLevel';
-import ScreenAnalysisRulesMath from '../components/screens/ScreenAnalysisRulesMath';
 
 import ScreenDashboardBase from '../components/screens/ScreenDashboardBase';
 
 import ScreenDataLayersBase from '../components/screens/ScreenDataLayersBase';
 
 import ScreenMetadataBase from '../components/screens/ScreenMetadataBase';
-import ScreenMetadataLayerVector from '../components/screens/ScreenMetadataLayerVector';
 
 import ScreenPlacesBase from '../components/screens/ScreenPlacesBase';
-import ScreenPlaceDataSourceAttSet from '../components/screens/ScreenPlaceDataSourceAttSet';
 import logger from '../core/Logger';
 
 var initialScreenSets = {

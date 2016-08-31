@@ -92,6 +92,7 @@ class ScreenDataLayersBase extends ScreenController {
 	}
 
 	render() {
+		logger.trace("ScreenDataLayersBase# render(), This state: ", this.state);
 
 		let ret = null;
 		let configInsert = null;

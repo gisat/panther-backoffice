@@ -112,7 +112,7 @@ class ConfigDataLayer extends ControllerComponent {
 			valueTemplate: relations2state.valueTemplate,
 			valueScope: relations2state.valueScope,
 			valuePlaces: relations2state.valuePlaces,
-			valuePeriods: relations2state.layerType=='au' ? null : relations2state.valuePeriods,
+			valuePeriods: relations2state.layerType=='au' ? [] : relations2state.valuePeriods,
 			columnMap: columnMap
 		}
 	}
@@ -294,14 +294,13 @@ class ConfigDataLayer extends ControllerComponent {
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
 		this._stateHash = utils.stringHash("ConfigDataLayer" + props.selectorValue);
 	}
+
 	getStateHash() {
 		if(!this._stateHash) {
 			this.updateStateHash();
 		}
 		return this._stateHash;
 	}
-
-
 
 	saveForm() {
 		super.saveForm();
@@ -508,6 +507,12 @@ class ConfigDataLayer extends ControllerComponent {
 
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		if(!_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState)) {
+			return true;
+		}
+	}
+
 
 	onChangeLayerType (value) {
 		let currentType = this.state.current.layerType;
@@ -611,160 +616,165 @@ class ConfigDataLayer extends ControllerComponent {
 	}
 
 	render() {
-		logger.trace("ConfigDataLayer# render(), This state: ", this.state, ", Relations state: ", this.state.relationsState);
+		logger.trace("ConfigDataLayer# render(), This state: ", this.state, ", Relations state: ", this.state.relationsState, ", Built state: ", this.state.built);
+		let ret = null;
 
-		let destinations = this.prepareDestinations(this.props.store.attributeSets);
+		if(this.state.built) {
 
-		var saveButton = " ";
-		if (this.state.current.layerType) {
-			saveButton = (
-				<SaveButton
-					saved={this.equalStates(this.state.current,this.state.saved)}
-					saving={this.state.saving}
-					className="save-button"
-					onClick={this.saveForm.bind(this)}
-				/>
-			);
-		}
+			let destinations = this.prepareDestinations(this.props.store.attributeSets);
 
-		var prod = "Select layer type";
-		if (!this.props.selectorValue) {
-			prod = "Select data layer";
-		}
+			var saveButton = " ";
+			if (this.state.current.layerType) {
+				saveButton = (
+					<SaveButton
+						saved={this.equalStates(this.state.current, this.state.saved)}
+						saving={this.state.saving}
+						className="save-button"
+						onClick={this.saveForm.bind(this)}
+					/>
+				);
+			}
 
-		//var mapFrame = "";
-		var mapImage = "";
-		if(this.props.selectorValue) {
+			var prod = "Select layer type";
+			if (!this.props.selectorValue) {
+				prod = "Select data layer";
+			}
 
-			var dataLayer = _.findWhere(this.props.dataLayers,{key: this.props.selectorValue});
+			//var mapFrame = "";
+			var mapImage = "";
+			if (this.props.selectorValue) {
 
-			//var mapFrameStyle = {
-			//	border: 'none',
-			//	width: '350px',
-			//	height: '600px'
-			//};
-			var mapImageStyle = {
-				border: '1px solid rgba(0,0,0,.15)'
-			};
-			//var mapFrameSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
-			var mapImageSrc = geoserverProtocol + geoserverAddress + "/" + dataLayer.geoserverWorkspace + "/wms/reflect?layers=" + dataLayer.key + "&width=800&transparent=true";
+				var dataLayer = _.findWhere(this.props.dataLayers, {key: this.props.selectorValue});
 
-			//// todo not an iframe
-			//mapFrame = (
-			//	<div className="beside">
-			//		<iframe src={mapFrameSrc} style={mapFrameStyle}></iframe>
-			//	</div>
-			//);
-			mapImage = (
-				<div className="beside">
-					<img src={mapImageSrc} style={mapImageStyle} />
-				</div>
-			);
+				//var mapFrameStyle = {
+				//	border: 'none',
+				//	width: '350px',
+				//	height: '600px'
+				//};
+				var mapImageStyle = {
+					border: '1px solid rgba(0,0,0,.15)'
+				};
+				//var mapFrameSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
+				var mapImageSrc = geoserverProtocol + geoserverAddress + "/" + dataLayer.geoserverWorkspace + "/wms/reflect?layers=" + dataLayer.key + "&width=800&transparent=true";
 
-		}
-
-		return (
-			<div>
-
-				{mapImage}
-
-				<div
-					//className="frame-input-wrapper"
-					className={this.props.selectorValue ? 'frame-input-wrapper' : 'frame-input-wrapper hidden'}
-				>
-					<label className="container">
-						Layer type
-						<Select
-							onChange={this.onChangeLayerType.bind(this)}
-							options={LAYERTYPES}
-							valueKey="key"
-							labelKey="name"
-							value={this.state.current.layerType}
-							clearable={false}
-						/>
-					</label>
-				</div>
-
-				<div
-					className={this.state.current.layerType==null ? 'variant active' : 'variant'}
-					id="config-data-layer-none"
-				>
-					<div className="data-layers-no-type">
-						{prod}
+				//// todo not an iframe
+				//mapFrame = (
+				//	<div className="beside">
+				//		<iframe src={mapFrameSrc} style={mapFrameStyle}></iframe>
+				//	</div>
+				//);
+				mapImage = (
+					<div className="beside">
+						<img src={mapImageSrc} style={mapImageStyle}/>
 					</div>
-				</div>
-				<div
-					className={this.state.current.layerType=="vector" ? 'variant active' : 'variant'}
-					id="config-data-layer-vector"
-				>
-					<ConfigDataLayerVector
-						layerTemplates={this.props.store.vectorLayerTemplates}
-						scopes={this.props.store.scopes}
-						places={this.props.store.places}
-						periods={this.props.store.periods}
-						destinations={destinations}
-						valueTemplate={this.state.current.valueTemplate}
-						valueScope={this.state.current.valueScope}
-						valuesPlaces={this.state.current.valuePlaces}
-						valuesPeriods={this.state.current.valuePeriods}
-						columnMap={this.state.current.columnMap}
-						onChangeTemplate={this.onChangeObjectSelect.bind(this, "valueTemplate", ObjectTypes.VECTOR_LAYER_TEMPLATE)}
-						onChangeScope={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
-						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuePlaces", ObjectTypes.PLACE)}
-						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuePeriods", ObjectTypes.PERIOD)}
-						onObjectClick={this.onObjectClick.bind(this)}
-						onChangeColumnTableDestination={this.onChangeColumnTableSelect.bind(this, "valueUseAs")}
-						onChangeColumnTablePeriods={this.onChangeColumnTableSelect.bind(this, "valuesPeriods")}
-					/>
-				</div>
-				<div
-					className={this.state.current.layerType=="raster" ? 'variant active' : 'variant'}
-					id="config-data-layer-raster"
-				>
-					<ConfigDataLayerRaster
-						layerTemplates={this.props.store.rasterLayerTemplates}
-						scopes={this.props.store.scopes}
-						places={this.props.store.places}
-						periods={this.props.store.periods}
-						valueTemplate={this.state.current.valueTemplate}
-						valueScope={this.state.current.valueScope}
-						valuesPlaces={this.state.current.valuePlaces}
-						valuesPeriods={this.state.current.valuePeriods}
-						onChangeTemplate={this.onChangeObjectSelect.bind(this, "valueTemplate", ObjectTypes.RASTER_LAYER_TEMPLATE)}
-						onChangeScope={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
-						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuePlaces", ObjectTypes.PLACE)}
-						onChangePeriods={this.onChangeObjectSelect.bind(this, "valuePeriods", ObjectTypes.PERIOD)}
-						onObjectClick={this.onObjectClick.bind(this)}
-					/>
-				</div>
-				<div
-					className={this.state.current.layerType=="au" ? 'variant active' : 'variant'}
-					id="config-data-layer-au"
-				>
-					<ConfigDataLayerAnalytical
-						levels={this.props.store.auLevels}
-						scopes={this.props.store.scopes}
-						places={this.props.store.places}
-						periods={this.props.store.periods}
-						destinations={destinations}
-						valueLevel={this.state.current.valueTemplate}
-						valueScope={this.state.current.valueScope}
-						valuesPlaces={this.state.current.valuePlaces}
-						columnMap={this.state.current.columnMap}
-						onChangeLevel={this.onChangeObjectSelect.bind(this, "valueTemplate", ObjectTypes.AU_LEVEL)}
-						onChangeScope={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
-						onChangePlaces={this.onChangeObjectSelect.bind(this, "valuePlaces", ObjectTypes.PLACE)}
-						onObjectClick={this.onObjectClick.bind(this)}
-						onChangeColumnTableDestination={this.onChangeColumnTableSelect.bind(this, "valueUseAs")}
-						onChangeColumnTablePeriods={this.onChangeColumnTableSelect.bind(this, "valuesPeriods")}
-					/>
-				</div>
+				);
 
-				{saveButton}
+			}
 
-			</div>
-		);
+			ret = (
+				<div>
 
+					{mapImage}
+
+					<div
+						//className="frame-input-wrapper"
+						className={this.props.selectorValue ? 'frame-input-wrapper' : 'frame-input-wrapper hidden'}
+					>
+						<label className="container">
+							Layer type
+							<Select
+								onChange={this.onChangeLayerType.bind(this)}
+								options={LAYERTYPES}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.layerType}
+								clearable={false}
+							/>
+						</label>
+					</div>
+
+					<div
+						className={this.state.current.layerType == null ? 'variant active' : 'variant'}
+						id="config-data-layer-none"
+					>
+						<div className="data-layers-no-type">
+							{prod}
+						</div>
+					</div>
+					<div
+						className={this.state.current.layerType == "vector" ? 'variant active' : 'variant'}
+						id="config-data-layer-vector"
+					>
+						<ConfigDataLayerVector
+							layerTemplates={this.props.store.vectorLayerTemplates}
+							scopes={this.props.store.scopes}
+							places={this.props.store.places}
+							periods={this.props.store.periods}
+							destinations={destinations}
+							valueTemplate={this.state.current.valueTemplate}
+							valueScope={this.state.current.valueScope}
+							valuesPlaces={this.state.current.valuePlaces}
+							valuesPeriods={this.state.current.valuePeriods}
+							columnMap={this.state.current.columnMap}
+							onChangeTemplate={this.onChangeObjectSelect.bind(this, "valueTemplate", ObjectTypes.VECTOR_LAYER_TEMPLATE)}
+							onChangeScope={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
+							onChangePlaces={this.onChangeObjectSelect.bind(this, "valuePlaces", ObjectTypes.PLACE)}
+							onChangePeriods={this.onChangeObjectSelect.bind(this, "valuePeriods", ObjectTypes.PERIOD)}
+							onObjectClick={this.onObjectClick.bind(this)}
+							onChangeColumnTableDestination={this.onChangeColumnTableSelect.bind(this, "valueUseAs")}
+							onChangeColumnTablePeriods={this.onChangeColumnTableSelect.bind(this, "valuesPeriods")}
+						/>
+					</div>
+					<div
+						className={this.state.current.layerType == "raster" ? 'variant active' : 'variant'}
+						id="config-data-layer-raster"
+					>
+						<ConfigDataLayerRaster
+							layerTemplates={this.props.store.rasterLayerTemplates}
+							scopes={this.props.store.scopes}
+							places={this.props.store.places}
+							periods={this.props.store.periods}
+							valueTemplate={this.state.current.valueTemplate}
+							valueScope={this.state.current.valueScope}
+							valuesPlaces={this.state.current.valuePlaces}
+							valuesPeriods={this.state.current.valuePeriods}
+							onChangeTemplate={this.onChangeObjectSelect.bind(this, "valueTemplate", ObjectTypes.RASTER_LAYER_TEMPLATE)}
+							onChangeScope={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
+							onChangePlaces={this.onChangeObjectSelect.bind(this, "valuePlaces", ObjectTypes.PLACE)}
+							onChangePeriods={this.onChangeObjectSelect.bind(this, "valuePeriods", ObjectTypes.PERIOD)}
+							onObjectClick={this.onObjectClick.bind(this)}
+						/>
+					</div>
+					<div
+						className={this.state.current.layerType == "au" ? 'variant active' : 'variant'}
+						id="config-data-layer-au"
+					>
+						<ConfigDataLayerAnalytical
+							levels={this.props.store.auLevels}
+							scopes={this.props.store.scopes}
+							places={this.props.store.places}
+							periods={this.props.store.periods}
+							destinations={destinations}
+							valueLevel={this.state.current.valueTemplate}
+							valueScope={this.state.current.valueScope}
+							valuesPlaces={this.state.current.valuePlaces}
+							columnMap={this.state.current.columnMap}
+							onChangeLevel={this.onChangeObjectSelect.bind(this, "valueTemplate", ObjectTypes.AU_LEVEL)}
+							onChangeScope={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
+							onChangePlaces={this.onChangeObjectSelect.bind(this, "valuePlaces", ObjectTypes.PLACE)}
+							onObjectClick={this.onObjectClick.bind(this)}
+							onChangeColumnTableDestination={this.onChangeColumnTableSelect.bind(this, "valueUseAs")}
+							onChangeColumnTablePeriods={this.onChangeColumnTableSelect.bind(this, "valuesPeriods")}
+						/>
+					</div>
+
+					{saveButton}
+
+				</div>
+			);
+		}
+
+		return ret;
 	}
 }
 

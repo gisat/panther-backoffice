@@ -123,17 +123,14 @@ class ConfigMetadataScope extends ControllerComponent {
 		this.responseListener.add(AULevelStore);
 		this.responseListener.add(PeriodStore);
 	}
-	
+
 	/**
 	 * Differentiate between states
 	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
 	 */
-	updateStateHash(props) {
-		if(!props){
-			props = this.props;
-		}
+	updateStateHash() {
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
-		this._stateHash = utils.stringHash(props.selectorValue);
+		this._stateHash = utils.stringHash(this.props.selectorValue);
 	}
 
 	saveForm() {
@@ -164,6 +161,10 @@ class ConfigMetadataScope extends ControllerComponent {
 	handleThemePeriods(newPeriods) {
 		let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
 		utils.getThemesForScope(scope).then(function(themes){
+			if(themes == null) {
+				return;
+			}
+
 			let actionData = [];
 
 			themes.models.forEach(function(model){
@@ -331,7 +332,7 @@ class ConfigMetadataScope extends ControllerComponent {
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
-						Hierarchy of analytical units, common for all places in the scope. Ordered from largest areas to most detailed division.
+						Hierarchy of analytical units, common for all places in the scope. Ordered from largest areas to most detailed division.  In order to see the +/- signs and correct areas on the side, it is necessary to upload data layers for each level for every place in the scope.
 					</div>
 				</div>
 
