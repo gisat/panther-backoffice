@@ -19,12 +19,16 @@ import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
 
+let modelInstance = new Model[ObjectTypes.PLACE];
+let model = modelInstance.data();
+
 var initialState = {
 	place: null,
 	valueActive: false,
 	valueName: "",
 	valueBoundingBox: "",
-	valueScope: []
+	valueScope: [],
+	valueDescription: ""
 };
 
 
@@ -77,6 +81,7 @@ class ConfigMetadataPlace extends PantherComponent{
 							valueBoundingBox: place.boundingBox,
 							valueScope: place.scope ? [place.scope.key] : []
 						};
+						if (model.hasOwnProperty('description')) newState.valueDescription = place.description;
 						newState.savedState = utils.deepClone(newState);
 						if (thisComponent.mounted) {
 							thisComponent.setState(newState);
@@ -186,6 +191,7 @@ class ConfigMetadataPlace extends PantherComponent{
 		modelData.name = this.state.valueName;
 		modelData.boundingBox = this.state.valueBoundingBox; // Use Bounding Box from CSV.
 		modelData.scope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
+		if (model.hasOwnProperty('description')) modelData.description = this.state.valueDescription;
 		let modelObj = new Model[ObjectTypes.PLACE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.PLACE);
@@ -206,6 +212,12 @@ class ConfigMetadataPlace extends PantherComponent{
 	onChangeBoundingBox(e) {
 		this.setState({
 			valueBoundingBox: e.target.value
+		});
+	}
+
+	onChangeDescription(e) {
+		this.setState({
+			valueDescription: e.target.value
 		});
 	}
 
@@ -250,6 +262,28 @@ class ConfigMetadataPlace extends PantherComponent{
 		if(this.state.place && this.state.place.active){
 			isActiveText = "active";
 			isActiveClasses = "activeness-indicator active";
+		}
+
+		var extraFields = [];
+
+		if (model.hasOwnProperty('description')) {
+			extraFields.push((
+				<div
+					className="frame-input-wrapper" //todo get required from model too?
+					key="extended-fields-description"
+				>
+					<label className="container">
+						Description
+						<Input
+							type="text"
+							name="description"
+							placeholder=" "
+							value={this.state.valueDescription}
+							onChange={this.onChangeDescription.bind(this)}
+						/>
+					</label>
+				</div>
+			));
 		}
 
 		return (
@@ -311,6 +345,8 @@ class ConfigMetadataPlace extends PantherComponent{
 						/>
 					</label>
 				</div>
+
+				{extraFields}
 
 				{saveButton}
 
