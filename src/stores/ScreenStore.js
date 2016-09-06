@@ -98,7 +98,8 @@ var initialScreenSets = {
 class ScreenStore extends Store {
 
 	constructor() {
-		super();		//this._models = this.load();
+		super();
+		this._models = this.load();
 		let thisStore = this;
 		this._models.then(function(){
 			thisStore._historyStacks = thisStore.generateHistoryStacks();
@@ -218,6 +219,22 @@ class ScreenStore extends Store {
 
 	request(method, object){
 		return null;
+	}
+
+	getById(screenSetKey) {
+		let thisStore = this;
+		return new Promise(function (resolve, reject) {
+			thisStore._models.then(function(models){
+				let result = _.findWhere(models, {key: screenSetKey});
+				if(result){
+					resolve(result);
+				} else {
+					resolve(null);
+				}
+			}, function (err) {
+				reject(err);
+			});
+		});
 	}
 
 	/**

@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import RasterLayerModel from '../models/RasterLayerModel';
@@ -11,7 +11,7 @@ import TopicStore from './TopicStore';
 import logger from '../core/Logger';
 
 
-class RasterLayerStore extends Store {
+class RasterLayerStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/areatemplate";

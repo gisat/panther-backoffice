@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 //import AppDispatcher from '../dispatcher/AppDispatcher';
 //import ActionTypes from '../constants/ActionTypes';
 
@@ -6,7 +6,7 @@ import VectorLayerStore from './VectorLayerStore';
 import RasterLayerStore from './RasterLayerStore';
 import AULevelStore from './AULevelStore';
 
-class GeneralLayerStore extends Store {
+class GeneralLayerStore extends ApiStore {
 
 	registerListeners(){
 		this.changeListener.add(VectorLayerStore);

@@ -68,7 +68,7 @@ class PantherComponent extends Component {
 		}
 		let statePromise = this.getStateFromStores(map, limitKeys);
 		var component = this;
-		statePromise.then(function(map){
+		return statePromise.then(function(map){
 			if(component.mounted) {
 				logger.trace("PantherComponent# setStateFromStores(), Data to set: ", map, ", Current Component: ", component);
 				component.setState(map);

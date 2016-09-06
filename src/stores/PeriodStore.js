@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
@@ -7,7 +7,7 @@ import PeriodModel from '../models/PeriodModel';
 //import UserStore from './UserStore';
 import logger from '../core/Logger';
 
-class PeriodStore extends Store {
+class PeriodStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/year";

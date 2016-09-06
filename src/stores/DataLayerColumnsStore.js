@@ -1,13 +1,13 @@
 import _ from 'underscore';
 
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
 import DataLayerColumnsModel from '../models/DataLayerColumnsModel';
 import logger from '../core/Logger';
 
-class DataLayerColumnsStore extends Store {
+class DataLayerColumnsStore extends ApiStore {
 
 	load(){
 		this._models = this._models || {};

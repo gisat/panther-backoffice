@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import ObjectRelationModel from '../models/ObjectRelationModel';
@@ -14,7 +14,7 @@ import AnalysisRunStore from './AnalysisRunStore';
 
 import logger from '../core/Logger';
 
-class ObjectRelationStore extends Store {
+class ObjectRelationStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/layerref";
@@ -45,7 +45,7 @@ let storeInstance = new ObjectRelationStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 	logger.info("ObjectRelationStore# dispatchToken(), Action:", action);
-	
+
 	switch(action.type) {
 		case ActionTypes.OBJECT_RELATION_CREATE:
 			storeInstance.create(action.model);

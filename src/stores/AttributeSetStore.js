@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import AttributeSetModel from '../models/AttributeSetModel';
@@ -9,7 +9,7 @@ import VectorLayerStore from './VectorLayerStore';
 import TopicStore from './TopicStore';
 import logger from '../core/Logger';
 
-class AttributeSetStore extends Store {
+class AttributeSetStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/attributeset";

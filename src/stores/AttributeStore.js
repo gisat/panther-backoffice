@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import AttributeModel from '../models/AttributeModel';
@@ -7,7 +7,7 @@ import logger from '../core/Logger';
 //import UserStore from './UserStore';
 
 
-class AttributeStore extends Store {
+class AttributeStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/attribute";

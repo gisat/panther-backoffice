@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import AULevelModel from '../models/AULevelModel';
@@ -9,7 +9,7 @@ import StyleStore from './StyleStore';
 import TopicStore from './TopicStore';
 import logger from '../core/Logger';
 
-class AULevelStore extends Store {
+class AULevelStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/areatemplate";

@@ -1,4 +1,4 @@
-import Store from './Store';
+import ApiStore from './ApiStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import TopicModel from '../models/TopicModel';
@@ -6,7 +6,7 @@ import TopicModel from '../models/TopicModel';
 //import UserStore from './UserStore';
 import logger from '../core/Logger';
 
-class TopicStore extends Store {
+class TopicStore extends ApiStore {
 
 	getApiUrl(){
 		return "/rest/topic";

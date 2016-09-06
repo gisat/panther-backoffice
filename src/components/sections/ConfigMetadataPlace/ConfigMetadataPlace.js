@@ -20,12 +20,16 @@ import WorldWindow from '../../WorldWindow';
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
 
+let modelInstance = new Model[ObjectTypes.PLACE];
+let model = modelInstance.data();
+
 var initialState = {
 	place: null,
 	valueActive: false,
 	valueName: "",
 	valueBoundingBox: "",
-	valueScope: []
+	valueScope: [],
+	valueDescription: ""
 };
 
 
@@ -78,6 +82,7 @@ class ConfigMetadataPlace extends PantherComponent{
 							valueBoundingBox: place.boundingBox,
 							valueScope: place.scope ? [place.scope.key] : []
 						};
+						if (model.hasOwnProperty('description')) newState.valueDescription = place.description;
 						newState.savedState = utils.deepClone(newState);
 						this.onChangeBoundingBoxToMap(place.boundingBox);
 						if (thisComponent.mounted) {
@@ -188,6 +193,7 @@ class ConfigMetadataPlace extends PantherComponent{
 		modelData.name = this.state.valueName;
 		modelData.boundingBox = this.state.valueBoundingBox; // Use Bounding Box from CSV.
 		modelData.scope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
+		if (model.hasOwnProperty('description')) modelData.description = this.state.valueDescription;
 		let modelObj = new Model[ObjectTypes.PLACE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.PLACE);
@@ -252,6 +258,12 @@ class ConfigMetadataPlace extends PantherComponent{
 		});
 	}
 
+	onChangeDescription(e) {
+		this.setState({
+			valueDescription: e.target.value
+		});
+	}
+
 	onChangeObjectSelect (stateKey, objectType, value, values) {
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
@@ -293,6 +305,28 @@ class ConfigMetadataPlace extends PantherComponent{
 		if(this.state.place && this.state.place.active){
 			isActiveText = "active";
 			isActiveClasses = "activeness-indicator active";
+		}
+
+		var extraFields = [];
+
+		if (model.hasOwnProperty('description')) {
+			extraFields.push((
+				<div
+					className="frame-input-wrapper" //todo get required from model too?
+					key="extended-fields-description"
+				>
+					<label className="container">
+						Description
+						<Input
+							type="text"
+							name="description"
+							placeholder=" "
+							value={this.state.valueDescription}
+							onChange={this.onChangeDescription.bind(this)}
+						/>
+					</label>
+				</div>
+			));
 		}
 
 		return (
@@ -364,6 +398,8 @@ class ConfigMetadataPlace extends PantherComponent{
 					id="one"
 					onMount={this.wwdMounted.bind(this)}
 				/>
+
+				{extraFields}
 
 				{saveButton}
 
