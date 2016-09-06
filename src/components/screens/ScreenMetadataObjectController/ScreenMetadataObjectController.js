@@ -79,18 +79,15 @@ class ScreenMetadataObjectController extends ControllerComponent {
 			this.removeListeners();
 			this.addListeners(newProps);
 		}
-		super.componentWillReceiveProps(newProps);
 	}
 
 	addListeners(props) {
 		if(!props) {
 			props = this.props;
 		}
-		//this.changeListener.add(Store[props.data.objectType]);
 		this.responseListener.add(Store[props.data.objectType]);
 	}
 	removeListeners() {
-		//this.changeListener.clean();
 		this.responseListener.clean();
 	}
 

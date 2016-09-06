@@ -15,6 +15,7 @@ import PlaceStore from '../../../stores/PlaceStore';
 import ScopeStore from '../../../stores/ScopeStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
+import WorldWindow from '../../WorldWindow';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
@@ -78,6 +79,7 @@ class ConfigMetadataPlace extends PantherComponent{
 							valueScope: place.scope ? [place.scope.key] : []
 						};
 						newState.savedState = utils.deepClone(newState);
+						this.onChangeBoundingBoxToMap(place.boundingBox);
 						if (thisComponent.mounted) {
 							thisComponent.setState(newState);
 						}
@@ -207,6 +209,47 @@ class ConfigMetadataPlace extends PantherComponent{
 		this.setState({
 			valueBoundingBox: e.target.value
 		});
+		this.onChangeBoundingBoxToMap(e.target.value);
+	}
+
+	onChangeBoundingBoxToMap(valueBoundingBox) {
+		var values = valueBoundingBox.split(",");
+		if(values.length > 3) {
+			var selectedPoints = [
+				new WorldWind.Position(values[0].trim(), values[1].trim(), 10000),
+				new WorldWind.Position(values[2].trim(), values[3].trim(), 10000)
+			];
+			this.updatePointsInMap(selectedPoints);
+			this.wwd.goTo(new WorldWind.Location(values[0].trim(), values[1].trim()));
+			this.currentSelector.enabled = false;
+		} else {
+			this.currentSelector._layerOfSelectedObjects.removeRenderable(this.currentSelector._visibleRepresentation);
+			this.updatePointsInMap([]);
+			this.currentSelector.enabled = true;
+		}
+	}
+
+	updatePointsInMap(selectedPoints) {
+		this.currentSelector._selectedArea = selectedPoints;
+		this.currentSelector.redrawCurrentlySelectedArea();
+		this.wwd.redraw();
+	}
+
+	onChangeBoundingBoxMap(selectedPoints) {
+		if(selectedPoints.length > 1) {
+			var valueBoundingBox = selectedPoints[0].longitude + "," + selectedPoints[0].latitude + "," + selectedPoints[1].longitude + "," + selectedPoints[1].latitude;
+			this.setState({
+				valueBoundingBox: valueBoundingBox
+			});
+		}
+	}
+
+	wwdMounted(wwd) {
+		this.wwd = wwd;
+		this.currentSelector = new WorldWind.SelectionController(wwd, {
+			onSelectionChangeListener: this.onChangeBoundingBoxMap.bind(this),
+			type: 'boundingBox'
+		});
 	}
 
 	onChangeObjectSelect (stateKey, objectType, value, values) {
@@ -310,7 +353,17 @@ class ConfigMetadataPlace extends PantherComponent{
 							onChange={this.onChangeBoundingBox.bind(this)}
 						/>
 					</label>
+					<div className="frame-input-wrapper-info">
+						It is possible to set bounding box using the map below. In order to select bounding box press shift and click on top left corner of the selection and then bottom right corner. If you want to change the bounding box simply delete the value in the field. <br/>
+						It is also possible to set bounding box for the place in a format of bounding box starting with upper left corner and ending with bottom right corner. Format is longitude of upper left corner, latitude of upper left corner, longitude of bottom right corner, latitude of bottom right corner. <br/>
+						Example: 10,10,15,20
+					</div>
 				</div>
+
+				<WorldWindow
+					id="one"
+					onMount={this.wwdMounted.bind(this)}
+				/>
 
 				{saveButton}
 

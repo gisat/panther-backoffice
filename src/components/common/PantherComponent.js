@@ -130,7 +130,8 @@ class PantherComponent extends Component {
 	setStateDeep(updatePath, callback) {
 		logger.trace("PantherComponent# setStateDeep(), Current this: ", this, ", updatePath: ", updatePath);
 		if(this.mounted) {
-			this.setState(update(this.state, updatePath), callback);
+			var updatedState = update(this.state, updatePath);
+			this.setState(updatedState, callback);
 		} else {
 			logger.warn("PantherComponent# setStateDeep(), Tries to update deep state of unmounted component.", updatePath);
 		}

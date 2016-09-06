@@ -21,6 +21,7 @@ import ThemeStore from '../../../stores/ThemeStore';
 import TopicStore from '../../../stores/TopicStore';
 import LayerGroupStore from '../../../stores/LayerGroupStore';
 import StyleStore from '../../../stores/StyleStore';
+import ScreenStore from '../../../stores/ScreenStore';
 
 import ScreenMetadataObject from '../ScreenMetadataObject'
 import ObjectList from '../../elements/ObjectList';
