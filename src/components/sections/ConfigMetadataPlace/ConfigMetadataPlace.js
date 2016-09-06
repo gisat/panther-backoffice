@@ -84,7 +84,7 @@ class ConfigMetadataPlace extends PantherComponent{
 						};
 						if (model.hasOwnProperty('description')) newState.valueDescription = place.description;
 						newState.savedState = utils.deepClone(newState);
-						this.onChangeBoundingBoxToMap(place.boundingBox);
+						thisComponent.onChangeBoundingBoxToMap(place.boundingBox);
 						if (thisComponent.mounted) {
 							thisComponent.setState(newState);
 						}
@@ -161,7 +161,7 @@ class ConfigMetadataPlace extends PantherComponent{
 					this.state.valueActive == this.state.place.active &&
 					this.state.valueName == this.state.place.name &&
 					this.state.valueBoundingBox == this.state.place.boundingBox &&
-					_.isEqual(this.state.valueScope,this.state.savedState.valueScope)
+					_.isEqual(this.state.valueScope, this.state.savedState && this.state.savedState.valueScope) // savedState doesn't have to exist.
 			);
 		}
 		return isIt;
@@ -222,11 +222,11 @@ class ConfigMetadataPlace extends PantherComponent{
 		var values = valueBoundingBox.split(",");
 		if(values.length > 3) {
 			var selectedPoints = [
-				new WorldWind.Position(values[0].trim(), values[1].trim(), 10000),
-				new WorldWind.Position(values[2].trim(), values[3].trim(), 10000)
+				new WorldWind.Position(values[1].trim(), values[0].trim(), 10000),
+				new WorldWind.Position(values[3].trim(), values[2].trim(), 10000)
 			];
 			this.updatePointsInMap(selectedPoints);
-			this.wwd.goTo(new WorldWind.Location(values[0].trim(), values[1].trim()));
+			this.wwd.goTo(new WorldWind.Location(values[1].trim(), values[0].trim()));
 			this.currentSelector.enabled = false;
 		} else {
 			this.currentSelector._layerOfSelectedObjects.removeRenderable(this.currentSelector._visibleRepresentation);
