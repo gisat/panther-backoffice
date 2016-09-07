@@ -501,6 +501,30 @@ class ConfigDataLayer extends ControllerComponent {
 					}
 				}
 			}
+		} else {
+			// Verify existence of all necessary data.
+			if(!values.places) {
+				alert("At least one place must be associated with the data layer.")
+			} else if(!values.periods) {
+				alert("Chosen Scope doesn't have any associated time period. Please fix this before continuing.")
+			}
+
+			if(thisComponent.state.current.layerType == 'au') {
+				if(!values.template) {
+					alert("The level of the analytical units is required.");
+				}
+			} else {
+				if(!values.template) {
+					alert("Please specify the layer template.");
+				}
+			}
+
+			// TODO: Verify the FID as well.
+
+			this.setState({
+				saving: false
+			});
+			return;
 		}
 
 		// was not in valuePlaces × valuePeriods, thus was removed -> delete

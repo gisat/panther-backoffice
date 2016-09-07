@@ -187,60 +187,6 @@ class ScreenDashboardBase extends PantherComponent {
 
 				</div></div>
 
-				<Form>
-
-					<FormField
-						//disabled={this.props.disabled}
-						name="active"
-						valid={typeof(this.state.valueActive)=='boolean'}
-						changed={!this.state.valueActive}
-					>
-						<FormFieldActivation
-							value={this.state.valueActive}
-							savedValue={true}
-							onChange={this.onChangeActive.bind(this)}
-						/>
-					</FormField>
-
-					<FormField
-						//disabled={this.props.disabled}
-						name="name"
-						required={true}
-						active={true}
-						valid={this.state.valueName.length > 2}
-						changed={this.state.valueName != "Robert"}
-						contentLabel="Name"
-					>
-						<Input
-							type="text"
-							name="name"
-							placeholder=" "
-							value={this.state.valueName}
-							onChange={this.onChangeName.bind(this)}
-						/>
-					</FormField>
-
-					<FormField
-						//disabled={this.props.disabled}
-						name="nickname"
-						required={true}
-						active={true}
-						valid={this.state.valueNickname != this.state.valueName}
-						changed={this.state.valueNickname != "Bob"}
-						contentLabel="Nickname"
-						contentInfo="Has to be different than name"
-					>
-						<Input
-							type="text"
-							name="nickname"
-							placeholder=" "
-							value={this.state.valueNickname}
-							onChange={this.onChangeNickname.bind(this)}
-						/>
-					</FormField>
-
-				</Form>
-
 			</div>
 		);
 
