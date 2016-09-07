@@ -200,15 +200,11 @@ class ConfigDataLayer extends ControllerComponent {
 				this.addRelationToColumnMap(ret, relation.parentColumn, "P", layerType);
 			}
 
-			if(relation.hasOwnProperty("columnMap") && relation.isOfAttributeSet && relation.attributeSet){
+			if(relation.hasOwnProperty("columnMap") && relation.isOfAttributeSet){
 				_.each(relation.columnMap, function(column){
 					let keyString = relation.attributeSet.key + "-" + column.attribute.key;
 					this.addRelationToColumnMap(ret, column.column, keyString, layerType, relation);
 				}, this);
-			}
-
-			if(relation.hasOwnProperty("columnMap") && relation.isOfAttributeSet && relation.attributeSet == null) {
-				logger.warning('ConfigDataLayer#columns2state Attribute set is null.');
 			}
 
 		}, this);
