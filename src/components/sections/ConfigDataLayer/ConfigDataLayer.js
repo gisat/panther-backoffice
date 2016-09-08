@@ -389,13 +389,16 @@ class ConfigDataLayer extends ControllerComponent {
 							if (values.fidColumn) existingModel.fidColumn = values.fidColumn;
 							if (values.nameColumn) existingModel.nameColumn = values.nameColumn;
 							if (values.parentColumn) existingModel.parentColumn = values.parentColumn;
+							// Add to the updated models.
 							actionData[0].push({type: "update", model: existingModel});
 						}
+						// Remove already existing relation from relations.
 						relations = _.reject(relations, function (item) {
 							return item.key === existingModel.key;
 						});
 					} else {
 						// does not exist -> create
+						// Possibly take a look at the usage of Number.
 						let object = {
 							dataSource: _.findWhere(thisComponent.props.store.dataLayers, {key: thisComponent.props.selectorValue}),
 							place: _.findWhere(thisComponent.props.store.places, {key: placeValue}),
@@ -403,6 +406,7 @@ class ConfigDataLayer extends ControllerComponent {
 						};
 						object = _.assign(object, baseObject);
 						let newModel = new Model[ObjectTypes.OBJECT_RELATION](object);
+						// Add creation of the new model.
 						actionData[0].push({type: "create", model: newModel});
 					}
 				}
@@ -422,6 +426,7 @@ class ConfigDataLayer extends ControllerComponent {
 			}, thisComponent);
 			columnMapPeriods = _.uniq(columnMapPeriods);
 			columnMapAttSets = _.uniq(columnMapAttSets);
+			// Now I should have all uniques periods and unique attribute sets. This specifies the layers we must create.
 			logger.trace("ConfigDataLayer# saveForm(), Column map periods", columnMapPeriods, "Column map attribute sets",
 				columnMapAttSets);
 			// get all columnMaps attributeSets
@@ -490,8 +495,9 @@ class ConfigDataLayer extends ControllerComponent {
 									place: _.findWhere(thisComponent.props.store.places, {key: placeValue}),
 									period: _.findWhere(thisComponent.props.store.periods, {key: periodValue}),
 									columnMap: columnMap,
-									attributeSet: _.findWhere(thisComponent.props.store.attributeSets, {key: attSet})
+									attributeSet: _.findWhere(thisComponent.props.store.attributeSets, {key: Number(attSet)})
 								};
+
 								object = _.assign(object, baseObjectForColumnMap);
 								let newModel = new Model[ObjectTypes.OBJECT_RELATION](object);
 								actionData[1].push({type: "create", model: newModel});
