@@ -446,7 +446,10 @@ class ConfigDataLayer extends ControllerComponent {
 								if (column.valueUseAs.length && !_.contains(["I", "P", "N"], column.valueUseAs[0])) {
 									let destination = column.valueUseAs[0].split('-',2);
 									if (destination[0] == attSet) {
-										let attributeModel = _.findWhere(this.props.store.attributes, {key: Number(destination[1])});
+										let attributeModel = _.findWhere(this.props.store.attributes, {key: destination[1]});
+										if(!attributeModel) {
+											attributeModel = _.findWhere(this.props.store.attributes, {key: Number(destination[1])});
+										}
 										columnMap.push({
 											attribute: attributeModel,
 											column: columnName
