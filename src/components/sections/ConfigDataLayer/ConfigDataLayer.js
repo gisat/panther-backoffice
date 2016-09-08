@@ -542,7 +542,12 @@ class ConfigDataLayer extends ControllerComponent {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		return !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState);
+		var result = !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState);
+		if(!result) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 
