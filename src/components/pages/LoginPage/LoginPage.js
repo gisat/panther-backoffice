@@ -17,7 +17,8 @@ class LoginPage extends Component {
 		this.state = {
 			valueName: "",
 			valuePassword: "",
-			error: ""
+			error: "",
+			ready: false
 		};
 	}
 
@@ -25,7 +26,14 @@ class LoginPage extends Component {
 		onSetTitle: PropTypes.func.isRequired
 	};
 
+	componentDidMount() {
+		this.setState({ready: true});
+	}
+
 	onClick() {
+		if(!this.state.ready) {
+			return;
+		}
 		this.setState({error: ''});
 		let id = utils.guid();
 		ActionCreator.addOperation(id, {});
