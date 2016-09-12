@@ -26,14 +26,7 @@ class LoginPage extends Component {
 		onSetTitle: PropTypes.func.isRequired
 	};
 
-	componentDidMount() {
-		this.setState({ready: true});
-	}
-
 	onClick() {
-		if(!this.state.ready) {
-			return;
-		}
 		this.setState({error: ''});
 		let id = utils.guid();
 		ActionCreator.addOperation(id, {});
