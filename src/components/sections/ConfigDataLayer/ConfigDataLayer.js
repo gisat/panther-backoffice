@@ -657,7 +657,11 @@ class ConfigDataLayer extends ControllerComponent {
 		let ret = null;
 
 		if(this.state.built) {
-
+			let places = [];
+			if(this.state.current.valueScope && this.state.current.valueScope.length > 0) {
+				let scope = _.findWhere(this.props.store.scopes, {key: this.state.current.valueScope[0]});
+				places = _.where(this.props.store.places, {scope: scope});
+			}
 			let destinations = this.prepareDestinations(this.props.store.attributeSets);
 
 			var saveButton = " ";
@@ -745,7 +749,7 @@ class ConfigDataLayer extends ControllerComponent {
 						<ConfigDataLayerVector
 							layerTemplates={this.props.store.vectorLayerTemplates}
 							scopes={this.props.store.scopes}
-							places={this.props.store.places}
+							places={places}
 							periods={this.props.store.periods}
 							destinations={destinations}
 							valueTemplate={this.state.current.valueTemplate}
@@ -769,7 +773,7 @@ class ConfigDataLayer extends ControllerComponent {
 						<ConfigDataLayerRaster
 							layerTemplates={this.props.store.rasterLayerTemplates}
 							scopes={this.props.store.scopes}
-							places={this.props.store.places}
+							places={places}
 							periods={this.props.store.periods}
 							valueTemplate={this.state.current.valueTemplate}
 							valueScope={this.state.current.valueScope}
@@ -789,7 +793,7 @@ class ConfigDataLayer extends ControllerComponent {
 						<ConfigDataLayerAnalytical
 							levels={this.props.store.auLevels}
 							scopes={this.props.store.scopes}
-							places={this.props.store.places}
+							places={places}
 							periods={this.props.store.periods}
 							destinations={destinations}
 							valueLevel={this.state.current.valueTemplate}

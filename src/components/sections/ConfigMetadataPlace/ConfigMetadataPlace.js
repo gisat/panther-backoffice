@@ -219,6 +219,10 @@ class ConfigMetadataPlace extends PantherComponent{
 	}
 
 	onChangeBoundingBoxToMap(valueBoundingBox) {
+		if(!valueBoundingBox) {
+			return;
+		}
+
 		var values = valueBoundingBox.split(",");
 		if(values.length > 3) {
 			var selectedPoints = [
