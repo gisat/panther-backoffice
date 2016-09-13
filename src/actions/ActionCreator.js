@@ -6,7 +6,6 @@ import logger from '../core/Logger'
 export default {
 
 	createObjectAndRespond: function(model,objectType,responseData,stateHash) {
-
 		var action = {
 			type: null,
 			model: model,
