@@ -172,6 +172,8 @@ class ApiStore extends Store {
 				thisStore.emitChange();
 				thisStore.emit(EventTypes.OBJECT_CREATED,result,responseData,responseStateHash);
 			});
+		}, function(error){
+			thisStore.emit(EventTypes.API_ERROR, error);
 		});
 	}
 

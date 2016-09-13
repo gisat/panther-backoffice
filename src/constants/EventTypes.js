@@ -4,5 +4,6 @@ export default keyMirror({
 	STORE_CHANGE: null,
 	OBJECT_CREATED: null,
 	SCREEN_OPENED: null,
-	SCREEN_FOCUS: null
+	SCREEN_FOCUS: null,
+	API_ERROR: null
 });
