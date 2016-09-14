@@ -1,12 +1,13 @@
 import Model from './Model';
 import UserStore from '../stores/UserStore';
 import ScopeStore from '../stores/ScopeStore';
+import config from '../config';
 
 
 class PlaceModel extends Model {
 
 	data() {
-		return {
+		let ret = {
 			key: {
 				serverName: '_id', //number
 				sendToServer: true
@@ -63,6 +64,19 @@ class PlaceModel extends Model {
 				sendToServer: false //for now
 			}
 		};
+
+		if (config.models.hasOwnProperty('place')) {
+
+			if (config.models.place.description) {
+				ret.description = {
+					serverName: 'description', //string
+					sendToServer: true
+				};
+			}
+
+		}
+
+		return ret;
 	}
 
 }
