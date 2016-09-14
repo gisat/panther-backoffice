@@ -79,10 +79,11 @@ export default {
 		AppDispatcher.dispatch(action);
 	},
 
-	handleObjects: function(data,objectType) {
+	handleObjects: function(data, objectType, operationId) {
 		var action = {
 			type: null,
-			data: data
+			data: data,
+			operationId: operationId
 		};
 		logger.trace("ActionCreator# handleObjects(), Object type:", objectType);
 		switch (objectType) {

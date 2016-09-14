@@ -22,6 +22,19 @@ class Store extends EventEmitter {
 		this.removeListener(EventTypes.STORE_CHANGE, callback);
 	}
 
+	emitError(error, operationId, data) {
+		logger.trace(this.constructor.name + ":Store# emitError()");
+		this.emit(EventTypes.STORE_ERROR, error, operationId, data);
+	}
+
+	addErrorListener(callback) {
+		this.on(EventTypes.STORE_ERROR, callback);
+	}
+
+	removeErrorListener(callback) {
+		this.removeListener(EventTypes.STORE_ERROR, callback);
+	}
+
 
 	getFiltered(options){
 		return Promise.resolve(null);

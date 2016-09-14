@@ -64,7 +64,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			break;
 		case ActionTypes.OBJECT_RELATION_HANDLE:
 			//storeInstance.handle(action.data);
-			storeInstance.handle(action.data);
+			storeInstance.handle(action.data, action.operationId);
 			break;
 		default:
 			return;

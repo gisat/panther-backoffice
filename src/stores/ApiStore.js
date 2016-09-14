@@ -106,7 +106,7 @@ class ApiStore extends Store {
 	 * Handle requests asynchronously or in synchronous batches. When all is resolved, reloads the store.
 	 * @param actionData Array of arrays (of synchronous batches of requests) or array of requests
 	 */
-	handle(actionData) {
+	handle(actionData, operationId) {
 
 		// if not arrray of arrays (batches of commands)
 		if(!Array.isArray(actionData[0])){
@@ -139,6 +139,8 @@ class ApiStore extends Store {
 				Promise.all(promises).then(function(){
 					logger.trace("Store# handle(), Batch finished");
 					callback(); // this is how one cycle says it's finished
+				}, function(err){
+					callback(err);
 				});
 			}.bind(this),
 
@@ -146,6 +148,7 @@ class ApiStore extends Store {
 			function(err){
 				logger.trace("Store# handle(), Final callback", err);
 				if(err){
+					this.emitError(err, operationId);
 					return logger.error("Store# handle(), Error: ", err);
 				}
 				this.reload();

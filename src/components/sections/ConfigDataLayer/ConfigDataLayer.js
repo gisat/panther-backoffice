@@ -160,6 +160,7 @@ class ConfigDataLayer extends ControllerComponent {
 		this.responseListener.add(AULevelStore);
 		this.responseListener.add(PlaceStore);
 		this.responseListener.add(PeriodStore);
+		this.errorListener.add(ObjectRelationStore);
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -304,7 +305,7 @@ class ConfigDataLayer extends ControllerComponent {
 	}
 
 	saveForm() {
-		super.saveForm();
+		let operationId = super.saveForm();
 		var AUPeriods = null;
 		if(this.state.current.layerType == "au" && this.state.current.valueScope[0]){
 			let scope = _.findWhere(this.props.store.scopes,{key: this.state.current.valueScope[0]});
@@ -537,7 +538,7 @@ class ConfigDataLayer extends ControllerComponent {
 			actionData[1].push({type:"delete",model:unusedModel});
 		});
 		logger.trace("ConfigDataLayer# saveForm(), Action data:", actionData);
-		ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION);
+		ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION, operationId);
 
 	}
 

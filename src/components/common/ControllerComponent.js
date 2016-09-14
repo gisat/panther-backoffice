@@ -27,7 +27,8 @@ var initialState = {
 	invalid: false,
 	built: false,
 	updated: false,
-	saving: false
+	saving: false,
+	saveOperation: null
 };
 
 class ControllerComponent extends PantherComponent {
@@ -42,6 +43,7 @@ class ControllerComponent extends PantherComponent {
 		logger.info("ControllerComponent# constructor(), Props: ", props);
 
 		this.responseListener = new ListenerHandler(this, this._onStoreResponse, 'addResponseListener', 'removeResponseListener');
+		this.errorListener = new ListenerHandler(this, this._onStoreError, 'addErrorListener', 'removeErrorListener');
 	}
 
 	componentDidMount() {
@@ -92,11 +94,26 @@ class ControllerComponent extends PantherComponent {
 	}
 
 	/**
-	 * Hook. This method is called whenever store responds to action, which this component listens to.
+	 * Hook. This method is called whenever store, which this component listens to, responds to action.
 	 * To be overridden by descendants.
 	 * @private
 	 */
 	_onStoreResponse() {}
+
+	/**
+	 * This method is called whenever store, which this component listens to, emits error.
+	 * @private
+	 */
+	_onStoreError(error, operationId, data) {
+		logger.trace(this.constructor.name + ":ControllerComponent# _onStoreError() 1");
+		if (operationId==this.state.saveOperation) {
+			logger.trace(this.constructor.name + ":ControllerComponent# _onStoreError()");
+			this.setState({
+				saving: false,
+				saveOperation: null
+			});
+		}
+	}
 
 	componentWillUpdate() {
 		this.mounted = true;
@@ -107,6 +124,7 @@ class ControllerComponent extends PantherComponent {
 		this.mounted = false;
 
 		this.responseListener.clean();
+		this.errorListener.clean();
 	}
 
 
@@ -206,10 +224,13 @@ class ControllerComponent extends PantherComponent {
 
 
 	saveForm() {
+		let guid = utils.guid();
 		this.setState({
-			saving: true
+			saving: true,
+			saveOperation: guid
 		});
 		this.acceptChange = true;
+		return guid;
 	}
 }
 
