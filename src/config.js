@@ -1,27 +1,63 @@
-/*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
+/**
+ * CONFIG
+ *
+ * Per-instance values, development values & features.
+ * Versions/variants managed in github.com/gisat/docker/
+ */
+import _ from 'underscore';
 
-export const googleAnalyticsId = 'UA-XXXXX-X'; // edit this on deploy
-export const publicPath = ""; ///// don't forget leading slash. like this: /backoffice
-export const serverPort = 5555;
+/**
+ * DEFAULT VALUES (fallback)
+ * Used if not specified in rewrites.
+ */
+import defaults from './configDefaults';
 
-export const apiProtocol = "http://";
-export const apiHost = "localhost:4000"; //host + port
-export const apiPath = "/";
+/**
+ * CONFIG
+ */
+let rewrites = {
 
-export const geonodeProtocol = "http://";
-export const geonodeAddress = "localhost/geonode"; //address - host + port + base path
+	loggingLevel: 0,
 
-export const geoserverProtocol = "http://";
-export const geoserverAddress = "localhost/geoserver"; //address - host + port + base path
+};
 
-export const frontOfficeProtocol = "http://";
-export const frontOfficeAddress = "localhost"; //address - host + port + base path
-export const frontOfficeExplorationPath = "";
+/**
+ * getter
+ * todo review usage
+ */
+let methods = {
+	get: function(key) {
+		if (rewrites.hasOwnProperty(key)) {
+			return rewrites[key];
+		}
+		else if (defaults.hasOwnProperty(key)) {
+			// log use of default?
+			return defaults[key];
+		}
+		else {
+			throw 'Invalid config key requested';
+		}
+	}
+};
 
-// 0 means TRACE and higher. Use when you want to see all messages.
-// 1 means INFO and higher
-// 2 means WARN and higher
-// 3 means ERROR only
-// 4 means nothing from our application will be displayed. This should be default for production use.
-// Any other or none means INFO as this is default logging level.
-export const loggingLevel = 0;
+let config = _.assign({}, defaults, rewrites, methods);
+export default config;
+
+
+/**
+ * legacy exports - to be removed
+ */
+export const googleAnalyticsId = config.googleAnalyticsId;
+export const publicPath = config.publicPath;
+export const serverPort = config.serverPort;
+export const apiProtocol = config.apiProtocol;
+export const apiHost = config.apiHost;
+export const apiPath = config.apiPath;
+export const geonodeProtocol = config.geonodeProtocol;
+export const geonodeAddress = config.geonodeAddress;
+export const geoserverProtocol = config.geoserverProtocol;
+export const geoserverAddress = config.geoserverAddress;
+export const frontOfficeProtocol = config.frontOfficeProtocol;
+export const frontOfficeAddress = config.frontOfficeAddress;
+export const frontOfficeExplorationPath = config.frontOfficeExplorationPath;
+export const loggingLevel = config.loggingLevel;
