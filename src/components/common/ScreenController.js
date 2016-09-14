@@ -32,7 +32,7 @@ class ScreenController extends PantherComponent {
 		super(props);
 		this.state = utils.deepClone(initialState); //descendants MUST NOT set state (only merge) in constructor
 
-		logger.info("ScreenController# constructor(), Props: ", props);
+		logger.info(this.constructor.name + ":ScreenController# constructor(), Props: ", props);
 
 		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
 	}
@@ -147,7 +147,7 @@ class ScreenController extends PantherComponent {
 	 * @returns {Promise} of (possibly partial) state object
 	 */
 	getStateFromStores(map, limitKeys) {
-		logger.info("ScreenController# getStateFromStores(), Data: ", map, ", limited to keys:", limitKeys);
+		logger.info(this.constructor.name + ":ScreenController# getStateFromStores(), Data: ", map, ", limited to keys:", limitKeys);
 
 		return new Promise ( function (resolve, reject) {
 			var setAll = false;

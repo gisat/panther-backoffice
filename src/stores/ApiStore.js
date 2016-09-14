@@ -31,7 +31,7 @@ class ApiStore extends Store {
 	 * To be overridden
 	 */
 	getApiUrl(){
-		logger.error("Store# getApiUrl(), getApiUrl not overridden");
+		logger.error(this.constructor.name + ":ApiStore# getApiUrl(), getApiUrl not overridden");
 	}
 
 	getCreateApiUrl() {
@@ -45,7 +45,7 @@ class ApiStore extends Store {
 	registerListeners(){}
 
 	getInstance(options,data){
-		logger.error("Store# getInstance(options, data), getInstance not overridden", options, data);
+		logger.error(this.constructor.name + ":ApiStore# getInstance(options, data), getInstance not overridden", options, data);
 		return {};
 	}
 
@@ -61,17 +61,17 @@ class ApiStore extends Store {
 	}
 
 	reload() {
-		logger.trace("Store# reload(), In progress: ", this.reloadInProgress);
+		logger.trace(this.constructor.name + ":ApiStore# reload(), In progress: ", this.reloadInProgress);
 		if(this.reloadInProgress) {
 			return;
 		}
 		this.reloadInProgress = true;
 		var guid = utils.guid();
-		logger.trace("Store# reload(), GUID: ", guid, ",Current store: ", this);
+		logger.trace(this.constructor.name + ":ApiStore# reload(), GUID: ", guid);
 		var thisStore = this;
 		this._models = this.load();
 		this._models.then(function(){
-			logger.trace("Store# reload(), Models loading finished, GUID: ", guid, ", Current store: ", thisStore);
+			logger.trace(thisStore.constructor.name + ":ApiStore# reload(), Models loading finished, GUID: ", guid);
 			thisStore.reloadInProgress = false;
 			thisStore.emitChange();
 		});
@@ -105,8 +105,10 @@ class ApiStore extends Store {
 	/**
 	 * Handle requests asynchronously or in synchronous batches. When all is resolved, reloads the store.
 	 * @param actionData Array of arrays (of synchronous batches of requests) or array of requests
+	 * @param operationId Operation ID to send in case of error
 	 */
 	handle(actionData, operationId) {
+		var thisStore = this;
 
 		// if not arrray of arrays (batches of commands)
 		if(!Array.isArray(actionData[0])){
@@ -121,7 +123,7 @@ class ApiStore extends Store {
 			// this is the iterator
 			// it works synchronous in async.eachSeries - it's waiting for each cycle to be finished
 			function(batch, callback){
-				logger.trace("Store# handle(), Batch", batch);
+				logger.trace(this.constructor.name + ":ApiStore# handle(), Batch", batch);
 				var promises = [];
 				batch.forEach(function(action){
 					switch (action.type) {
@@ -137,7 +139,7 @@ class ApiStore extends Store {
 					}
 				}, this);
 				Promise.all(promises).then(function(){
-					logger.trace("Store# handle(), Batch finished");
+					logger.trace(thisStore.constructor.name + ":ApiStore# handle(), Batch finished");
 					callback(); // this is how one cycle says it's finished
 				}, function(err){
 					callback(err);
@@ -146,10 +148,10 @@ class ApiStore extends Store {
 
 			// this is the final callback of async.eachSeries
 			function(err){
-				logger.trace("Store# handle(), Final callback", err);
+				logger.trace(this.constructor.name + ":ApiStore# handle(), Final callback", err);
 				if(err){
 					this.emitError(err, operationId);
-					return logger.error("Store# handle(), Error: ", err);
+					return logger.error(this.constructor.name + ":ApiStore# handle(), Error: ", err);
 				}
 				this.reload();
 			}.bind(this)
@@ -159,7 +161,7 @@ class ApiStore extends Store {
 
 	createObjectAndRespond(model,responseData,responseStateHash) {
 		let guid = utils.guid();
-		logger.trace("Store# createObjectAndRespond(), Response data",responseData, ", GUID: ", guid);
+		logger.trace(this.constructor.name + ":ApiStore# createObjectAndRespond(), Response data",responseData, ", GUID: ", guid);
 		// todo ? Model.resolveForServer ?
 		//var object = {
 		//	name: objectData.name,
@@ -169,9 +171,9 @@ class ApiStore extends Store {
 		var resultPromise = this.create(model);
 
 		resultPromise.then(function(result){
-			logger.trace("Store# createObjectAndRespond(), Promise resolved - Result", result, ", Current store: ", thisStore, ", GUID: ", guid);
+			logger.trace(thisStore.constructor.name + ":ApiStore# createObjectAndRespond(), Promise resolved - Result", result, ", GUID: ", guid);
 			thisStore.reload().then(function(){
-				logger.trace("Store# createObjectAndRespond(), Reload finished", result, ", GUID: ", guid);
+				logger.trace(thisStore.constructor.name + ":ApiStore# createObjectAndRespond(), Reload finished", result, ", GUID: ", guid);
 				thisStore.emitChange();
 				thisStore.emit(EventTypes.OBJECT_CREATED,result,responseData,responseStateHash);
 			});
@@ -190,7 +192,7 @@ class ApiStore extends Store {
 			var url = apiProtocol + apiHost + path.join(apiPath, apiUrl).replace(/\\/g, "/");
 			var communicationObject = superagent(method.toUpperCase(), url);
 			communicationObject._callback = function(){
-				logger.info("Store# request(), Argument: ",arguments[0]);
+				logger.info(thisStore.constructor.name + ":ApiStore# request(), Argument: ",arguments[0]);
 			};
 				communicationObject.send(object)
 				.withCredentials()
@@ -202,7 +204,7 @@ class ApiStore extends Store {
 					// No response
 					if(typeof res == 'undefined'){
 						let errorMessage = err ? "Server request failed\nError message: " + err : "Error: Empty response";
-						logger.error("Store#request " + errorMessage);
+						logger.error(thisStore.constructor.name + ":ApiStore#request " + errorMessage);
 						utils.displayMessage(errorMessage);
 						reject(err);
 						return;
@@ -210,7 +212,7 @@ class ApiStore extends Store {
 
 					// Response present, but with empty text
 					if(!res.text) {
-						logger.warn("Store#request No data was returned.");
+						logger.warn(thisStore.constructor.name + ":ApiStore#request No data was returned.");
 						resolve();
 						return;
 					}
@@ -220,7 +222,7 @@ class ApiStore extends Store {
 						var responseJson = JSON.parse(res.text);
 					}catch(e){
 						let errorMessage = "Error: Failed to parse server response.";
-						logger.error("Store#request JSON parse: " + errorMessage);
+						logger.error(thisStore.constructor.name + ":ApiStore#request JSON parse: " + errorMessage);
 						utils.displayMessage(errorMessage);
 						reject(e);
 						return;

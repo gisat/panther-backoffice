@@ -105,7 +105,6 @@ class ControllerComponent extends PantherComponent {
 	 * @private
 	 */
 	_onStoreError(error, operationId, data) {
-		logger.trace(this.constructor.name + ":ControllerComponent# _onStoreError() 1");
 		if (operationId==this.state.saveOperation) {
 			logger.trace(this.constructor.name + ":ControllerComponent# _onStoreError()");
 			this.setState({
@@ -154,7 +153,7 @@ class ControllerComponent extends PantherComponent {
 			}
 		}
 		else {
-			logger.info("ControllerComponent# reloadState(), Component is already unmounted." + this);
+			logger.info(this.constructor.name + ":ControllerComponent# reloadState(), Component is already unmounted." + this);
 		}
 	}
 

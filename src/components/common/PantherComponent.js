@@ -14,7 +14,7 @@ class PantherComponent extends Component {
 
 		// todo legacy
 		this.acceptChange = true;
-		logger.info("PantherComponent# constructor(), Props: ", props);
+		logger.info(this.constructor.name + ":PantherComponent# constructor(), Props: ", props);
 
 		// todo legacy, remove after all components moved to ScreenController or ControllerComponent
 		this.changeListener = new ListenerHandler(this, this._onStoreChange, 'addChangeListener', 'removeChangeListener');
@@ -70,10 +70,10 @@ class PantherComponent extends Component {
 		var component = this;
 		return statePromise.then(function(map){
 			if(component.mounted) {
-				logger.trace("PantherComponent# setStateFromStores(), Data to set: ", map, ", Current Component: ", component);
+				logger.trace(component.constructor.name + ":PantherComponent# setStateFromStores(), Data to set: ", map);
 				component.setState(map);
 			} else {
-				logger.info("PantherComponent# setStateFromStores(), Component is already unmounted." + component);
+				logger.info(component.constructor.name + ":PantherComponent# setStateFromStores(), Component is already unmounted.");
 				component.render();
 			}
 		});
@@ -87,7 +87,7 @@ class PantherComponent extends Component {
 	 * @returns {Promise} of (possibly partial) state object
 	 */
 	getStateFromStores(map, limitKeys) {
-		logger.info("PantherComponent# getStateFromStores(), Data: ", map, ", limited to keys:", limitKeys);
+		logger.info(this.constructor.name + ":PantherComponent# getStateFromStores(), Data: ", map, ", limited to keys:", limitKeys);
 
 		return new Promise ( function (resolve, reject) {
 			var setAll = false;
@@ -128,12 +128,12 @@ class PantherComponent extends Component {
 	 * @param callback
 	 */
 	setStateDeep(updatePath, callback) {
-		logger.trace("PantherComponent# setStateDeep(), Current this: ", this, ", updatePath: ", updatePath);
+		logger.trace(this.constructor.name + ":PantherComponent# setStateDeep(), updatePath: ", updatePath);
 		if(this.mounted) {
 			var updatedState = update(this.state, updatePath);
 			this.setState(updatedState, callback);
 		} else {
-			logger.warn("PantherComponent# setStateDeep(), Tries to update deep state of unmounted component.", updatePath);
+			logger.warn(this.constructor.name + ":PantherComponent# setStateDeep(), Tries to update deep state of unmounted component.", updatePath);
 		}
 	}
 
