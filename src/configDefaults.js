@@ -45,7 +45,7 @@ export default {
 	// 3 means ERROR only
 	// 4 means nothing from our application will be displayed. This should be default for production use.
 	// Any other or none means INFO as this is default logging level.
-	loggingLevel: 0,
+	loggingLevel: 4,
 
 
 	/**
