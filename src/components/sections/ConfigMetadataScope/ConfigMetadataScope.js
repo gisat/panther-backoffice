@@ -3,7 +3,7 @@ import ControllerComponent from '../../common/ControllerComponent';
 
 import utils from '../../../utils/utils';
 
-import { Input, Button } from '../../SEUI/elements';
+import { Input, IconButton } from '../../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
@@ -69,10 +69,10 @@ class ConfigMetadataScope extends ControllerComponent {
 		if(props.selectorValue) {
 			let scope = _.findWhere(props.store.scopes, {key: props.selectorValue});
 			nextState = {
-				valueActive: scope.active,
-				valueName: scope.name,
-				valuesAULevels: utils.getModelsKeys(scope.levels),
-				valuesPeriods: utils.getModelsKeys(scope.periods)
+				valueActive: scope ? scope.active : false,
+				valueName: scope ? scope.name : "",
+				valuesAULevels: scope ? utils.getModelsKeys(scope.levels) : [],
+				valuesPeriods: scope ? utils.getModelsKeys(scope.periods) : []
 			};
 		}
 		return nextState;
@@ -259,22 +259,23 @@ class ConfigMetadataScope extends ControllerComponent {
 		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
+	onDeleteClick() {
+		let scope = new Model[ObjectTypes.SCOPE]({key: this.props.selectorValue});
+		//let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
+		let actionData = [{type:"delete", model:scope}];
+		ActionCreator.handleObjects(actionData, ObjectTypes.SCOPE);
+		ActionCreator.closeScreen(this.props.screenKey); //todo do something more inteligent
+	}
+
 
 	render() {
 
+		let ret = null;
+
+		if (this.state.built) {
+
 		let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
 
-		var saveButton = " ";
-		if (this.state.built) {
-			saveButton = (
-				<SaveButton
-					saved={this.equalStates(this.state.current,this.state.saved)}
-					saving={this.state.saving}
-					className="save-button"
-					onClick={this.saveForm.bind(this)}
-				/>
-			);
-		}
 
 		var isActiveText = "inactive";
 		var isActiveClasses = "activeness-indicator";
@@ -283,7 +284,7 @@ class ConfigMetadataScope extends ControllerComponent {
 			isActiveClasses = "activeness-indicator active";
 		}
 
-		return (
+		ret = (
 			<div>
 
 				<div className="frame-input-wrapper">
@@ -356,10 +357,39 @@ class ConfigMetadataScope extends ControllerComponent {
 					</div>
 				</div>
 
-				{saveButton}
+				<div className="config-controls">
+					<div className="config-controls-left">
+						<SaveButton
+							saved={this.equalStates(this.state.current,this.state.saved)}
+							saving={this.state.saving}
+							disabled={this.props.disabled}
+							className="save-button"
+							onClick={this.saveForm.bind(this)}
+						/>
+					</div>
+					<div className="config-controls-right">
+						<IconButton
+							name="trash outline"
+							basic
+							disabled={this.props.disabled}
+							className="delete-button"
+							onClick={this.onDeleteClick.bind(this)}
+						>
+							Delete
+						</IconButton>
+					</div>
+				</div>
 
 			</div>
 		);
+
+		} else {
+			ret = (
+				<div className="component-loading"></div>
+			);
+		}
+
+		return ret;
 
 	}
 }

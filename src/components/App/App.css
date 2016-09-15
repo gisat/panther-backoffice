@@ -1339,6 +1339,18 @@ a.ptr-item {
 	background: #f60;
 }
 
+.config-controls {
+	position: relative;
+}
+.config-controls-left {
+	position: absolute;
+	left: 0;
+}
+.config-controls-right {
+	position: absolute;
+	right: 0;
+}
+
 
 .UIObjectSelect-control {
 	display: block;

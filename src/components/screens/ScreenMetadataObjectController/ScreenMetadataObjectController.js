@@ -138,7 +138,8 @@ class ScreenMetadataObjectController extends ControllerComponent {
 			var props = {
 				disabled: this.props.disabled,
 				selectorValue: this.state.ui.selectorValue,
-				store: this.props.store
+				store: this.props.store,
+				screenKey: this.props.screenKey
 				//parentUrl: this.getUrl()
 			};
 			switch (this.props.data.objectType) {
