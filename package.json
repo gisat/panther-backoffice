@@ -70,7 +70,7 @@
     "replace": "^0.3.0",
     "style-loader": "^0.12.4",
     "url-loader": "^0.5.6",
-    "webpack": "^1.12.2",
+    "webpack": "^1.12.15",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-hot-middleware": "^2.3.0"
   },
