@@ -70,7 +70,7 @@ class AttributeModel extends Model {
 						) {
 							return "km2";
 						} else {
-							return null;
+							return "";
 						}
 					}
 
@@ -84,7 +84,7 @@ class AttributeModel extends Model {
 						data == "m2" ||
 						data == "km2"
 					) {
-						return null;
+						return "";
 					} else {
 						return data;
 					}
