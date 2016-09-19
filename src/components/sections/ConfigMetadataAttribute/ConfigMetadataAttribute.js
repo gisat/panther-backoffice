@@ -1,50 +1,52 @@
 import React, { PropTypes, Component } from 'react';
-import PantherComponent from '../../common/PantherComponent';
-import Select from 'react-select';
-
+import ControllerComponent from '../../common/ControllerComponent';
+import ActionCreator from '../../../actions/ActionCreator';
+import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
-
-import { Input, Button } from '../../SEUI/elements';
-import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
-import SaveButton from '../../atoms/SaveButton';
-
-import OptionStandardUnits from '../../atoms/UICustomSelect/OptionStandardUnits';
-import SingleValueStandardUnits from '../../atoms/UICustomSelect/SingleValueStandardUnits';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
+import ScopeModel from '../../../models/ScopeModel';
+import AttributeModel from '../../../models/AttributeModel';
 import AttributeStore from '../../../stores/AttributeStore';
-import TopicStore from '../../../stores/TopicStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
-import ListenerHandler from '../../../core/ListenerHandler';
-import logger from '../../../core/Logger';
+import { Input, Button } from '../../SEUI/elements';
+import { CheckboxFields, Checkbox } from '../../SEUI/modules';
+import Select from 'react-select';
 import {SliderPicker} from 'react-color';
+import ConfigControls from '../../atoms/ConfigControls';
+import OptionStandardUnits from '../../atoms/UICustomSelect/OptionStandardUnits';
+import SingleValueStandardUnits from '../../atoms/UICustomSelect/SingleValueStandardUnits';
+
 
 var initialState = {
-	attribute: null,
 	valueActive: false,
 	valueName: "",
-	valueCode: "",
+	//valueCode: "",
 	//valueType: [],
 	valueType: "",
-	valueUnitsStandard: [],
+	valueUnitsStandard: "",
 	valueUnitsCustom: "",
 	valueColor: ""
 };
 
 
-class ConfigMetadataAttribute extends PantherComponent{
+class ConfigMetadataAttribute extends ControllerComponent {
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
+		scope: PropTypes.instanceOf(ScopeModel),
+		store: PropTypes.shape({
+			attributes: PropTypes.arrayOf(PropTypes.instanceOf(AttributeModel))
+		}).isRequired,
 		selectorValue: React.PropTypes.any
 	};
 
 	static defaultProps = {
 		disabled: false,
+		scope: null,
 		selectorValue: null
 	};
 
@@ -55,88 +57,31 @@ class ConfigMetadataAttribute extends PantherComponent{
 
 	constructor(props) {
 		super(props);
-		this.state = utils.deepClone(initialState);
+		this.state.current = _.assign(this.state.current, utils.deepClone(initialState));
+		this.state.saved = utils.clone(this.state.current);
 	}
 
-	store2state(props) {
-		return {
-			attribute: AttributeStore.getById(props.selectorValue)
-		};
-	}
 
-	setStateFromStores(props,keys) {
+	buildState(props) {
 		if(!props){
 			props = this.props;
 		}
+		let nextState = {};
 		if(props.selectorValue) {
-			var thisComponent = this;
-			let store2state = this.store2state(props);
-			super.setStateFromStores.call(this, store2state, keys);
-			// if stores changed, overrides user input - todo fix
-
-			if(!keys || keys.indexOf("attribute")!=-1) {
-				store2state.attribute.then(function (attribute) {
-					if(thisComponent.acceptChange) {
-						thisComponent.acceptChange = false;
-						let newState = {
-							valueActive: attribute.active,
-							valueName: attribute.name,
-							valueCode: attribute.code,
-							//valueType: attribute.type ? [attribute.type] : [],
-							valueType: attribute.type,
-							valueUnitsStandard: attribute.standardUnits,
-							valueUnitsCustom: attribute.customUnits,
-							valueColor: attribute.color
-						};
-						newState.savedState = utils.deepClone(newState);
-						if (thisComponent.mounted) {
-							thisComponent.setState(newState);
-						}
-					}
-				});
+			let attribute = _.findWhere(props.store.attributes, {key: props.selectorValue});
+			if (attribute) {
+				nextState = {
+					valueActive: attribute.active,
+					valueName: attribute.name,
+					//valueCode: attribute.code,
+					valueType: attribute.type,
+					valueUnitsStandard: attribute.standardUnits,
+					valueUnitsCustom: attribute.customUnits,
+					valueColor: attribute.color
+				};
 			}
 		}
-	}
-
-	_onStoreChange(keys) {
-		logger.trace("ConfigMetadataAttribute# _onStoreChange(), Keys:", keys);
-		this.setStateFromStores(this.props,keys);
-	}
-
-	componentDidMount() {
-		super.componentDidMount();
-		this.changeListener.add(AttributeStore, ["attribute"]);
-
-		this.setStateFromStores();
-	}
-
-	componentWillReceiveProps(newProps) {
-		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.acceptChange = true;
-			this.setStateFromStores(newProps);
-			this.updateStateHash(newProps);
-		}
-	}
-
-
-	/**
-	 * Check if state is the same as it was when loaded from stores
-	 * @returns {boolean}
-	 */
-	isStateUnchanged() {
-		var isIt = true;
-		if(this.state.attribute) {
-			isIt = (
-					this.state.valueActive == this.state.attribute.active &&
-					this.state.valueName == this.state.attribute.name &&
-					//this.state.valueCode == this.state.attribute.code &&
-					_.isEqual(this.state.valueType,this.state.savedState.valueType) &&
-					_.isEqual(this.state.valueUnitsStandard,this.state.savedState.valueUnitsStandard) &&
-					this.state.valueUnitsCustom == this.state.attribute.customUnits &&
-					this.state.valueColor == this.state.attribute.color
-			);
-		}
-		return isIt;
+		return nextState;
 	}
 
 	/**
@@ -150,62 +95,69 @@ class ConfigMetadataAttribute extends PantherComponent{
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
 		this._stateHash = utils.stringHash(props.selectorValue);
 	}
-	getStateHash() {
-		if(!this._stateHash) {
-			this.updateStateHash();
-		}
-		return this._stateHash;
-	}
 
-	saveForm() {
+	saveForm(closePanelAfter) {
 		super.saveForm();
+
 		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.attribute);
-		modelData.active = this.state.valueActive;
-		modelData.name = this.state.valueName;
+		let attribute = _.findWhere(this.props.store.attributes, {key: this.props.selectorValue});
+		_.assign(modelData, attribute);
+		modelData.active = this.state.current.valueActive;
+		modelData.name = this.state.current.valueName;
 		//modelData.code = this.state.valueCode;
-		//modelData.type = _.findWhere(this.state.topics, {key: this.state.valueTopic[0]});
-		modelData.type = this.state.valueType;
-		modelData.standardUnits = this.state.valueUnitsStandard;
-		modelData.customUnits = this.state.valueUnitsCustom;
-		modelData.color = this.state.valueColor;
+		modelData.type = this.state.current.valueType;
+		modelData.standardUnits = this.state.current.valueUnitsStandard;
+		modelData.customUnits = this.state.current.valueUnitsCustom;
+		modelData.color = this.state.current.valueColor;
 		let modelObj = new Model[ObjectTypes.ATTRIBUTE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.ATTRIBUTE);
 	}
 
+	deleteObject() {
+		let model = new Model[ObjectTypes.ATTRIBUTE]({key: this.props.selectorValue});
+		let actionData = [{type:"delete", model:model}];
+		ActionCreator.handleObjects(actionData, ObjectTypes.ATTRIBUTE);
+		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+	}
+
 	onChangeActive() {
-		this.setState({
-			valueActive: !this.state.valueActive
+		this.setCurrentState({
+			valueActive: !this.state.current.valueActive
 		});
 	}
 
 	onChangeName(e) {
-		this.setState({
+		this.setCurrentState({
 			valueName: e.target.value
 		});
 	}
 
 	onChangeCode(e) {
-		this.setState({
+		this.setCurrentState({
 			valueCode: e.target.value
 		});
 	}
 
 	onChangeType (value,values) {
-		this.setState({
+		this.setCurrentState({
 			valueType: value
 		});
 	}
 
 	onChangeUnitsStandard (value,values) {
-		this.setState({
-			valueUnitsStandard: value
+		let valueUnitsCustom = this.state.current.valueUnitsCustom;
+		if (value) {
+			valueUnitsCustom = "";
+		}
+		this.setCurrentState({
+			valueUnitsStandard: value,
+			valueUnitsCustom: valueUnitsCustom
 		});
 	}
 
 	onChangeUnitsCustom(e) {
-		this.setState({
+		this.setCurrentState({
 			valueUnitsCustom: e.target.value
 		});
 	}
@@ -218,33 +170,29 @@ class ConfigMetadataAttribute extends PantherComponent{
 		//	hexCode = "#" + e.target.value;
 		//}
 		// onChange is called per character, validation cannot be here
-		this.setState({
+		this.setCurrentState({
 			valueColor: e.target.value
 		});
 	}
 
 	onChangeColorSlider(color) {
-		this.setState({
+		this.setCurrentState({
 			valueColor: color.hex
 		});
 	}
 
 	render() {
 
-		var saveButton = " ";
-		if (this.state.attribute) {
-			saveButton = (
-				<SaveButton
-					saved={this.isStateUnchanged()}
-					className="save-button"
-					onClick={this.saveForm.bind(this)}
-				/>
-			);
-		}
+		let ret = null;
+
+		if (this.state.built) {
+
+		let attribute = _.findWhere(this.props.store.attributes, {key: this.props.selectorValue});
+
 
 		var isActiveText = "inactive";
 		var isActiveClasses = "activeness-indicator";
-		if(this.state.attribute && this.state.attribute.active){
+		if(attribute && attribute.active){
 			isActiveText = "active";
 			isActiveClasses = "activeness-indicator active";
 		}
@@ -276,7 +224,7 @@ class ConfigMetadataAttribute extends PantherComponent{
 			}
 		];
 
-		return (
+		ret = (
 			<div>
 
 				<div className="frame-input-wrapper required">
@@ -286,7 +234,7 @@ class ConfigMetadataAttribute extends PantherComponent{
 							type="text"
 							name="name"
 							placeholder=" "
-							value={this.state.valueName}
+							value={this.state.current.valueName}
 							onChange={this.onChangeName.bind(this)}
 						/>
 					</label>
@@ -316,7 +264,7 @@ class ConfigMetadataAttribute extends PantherComponent{
 							options={attributeTypes}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valueType}
+							value={this.state.current.valueType}
 						/>
 					</label>
 				</div>
@@ -331,7 +279,7 @@ class ConfigMetadataAttribute extends PantherComponent{
 							singleValueComponent={SingleValueStandardUnits}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valueUnitsStandard}
+							value={this.state.current.valueUnitsStandard}
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
@@ -346,7 +294,7 @@ class ConfigMetadataAttribute extends PantherComponent{
 							type="text"
 							name="customUnits"
 							placeholder=" "
-							value={this.state.valueUnitsCustom}
+							value={this.state.current.valueUnitsCustom}
 							onChange={this.onChangeUnitsCustom.bind(this)}
 						/>
 					</label>
@@ -363,11 +311,11 @@ class ConfigMetadataAttribute extends PantherComponent{
 							type="text"
 							name="color"
 							placeholder=" "
-							value={this.state.valueColor}
+							value={this.state.current.valueColor}
 							onChange={this.onChangeColor.bind(this)}
 						/>
 						<SliderPicker
-							color={this.state.valueColor}
+							color={this.state.current.valueColor}
 							onChange={this.onChangeColorSlider.bind(this)}
 						/>
 					</label>
@@ -376,10 +324,24 @@ class ConfigMetadataAttribute extends PantherComponent{
 					</div>
 				</div>
 
-				{saveButton}
+				<ConfigControls
+					disabled={this.props.disabled}
+					saved={this.equalStates(this.state.current,this.state.saved)}
+					saving={this.state.saving}
+					onSave={this.saveForm.bind(this)}
+					onDelete={this.deleteObject.bind(this)}
+				/>
 
 			</div>
 		);
+
+		} else {
+			ret = (
+				<div className="component-loading"></div>
+			);
+		}
+
+		return ret;
 
 	}
 }
