@@ -1,16 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import ControllerComponent from '../../common/ControllerComponent';
-
+import ActionCreator from '../../../actions/ActionCreator';
+import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
-
-import { Input, IconButton } from '../../SEUI/elements';
-import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
-import UIObjectSelect from '../../atoms/UIObjectSelect';
-import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
 import ScopeModel from '../../../models/ScopeModel';
 import AULevelModel from '../../../models/AULevelModel';
 import PeriodModel from '../../../models/PeriodModel';
@@ -20,7 +15,11 @@ import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
-import logger from '../../../core/Logger';
+import { Input, IconButton } from '../../SEUI/elements';
+import { CheckboxFields, Checkbox } from '../../SEUI/modules';
+import UIObjectSelect from '../../atoms/UIObjectSelect';
+import ConfigControls from '../../atoms/ConfigControls';
+
 
 var initialState = {
 	valueActive: false,
@@ -68,12 +67,14 @@ class ConfigMetadataScope extends ControllerComponent {
 		let nextState = {};
 		if(props.selectorValue) {
 			let scope = _.findWhere(props.store.scopes, {key: props.selectorValue});
-			nextState = {
-				valueActive: scope ? scope.active : false,
-				valueName: scope ? scope.name : "",
-				valuesAULevels: scope ? utils.getModelsKeys(scope.levels) : [],
-				valuesPeriods: scope ? utils.getModelsKeys(scope.periods) : []
-			};
+			if (scope) {
+				nextState = {
+					valueActive: scope.active,
+					valueName: scope.name,
+					valuesAULevels: utils.getModelsKeys(scope.levels),
+					valuesPeriods: utils.getModelsKeys(scope.periods)
+				};
+			}
 		}
 		return nextState;
 	}
@@ -133,7 +134,7 @@ class ConfigMetadataScope extends ControllerComponent {
 		this._stateHash = utils.stringHash(this.props.selectorValue);
 	}
 
-	saveForm() {
+	saveForm(closePanelAfter) {
 		super.saveForm();
 
 		var actionData = [], modelData = {};
@@ -259,12 +260,12 @@ class ConfigMetadataScope extends ControllerComponent {
 		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
-	onDeleteClick() {
+	deleteObject() {
 		let scope = new Model[ObjectTypes.SCOPE]({key: this.props.selectorValue});
 		//let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
 		let actionData = [{type:"delete", model:scope}];
 		ActionCreator.handleObjects(actionData, ObjectTypes.SCOPE);
-		ActionCreator.closeScreen(this.props.screenKey); //todo do something more inteligent
+		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
 	}
 
 
@@ -357,28 +358,13 @@ class ConfigMetadataScope extends ControllerComponent {
 					</div>
 				</div>
 
-				<div className="config-controls">
-					<div className="config-controls-left">
-						<SaveButton
-							saved={this.equalStates(this.state.current,this.state.saved)}
-							saving={this.state.saving}
-							disabled={this.props.disabled}
-							className="save-button"
-							onClick={this.saveForm.bind(this)}
-						/>
-					</div>
-					<div className="config-controls-right">
-						<IconButton
-							name="trash outline"
-							basic
-							disabled={this.props.disabled}
-							className="delete-button"
-							onClick={this.onDeleteClick.bind(this)}
-						>
-							Delete
-						</IconButton>
-					</div>
-				</div>
+				<ConfigControls
+					disabled={this.props.disabled}
+					saved={this.equalStates(this.state.current,this.state.saved)}
+					saving={this.state.saving}
+					onSave={this.saveForm.bind(this)}
+					onDelete={this.deleteObject.bind(this)}
+				/>
 
 			</div>
 		);

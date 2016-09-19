@@ -1,0 +1,6 @@
+{
+	"name": "ConfigControls",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./ConfigControls.js"
+}
