@@ -491,6 +491,7 @@ class ScreenAnalysisRulesSpatial extends PantherComponent {
 				let operations = _.values(analysisOperationsMetadata.SPATIAL);
 				let resultAttSet = _.findWhere(this.state.attributeSetsResult, {key: this.state.valueResultAttSet[0]});
 				for (let attribute of resultAttSet.attributes) {
+					var operationType = (attributeMapRow && attributeMapRow.operationType) || null;
 					let attributeMap = this.state.valueAttributeMaps[this.state.valueResultAttSet];
 					let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute});
 					let operationCellInsert = (
@@ -502,7 +503,7 @@ class ScreenAnalysisRulesSpatial extends PantherComponent {
 									options={operations}
 									valueKey="key"
 									labelKey="name"
-									value={attributeMapRow.operationType}
+									value={operationType}
 									clearable={false}
 								/>
 							</label>
@@ -514,7 +515,7 @@ class ScreenAnalysisRulesSpatial extends PantherComponent {
 						valueCellCaption = "",
 						valueDestination = null,
 						weightingDestination = null;
-					switch (attributeMapRow.operationType) {
+					switch (operationType) {
 						case analysisOperationsMetadata.SPATIAL[AnalysisOperations.SPATIAL.SUM_ATTRIBUTE].key:
 							insertValueCell = true;
 							valueCellCaption = "Attribute to sum";
