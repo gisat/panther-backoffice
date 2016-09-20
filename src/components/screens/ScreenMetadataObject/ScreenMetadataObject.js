@@ -89,7 +89,7 @@ class ScreenMetadataObject extends ScreenController {
 				break;
 			case ObjectTypes.AU_LEVEL:
 				storeloads = {
-					layers: this._load(AULevelStore)
+					levels: this._load(AULevelStore)
 				};
 				break;
 			case ObjectTypes.ATTRIBUTE:
@@ -123,7 +123,8 @@ class ScreenMetadataObject extends ScreenController {
 				break;
 			case ObjectTypes.STYLE:
 				storeloads = {
-					styles: this._load(StyleStore)
+					styles: this._load(StyleStore),
+					attributeSets: this._load(AttributeSetStore)
 				};
 				break;
 		}

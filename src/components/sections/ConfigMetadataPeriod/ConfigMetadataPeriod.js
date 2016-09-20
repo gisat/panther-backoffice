@@ -1,34 +1,31 @@
 import React, { PropTypes, Component } from 'react';
 import ControllerComponent from '../../common/ControllerComponent';
-
+import ActionCreator from '../../../actions/ActionCreator';
+import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
-
-import { Input } from '../../SEUI/elements';
 import _ from 'underscore';
-import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
 import ScopeModel from '../../../models/ScopeModel';
 import PeriodModel from '../../../models/PeriodModel';
 
-import logger from '../../../core/Logger';
+import { Input } from '../../SEUI/elements';
+import ConfigControls from '../../atoms/ConfigControls';
 
 var initialState = {
-	valueActive: false,
 	valueName: ""
 };
 
 
-class ConfigMetadataPeriod extends ControllerComponent{
+class ConfigMetadataPeriod extends ControllerComponent {
 
 	static propTypes = {
-		disabled: React.PropTypes.bool,
+		disabled: PropTypes.bool,
 		scope: PropTypes.instanceOf(ScopeModel),
 		store: PropTypes.shape({
 			periods: PropTypes.arrayOf(PropTypes.instanceOf(PeriodModel))
 		}).isRequired,
-		selectorValue: React.PropTypes.any
+		selectorValue: PropTypes.any
 	};
 
 	static defaultProps = {
@@ -54,7 +51,6 @@ class ConfigMetadataPeriod extends ControllerComponent{
 		if(props.selectorValue) {
 			let period = _.findWhere(props.store.periods, {key: props.selectorValue});
 			nextState = {
-				valueActive: period.active,
 				valueName: period.name
 			};
 		}
@@ -74,8 +70,9 @@ class ConfigMetadataPeriod extends ControllerComponent{
 		this._stateHash = utils.stringHash(props.selectorValue);
 	}
 
-	saveForm() {
+	saveForm(closePanelAfter) {
 		super.saveForm();
+
 		var actionData = [], modelData = {};
 		let period = _.findWhere(this.props.store.periods, {key: this.props.selectorValue});
 		_.assign(modelData, period);
@@ -86,11 +83,13 @@ class ConfigMetadataPeriod extends ControllerComponent{
 		ActionCreator.handleObjects(actionData,ObjectTypes.PERIOD);
 	}
 
-	onChangeActive() {
-		this.setCurrentState({
-			valueActive: !this.state.current.valueActive
-		});
+	deleteObject() {
+		let model = new Model[ObjectTypes.PERIOD]({key: this.props.selectorValue});
+		let actionData = [{type:"delete", model:model}];
+		ActionCreator.handleObjects(actionData, ObjectTypes.PERIOD);
+		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
 	}
+
 
 	onChangeName(e) {
 		this.setCurrentState({
@@ -103,23 +102,7 @@ class ConfigMetadataPeriod extends ControllerComponent{
 
 		let ret = null;
 
-		var saveButton = " ";
-		let period = _.findWhere(this.props.store.periods, {key: this.props.selectorValue});
-		if (period && this.state.built) {
-			saveButton = (
-				<SaveButton
-					saved={this.equalStates(this.state.current,this.state.saved)}
-					saving={this.state.saving}
-					className="save-button"
-					onClick={this.saveForm.bind(this)}
-				/>
-			);
-			// var isActiveText = "inactive";
-			// var isActiveClasses = "activeness-indicator";
-			// if(period && period.active){
-			// 	isActiveText = "active";
-			// 	isActiveClasses = "activeness-indicator active";
-			// }
+		if (this.state.built) {
 
 			ret = (
 				<div>
@@ -137,12 +120,23 @@ class ConfigMetadataPeriod extends ControllerComponent{
 						</label>
 					</div>
 
-					{saveButton}
+					<ConfigControls
+						disabled={this.props.disabled}
+						saved={this.equalStates(this.state.current,this.state.saved)}
+						saving={this.state.saving}
+						onSave={this.saveForm.bind(this)}
+						onDelete={this.deleteObject.bind(this)}
+					/>
 
 				</div>
 			);
 
+		} else {
+			ret = (
+				<div className="component-loading"></div>
+			);
 		}
+
 		return ret;
 	}
 }

@@ -165,7 +165,7 @@ class ScreenMetadataObjectController extends ControllerComponent {
 					break;
 				case ObjectTypes.AU_LEVEL:
 					configComponent = <ConfigMetadataAULevel {...props} />;
-					selectorData = this.props.store.layers;
+					selectorData = this.props.store.levels;
 					break;
 				case ObjectTypes.ATTRIBUTE:
 					configComponent = <ConfigMetadataAttribute {...props} />;

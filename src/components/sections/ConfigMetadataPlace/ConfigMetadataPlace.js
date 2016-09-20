@@ -1,47 +1,53 @@
 import React, { PropTypes, Component } from 'react';
-import PantherComponent from '../../common/PantherComponent';
-
+import ControllerComponent from '../../common/ControllerComponent';
+import ActionCreator from '../../../actions/ActionCreator';
+import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
-
-import { Input, Button } from '../../SEUI/elements';
-import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
-import UIObjectSelect from '../../atoms/UIObjectSelect';
-import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
+import ScopeModel from '../../../models/ScopeModel';
+import PlaceModel from '../../../models/PlaceModel';
 import PlaceStore from '../../../stores/PlaceStore';
 import ScopeStore from '../../../stores/ScopeStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
-import WorldWindow from '../../WorldWindow';
 
-import ListenerHandler from '../../../core/ListenerHandler';
-import logger from '../../../core/Logger';
+import { Input, Button } from '../../SEUI/elements';
+import { CheckboxFields, Checkbox } from '../../SEUI/modules';
+import UIObjectSelect from '../../atoms/UIObjectSelect';
+import ConfigControls from '../../atoms/ConfigControls';
+import WorldWindow from '../../WorldWindow';
 
 let modelInstance = new Model[ObjectTypes.PLACE];
 let model = modelInstance.data();
 
 var initialState = {
-	place: null,
 	valueActive: false,
 	valueName: "",
 	valueBoundingBox: "",
-	valueScope: [],
-	valueDescription: ""
+	valueScope: []
 };
+if (model.hasOwnProperty('description')) {
+	initialState.valueDescription = "";
+}
 
 
-class ConfigMetadataPlace extends PantherComponent{
+class ConfigMetadataPlace extends ControllerComponent {
 
 	static propTypes = {
-		disabled: React.PropTypes.bool,
-		selectorValue: React.PropTypes.any
+		disabled: PropTypes.bool,
+		scope: PropTypes.instanceOf(ScopeModel),
+		store: PropTypes.shape({
+			places: PropTypes.arrayOf(PropTypes.instanceOf(PlaceModel)),
+			scopes: PropTypes.arrayOf(PropTypes.instanceOf(ScopeModel))
+		}).isRequired,
+		selectorValue: PropTypes.any
 	};
 
 	static defaultProps = {
 		disabled: false,
+		scope: null,
 		selectorValue: null
 	};
 
@@ -52,51 +58,32 @@ class ConfigMetadataPlace extends PantherComponent{
 
 	constructor(props) {
 		super(props);
-		this.state = utils.deepClone(initialState);
+		this.state.current = _.assign(this.state.current, utils.deepClone(initialState));
+		this.state.saved = utils.clone(this.state.current);
 	}
 
-	store2state(props) {
-		return {
-			place: PlaceStore.getById(props.selectorValue),
-			scopes: ScopeStore.getAll()
-		};
-	}
 
-	setStateFromStores(props,keys) {
+	buildState(props) {
 		if(!props){
 			props = this.props;
 		}
+		let nextState = {};
 		if(props.selectorValue) {
-			var thisComponent = this;
-			let store2state = this.store2state(props);
-			super.setStateFromStores(store2state, keys);
-			// if stores changed, overrides user input - todo fix
-
-			if(!keys || keys.indexOf("place")!=-1) {
-				store2state.place.then(function (place) {
-					if(thisComponent.acceptChange) {
-						thisComponent.acceptChange = false;
-						let newState = {
-							valueActive: place.active,
-							valueName: place.name,
-							valueBoundingBox: place.boundingBox,
-							valueScope: place.scope ? [place.scope.key] : []
-						};
-						if (model.hasOwnProperty('description')) newState.valueDescription = place.description;
-						newState.savedState = utils.deepClone(newState);
-						thisComponent.onChangeBoundingBoxToMap(place.boundingBox);
-						if (thisComponent.mounted) {
-							thisComponent.setState(newState);
-						}
-					}
-				});
+			let place = _.findWhere(props.store.places, {key: props.selectorValue});
+			if (place) {
+				nextState = {
+					valueActive: place.active,
+					valueName: place.name,
+					valueBoundingBox: place.boundingBox,
+					valueScope: place.scope ? [place.scope.key] : []
+				};
+				if (model.hasOwnProperty('description')) {
+					nextState.valueDescription = place.description;
+				}
+				this.onChangeBoundingBoxToMap(place.boundingBox);
 			}
 		}
-	}
-
-	_onStoreChange(keys) {
-		logger.trace("ConfigMetadataPlace# _onStoreChange(), Keys:", keys);
-		this.setStateFromStores(this.props,keys);
+		return nextState;
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -104,11 +91,13 @@ class ConfigMetadataPlace extends PantherComponent{
 		if (stateHash === this.getStateHash()) {
 			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
 				let stateKey = responseData.stateKey;
-				let values = utils.deepClone(thisComponent.state[stateKey]);
+				let values = utils.deepClone(thisComponent.state.current[stateKey]);
 				values.push(result[0].key);
-				thisComponent.setState({
+				if(thisComponent.mounted) {
+					thisComponent.setCurrentState({
 						[stateKey]: values
 					});
+				}
 				var screenObjectType;
 				switch(stateKey){
 					case "valueScope":
@@ -134,37 +123,9 @@ class ConfigMetadataPlace extends PantherComponent{
 
 	componentDidMount() {
 		super.componentDidMount();
-		this.changeListener.add(PlaceStore,["place"]);
-		this.changeListener.add(ScopeStore,["scopes"]);
 		this.responseListener.add(ScopeStore);
 
 		this.setStateFromStores();
-	}
-
-	componentWillReceiveProps(newProps) {
-		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.acceptChange = true;
-			this.setStateFromStores(newProps);
-			this.updateStateHash(newProps);
-		}
-	}
-
-
-	/**
-	 * Check if state is the same as it was when loaded from stores
-	 * @returns {boolean}
-	 */
-	isStateUnchanged() {
-		var isIt = true;
-		if(this.state.place) {
-			isIt = (
-					this.state.valueActive == this.state.place.active &&
-					this.state.valueName == this.state.place.name &&
-					this.state.valueBoundingBox == this.state.place.boundingBox &&
-					_.isEqual(this.state.valueScope, this.state.savedState && this.state.savedState.valueScope) // savedState doesn't have to exist.
-			);
-		}
-		return isIt;
 	}
 
 	/**
@@ -178,41 +139,47 @@ class ConfigMetadataPlace extends PantherComponent{
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
 		this._stateHash = utils.stringHash(props.selectorValue);
 	}
-	getStateHash() {
-		if(!this._stateHash) {
-			this.updateStateHash();
-		}
-		return this._stateHash;
-	}
 
-	saveForm() {
+	saveForm(closePanelAfter) {
 		super.saveForm();
+
 		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.place);
-		modelData.active = this.state.valueActive;
-		modelData.name = this.state.valueName;
-		modelData.boundingBox = this.state.valueBoundingBox; // Use Bounding Box from CSV.
-		modelData.scope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
-		if (model.hasOwnProperty('description')) modelData.description = this.state.valueDescription;
+		let place = _.findWhere(this.props.store.places, {key: this.props.selectorValue});
+		_.assign(modelData, place);
+		modelData.active = this.state.current.valueActive;
+		modelData.name = this.state.current.valueName;
+		modelData.boundingBox = this.state.current.valueBoundingBox; // Use Bounding Box from CSV.
+		modelData.scope = _.findWhere(this.props.store.scopes, {key: this.state.current.valueScope[0]});
+		if (model.hasOwnProperty('description')) {
+			modelData.description = this.state.current.valueDescription;
+		}
 		let modelObj = new Model[ObjectTypes.PLACE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.PLACE);
 	}
 
+	deleteObject() {
+		let model = new Model[ObjectTypes.PLACE]({key: this.props.selectorValue});
+		let actionData = [{type:"delete", model:model}];
+		ActionCreator.handleObjects(actionData, ObjectTypes.PLACE);
+		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+	}
+
+
 	onChangeActive() {
-		this.setState({
-			valueActive: !this.state.valueActive
+		this.setCurrentState({
+			valueActive: !this.state.current.valueActive
 		});
 	}
 
 	onChangeName(e) {
-		this.setState({
+		this.setCurrentState({
 			valueName: e.target.value
 		});
 	}
 
 	onChangeBoundingBox(e) {
-		this.setState({
+		this.setCurrentState({
 			valueBoundingBox: e.target.value
 		});
 		this.onChangeBoundingBoxToMap(e.target.value);
@@ -248,7 +215,7 @@ class ConfigMetadataPlace extends PantherComponent{
 	onChangeBoundingBoxMap(selectedPoints) {
 		if(selectedPoints.length > 1) {
 			var valueBoundingBox = selectedPoints[0].longitude + "," + selectedPoints[0].latitude + "," + selectedPoints[1].longitude + "," + selectedPoints[1].latitude;
-			this.setState({
+			this.setCurrentState({
 				valueBoundingBox: valueBoundingBox
 			});
 		}
@@ -263,7 +230,7 @@ class ConfigMetadataPlace extends PantherComponent{
 	}
 
 	onChangeDescription(e) {
-		this.setState({
+		this.setCurrentState({
 			valueDescription: e.target.value
 		});
 	}
@@ -272,7 +239,7 @@ class ConfigMetadataPlace extends PantherComponent{
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
 		newState[stateKey] = newValues;
-		this.setState(newState);
+		this.setCurrentState(newState);
 	}
 
 	onObjectClick (itemType, value, event) {
@@ -293,20 +260,16 @@ class ConfigMetadataPlace extends PantherComponent{
 
 	render() {
 
-		var saveButton = " ";
-		if (this.state.place) {
-			saveButton = (
-				<SaveButton
-					saved={this.isStateUnchanged()}
-					className="save-button"
-					onClick={this.saveForm.bind(this)}
-				/>
-			);
-		}
+		let ret = null;
+
+		if (this.state.built) {
+
+		let place = _.findWhere(this.props.store.places, {key: this.props.selectorValue});
+
 
 		var isActiveText = "inactive";
 		var isActiveClasses = "activeness-indicator";
-		if(this.state.place && this.state.place.active){
+		if(place && place.active){
 			isActiveText = "active";
 			isActiveClasses = "activeness-indicator active";
 		}
@@ -325,7 +288,7 @@ class ConfigMetadataPlace extends PantherComponent{
 							type="text"
 							name="description"
 							placeholder=" "
-							value={this.state.valueDescription}
+							value={this.state.current.valueDescription}
 							onChange={this.onChangeDescription.bind(this)}
 						/>
 					</label>
@@ -339,7 +302,7 @@ class ConfigMetadataPlace extends PantherComponent{
 				<div className="frame-input-wrapper">
 					<div className="container activeness">
 						<Checkbox
-							checked={this.state.valueActive}
+							checked={this.state.current.valueActive}
 							onClick={this.onChangeActive.bind(this)}
 						>
 							<span>Active</span>
@@ -358,7 +321,7 @@ class ConfigMetadataPlace extends PantherComponent{
 							type="text"
 							name="name"
 							placeholder=" "
-							value={this.state.valueName}
+							value={this.state.current.valueName}
 							onChange={this.onChangeName.bind(this)}
 						/>
 					</label>
@@ -370,12 +333,12 @@ class ConfigMetadataPlace extends PantherComponent{
 						<UIObjectSelect
 							onChange={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.SCOPE)}
-							options={this.state.scopes}
+							options={this.props.store.scopes}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valueScope}
+							value={this.state.current.valueScope}
 						/>
 					</label>
 				</div>
@@ -387,7 +350,7 @@ class ConfigMetadataPlace extends PantherComponent{
 							type="text"
 							name="boundingBox"
 							placeholder=" "
-							value={this.state.valueBoundingBox}
+							value={this.state.current.valueBoundingBox}
 							onChange={this.onChangeBoundingBox.bind(this)}
 						/>
 					</label>
@@ -405,10 +368,24 @@ class ConfigMetadataPlace extends PantherComponent{
 
 				{extraFields}
 
-				{saveButton}
+				<ConfigControls
+					disabled={this.props.disabled}
+					saved={this.equalStates(this.state.current,this.state.saved)}
+					saving={this.state.saving}
+					onSave={this.saveForm.bind(this)}
+					onDelete={this.deleteObject.bind(this)}
+				/>
 
 			</div>
 		);
+
+		} else {
+			ret = (
+				<div className="component-loading"></div>
+			);
+		}
+
+		return ret;
 
 	}
 }

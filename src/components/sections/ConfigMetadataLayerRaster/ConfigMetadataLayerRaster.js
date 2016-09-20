@@ -1,16 +1,16 @@
 import React, { PropTypes, Component } from 'react';
-import PantherComponent from '../../common/PantherComponent';
-
+import ControllerComponent from '../../common/ControllerComponent';
+import ActionCreator from '../../../actions/ActionCreator';
+import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
-
-import { Input, Button } from '../../SEUI/elements';
-import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
-import UIObjectSelect from '../../atoms/UIObjectSelect';
-import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
+import ScopeModel from '../../../models/ScopeModel';
+import RasterLayerModel from '../../../models/RasterLayerModel';
+import TopicModel from '../../../models/TopicModel';
+import LayerGroupModel from '../../../models/LayerGroupModel';
+import StyleModel from '../../../models/StyleModel';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
 import TopicStore from '../../../stores/TopicStore';
 import LayerGroupStore from '../../../stores/LayerGroupStore';
@@ -18,29 +18,38 @@ import StyleStore from '../../../stores/StyleStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
-import ListenerHandler from '../../../core/ListenerHandler';
-import logger from '../../../core/Logger';
+import { Input, Button } from '../../SEUI/elements';
+import { CheckboxFields, Checkbox } from '../../SEUI/modules';
+import UIObjectSelect from '../../atoms/UIObjectSelect';
+import ConfigControls from '../../atoms/ConfigControls';
+
 
 var initialState = {
-	style: null,
 	valueActive: false,
 	valueName: "",
 	valueTopic: [],
-	topicThemes: [],
 	valueLayerGroup: [],
 	valuesStyles: []
 };
 
 
-class ConfigMetadataLayerRaster extends PantherComponent{
+class ConfigMetadataLayerRaster extends ControllerComponent {
 
 	static propTypes = {
-		disabled: React.PropTypes.bool,
-		selectorValue: React.PropTypes.any
+		disabled: PropTypes.bool,
+		scope: PropTypes.instanceOf(ScopeModel),
+		store: PropTypes.shape({
+			layers: PropTypes.arrayOf(PropTypes.instanceOf(RasterLayerModel)),
+			topics: PropTypes.arrayOf(PropTypes.instanceOf(TopicModel)),
+			layerGroups: PropTypes.arrayOf(PropTypes.instanceOf(LayerGroupModel)),
+			styles: PropTypes.arrayOf(PropTypes.instanceOf(StyleModel))
+		}).isRequired,
+		selectorValue: PropTypes.any
 	};
 
 	static defaultProps = {
 		disabled: false,
+		scope: null,
 		selectorValue: null
 	};
 
@@ -51,52 +60,29 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 
 	constructor(props) {
 		super(props);
-		this.state = utils.deepClone(initialState);
+		this.state.current = _.assign(this.state.current, utils.deepClone(initialState));
+		this.state.saved = utils.clone(this.state.current);
 	}
 
-	store2state(props) {
-		return {
-			layer: RasterLayerStore.getById(props.selectorValue),
-			topics: TopicStore.getAll(),
-			layerGroups: LayerGroupStore.getAll(),
-			styles: StyleStore.getAll()
-		};
-	}
 
-	setStateFromStores(props,keys) {
+	buildState(props) {
 		if(!props){
 			props = this.props;
 		}
+		let nextState = {};
 		if(props.selectorValue) {
-			var thisComponent = this;
-			let store2state = this.store2state(props);
-			super.setStateFromStores(store2state, keys);
-			// if stores changed, overrides user input - todo fix
-
-			if(!keys || keys.indexOf("layer")!=-1) {
-				store2state.layer.then(function (layer) {
-					if(thisComponent.acceptChange) {
-						thisComponent.acceptChange = false;
-						let newState = {
-							valueActive: layer.active,
-							valueName: layer.name,
-							valueTopic: layer.topic ? [layer.topic.key] : [],
-							valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
-							valuesStyles: utils.getModelsKeys(layer.styles)
-						};
-						newState.savedState = utils.deepClone(newState);
-						if (thisComponent.mounted) {
-							thisComponent.setState(newState);
-						}
-					}
-				});
+			let layer = _.findWhere(props.store.layers, {key: props.selectorValue});
+			if (layer) {
+				nextState = {
+					valueActive: layer.active,
+					valueName: layer.name,
+					valueTopic: layer.topic ? [layer.topic.key] : [],
+					valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
+					valuesStyles: utils.getModelsKeys(layer.styles)
+				};
 			}
 		}
-	}
-
-	_onStoreChange(keys) {
-		logger.trace("ConfigMetadataLayerRaster# _onStoreChange(), Keys:", keys);
-		this.setStateFromStores(this.props,keys);
+		return nextState;
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -104,11 +90,13 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 		if (stateHash === this.getStateHash()) {
 			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
 				let stateKey = responseData.stateKey;
-				let values = utils.deepClone(thisComponent.state[stateKey]);
+				let values = utils.deepClone(thisComponent.state.current[stateKey]);
 				values.push(result[0].key);
-				thisComponent.setState({
+				if(thisComponent.mounted) {
+					thisComponent.setCurrentState({
 						[stateKey]: values
 					});
+				}
 				var screenObjectType;
 				switch(stateKey){
 					case "valueTopic":
@@ -140,55 +128,22 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 
 	componentDidMount() {
 		super.componentDidMount();
-		this.changeListener.add(RasterLayerStore, ["layer"]);
-		this.changeListener.add(TopicStore, ["topics"]);
 		this.responseListener.add(TopicStore);
-		this.changeListener.add(LayerGroupStore, ["layerGroups"]);
 		this.responseListener.add(LayerGroupStore);
-		this.changeListener.add(StyleStore, ["styles"]);
 		this.responseListener.add(StyleStore);
-
-		this.setStateFromStores();
-	}
-
-	componentWillReceiveProps(newProps) {
-		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.acceptChange = true;
-			this.setStateFromStores(newProps);
-			this.updateStateHash(newProps);
-		}
 	}
 
 	componentDidUpdate(oldProps, oldState) {
-		if (this.state.valueTopic && (oldState.valueTopic != this.state.valueTopic)) {
+		if (this.state.current.valueTopic && (oldState.current.valueTopic != this.state.current.valueTopic)) {
 			var thisComponent = this;
-			utils.getThemesForTopics(this.state.valueTopic).then(function(themes){
+			utils.getThemesForTopics(this.state.current.valueTopic).then(function(themes){
 				if(thisComponent.mounted) {
-					thisComponent.setState({
+					thisComponent.setUIState({
 						topicThemes: themes
 					});
 				}
 			});
 		}
-	}
-
-
-	/**
-	 * Check if state is the same as it was when loaded from stores
-	 * @returns {boolean}
-	 */
-	isStateUnchanged() {
-		var isIt = true;
-		if(this.state.layer) {
-			isIt = (
-					this.state.valueActive == this.state.layer.active &&
-					this.state.valueName == this.state.layer.name &&
-					_.isEqual(this.state.valueTopic,this.state.savedState.valueTopic) &&
-					_.isEqual(this.state.valueLayerGroup,this.state.savedState.valueLayerGroup) &&
-					_.isEqual(this.state.valuesStyles,this.state.savedState.valuesStyles)
-			);
-		}
-		return isIt;
 	}
 
 	/**
@@ -202,24 +157,20 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
 		this._stateHash = utils.stringHash(props.selectorValue);
 	}
-	getStateHash() {
-		if(!this._stateHash) {
-			this.updateStateHash();
-		}
-		return this._stateHash;
-	}
 
-	saveForm() {
+	saveForm(closePanelAfter) {
 		super.saveForm();
+
 		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.layer);
-		modelData.active = this.state.valueActive;
-		modelData.name = this.state.valueName;
-		modelData.topic = _.findWhere(this.state.topics, {key: this.state.valueTopic[0]});
-		modelData.layerGroup = _.findWhere(this.state.layerGroups, {key: this.state.valueLayerGroup[0]});
+		let layer = _.findWhere(this.props.store.layers, {key: this.props.selectorValue});
+		_.assign(modelData, layer);
+		modelData.active = this.state.current.valueActive;
+		modelData.name = this.state.current.valueName;
+		modelData.topic = _.findWhere(this.props.store.topics, {key: this.state.current.valueTopic[0]});
+		modelData.layerGroup = _.findWhere(this.props.store.layerGroups, {key: this.state.current.valueLayerGroup[0]});
 		modelData.styles = [];
-		for (let key of this.state.valuesStyles) {
-			let period = _.findWhere(this.state.styles, {key: key});
+		for (let key of this.state.current.valuesStyles) {
+			let period = _.findWhere(this.props.store.styles, {key: key});
 			modelData.styles.push(period);
 		}
 		let modelObj = new Model[ObjectTypes.RASTER_LAYER_TEMPLATE](modelData);
@@ -227,14 +178,22 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 		ActionCreator.handleObjects(actionData,ObjectTypes.RASTER_LAYER_TEMPLATE);
 	}
 
+	deleteObject() {
+		let model = new Model[ObjectTypes.RASTER_LAYER_TEMPLATE]({key: this.props.selectorValue});
+		let actionData = [{type:"delete", model:model}];
+		ActionCreator.handleObjects(actionData, ObjectTypes.RASTER_LAYER_TEMPLATE);
+		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+	}
+
+
 	onChangeActive() {
-		this.setState({
-			valueActive: !this.state.valueActive
+		this.setCurrentState({
+			valueActive: !this.state.current.valueActive
 		});
 	}
 
 	onChangeName(e) {
-		this.setState({
+		this.setCurrentState({
 			valueName: e.target.value
 		});
 	}
@@ -243,7 +202,7 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
 		newState[stateKey] = newValues;
-		this.setState(newState);
+		this.setCurrentState(newState);
 	}
 
 	onObjectClick (itemType, value, event) {
@@ -264,29 +223,15 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 
 	render() {
 
-		var saveButton = " ";
-		if (this.state.layer) {
-			saveButton = (
-				<SaveButton
-					saved={this.isStateUnchanged()}
-					className="save-button"
-					onClick={this.saveForm.bind(this)}
-				/>
-			);
-		}
+		let ret = null;
 
-		var isActiveText = "inactive";
-		var isActiveClasses = "activeness-indicator";
-		if(this.state.layer && this.state.layer.active){
-			isActiveText = "active";
-			isActiveClasses = "activeness-indicator active";
-		}
+		if (this.state.built) {
 
 		var topicInfoInsert = null;
-		if(this.state.valueTopic && this.state.valueTopic.length) {
+		if(this.state.current.valueTopic && this.state.current.valueTopic.length) {
 			let themesString = "";
-			if(this.state.topicThemes) {
-				for (let theme of this.state.topicThemes) {
+			if(this.state.ui.topicThemes) {
+				for (let theme of this.state.ui.topicThemes) {
 					if (themesString) {
 						themesString += ", ";
 					}
@@ -295,13 +240,13 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 			}
 			topicInfoInsert = (
 				<div className="frame-input-wrapper-info">
-					<b>{this.state.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
-					{this.state.topicThemes.length ? themesString : "No themes"}
+					<b>{this.state.ui.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
+					{this.state.ui.topicThemes.length ? themesString : "No themes"}
 				</div>
 			);
 		}
 
-		return (
+		ret = (
 			<div>
 
 				<div className="frame-input-wrapper required">
@@ -311,7 +256,7 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 							type="text"
 							name="name"
 							placeholder=" "
-							value={this.state.valueName}
+							value={this.state.current.valueName}
 							onChange={this.onChangeName.bind(this)}
 						/>
 					</label>
@@ -323,12 +268,12 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 						<UIObjectSelect
 							onChange={this.onChangeObjectSelect.bind(this, "valueTopic", ObjectTypes.TOPIC)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.TOPIC)}
-							options={this.state.topics}
+							options={this.props.store.topics}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valueTopic}
+							value={this.state.current.valueTopic}
 						/>
 					</label>
 					{topicInfoInsert}
@@ -340,12 +285,12 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 						<UIObjectSelect
 							onChange={this.onChangeObjectSelect.bind(this, "valueLayerGroup", ObjectTypes.LAYER_GROUP)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.LAYER_GROUP)}
-							options={this.state.layerGroups}
+							options={this.props.store.layerGroups}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valueLayerGroup}
+							value={this.state.current.valueLayerGroup}
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
@@ -360,20 +305,34 @@ class ConfigMetadataLayerRaster extends PantherComponent{
 							multi
 							onChange={this.onChangeObjectSelect.bind(this, "valuesStyles", ObjectTypes.STYLE)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.STYLE)}
-							options={this.state.styles}
+							options={this.props.store.styles}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valuesStyles}
+							value={this.state.current.valuesStyles}
 						/>
 					</label>
 				</div>
 
-				{saveButton}
+				<ConfigControls
+					disabled={this.props.disabled}
+					saved={this.equalStates(this.state.current,this.state.saved)}
+					saving={this.state.saving}
+					onSave={this.saveForm.bind(this)}
+					onDelete={this.deleteObject.bind(this)}
+				/>
 
 			</div>
 		);
+
+		} else {
+			ret = (
+				<div className="component-loading"></div>
+			);
+		}
+
+		return ret;
 
 	}
 }

@@ -1,33 +1,32 @@
 import React, { PropTypes, Component } from 'react';
-import PantherComponent from '../../common/PantherComponent';
-
+import ControllerComponent from '../../common/ControllerComponent';
+import ActionCreator from '../../../actions/ActionCreator';
+import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
-
-import { Input, Button, Icon } from '../../SEUI/elements';
-import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
-import Select from 'react-select';
-import UIObjectSelect from '../../atoms/UIObjectSelect';
-import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
-import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
-import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
+import ScopeModel from '../../../models/ScopeModel';
+import StyleModel from '../../../models/StyleModel';
+import AttributeSetModel from '../../../models/AttributeSetModel';
 import StyleStore from '../../../stores/StyleStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
-import ListenerHandler from '../../../core/ListenerHandler';
-import logger from '../../../core/Logger';
+import { Input, Button, Icon } from '../../SEUI/elements';
+import { CheckboxFields, Checkbox } from '../../SEUI/modules';
+import Select from 'react-select';
+import UIObjectSelect from '../../atoms/UIObjectSelect';
+import OptionDestination from '../../atoms/UICustomSelect/OptionDestination';
+import SingleValueDestination from '../../atoms/UICustomSelect/SingleValueDestination';
+import ConfigControls from '../../atoms/ConfigControls';
 import {SliderPicker} from 'react-color';
 
 var initialState = {
-	style: null,
 	valueActive: false,
 	valueName: "",
-	valueServerName: "",
+	//valueServerName: "",
 	valueSource: "definition",
 	valueFeaturesType: "polygon",
 	valueFilterType: "no",
@@ -58,15 +57,21 @@ const FILTERTYPES = [
 ];
 
 
-class ConfigMetadataStyle extends PantherComponent{
+class ConfigMetadataStyle extends ControllerComponent {
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
+		scope: PropTypes.instanceOf(ScopeModel),
+		store: PropTypes.shape({
+			styles: PropTypes.arrayOf(PropTypes.instanceOf(StyleModel)),
+			attributeSets: PropTypes.arrayOf(PropTypes.instanceOf(AttributeSetModel))
+		}).isRequired,
 		selectorValue: React.PropTypes.any
 	};
 
 	static defaultProps = {
 		disabled: false,
+		scope: null,
 		selectorValue: null
 	};
 
@@ -77,69 +82,43 @@ class ConfigMetadataStyle extends PantherComponent{
 
 	constructor(props) {
 		super(props);
-		this.state = utils.deepClone(initialState);
+		this.state.current = _.assign(this.state.current, utils.deepClone(initialState));
+		this.state.saved = utils.clone(this.state.current);
 	}
 
-	store2state(props) {
-		return {
-			style: StyleStore.getById(props.selectorValue),
-			attributeSets: AttributeSetStore.getAll()
-		};
-	}
 
-	setStateFromStores(props,keys) {
+	buildState(props) {
 		if(!props){
 			props = this.props;
 		}
+		let nextState = {};
 		if(props.selectorValue) {
-			var thisComponent = this;
-			let store2state = this.store2state(props);
-			super.setStateFromStores(store2state, keys);
-			// if stores changed, overrides user input - todo fix
-
-			if(!keys || keys.indexOf("style")!=-1) {
-				store2state.style.then(function (style) {
-					if(thisComponent.acceptChange) {
-						thisComponent.acceptChange = false;
-						let newState = {
-							valueActive: style.active,
-							valueName: style.name,
-							valueSource: style.source
-						};
-						if (style.source=="definition") {
-							newState.valueFeaturesType = style.definition.type;
-							newState.valueFilterType = style.definition.filterType;
-							newState.valueFilterAttributeSet = style.definition.filterAttributeSetKey;
-							newState.valueFilterAttribute = style.definition.filterAttributeKey;
-							newState.valueDefinitionRules = utils.clone(style.definition.rules);
-							if (
-								style.definition.rules &&
-								style.definition.rules.length
-							) {
-								newState.valueDefinitionSingleRule = utils.clone(style.definition.rules[0]);
-							}
-						}
-						else if (style.source=="geoserver") {
-							newState.valueServerName = style.serverName;
-						}
-						newState.savedState = utils.deepClone(newState);
-						if (thisComponent.mounted) {
-							thisComponent.setState(newState);
-						}
+			let style = _.findWhere(props.store.styles, {key: props.selectorValue});
+			if (style) {
+				nextState = {
+					valueActive: style.active,
+					valueName: style.name,
+					valueSource: style.source
+				};
+				if (style.source=="definition") {
+					nextState.valueFeaturesType = style.definition.type;
+					nextState.valueFilterType = style.definition.filterType;
+					nextState.valueFilterAttributeSet = style.definition.filterAttributeSetKey;
+					nextState.valueFilterAttribute = style.definition.filterAttributeKey;
+					nextState.valueDefinitionRules = utils.clone(style.definition.rules);
+					if (
+						style.definition.rules &&
+						style.definition.rules.length
+					) {
+						nextState.valueDefinitionSingleRule = utils.clone(style.definition.rules[0]);
 					}
-				});
-			}
-			if(!keys || keys.indexOf("attributeSets")!=-1) {
-				store2state.attributeSets.then(function(attributeSets) {
-					super.setStateFromStores(thisComponent.atts2state(attributeSets));
-				});
+				}
+				else if (style.source=="geoserver") {
+					nextState.valueServerName = style.serverName;
+				}
 			}
 		}
-	}
-
-	_onStoreChange(keys) {
-		logger.trace("ConfigMetadataStyle# _onStoreChange(), Keys:", keys);
-		this.setStateFromStores(this.props,keys);
+		return nextState;
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -147,11 +126,13 @@ class ConfigMetadataStyle extends PantherComponent{
 		if (stateHash === this.getStateHash()) {
 			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
 				let stateKey = responseData.stateKey;
-				let values = utils.deepClone(thisComponent.state[stateKey]);
+				let values = utils.deepClone(thisComponent.state.current[stateKey]);
 				values.push(result[0].key);
-				thisComponent.setState({
+				if(thisComponent.mounted) {
+					thisComponent.setCurrentState({
 						[stateKey]: values
 					});
+				}
 				var screenObjectType;
 				switch(stateKey){
 					case "valueTopic":
@@ -175,106 +156,6 @@ class ConfigMetadataStyle extends PantherComponent{
 		}
 	}
 
-	componentDidMount() {
-		super.componentDidMount();
-		this.changeListener.add(StyleStore, ["style"]);
-		this.changeListener.add(AttributeSetStore, ["attributeSets"]);
-		this.setStateFromStores();
-	}
-
-	componentWillReceiveProps(newProps) {
-		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.acceptChange = true;
-			this.setStateFromStores(newProps);
-			this.updateStateHash(newProps);
-		}
-	}
-
-
-	/**
-	 * Check if state is the same as it was when loaded from stores
-	 * @returns {boolean}
-	 */
-	isStateUnchanged() {
-		var isIt = true;
-		if(this.state.style) {
-
-			var definitionIsIt = true;
-			if (
-				this.state.valueSource=="definition"
-			) {
-				if (
-					this.state.style.definition &&
-					this.state.style.definition.hasOwnProperty("type")
-				) {
-					if (this.state.style.definition.filterType == this.state.valueFilterType) {
-						if (
-							this.state.valueFilterType == "attributeCsv" ||
-							this.state.valueFilterType == "attributeInterval"
-						) {
-							definitionIsIt = (
-								this.state.valueFeaturesType == this.state.style.definition.type &&
-								this.state.valueFilterAttributeSet == this.state.style.definition.filterAttributeSetKey &&
-								this.state.valueFilterAttribute == this.state.style.definition.filterAttributeKey
-							);
-							if (this.state.valueFilterAttributeSet && this.state.valueFilterAttribute) {
-								definitionIsIt = (
-									definitionIsIt &&
-									_.isEqual(this.state.valueDefinitionRules, this.state.style.definition.rules)
-								);
-							}
-						}
-						else {
-							// no filter -> single rule
-							if (this.state.style.definition.rules.length) {
-								definitionIsIt = (
-									_.isEqual(this.state.valueDefinitionSingleRule, this.state.style.definition.rules[0])
-								);
-							}
-							else {
-								//todo could we just not have empty keys?
-								var appearanceSet = false;
-								if(this.state.valueDefinitionSingleRule.hasOwnProperty("appearance")) {
-									_.each(this.state.valueDefinitionSingleRule.appearance, function(value, key){
-										appearanceSet = appearanceSet || !!value;
-									});
-								}
-								definitionIsIt = !(
-									this.state.valueDefinitionSingleRule.name ||
-									appearanceSet
-								);
-							}
-						}
-					}
-					else {
-						// filter types differ
-						definitionIsIt = false;
-					}
-				}
-				else {
-					// source is definition but there isn't one
-					definitionIsIt = !(
-						this.state.valueFilterType ||
-						this.state.valueFeaturesType ||
-						this.state.valueFilterAttributeSet ||
-						this.state.valueFilterAttribute ||
-						this.state.valueDefinitionRules.length
-					);
-				}
-			}
-			else if (this.state.valueSource=="geoserver") {
-				definitionIsIt = this.state.valueServerName == this.state.style.serverName;
-			}
-
-			isIt = (
-					this.state.valueActive == this.state.style.active &&
-					this.state.valueName == this.state.style.name &&
-					definitionIsIt
-			);
-		}
-		return isIt;
-	}
-
 	/**
 	 * Prepare options for data table selects
 	 * Called in store2state().
@@ -282,11 +163,9 @@ class ConfigMetadataStyle extends PantherComponent{
 	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
 	 */
 	atts2state(attributeSets) {
-		var ret = {
-			filterDestinations: null
-		};
+		var ret = null;
 		if (attributeSets) {
-			ret.filterDestinations = [];
+			ret = [];
 			for (let attset of attributeSets) {
 				if(attset.attributes) {
 					for (let att of attset.attributes) {
@@ -298,7 +177,7 @@ class ConfigMetadataStyle extends PantherComponent{
 							attributeKey: att.key,
 							attributeSetKey: attset.key
 						};
-						ret.filterDestinations.push(object);
+						ret.push(object);
 					}
 				}
 			}
@@ -317,57 +196,53 @@ class ConfigMetadataStyle extends PantherComponent{
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
 		this._stateHash = utils.stringHash(props.selectorValue);
 	}
-	getStateHash() {
-		if(!this._stateHash) {
-			this.updateStateHash();
-		}
-		return this._stateHash;
-	}
 
 	saveForm() {
 		super.saveForm();
-		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.style);
-		modelData.active = this.state.valueActive;
-		modelData.name = this.state.valueName;
-		modelData.source = this.state.valueSource;
 
-		if (this.state.valueSource=="definition") {
+		var actionData = [], modelData = {};
+		let style = _.findWhere(this.props.store.styles, {key: this.props.selectorValue});
+		_.assign(modelData, style);
+		modelData.active = this.state.current.valueActive;
+		modelData.name = this.state.current.valueName;
+		modelData.source = this.state.current.valueSource;
+
+		if (this.state.current.valueSource=="definition") {
 			modelData.definition = {
-				type: this.state.valueFeaturesType,
-				filterType: this.state.valueFilterType
+				type: this.state.current.valueFeaturesType,
+				filterType: this.state.current.valueFilterType
 			};
 			if (
-				this.state.valueFilterType=="attributeCsv" ||
-				this.state.valueFilterType=="attributeInterval"
+				this.state.current.valueFilterType=="attributeCsv" ||
+				this.state.current.valueFilterType=="attributeInterval"
 			) {
 				if (
-					this.state.valueFilterAttributeSet &&
-					this.state.valueFilterAttribute
+					this.state.current.valueFilterAttributeSet &&
+					this.state.current.valueFilterAttribute
 				) {
 					// filter set -> standard rule set
-					modelData.definition.filterAttributeKey = this.state.valueFilterAttribute;
-					modelData.definition.filterAttributeSetKey = this.state.valueFilterAttributeSet;
-					modelData.definition.rules = utils.clone(this.state.valueDefinitionRules);
+					modelData.definition.filterAttributeKey = this.state.current.valueFilterAttribute;
+					modelData.definition.filterAttributeSetKey = this.state.current.valueFilterAttributeSet;
+					modelData.definition.rules = utils.clone(this.state.current.valueDefinitionRules);
 				}
 				else {
 					// no filter -> single rule for all features
 					modelData.definition.filterAttributeKey = null;
 					modelData.definition.filterAttributeSetKey = null;
-					modelData.definition.rules = [utils.clone(this.state.valueDefinitionSingleRule)];
+					modelData.definition.rules = [utils.clone(this.state.current.valueDefinitionSingleRule)];
 				}
 			}
 			else {
 				// no filter type - no filter / filters vary
-				if(this.state.valueDefinitionSingleRule) {
-					modelData.definition.rules = [utils.clone(this.state.valueDefinitionSingleRule)];
+				if(this.state.current.valueDefinitionSingleRule) {
+					modelData.definition.rules = [utils.clone(this.state.current.valueDefinitionSingleRule)];
 				} else {
-					modelData.definition.rules = utils.clone(this.state.valueDefinitionRules);
+					modelData.definition.rules = utils.clone(this.state.current.valueDefinitionRules);
 				}
 			}
 		}
-		else if (this.state.valueSource=="geoserver") {
-			modelData.serverName = this.state.valueServerName;
+		else if (this.state.current.valueSource=="geoserver") {
+			modelData.serverName = this.state.current.valueServerName;
 		}
 
 		let modelObj = new Model[ObjectTypes.STYLE](modelData);
@@ -375,44 +250,52 @@ class ConfigMetadataStyle extends PantherComponent{
 		ActionCreator.handleObjects(actionData,ObjectTypes.STYLE);
 	}
 
+	deleteObject() {
+		let model = new Model[ObjectTypes.STYLE]({key: this.props.selectorValue});
+		let actionData = [{type:"delete", model:model}];
+		ActionCreator.handleObjects(actionData, ObjectTypes.STYLE);
+		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+	}
+
+
 	onChangeActive() {
-		this.setState({
-			valueActive: !this.state.valueActive
+		this.setCurrentState({
+			valueActive: !this.state.current.valueActive
 		});
 	}
 
 	onChangeName(e) {
-		this.setState({
+		this.setCurrentState({
 			valueName: e.target.value
 		});
 	}
 
 	onChangeSource(value, values) {
-		this.setState({
+		this.setCurrentState({
 			valueSource: value
 		});
 	}
 
 	onChangeFeaturesType(value, values) {
-		this.setState({
+		this.setCurrentState({
 			valueFeaturesType: value
 		});
 	}
 
 	onChangeFilterType(value, values) {
-		this.setState({
+		this.setCurrentState({
 			valueFilterType: value
 		});
 	}
 
 	onChangeFilterDestination(value, values) {
 		if (values.length) {
-			this.setState({
+			this.setCurrentState({
 				valueFilterAttributeSet: values[0].attributeSetKey,
 				valueFilterAttribute: values[0].attributeKey
 			});
 		} else {
-			this.setState({
+			this.setCurrentState({
 				valueFilterAttributeSet: null,
 				valueFilterAttribute: null
 			});
@@ -422,16 +305,20 @@ class ConfigMetadataStyle extends PantherComponent{
 	onChangeRule(ruleIndex,key,e) {
 		if(ruleIndex) {
 			this.setStateDeep({
-				valueDefinitionRules: {
-					[ruleIndex]: {
-						[key]: {$set: e.target.value}
+				current: {
+					valueDefinitionRules: {
+						[ruleIndex]: {
+							[key]: {$set: e.target.value}
+						}
 					}
 				}
 			});
 		} else {
 			this.setStateDeep({
-				valueDefinitionSingleRule: {
-					[key]: {$set: e.target.value}
+				current: {
+					valueDefinitionSingleRule: {
+						[key]: {$set: e.target.value}
+					}
 				}
 			});
 		}
@@ -448,19 +335,23 @@ class ConfigMetadataStyle extends PantherComponent{
 	onChangeRuleAppearanceWithValue(ruleIndex, key, value) {
 		if (ruleIndex) {
 			this.setStateDeep({
-				valueDefinitionRules: {
-					[ruleIndex]: {
-						appearance: {
-							[key]: {$set: value}
+				current: {
+					valueDefinitionRules: {
+						[ruleIndex]: {
+							appearance: {
+								[key]: {$set: value}
+							}
 						}
 					}
 				}
 			});
 		} else {
 			this.setStateDeep({
-				valueDefinitionSingleRule: {
-					appearance: {
-						[key]: {$set: value}
+				current: {
+					valueDefinitionSingleRule: {
+						appearance: {
+							[key]: {$set: value}
+						}
 					}
 				}
 			});
@@ -470,11 +361,13 @@ class ConfigMetadataStyle extends PantherComponent{
 	onChangeRuleFilter(ruleIndex,filterType,key,e) {
 		if (ruleIndex) {
 			this.setStateDeep({
-				valueDefinitionRules: {
-					[ruleIndex]: {
-						filter: {
-							[filterType]: {
-								[key]: {$set: e.target.value}
+				current: {
+					valueDefinitionRules: {
+						[ruleIndex]: {
+							filter: {
+								[filterType]: {
+									[key]: {$set: e.target.value}
+								}
 							}
 						}
 					}
@@ -482,10 +375,12 @@ class ConfigMetadataStyle extends PantherComponent{
 			});
 		} else {
 			this.setStateDeep({
-				valueDefinitionSingleRule: {
-					filter: {
-						[filterType]: {
-							[key]: {$set: e.target.value}
+				current: {
+					valueDefinitionSingleRule: {
+						filter: {
+							[filterType]: {
+								[key]: {$set: e.target.value}
+							}
 						}
 					}
 				}
@@ -495,7 +390,9 @@ class ConfigMetadataStyle extends PantherComponent{
 
 	onChangeRemoveRule(ruleIndex) {
 		this.setStateDeep({
-			valueDefinitionRules: {$splice: [[ruleIndex,1]]}
+			current: {
+				valueDefinitionRules: {$splice: [[ruleIndex, 1]]}
+			}
 		});
 	}
 
@@ -505,18 +402,22 @@ class ConfigMetadataStyle extends PantherComponent{
 			filter[filterType] = {};
 		}
 		this.setStateDeep({
-			valueDefinitionRules: {$push: [{
-				name: "",
-				filter: filter,
-				appearance: {
-					fillColour: "" // todo create more general (w/o appearance options)
+			current: {
+				valueDefinitionRules: {
+					$push: [{
+						name: "",
+						filter: filter,
+						appearance: {
+							fillColour: "" // todo create more general (w/o appearance options)
+						}
+					}]
 				}
-			}]}
+			}
 		});
 	}
 
 	onChangeServerName(e) {
-		this.setState({
+		this.setCurrentState({
 			valueServerName: e.target.value
 		});
 	}
@@ -525,7 +426,7 @@ class ConfigMetadataStyle extends PantherComponent{
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
 		newState[stateKey] = newValues;
-		this.setState(newState);
+		this.setCurrentState(newState);
 	}
 
 	onObjectClick (itemType, value, event) {
@@ -546,33 +447,24 @@ class ConfigMetadataStyle extends PantherComponent{
 
 	render() {
 
-		var saveButton = " ";
-		if (this.state.style) {
-			saveButton = (
-				<SaveButton
-					saved={this.isStateUnchanged()}
-					className="save-button"
-					onClick={this.saveForm.bind(this)}
-				/>
-			);
-		}
+		let ret = null;
 
-		var isActiveText = "inactive";
-		var isActiveClasses = "activeness-indicator";
-		if(this.state.style && this.state.style.active){
-			isActiveText = "active";
-			isActiveClasses = "activeness-indicator active";
-		}
+		if (this.state.built) {
+
+		let filterDestinations = this.atts2state(this.props.store.attributeSets);
 
 		let sourceForm = null;
-		if (this.state.valueSource=="definition") {
+		if (this.state.current.valueSource=="definition") {
 
 			var classesInsert = null, commonFilterConfigInsert = null;
-			if (this.state.valueFilterType=="attributeCsv") {
+			if (this.state.current.valueFilterType=="attributeCsv") {
 
 				var filterDestination = null;
-				if (this.state.valueFilterAttributeSet && this.state.valueFilterAttribute) {
-					filterDestination = this.state.valueFilterAttributeSet + "-" + this.state.valueFilterAttribute;
+				if (
+					this.state.current.valueFilterAttributeSet &&
+					this.state.current.valueFilterAttribute
+				) {
+					filterDestination = this.state.current.valueFilterAttributeSet + "-" + this.state.current.valueFilterAttribute;
 				}
 
 				commonFilterConfigInsert = (
@@ -581,7 +473,7 @@ class ConfigMetadataStyle extends PantherComponent{
 							Filter attribute
 							<Select
 								onChange={this.onChangeFilterDestination.bind(this)}
-								options={this.state.filterDestinations}
+								options={filterDestinations}
 								optionComponent={OptionDestination}
 								singleValueComponent={SingleValueDestination}
 								valueKey="key"
@@ -598,16 +490,16 @@ class ConfigMetadataStyle extends PantherComponent{
 
 				var rulesInsert = [];
 
-				if (this.state.valueFilterAttribute) {
-					for (let ruleIndex in this.state.valueDefinitionRules) {
+				if (this.state.current.valueFilterAttribute) {
+					for (let ruleIndex in this.state.current.valueDefinitionRules) {
 
 						var filterValues = "";
 						if (
-							this.state.valueDefinitionRules[ruleIndex].filter &&
-							this.state.valueDefinitionRules[ruleIndex].filter.attributeCsv &&
-							this.state.valueDefinitionRules[ruleIndex].filter.attributeCsv.hasOwnProperty("values")
+							this.state.current.valueDefinitionRules[ruleIndex].filter &&
+							this.state.current.valueDefinitionRules[ruleIndex].filter.attributeCsv &&
+							this.state.current.valueDefinitionRules[ruleIndex].filter.attributeCsv.hasOwnProperty("values")
 						) {
-							filterValues = this.state.valueDefinitionRules[ruleIndex].filter.attributeCsv.values;
+							filterValues = this.state.current.valueDefinitionRules[ruleIndex].filter.attributeCsv.values;
 						}
 
 						rulesInsert.push(
@@ -616,7 +508,7 @@ class ConfigMetadataStyle extends PantherComponent{
 								className="frame-wrapper-object"
 							>
 								<div className="frame-wrapper-header">
-									{this.state.valueDefinitionRules[ruleIndex].name}
+									{this.state.current.valueDefinitionRules[ruleIndex].name}
 									<div
 										className="frame-wrapper-header-remove"
 										onClick={this.onChangeRemoveRule.bind(this,ruleIndex)}
@@ -632,7 +524,7 @@ class ConfigMetadataStyle extends PantherComponent{
 										type="text"
 										name={"valueName" + ruleIndex}
 										placeholder=" "
-										value={this.state.valueDefinitionRules[ruleIndex].name}
+										value={this.state.current.valueDefinitionRules[ruleIndex].name}
 										onChange={this.onChangeRule.bind(this,ruleIndex,"name")}
 									/>
 								</label>
@@ -652,11 +544,11 @@ class ConfigMetadataStyle extends PantherComponent{
 										type="text"
 										name={"valueFillColour" + ruleIndex}
 										placeholder=" "
-										value={this.state.valueDefinitionRules[ruleIndex].appearance.fillColour}
+										value={this.state.current.valueDefinitionRules[ruleIndex].appearance.fillColour}
 										onChange={this.onChangeRuleAppearance.bind(this,ruleIndex,"fillColour")}
 									/>
 									<SliderPicker
-										color={this.state.valueDefinitionRules[ruleIndex].appearance.fillColour || '#0000ff'}
+										color={this.state.current.valueDefinitionRules[ruleIndex].appearance.fillColour || '#0000ff'}
 										onChangeComplete={this.onChangeColorAppearance.bind(this,ruleIndex)}
 									/>
 								</label>
@@ -702,7 +594,7 @@ class ConfigMetadataStyle extends PantherComponent{
 								className="frame-wrapper-object singleclass"
 							>
 								<div className="frame-wrapper-header">
-									{this.state.valueDefinitionSingleRule.name}
+									{this.state.current.valueDefinitionSingleRule.name}
 								</div>
 								<label className="container">
 									Name
@@ -710,7 +602,7 @@ class ConfigMetadataStyle extends PantherComponent{
 										type="text"
 										name="valueName-singlerule"
 										placeholder=" "
-										value={this.state.valueDefinitionSingleRule.name}
+										value={this.state.current.valueDefinitionSingleRule.name}
 										onChange={this.onChangeRule.bind(this,false,"name")}
 									/>
 								</label>
@@ -720,12 +612,12 @@ class ConfigMetadataStyle extends PantherComponent{
 										type="text"
 										name="valueFillColour-singlerule"
 										placeholder=" "
-										value={this.state.valueDefinitionSingleRule.appearance.fillColour}
+										value={this.state.current.valueDefinitionSingleRule.appearance.fillColour}
 										onChange={this.onChangeRuleAppearance.bind(this,false,"fillColour")}
 									/>
 									<div className="picker-wrapper">
 										<SliderPicker
-											color={this.state.valueDefinitionSingleRule.appearance.fillColour || '#0000ff'}
+											color={this.state.current.valueDefinitionSingleRule.appearance.fillColour || '#0000ff'}
 											onChangeComplete={this.onChangeColorAppearance.bind(this,false)}
 										/>
 									</div>
@@ -753,7 +645,7 @@ class ConfigMetadataStyle extends PantherComponent{
 								options={FEATURESTYPES}
 								valueKey="key"
 								labelKey="name"
-								value={this.state.valueFeaturesType}
+								value={this.state.current.valueFeaturesType}
 								clearable={false}
 							/>
 						</label>
@@ -770,7 +662,7 @@ class ConfigMetadataStyle extends PantherComponent{
 								options={FILTERTYPES}
 								valueKey="key"
 								labelKey="name"
-								value={this.state.valueFilterType}
+								value={this.state.current.valueFilterType}
 								clearable={false}
 							/>
 						</label>
@@ -787,7 +679,7 @@ class ConfigMetadataStyle extends PantherComponent{
 			);
 
 		}
-		else if (this.state.valueSource=="geoserver") {
+		else if (this.state.current.valueSource=="geoserver") {
 
 			sourceForm = (
 				<div className="frame-input-wrapper required">
@@ -797,7 +689,7 @@ class ConfigMetadataStyle extends PantherComponent{
 							type="text"
 							name="serverName"
 							placeholder=" "
-							value={this.state.valueServerName}
+							value={this.state.current.valueServerName}
 							onChange={this.onChangeServerName.bind(this)}
 						/>
 					</label>
@@ -809,7 +701,7 @@ class ConfigMetadataStyle extends PantherComponent{
 
 		}
 
-		return (
+		ret = (
 			<div>
 
 				<div className="frame-input-wrapper required">
@@ -819,7 +711,7 @@ class ConfigMetadataStyle extends PantherComponent{
 							type="text"
 							name="name"
 							placeholder=" "
-							value={this.state.valueName}
+							value={this.state.current.valueName}
 							onChange={this.onChangeName.bind(this)}
 						/>
 					</label>
@@ -833,7 +725,7 @@ class ConfigMetadataStyle extends PantherComponent{
 							options={SOURCES}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valueSource}
+							value={this.state.current.valueSource}
 							clearable={false}
 						/>
 					</label>
@@ -844,10 +736,24 @@ class ConfigMetadataStyle extends PantherComponent{
 
 				{sourceForm}
 
-				{saveButton}
+				<ConfigControls
+					disabled={this.props.disabled}
+					saved={this.equalStates(this.state.current,this.state.saved)}
+					saving={this.state.saving}
+					onSave={this.saveForm.bind(this)}
+					onDelete={this.deleteObject.bind(this)}
+				/>
 
 			</div>
 		);
+
+		} else {
+			ret = (
+				<div className="component-loading"></div>
+			);
+		}
+
+		return ret;
 
 	}
 }

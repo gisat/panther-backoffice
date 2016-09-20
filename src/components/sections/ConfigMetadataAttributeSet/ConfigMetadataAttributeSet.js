@@ -1,44 +1,51 @@
 import React, { PropTypes, Component } from 'react';
-import PantherComponent from '../../common/PantherComponent';
-
+import ControllerComponent from '../../common/ControllerComponent';
+import ActionCreator from '../../../actions/ActionCreator';
+import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
-
-import { Input, Button } from '../../SEUI/elements';
-import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
-import UIObjectSelect from '../../atoms/UIObjectSelect';
-import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
+import ScopeModel from '../../../models/ScopeModel';
+import AttributeSetModel from '../../../models/AttributeSetModel';
+import AttributeModel from '../../../models/AttributeModel';
+import TopicModel from '../../../models/TopicModel';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 import AttributeStore from '../../../stores/AttributeStore';
 import TopicStore from '../../../stores/TopicStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
-import ListenerHandler from '../../../core/ListenerHandler';
-import logger from '../../../core/Logger';
+import { Input, Button } from '../../SEUI/elements';
+import { CheckboxFields, Checkbox } from '../../SEUI/modules';
+import UIObjectSelect from '../../atoms/UIObjectSelect';
+import ConfigControls from '../../atoms/ConfigControls';
+
 
 var initialState = {
-	attributeSet: null,
 	valueActive: false,
 	valueName: "",
 	valueTopic: [],
-	topicThemes: [],
 	valuesAttributes: []
 };
 
 
-class ConfigMetadataAttributeSet extends PantherComponent{
+class ConfigMetadataAttributeSet extends ControllerComponent {
 
 	static propTypes = {
-		disabled: React.PropTypes.bool,
+		disabled: PropTypes.bool,
+		scope: PropTypes.instanceOf(ScopeModel),
+		store: PropTypes.shape({
+			attributeSets: PropTypes.arrayOf(PropTypes.instanceOf(AttributeSetModel)),
+			attributes: PropTypes.arrayOf(PropTypes.instanceOf(AttributeModel)),
+			topics: PropTypes.arrayOf(PropTypes.instanceOf(TopicModel))
+		}).isRequired,
 		selectorValue: React.PropTypes.any
 	};
 
 	static defaultProps = {
 		disabled: false,
+		scope: null,
 		selectorValue: null
 	};
 
@@ -49,50 +56,28 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 
 	constructor(props) {
 		super(props);
-		this.state = utils.deepClone(initialState);
+		this.state.current = _.assign(this.state.current, utils.deepClone(initialState));
+		this.state.saved = utils.clone(this.state.current);
 	}
 
-	store2state(props) {
-		return {
-			attributeSet: AttributeSetStore.getById(props.selectorValue),
-			topics: TopicStore.getAll(),
-			attributes: AttributeStore.getAll()
-		};
-	}
 
-	setStateFromStores(props,keys) {
+	buildState(props) {
 		if(!props){
 			props = this.props;
 		}
+		let nextState = {};
 		if(props.selectorValue) {
-			var thisComponent = this;
-			let store2state = this.store2state(props);
-			super.setStateFromStores(store2state, keys);
-			// if stores changed, overrides user input - todo fix
-
-			if(!keys || keys.indexOf("attributeSet")!=-1) {
-				store2state.attributeSet.then(function (attributeSet) {
-					if(thisComponent.acceptChange) {
-						thisComponent.acceptChange = false;
-						let newState = {
-							valueActive: attributeSet.active,
-							valueName: attributeSet.name,
-							valueTopic: attributeSet.topic ? [attributeSet.topic.key] : [],
-							valuesAttributes: utils.getModelsKeys(attributeSet.attributes)
-						};
-						newState.savedState = utils.deepClone(newState);
-						if (thisComponent.mounted) {
-							thisComponent.setState(newState);
-						}
-					}
-				});
+			let attributeSet = _.findWhere(props.store.attributeSets, {key: props.selectorValue});
+			if (attributeSet) {
+				nextState = {
+					valueActive: attributeSet.active,
+					valueName: attributeSet.name,
+					valueTopic: attributeSet.topic ? [attributeSet.topic.key] : [],
+					valuesAttributes: utils.getModelsKeys(attributeSet.attributes)
+				};
 			}
 		}
-	}
-
-	_onStoreChange(keys) {
-		logger.trace("ConfigMetadataAttributeSet# _onStoreChange(), Keys:", keys);
-		this.setStateFromStores(this.props,keys);
+		return nextState;
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -100,11 +85,13 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 		if (stateHash === this.getStateHash()) {
 			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
 				let stateKey = responseData.stateKey;
-				let values = utils.deepClone(thisComponent.state[stateKey]);
+				let values = utils.deepClone(thisComponent.state.current[stateKey]);
 				values.push(result[0].key);
-				thisComponent.setState({
+				if(thisComponent.mounted) {
+					thisComponent.setCurrentState({
 						[stateKey]: values
 					});
+				}
 				var screenObjectType;
 				switch(stateKey){
 					case "valueTopic":
@@ -133,52 +120,21 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 
 	componentDidMount() {
 		super.componentDidMount();
-		this.changeListener.add(AttributeSetStore, ["attributeSet"]);
-		this.changeListener.add(TopicStore, ["topics"]);
 		this.responseListener.add(TopicStore);
-		this.changeListener.add(AttributeStore, ["attributes"]);
 		this.responseListener.add(AttributeStore);
-
-		this.setStateFromStores();
-	}
-
-	componentWillReceiveProps(newProps) {
-		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.acceptChange = true;
-			this.setStateFromStores(newProps);
-			this.updateStateHash(newProps);
-		}
 	}
 
 	componentDidUpdate(oldProps, oldState) {
-		if (this.state.valueTopic && (oldState.valueTopic != this.state.valueTopic)) {
+		if (this.state.current.valueTopic && (oldState.current.valueTopic != this.state.current.valueTopic)) {
 			var thisComponent = this;
-			utils.getThemesForTopics(this.state.valueTopic).then(function(themes){
+			utils.getThemesForTopics(this.state.current.valueTopic).then(function(themes){
 				if(thisComponent.mounted) {
-					thisComponent.setState({
+					thisComponent.setUIState({
 						topicThemes: themes
 					});
 				}
 			});
 		}
-	}
-
-
-	/**
-	 * Check if state is the same as it was when loaded from stores
-	 * @returns {boolean}
-	 */
-	isStateUnchanged() {
-		var isIt = true;
-		if(this.state.attributeSet) {
-			isIt = (
-					this.state.valueActive == this.state.attributeSet.active &&
-					this.state.valueName == this.state.attributeSet.name &&
-					_.isEqual(this.state.valueTopic,this.state.savedState.valueTopic) &&
-					_.isEqual(this.state.valuesAttributes,this.state.savedState.valuesAttributes)
-			);
-		}
-		return isIt;
 	}
 
 	/**
@@ -192,23 +148,19 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
 		this._stateHash = utils.stringHash(props.selectorValue);
 	}
-	getStateHash() {
-		if(!this._stateHash) {
-			this.updateStateHash();
-		}
-		return this._stateHash;
-	}
 
-	saveForm() {
+	saveForm(closePanelAfter) {
 		super.saveForm();
+
 		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.attributeSet);
-		modelData.active = this.state.valueActive;
-		modelData.name = this.state.valueName;
-		modelData.topic = _.findWhere(this.state.topics, {key: this.state.valueTopic[0]});
+		let attributeSet = _.findWhere(this.props.store.attributeSets, {key: this.props.selectorValue});
+		_.assign(modelData, attributeSet);
+		modelData.active = this.state.current.valueActive;
+		modelData.name = this.state.current.valueName;
+		modelData.topic = _.findWhere(this.props.store.topics, {key: this.state.current.valueTopic[0]});
 		modelData.attributes = [];
-		for (let key of this.state.valuesAttributes) {
-			let attribute = _.findWhere(this.state.attributes, {key: key});
+		for (let key of this.state.current.valuesAttributes) {
+			let attribute = _.findWhere(this.props.store.attributes, {key: key});
 			modelData.attributes.push(attribute);
 		}
 		let modelObj = new Model[ObjectTypes.ATTRIBUTE_SET](modelData);
@@ -216,14 +168,22 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 		ActionCreator.handleObjects(actionData,ObjectTypes.ATTRIBUTE_SET);
 	}
 
+	deleteObject() {
+		let model = new Model[ObjectTypes.ATTRIBUTE_SET]({key: this.props.selectorValue});
+		let actionData = [{type:"delete", model:model}];
+		ActionCreator.handleObjects(actionData, ObjectTypes.ATTRIBUTE_SET);
+		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+	}
+
+
 	onChangeActive() {
-		this.setState({
-			valueActive: !this.state.valueActive
+		this.setCurrentState({
+			valueActive: !this.state.current.valueActive
 		});
 	}
 
 	onChangeName(e) {
-		this.setState({
+		this.setCurrentState({
 			valueName: e.target.value
 		});
 	}
@@ -232,7 +192,7 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
 		newState[stateKey] = newValues;
-		this.setState(newState);
+		this.setCurrentState(newState);
 	}
 
 	onObjectClick (itemType, value, event) {
@@ -253,29 +213,15 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 
 	render() {
 
-		var saveButton = " ";
-		if (this.state.attributeSet) {
-			saveButton = (
-				<SaveButton
-					saved={this.isStateUnchanged()}
-					className="save-button"
-					onClick={this.saveForm.bind(this)}
-				/>
-			);
-		}
+		let ret = null;
 
-		var isActiveText = "inactive";
-		var isActiveClasses = "activeness-indicator";
-		if(this.state.attributeSet && this.state.attributeSet.active){
-			isActiveText = "active";
-			isActiveClasses = "activeness-indicator active";
-		}
+		if (this.state.built) {
 
 		var topicInfoInsert = null;
-		if(this.state.valueTopic && this.state.valueTopic.length) {
+		if(this.state.current.valueTopic && this.state.current.valueTopic.length) {
 			let themesString = "";
-			if(this.state.topicThemes) {
-				for (let theme of this.state.topicThemes) {
+			if(this.state.ui.topicThemes) {
+				for (let theme of this.state.ui.topicThemes) {
 					if (themesString) {
 						themesString += ", ";
 					}
@@ -284,13 +230,13 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 			}
 			topicInfoInsert = (
 				<div className="frame-input-wrapper-info">
-					<b>{this.state.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
-					{this.state.topicThemes.length ? themesString : "No themes"}
+					<b>{this.state.ui.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
+					{this.state.ui.topicThemes.length ? themesString : "No themes"}
 				</div>
 			);
 		}
 
-		return (
+		ret = (
 			<div>
 
 				<div className="frame-input-wrapper required">
@@ -300,7 +246,7 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 							type="text"
 							name="name"
 							placeholder=" "
-							value={this.state.valueName}
+							value={this.state.current.valueName}
 							onChange={this.onChangeName.bind(this)}
 						/>
 					</label>
@@ -312,12 +258,12 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 						<UIObjectSelect
 							onChange={this.onChangeObjectSelect.bind(this, "valueTopic", ObjectTypes.TOPIC)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.TOPIC)}
-							options={this.state.topics}
+							options={this.props.store.topics}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valueTopic}
+							value={this.state.current.valueTopic}
 						/>
 					</label>
 					{topicInfoInsert}
@@ -331,20 +277,34 @@ class ConfigMetadataAttributeSet extends PantherComponent{
 							className="template"
 							onChange={this.onChangeObjectSelect.bind(this, "valuesAttributes", ObjectTypes.ATTRIBUTE)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.ATTRIBUTE)}
-							options={this.state.attributes}
+							options={this.props.store.attributes}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valuesAttributes}
+							value={this.state.current.valuesAttributes}
 						/>
 					</label>
 				</div>
 
-				{saveButton}
+				<ConfigControls
+					disabled={this.props.disabled}
+					saved={this.equalStates(this.state.current,this.state.saved)}
+					saving={this.state.saving}
+					onSave={this.saveForm.bind(this)}
+					onDelete={this.deleteObject.bind(this)}
+				/>
 
 			</div>
 		);
+
+		} else {
+			ret = (
+				<div className="component-loading"></div>
+			);
+		}
+
+		return ret;
 
 	}
 }
