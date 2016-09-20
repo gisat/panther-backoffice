@@ -56,11 +56,16 @@ class Model {
 				if(data[keyProps.serverName]) {
 					let nestedPromise = self.resolveForLocal(data[keyProps.serverName], model[key].model, self);
 					nestedPromise.then(function(transformedNestedData){
-						ret[key] = transformedNestedData;
+						if (
+							!keyProps.ignoreEmpty ||
+							Object.keys(_.pick(transformedNestedData, _.identity)).length
+						) {
+							ret[key] = transformedNestedData;
+						}
 					});
 					promises.push(nestedPromise);
-				} else {
-					ret[key] = null;
+				} else if (!keyProps.ignoreEmpty) {
+					ret[key] = {};
 				}
 			} else {
 				if (keyProps.isPromise) {
@@ -69,7 +74,7 @@ class Model {
 						ret[key] = transformedData;
 					});
 					promises.push(promise);
-				} else {
+				} else if (!keyProps.ignoreEmpty || !!data[keyProps.serverName]) {
 					if (keyProps.transformForLocal) {
 						ret[key] = keyProps.transformForLocal(data[keyProps.serverName], data);
 					} else {

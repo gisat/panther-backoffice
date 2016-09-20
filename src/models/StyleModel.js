@@ -122,6 +122,7 @@ class StyleModel extends Model {
 										serverName: 'attributeCsv',
 										sendToServer: true,
 										isNested: true,
+										ignoreEmpty: true,
 										model: {
 											values: {
 												serverName: 'values', //string - csv
@@ -133,6 +134,7 @@ class StyleModel extends Model {
 										serverName: 'attributeInterval',
 										sendToServer: true,
 										isNested: true,
+										ignoreEmpty: true,
 										model: {
 											start: {
 												serverName: 'intervalStart', //number
@@ -144,10 +146,11 @@ class StyleModel extends Model {
 											}
 										}
 									},
-									logicalAnd: {
-										serverName: 'logicalAnd',
-										sendToServer: true
-									}
+									//logicalAnd: {
+									//	serverName: 'logicalAnd',
+									//	sendToServer: true,
+									//	ignoreEmpty: true
+									//}
 								}
 							},
 							appearance: {
@@ -157,19 +160,23 @@ class StyleModel extends Model {
 								model: {
 									fillColour: {
 										serverName: 'fillColour', //hex
-										sendToServer: true
+										sendToServer: true,
+										ignoreEmpty: true
 									},
 									strokeColour: {
 										serverName: 'strokeColour', //hex
-										sendToServer: true
+										sendToServer: true,
+										ignoreEmpty: true
 									},
 									strokeWidth: {
 										serverName: 'strokeWidth', //number - 0.1
-										sendToServer: true
+										sendToServer: true,
+										ignoreEmpty: true
 									},
 									shapeSize: {
 										serverName: 'shapeSize', //number - 8
-										sendToServer: true
+										sendToServer: true,
+										ignoreEmpty: true
 									}
 								}
 							}
