@@ -428,7 +428,7 @@ class ScreenAnalysisRulesSpatial extends PantherComponent {
 
 	onChangeInRow(type, attribute, value, values) {
 		let attributeMap = utils.clone(this.state.valueAttributeMaps[this.state.valueResultAttSet]);
-		let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute});
+		let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute}) || {};
 		switch (type) {
 			case "operation":
 				attributeMapRow.operationType = value;
