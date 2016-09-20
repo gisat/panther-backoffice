@@ -492,9 +492,8 @@ class ScreenAnalysisRulesSpatial extends PantherComponent {
 				let resultAttSet = _.findWhere(this.state.attributeSetsResult, {key: this.state.valueResultAttSet[0]});
 				for (let attribute of resultAttSet.attributes) {
 					var operationType = (attributeMapRow && attributeMapRow.operationType) || null;
-					attributeMapRow = attributeMapRow || {};
 					let attributeMap = this.state.valueAttributeMaps[this.state.valueResultAttSet];
-					let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute});
+					let attributeMapRow = _.findWhere(attributeMap, {attribute: attribute}) || {};
 					let operationCellInsert = (
 						<td className="allowOverflow resetui">
 							<label className="container">
