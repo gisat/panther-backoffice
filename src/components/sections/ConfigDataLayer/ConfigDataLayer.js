@@ -659,9 +659,13 @@ class ConfigDataLayer extends ControllerComponent {
 
 		if(this.state.built) {
 			let places = [];
+			let analyticalUnitsLevels = [];
+			let periods = [];
 			if(this.state.current.valueScope && this.state.current.valueScope.length > 0) {
 				let scope = _.findWhere(this.props.store.scopes, {key: this.state.current.valueScope[0]});
 				places = _.where(this.props.store.places, {scope: scope});
+				analyticalUnitsLevels = scope.levels;
+				periods = scope.periods;
 			}
 			let destinations = this.prepareDestinations(this.props.store.attributeSets);
 
@@ -751,7 +755,7 @@ class ConfigDataLayer extends ControllerComponent {
 							layerTemplates={this.props.store.vectorLayerTemplates}
 							scopes={this.props.store.scopes}
 							places={places}
-							periods={this.props.store.periods}
+							periods={periods}
 							destinations={destinations}
 							valueTemplate={this.state.current.valueTemplate}
 							valueScope={this.state.current.valueScope}
@@ -775,7 +779,7 @@ class ConfigDataLayer extends ControllerComponent {
 							layerTemplates={this.props.store.rasterLayerTemplates}
 							scopes={this.props.store.scopes}
 							places={places}
-							periods={this.props.store.periods}
+							periods={periods}
 							valueTemplate={this.state.current.valueTemplate}
 							valueScope={this.state.current.valueScope}
 							valuesPlaces={this.state.current.valuePlaces}
@@ -792,10 +796,10 @@ class ConfigDataLayer extends ControllerComponent {
 						id="config-data-layer-au"
 					>
 						<ConfigDataLayerAnalytical
-							levels={this.props.store.auLevels}
+							levels={analyticalUnitsLevels}
 							scopes={this.props.store.scopes}
 							places={places}
-							periods={this.props.store.periods}
+							periods={periods}
 							destinations={destinations}
 							valueLevel={this.state.current.valueTemplate}
 							valueScope={this.state.current.valueScope}
