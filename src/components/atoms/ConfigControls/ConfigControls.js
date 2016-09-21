@@ -32,29 +32,42 @@ class ConfigControls extends Component {
 
 	render() {
 
+		let leftInsert = [], rightInsert = [];
+
+		leftInsert.push(
+			<SaveButton
+				key="saveButton"
+				saved={this.props.saved}
+				saving={this.props.saving}
+				disabled={this.props.disabled}
+				className="save-button"
+				onClick={this.props.onSave}
+			/>
+		);
+
+
+		rightInsert.push(
+			<IconButton
+				key="deleteButton"
+				name="trash outline"
+				basic
+				disabled={this.props.disabled}
+				className="delete-button"
+				onClick={this.props.onDelete}
+			>
+				Delete
+			</IconButton>
+		);
+
 		let classes = classNames('config-controls',	this.props.className);
 
 		return (
 			<div className={classes}>
 				<div className="config-controls-left">
-					<SaveButton
-						saved={this.props.saved}
-						saving={this.props.saving}
-						disabled={this.props.disabled}
-						className="save-button"
-						onClick={this.props.onSave}
-					/>
+					{leftInsert}
 				</div>
 				<div className="config-controls-right">
-					<IconButton
-						name="trash outline"
-						basic
-						disabled={this.props.disabled}
-						className="delete-button"
-						onClick={this.props.onDelete}
-					>
-						Delete
-					</IconButton>
+					{rightInsert}
 				</div>
 			</div>
 		);
