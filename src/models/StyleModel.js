@@ -109,10 +109,6 @@ class StyleModel extends Model {
 								serverName: 'name',
 								sendToServer: true
 							},
-							title: {
-								serverName: 'title',
-								sendToServer: true
-							},
 							filter: {
 								serverName: 'filter',
 								sendToServer: true,
