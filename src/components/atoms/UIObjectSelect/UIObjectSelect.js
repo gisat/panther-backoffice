@@ -176,7 +176,7 @@ var UIObjectSelect = React.createClass({
 
 	componentWillReceiveProps (newProps) {
 		var optionsChanged = false;
-		if (_.isEqual(newProps.options,this.props.options)) {
+		if (!_.isEqual(newProps.options,this.props.options)) {
 			optionsChanged = true;
 			this.setState({
 				options: newProps.options,
