@@ -1,38 +1,41 @@
 import React, { PropTypes, Component } from 'react';
-import PantherComponent from '../../common/PantherComponent';
-
+import ControllerComponent from '../../common/ControllerComponent';
+import ActionCreator from '../../../actions/ActionCreator';
+import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
-
-import { Input, Button } from '../../SEUI/elements';
-import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
-import UIObjectSelect from '../../atoms/UIObjectSelect';
-import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
+import ScopeModel from '../../../models/ScopeModel';
+import TopicModel from '../../../models/TopicModel';
 import TopicStore from '../../../stores/TopicStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
-import logger from '../../../core/Logger';
-import ListenerHandler from '../../../core/ListenerHandler';
+
+import { Input, Button } from '../../SEUI/elements';
+import { CheckboxFields, Checkbox } from '../../SEUI/modules';
+import UIObjectSelect from '../../atoms/UIObjectSelect';
+import ConfigControls from '../../atoms/ConfigControls';
 
 var initialState = {
-	topic: null,
-	valueActive: false,
 	valueName: ""
 };
 
 
-class ConfigMetadataTopic extends PantherComponent{
+class ConfigMetadataTopic extends ControllerComponent {
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
+		scope: PropTypes.instanceOf(ScopeModel),
+		store: PropTypes.shape({
+			topics: PropTypes.arrayOf(PropTypes.instanceOf(TopicModel))
+		}).isRequired,
 		selectorValue: React.PropTypes.any
 	};
 
 	static defaultProps = {
 		disabled: false,
+		scope: null,
 		selectorValue: null
 	};
 
@@ -43,76 +46,25 @@ class ConfigMetadataTopic extends PantherComponent{
 
 	constructor(props) {
 		super(props);
-		this.state = utils.deepClone(initialState);
+		this.state.current = _.assign(this.state.current, utils.deepClone(initialState));
+		this.state.saved = utils.clone(this.state.current);
 	}
 
-	store2state(props) {
-		return {
-			topic: TopicStore.getById(props.selectorValue)
-		};
-	}
 
-	setStateFromStores(props,keys) {
+	buildState(props) {
 		if(!props){
 			props = this.props;
 		}
+		let nextState = {};
 		if(props.selectorValue) {
-			var thisComponent = this;
-			let store2state = this.store2state(props);
-			super.setStateFromStores(store2state, keys);
-			// if stores changed, overrides user input - todo fix
-
-			if(!keys || keys.indexOf("topic")!=-1) {
-				store2state.topic.then(function (topic) {
-					if(thisComponent.acceptChange) {
-						thisComponent.acceptChange = false;
-						let newState = {
-							valueActive: topic.active,
-							valueName: topic.name
-						};
-						newState.savedState = utils.deepClone(newState);
-						if (thisComponent.mounted) {
-							thisComponent.setState(newState);
-						}
-					}
-				});
+			let topic = _.findWhere(props.store.topics, {key: props.selectorValue});
+			if (topic) {
+				nextState = {
+					valueName: topic.name
+				};
 			}
 		}
-	}
-
-	_onStoreChange(keys) {
-		logger.trace("ConfigMetadataTopic# _onStoreChange(), Keys:", keys);
-		this.setStateFromStores(this.props,keys);
-	}
-
-	componentDidMount() {
-		super.componentDidMount();
-		this.changeListener.add(TopicStore, ["topic"]);
-		this.setStateFromStores();
-	}
-
-	componentWillReceiveProps(newProps) {
-		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.acceptChange = true;
-			this.setStateFromStores(newProps);
-			this.updateStateHash(newProps);
-		}
-	}
-
-
-	/**
-	 * Check if state is the same as it was when loaded from stores
-	 * @returns {boolean}
-	 */
-	isStateUnchanged() {
-		var isIt = true;
-		if(this.state.topic) {
-			isIt = (
-					this.state.valueActive == this.state.topic.active &&
-					this.state.valueName == this.state.topic.name
-			);
-		}
-		return isIt;
+		return nextState;
 	}
 
 	/**
@@ -126,32 +78,29 @@ class ConfigMetadataTopic extends PantherComponent{
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
 		this._stateHash = utils.stringHash(props.selectorValue);
 	}
-	getStateHash() {
-		if(!this._stateHash) {
-			this.updateStateHash();
-		}
-		return this._stateHash;
-	}
 
 	saveForm() {
 		super.saveForm();
+
 		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.topic);
-		modelData.active = this.state.valueActive;
-		modelData.name = this.state.valueName;
+		let topic = _.findWhere(this.props.store.topics, {key: this.props.selectorValue});
+		_.assign(modelData, topic);
+		modelData.name = this.state.current.valueName;
 		let modelObj = new Model[ObjectTypes.TOPIC](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.TOPIC);
 	}
 
-	onChangeActive() {
-		this.setState({
-			valueActive: !this.state.valueActive
-		});
+	deleteObject() {
+		let model = new Model[ObjectTypes.TOPIC]({key: this.props.selectorValue});
+		let actionData = [{type:"delete", model:model}];
+		ActionCreator.handleObjects(actionData, ObjectTypes.TOPIC);
+		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
 	}
 
+
 	onChangeName(e) {
-		this.setState({
+		this.setCurrentState({
 			valueName: e.target.value
 		});
 	}
@@ -159,25 +108,11 @@ class ConfigMetadataTopic extends PantherComponent{
 
 	render() {
 
-		var saveButton = " ";
-		if (this.state.topic) {
-			saveButton = (
-				<SaveButton
-					saved={this.isStateUnchanged()}
-					className="save-button"
-					onClick={this.saveForm.bind(this)}
-				/>
-			);
-		}
+		let ret = null;
 
-		var isActiveText = "inactive";
-		var isActiveClasses = "activeness-indicator";
-		if(this.state.topic && this.state.topic.active){
-			isActiveText = "active";
-			isActiveClasses = "activeness-indicator active";
-		}
+		if (this.state.built) {
 
-		return (
+		ret = (
 			<div>
 
 				<div className="frame-input-wrapper required">
@@ -187,16 +122,30 @@ class ConfigMetadataTopic extends PantherComponent{
 							type="text"
 							name="name"
 							placeholder=" "
-							value={this.state.valueName}
+							value={this.state.current.valueName}
 							onChange={this.onChangeName.bind(this)}
 						/>
 					</label>
 				</div>
 
-				{saveButton}
+				<ConfigControls
+					disabled={this.props.disabled}
+					saved={this.equalStates(this.state.current,this.state.saved)}
+					saving={this.state.saving}
+					onSave={this.saveForm.bind(this)}
+					onDelete={this.deleteObject.bind(this)}
+				/>
 
 			</div>
 		);
+
+		} else {
+			ret = (
+				<div className="component-loading"></div>
+			);
+		}
+
+		return ret;
 
 	}
 }

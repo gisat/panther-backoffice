@@ -1,45 +1,51 @@
 import React, { PropTypes, Component } from 'react';
-import PantherComponent from '../../common/PantherComponent';
-
+import ControllerComponent from '../../common/ControllerComponent';
+import ActionCreator from '../../../actions/ActionCreator';
+import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
-
-import { Input, Button } from '../../SEUI/elements';
-import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import _ from 'underscore';
-import UIObjectSelect from '../../atoms/UIObjectSelect';
-import SaveButton from '../../atoms/SaveButton';
 
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
+import ScopeModel from '../../../models/ScopeModel';
+import ThemeModel from '../../../models/ThemeModel';
+import TopicModel from '../../../models/TopicModel';
 import ThemeStore from '../../../stores/ThemeStore';
 import TopicStore from '../../../stores/TopicStore';
 import ScopeStore from '../../../stores/ScopeStore';
-import PeriodStore from '../../../stores/PeriodStore';
+//import PeriodStore from '../../../stores/PeriodStore';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
-import logger from '../../../core/Logger';
-import ListenerHandler from '../../../core/ListenerHandler';
+
+import { Input, Button } from '../../SEUI/elements';
+import { CheckboxFields, Checkbox } from '../../SEUI/modules';
+import UIObjectSelect from '../../atoms/UIObjectSelect';
+import ConfigControls from '../../atoms/ConfigControls';
 
 var initialState = {
-	style: null,
 	valueActive: false,
 	valueName: "",
 	valueScope: [],
 	valuesTopics: [],
-	valuesTopicsPreferential: [],
-	valuesPeriods: []
+	valuesTopicsPreferential: []
 };
 
 
-class ConfigMetadataTheme extends PantherComponent{
+class ConfigMetadataTheme extends ControllerComponent {
 
 	static propTypes = {
 		disabled: React.PropTypes.bool,
+		scope: PropTypes.instanceOf(ScopeModel),
+		store: PropTypes.shape({
+			themes: PropTypes.arrayOf(PropTypes.instanceOf(ThemeModel)),
+			topics: PropTypes.arrayOf(PropTypes.instanceOf(TopicModel)),
+			scopes: PropTypes.arrayOf(PropTypes.instanceOf(ScopeModel))
+		}).isRequired,
 		selectorValue: React.PropTypes.any
 	};
 
 	static defaultProps = {
 		disabled: false,
+		scope: null,
 		selectorValue: null
 	};
 
@@ -50,53 +56,29 @@ class ConfigMetadataTheme extends PantherComponent{
 
 	constructor(props) {
 		super(props);
-		this.state = utils.deepClone(initialState);
+		this.state.current = _.assign(this.state.current, utils.deepClone(initialState));
+		this.state.saved = utils.clone(this.state.current);
 	}
 
-	store2state(props) {
-		return {
-			theme: ThemeStore.getById(props.selectorValue),
-			scopes: ScopeStore.getAll(),
-			topics: TopicStore.getAll()
-		};
-	}
 
-	setStateFromStores(props,keys) {
+	buildState(props) {
 		if(!props){
 			props = this.props;
 		}
+		let nextState = {};
 		if(props.selectorValue) {
-			var thisComponent = this;
-			let store2state = this.store2state(props);
-			super.setStateFromStores(store2state, keys);
-			// if stores changed, overrides user input - todo fix
-
-			if(!keys || keys.indexOf("theme")!=-1) {
-				store2state.theme.then(function (theme) {
-					if(thisComponent.acceptChange) {
-						thisComponent.acceptChange = false;
-
-						let newState = {
-							valueActive: theme.active,
-							valueName: theme.name,
-							valueScope: theme.scope ? [theme.scope.key] : [],
-							valuesTopics: utils.getModelsKeys(theme.topics),
-							valuesTopicsPreferential: utils.getModelsKeys(theme.topicsPreferential),
-							valuesPeriods: utils.getModelsKeys(theme.periods)
-						};
-						newState.savedState = utils.deepClone(newState);
-						if (thisComponent.mounted) {
-							thisComponent.setState(newState);
-						}
-					}
-				});
+			let theme = _.findWhere(props.store.themes, {key: props.selectorValue});
+			if (theme) {
+				nextState = {
+					valueActive: theme.active,
+					valueName: theme.name,
+					valueScope: theme.scope ? [theme.scope.key] : [],
+					valuesTopics: utils.getModelsKeys(theme.topics),
+					valuesTopicsPreferential: utils.getModelsKeys(theme.topicsPreferential)
+				};
 			}
 		}
-	}
-
-	_onStoreChange(keys) {
-		logger.trace("ConfigMetadataTheme# _onStoreChange(), Keys:", keys);
-		this.setStateFromStores(this.props,keys);
+		return nextState;
 	}
 
 	_onStoreResponse(result,responseData,stateHash) {
@@ -104,11 +86,13 @@ class ConfigMetadataTheme extends PantherComponent{
 		if (stateHash === this.getStateHash()) {
 			if (responseData.hasOwnProperty("stateKey") && responseData.stateKey) {
 				let stateKey = responseData.stateKey;
-				let values = utils.deepClone(thisComponent.state[stateKey]);
+				let values = utils.deepClone(thisComponent.state.current[stateKey]);
 				values.push(result[0].key);
-				thisComponent.setState({
-					[stateKey]: values
-				});
+				if(thisComponent.mounted) {
+					thisComponent.setCurrentState({
+						[stateKey]: values
+					});
+				}
 				var screenObjectType;
 				switch(stateKey){
 					case "valueScope":
@@ -139,44 +123,10 @@ class ConfigMetadataTheme extends PantherComponent{
 		}
 	}
 
-	componentDidMount() { 
+	componentDidMount() {
 		super.componentDidMount();
-		this.changeListener.add(ThemeStore, ["theme"]);
-		this.changeListener.add(ScopeStore, ["scopes"]);
-		this.changeListener.add(TopicStore, ["topics"]);
 		this.responseListener.add(ScopeStore);
 		this.responseListener.add(TopicStore);
-		this.responseListener.add(PeriodStore);
-
-		this.setStateFromStores();
-	}
-
-	componentWillReceiveProps(newProps) {
-		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.acceptChange = true;
-			this.setStateFromStores(newProps);
-			this.updateStateHash(newProps);
-		}
-	}
-
-
-	/**
-	 * Check if state is the same as it was when loaded from stores
-	 * @returns {boolean}
-	 */
-	isStateUnchanged() {
-		var isIt = true;
-		if(this.state.theme) {
-			isIt = (
-				this.state.valueActive == this.state.theme.active &&
-				this.state.valueName == this.state.theme.name &&
-				_.isEqual(this.state.valueScope,this.state.savedState.valueScope) &&
-				_.isEqual(this.state.valuesTopics,this.state.savedState.valuesTopics) &&
-				_.isEqual(this.state.valuesTopicsPreferential,this.state.savedState.valuesTopicsPreferential) &&
-				_.isEqual(this.state.valuesPeriods,this.state.savedState.valuesPeriods)
-			);
-		}
-		return isIt;
 	}
 
 	/**
@@ -190,45 +140,49 @@ class ConfigMetadataTheme extends PantherComponent{
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
 		this._stateHash = utils.stringHash(props.selectorValue);
 	}
-	getStateHash() {
-		if(!this._stateHash) {
-			this.updateStateHash();
-		}
-		return this._stateHash;
-	}
 
-	saveForm() {
+	saveForm(closePanelAfter) {
 		super.saveForm();
-		var thisComponent = this;
+
 		var actionData = [], modelData = {};
-		_.assign(modelData, this.state.theme);
-		modelData.active = this.state.valueActive;
-		modelData.name = this.state.valueName;
-		modelData.scope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
+		let theme = _.findWhere(this.props.store.themes, {key: this.props.selectorValue});
+		_.assign(modelData, theme);
+		modelData.active = this.state.current.valueActive;
+		modelData.name = this.state.current.valueName;
+		modelData.scope = _.findWhere(this.props.store.scopes, {key: this.state.current.valueScope[0]});
 		modelData.topics = [];
-		for (let key of this.state.valuesTopics) {
-			let topic = _.findWhere(this.state.topics, {key: key});
+		for (let key of this.state.current.valuesTopics) {
+			let topic = _.findWhere(this.props.store.topics, {key: key});
 			modelData.topics.push(topic);
 		}
 		modelData.topicsPreferential = [];
-		for (let key of this.state.valuesTopicsPreferential) {
-			let topic = _.findWhere(this.state.topics, {key: key});
+		for (let key of this.state.current.valuesTopicsPreferential) {
+			let topic = _.findWhere(this.props.store.topics, {key: key});
 			modelData.topicsPreferential.push(topic);
 		}
+		modelData.periods = modelData.scope ? modelData.scope.periods : []; //ensure periods are copied from newly added scope
 
 		let modelObj = new Model[ObjectTypes.THEME](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.THEME);
 	}
 
+	deleteObject() {
+		let model = new Model[ObjectTypes.THEME]({key: this.props.selectorValue});
+		let actionData = [{type:"delete", model:model}];
+		ActionCreator.handleObjects(actionData, ObjectTypes.THEME);
+		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+	}
+
+
 	onChangeActive() {
-		this.setState({
-			valueActive: !this.state.valueActive
+		this.setCurrentState({
+			valueActive: !this.state.current.valueActive
 		});
 	}
 
 	onChangeName(e) {
-		this.setState({
+		this.setCurrentState({
 			valueName: e.target.value
 		});
 	}
@@ -237,34 +191,19 @@ class ConfigMetadataTheme extends PantherComponent{
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
 		newState[stateKey] = newValues;
-		this.setState(newState);
-	}
-
-	onChangeScope (value, values) {
-		let newValue = utils.handleNewObjects(values, ObjectTypes.SCOPE, {stateKey: "valueScope"}, this.getStateHash());
-
-		var periods = [];
-		if (value) {
-			let scope = _.findWhere(this.state.scopes, {key: value});
-			periods = utils.getModelsKeys(scope.periods);
-		}
-
-		this.setState({
-			valueScope: newValue,
-			valuesPeriods: periods
-		});
+		this.setCurrentState(newState);
 	}
 
 	onChangeTopics (value, values) {
 		let newValue = utils.handleNewObjects(values, ObjectTypes.TOPIC, {stateKey: "valuesTopics"}, this.getStateHash());
 
 		// topics changed - change preferential accordingly
-		let valuesTopicsPreferential = utils.clone(this.state.valuesTopicsPreferential);
+		let valuesTopicsPreferential = utils.clone(this.state.current.valuesTopicsPreferential);
 		valuesTopicsPreferential = _.filter(valuesTopicsPreferential,function(key){
 			return _.contains(newValue,key);
 		},this);
 
-		this.setState({
+		this.setCurrentState({
 			valuesTopics: newValue,
 			valuesTopicsPreferential: valuesTopicsPreferential
 		});
@@ -288,38 +227,17 @@ class ConfigMetadataTheme extends PantherComponent{
 
 	render() {
 
-		var saveButton = " ";
-		if (this.state.theme) {
-			saveButton = (
-				<SaveButton
-					saved={this.isStateUnchanged()}
-					className="save-button"
-					onClick={this.saveForm.bind(this)}
-				/>
-			);
-		}
+		let ret = null;
 
-		var isActiveText = "inactive";
-		var isActiveClasses = "activeness-indicator";
-		if(this.state.theme && this.state.theme.active){
-			isActiveText = "active";
-			isActiveClasses = "activeness-indicator active";
-		}
+		if (this.state.built) {
 
-		var selectedTopics = _.filter(this.state.topics,function(topic){
-			return _.contains(this.state.valuesTopics,topic.key);
+
+		var selectedTopics = _.filter(this.props.store.topics,function(topic){
+			return _.contains(this.state.current.valuesTopics,topic.key);
 		},this);
 
-		var periodsOptions = [];
-		if(this.state.valueScope[0]) {
-			var selectedScope = _.findWhere(this.state.scopes, {key: this.state.valueScope[0]});
-			if(selectedScope) {
-				periodsOptions = selectedScope.periods;
-			}
-		}
 
-
-		return (
+		ret = (
 			<div>
 
 				<div className="frame-input-wrapper required">
@@ -329,7 +247,7 @@ class ConfigMetadataTheme extends PantherComponent{
 							type="text"
 							name="name"
 							placeholder=" "
-							value={this.state.valueName}
+							value={this.state.current.valueName}
 							onChange={this.onChangeName.bind(this)}
 						/>
 					</label>
@@ -339,14 +257,14 @@ class ConfigMetadataTheme extends PantherComponent{
 					<label className="container">
 						Scope
 						<UIObjectSelect
-							onChange={this.onChangeScope.bind(this)}
+							onChange={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.SCOPE)}
-							options={this.state.scopes}
+							options={this.props.store.scopes}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valueScope}
+							value={this.state.current.valueScope}
 						/>
 					</label>
 				</div>
@@ -358,12 +276,12 @@ class ConfigMetadataTheme extends PantherComponent{
 							multi
 							onChange={this.onChangeTopics.bind(this)}
 							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.TOPIC)}
-							options={this.state.topics}
+							options={this.props.store.topics}
 							allowCreate
 							newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valuesTopics}
+							value={this.state.current.valuesTopics}
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
@@ -383,7 +301,7 @@ class ConfigMetadataTheme extends PantherComponent{
 							//newOptionCreator={utils.keyNameOptionFactory}
 							valueKey="key"
 							labelKey="name"
-							value={this.state.valuesTopicsPreferential}
+							value={this.state.current.valuesTopicsPreferential}
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
@@ -391,10 +309,24 @@ class ConfigMetadataTheme extends PantherComponent{
 					</div>
 				</div>
 
-				{saveButton}
+				<ConfigControls
+					disabled={this.props.disabled}
+					saved={this.equalStates(this.state.current,this.state.saved)}
+					saving={this.state.saving}
+					onSave={this.saveForm.bind(this)}
+					onDelete={this.deleteObject.bind(this)}
+				/>
 
 			</div>
 		);
+
+		} else {
+			ret = (
+				<div className="component-loading"></div>
+			);
+		}
+
+		return ret;
 
 	}
 }
