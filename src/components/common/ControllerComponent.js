@@ -85,6 +85,7 @@ class ControllerComponent extends PantherComponent {
 					next: {$merge: nextState},
 					invalid: {$set: true}
 				});
+				logger.error(this.constructor.name + ":ControllerComponent# invalid state set");
 			}
 		}
 		else {
