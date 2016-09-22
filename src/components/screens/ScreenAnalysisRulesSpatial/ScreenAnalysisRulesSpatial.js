@@ -198,30 +198,33 @@ class ScreenAnalysisRulesSpatial extends PantherComponent {
 	isStateUnchanged() {
 		var isIt = true;
 		if(this.state.analysis) {
+			let isLayerTemplateMissing = !this.state.valueFeatureLayer.length && !this.state.analysis.layerObject;
+			let isLayerTemplateTheSame = this.state.analysis.layerObject &&
+				(this.state.valueFeatureLayer[0] == this.state.analysis.layerObject.key);
+			let isResultAttributeSetMissing = !this.state.valueResultAttSet.length && !this.state.analysis.attributeSet;
+			let isResultAttributeSetTheSame = this.state.analysis.attributeSet &&
+				(this.state.valueResultAttSet[0] == this.state.analysis.attributeSet.key);
+			let isFilterAttributeSetMissing = !this.state.valueFilterAttSetAtt.length && !this.state.analysis.filterAttribute;
+			let isFilterAttributeTheSame = !!(this.state.analysis.filterAttribute &&
+				this.state.analysis.filterAttributeSet &&
+				(this.state.valueFilterAttSetAtt[0] == this.state.analysis.filterAttributeSet.key + "-" + this.state.analysis.filterAttribute.key));
+
+			let isAttributeMapTheSame = _.isEqual(this.state.valueAttributeMaps[this.state.analysis.attributeSet.key], this.state.analysis.attributeMap);
+
 			isIt = (
 				(
-					(!this.state.valueFeatureLayer.length && !this.state.analysis.layerObject) ||
-					(
-						this.state.analysis.layerObject &&
-						(this.state.valueFeatureLayer[0] == this.state.analysis.layerObject.key)
-					)
+					(isLayerTemplateMissing) ||
+					(isLayerTemplateTheSame)
 				) &&
 				(
-					(!this.state.valueResultAttSet.length && !this.state.analysis.attributeSet) ||
-					(
-						this.state.analysis.attributeSet &&
-						(this.state.valueResultAttSet[0] == this.state.analysis.attributeSet.key)
-					)
+					(isResultAttributeSetMissing) ||
+					(isResultAttributeSetTheSame)
 				) &&
 				(
-					(!this.state.valueFilterAttSetAtt && !this.state.analysis.filterAttribute) ||
-					(
-						this.state.analysis.filterAttribute &&
-						this.state.analysis.filterAttributeSet &&
-						(this.state.valueFilterAttSetAtt[0] == this.state.analysis.filterAttributeSet.key + "-" + this.state.analysis.filterAttribute.key)
-					)
+					(isFilterAttributeSetMissing) ||
+					(isFilterAttributeTheSame)
 				) &&
-					_.isEqual(this.state.valueAttributeMaps[this.state.analysis.attributeSet.key], this.state.analysis.attributeMap)
+					isAttributeMapTheSame
 			);
 		}
 		return isIt;
