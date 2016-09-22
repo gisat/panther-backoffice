@@ -227,13 +227,13 @@ class ConfigMetadataAttributeSet extends ControllerComponent {
 					}
 					themesString += theme.name
 				}
+				topicInfoInsert = (
+					<div className="frame-input-wrapper-info">
+						<b>{this.state.ui.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
+						{this.state.ui.topicThemes.length ? themesString : "No themes"}
+					</div>
+				);
 			}
-			topicInfoInsert = (
-				<div className="frame-input-wrapper-info">
-					<b>{this.state.ui.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
-					{this.state.ui.topicThemes.length ? themesString : "No themes"}
-				</div>
-			);
 		}
 
 		ret = (
