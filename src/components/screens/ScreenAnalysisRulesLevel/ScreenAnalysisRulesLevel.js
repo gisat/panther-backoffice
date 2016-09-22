@@ -196,7 +196,12 @@ class ScreenAnalysisRulesLevel extends PantherComponent {
 			);
 			if (isIt) {
 				for (let attSet of this.state.analysis.attributeSets) {
-					isIt = isIt && _.isEqual(this.state.valueAttributeMaps[attSet.key], _.where(this.state.analysis.attributeMap, {attributeSet: attSet}))
+					var attributeSetToCompare = _.where(this.state.analysis.attributeMap, {attributeSet: attSet});
+					var currentAttributeSet = this.state.valueAttributeMaps[attSet.key];
+					if(!_.isEqual(currentAttributeSet, attributeSetToCompare)) {
+						logger.info('ScreenAnalysisRulesLevel#isStateUnchanged Current: ', currentAttributeSet, ' To Compare: ', attributeSetToCompare);
+					}
+					isIt = isIt && _.isEqual(currentAttributeSet, attributeSetToCompare)
 				}
 			}
 		}
