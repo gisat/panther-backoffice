@@ -109,7 +109,7 @@ class ScreenAnalysesBase extends PantherComponent{
 
 	componentDidMount() {
 		super.componentDidMount();
-		this.changeListener.add(AnalysisStore, ["spatialAnalyses","fidAnalyses","mathAnalyses"]);
+		this.changeListener.add(AnalysisStore, ["spatialAnalyses","levelAnalyses","mathAnalyses"]);
 		this.responseListener.add(AnalysisStore);
 
 		super.setStateFromStores(this.store2state());
