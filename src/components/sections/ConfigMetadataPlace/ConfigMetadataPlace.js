@@ -80,7 +80,6 @@ class ConfigMetadataPlace extends ControllerComponent {
 				if (model.hasOwnProperty('description')) {
 					nextState.valueDescription = place.description;
 				}
-				this.onChangeBoundingBoxToMap(place.boundingBox);
 			}
 		}
 		return nextState;
@@ -186,7 +185,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 	}
 
 	onChangeBoundingBoxToMap(valueBoundingBox) {
-		if(!valueBoundingBox || !this.currentSelector) {
+		if(_.isUndefined(valueBoundingBox) || !this.currentSelector) {
 			return;
 		}
 
