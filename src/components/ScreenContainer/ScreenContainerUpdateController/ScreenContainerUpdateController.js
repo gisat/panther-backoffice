@@ -11,7 +11,9 @@ class ScreenContainerUpdateController extends PantherComponent {
 	};
 
 	shouldComponentUpdate(nextProps, nextState) {
-		return !(nextProps.focusUpdate && (nextProps.disabled == this.props.disabled));
+		let ret = !(nextProps.focusUpdate && (nextProps.disabled == this.props.disabled));
+		if (!ret) logger.trace("ScreenContainerUpdateController blocked update");
+		return ret;
 	}
 
 	render() {
