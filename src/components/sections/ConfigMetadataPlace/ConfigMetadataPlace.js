@@ -186,7 +186,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 	}
 
 	onChangeBoundingBoxToMap(valueBoundingBox) {
-		if(!valueBoundingBox) {
+		if(!valueBoundingBox || !this.currentSelector) {
 			return;
 		}
 
@@ -227,6 +227,9 @@ class ConfigMetadataPlace extends ControllerComponent {
 			onSelectionChangeListener: this.onChangeBoundingBoxMap.bind(this),
 			type: 'boundingBox'
 		});
+		if(this.state.current && this.state.current.valueBoundingBox) {
+			this.onChangeBoundingBoxToMap(this.state.current.valueBoundingBox);
+		}
 	}
 
 	onChangeDescription(e) {
