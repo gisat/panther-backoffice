@@ -206,7 +206,7 @@ class ApiStore extends Store {
 						let errorMessage = err ? "Server request failed\nError message: " + err : "Error: Empty response";
 						logger.error(thisStore.constructor.name + ":ApiStore#request " + errorMessage);
 						utils.displayMessage(errorMessage);
-						reject(err);
+						resolve(err);
 						return;
 					}
 
@@ -224,7 +224,7 @@ class ApiStore extends Store {
 						let errorMessage = "Error: Failed to parse server response.";
 						logger.error(thisStore.constructor.name + ":ApiStore#request JSON parse: " + errorMessage);
 						utils.displayMessage(errorMessage);
-						reject(e);
+						resolve(e);
 						return;
 					}
 
@@ -235,7 +235,7 @@ class ApiStore extends Store {
 							responseMessage = responseJson.message;
 						}
 						utils.displayMessage(err + "\n" + responseMessage);
-						reject(err);
+						resolve(err);
 						return;
 					}
 
