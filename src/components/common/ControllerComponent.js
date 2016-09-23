@@ -83,7 +83,9 @@ class ControllerComponent extends PantherComponent {
 				//todo next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
 				this.setStateDeep({
 					next: {$merge: nextState},
-					invalid: {$set: true}
+					saved: {$merge: nextState}, // TODO: See what is happening. What if there is actually some issue on the server.
+					invalid: {$set: true},
+					saving: {$set: false}
 				});
 				logger.error(this.constructor.name + ":ControllerComponent# invalid state set");
 			}
