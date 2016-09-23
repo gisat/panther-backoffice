@@ -33,6 +33,7 @@ var initialState = {
 	valueDefinitionRules: [],
 	valueDefinitionSingleRule: {
 		name: "",
+		filter: {},
 		appearance: {
 			fillColour: ""
 		}
