@@ -297,8 +297,8 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 			}
 			topicInfoInsert = (
 				<div className="frame-input-wrapper-info">
-					<b>{this.state.ui.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
-					{this.state.ui.topicThemes.length ? themesString : "No themes"}
+					<b>{themesString.length > 0 ? "Themes: " : "Theme: "}</b>
+					{themesString.length > 0 ? themesString : "No themes"}
 				</div>
 			);
 		}
