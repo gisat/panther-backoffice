@@ -102,7 +102,7 @@ class DelayButton extends Component {
 		};
 		if (this.state.countdown) {
 			style = {
-				transition: 'background 5000ms linear'
+				transition: 'background ' + this.props.delay + 'ms linear'
 			};
 		}
 		var { color, basic, disabled, className, onClick, name, ...other } = this.props;
