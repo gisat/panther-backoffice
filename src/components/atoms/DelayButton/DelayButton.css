@@ -1,0 +1,24 @@
+.ptr-delay-button {
+	background: linear-gradient(to right, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%);
+	background-size: 200% auto;
+	background-position: right 0;
+}
+
+.ptr-delay-button.countdown {
+	background-position: left 0;
+}
+
+/* errrghh hacks todo get rid of them */
+.ui.button.ptr-delay-button,
+.ui.button.ptr-delay-button:hover,
+.ui.button.ptr-delay-button:active,
+.ui.button.ptr-delay-button:focus {
+	background: linear-gradient(to right, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%) !important;
+	background-size: 200% auto !important;
+	background-position: right 0 !important;
+}
+
+.ui.button.ptr-delay-button.countdown {
+	background-position: left 0 !important;
+}
+

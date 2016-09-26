@@ -1,0 +1,6 @@
+{
+	"name": "DelayButton",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./DelayButton.js"
+}
