@@ -11,7 +11,7 @@ import {geoserverProtocol, geoserverAddress} from '../../../config';
 
 import Select from 'react-select';
 import SaveButton from '../../atoms/SaveButton';
-import { IconButton } from '../../SEUI/elements';
+import DelayButton from '../../atoms/DelayButton';
 
 import ConfigDataLayerVector from '../ConfigDataLayerVector';
 import ConfigDataLayerRaster from '../ConfigDataLayerRaster';
@@ -701,15 +701,14 @@ class ConfigDataLayer extends ControllerComponent {
 			var unlinkButton = " ";
 			if (this.props.store.relations.length) {
 				unlinkButton = (
-					<IconButton
+					<DelayButton
 						name="trash outline"
-						basic
 						disabled={this.props.disabled}
-						className="delete-button"
+						className="w12"
 						onClick={this.unlinkLayer.bind(this)}
 					>
 						Remove all links
-					</IconButton>
+					</DelayButton>
 				);
 			}
 

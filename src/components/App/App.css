@@ -208,6 +208,19 @@ label.container {
 	fill:#95a5c3;
 }
 
+.button.w10 {
+	min-width: 10rem;
+}
+.button.w12 {
+	min-width: 12rem;
+}
+.button.w14 {
+	min-width: 14rem;
+}
+.button.w16 {
+	min-width: 16rem;
+}
+
 /* ===== layout ===== */
 
 #menu {
