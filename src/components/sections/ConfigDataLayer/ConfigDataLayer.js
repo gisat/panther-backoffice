@@ -11,6 +11,7 @@ import {geoserverProtocol, geoserverAddress} from '../../../config';
 
 import Select from 'react-select';
 import SaveButton from '../../atoms/SaveButton';
+import { IconButton } from '../../SEUI/elements';
 
 import ConfigDataLayerVector from '../ConfigDataLayerVector';
 import ConfigDataLayerRaster from '../ConfigDataLayerRaster';
@@ -542,6 +543,22 @@ class ConfigDataLayer extends ControllerComponent {
 
 	}
 
+	unlinkLayer() {
+
+		let operationId = utils.guid();
+		var relations = [];
+		_.assign(relations, this.props.store.relations);
+		var actionData = [];
+
+		for (let relation of relations) {
+			actionData.push({type: "delete", model: relation});
+		}
+
+		logger.trace("ConfigDataLayer# unlinkLayer(), Action data:", actionData);
+		ActionCreator.handleObjects(actionData,ObjectTypes.OBJECT_RELATION, operationId);
+
+	}
+
 	shouldComponentUpdate(nextProps, nextState) {
 		var result = !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState);
 		if(!result) {
@@ -681,6 +698,21 @@ class ConfigDataLayer extends ControllerComponent {
 				);
 			}
 
+			var unlinkButton = " ";
+			if (this.props.store.relations.length) {
+				unlinkButton = (
+					<IconButton
+						name="trash outline"
+						basic
+						disabled={this.props.disabled}
+						className="delete-button"
+						onClick={this.unlinkLayer.bind(this)}
+					>
+						Remove all links
+					</IconButton>
+				);
+			}
+
 			var prod = "Select layer type";
 			if (!this.props.selectorValue) {
 				prod = "Select data layer";
@@ -814,7 +846,14 @@ class ConfigDataLayer extends ControllerComponent {
 						/>
 					</div>
 
-					{saveButton}
+					<div className="config-controls">
+						<div className="config-controls-left">
+							{saveButton}
+						</div>
+						<div className="config-controls-right">
+							{unlinkButton}
+						</div>
+					</div>
 
 				</div>
 			);
