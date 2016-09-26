@@ -208,6 +208,18 @@ label.container {
 	fill:#95a5c3;
 }
 
+.button.w2 {
+	min-width: 2rem;
+}
+.button.w4 {
+	min-width: 4rem;
+}
+.button.w6 {
+	min-width: 6rem;
+}
+.button.w8 {
+	min-width: 8rem;
+}
 .button.w10 {
 	min-width: 10rem;
 }
@@ -219,6 +231,18 @@ label.container {
 }
 .button.w16 {
 	min-width: 16rem;
+}
+.button.w18 {
+	min-width: 18rem;
+}
+.button.w20 {
+	min-width: 20rem;
+}
+.button.w22 {
+	min-width: 22rem;
+}
+.button.w24 {
+	min-width: 24rem;
 }
 
 /* ===== layout ===== */

@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 
 import SaveButton from '../SaveButton';
-import { IconButton } from '../../SEUI/elements';
+import DelayButton from '../../atoms/DelayButton';
 
 
 class ConfigControls extends Component {
@@ -40,23 +40,22 @@ class ConfigControls extends Component {
 				saved={this.props.saved}
 				saving={this.props.saving}
 				disabled={this.props.disabled}
-				className="save-button"
+				className="save-button w6"
 				onClick={this.props.onSave}
 			/>
 		);
 
 
 		//rightInsert.push(
-		//	<IconButton
+		//	<DelayButton
 		//		key="deleteButton"
 		//		name="trash outline"
-		//		basic
 		//		disabled={this.props.disabled}
-		//		className="delete-button"
+		//		className="delete-button w6"
 		//		onClick={this.props.onDelete}
 		//	>
 		//		Delete
-		//	</IconButton>
+		//	</DelayButton>
 		//);
 
 		let classes = classNames('config-controls',	this.props.className);
