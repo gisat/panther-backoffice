@@ -334,7 +334,9 @@ class ConfigMetadataScope extends ControllerComponent {
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
-						Hierarchy of analytical units, common for all places in the scope. Ordered from largest areas to most detailed division.  In order to see the +/- signs and correct areas on the side, it is necessary to upload data layers for each level for every place in the scope.
+						Hierarchy of analytical units, common for all places in the scope. Ordered from largest areas to most detailed division.
+						<br/>For areas and levels to work correctly in Exploration, all levels in all places in the scope must be linked to a data layer.
+						<br/><b>After linking data layers to levels, changes in levels can break display in Exploration!</b>
 					</div>
 				</div>
 
@@ -354,7 +356,7 @@ class ConfigMetadataScope extends ControllerComponent {
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
-						Periods available for the scope. Can be narrowed down per theme.
+						Periods available for the scope.
 					</div>
 				</div>
 
