@@ -46,17 +46,18 @@ class ConfigControls extends Component {
 		);
 
 
-		//rightInsert.push(
-		//	<DelayButton
-		//		key="deleteButton"
-		//		name="trash outline"
-		//		disabled={this.props.disabled}
-		//		className="delete-button w6"
-		//		onClick={this.props.onDelete}
-		//	>
-		//		Delete
-		//	</DelayButton>
-		//);
+		rightInsert.push(
+			<DelayButton
+				key="deleteButton"
+				name="trash outline"
+				delay={500}
+				disabled={this.props.disabled}
+				className="delete-button w6"
+				onClick={this.props.onDelete}
+			>
+				Delete
+			</DelayButton>
+		);
 
 		let classes = classNames('config-controls',	this.props.className);
 
