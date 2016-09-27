@@ -12,6 +12,10 @@
 .selector-heading .UICustomSelect-value > div {
 	height: 2.25rem;
 }
+.selector-heading .UICustomSelect-value > div {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 
 .selector-heading .UICustomSelect.has-value .UICustomSelect-value {
 	border-bottom: 1px dashed rgba(34,36,38,.1);
