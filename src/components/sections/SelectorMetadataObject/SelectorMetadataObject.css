@@ -1,0 +1,68 @@
+.selector-heading label.container {
+	margin-bottom: 0;
+}
+.selector-heading .UICustomSelect .Select-control {
+	box-shadow: none;
+	background: transparent;
+
+	border-bottom-left-radius: 0;
+}
+.selector-heading .UICustomSelect,
+.selector-heading .UICustomSelect-value,
+.selector-heading .UICustomSelect-value > div {
+	height: 2.25rem;
+}
+
+.selector-heading .UICustomSelect.has-value .UICustomSelect-value {
+	border-bottom: 1px dashed rgba(34,36,38,.1);
+	padding: 0 .5rem 0 0;
+	margin-right: 2.2rem;
+	top:0;
+	color: #222;
+}
+.selector-heading .UICustomSelect .UICustomSelect-value span:not(.option-id) {
+	font-size: 1.75rem;
+	line-height: 2.25rem;
+	height:2.25rem;
+	font-weight: bold;
+}
+.selector-heading .UICustomSelect .Select-control .Select-arrow-zone {
+	width: 2.5rem;
+	height: 2.25rem;
+	/*box-shadow: 0 0 0 1px rgba(160,160,160,.3);*/
+	box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+	padding: 0;
+	border-radius: .28571429rem;
+	transition:
+		opacity .1s ease,
+		background-color .1s ease,
+		color .1s ease,
+		box-shadow .1s ease,
+		background .1s ease;
+}
+.selector-heading .UICustomSelect .Select-control .Select-arrow-zone .Select-arrow {
+	border-color: rgba(0,0,0,.4) transparent transparent;
+}
+.selector-heading .UICustomSelect .Select-control .Select-arrow-zone:hover {
+	box-shadow: 0 0 0 1px rgba(34,36,38,.35) inset;
+	background: rgba(255, 255, 255, 0.1);
+}
+.selector-heading .UICustomSelect .Select-control .Select-arrow-zone:hover .Select-arrow {
+	border-color: rgba(0,0,0,.6) transparent transparent;
+}
+
+.selector-heading .input-wrapper > div:nth-child(2) .button,
+.selector-heading .input-wrapper > div:nth-child(2) .buttons {
+	bottom:0;
+}
+
+.UICustomSelect .Select-input {
+	padding: 1px 0 0 1px;
+}
+.UICustomSelect .Select-input input {
+	font-size: 1.75rem;
+	line-height: 2.25rem;
+	/*font-weight: bold;*/
+	padding-left: 0;
+	/*color: #666;*/
+}

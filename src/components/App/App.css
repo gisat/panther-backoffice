@@ -342,6 +342,18 @@ label.container {
 	position: relative;
 }
 
+.screen-setter-section {
+	text-transform: uppercase;
+	height: .9375rem;
+	font-size: .75rem;
+	line-height: .9375rem;
+	/*margin-bottom: .625rem;*/
+	color: #999;
+	padding-left: .3rem;
+
+	/*background: rgba(255,0,255,.2);*/
+}
+
 
 /* scrollbars
 todo hex colours, button icons */
@@ -1789,8 +1801,12 @@ span.todo {
 /*
 
 .screen, .screen-content > div {
-	background: #aaa url("../img/grid6.png");
+	background: #bababa url("../../../bordel-sablony/img/grid6.png");
 	background-attachment: scroll;
+}
+
+.screen-setter {
+	background: rgba(255,255,255,.2);
 }
 
 h1, h2, h3, h4, h5 {

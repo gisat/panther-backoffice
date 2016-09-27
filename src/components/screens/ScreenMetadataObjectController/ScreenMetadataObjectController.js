@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ScreenMetadataObjectController.css';
-import withStyles from '../../../decorators/withStyles';
+//import styles from './ScreenMetadataObjectController.css';
+//import withStyles from '../../../decorators/withStyles';
 
 import path from "path";
 
@@ -34,7 +34,7 @@ var initialState = {
 };
 
 
-@withStyles(styles)
+//@withStyles(styles)
 class ScreenMetadataObjectController extends ControllerComponent {
 
 	constructor(props) {
@@ -196,7 +196,7 @@ class ScreenMetadataObjectController extends ControllerComponent {
 			ret = (
 				<div>
 					<div className="screen-setter"><div>
-						<h2>{headline}</h2>
+						<div className="screen-setter-section">{headline}</div>
 						<SelectorMetadataObject
 							disabled={this.props.disabled}
 							data={selectorData}
