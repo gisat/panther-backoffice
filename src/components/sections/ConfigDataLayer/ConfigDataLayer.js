@@ -343,7 +343,11 @@ class ConfigDataLayer extends ControllerComponent {
 				break;
 		}
 
-		if (values.template && values.places && values.periods) {
+		if (
+			values.template &&
+			values.places && values.places.length &&
+			values.periods && values.periods.length
+		) {
 
 			var layerTemplate = _.findWhere(layerTemplates, {key: values.template});
 
@@ -510,10 +514,10 @@ class ConfigDataLayer extends ControllerComponent {
 			}
 		} else {
 			// Verify existence of all necessary data.
-			if(!values.places) {
+			if(!values.places || !values.places.length) {
 				alert("At least one place must be associated with the data layer.")
-			} else if(!values.periods) {
-				alert("Chosen Scope doesn't have any associated time period. Please fix this before continuing.")
+			} else if(!values.periods || !values.periods.length) {
+				window.alert("Chosen Scope doesn't have any associated time period. Please fix this before continuing.")
 			}
 
 			if(thisComponent.state.current.layerType == 'au') {
