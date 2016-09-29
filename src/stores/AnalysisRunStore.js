@@ -48,7 +48,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			storeInstance.createObjectAndRespond(action.model, action.responseData, action.stateHash);
 			break;
 		case ActionTypes.ANALYSIS_RUN_HANDLE:
-			storeInstance.handle(action.data);
+			storeInstance.handle(action.data, action.operationId);
 			setTimeout(reloadThisStoreUntilAllFinished, 500);
 			break;
 		default:
