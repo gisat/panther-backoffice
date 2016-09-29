@@ -60,7 +60,12 @@ class ControllerComponent extends PantherComponent {
 		let nextState = this.buildState(nextProps);
 
 		if (this.mounted) {
-			if (this.equalStates(this.state.current, nextState)) {
+			if (this.equalStates(this.state.saved, nextState)) {
+				//new state is the same as saved, nothing changed up, nothing needs to change here
+				//may be unnecessary render up the tree
+				//also catches the case where all three are equal
+				logger.trace(this.constructor.name + ":ControllerComponent#componentWillReceiveProps next = saved");
+			} else if (this.equalStates(this.state.current, nextState)) {
 				//new state is the same as current, can be used (we probably saved)
 				this.setStateDeep({
 					current: {$merge: nextState},
@@ -68,8 +73,10 @@ class ControllerComponent extends PantherComponent {
 					built: {$set: true},
 					saving: {$set: false}
 				});
+				logger.trace(this.constructor.name + ":ControllerComponent#componentWillReceiveProps next = current");
 			} else if (this.equalStates(this.state.current, this.state.saved)) {
-				//state was not changed from saved - can be replaced with new
+				//state was not changed from saved - can be replaced with new saved
+				//updated flag is set, so user can be made aware of the change - todo reset - probably on user action
 				this.setStateDeep({
 					current: {$merge: nextState},
 					saved: {$merge: nextState},
@@ -77,17 +84,16 @@ class ControllerComponent extends PantherComponent {
 					updated: {$set: true},
 					saving: {$set: false}
 				});
+				logger.trace(this.constructor.name + ":ControllerComponent#componentWillReceiveProps current = saved");
 			} else {
-				//state was changed - todo what to do?
+				//state was changed both up and here - todo what to do? call method for resolving conflict?
 				//for now, set invalid state flag and save next state
-				//todo next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
+				//next state doesn't need to be in state, but since we need to trigger render with 'invalid' anyway, why not
 				this.setStateDeep({
 					next: {$merge: nextState},
-					saved: {$merge: nextState}, // TODO: See what is happening. What if there is actually some issue on the server.
-					invalid: {$set: true},
-					saving: {$set: false}
+					invalid: {$set: true}
 				});
-				logger.error(this.constructor.name + ":ControllerComponent# invalid state set");
+				logger.error(this.constructor.name + ":ControllerComponent#componentWillReceiveProps invalid state set");
 			}
 		}
 		else {
