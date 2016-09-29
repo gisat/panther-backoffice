@@ -210,7 +210,7 @@ class ScreenAnalysisRulesSpatial extends PantherComponent {
 				(this.state.valueFilterAttSetAtt[0] == this.state.analysis.filterAttributeSet.key + "-" + this.state.analysis.filterAttribute.key));
 
 			let isAttributeMapTheSame = false;
-			if(!isResultAttributeSetMissing) {
+			if(this.state.analysis.attributeSet) {
 				isAttributeMapTheSame = _.isEqual(this.state.valueAttributeMaps[this.state.analysis.attributeSet.key], this.state.analysis.attributeMap);
 			}
 
