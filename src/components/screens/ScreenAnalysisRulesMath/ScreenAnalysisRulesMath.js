@@ -205,7 +205,10 @@ class ScreenAnalysisRulesMath extends PantherComponent {
 			let isResultAttributeSetMissing = !this.state.valueResultAttSet.length && !this.state.analysis.attributeSet;
 			let isAttributeSetsSame = this.state.analysis.attributeSet &&
 				(this.state.valueResultAttSet[0] == this.state.analysis.attributeSet.key);
-			let isAttributeTableTheSame = _.isEqual(this.state.valueAttributeSetMap[this.state.valueResultAttSet],this.state.savedAttributeSetMap[this.state.analysis.attributeSet.key]);
+			let isAttributeTableTheSame = false;
+			if(!isResultAttributeSetMissing) {
+				isAttributeTableTheSame = _.isEqual(this.state.valueAttributeSetMap[this.state.valueResultAttSet],this.state.savedAttributeSetMap[this.state.analysis.attributeSet.key]);
+			}
 
 			isIt = (
 				(
