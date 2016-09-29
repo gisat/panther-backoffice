@@ -50,7 +50,6 @@ class ConfigControls extends Component {
 			<DelayButton
 				key="deleteButton"
 				name="trash outline"
-				delay={500}
 				disabled={this.props.disabled}
 				className="delete-button w6"
 				onClick={this.props.onDelete}
