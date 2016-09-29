@@ -9,6 +9,7 @@ import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ScopeModel from '../../../models/ScopeModel';
 import AULevelModel from '../../../models/AULevelModel';
 import PeriodModel from '../../../models/PeriodModel';
+import ScopeStore from '../../../stores/ScopeStore';
 import AULevelStore from '../../../stores/AULevelStore';
 import PeriodStore from '../../../stores/PeriodStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
@@ -123,6 +124,7 @@ class ConfigMetadataScope extends ControllerComponent {
 
 		this.responseListener.add(AULevelStore);
 		this.responseListener.add(PeriodStore);
+		this.errorListener.add(ScopeStore);
 	}
 
 	/**
@@ -135,7 +137,7 @@ class ConfigMetadataScope extends ControllerComponent {
 	}
 
 	saveForm(closePanelAfter) {
-		super.saveForm();
+		let operationId = super.saveForm();
 
 		var actionData = [], modelData = {};
 		let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
@@ -156,7 +158,7 @@ class ConfigMetadataScope extends ControllerComponent {
 		actionData.push({type:"update",model:modelObj});
 		this.handleRelations(modelObj.periods, scope.periods);
 		this.handleThemePeriods(modelObj.periods);
-		ActionCreator.handleObjects(actionData,ObjectTypes.SCOPE);
+		ActionCreator.handleObjects(actionData,ObjectTypes.SCOPE, operationId);
 	}
 
 	handleThemePeriods(newPeriods) {

@@ -122,6 +122,7 @@ class ConfigMetadataAttributeSet extends ControllerComponent {
 		super.componentDidMount();
 		this.responseListener.add(TopicStore);
 		this.responseListener.add(AttributeStore);
+		this.errorListener.add(AttributeSetStore);
 	}
 
 	componentDidUpdate(oldProps, oldState) {
@@ -150,7 +151,7 @@ class ConfigMetadataAttributeSet extends ControllerComponent {
 	}
 
 	saveForm(closePanelAfter) {
-		super.saveForm();
+		let operationId = super.saveForm();
 
 		var actionData = [], modelData = {};
 		let attributeSet = _.findWhere(this.props.store.attributeSets, {key: this.props.selectorValue});
@@ -165,7 +166,7 @@ class ConfigMetadataAttributeSet extends ControllerComponent {
 		}
 		let modelObj = new Model[ObjectTypes.ATTRIBUTE_SET](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.ATTRIBUTE_SET);
+		ActionCreator.handleObjects(actionData,ObjectTypes.ATTRIBUTE_SET, operationId);
 	}
 
 	deleteObject() {

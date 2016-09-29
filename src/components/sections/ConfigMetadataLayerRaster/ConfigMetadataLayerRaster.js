@@ -131,6 +131,7 @@ class ConfigMetadataLayerRaster extends ControllerComponent {
 		this.responseListener.add(TopicStore);
 		this.responseListener.add(LayerGroupStore);
 		this.responseListener.add(StyleStore);
+		this.errorListener.add(RasterLayerStore);
 	}
 
 	componentDidUpdate(oldProps, oldState) {
@@ -159,7 +160,7 @@ class ConfigMetadataLayerRaster extends ControllerComponent {
 	}
 
 	saveForm(closePanelAfter) {
-		super.saveForm();
+		let operationId = super.saveForm();
 
 		var actionData = [], modelData = {};
 		let layer = _.findWhere(this.props.store.layers, {key: this.props.selectorValue});
@@ -175,7 +176,7 @@ class ConfigMetadataLayerRaster extends ControllerComponent {
 		}
 		let modelObj = new Model[ObjectTypes.RASTER_LAYER_TEMPLATE](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.RASTER_LAYER_TEMPLATE);
+		ActionCreator.handleObjects(actionData,ObjectTypes.RASTER_LAYER_TEMPLATE, operationId);
 	}
 
 	deleteObject() {

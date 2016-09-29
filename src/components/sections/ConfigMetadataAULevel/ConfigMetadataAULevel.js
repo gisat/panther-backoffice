@@ -69,6 +69,11 @@ class ConfigMetadataAULevel extends ControllerComponent {
 		return nextState;
 	}
 
+	componentDidMount() {
+		super.componentDidMount();
+		this.errorListener.add(AULevelStore);
+	}
+
 	/**
 	 * Differentiate between states
 	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
@@ -82,7 +87,7 @@ class ConfigMetadataAULevel extends ControllerComponent {
 	}
 
 	saveForm(closePanelAfter) {
-		super.saveForm();
+		let operationId = super.saveForm();
 
 		var actionData = [], modelData = {};
 		let level = _.findWhere(this.props.store.levels, {key: this.props.selectorValue});
@@ -91,7 +96,7 @@ class ConfigMetadataAULevel extends ControllerComponent {
 		modelData.name = this.state.current.valueName;
 		let modelObj = new Model[ObjectTypes.AU_LEVEL](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.AU_LEVEL);
+		ActionCreator.handleObjects(actionData,ObjectTypes.AU_LEVEL, operationId);
 	}
 
 	deleteObject() {

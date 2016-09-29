@@ -67,6 +67,11 @@ class ConfigMetadataTopic extends ControllerComponent {
 		return nextState;
 	}
 
+	componentDidMount() {
+		super.componentDidMount();
+		this.errorListener.add(TopicStore);
+	}
+
 	/**
 	 * Differentiate between states
 	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
@@ -79,8 +84,8 @@ class ConfigMetadataTopic extends ControllerComponent {
 		this._stateHash = utils.stringHash(props.selectorValue);
 	}
 
-	saveForm() {
-		super.saveForm();
+	saveForm(closePanelAfter) {
+		let operationId = super.saveForm();
 
 		var actionData = [], modelData = {};
 		let topic = _.findWhere(this.props.store.topics, {key: this.props.selectorValue});
@@ -88,7 +93,7 @@ class ConfigMetadataTopic extends ControllerComponent {
 		modelData.name = this.state.current.valueName;
 		let modelObj = new Model[ObjectTypes.TOPIC](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.TOPIC);
+		ActionCreator.handleObjects(actionData,ObjectTypes.TOPIC, operationId);
 	}
 
 	deleteObject() {
