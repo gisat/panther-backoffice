@@ -152,6 +152,7 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 		this.responseListener.add(LayerGroupStore);
 		this.responseListener.add(StyleStore);
 		this.responseListener.add(AttributeSetStore);
+		this.errorListener.add(VectorLayerStore);
 	}
 
 	componentDidUpdate(oldProps, oldState) {
@@ -180,7 +181,7 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 	}
 
 	saveForm(closePanelAfter) {
-		super.saveForm();
+		let operationId = super.saveForm();
 
 		var thisComponent = this;
 		var actionData = [], modelData = {};
@@ -226,7 +227,7 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 
 		let modelObj = new Model[ObjectTypes.VECTOR_LAYER_TEMPLATE](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.VECTOR_LAYER_TEMPLATE);
+		ActionCreator.handleObjects(actionData,ObjectTypes.VECTOR_LAYER_TEMPLATE, operationId);
 	}
 
 	deleteObject() {

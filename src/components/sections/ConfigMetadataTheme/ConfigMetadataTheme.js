@@ -127,6 +127,7 @@ class ConfigMetadataTheme extends ControllerComponent {
 		super.componentDidMount();
 		this.responseListener.add(ScopeStore);
 		this.responseListener.add(TopicStore);
+		this.errorListener.add(ThemeStore);
 	}
 
 	/**
@@ -142,7 +143,7 @@ class ConfigMetadataTheme extends ControllerComponent {
 	}
 
 	saveForm(closePanelAfter) {
-		super.saveForm();
+		let operationId = super.saveForm();
 
 		var actionData = [], modelData = {};
 		let theme = _.findWhere(this.props.store.themes, {key: this.props.selectorValue});
@@ -164,7 +165,7 @@ class ConfigMetadataTheme extends ControllerComponent {
 
 		let modelObj = new Model[ObjectTypes.THEME](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.THEME);
+		ActionCreator.handleObjects(actionData,ObjectTypes.THEME, operationId);
 	}
 
 	deleteObject() {

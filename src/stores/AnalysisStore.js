@@ -46,7 +46,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 		case ActionTypes.ANALYSIS_SPATIAL_HANDLE:
 		case ActionTypes.ANALYSIS_LEVEL_HANDLE:
 		case ActionTypes.ANALYSIS_MATH_HANDLE:
-			storeInstance.handle(action.data);
+			storeInstance.handle(action.data, action.operationId);
 			break;
 		default:
 			return;

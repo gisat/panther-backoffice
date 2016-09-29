@@ -71,6 +71,11 @@ class ConfigMetadataLayerGroup extends ControllerComponent {
 		return nextState;
 	}
 
+	componentDidMount() {
+		super.componentDidMount();
+		this.errorListener.add(LayerGroupStore);
+	}
+
 	/**
 	 * Differentiate between states
 	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
@@ -84,7 +89,7 @@ class ConfigMetadataLayerGroup extends ControllerComponent {
 	}
 
 	saveForm(closePanelAfter) {
-		super.saveForm();
+		let operationId = super.saveForm();
 
 		var actionData = [], modelData = {};
 		let layerGroup = _.findWhere(this.props.store.layerGroups, {key: this.props.selectorValue});
@@ -94,7 +99,7 @@ class ConfigMetadataLayerGroup extends ControllerComponent {
 		modelData.order = this.state.current.valueOrder;
 		let modelObj = new Model[ObjectTypes.LAYER_GROUP](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.LAYER_GROUP);
+		ActionCreator.handleObjects(actionData,ObjectTypes.LAYER_GROUP, operationId);
 	}
 
 	deleteObject() {

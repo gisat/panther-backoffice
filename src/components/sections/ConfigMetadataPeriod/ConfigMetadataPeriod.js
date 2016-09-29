@@ -8,6 +8,7 @@ import _ from 'underscore';
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ScopeModel from '../../../models/ScopeModel';
 import PeriodModel from '../../../models/PeriodModel';
+import PeriodStore from '../../../stores/PeriodStore';
 
 import { Input } from '../../SEUI/elements';
 import ConfigControls from '../../atoms/ConfigControls';
@@ -57,6 +58,11 @@ class ConfigMetadataPeriod extends ControllerComponent {
 		return nextState;
 	}
 
+	componentDidMount() {
+		super.componentDidMount();
+		this.errorListener.add(PeriodStore);
+	}
+
 
 	/**
 	 * Differentiate between states
@@ -71,7 +77,7 @@ class ConfigMetadataPeriod extends ControllerComponent {
 	}
 
 	saveForm(closePanelAfter) {
-		super.saveForm();
+		let operationId = super.saveForm();
 
 		var actionData = [], modelData = {};
 		let period = _.findWhere(this.props.store.periods, {key: this.props.selectorValue});
@@ -80,7 +86,7 @@ class ConfigMetadataPeriod extends ControllerComponent {
 		modelData.name = this.state.current.valueName;
 		let modelObj = new Model[ObjectTypes.PERIOD](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.PERIOD);
+		ActionCreator.handleObjects(actionData,ObjectTypes.PERIOD, operationId);
 	}
 
 	deleteObject() {

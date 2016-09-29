@@ -84,6 +84,11 @@ class ConfigMetadataAttribute extends ControllerComponent {
 		return nextState;
 	}
 
+	componentDidMount() {
+		super.componentDidMount();
+		this.errorListener.add(AttributeStore);
+	}
+
 	/**
 	 * Differentiate between states
 	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
@@ -97,7 +102,7 @@ class ConfigMetadataAttribute extends ControllerComponent {
 	}
 
 	saveForm(closePanelAfter) {
-		super.saveForm();
+		let operationId = super.saveForm();
 
 		var actionData = [], modelData = {};
 		let attribute = _.findWhere(this.props.store.attributes, {key: this.props.selectorValue});
@@ -111,7 +116,7 @@ class ConfigMetadataAttribute extends ControllerComponent {
 		modelData.color = this.state.current.valueColor;
 		let modelObj = new Model[ObjectTypes.ATTRIBUTE](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.ATTRIBUTE);
+		ActionCreator.handleObjects(actionData,ObjectTypes.ATTRIBUTE, operationId);
 	}
 
 	deleteObject() {

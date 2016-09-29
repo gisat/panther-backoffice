@@ -123,8 +123,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 	componentDidMount() {
 		super.componentDidMount();
 		this.responseListener.add(ScopeStore);
-
-		this.setStateFromStores();
+		this.errorListener.add(PlaceStore);
 	}
 
 	/**
@@ -140,7 +139,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 	}
 
 	saveForm(closePanelAfter) {
-		super.saveForm();
+		let operationId = super.saveForm();
 
 		var actionData = [], modelData = {};
 		let place = _.findWhere(this.props.store.places, {key: this.props.selectorValue});
@@ -154,7 +153,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 		}
 		let modelObj = new Model[ObjectTypes.PLACE](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.PLACE);
+		ActionCreator.handleObjects(actionData,ObjectTypes.PLACE, operationId);
 	}
 
 	deleteObject() {

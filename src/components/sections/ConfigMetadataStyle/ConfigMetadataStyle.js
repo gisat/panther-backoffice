@@ -122,6 +122,11 @@ class ConfigMetadataStyle extends ControllerComponent {
 		return nextState;
 	}
 
+	componentDidMount() {
+		super.componentDidMount();
+		this.errorListener.add(StyleStore);
+	}
+
 	_onStoreResponse(result,responseData,stateHash) {
 		var thisComponent = this;
 		if (stateHash === this.getStateHash()) {
@@ -198,8 +203,8 @@ class ConfigMetadataStyle extends ControllerComponent {
 		this._stateHash = utils.stringHash(props.selectorValue);
 	}
 
-	saveForm() {
-		super.saveForm();
+	saveForm(closePanelAfter) {
+		let operationId = super.saveForm();
 
 		var actionData = [], modelData = {};
 		let style = _.findWhere(this.props.store.styles, {key: this.props.selectorValue});
@@ -248,7 +253,7 @@ class ConfigMetadataStyle extends ControllerComponent {
 
 		let modelObj = new Model[ObjectTypes.STYLE](modelData);
 		actionData.push({type:"update",model:modelObj});
-		ActionCreator.handleObjects(actionData,ObjectTypes.STYLE);
+		ActionCreator.handleObjects(actionData,ObjectTypes.STYLE, operationId);
 	}
 
 	deleteObject() {
