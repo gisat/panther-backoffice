@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'; import PantherComponent from '../../common/PantherComponent';
-//import styles from './SelectorMetadataObject.css';
-//import withStyles from '../../../decorators/withStyles';
+import styles from './SelectorAnalysis.css';
+import withStyles from '../../../decorators/withStyles';
 
 import { Button, Input, Icon } from '../../SEUI/elements';
 import Select from 'react-select';
@@ -9,7 +9,7 @@ import OptionKeyName from '../../atoms/UICustomSelect/OptionKeyName';
 import SingleValueKeyName from '../../atoms/UICustomSelect/SingleValueKeyName';
 
 
-//@withStyles(styles)
+@withStyles(styles)
 class SelectorAnalysis extends PantherComponent{
 
 	static propTypes = {
@@ -32,7 +32,7 @@ class SelectorAnalysis extends PantherComponent{
 	render() {
 		return (
 			<div>
-				<div className="selector">
+				<div className="selector selector-heading">
 					<div className="input-wrapper basic">
 						<div>
 							<label className="container">

@@ -35,7 +35,7 @@ class ScreenAnalysisConfig extends PantherComponent{
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
-		
+
 		if(this.props.data && this.props.data.objectType) {
 			this.state.objectType = this.props.data.objectType;
 		}
@@ -137,7 +137,7 @@ class ScreenAnalysisConfig extends PantherComponent{
 			ret = (
 				<div>
 					<div className="screen-setter"><div>
-						<h2>{title}</h2>
+						<div className="screen-setter-section">{title}</div>
 						<SelectorAnalysis
 							disabled={this.props.disabled}
 							data={this.state.selectorData}
