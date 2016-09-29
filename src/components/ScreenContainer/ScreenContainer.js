@@ -15,8 +15,11 @@ import ListenerHandler from '../../core/ListenerHandler';
 import logger from '../../core/Logger'
 import PantherComponent from "../common/PantherComponent";
 
+import ScreenContainerUpdateController from './ScreenContainerUpdateController';
+
 var initialState = {
-	isFocused: false
+	isFocused: false,
+	focusUpdate: false
 };
 
 
@@ -89,6 +92,12 @@ class ScreenContainer extends PantherComponent {
 		this.focusListener.add(ScreenStore);
 	}
 
+	componentWillReceiveProps() {
+		this.setState({
+			focusUpdate: false
+		});
+	}
+
 	componentWillUnmount() {
 		super.componentWillUnmount();
 		this.focusListener.clean();
@@ -96,14 +105,16 @@ class ScreenContainer extends PantherComponent {
 
 	onPanelFocus() {
 		this.setState({
-			isFocused: true
+			isFocused: true,
+			focusUpdate: true
 		});
 		ActionCreator.logScreenActivity(this.props.screenState.key);
 	}
 
 	onPanelBlur() {
 		this.setState({
-			isFocused: false
+			isFocused: false,
+			focusUpdate: true
 		});
 	}
 
@@ -197,14 +208,19 @@ class ScreenContainer extends PantherComponent {
 				onFocus={this.onPanelFocus.bind(this)}
 				onBlur={this.onPanelBlur.bind(this)}
 			>
-				<div className="screen-scroll"><div>
+				<div className="screen-scroll">
 					{/*React.cloneElement(this.props.screenState.component, {
 						disabled: disabled,
 						data: totallyLocalData,
 						parentUrl: this.props.screenState.parentUrl || ""
 					} )*/}
-					{screen}
-				</div></div>
+					<ScreenContainerUpdateController
+						focusUpdate={this.state.focusUpdate}
+						disabled={this.props.disabled}
+					>
+						{screen}
+					</ScreenContainerUpdateController>
+				</div>
 				<div className="screen-controls middle">
 					<Buttons basic icon vertical>
 						<IconButton
