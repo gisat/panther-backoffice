@@ -7,6 +7,7 @@ import withStyles from '../../decorators/withStyles';
 import logger from '../../core/Logger';
 import Menu from '../Menu';
 import Page from '../Page';
+import Loader from '../atoms/Loader';
 
 
 @withContext
@@ -44,10 +45,14 @@ class App extends PantherComponent {
 	render() {
 		let ret = "";
 
-		let loadingOverlay = null;
+		let loadingOverlay = (
+			<div id="loading-overlay"></div>
+		);
 		if(this.state.loading){
 			loadingOverlay = (
-				<div id="loading-overlay"></div>
+				<div id="loading-overlay" className="active">
+					<Loader />
+				</div>
 			);
 		}
 

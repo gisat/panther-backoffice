@@ -26,6 +26,8 @@ import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 import SelectorDataLayer from '../../sections/SelectorDataLayer';
 import ConfigDataLayer from '../../sections/ConfigDataLayer';
 
+import Loader from '../../atoms/Loader';
+
 var initialState = {
 	selectorValue: null
 };
@@ -95,7 +97,11 @@ class ScreenDataLayersBase extends ScreenController {
 		logger.trace("ScreenDataLayersBase# render(), This state: ", this.state);
 
 		let ret = null;
-		let configInsert = null;
+		let configInsert = (
+			<div className="component-loading">
+				<Loader />
+			</div>
+		);
 
 		if (this.state.ready) {
 			configInsert = (

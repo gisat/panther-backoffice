@@ -8,6 +8,7 @@ import utils from '../../../utils/utils';
 import {publicPath} from '../../../config';
 
 import {Input, Button} from '../../SEUI/elements';
+import Loader from '../../atoms/Loader';
 
 @withStyles(styles)
 class LoginPage extends Component {
@@ -135,7 +136,9 @@ class LoginPage extends Component {
 		}
 		return (
 			<div className="full-viewport login-page">
-				<div className="login-page-loader"></div>
+				<div className="login-page-loader">
+					<Loader />
+				</div>
 				{loginBoxInsert}
 			</div>
 		);
