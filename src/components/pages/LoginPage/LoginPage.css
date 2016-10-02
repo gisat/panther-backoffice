@@ -1,13 +1,18 @@
+.login-page {
+	height: 100%;
+}
 .login-page-loader {
-	position: absolute;
 	z-index: 5;
-	top:50%;
-	left:50%;
-	transform: translate(-50%,-50%);
+	/*position: absolute;*/
+	/*top:50%;*/
+	/*left:50%;*/
+	/*transform: translate(-50%,-50%);*/
 
-	width: 3.75rem;
-	height: 3.75rem;
+	/*width: 4rem;*/
+	/*height: 4rem;*/
 
+	/*background: rgba(186, 186, 186, 0.8);*/
+	/*border-radius: 999%;*/
 
 }
 .login-box {
