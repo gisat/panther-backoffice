@@ -295,13 +295,13 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 					}
 					themesString += theme.name
 				}
+				topicInfoInsert = (
+					<div className="frame-input-wrapper-info">
+						<b>{this.state.ui.topicThemes.length == 1 ? "Theme: " : "Themes: "}</b>
+						{this.state.ui.topicThemes.length ? themesString : "No themes"}
+					</div>
+				);
 			}
-			topicInfoInsert = (
-				<div className="frame-input-wrapper-info">
-					<b>{themesString.length > 0 ? "Themes: " : "Theme: "}</b>
-					{themesString.length > 0 ? themesString : "No themes"}
-				</div>
-			);
 		}
 
 		var optionsAttSets = _.filter(this.props.store.attributeSets, function(attributeSet){
