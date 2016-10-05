@@ -169,8 +169,8 @@ class ConfigMetadataAttributeSet extends ControllerComponent {
 		ActionCreator.handleObjects(actionData,ObjectTypes.ATTRIBUTE_SET, operationId);
 	}
 
-	deleteObject() {
-		let model = new Model[ObjectTypes.ATTRIBUTE_SET]({key: this.props.selectorValue});
+	deleteObject(key) {
+		let model = new Model[ObjectTypes.ATTRIBUTE_SET]({key: key});
 		let actionData = [{type:"delete", model:model}];
 		ActionCreator.handleObjects(actionData, ObjectTypes.ATTRIBUTE_SET);
 		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
@@ -293,7 +293,7 @@ class ConfigMetadataAttributeSet extends ControllerComponent {
 					saved={this.equalStates(this.state.current,this.state.saved)}
 					saving={this.state.saving}
 					onSave={this.saveForm.bind(this)}
-					onDelete={this.deleteObject.bind(this)}
+					onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
 				/>
 
 			</div>

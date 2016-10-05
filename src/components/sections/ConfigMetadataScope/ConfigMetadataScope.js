@@ -262,8 +262,8 @@ class ConfigMetadataScope extends ControllerComponent {
 		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
-	deleteObject() {
-		let model = new Model[ObjectTypes.SCOPE]({key: this.props.selectorValue});
+	deleteObject(key) {
+		let model = new Model[ObjectTypes.SCOPE]({key: key});
 		//let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
 		let actionData = [{type:"delete", model:model}];
 		ActionCreator.handleObjects(actionData, ObjectTypes.SCOPE);
@@ -367,7 +367,7 @@ class ConfigMetadataScope extends ControllerComponent {
 					saved={this.equalStates(this.state.current,this.state.saved)}
 					saving={this.state.saving}
 					onSave={this.saveForm.bind(this)}
-					onDelete={this.deleteObject.bind(this)}
+					onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
 				/>
 
 			</div>

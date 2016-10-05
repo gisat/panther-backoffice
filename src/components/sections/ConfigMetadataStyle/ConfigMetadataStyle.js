@@ -256,8 +256,8 @@ class ConfigMetadataStyle extends ControllerComponent {
 		ActionCreator.handleObjects(actionData,ObjectTypes.STYLE, operationId);
 	}
 
-	deleteObject() {
-		let model = new Model[ObjectTypes.STYLE]({key: this.props.selectorValue});
+	deleteObject(key) {
+		let model = new Model[ObjectTypes.STYLE]({key: key});
 		let actionData = [{type:"delete", model:model}];
 		ActionCreator.handleObjects(actionData, ObjectTypes.STYLE);
 		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
@@ -747,7 +747,7 @@ class ConfigMetadataStyle extends ControllerComponent {
 					saved={this.equalStates(this.state.current,this.state.saved)}
 					saving={this.state.saving}
 					onSave={this.saveForm.bind(this)}
-					onDelete={this.deleteObject.bind(this)}
+					onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
 				/>
 
 			</div>

@@ -168,8 +168,8 @@ class ConfigMetadataTheme extends ControllerComponent {
 		ActionCreator.handleObjects(actionData,ObjectTypes.THEME, operationId);
 	}
 
-	deleteObject() {
-		let model = new Model[ObjectTypes.THEME]({key: this.props.selectorValue});
+	deleteObject(key) {
+		let model = new Model[ObjectTypes.THEME]({key: key});
 		let actionData = [{type:"delete", model:model}];
 		ActionCreator.handleObjects(actionData, ObjectTypes.THEME);
 		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
@@ -315,7 +315,7 @@ class ConfigMetadataTheme extends ControllerComponent {
 					saved={this.equalStates(this.state.current,this.state.saved)}
 					saving={this.state.saving}
 					onSave={this.saveForm.bind(this)}
-					onDelete={this.deleteObject.bind(this)}
+					onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
 				/>
 
 			</div>
