@@ -9,6 +9,7 @@ import ListenerHandler from '../core/ListenerHandler';
 
 import DataLayerModel from '../models/DataLayerModel';
 import EventTypes from '../constants/EventTypes';
+import logged from '../models/UserModel';
 
 import { apiProtocol, apiHost, apiPath } from '../config';
 import logger from '../core/Logger';
@@ -18,10 +19,9 @@ class ApiStore extends Store {
 
 	constructor() {
 		super();
-		this._models = this.load(); //mozna ne tady ale primo do filtru atd. lazy load
-		//Promise.resolve(this._models).then(function(models){
-		//	console.log("Store > constructor > _models",models);
-		//});
+		this._models = new Promise(function(resolve,reject){});
+		this.loginListener = new ListenerHandler(this, this.initialLoad, 'addLoginListener', 'removeLoginListener');
+		this.loginListener.add(logged);
 		this.changeListener = new ListenerHandler(this, this.reload, 'addChangeListener', 'removeChangeListener');
 		this.registerListeners();
 		this._maxListeners = 40; // increase listener limit a bit, but todo fix removeListeners
@@ -82,6 +82,10 @@ class ApiStore extends Store {
 	load() {
 		var method = this.getApiLoadMethod();
 		return this.request(method);
+	}
+
+	initialLoad() {
+		this._models = this.load();
 	}
 
 	create(model) {
