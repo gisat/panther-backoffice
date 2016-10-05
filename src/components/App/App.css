@@ -1773,7 +1773,7 @@ ol.list-steps > li::before {
 	background-position: center;
 
 	transition:
-		opacity .2s .3s ease-in-out;
+		opacity .2s 0s ease-in-out;
 
 	pointer-events: none;
 	opacity: 0;
@@ -1782,6 +1782,9 @@ ol.list-steps > li::before {
 #loading-overlay.active {
 	pointer-events: all;
 	opacity: 1;
+
+	transition:
+		opacity .2s .3s ease-in-out;
 }
 
 .component-loading {
