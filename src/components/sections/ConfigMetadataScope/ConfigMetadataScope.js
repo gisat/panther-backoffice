@@ -267,7 +267,9 @@ class ConfigMetadataScope extends ControllerComponent {
 		//let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
 		let actionData = [{type:"delete", model:model}];
 		ActionCreator.handleObjects(actionData, ObjectTypes.SCOPE);
-		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		if (key == this.props.selectorValue) {
+			ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		}
 	}
 
 

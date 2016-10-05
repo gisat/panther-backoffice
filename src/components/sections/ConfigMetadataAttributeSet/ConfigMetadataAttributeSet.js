@@ -173,7 +173,9 @@ class ConfigMetadataAttributeSet extends ControllerComponent {
 		let model = new Model[ObjectTypes.ATTRIBUTE_SET]({key: key});
 		let actionData = [{type:"delete", model:model}];
 		ActionCreator.handleObjects(actionData, ObjectTypes.ATTRIBUTE_SET);
-		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		if (key == this.props.selectorValue) {
+			ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		}
 	}
 
 

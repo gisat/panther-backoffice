@@ -103,7 +103,9 @@ class ConfigMetadataAULevel extends ControllerComponent {
 		let model = new Model[ObjectTypes.AU_LEVEL]({key: key});
 		let actionData = [{type:"delete", model:model}];
 		ActionCreator.handleObjects(actionData, ObjectTypes.AU_LEVEL);
-		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		if (key == this.props.selectorValue) {
+			ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		}
 	}
 
 

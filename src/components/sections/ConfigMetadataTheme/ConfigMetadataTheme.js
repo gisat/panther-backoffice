@@ -172,7 +172,9 @@ class ConfigMetadataTheme extends ControllerComponent {
 		let model = new Model[ObjectTypes.THEME]({key: key});
 		let actionData = [{type:"delete", model:model}];
 		ActionCreator.handleObjects(actionData, ObjectTypes.THEME);
-		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		if (key == this.props.selectorValue) {
+			ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		}
 	}
 
 

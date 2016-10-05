@@ -93,7 +93,9 @@ class ConfigMetadataPeriod extends ControllerComponent {
 		let model = new Model[ObjectTypes.PERIOD]({key: key});
 		let actionData = [{type:"delete", model:model}];
 		ActionCreator.handleObjects(actionData, ObjectTypes.PERIOD);
-		ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		if (key == this.props.selectorValue) {
+			ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		}
 	}
 
 
