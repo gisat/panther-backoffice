@@ -311,6 +311,7 @@ class ConfigMetadataTheme extends ControllerComponent {
 				</div>
 
 				<ConfigControls
+					key={"ConfigControls" + this.props.selectorValue}
 					disabled={this.props.disabled}
 					saved={this.equalStates(this.state.current,this.state.saved)}
 					saving={this.state.saving}
