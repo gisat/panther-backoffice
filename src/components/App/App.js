@@ -46,7 +46,9 @@ class App extends PantherComponent {
 		let ret = "";
 
 		let loadingOverlay = (
-			<div id="loading-overlay"></div>
+			<div id="loading-overlay">
+				<Loader />
+			</div>
 		);
 		if(this.state.loading){
 			loadingOverlay = (
