@@ -5,12 +5,13 @@ import logger from '../core/Logger'
 
 export default {
 
-	createObjectAndRespond: function(model,objectType,responseData,stateHash) {
+	createObjectAndRespond: function(model,objectType,responseData,stateHash,instanceId) {
 		var action = {
 			type: null,
 			model: model,
 			responseData: responseData,
-			stateHash: stateHash
+			stateHash: stateHash,
+			instanceId: instanceId
 		};
 		logger.trace("ActionCreator# createObjectAndRespond(), Object type:", objectType, ", model: ", model);
 		let actionType = objectType+"_CREATE_RESPOND";

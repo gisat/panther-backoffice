@@ -159,9 +159,9 @@ class ApiStore extends Store {
 
 	}
 
-	createObjectAndRespond(model,responseData,responseStateHash) {
+	createObjectAndRespond(model,responseData,responseStateHash, instanceId) {
 		let guid = utils.guid();
-		logger.trace(this.constructor.name + ":ApiStore# createObjectAndRespond(), Response data",responseData, ", GUID: ", guid);
+		logger.trace(this.constructor.name + ":ApiStore# createObjectAndRespond(), Response data",responseData, ", GUID: ", guid, ", instance",instanceId);
 		// todo ? Model.resolveForServer ?
 		//var object = {
 		//	name: objectData.name,
@@ -175,7 +175,7 @@ class ApiStore extends Store {
 			thisStore.reload().then(function(){
 				logger.trace(thisStore.constructor.name + ":ApiStore# createObjectAndRespond(), Reload finished", result, ", GUID: ", guid);
 				thisStore.emitChange();
-				thisStore.emit(EventTypes.OBJECT_CREATED,result,responseData,responseStateHash);
+				thisStore.emit(EventTypes.OBJECT_CREATED,result,responseData,responseStateHash, instanceId);
 			});
 		});
 	}

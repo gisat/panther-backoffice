@@ -86,9 +86,11 @@ class ScreenAnalysesBase extends PantherComponent{
 		super.setStateFromStores(this.store2state(), keys);
 	}
 
-	_onStoreResponse(result,responseData,stateHash) {
-		//var thisComponent = this;
-		if (stateHash === this.getStateHash()) {
+	_onStoreResponse(result,responseData,stateHash, instanceId) {
+		if (
+			(stateHash === this.getStateHash())
+			&& (instanceId === this.instance)
+		) {
 			logger.trace("ScreenAnalysisBase# _onStoreResponse(), result", result, ", Response data", responseData, ", State hash", stateHash);
 			if (result) {
 				var screenName = this.props.screenKey + "-ScreenAnalysis" + responseData.objectType;
@@ -171,7 +173,7 @@ class ScreenAnalysesBase extends PantherComponent{
 			objectType: itemType,
 			analysisType: analysisType
 		};
-		ActionCreator.createObjectAndRespond(model,itemType,responseData,this.getStateHash());
+		ActionCreator.createObjectAndRespond(model,itemType,responseData,this.getStateHash(),this.instance);
 		//this.changeActiveObjectListItem(itemType,null);
 	}
 
