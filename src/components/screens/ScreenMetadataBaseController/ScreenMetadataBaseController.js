@@ -164,7 +164,7 @@ class ScreenMetadataBaseController extends ControllerComponent {
 		let responseData = {
 			objectType: itemType
 		};
-		ActionCreator.createObjectAndRespond(model,itemType,responseData,this.getStateHash());
+		ActionCreator.createObjectAndRespond(model,itemType,responseData,this.getStateHash(),this.instance);
 		//this.changeActiveObjectListItem(itemType,null);
 	}
 
