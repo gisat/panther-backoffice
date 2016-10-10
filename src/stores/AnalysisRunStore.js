@@ -72,7 +72,7 @@ function reloadThisStoreUntilAllFinished() {
 	promisesOfLoad.then(function(models){
 		let containsInformation = true;
 		models.forEach(function(model){
-			if(!model.hasOwnProperty("status")) {
+			if(!model.status) {
 				containsInformation = false;
 			}
 		});
