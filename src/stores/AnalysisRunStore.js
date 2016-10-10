@@ -63,7 +63,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 function reloadThisStoreUntilAllFinished() {
 	logger.info("AnalysisRunStore#reloadThisStoreUntilAllFinished Issue new request for reload. Current time: ", new Date());
 
-	let promisesOfLoad = storeInstance.reload();
+	let promisesOfLoad = storeInstance.reloadInternal();
 	if(!promisesOfLoad) {
 		setTimeout(reloadThisStoreUntilAllFinished, 500);
 		return;
@@ -72,13 +72,15 @@ function reloadThisStoreUntilAllFinished() {
 	promisesOfLoad.then(function(models){
 		let containsInformation = true;
 		models.forEach(function(model){
-			if(!model.finished) {
+			if(!model.hasOwnProperty("status")) {
 				containsInformation = false;
 			}
 		});
 
 		if(!containsInformation) {
 			setTimeout(reloadThisStoreUntilAllFinished, 500);
+		} else {
+			storeInstance.emitChange();
 		}
 	});
 }

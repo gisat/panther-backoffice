@@ -60,7 +60,7 @@ class ApiStore extends Store {
 		this.removeListener(EventTypes.OBJECT_CREATED, callback);
 	}
 
-	reload() {
+	reloadInternal() {
 		logger.trace(this.constructor.name + ":ApiStore# reload(), In progress: ", this.reloadInProgress);
 		if(this.reloadInProgress) {
 			return;
@@ -73,11 +73,20 @@ class ApiStore extends Store {
 		this._models.then(function(){
 			logger.trace(thisStore.constructor.name + ":ApiStore# reload(), Models loading finished, GUID: ", guid);
 			thisStore.reloadInProgress = false;
-			thisStore.emitChange();
 		});
 		return this._models;
 	}
 
+	reload() {
+		var thisStore = this;
+		let res = this.reloadInternal();
+		if (res) {
+			res.then(function(){
+				thisStore.emitChange();
+			});
+			return res;
+		}
+	}
 
 	load() {
 		var method = this.getApiLoadMethod();
@@ -174,7 +183,7 @@ class ApiStore extends Store {
 			logger.trace(thisStore.constructor.name + ":ApiStore# createObjectAndRespond(), Promise resolved - Result", result, ", GUID: ", guid);
 			thisStore.reload().then(function(){
 				logger.trace(thisStore.constructor.name + ":ApiStore# createObjectAndRespond(), Reload finished", result, ", GUID: ", guid);
-				thisStore.emitChange();
+				//thisStore.emitChange(); // emitChange is in reload(), todo delete here
 				thisStore.emit(EventTypes.OBJECT_CREATED,result,responseData,responseStateHash, instanceId);
 			});
 		});
