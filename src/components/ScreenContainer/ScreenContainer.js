@@ -195,7 +195,8 @@ class ScreenContainer extends PantherComponent {
 				disabled: disabled,
 				data: totallyLocalData,
 				screenKey: this.props.screenState.key,
-				parentUrl: this.props.screenState.parentUrl || ""
+				parentUrl: this.props.screenState.parentUrl || "",
+				screenSet: this.props.screenSet
 			}
 		);
 
