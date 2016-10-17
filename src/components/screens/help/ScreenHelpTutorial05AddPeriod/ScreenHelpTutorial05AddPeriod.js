@@ -47,7 +47,7 @@ class ScreenHelpTutorial05AddPeriod extends PantherComponent {
 						className="help-video"
 						width="720"
 						height="421"
-						src="https://www.youtube.com/embed/_tafQgXbzfs?rel=0&cc_load_policy=1"
+						src="https://www.youtube.com/embed/_tafQgXbzfs?rel=0&cc_load_policy=1&cc_lang_pref=en"
 						frameBorder="0"
 						allowFullScreen
 					></iframe>

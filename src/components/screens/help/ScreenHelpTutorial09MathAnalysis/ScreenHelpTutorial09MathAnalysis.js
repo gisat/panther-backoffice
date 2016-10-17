@@ -47,7 +47,7 @@ class ScreenHelpTutorial09MathAnalysis extends PantherComponent {
 						className="help-video"
 						width="720"
 						height="421"
-						src="https://www.youtube.com/embed/l9QLdDZ3q7s?rel=0&cc_load_policy=1"
+						src="https://www.youtube.com/embed/l9QLdDZ3q7s?rel=0&cc_load_policy=1&cc_lang_pref=en"
 						frameBorder="0"
 						allowFullScreen
 					></iframe>
