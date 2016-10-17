@@ -56,7 +56,7 @@ class ScreenHelpUseCaseLayerAdd extends PantherComponent {
 						className="help-video"
 						width="720"
 						height="530"
-						src="https://www.youtube.com/embed/TZ9J7PXM3LY?rel=0"
+						src="https://www.youtube.com/embed/TZ9J7PXM3LY?rel=0&cc_load_policy=1"
 						frameborder="0"
 						allowfullscreen
 					></iframe>
@@ -91,7 +91,7 @@ class ScreenHelpUseCaseLayerAdd extends PantherComponent {
 						className="help-video"
 						width="720"
 						height="407"
-						src="https://www.youtube.com/embed/0KtCr7PNrAM?rel=0"
+						src="https://www.youtube.com/embed/0KtCr7PNrAM?rel=0&cc_load_policy=1"
 						frameborder="0"
 						allowfullscreen
 					></iframe>

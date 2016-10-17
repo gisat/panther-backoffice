@@ -47,7 +47,7 @@ class ScreenHelpTutorial04AttributeSetsAttributes extends PantherComponent {
 						className="help-video"
 						width="720"
 						height="421"
-						src="https://www.youtube.com/embed/qi8GCK91p-8?rel=0"
+						src="https://www.youtube.com/embed/qi8GCK91p-8?rel=0&cc_load_policy=1"
 						frameborder="0"
 						allowfullscreen
 					></iframe>

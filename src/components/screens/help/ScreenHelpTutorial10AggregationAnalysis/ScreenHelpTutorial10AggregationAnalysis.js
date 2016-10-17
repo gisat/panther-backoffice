@@ -47,7 +47,7 @@ class ScreenHelpTutorial10AggregationAnalysis extends PantherComponent {
 						className="help-video"
 						width="720"
 						height="421"
-						src="https://www.youtube.com/embed/2Cd2NzAwk1o?rel=0"
+						src="https://www.youtube.com/embed/2Cd2NzAwk1o?rel=0&cc_load_policy=1"
 						frameborder="0"
 						allowfullscreen
 					></iframe>
