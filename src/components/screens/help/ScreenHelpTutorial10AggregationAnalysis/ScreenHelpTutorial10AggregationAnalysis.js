@@ -48,8 +48,8 @@ class ScreenHelpTutorial10AggregationAnalysis extends PantherComponent {
 						width="720"
 						height="421"
 						src="https://www.youtube.com/embed/2Cd2NzAwk1o?rel=0&cc_load_policy=1"
-						frameborder="0"
-						allowfullscreen
+						frameBorder="0"
+						allowFullScreen
 					></iframe>
 
 				</div></div>

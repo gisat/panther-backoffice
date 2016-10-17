@@ -57,8 +57,8 @@ class ScreenHelpUseCaseLayerAdd extends PantherComponent {
 						width="720"
 						height="530"
 						src="https://www.youtube.com/embed/TZ9J7PXM3LY?rel=0&cc_load_policy=1"
-						frameborder="0"
-						allowfullscreen
+						frameBorder="0"
+						allowFullScreen
 					></iframe>
 
 					<h3>
@@ -92,8 +92,8 @@ class ScreenHelpUseCaseLayerAdd extends PantherComponent {
 						width="720"
 						height="407"
 						src="https://www.youtube.com/embed/0KtCr7PNrAM?rel=0&cc_load_policy=1"
-						frameborder="0"
-						allowfullscreen
+						frameBorder="0"
+						allowFullScreen
 					></iframe>
 
 					<h4>Connect vector layer</h4>

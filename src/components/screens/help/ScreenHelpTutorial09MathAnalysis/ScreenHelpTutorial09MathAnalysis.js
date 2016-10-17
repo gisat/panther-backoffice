@@ -48,8 +48,8 @@ class ScreenHelpTutorial09MathAnalysis extends PantherComponent {
 						width="720"
 						height="421"
 						src="https://www.youtube.com/embed/l9QLdDZ3q7s?rel=0&cc_load_policy=1"
-						frameborder="0"
-						allowfullscreen
+						frameBorder="0"
+						allowFullScreen
 					></iframe>
 
 				</div></div>
