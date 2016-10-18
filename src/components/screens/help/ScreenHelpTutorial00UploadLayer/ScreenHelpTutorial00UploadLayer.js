@@ -58,7 +58,7 @@ class ScreenHelpTutorial00UploadLayer extends PantherComponent {
 						<iframe
 							className="help-video"
 							width="720"
-							height="407"
+							height="529"
 							src="https://www.youtube.com/embed/TZ9J7PXM3LY?rel=0&cc_load_policy=1&cc_lang_pref=en"
 							frameBorder="0"
 							allowFullScreen
