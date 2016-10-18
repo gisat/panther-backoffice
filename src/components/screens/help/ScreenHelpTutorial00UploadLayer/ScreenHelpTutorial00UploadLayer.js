@@ -38,21 +38,12 @@ class ScreenHelpTutorial00UploadLayer extends PantherComponent {
 					<div>
 						<h2>Video Tutorial 0: Upload Data Layer in GeoNode</h2>
 
-						<p>The geographic data layer has to be uploaded to PUMA using the GeoNode interface before it can be edited
-							in Back Office or displayed in Data Exploration.</p>
+						<p>The geographic data layer has to be uploaded to PUMA using the GeoNode interface before it can be edited in Back Office or displayed in Data Exploration.</p>
 						<ol className="plain list-steps">
-							<li>From Back Office dashboard navigate the <b>Upload data layers</b> link. Or in GeoNode go to Layers and
-								click <b>Upload Layers</b> button.
-							</li>
-							<li>Select geodata files using the <b>Choose files</b> button or by dragging & dropping them to the
-								designated area.
-							</li>
-							<li>Click the <b>Upload Files</b> button and wait until all the files are loaded and the progress bar
-								disappears.
-							</li>
-							<li>The upload is complete. You can click <b>Layer info</b> button to navigate to layers detail page or
-								<b>Edit Metadata</b> to manage layers metadata.
-							</li>
+							<li>From Back Office dashboard navigate the <b>Upload data layers</b> link. Or in GeoNode go to Layers and click <b>Upload Layers</b> button.</li>
+							<li>Select geodata files using the <b>Choose files</b> button or by dragging & dropping them to the designated area.</li>
+							<li>Click the <b>Upload Files</b> button and wait until all the files are loaded and the progress bar disappears.</li>
+							<li>The upload is complete. You can click <b>Layer info</b> button to navigate to layers detail page or <b>Edit Metadata</b> to manage layers metadata.</li>
 						</ol>
 
 						<iframe
