@@ -14,6 +14,7 @@ import ScreenHelpTopicMetadata from '../help/ScreenHelpTopicMetadata';
 import ScreenHelpTopicBackOfficeInterface from '../help/ScreenHelpTopicBackOfficeInterface';
 import ScreenHelpUseCaseLayerAdd from '../help/ScreenHelpUseCaseLayerAdd';
 import ScreenHelpCreatePlace from '../help/ScreenHelpCreatePlace';
+import ScreenHelpTutorial00UploadLayer from '../help/ScreenHelpTutorial00UploadLayer';
 import ScreenHelpTutorial01ScopeThemeTopic from '../help/ScreenHelpTutorial01ScopeThemeTopic';
 import ScreenHelpTutorial02Place from '../help/ScreenHelpTutorial02Place';
 import ScreenHelpTutorial03AnalyticalUnits from '../help/ScreenHelpTutorial03AnalyticalUnits';
@@ -55,6 +56,9 @@ class ScreenHelpIndex extends PantherComponent {
 				break;
 			case 'CreatePlace':
 				component = ScreenHelpCreatePlace;
+				break;
+			case 'Tutorial00UploadLayer':
+				component = ScreenHelpTutorial00UploadLayer;
 				break;
 			case 'Tutorial01ScopeThemeTopic':
 				component = ScreenHelpTutorial01ScopeThemeTopic;
@@ -149,7 +153,7 @@ class ScreenHelpIndex extends PantherComponent {
 						</span>
 					</a>*/}
 
-					<h3>Use cases</h3>
+					{/*<h3>Use cases</h3>
 
 					<a
 						className="help-link"
@@ -172,7 +176,9 @@ class ScreenHelpIndex extends PantherComponent {
 						<span className="description">
 							Create new place and associated layers.
 						</span>
-					</a>
+					</a>*/}
+
+
 					{/*
 					 <a
 					 className="help-link"
@@ -194,6 +200,14 @@ class ScreenHelpIndex extends PantherComponent {
 
 
 					<h3>Video totorial</h3>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial00UploadLayer')}
+					>
+						<span>0: Upload Layer</span>
+						<span className="description">Upload Data Layers in GeoNode</span>
+					</a>
 
 					<a
 						className="help-link"
