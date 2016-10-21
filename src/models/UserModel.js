@@ -1,10 +1,13 @@
 import superagent from 'superagent';
 import path from 'path';
+import EventEmitter from 'events';
+import EventTypes from '../constants/EventTypes';
 
 import { apiPath, apiProtocol, apiHost} from '../config';
 
-class User {
+class User extends EventEmitter {
 	constructor() {
+		super();
 		this.logged = false;
 	}
 
@@ -14,6 +17,15 @@ class User {
 
 	login() {
 		this.logged = true;
+		this.emit(EventTypes.USER_LOGGED_IN);
+	}
+
+	addLoginListener(callback) {
+		this.on(EventTypes.USER_LOGGED_IN, callback);
+	}
+
+	removeLoginListener(callback) {
+		this.removeListener(EventTypes.USER_LOGGED_IN, callback);
 	}
 }
 
