@@ -1,4 +1,5 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 import LayerGroupStore from '../stores/LayerGroupStore';
 import StyleStore from '../stores/StyleStore';
@@ -7,6 +8,10 @@ import AttributeSetStore from '../stores/AttributeSetStore';
 
 
 class VectorLayerModel extends Model {
+
+	getType() {
+		return ObjectTypes.VECTOR_LAYER_TEMPLATE;
+	}
 
 	data() {
 		return {

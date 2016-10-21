@@ -1,4 +1,5 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 import AttributeStore from '../stores/AttributeStore';
 import VectorLayerStore from '../stores/VectorLayerStore';
@@ -6,6 +7,10 @@ import TopicStore from '../stores/TopicStore';
 
 
 class AttributeSetModel extends Model {
+
+	getType() {
+		return ObjectTypes.ATTRIBUTE_SET;
+	}
 
 	data() {
 		return {

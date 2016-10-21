@@ -48,6 +48,7 @@ export const Store = {
 	LAYER_GROUP: LayerGroupStore,
 	STYLE: StyleStore,
 	OBJECT_RELATION: ObjectRelationStore,
+	ANALYSIS: AnalysisStore,
 	ANALYSIS_SPATIAL: AnalysisStore,
 	ANALYSIS_LEVEL: AnalysisStore,
 	ANALYSIS_MATH: AnalysisStore,
@@ -69,6 +70,7 @@ export const Model = {
 	LAYER_GROUP: LayerGroupModel,
 	STYLE: StyleModel,
 	OBJECT_RELATION: ObjectRelationModel,
+	ANALYSIS: AnalysisModel,
 	ANALYSIS_SPATIAL: AnalysisModel,
 	ANALYSIS_LEVEL: AnalysisModel,
 	ANALYSIS_MATH: AnalysisModel,
@@ -136,6 +138,10 @@ export const objectTypesMetadata = {
 		url: "style"
 	},
 	OBJECT_RELATION: {
+		name: null,
+		url: null
+	},
+	ANALYSIS: {
 		name: null,
 		url: null
 	},

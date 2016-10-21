@@ -1,4 +1,5 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 import LayerGroupStore from '../stores/LayerGroupStore';
 import StyleStore from '../stores/StyleStore';
@@ -6,6 +7,10 @@ import TopicStore from '../stores/TopicStore';
 
 
 class RasterLayerModel extends Model {
+
+	getType() {
+		return ObjectTypes.RASTER_LAYER_TEMPLATE;
+	}
 
 	data() {
 		return {

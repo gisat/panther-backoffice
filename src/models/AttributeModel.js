@@ -1,8 +1,13 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 
 
 class AttributeModel extends Model {
+
+	getType() {
+		return ObjectTypes.ATTRIBUTE;
+	}
 
 	data() {
 		return {

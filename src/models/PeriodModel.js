@@ -1,9 +1,13 @@
-
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 
 
 class PeriodModel extends Model {
+
+	getType() {
+		return ObjectTypes.PERIOD;
+	}
 
 	data() {
 		return {

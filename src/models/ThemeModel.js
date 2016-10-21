@@ -1,4 +1,5 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 import ScopeStore from '../stores/ScopeStore';
 import PeriodStore from '../stores/PeriodStore';
@@ -6,6 +7,10 @@ import TopicStore from '../stores/TopicStore';
 
 
 class ThemeModel extends Model {
+
+	getType() {
+		return ObjectTypes.THEME;
+	}
 
 	data() {
 		return {

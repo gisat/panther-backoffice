@@ -1,10 +1,15 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 //import AttributeStore from '../stores/AttributeStore';
 //import AttributeSetStore from '../stores/AttributeSetStore';
 
 
 class StyleModel extends Model {
+
+	getType() {
+		return ObjectTypes.STYLE;
+	}
 
 	data() {
 		return {

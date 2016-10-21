@@ -1,10 +1,15 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 import GeneralLayerStore from '../stores/GeneralLayerStore';
 import AttributeSetStore from '../stores/AttributeSetStore';
 import AttributeStore from '../stores/AttributeStore';
 
 class AnalysisModel extends Model {
+
+	getType() {
+		return ObjectTypes.ANALYSIS;
+	}
 
 	data() {
 		return {

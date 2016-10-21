@@ -1,4 +1,5 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 import GeneralLayerStore from '../stores/GeneralLayerStore';
 import AttributeSetStore from '../stores/AttributeSetStore';
@@ -12,6 +13,10 @@ import DataLayerModel from '../models/DataLayerModel';
 
 
 class ObjectRelationModel extends Model {
+
+	getType() {
+		return ObjectTypes.OBJECT_RELATION;
+	}
 
 	data() {
 		return {

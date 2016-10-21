@@ -1,8 +1,13 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 
 
 class LayerGroupModel extends Model {
+
+	getType() {
+		return ObjectTypes.LAYER_GROUP;
+	}
 
 	data() {
 		return {
