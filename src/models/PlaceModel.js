@@ -2,7 +2,6 @@ import Model from './Model';
 import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 import ScopeStore from '../stores/ScopeStore';
-import config from '../config';
 
 
 class PlaceModel extends Model {

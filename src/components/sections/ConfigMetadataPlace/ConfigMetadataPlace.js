@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import ControllerComponent from '../../common/ControllerComponent';
-import ActionCreator from '../../../actions/ActionCreator';
+import config from '../../../config';
 import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
 import _ from 'underscore';
@@ -10,6 +10,7 @@ import ScopeModel from '../../../models/ScopeModel';
 import PlaceModel from '../../../models/PlaceModel';
 import PlaceStore from '../../../stores/PlaceStore';
 import ScopeStore from '../../../stores/ScopeStore';
+import ActionCreator from '../../../actions/ActionCreator';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
