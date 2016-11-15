@@ -1,6 +1,7 @@
 import Model from './Model';
 import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
+import ScopeStore from '../stores/ScopeStore';
 import LayerGroupStore from '../stores/LayerGroupStore';
 import StyleStore from '../stores/StyleStore';
 import TopicStore from '../stores/TopicStore';
@@ -51,6 +52,15 @@ class VectorLayerModel extends Model {
 				transformForLocal: function (data) {
 					return UserStore.getById(data)
 				},
+				isPromise: true
+			},
+			scope: {
+				serverName: 'dataset', //id
+				sendToServer: true,
+				transformForLocal: function (data) {
+					return ScopeStore.getById(data)
+				},
+				transformForServer: this.getKey,
 				isPromise: true
 			},
 			layerType: {
