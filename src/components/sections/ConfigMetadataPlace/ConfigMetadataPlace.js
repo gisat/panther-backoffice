@@ -19,8 +19,7 @@ import UIObjectSelect from '../../atoms/UIObjectSelect';
 import ConfigControls from '../../atoms/ConfigControls';
 import WorldWindow from '../../WorldWindow';
 
-let modelInstance = new Model[ObjectTypes.PLACE];
-let model = modelInstance.data();
+let modelConfig = _.assign({}, config.models.common, config.models.PLACE);
 
 var initialState = {
 	valueActive: false,
@@ -28,7 +27,7 @@ var initialState = {
 	valueBoundingBox: "",
 	valueScope: []
 };
-if (model.hasOwnProperty('description')) {
+if (modelConfig.description) {
 	initialState.valueDescription = "";
 }
 
@@ -77,7 +76,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 					valueBoundingBox: place.boundingBox,
 					valueScope: place.scope ? [place.scope.key] : []
 				};
-				if (model.hasOwnProperty('description')) {
+				if (modelConfig.description) {
 					nextState.valueDescription = place.description;
 				}
 			}
@@ -148,7 +147,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 		modelData.name = this.state.current.valueName;
 		modelData.boundingBox = this.state.current.valueBoundingBox; // Use Bounding Box from CSV.
 		modelData.scope = _.findWhere(this.props.store.scopes, {key: this.state.current.valueScope[0]});
-		if (model.hasOwnProperty('description')) {
+		if (modelConfig.description) {
 			modelData.description = this.state.current.valueDescription;
 		}
 		let modelObj = new Model[ObjectTypes.PLACE](modelData);
@@ -267,121 +266,121 @@ class ConfigMetadataPlace extends ControllerComponent {
 
 		if (this.state.built) {
 
-		let place = _.findWhere(this.props.store.places, {key: this.props.selectorValue});
+			let place = _.findWhere(this.props.store.places, {key: this.props.selectorValue});
 
 
-		var isActiveText = "inactive";
-		var isActiveClasses = "activeness-indicator";
-		if(place && place.active){
-			isActiveText = "active";
-			isActiveClasses = "activeness-indicator active";
-		}
+			var isActiveText = "inactive";
+			var isActiveClasses = "activeness-indicator";
+			if(place && place.active){
+				isActiveText = "active";
+				isActiveClasses = "activeness-indicator active";
+			}
 
-		var extraFields = [];
 
-		if (model.hasOwnProperty('description')) {
-			extraFields.push((
-				<div
-					className="frame-input-wrapper" //todo get required from model too?
-					key="extended-fields-description"
-				>
-					<label className="container">
-						Description
-						<Input
-							type="text"
-							name="description"
-							placeholder=" "
-							value={this.state.current.valueDescription}
-							onChange={this.onChangeDescription.bind(this)}
-						/>
-					</label>
-				</div>
-			));
-		}
+			let descriptionField = null;
+			if (modelConfig.description) {
+				descriptionField = (
+					<div
+						className="frame-input-wrapper" //todo get required from model too?
+						key="extended-fields-description"
+					>
+						<label className="container">
+							Description
+							<Input
+								type="text"
+								name="description"
+								placeholder=" "
+								value={this.state.current.valueDescription}
+								onChange={this.onChangeDescription.bind(this)}
+							/>
+						</label>
+					</div>
+				);
+			}
 
-		return (
-			<div>
+			return (
+				<div>
 
-				<div className="frame-input-wrapper">
-					<div className="container activeness">
-						<Checkbox
-							checked={this.state.current.valueActive}
-							onClick={this.onChangeActive.bind(this)}
-						>
-							<span>Active</span>
-						</Checkbox>
-						<div className="frame-input-pull-right">
-							{isActiveText}
-							<div className={isActiveClasses}></div>
+					<div className="frame-input-wrapper">
+						<div className="container activeness">
+							<Checkbox
+								checked={this.state.current.valueActive}
+								onClick={this.onChangeActive.bind(this)}
+							>
+								<span>Active</span>
+							</Checkbox>
+							<div className="frame-input-pull-right">
+								{isActiveText}
+								<div className={isActiveClasses}></div>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div className="frame-input-wrapper required">
-					<label className="container">
-						Name
-						<Input
-							type="text"
-							name="name"
-							placeholder=" "
-							value={this.state.current.valueName}
-							onChange={this.onChangeName.bind(this)}
-						/>
-					</label>
-				</div>
-
-				<div className="frame-input-wrapper required">
-					<label className="container">
-						Scope
-						<UIObjectSelect
-							onChange={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
-							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.SCOPE)}
-							options={this.props.store.scopes}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
-							valueKey="key"
-							labelKey="name"
-							value={this.state.current.valueScope}
-						/>
-					</label>
-				</div>
-
-				<div className="frame-input-wrapper required">
-					<label className="container">
-						Bounding box
-						<Input
-							type="text"
-							name="boundingBox"
-							placeholder=" "
-							value={this.state.current.valueBoundingBox}
-							onChange={this.onChangeBoundingBox.bind(this)}
-						/>
-					</label>
-					<div className="frame-input-wrapper-info">
-						It is possible to set bounding box using the map below. In order to select bounding box press shift and click on top left corner of the selection and then bottom right corner. If you want to change the bounding box simply delete the value in the field. <br/>
-						It is also possible to set bounding box for the place in a format of bounding box starting with upper left corner and ending with bottom right corner. Format is longitude of upper left corner, latitude of upper left corner, longitude of bottom right corner, latitude of bottom right corner. <br/>
-						Example: 10,10,15,20
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Name
+							<Input
+								type="text"
+								name="name"
+								placeholder=" "
+								value={this.state.current.valueName}
+								onChange={this.onChangeName.bind(this)}
+							/>
+						</label>
 					</div>
+
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Scope
+							<UIObjectSelect
+								onChange={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
+								onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.SCOPE)}
+								options={this.props.store.scopes}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.valueScope}
+							/>
+						</label>
+					</div>
+
+					{descriptionField}
+
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Bounding box
+							<Input
+								type="text"
+								name="boundingBox"
+								placeholder=" "
+								value={this.state.current.valueBoundingBox}
+								onChange={this.onChangeBoundingBox.bind(this)}
+							/>
+						</label>
+						<div className="frame-input-wrapper-info">
+							It is possible to set bounding box using the map below. In order to select bounding box press shift and click on top left corner of the selection and then bottom right corner. If you want to change the bounding box simply delete the value in the field. <br/>
+							It is also possible to set bounding box for the place in a format of bounding box starting with upper left corner and ending with bottom right corner. Format is longitude of upper left corner, latitude of upper left corner, longitude of bottom right corner, latitude of bottom right corner. <br/>
+							Example: 10,10,15,20
+						</div>
+					</div>
+
+					<WorldWindow
+						id="one"
+						onMount={this.wwdMounted.bind(this)}
+					/>
+
+					<ConfigControls
+						key={"ConfigControls" + this.props.selectorValue}
+						disabled={this.props.disabled}
+						saved={this.equalStates(this.state.current,this.state.saved)}
+						saving={this.state.saving}
+						onSave={this.saveForm.bind(this)}
+						onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
+					/>
+
 				</div>
-
-				<WorldWindow
-					id="one"
-					onMount={this.wwdMounted.bind(this)}
-				/>
-
-				{extraFields}
-
-				<ConfigControls
-					key={"ConfigControls" + this.props.selectorValue}
-					disabled={this.props.disabled}
-					saved={this.equalStates(this.state.current,this.state.saved)}
-					saving={this.state.saving}
-					onSave={this.saveForm.bind(this)}
-					onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
-				/>
-
-			</div>
-		);
+			);
 
 		} else {
 			ret = (

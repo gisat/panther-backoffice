@@ -12,7 +12,7 @@ class PlaceModel extends Model {
 	}
 
 	data() {
-		let ret = {
+		return {
 			key: {
 				serverName: '_id', //number
 				sendToServer: true
@@ -67,21 +67,12 @@ class PlaceModel extends Model {
 			center: {
 				serverName: 'center',
 				sendToServer: false //for now
+			},
+			description: {
+				serverName: 'description', //string
+				sendToServer: true
 			}
 		};
-
-		if (config.models.hasOwnProperty('place')) {
-
-			if (config.models.place.description) {
-				ret.description = {
-					serverName: 'description', //string
-					sendToServer: true
-				};
-			}
-
-		}
-
-		return ret;
 	}
 
 }
