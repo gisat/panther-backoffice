@@ -59,7 +59,8 @@ export default {
 			changed: true,
 			changedBy: true,
 			created: true,
-			createdBy: true
+			createdBy: true,
+			scope: false
 		},
 		SCOPE: {
 			levels: true,
