@@ -1,7 +1,7 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { Component, PropTypes } from 'react';
-import { publicPath } from '../../config';
+import config from '../../config';
 
 class Html extends Component {
 
@@ -19,6 +19,15 @@ class Html extends Component {
 
 
 	render() {
+
+		let publicPath = "";
+		if (config.publicPath) {
+			let cleanPublicPath = config.publicPath.replace(/^\/*(.*?)\/*$/, "$1");
+			if (cleanPublicPath) {
+				publicPath = "/" + cleanPublicPath;
+			}
+		}
+
 		return (
 			<html className="no-js" lang="en">
 			<head>
