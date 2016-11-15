@@ -55,7 +55,7 @@ class VectorLayerModel extends Model {
 				isPromise: true
 			},
 			scope: {
-				serverName: 'dataset', //id
+				serverName: 'scope', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
 					return ScopeStore.getById(data)
