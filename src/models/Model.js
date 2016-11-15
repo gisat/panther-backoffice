@@ -16,11 +16,13 @@ class Model {
 			this.ready = new Promise(function(resolve,reject){
 				resolvePromise.then(function(opts){
 					_.assign(self,opts);
+					delete self._modelConfig;
 					resolve();
 				});
 			});
 		} else {
 			_.assign(this,this.prepareModel(options));
+			delete this._modelConfig;
 			this.ready = Promise.resolve();
 		}
 	}

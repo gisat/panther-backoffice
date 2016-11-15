@@ -70,7 +70,9 @@ export default {
 			boundingBox: true,
 			center: true
 		},
-		PERIOD: {},
+		PERIOD: {
+			date: false
+		},
 		VECTOR_LAYER_TEMPLATE: {
 			layerType: true,
 			layerGroup: true,
