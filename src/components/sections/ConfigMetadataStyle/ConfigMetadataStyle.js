@@ -405,10 +405,13 @@ class ConfigMetadataStyle extends ControllerComponent {
 	}
 
 	onChangeAddRule(filterType) {
-		var filter = {};
-		if (filterType) {
-			filter[filterType] = {};
-		}
+		var filter = {
+			attributeCsv: {},
+			attributeInterval: {}
+		};
+		//if (filterType) {
+		//	filter[filterType] = {};
+		//}
 		this.setStateDeep({
 			current: {
 				valueDefinitionRules: {
@@ -465,7 +468,10 @@ class ConfigMetadataStyle extends ControllerComponent {
 		if (this.state.current.valueSource=="definition") {
 
 			var classesInsert = null, commonFilterConfigInsert = null;
-			if (this.state.current.valueFilterType=="attributeCsv") {
+			if (
+				this.state.current.valueFilterType=="attributeCsv"
+				|| this.state.current.valueFilterType=="attributeInterval"
+			) {
 
 				var filterDestination = null;
 				if (
@@ -501,13 +507,71 @@ class ConfigMetadataStyle extends ControllerComponent {
 				if (this.state.current.valueFilterAttribute) {
 					for (let ruleIndex in this.state.current.valueDefinitionRules) {
 
-						var filterValues = "";
-						if (
-							this.state.current.valueDefinitionRules[ruleIndex].filter &&
-							this.state.current.valueDefinitionRules[ruleIndex].filter.attributeCsv &&
-							this.state.current.valueDefinitionRules[ruleIndex].filter.attributeCsv.hasOwnProperty("values")
-						) {
-							filterValues = this.state.current.valueDefinitionRules[ruleIndex].filter.attributeCsv.values;
+						var filterConfigInsert = null;
+						if (this.state.current.valueFilterType=="attributeCsv") {
+							var filterValues = "";
+							if (
+								this.state.current.valueDefinitionRules[ruleIndex].filter &&
+								this.state.current.valueDefinitionRules[ruleIndex].filter.attributeCsv &&
+								this.state.current.valueDefinitionRules[ruleIndex].filter.attributeCsv.hasOwnProperty("values")
+							) {
+								filterValues = this.state.current.valueDefinitionRules[ruleIndex].filter.attributeCsv.values;
+							}
+							filterConfigInsert = (
+								<label className="container">
+									Filter
+									<Input
+										type="text"
+										name={"valueFilter" + ruleIndex}
+										placeholder=" "
+										value={filterValues}
+										onChange={this.onChangeRuleFilter.bind(this,ruleIndex,"attributeCsv","values")}
+									/>
+								</label>
+							);
+						} else if(this.state.current.valueFilterType=="attributeInterval") {
+							var filterStart = "", filterEnd = "";
+							if (
+								this.state.current.valueDefinitionRules[ruleIndex].filter &&
+								this.state.current.valueDefinitionRules[ruleIndex].filter.attributeInterval &&
+								this.state.current.valueDefinitionRules[ruleIndex].filter.attributeInterval.hasOwnProperty("start")
+							) {
+								filterStart = this.state.current.valueDefinitionRules[ruleIndex].filter.attributeInterval.start;
+							}
+							if (
+								this.state.current.valueDefinitionRules[ruleIndex].filter &&
+								this.state.current.valueDefinitionRules[ruleIndex].filter.attributeInterval &&
+								this.state.current.valueDefinitionRules[ruleIndex].filter.attributeInterval.hasOwnProperty("end")
+							) {
+								filterEnd = this.state.current.valueDefinitionRules[ruleIndex].filter.attributeInterval.end;
+							}
+							filterConfigInsert = (
+								<div className="form-split">
+									Filter
+									<div>
+										<label className="container">
+											Interval start
+											<Input
+												type="text"
+												name={"valueFilterStart" + ruleIndex}
+												placeholder=" "
+												value={filterStart}
+												onChange={this.onChangeRuleFilter.bind(this,ruleIndex,"attributeInterval","start")}
+											/>
+										</label>
+										<label className="container">
+											Interval end
+											<Input
+												type="text"
+												name={"valueFilterEnd" + ruleIndex}
+												placeholder=" "
+												value={filterEnd}
+												onChange={this.onChangeRuleFilter.bind(this,ruleIndex,"attributeInterval","end")}
+											/>
+										</label>
+									</div>
+								</div>
+							);
 						}
 
 						rulesInsert.push(
@@ -536,16 +600,7 @@ class ConfigMetadataStyle extends ControllerComponent {
 										onChange={this.onChangeRule.bind(this,ruleIndex,"name")}
 									/>
 								</label>
-								<label className="container">
-									Filter
-									<Input
-										type="text"
-										name={"valueFilter" + ruleIndex}
-										placeholder=" "
-										value={filterValues}
-										onChange={this.onChangeRuleFilter.bind(this,ruleIndex,"attributeCsv","values")}
-									/>
-								</label>
+								{filterConfigInsert}
 								<label className="container">
 									Fill colour
 									<Input

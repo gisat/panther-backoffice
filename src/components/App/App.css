@@ -1329,9 +1329,20 @@ a.ptr-item {
 	position: relative;
 }
 .frame-wrapper-object > label,
-.frame-wrapper-object > .label {
+.frame-wrapper-object > .label,
+.frame-wrapper-object > .form-split {
 	padding: .875rem;
 	margin: 0;
+}
+/*.form-split > span {*/
+	/*display: block;*/
+/*}*/
+.form-split > div > label {
+	width: calc(50% - .5rem);
+	display: inline-block;
+}
+.form-split > div > label:first-child {
+	margin-right: 1rem;
 }
 .frame-input-wrapper > .label > .frame-wrapper-object {
 	margin-top: .5rem;
