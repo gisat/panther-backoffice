@@ -39,9 +39,11 @@ class ScreenHelpTutorial05AddPeriod extends PantherComponent {
 					<h2>Video Tutorial 5: Add Reference Period</h2>
 
 					<p>Add new Reference Period to existing Scope</p>
-					{/*<ol className="plain list-steps">
-						<li>_______</li>
-					</ol>*/}
+
+					<p>
+						Period represents time period with the data. In the FrontOffice it is possible to show the data based on the
+						time.
+					</p>
 
 					<iframe
 						className="help-video"

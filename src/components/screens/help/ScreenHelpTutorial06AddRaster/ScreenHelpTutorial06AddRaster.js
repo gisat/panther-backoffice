@@ -39,9 +39,10 @@ class ScreenHelpTutorial06AddRaster extends PantherComponent {
 					<h2>Video Tutorial 6: Raster Layer</h2>
 
 					<p>Map raster Data Layer to Place</p>
-					{/*<ol className="plain list-steps">
-						<li>_______</li>
-					</ol>*/}
+
+					<p>
+						Raster layer means geographically located image, which can be displayed in the Front Office.
+					</p>
 
 					<iframe
 						className="help-video"

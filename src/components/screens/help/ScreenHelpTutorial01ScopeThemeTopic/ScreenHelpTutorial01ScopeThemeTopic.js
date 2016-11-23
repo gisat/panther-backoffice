@@ -39,9 +39,20 @@ class ScreenHelpTutorial01ScopeThemeTopic extends PantherComponent {
 					<h2>Video Tutorial 1: Scope, Theme and Topic</h2>
 
 					<p>Create basic metadata structures</p>
-					{/*<ol className="plain list-steps">
-						<li>_______</li>
-					</ol>*/}
+					<p>
+						Scope represents the combination of the periods and levels of analytical units. All the data layers
+						associated with given Scope must respect the period setting and make sense in the amount of analytical units.
+						The analytical units are specific for every Place. Scope only specifies how many of them are there and what
+						is their ordering from the least detailed to the most detailed.
+					</p>
+					<p>
+						Theme represents the combination of topics which will be applied to given selection. In the FrontOffice the
+						user selects theme alongside with Scope and Place to see the available layers and visualisations.
+					</p>
+					<p>
+						Topic represents the combination of Atttribute Sets associated with given Scope. Attribute sets are further
+						used in analysis and to display charts and thematic maps in the FrontOffice.
+					</p>
 
 					<iframe
 						className="help-video"

@@ -39,9 +39,12 @@ class ScreenHelpTutorial08SpatialAnalysis extends PantherComponent {
 					<h2>Video Tutorial 8: Spatial Analysis</h2>
 
 					<p>Create and run Spatial Analyses</p>
-					{/*<ol className="plain list-steps">
-						<li>_______</li>
-					</ol>*/}
+
+					<p>
+						Spatial analysis allows you to map the information contained in vector layers to the analytical units. For
+						example if you would have the land use vector layer you can use spatial analysis to count the amount of
+						different types of land use per analyticial unit.
+					</p>
 
 					<iframe
 						className="help-video"

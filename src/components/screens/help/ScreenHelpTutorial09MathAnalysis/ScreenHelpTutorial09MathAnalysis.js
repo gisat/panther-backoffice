@@ -39,9 +39,11 @@ class ScreenHelpTutorial09MathAnalysis extends PantherComponent {
 					<h2>Video Tutorial 9: Math Analysis</h2>
 
 					<p>Create and run Math Analyses</p>
-					{/*<ol className="plain list-steps">
-						<li>_______</li>
-					</ol>*/}
+
+					<p>
+						Math analysis allows creation of new attribute as a math operation on already existing attributes mapped to
+						the analytical units.
+					</p>
 
 					<iframe
 						className="help-video"

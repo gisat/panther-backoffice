@@ -39,9 +39,12 @@ class ScreenHelpTutorial07AddVector extends PantherComponent {
 					<h2>Video Tutorial 7: Vector Layer</h2>
 
 					<p>Map vector Data Layer to Place</p>
-					{/*<ol className="plain list-steps">
-						<li>_______</li>
-					</ol>*/}
+
+					<p>
+						Vector layer represents vector layer imported via GeoNode as one of the supported formats. Basically it
+						means that the data contains column geom, representing geometry for each row. This type of data can be used
+						inside of the analysis and as a source for attributes.
+					</p>
 
 					<iframe
 						className="help-video"

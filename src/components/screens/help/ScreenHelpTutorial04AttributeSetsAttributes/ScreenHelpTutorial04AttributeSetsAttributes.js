@@ -39,9 +39,15 @@ class ScreenHelpTutorial04AttributeSetsAttributes extends PantherComponent {
 					<h2>Video Tutorial 4: Attribute Sets and Attributes</h2>
 
 					<p>Using Attribute Sets and Attributes to keep statistical informations</p>
-					{/*<ol className="plain list-steps">
-						<li>_______</li>
-					</ol>*/}
+
+					<p>
+						Attribute Sets represent combination of Attributes which can be added to the Scope via Topics.
+					</p>
+
+					<p>
+						Attributes themselves represent the columns in the data, which can be used in analysis, charts, filters and
+						thematic maps.
+					</p>
 
 					<iframe
 						className="help-video"

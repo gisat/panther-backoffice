@@ -39,9 +39,11 @@ class ScreenHelpTutorial02Place extends PantherComponent {
 					<h2>Video Tutorial 2: Place</h2>
 
 					<p>Create new Place</p>
-					{/*<ol className="plain list-steps">
-						<li>_______</li>
-					</ol>*/}
+					<p>
+						Place represents new location available in the Scope. It needs to come with new analytical units. In order
+						to show the data already available as vector layers in the application, it is necessary to run analyse for
+						the new place on them.
+					</p>
 
 					<iframe
 						className="help-video"

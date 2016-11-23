@@ -39,9 +39,11 @@ class ScreenHelpTutorial10AggregationAnalysis extends PantherComponent {
 					<h2>Video Tutorial 10: Aggregation Analysis</h2>
 
 					<p>Create and run Aggregation Analyses</p>
-					{/*<ol className="plain list-steps">
-						<li>_______</li>
-					</ol>*/}
+
+					<p>
+						Aggregation analysis allows to use the spatial analysis, when it was performed on more detailed level, and
+						aggregate it for less detailed levels.
+					</p>
 
 					<iframe
 						className="help-video"

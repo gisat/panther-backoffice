@@ -39,9 +39,11 @@ class ScreenHelpTutorial03AnalyticalUnits extends PantherComponent {
 					<h2>Video Tutorial 3: Mapping Analytical Units</h2>
 
 					<p>Mapping Analytical Unit Data Layers to Place by level</p>
-					{/*<ol className="plain list-steps">
-						<li>_______</li>
-					</ol>*/}
+					<p>
+						Analytical units represents the regions which will be shown in the charts, tematic maps and are used for
+						filtering. If you use spatial analysis it also counts the information from vector data layers on the
+						analytical units.
+					</p>
 
 					<iframe
 						className="help-video"
