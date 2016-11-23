@@ -465,7 +465,7 @@ class ConfigMetadataStyle extends ControllerComponent {
 		if (this.state.current.valueSource=="definition") {
 
 			var classesInsert = null, commonFilterConfigInsert = null;
-			if (this.state.current.valueFilterType=="attributeCsv") {
+			if (this.state.current.valueFilterType=="attributeCsv" || this.state.current.valueFilterType=="attributeInterval") {
 
 				var filterDestination = null;
 				if (
