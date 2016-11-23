@@ -428,14 +428,14 @@ class ScreenStore extends Store {
 			});
 			var screen = screenSet.screens[screenKey];
 			// - new structures - to be saved
-			var newScreenSets = utils.clone(this._screenSets);
-			var newModels = this.generateModels(newScreenSets);
-			//var newHistoryStacks = this.generateHistoryStacks(newScreenSets);
+			var newScreenSets = utils.clone(this._screenSets); //nothing happens to this, only to screens inside:
+			var newModels = this.generateModels(newScreenSets); //ensures screensets & models share screens again
+			//var newHistoryStacks = this.generateHistoryStacks(newScreenSets); <- would lose changes in history
 			var newHistoryStacks = utils.clone(this._historyStacks);
 			for (var stackKey in newHistoryStacks) {
 				if(newHistoryStacks.hasOwnProperty(stackKey)){
 					for (var record of newHistoryStacks[stackKey]) {
-						record.screen = newScreenSets[stackKey].screens[record.screen.key];
+						record.screen = newScreenSets[stackKey].screens[record.screen.key]; //share screen refs with new, not old
 					}
 				}
 			}
@@ -473,7 +473,7 @@ class ScreenStore extends Store {
 
 
 			//var index = -1;
-			var index = _.indexOf(newScreens,newScreen);
+			//var index = _.indexOf(newScreens,newScreen);
 			// get index for actual screen
 			//newScreens.map(function (obj, i) {
 			//	if (obj.key == screenKey) {

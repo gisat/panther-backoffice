@@ -14,6 +14,17 @@ import ScreenHelpTopicMetadata from '../help/ScreenHelpTopicMetadata';
 import ScreenHelpTopicBackOfficeInterface from '../help/ScreenHelpTopicBackOfficeInterface';
 import ScreenHelpUseCaseLayerAdd from '../help/ScreenHelpUseCaseLayerAdd';
 import ScreenHelpCreatePlace from '../help/ScreenHelpCreatePlace';
+import ScreenHelpTutorial00UploadLayer from '../help/ScreenHelpTutorial00UploadLayer';
+import ScreenHelpTutorial01ScopeThemeTopic from '../help/ScreenHelpTutorial01ScopeThemeTopic';
+import ScreenHelpTutorial02Place from '../help/ScreenHelpTutorial02Place';
+import ScreenHelpTutorial03AnalyticalUnits from '../help/ScreenHelpTutorial03AnalyticalUnits';
+import ScreenHelpTutorial04AttributeSetsAttributes from '../help/ScreenHelpTutorial04AttributeSetsAttributes';
+import ScreenHelpTutorial05AddPeriod from '../help/ScreenHelpTutorial05AddPeriod';
+import ScreenHelpTutorial06AddRaster from '../help/ScreenHelpTutorial06AddRaster';
+import ScreenHelpTutorial07AddVector from '../help/ScreenHelpTutorial07AddVector';
+import ScreenHelpTutorial08SpatialAnalysis from '../help/ScreenHelpTutorial08SpatialAnalysis';
+import ScreenHelpTutorial09MathAnalysis from '../help/ScreenHelpTutorial09MathAnalysis';
+import ScreenHelpTutorial10AggregationAnalysis from '../help/ScreenHelpTutorial10AggregationAnalysis';
 
 import logger from '../../../core/Logger';
 import PantherComponent from "../../common/PantherComponent";
@@ -45,6 +56,39 @@ class ScreenHelpIndex extends PantherComponent {
 				break;
 			case 'CreatePlace':
 				component = ScreenHelpCreatePlace;
+				break;
+			case 'Tutorial00UploadLayer':
+				component = ScreenHelpTutorial00UploadLayer;
+				break;
+			case 'Tutorial01ScopeThemeTopic':
+				component = ScreenHelpTutorial01ScopeThemeTopic;
+				break;
+			case 'Tutorial02Place':
+				component = ScreenHelpTutorial02Place;
+				break;
+			case 'Tutorial03AnalyticalUnits':
+				component = ScreenHelpTutorial03AnalyticalUnits;
+				break;
+			case 'Tutorial04AttributeSetsAttributes':
+				component = ScreenHelpTutorial04AttributeSetsAttributes;
+				break;
+			case 'Tutorial05AddPeriod':
+				component = ScreenHelpTutorial05AddPeriod;
+				break;
+			case 'Tutorial06AddRaster':
+				component = ScreenHelpTutorial06AddRaster;
+				break;
+			case 'Tutorial07AddVector':
+				component = ScreenHelpTutorial07AddVector;
+				break;
+			case 'Tutorial08SpatialAnalysis':
+				component = ScreenHelpTutorial08SpatialAnalysis;
+				break;
+			case 'Tutorial09MathAnalysis':
+				component = ScreenHelpTutorial09MathAnalysis;
+				break;
+			case 'Tutorial10AggregationAnalysis':
+				component = ScreenHelpTutorial10AggregationAnalysis;
 				break;
 		}
 		if (component) {
@@ -109,7 +153,7 @@ class ScreenHelpIndex extends PantherComponent {
 						</span>
 					</a>*/}
 
-					<h3>Use cases</h3>
+					{/*<h3>Use cases</h3>
 
 					<a
 						className="help-link"
@@ -132,7 +176,9 @@ class ScreenHelpIndex extends PantherComponent {
 						<span className="description">
 							Create new place and associated layers.
 						</span>
-					</a>
+					</a>*/}
+
+
 					{/*
 					 <a
 					 className="help-link"
@@ -150,6 +196,99 @@ class ScreenHelpIndex extends PantherComponent {
 							Managing a place
 						</span>
 					</a>*/}
+
+
+
+					<h3>Video totorial</h3>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial00UploadLayer')}
+					>
+						<span>0: Upload Layer</span>
+						<span className="description">Upload Data Layers in GeoNode</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial01ScopeThemeTopic')}
+					>
+						<span>1: Scope, Theme and Topic</span>
+						<span className="description">Create basic metadata structures</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial02Place')}
+					>
+						<span>2: Place</span>
+						<span className="description">Create new Place</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial03AnalyticalUnits')}
+					>
+						<span>3: Mapping Analytical Units</span>
+						<span className="description">Mapping Analytical Unit Data Layers to Place by level</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial04AttributeSetsAttributes')}
+					>
+						<span>4: Attribute Sets and Attributes</span>
+						<span className="description">Using Attribute Sets and Attributes to keep statistical informations</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial05AddPeriod')}
+					>
+						<span>5: Add Reference Period</span>
+						<span className="description">Add new Reference Period to existing Scope</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial06AddRaster')}
+					>
+						<span>6: Raster Layer</span>
+						<span className="description">Map raster Data Layer to Place</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial07AddVector')}
+					>
+						<span>7: Vector Layer</span>
+						<span className="description">Map vector Data Layer to Place</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial08SpatialAnalysis')}
+					>
+						<span>8: Spatial Analysis</span>
+						<span className="description">Create and run Spatial Analyses</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial09MathAnalysis')}
+					>
+						<span>9: Math Analysis</span>
+						<span className="description">Create and run Math Analyses</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial10AggregationAnalysis')}
+					>
+						<span>10: Aggregation Analysis</span>
+						<span className="description">Create and run Aggregation Analyses</span>
+					</a>
+
 
 				</div></div>
 			</div>

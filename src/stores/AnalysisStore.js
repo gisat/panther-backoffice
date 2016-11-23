@@ -41,7 +41,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 		case ActionTypes.ANALYSIS_SPATIAL_CREATE_RESPOND:
 		case ActionTypes.ANALYSIS_LEVEL_CREATE_RESPOND:
 		case ActionTypes.ANALYSIS_MATH_CREATE_RESPOND:
-			storeInstance.createObjectAndRespond(action.model, action.responseData, action.stateHash);
+			storeInstance.createObjectAndRespond(action.model, action.responseData, action.stateHash, action.instanceId);
 			break;
 		case ActionTypes.ANALYSIS_SPATIAL_HANDLE:
 		case ActionTypes.ANALYSIS_LEVEL_HANDLE:

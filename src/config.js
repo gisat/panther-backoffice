@@ -1,25 +1,20 @@
 /**
- * CONFIG
- *
- * Per-instance values, development values & features.
- * Versions/variants managed in github.com/gisat/docker/
+ * CONFIG LOGIC - NOT FOR CONFIGURATION VALUES
  */
-import _ from 'underscore';
+
+import _ from 'lodash';
 
 /**
  * DEFAULT VALUES (fallback)
  * Used if not specified in rewrites.
  */
-import defaults from './configDefaults';
-
+import defaults from './config/defaults';
 /**
- * CONFIG
+ * CONFIG PROPER
+ * Per-instance values, development values & features.
  */
-let rewrites = {
+import rewrites from './config/rewrites';
 
-	loggingLevel: 0,
-
-};
 
 /**
  * getter
@@ -40,7 +35,7 @@ let methods = {
 	}
 };
 
-let config = _.assign({}, defaults, rewrites, methods);
+let config = _.merge({}, defaults, rewrites, methods);
 export default config;
 
 

@@ -109,6 +109,7 @@ class Page extends PantherComponent {
 						key={screen.key}
 						screenState={screen}
 						refs={this.refs}
+						screenSet={this.props.screenSet}
 					/>
 				);
 			}.bind(this));

@@ -47,8 +47,8 @@ class ScreenHelpCreatePlace extends PantherComponent {
 						width="720"
 						height="530"
 						src="https://www.youtube.com/embed/trK5gptIopg"
-						frameborder="0"
-						allowfullscreen
+						frameBorder="0"
+						allowFullScreen
 					></iframe>
 
 					<h3>
@@ -60,8 +60,8 @@ class ScreenHelpCreatePlace extends PantherComponent {
 						width="720"
 						height="407"
 						src="https://www.youtube.com/embed/rCb-6M4oU74"
-						frameborder="0"
-						allowfullscreen
+						frameBorder="0"
+						allowFullScreen
 					></iframe>
 
 					<h3>
@@ -73,8 +73,8 @@ class ScreenHelpCreatePlace extends PantherComponent {
 						width="720"
 						height="407"
 						src="https://www.youtube.com/embed/zaDWExxTuyI"
-						frameborder="0"
-						allowfullscreen
+						frameBorder="0"
+						allowFullScreen
 					></iframe>
 
 					<h3>
@@ -86,8 +86,8 @@ class ScreenHelpCreatePlace extends PantherComponent {
 						width="720"
 						height="407"
 						src="https://www.youtube.com/embed/rUBo1ETpapA"
-						frameborder="0"
-						allowfullscreen
+						frameBorder="0"
+						allowFullScreen
 					></iframe>
 
 					<h3>
@@ -99,8 +99,8 @@ class ScreenHelpCreatePlace extends PantherComponent {
 						width="720"
 						height="407"
 						src="https://www.youtube.com/embed/OEOHlb-oFAs"
-						frameborder="0"
-						allowfullscreen
+						frameBorder="0"
+						allowFullScreen
 					></iframe>
 				</div></div>
 			</div>

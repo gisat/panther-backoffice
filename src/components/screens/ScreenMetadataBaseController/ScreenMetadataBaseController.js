@@ -87,8 +87,11 @@ class ScreenMetadataBaseController extends ControllerComponent {
 	//	return path.join(this.props.parentUrl, "metadata/" + this.state.selectorValue); // todo
 	// }
 
-	_onStoreResponse(result,responseData,stateHash) {
-		if (stateHash === this.getStateHash()) {
+	_onStoreResponse(result,responseData,stateHash, instanceId) {
+		if (
+			(stateHash === this.getStateHash())
+			&& (instanceId === this.instance)
+		) {
 			if (result) {
 				var screenName = this.props.screenKey + "-ScreenMetadata" + responseData.objectType;
 				let options = {
@@ -161,7 +164,7 @@ class ScreenMetadataBaseController extends ControllerComponent {
 		let responseData = {
 			objectType: itemType
 		};
-		ActionCreator.createObjectAndRespond(model,itemType,responseData,this.getStateHash());
+		ActionCreator.createObjectAndRespond(model,itemType,responseData,this.getStateHash(),this.instance);
 		//this.changeActiveObjectListItem(itemType,null);
 	}
 

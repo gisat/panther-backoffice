@@ -9,6 +9,7 @@ import ListenerHandler from '../core/ListenerHandler';
 
 import DataLayerModel from '../models/DataLayerModel';
 import EventTypes from '../constants/EventTypes';
+import logged from '../models/UserModel';
 
 import { apiProtocol, apiHost, apiPath } from '../config';
 import logger from '../core/Logger';
@@ -18,10 +19,9 @@ class ApiStore extends Store {
 
 	constructor() {
 		super();
-		this._models = this.load(); //mozna ne tady ale primo do filtru atd. lazy load
-		//Promise.resolve(this._models).then(function(models){
-		//	console.log("Store > constructor > _models",models);
-		//});
+		this._models = new Promise(function(resolve,reject){});
+		this.loginListener = new ListenerHandler(this, this.initialLoad, 'addLoginListener', 'removeLoginListener');
+		this.loginListener.add(logged);
 		this.changeListener = new ListenerHandler(this, this.reload, 'addChangeListener', 'removeChangeListener');
 		this.registerListeners();
 		this._maxListeners = 40; // increase listener limit a bit, but todo fix removeListeners
@@ -60,7 +60,7 @@ class ApiStore extends Store {
 		this.removeListener(EventTypes.OBJECT_CREATED, callback);
 	}
 
-	reload() {
+	reloadInternal() {
 		logger.trace(this.constructor.name + ":ApiStore# reload(), In progress: ", this.reloadInProgress);
 		if(this.reloadInProgress) {
 			return;
@@ -73,15 +73,28 @@ class ApiStore extends Store {
 		this._models.then(function(){
 			logger.trace(thisStore.constructor.name + ":ApiStore# reload(), Models loading finished, GUID: ", guid);
 			thisStore.reloadInProgress = false;
-			thisStore.emitChange();
 		});
 		return this._models;
 	}
 
+	reload() {
+		var thisStore = this;
+		let res = this.reloadInternal();
+		if (res) {
+			res.then(function(){
+				thisStore.emitChange();
+			});
+			return res;
+		}
+	}
 
 	load() {
 		var method = this.getApiLoadMethod();
 		return this.request(method);
+	}
+
+	initialLoad() {
+		this._models = this.load();
 	}
 
 	create(model) {
@@ -159,9 +172,9 @@ class ApiStore extends Store {
 
 	}
 
-	createObjectAndRespond(model,responseData,responseStateHash) {
+	createObjectAndRespond(model,responseData,responseStateHash, instanceId) {
 		let guid = utils.guid();
-		logger.trace(this.constructor.name + ":ApiStore# createObjectAndRespond(), Response data",responseData, ", GUID: ", guid);
+		logger.trace(this.constructor.name + ":ApiStore# createObjectAndRespond(), Response data",responseData, ", GUID: ", guid, ", instance",instanceId);
 		// todo ? Model.resolveForServer ?
 		//var object = {
 		//	name: objectData.name,
@@ -174,8 +187,8 @@ class ApiStore extends Store {
 			logger.trace(thisStore.constructor.name + ":ApiStore# createObjectAndRespond(), Promise resolved - Result", result, ", GUID: ", guid);
 			thisStore.reload().then(function(){
 				logger.trace(thisStore.constructor.name + ":ApiStore# createObjectAndRespond(), Reload finished", result, ", GUID: ", guid);
-				thisStore.emitChange();
-				thisStore.emit(EventTypes.OBJECT_CREATED,result,responseData,responseStateHash);
+				//thisStore.emitChange(); // emitChange is in reload(), todo delete here
+				thisStore.emit(EventTypes.OBJECT_CREATED,result,responseData,responseStateHash, instanceId);
 			});
 		});
 	}
