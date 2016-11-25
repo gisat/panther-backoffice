@@ -25,6 +25,7 @@ import ScreenHelpTutorial07AddVector from '../help/ScreenHelpTutorial07AddVector
 import ScreenHelpTutorial08SpatialAnalysis from '../help/ScreenHelpTutorial08SpatialAnalysis';
 import ScreenHelpTutorial09MathAnalysis from '../help/ScreenHelpTutorial09MathAnalysis';
 import ScreenHelpTutorial10AggregationAnalysis from '../help/ScreenHelpTutorial10AggregationAnalysis';
+import ScreenHelpTutorial11Styles from '../help/ScreenHelpTutorial11Styles';
 
 import logger from '../../../core/Logger';
 import PantherComponent from "../../common/PantherComponent";
@@ -89,6 +90,9 @@ class ScreenHelpIndex extends PantherComponent {
 				break;
 			case 'Tutorial10AggregationAnalysis':
 				component = ScreenHelpTutorial10AggregationAnalysis;
+				break;
+			case 'Tutorial11Styles':
+				component = ScreenHelpTutorial11Styles;
 				break;
 		}
 		if (component) {
@@ -287,6 +291,14 @@ class ScreenHelpIndex extends PantherComponent {
 					>
 						<span>10: Aggregation Analysis</span>
 						<span className="description">Create and run Aggregation Analyses</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial11Styles')}
+					>
+						<span>11: Styles</span>
+						<span className="description">Cartographic styles of layers</span>
 					</a>
 
 
