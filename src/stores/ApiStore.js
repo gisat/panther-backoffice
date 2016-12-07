@@ -311,6 +311,11 @@ class ApiStore extends Store {
 							if(!_.contains(value, model[key])) {
 								shouldRemain = false;
 							}
+						} else if(_.isObject(model[key]) && !_.isObject(value)) {
+							// filter by nested model key
+							if (!model[key].hasOwnProperty('key') || model[key].key != value) {
+								shouldRemain = false;
+							}
 						} else {
 							if (!model.hasOwnProperty(key) || model[key] != value) {
 								shouldRemain = false;
