@@ -1,12 +1,18 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
+import ScopeStore from '../stores/ScopeStore';
 import LayerGroupStore from '../stores/LayerGroupStore';
 import StyleStore from '../stores/StyleStore';
 import TopicStore from '../stores/TopicStore';
-import AttributeSetStore from '../stores/AttributeSetStore';
+// import AttributeSetStore from '../stores/AttributeSetStore';
 
 
 class VectorLayerModel extends Model {
+
+	getType() {
+		return ObjectTypes.VECTOR_LAYER_TEMPLATE;
+	}
 
 	data() {
 		return {
@@ -46,6 +52,15 @@ class VectorLayerModel extends Model {
 				transformForLocal: function (data) {
 					return UserStore.getById(data)
 				},
+				isPromise: true
+			},
+			scope: {
+				serverName: 'scope', //id
+				sendToServer: true,
+				transformForLocal: function (data) {
+					return ScopeStore.getById(data)
+				},
+				transformForServer: this.getKey,
 				isPromise: true
 			},
 			layerType: {

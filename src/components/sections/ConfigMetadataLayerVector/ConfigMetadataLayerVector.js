@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import ControllerComponent from '../../common/ControllerComponent';
-import ActionCreator from '../../../actions/ActionCreator';
+import config from '../../../config';
 import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
 import _ from 'underscore';
@@ -18,6 +18,8 @@ import LayerGroupStore from '../../../stores/LayerGroupStore';
 import StyleStore from '../../../stores/StyleStore';
 import AttributeSetStore from '../../../stores/AttributeSetStore';
 
+import ActionCreator from '../../../actions/ActionCreator';
+
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import { Input, Button } from '../../SEUI/elements';
@@ -25,13 +27,17 @@ import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import ConfigControls from '../../atoms/ConfigControls';
 
+
+let modelConfig = _.assign({}, config.models.common, config.models.VECTOR_LAYER_TEMPLATE);
+
 var initialState = {
 	valueActive: false,
 	valueName: "",
 	valueTopic: [],
 	valueLayerGroup: [],
 	valuesStyles: [],
-	valuesAttSets: []
+	valuesAttSets: [],
+	valueScope: []
 };
 
 
@@ -95,7 +101,8 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 					valueTopic: layer.topic ? [layer.topic.key] : [],
 					valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
 					valuesStyles: utils.getModelsKeys(layer.styles),
-					valuesAttSets: utils.getModelsKeys(attSets)
+					valuesAttSets: utils.getModelsKeys(attSets),
+					valueScope: layer.scope ? [layer.scope.key] : []
 				};
 			}
 		}
@@ -127,6 +134,9 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 						break;
 					case "valuesAttSets":
 						screenObjectType = ObjectTypes.ATTRIBUTE_SET;
+						break;
+					case "valueScope":
+						screenObjectType = ObjectTypes.SCOPE;
 						break;
 				}
 				var screenName = this.props.screenKey + "-ScreenMetadata" + screenObjectType;
@@ -189,6 +199,9 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 		_.assign(modelData, layer);
 		modelData.active = this.state.current.valueActive;
 		modelData.name = this.state.current.valueName;
+		if (modelConfig.scope) {
+			modelData.scope = _.findWhere(this.props.store.scopes, {key: this.state.current.valueScope[0]});
+		}
 		modelData.topic = _.findWhere(this.props.store.topics, {key: this.state.current.valueTopic[0]});
 		modelData.layerGroup = _.findWhere(this.props.store.layerGroups, {key: this.state.current.valueLayerGroup[0]});
 		modelData.styles = [];
@@ -314,6 +327,27 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 			}
 		},this);
 
+		let scopeField = null;
+		if (modelConfig.scope) {
+			scopeField = (
+				<div className="frame-input-wrapper required">
+					<label className="container">
+						Scope
+						<UIObjectSelect
+							onChange={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
+							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.SCOPE)}
+							options={this.props.store.scopes}
+							allowCreate
+							newOptionCreator={utils.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.state.current.valueScope}
+						/>
+					</label>
+				</div>
+			);
+		}
+
 		ret = (
 			<div>
 
@@ -329,6 +363,8 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 						/>
 					</label>
 				</div>
+
+				{scopeField}
 
 				<div className="frame-input-wrapper required">
 					<label className="container">

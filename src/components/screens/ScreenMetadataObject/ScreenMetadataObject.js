@@ -73,6 +73,7 @@ class ScreenMetadataObject extends ScreenController {
 			case ObjectTypes.VECTOR_LAYER_TEMPLATE:
 				storeloads = {
 					layers: this._load(VectorLayerStore),
+					scopes: this._load(ScopeStore),
 					topics: this._load(TopicStore),
 					layerGroups: this._load(LayerGroupStore),
 					styles: this._load(StyleStore),
@@ -82,6 +83,7 @@ class ScreenMetadataObject extends ScreenController {
 			case ObjectTypes.RASTER_LAYER_TEMPLATE:
 				storeloads = {
 					layers: this._load(RasterLayerStore),
+					scopes: this._load(ScopeStore),
 					topics: this._load(TopicStore),
 					layerGroups: this._load(LayerGroupStore),
 					styles: this._load(StyleStore)
@@ -94,12 +96,14 @@ class ScreenMetadataObject extends ScreenController {
 				break;
 			case ObjectTypes.ATTRIBUTE:
 				storeloads = {
-					attributes: this._load(AttributeStore)
+					attributes: this._load(AttributeStore),
+					scopes: this._load(ScopeStore)
 				};
 				break;
 			case ObjectTypes.ATTRIBUTE_SET:
 				storeloads = {
 					attributeSets: this._load(AttributeSetStore),
+					scopes: this._load(ScopeStore),
 					topics: this._load(TopicStore),
 					attributes: this._load(AttributeStore)
 				};

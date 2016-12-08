@@ -1,22 +1,28 @@
 import _ from 'underscore';
 import logger from '../core/Logger';
+import config from '../config';
 
 class Model {
 	/**
 	 * returns promise of this model.
 	 */
 	constructor(options,data) {
+		if (config.models) {
+			this._modelConfig = _.assign({}, config.models.common, config.models[this.getType()]);
+		}
 		if(data){
 			var self = this;
 			var resolvePromise = this.resolveForLocal(data); // todo do we ever need both options and data?
 			this.ready = new Promise(function(resolve,reject){
 				resolvePromise.then(function(opts){
 					_.assign(self,opts);
+					delete self._modelConfig;
 					resolve();
 				});
 			});
 		} else {
 			_.assign(this,this.prepareModel(options));
+			delete this._modelConfig;
 			this.ready = Promise.resolve();
 		}
 	}
@@ -36,6 +42,12 @@ class Model {
 		}
 		if(!model) {
 			model = self.data();
+			if (config.models && self._modelConfig) {
+				// only allow first level keys allowed in config
+				_.omit(model,function(keyProps, key) {
+					return !self._modelConfig[key];
+				});
+			}
 		}
 		_.each(model, function (keyProps, key) {
 			if (keyProps.isArrayOfNested) {
@@ -101,29 +113,12 @@ class Model {
 		return options;
 	}
 
-	///**
-	// * Transform self for server
-	// */
-	//serialize() {
-	//	var serializedObject = {};
-	//	var model = this.data();
-	//	_.each(this, function (value, key) {
-	//		if(key!=="ready" && model[key].sendToServer) {
-	//			if(model[key].hasOwnProperty("isArrayOfNested") && model[key].isArrayOfNested){
-	//				//value = value.serialize();
-	//				for(var modelIndex in value){
-	//					value[modelIndex].attribute = value[modelIndex].attribute.key;
-	//				}
-	//			}else if(model[key].hasOwnProperty("transformForServer")){
-	//				value = model[key].transformForServer(value);
-	//			}
-	//			key = model[key].serverName;
-	//			serializedObject[key] = value;
-	//		}
-	//	});
-	//	//console.log("serializedObject",serializedObject);
-	//	return serializedObject;
-	//}
+	/**
+	 * get asociated object type from constants/ObjectTypes
+	 */
+	getType() {
+		return 'common';
+	}
 
 	/**
 	 * Transform self for server

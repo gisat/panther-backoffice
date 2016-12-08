@@ -1,4 +1,5 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 import AULevelStore from '../stores/AULevelStore';
 import AnalysisStore from '../stores/AnalysisStore';
@@ -8,6 +9,10 @@ import PeriodStore from '../stores/PeriodStore';
 
 
 class AnalysisRunModel extends Model {
+
+	getType() {
+		return ObjectTypes.ANALYSIS_RUN;
+	}
 
 	data() {
 		return {
@@ -19,10 +24,10 @@ class AnalysisRunModel extends Model {
 				serverName: 'name', //string
 				sendToServer: true
 			},
-			//active: {
-			//	serverName: 'active', //boolean
-			//	sendToServer: true
-			//},
+			active: {
+				serverName: 'active', //boolean
+				sendToServer: true
+			},
 			changed: {
 				serverName: 'changed', //date
 				sendToServer: false,

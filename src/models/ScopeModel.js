@@ -1,10 +1,15 @@
 import Model from './Model';
+import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
 import AULevelStore from '../stores/AULevelStore';
 import PeriodStore from '../stores/PeriodStore';
 
 
 class ScopeModel extends Model {
+
+	getType() {
+		return ObjectTypes.SCOPE;
+	}
 
 	data() {
 		return {

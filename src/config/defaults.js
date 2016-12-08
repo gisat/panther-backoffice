@@ -49,11 +49,123 @@ export default {
 
 
 	/**
-	 * Data models - extra types or properties
+	 * Data models - types & properties
+	 *
+	 * DO NOT DISABLE OLD (PRE-2016) PROPERTIES
+	 * the system is not yet ready for that
 	 */
 	models: {
-		place: {
+		common: {
+			key: true,
+			name: true,
+			active: true,
+			changed: true,
+			changedBy: true,
+			created: true,
+			createdBy: true,
+			scope: false
+		},
+		SCOPE: {
+			levels: true,
+			periods: true
+		},
+		PLACE: {
+			scope: true,
+			boundingBox: true,
+			center: true,
 			description: false
+		},
+		PERIOD: {
+			date: false
+		},
+		VECTOR_LAYER_TEMPLATE: {
+			layerType: true,
+			layerGroup: true,
+			styles: true,
+			topic: true,
+			attributeSets: true
+		},
+		RASTER_LAYER_TEMPLATE: {
+			layerType: true,
+			layerGroup: true,
+			styles: true,
+			topic: true,
+			justVisualization: true
+		},
+		AU_LEVEL: {
+			layerType: true,
+			layerGroup: true,
+			styles: true,
+			topic: true
+		},
+		ATTRIBUTE: {
+			type: true,
+			code: true,
+			standardUnits: true,
+			customUnits: true,
+			color: true,
+			description: false
+		},
+		ATTRIBUTE_SET: {
+			attributes: true,
+			vectorLayers: true,
+			topic: true,
+			description: false
+		},
+		TOPIC: {
+			requiresFullRef: true
+		},
+		THEME: {
+			scope: true,
+			periods: true,
+			topics: true,
+			topicsPreferential: true,
+			visualizations: true
+		},
+		LAYER_GROUP: {
+			order: true
+		},
+		STYLE: {
+			source: true,
+			serverName: true,
+			definition: true
+		},
+		OBJECT_RELATION: {
+			layerObject: true,
+			attributeSet: true,
+			isOfAttributeSet: true,
+			dataSource: true,
+			dataSourceString: true,
+			dataSourceOrigin: true,
+			place: true,
+			placeKey: true,
+			period: true,
+			implicit: true,
+			fidColumn: true,
+			nameColumn: true,
+			parentColumn: true,
+			columnMap: true
+		},
+		ANALYSIS: {
+			active: false,
+			analysisType: true,
+			layerObject: true,
+			attributeSet: true,
+			attributeSets: true,
+			filterAttribute: true,
+			filterAttributeSet: true,
+			useSum: true,
+			attributeMap: true
+		},
+		ANALYSIS_RUN: {
+			active: false,
+			finished: true,
+			analysis: true,
+			scope: true,
+			place: true,
+			period: true,
+			levels: true,
+			status: true
 		}
 	},
 
