@@ -48,6 +48,14 @@ class PeriodModel extends Model {
 					return UserStore.getById(data)
 				},
 				isPromise: true
+			},
+			date: {
+				serverName: 'date', //date string
+				sendToServer: true,
+				transformForLocal: this.transformDate,
+				transformForServer: function(date) {
+					return date.toISOString();
+				}
 			}
 		};
 	}

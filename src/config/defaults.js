@@ -72,7 +72,8 @@ export default {
 		PLACE: {
 			scope: true,
 			boundingBox: true,
-			center: true
+			center: true,
+			description: false
 		},
 		PERIOD: {
 			date: false
@@ -102,12 +103,14 @@ export default {
 			code: true,
 			standardUnits: true,
 			customUnits: true,
-			color: true
+			color: true,
+			description: false
 		},
 		ATTRIBUTE_SET: {
 			attributes: true,
 			vectorLayers: true,
-			topic: true
+			topic: true,
+			description: false
 		},
 		TOPIC: {
 			requiresFullRef: true

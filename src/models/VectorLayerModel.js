@@ -5,7 +5,7 @@ import ScopeStore from '../stores/ScopeStore';
 import LayerGroupStore from '../stores/LayerGroupStore';
 import StyleStore from '../stores/StyleStore';
 import TopicStore from '../stores/TopicStore';
-import AttributeSetStore from '../stores/AttributeSetStore';
+// import AttributeSetStore from '../stores/AttributeSetStore';
 
 
 class VectorLayerModel extends Model {

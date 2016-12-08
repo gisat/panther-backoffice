@@ -58,6 +58,7 @@ class StyleModel extends Model {
 					if (data) {
 						return data;
 					} else {
+						// old styles were geoserver only
 						return 'geoserver';
 					}
 				}

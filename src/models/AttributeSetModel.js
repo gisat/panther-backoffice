@@ -1,6 +1,7 @@
 import Model from './Model';
 import ObjectTypes from '../constants/ObjectTypes';
 import UserStore from '../stores/UserStore';
+import ScopeStore from '../stores/ScopeStore';
 import AttributeStore from '../stores/AttributeStore';
 import VectorLayerStore from '../stores/VectorLayerStore';
 import TopicStore from '../stores/TopicStore';
@@ -50,6 +51,15 @@ class AttributeSetModel extends Model {
 				transformForLocal: function (data) {
 					return UserStore.getById(data)
 				},
+				isPromise: true
+			},
+			scope: {
+				serverName: 'scope', //id
+				sendToServer: true,
+				transformForLocal: function (data) {
+					return ScopeStore.getById(data)
+				},
+				transformForServer: this.getKey,
 				isPromise: true
 			},
 			description: {

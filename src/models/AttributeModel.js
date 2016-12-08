@@ -64,6 +64,7 @@ class AttributeModel extends Model {
 					if (data) {
 						return data;
 					} else {
+						// backwards compatibility - convert from units
 						if (
 							serverObject.units == "m2"
 							//|| serverObject.units == "sqm"
@@ -96,6 +97,7 @@ class AttributeModel extends Model {
 				},
 				transformForServer: function (data, localObject) {
 					if (localObject.standardUnits) {
+						// standard units take precedence, save in units for backwards compatibility
 						return localObject.standardUnits;
 					} else {
 						return data;

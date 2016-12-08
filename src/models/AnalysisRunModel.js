@@ -24,10 +24,10 @@ class AnalysisRunModel extends Model {
 				serverName: 'name', //string
 				sendToServer: true
 			},
-			//active: {
-			//	serverName: 'active', //boolean
-			//	sendToServer: true
-			//},
+			active: {
+				serverName: 'active', //boolean
+				sendToServer: true
+			},
 			changed: {
 				serverName: 'changed', //date
 				sendToServer: false,
