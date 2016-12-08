@@ -49,7 +49,10 @@ export default {
 
 
 	/**
-	 * Data models - extra types or properties
+	 * Data models - types & properties
+	 *
+	 * DO NOT DISABLE OLD (PRE-2016) PROPERTIES
+	 * the system is not yet ready for that
 	 */
 	models: {
 		common: {
