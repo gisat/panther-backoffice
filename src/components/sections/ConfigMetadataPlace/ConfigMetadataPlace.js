@@ -315,7 +315,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 			}
 
 			let geometryField = null;
-			if (modelConfig.gometry) {
+			if (modelConfig.geometry) {
 				geometryField = (
 					<div
 						className="frame-input-wrapper"
