@@ -70,6 +70,10 @@ class PlaceModel extends Model {
 			description: {
 				serverName: 'description', //string
 				sendToServer: true
+			},
+			geometry: {
+				serverName: 'geometry', //geoJSON
+				sendToServer: true
 			}
 		};
 	}

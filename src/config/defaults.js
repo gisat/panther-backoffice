@@ -73,7 +73,8 @@ export default {
 			scope: true,
 			boundingBox: true,
 			center: true,
-			description: false
+			description: false,
+			geometry: false
 		},
 		PERIOD: {
 			date: false

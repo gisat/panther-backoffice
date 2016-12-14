@@ -31,6 +31,9 @@ var initialState = {
 if (modelConfig.description) {
 	initialState.valueDescription = "";
 }
+if (modelConfig.geometry) {
+	initialState.valueGeometry = "";
+}
 
 
 class ConfigMetadataPlace extends ControllerComponent {
@@ -79,6 +82,9 @@ class ConfigMetadataPlace extends ControllerComponent {
 				};
 				if (modelConfig.description) {
 					nextState.valueDescription = place.description;
+				}
+				if (modelConfig.geometry) {
+					nextState.valueGeometry = JSON.stringify(place.geometry);
 				}
 			}
 		}
@@ -150,6 +156,9 @@ class ConfigMetadataPlace extends ControllerComponent {
 		modelData.scope = _.findWhere(this.props.store.scopes, {key: this.state.current.valueScope[0]});
 		if (modelConfig.description) {
 			modelData.description = this.state.current.valueDescription;
+		}
+		if (modelConfig.geometry) {
+			modelData.geometry = JSON.parse(this.state.current.valueGeometry);
 		}
 		let modelObj = new Model[ObjectTypes.PLACE](modelData);
 		actionData.push({type:"update",model:modelObj});
@@ -238,6 +247,12 @@ class ConfigMetadataPlace extends ControllerComponent {
 		});
 	}
 
+	onChangeGeometry(e) {
+		this.setCurrentState({
+			valueGeometry: e.target.value
+		});
+	}
+
 	onChangeObjectSelect (stateKey, objectType, value, values) {
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
@@ -299,6 +314,27 @@ class ConfigMetadataPlace extends ControllerComponent {
 				);
 			}
 
+			let geometryField = null;
+			if (modelConfig.gometry) {
+				geometryField = (
+					<div
+						className="frame-input-wrapper"
+						key="extended-fields-geometry"
+					>
+						<label className="container">
+							Geometry
+							<Input
+								type="text"
+								name="geometry"
+								placeholder=" "
+								value={this.state.current.valueGeometry}
+								onChange={this.onChangeGeometry.bind(this)}
+							/>
+						</label>
+					</div>
+				);
+			}
+
 			return (
 				<div>
 
@@ -347,6 +383,8 @@ class ConfigMetadataPlace extends ControllerComponent {
 					</div>
 
 					{descriptionField}
+
+					{geometryField}
 
 					<div className="frame-input-wrapper required">
 						<label className="container">
