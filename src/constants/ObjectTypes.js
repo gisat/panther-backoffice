@@ -15,6 +15,7 @@ import StyleModel from '../models/StyleModel';
 import ObjectRelationModel from '../models/ObjectRelationModel';
 import AnalysisModel from '../models/AnalysisModel';
 import AnalysisRunModel from '../models/AnalysisRunModel';
+import GroupModel from '../models/GroupModel';
 
 import ScopeStore from '../stores/ScopeStore';
 import PlaceStore from '../stores/PlaceStore';
@@ -32,6 +33,7 @@ import StyleStore from '../stores/StyleStore';
 import ObjectRelationStore from '../stores/ObjectRelationStore';
 import AnalysisStore from '../stores/AnalysisStore';
 import AnalysisRunStore from '../stores/AnalysisRunStore';
+import GroupStore from '../stores/GroupStore';
 
 export const Store = {
 	SCOPE: ScopeStore,
@@ -52,7 +54,8 @@ export const Store = {
 	ANALYSIS_SPATIAL: AnalysisStore,
 	ANALYSIS_LEVEL: AnalysisStore,
 	ANALYSIS_MATH: AnalysisStore,
-	ANALYSIS_RUN: AnalysisRunStore
+	ANALYSIS_RUN: AnalysisRunStore,
+	GROUP: GroupStore
 };
 
 export const Model = {
@@ -74,7 +77,8 @@ export const Model = {
 	ANALYSIS_SPATIAL: AnalysisModel,
 	ANALYSIS_LEVEL: AnalysisModel,
 	ANALYSIS_MATH: AnalysisModel,
-	ANALYSIS_RUN: AnalysisRunModel
+	ANALYSIS_RUN: AnalysisRunModel,
+	GROUP: GroupModel
 };
 
 export default keyMirror(Model);

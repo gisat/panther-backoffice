@@ -207,6 +207,76 @@ export default {
 			id: id
 		};
 		AppDispatcher.dispatch(action);
-	}
+	},
 
+	addGroup(name){
+		let action = {
+			type: ActionTypes.GROUP_ADD,
+			data: {
+				name: name
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	loadGroups() {
+		let action = {
+			type: ActionTypes.GROUP_LOAD
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	deleteGroup(groupId) {
+		let action = {
+			type: ActionTypes.GROUP_DELETE,
+			data: {
+				id: groupId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	addMemberToGroup(groupId, userId) {
+		let action = {
+			type: ActionTypes.GROUP_ADD_MEMBER,
+			data: {
+				groupId: groupId,
+				userId: userId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	removeMemberFromGroup(groupId, userId) {
+		let action = {
+			type: ActionTypes.GROUP_REMOVE_MEMBER,
+			data: {
+				groupId: groupId,
+				userId: userId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	addPermission(groupId, permission) {
+		let action = {
+			type: ActionTypes.GROUP_ADD_PERMISSION,
+			data: {
+				groupId: groupId,
+				permission: permission
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	removePermission(groupId, permission) {
+		let action = {
+			type: ActionTypes.GROUP_REMOVE_PERMISSION,
+			data: {
+				groupId: groupId,
+				permission: permission
+			}
+		};
+		AppDispatcher.dispatch(action);
+	}
 };
