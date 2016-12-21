@@ -209,113 +209,127 @@ export default {
 		AppDispatcher.dispatch(action);
 	},
 
-	addGroup(name){
+	addGroup(operationId, name){
 		let action = {
 			type: ActionTypes.GROUP_ADD,
 			data: {
-				name: name
+				name: name,
+				operationId: operationId
 			}
 		};
 		AppDispatcher.dispatch(action);
 	},
 
-	loadGroups() {
+	loadGroups(operationId) {
 		let action = {
-			type: ActionTypes.GROUP_LOAD
+			type: ActionTypes.GROUP_LOAD,
+			data: {
+				operationId: operationId
+			}
 		};
 		AppDispatcher.dispatch(action);
 	},
 
-	deleteGroup(groupId) {
+	deleteGroup(operationId, groupId) {
 		let action = {
 			type: ActionTypes.GROUP_DELETE,
 			data: {
-				id: groupId
+				id: groupId,
+				operationId: operationId
 			}
 		};
 		AppDispatcher.dispatch(action);
 	},
 
-	addMemberToGroup(groupId, userId) {
+	addMemberToGroup(operationId, groupId, userId) {
 		let action = {
 			type: ActionTypes.GROUP_ADD_MEMBER,
 			data: {
 				groupId: groupId,
-				userId: userId
+				userId: userId,
+				operationId: operationId
 			}
 		};
 		AppDispatcher.dispatch(action);
 	},
 
-	removeMemberFromGroup(groupId, userId) {
+	removeMemberFromGroup(operationId, groupId, userId) {
 		let action = {
 			type: ActionTypes.GROUP_REMOVE_MEMBER,
 			data: {
 				groupId: groupId,
-				userId: userId
+				userId: userId,
+				operationId: operationId
 			}
 		};
 		AppDispatcher.dispatch(action);
 	},
 
-	addPermission(groupId, permission) {
+	addPermission(operationId, groupId, permission) {
 		let action = {
 			type: ActionTypes.GROUP_ADD_PERMISSION,
 			data: {
 				groupId: groupId,
-				permission: permission
+				permission: permission,
+				operationId: operationId
 			}
 		};
 		AppDispatcher.dispatch(action);
 	},
 
-	removePermission(groupId, permission) {
+	removePermission(operationId, groupId, permission) {
 		let action = {
 			type: ActionTypes.GROUP_REMOVE_PERMISSION,
 			data: {
 				groupId: groupId,
-				permission: permission
+				permission: permission,
+				operationId: operationId
 			}
 		};
 		AppDispatcher.dispatch(action);
 	},
 
-	loadUsers() {
+	loadUsers(operationId) {
 		let action = {
-			type: ActionTypes.USER_LOAD
+			type: ActionTypes.USER_LOAD,
+			data: {
+				operationId: operationId
+			}
 		};
 		AppDispatcher.dispatch(action);
 	},
 
-	addPermissionUser(userId, permission) {
+	addPermissionUser(operationId, userId, permission) {
 		let action = {
 			type: ActionTypes.USER_ADD_PERMISSION,
 			data: {
 				userId: userId,
-				permission: permission
+				permission: permission,
+				operationId: operationId
 			}
 		};
 		AppDispatcher.dispatch(action);
 	},
 
-	removePermissionFromUser(userId, permission) {
+	removePermissionFromUser(operationId, userId, permission) {
 		let action = {
 			type: ActionTypes.USER_REMOVE_PERMISSION,
 			data: {
 				userId: userId,
-				permission: permission
+				permission: permission,
+				operationId: operationId
 			}
 		};
 		AppDispatcher.dispatch(action);
 	},
 
-	login(username, password, id) {
+	login(username, password, operationId) {
 		let action = {
 			type: ActionTypes.LOGIN,
 			data: {
 				username: username,
 				password: password,
-				id: id
+				operationId: operationId
 			}
 		};
 		AppDispatcher.dispatch(action);

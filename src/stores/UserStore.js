@@ -26,15 +26,15 @@ class UserStore extends Store {
 		return apiProtocol + apiHost + path.join(apiPath, serverPath).replace(/\\/g, "/");
 	}
 
-	load(){
+	load(operationId){
 		if(!this.cache) {
-			return this.reload();
+			return this.reload(operationId);
 		} else {
 			return Promise.resolve(this.cache);
 		}
 	}
 
-	reload() {
+	reload(operationId) {
 		return superagent
 			.get(this.userUrl)
 			.withCredentials()
@@ -44,13 +44,15 @@ class UserStore extends Store {
 			.then(response => {
 				this.cache = response.body.data.map(user => new UserModel(null, user));
 				logger.info('UserStore#reload Loaded users: ', this.cache);
+				this.emitChange();
 				return this.cache;
 			}).catch(err => {
+				this.emitError(err, operationId);
 				logger.error('UserStore#reload Error: ',err);
 			});
 	}
 
-	addPermission(groupId, permission) {
+	addPermission(groupId, permission, operationId) {
 		return superagent
 			.post(this.permissionUserUrl)
 			.send({groupId: groupId, resourceType: permission.resourceType, resourceId: permission.resourceId, permission: permission.permission})
@@ -60,13 +62,14 @@ class UserStore extends Store {
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(() => {
 				logger.info('UserStore#reload Permission added');
-				return this.reload();
+				return this.reload(operationId);
 			}).catch(err => {
+				this.emitError(err, operationId);
 				logger.error('UserStore#reload Error: ',err);
 			});
 	}
 
-	removePermission(groupId, permission) {
+	removePermission(groupId, permission, operationId) {
 		return superagent
 			.delete(this.permissionUserUrl)
 			.send({groupId: groupId, resourceType: permission.resourceType, resourceId: permission.resourceId, permission: permission.permission})
@@ -76,13 +79,14 @@ class UserStore extends Store {
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(() => {
 				logger.info('UserStore#removePermission Permission removed');
-				return this.reload();
+				return this.reload(operationId);
 			}).catch(err => {
+				this.emitError(err, operationId);
 				logger.error('UserStore#reload Error: ',err);
 			});
 	}
 
-	login(username, password) {
+	login(username, password, operationId) {
 		return superagent
 			.post(this.loginUrl)
 			.send({
@@ -107,7 +111,9 @@ class UserStore extends Store {
 				});
 				// TODO: Store in cookie.
 				return this.logged;
-		})
+		}).catch(error => {
+			this.emitError(error, operationId);
+			})
 	}
 
 	byId(id) {
@@ -133,16 +139,16 @@ let storeInstance = new UserStore();
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 	switch(action.type) {
 		case ActionTypes.USER_LOAD:
-			storeInstance.load();
+			storeInstance.load(action.data.operationId);
 			break;
 		case ActionTypes.USER_ADD_PERMISSION:
-			storeInstance.addPermission(action.data.userId, action.data.permission);
+			storeInstance.addPermission(action.data.userId, action.data.permission, action.data.operationId);
 			break;
 		case ActionTypes.USER_REMOVE_PERMISSION:
-			storeInstance.removePermission(action.data.userId, action.data.permission);
+			storeInstance.removePermission(action.data.userId, action.data.permission, action.data.operationId);
 			break;
 		case ActionTypes.LOGIN:
-			storeInstance.login(action.data.username, action.data.password);
+			storeInstance.login(action.data.username, action.data.password, action.data.operationId);
 			break;
 	}
 });
