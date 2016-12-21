@@ -1,60 +1,61 @@
-import superagent from 'superagent';
-import path from 'path';
-import EventEmitter from 'events';
-import EventTypes from '../constants/EventTypes';
+import ObjectTypes from '../constants/ObjectTypes';
+import Model from './Model';
+import UserStore from '../stores/UserStore';
+import GroupStore from '../stores/GroupStore';
 
-import { apiPath, apiProtocol, apiHost} from '../config';
-
-class User extends EventEmitter {
-	constructor() {
-		super();
-		this.logged = false;
+class UserModel extends Model {
+	getType() {
+		return ObjectTypes.USER;
 	}
 
-	isLogged() {
-		return this.logged;
-	}
-
-	login() {
-		this.logged = true;
-		this.emit(EventTypes.USER_LOGGED_IN);
-	}
-
-	addLoginListener(callback) {
-		this.on(EventTypes.USER_LOGGED_IN, callback);
-	}
-
-	removeLoginListener(callback) {
-		this.removeListener(EventTypes.USER_LOGGED_IN, callback);
-	}
-}
-
-let logged = new User();
-export default logged;
-
-export function login(username, password, callback) {
-	superagent("POST", apiProtocol + apiHost + path.join(apiPath, "/api/login/login"))
-		.send({
-			username: username,
-			password: password
-		})
-		.withCredentials()
-		.set('Access-Control-Allow-Origin', 'true')
-		.set('Accept', 'application/json')
-		.set('Access-Control-Allow-Credentials', 'true')
-		.end(function(err, res){
-			if(err) {
-				callback({
-					err: err
-				});
-			} else {
-				// ssid
-				// sessionid
-				// csrftoken
-				logged.login();
-				callback({
-					success: res
-				});
+	data() {
+		return {
+			id: {
+				serverName: 'id',
+				sendToServer: true
+			},
+			changed: {
+				serverName: 'changed', //date
+				sendToServer: false,
+				transformForLocal: this.transformDate
+			},
+			changedBy: {
+				serverName: 'changedBy', //id
+				sendToServer: false,
+				transformForLocal: function (data) {
+					return UserStore.getById(data)
+				},
+				isPromise: true
+			},
+			created: {
+				serverName: 'created', //date
+				sendToServer: false,
+				transformForLocal: this.transformDate
+			},
+			createdBy: {
+				serverName: 'createdBy', //id
+				sendToServer: false,
+				transformForLocal: function (data) {
+					return UserStore.getById(data)
+				},
+				isPromise: true
+			},
+			permissions: {
+				serverName: 'permissions',
+				sendToServer: false
+			},
+			groups: {
+				serverName: 'groups',
+				sendToServer: false,
+				transformForLocal: function(data) {
+					return Promise.all(
+						data.map(group => GroupStore.byId(group.id))
+					);
+				},
+				isPromise: true
 			}
-		});
+		}
+	}
 }
+
+export default UserModel;

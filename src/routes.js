@@ -9,7 +9,7 @@ import LoginPage from './components/pages/LoginPage';
 import ContentPage from './components/temp/ContentPage';
 import NotFoundPage from './components/temp/NotFoundPage';
 import ErrorPage from './components/temp/ErrorPage';
-import logged from './models/UserModel';
+import UserStore from './stores/UserStore';
 
 import { publicPath } from './config';
 
@@ -22,7 +22,7 @@ const router = new Router(on => {
 	hookRoute(on, '/login', async () => <LoginPage />);
 
 	on('*', async (state, next) => {
-		if(!logged.isLogged()){
+		if(!UserStore.loggedIn()){
 			return <LoginPage />
 		} else {
 			const component = await next();

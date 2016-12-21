@@ -54,5 +54,9 @@ export default keyMirror({
 	GROUP_DELETE: null,
 	GROUP_ADD_MEMBER: null,
 	GROUP_ADD_PERMISSION: null,
-	GROUP_REMOVE_PERMISSION: null
+	GROUP_REMOVE_PERMISSION: null,
+	USER_LOAD: null,
+	USER_ADD_PERMISSION: null,
+	USER_REMOVE_PERMISSION: null,
+	LOGIN: null
 });

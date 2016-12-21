@@ -278,5 +278,46 @@ export default {
 			}
 		};
 		AppDispatcher.dispatch(action);
+	},
+
+	loadUsers() {
+		let action = {
+			type: ActionTypes.USER_LOAD
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	addPermissionUser(userId, permission) {
+		let action = {
+			type: ActionTypes.USER_ADD_PERMISSION,
+			data: {
+				userId: userId,
+				permission: permission
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	removePermissionFromUser(userId, permission) {
+		let action = {
+			type: ActionTypes.USER_REMOVE_PERMISSION,
+			data: {
+				userId: userId,
+				permission: permission
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	login(username, password, id) {
+		let action = {
+			type: ActionTypes.LOGIN,
+			data: {
+				username: username,
+				password: password,
+				id: id
+			}
+		};
+		AppDispatcher.dispatch(action);
 	}
 };

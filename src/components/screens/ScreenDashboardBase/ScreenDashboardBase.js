@@ -69,6 +69,8 @@ class ScreenDashboardBase extends PantherComponent {
 	}
 
 	render() {
+		// Load users
+		// Add Permission to
 
 		var frontOfficeURL = frontOfficeProtocol + frontOfficeAddress + "/";
 		var geoNodeURL = geonodeProtocol + geonodeAddress + "/";

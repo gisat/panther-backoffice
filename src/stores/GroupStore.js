@@ -6,9 +6,13 @@ import ActionTypes from '../constants/ActionTypes';
 
 import logger from '../core/Logger';
 import { apiProtocol, apiHost, apiPath } from '../config';
+import GroupModel from '../models/GroupModel';
+import Store from './Store';
 
-class GroupStore {
+class GroupStore extends Store {
 	constructor() {
+		super();
+
 		this.cache = null;
 		this.groupUrl = this.urlFor('/rest/group');
 		this.membersUrl = this.urlFor('/rest/member/group');
@@ -35,7 +39,7 @@ class GroupStore {
 			.set('Access-Control-Allow-Origin', 'true')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(response => {
-				this.cache = response.body.data;
+				this.cache = response.body.data.map(group => new GroupModel(null, group));
 				logger.info('GroupStore#reload Loaded groups: ', this.cache);
 				return this.cache;
 			}).catch(err => {
