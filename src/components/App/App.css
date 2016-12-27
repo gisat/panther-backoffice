@@ -97,12 +97,13 @@ a:hover, a:visited:hover {
 	color:#2f6eff;
 }
 /*a:focus, */
-#menu a:focus, #menu a.current:focus {
+#navigation a:focus,
+#navigation a.current:focus {
 	background-color: #477abf;
 	color:#fff;
 	outline: none;
 }
-#menu a:focus:hover {
+#navigation a:focus:hover {
 	background-color: #4c7fc4;
 }
 a, a:link, a i {
@@ -247,56 +248,94 @@ label.container {
 
 /* ===== layout ===== */
 
-#menu {
+#navigation {
 	background-color: #222;
+	height: 3.75rem;
+	position: relative;
+	z-index: 20;
+	box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.7);
+}
+#navigation > div {
+	display: inline-block;
+}
+#navigation-menu-opener {
+	width: 3.75rem;
+	border-right: 1px solid #333;
+}
+#navigation-menu-opener a {
+	cursor: pointer;
+}
+#navigation-quick-access {
+	width: calc(100% - 3.75rem);
+}
+
+#navigation-menu {
+	position: absolute;
+	top: 3.75rem;
+	left: 0;
+}
+
+
+#navigation ul {
+	list-style: none;
+	/*display: inline-block;*/
+}
+#navigation-quick-access ul li {
+	width: 3.75rem;
+	display: inline-block;
+}
+#navigation-quick-access li:not(:last-child) {
+	border-right: 1px solid #333;
 }
 #menu ul li {
-	list-style: none;
-	display: inline-block;
-	height: 3.75rem;
+	width: 100%;
 }
-#menu ul li img, #menu ul li svg {
+#navigation a img,
+#navigation a svg {
 	width: 2.5rem;
 	height: 2.5rem;
 	margin: 0;
 }
 
-#menu a, #menu a span {
+
+#navigation a, #navigation a span {
 	vertical-align: top;
 }
-#menu a {
+#navigation a {
 	display: inline-block;
 	height: 3.75rem;
 	padding: .625rem;
 	color: #aaa;
 	font-size: 0;
 }
-#menu a:hover {
+#navigation a:hover {
 	background-color: #333;
 	color:#fff;
 }
-#menu a:focus {
+#navigation a:focus {
 	color:#fff;
 }
 
-#menu a .line {
+#navigation a .line {
 	fill:#999;
 	transition:  fill .3s ease-out;
 }
-#menu a .first {
+#navigation a .first {
 	fill:#222;
 }
-#menu a .second {
+#navigation a .second {
 	fill:#354460;
 }
-#menu a:hover .line, #menu a:focus .line {
+#navigation a:hover .line,
+#navigation a:focus .line {
 	fill:#ddd;
 }
-#menu a:hover .second, #menu a:focus .second {
+#navigation a:hover .second,
+#navigation a:focus .second {
 	fill:#33447e;
 }
 
-#menu a span {
+#navigation a span {
 	display: inline-block;
 	font-size: 1.0625rem;
 	line-height: 2.5rem;
@@ -404,14 +443,14 @@ todo hex colours, button icons */
 }
 /* = responsive layouts = */
 
-@media screen and (max-width:47.19999em) {
+/*@media screen and (max-width:47.19999em) {
 	#menu a span {
 		display: none;
 	}
-}
+}*/
 @media screen and (max-width:65.99999em) {
 
-	#menu {
+	/*#menu {
 		width: 100%;
 		height:3.75rem;
 	}
@@ -419,9 +458,9 @@ todo hex colours, button icons */
 		width:200%;
 	}
 	#menu li:not(:last-child) {
-		border-right: 1px solid #333;
+		border-right: 1px solid #333;*/
 		/*padding: 0 .3125rem;*/
-	}
+	/*}*/
 
 	.screen {
 		width: 100%;
@@ -440,27 +479,27 @@ todo hex colours, button icons */
 
 	}
 
-	#menu {
-		position: relative;
-		z-index: 20;
-		/*width: 3.75rem;*/
-		/*height: 100%;*/
-		/*overflow: hidden;*/
-		box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.7);
-
-		/*transition: width .3s .2s ease-in-out, height .3s .5s ease-in-out;*/
-		/* height added for responsive resizing */
-	}
+	/*#menu {*/
+		/*position: relative;*/
+		/*z-index: 20;*/
+		/*!*width: 3.75rem;*!*/
+		/*!*height: 100%;*!*/
+		/*!*overflow: hidden;*!*/
+		/*box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.7);*/
+	
+		/*!*transition: width .3s .2s ease-in-out, height .3s .5s ease-in-out;*!*/
+		/*!* height added for responsive resizing *!*/
+	/*}*/
 	/*#menu.hover, #menu.open {*/
 		/*width: 17rem;*/
 	/*}*/
 	
-	#menu.hover {
+	/*#menu.hover {
 		transition-delay: 1.2s;
 	}
 	#menu.open {
 		transition-delay: 0s;
-	}
+	}*/
 	/*#menu ul, #menu ul li, #menu a {*/
 		/*width:22rem;*/
 	/*}*/
