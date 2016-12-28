@@ -1,6 +1,10 @@
+import React, { PropTypes, Component } from 'react';
 import ScreenController from '../../common/ScreenController';
-import styles from './ScreenPermissionsBase.css';
+
 import withStyle from '../../../decorators/withStyles';
+import styles from './ScreenPermissionsBase.css';
+
+import utils from '../../../utils/utils';
 
 import UserStore from '../../../stores/UserStore';
 import GroupStore from '../../../stores/GroupStore';
@@ -8,8 +12,24 @@ import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
 import TopicStore from '../../../stores/TopicStore';
 
+import ScreenPermissionsBaseController from '../ScreenPermissionsBaseController';
+
 @withStyle(styles)
 class ScreenPermissionsBase extends ScreenController {
+	static propTypes = {
+		disabled: PropTypes.bool,
+		screenKey: PropTypes.string.isRequired
+	};
+
+	static defaultProps = {
+		disabled: false
+	};
+
+	static contextTypes = {
+		onInteraction: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
+	};
+
 	_getStoreLoads(){
 		return {
 			scopes: this._load(ScopeStore),
@@ -30,10 +50,20 @@ class ScreenPermissionsBase extends ScreenController {
 		this.changeListener.add(GroupStore, ["groups"]);
 	}
 
+	getUrl() {
+		return path.join(this.props.parentUrl, "metadata/" + this.state.activeMenuItem);
+	}
+
 	render() {
-		return (
-			<div></div>
-		)
+		if (this.state.ready) {
+			let props = utils.clone(this.props);
+			props.store = this.state.store;
+			return React.createElement(ScreenPermissionsBaseController, props);
+		} else {
+			return (
+				<div className="component-loading"></div>
+			);
+		}
 	}
 }
 

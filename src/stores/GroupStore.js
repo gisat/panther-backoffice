@@ -42,6 +42,7 @@ class GroupStore extends Store {
 				this.cache = response.body.data.map(group => new GroupModel(null, group));
 				logger.info('GroupStore#reload Loaded groups: ', this.cache);
 				this.emitChange();
+				console.log(this.cache);
 				return this.cache;
 			}).catch(err => {
 				this.emitError(err, operationId);
@@ -158,6 +159,14 @@ class GroupStore extends Store {
 		return this.load().then(all => {
 			return all.filter(group => group.id == id);
 		});
+	}
+
+	getFiltered() {
+		return this.load();
+	}
+
+	getAll() {
+		return this.all();
 	}
 }
 

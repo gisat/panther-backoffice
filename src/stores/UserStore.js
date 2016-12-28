@@ -27,6 +27,7 @@ class UserStore extends Store {
 	}
 
 	load(operationId){
+		console.log("Cache", this.cache);
 		if(!this.cache) {
 			return this.reload(operationId);
 		} else {
@@ -42,9 +43,11 @@ class UserStore extends Store {
 			.set('Access-Control-Allow-Origin', 'true')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(response => {
-				this.cache = response.body.data.map(user => new UserModel(null, user));
+				let data = JSON.parse(response.body);
+				this.cache = data.data.map(user => new UserModel(null, user));
 				logger.info('UserStore#reload Loaded users: ', this.cache);
 				this.emitChange();
+				console.log(this.cache);
 				return this.cache;
 			}).catch(err => {
 				this.emitError(err, operationId);
@@ -124,6 +127,14 @@ class UserStore extends Store {
 
 	all() {
 		return this.load();
+	}
+
+	getFiltered() {
+		return this.load();
+	}
+
+	getAll() {
+		return this.all();
 	}
 
 	loggedIn() {

@@ -40,6 +40,8 @@ const router = new Router(on => {
 
 	hookRoute(on, '/metadata', async () => <Page screenSet="metadata" />);
 
+	hookRoute(on, '/permissions', async () => <Page screenSet="permissions" />);
+
 	on('*', async (state) => {
 		const content = await http.get(`${publicPath}/api/content?path=${state.path}`);
 		return content && <ContentPage {...content} />;

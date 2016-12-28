@@ -9,8 +9,8 @@ class GroupModel extends Model {
 
 	data() {
 		return {
-			id: {
-				serverName: 'id',
+			key: {
+				serverName: '_id',
 				sendToServer: true
 			},
 			name: {

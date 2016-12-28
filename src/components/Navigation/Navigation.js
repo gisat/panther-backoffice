@@ -26,25 +26,25 @@ class Navigation extends PantherComponent {
 		super(props);
 		this.state = utils.deepClone(initialState);
 	}
-	
+
 
 	onLinkClick(e) {
 		Link.handleClick(e);
 	}
-	
+
 	toggleMenu() {
 		this.setState({
 			showMenu: !this.state.showMenu
 		});
 	}
 
-	
+
 	render() {
 
 		return (
 			<div id="navigation">
 				<div id="navigation-menu">
-					
+
 				</div>
 				<div id="navigation-menu-opener">
 					<a
@@ -128,8 +128,8 @@ class Navigation extends PantherComponent {
 						</li>
 						<li>
 							<a
-								//href={publicPath + "/users"}
-								//onClick={this.onLinkClick.bind(this)}
+								href={publicPath + "/permissions"}
+								onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
 								className={this.props.activeScreenSet == "users" ? "current" : ""}
 							>
@@ -139,10 +139,10 @@ class Navigation extends PantherComponent {
 					</ul>
 				</div>
 				<div id="navigation-filter">
-					
+
 				</div>
 				<div id="navigation-user">
-					
+
 				</div>
 			</div>
 		);

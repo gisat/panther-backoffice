@@ -168,5 +168,13 @@ export const objectTypesMetadata = {
 	ANALYSIS_RUN: {
 		name: null,
 		url: null
+	},
+	USER: {
+		name: "User",
+		url: "user"
+	},
+	GROUP: {
+		name: "Group",
+		url: "group"
 	}
 };
