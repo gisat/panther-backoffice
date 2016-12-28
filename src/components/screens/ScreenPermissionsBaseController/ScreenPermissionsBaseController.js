@@ -36,11 +36,11 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 		super(props);
 
 		this._tabs = [
-			{data: "places", dataType: ObjectTypes.PLACE},
-			{data: "scopes", dataType: ObjectTypes.SCOPE},
-			{data: "topics", dataType: ObjectTypes.TOPIC},
-			{data: "users", dataType: ObjectTypes.USER},
-			{data: "groups", dataType: ObjectTypes.GROUP}
+			{data: "places", dataType: ObjectTypes.PLACE, allowAdd: false},
+			{data: "scopes", dataType: ObjectTypes.SCOPE, allowAdd: false},
+			{data: "topics", dataType: ObjectTypes.TOPIC, allowAdd: false},
+			{data: "users", dataType: ObjectTypes.USER, allowAdd: false},
+			{data: "groups", dataType: ObjectTypes.GROUP, allowAdd: true}
 		];
 		for (let tab of this._tabs) {
 			if(!tab.header) {
@@ -132,6 +132,7 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 						>
 							<ObjectList
 								data={this.props.store[tab.data]}
+								allowAdd = {tab.allowAdd}
 								onItemClick={this.onObjectListItemClick.bind(this, tab.dataType)}
 								onAddClick={this.onObjectListAddClick.bind(this, tab.dataType)}
 								itemClasses={classnames({'template': tab.isTemplate})}
