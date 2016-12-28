@@ -9,10 +9,8 @@ import UISVG from '../atoms/UISVG';
 import classNames from 'classnames';
 import utils from '../../utils/utils';
 
-var initialState = {
-	isFocused: false,
-	isHovered: false,
-	forceClose: false
+let initialState = {
+	showMenu: false
 };
 
 
@@ -28,65 +26,29 @@ class Navigation extends PantherComponent {
 		super(props);
 		this.state = utils.deepClone(initialState);
 	}
-
-
-	onFocus() {
-		this.setState({
-			isFocused: true
-		});
-	}
-
-	onBlur() {
-		this.setState({
-			isFocused: false
-		});
-	}
-
-	onMouseEnter() {
-		this.setState({
-			isHovered: true
-		});
-	}
-
-	onMouseLeave() {
-		this.setState({
-			isHovered: false,
-			forceClose: false
-		});
-	}
+	
 
 	onLinkClick(e) {
-		this.setState({
-			forceClose: true
-		});
 		Link.handleClick(e);
 	}
+	
+	toggleMenu() {
+		this.setState({
+			showMenu: !this.state.showMenu
+		});
+	}
 
-	//  className="current"
+	
 	render() {
 
-		let classes = classNames(
-			this.props.className,
-		{
-			'open': !this.state.forceClose && this.state.isFocused,
-			'hover': !this.state.forceClose && this.state.isHovered
-		});
-
 		return (
-			<div
-				id="navigation"
-				className={classes}
-				//onFocus={this.onFocus.bind(this)}
-				//onBlur={this.onBlur.bind(this)}
-				//onMouseEnter={this.onMouseEnter.bind(this)}
-				//onMouseLeave={this.onMouseLeave.bind(this)}
-			>
+			<div id="navigation">
 				<div id="navigation-menu">
 					
 				</div>
 				<div id="navigation-menu-opener">
 					<a
-						//onClick={this.toggleMenu.bind(this)}
+						onClick={this.toggleMenu.bind(this)}
 						tabIndex="-1"
 					>
 						<UISVG src='menu.isvg' />
