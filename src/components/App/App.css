@@ -335,6 +335,14 @@ label.container {
 	fill:#33447e;
 }
 
+#navigation a.current {
+	/*background: #444;*/
+	background: #2A3B50;
+}
+#navigation a.current .line {
+	fill: #ddd;
+}
+
 #navigation a span {
 	display: inline-block;
 	font-size: 1.0625rem;
@@ -1860,14 +1868,6 @@ span.todo {
 	padding:2px 4px;
 	margin:1.875rem 0;
 	display: inline-block;
-}
-
-#menu a.current {
-	/*background: #444;*/
-	background: #2A3B50;
-}
-#menu a.current .line {
-	fill: #ddd;
 }
 
 /* grid underlay */
