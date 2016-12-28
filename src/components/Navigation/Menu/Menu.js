@@ -1,13 +1,13 @@
 import React, { PropTypes, Component } from 'react';
-import PantherComponent from "../common/PantherComponent";
-import { publicPath } from '../../config';
+import PantherComponent from "../../common/PantherComponent";
+import { publicPath } from '../../../config';
 
 import styles from './Menu.css';
-import withStyles from '../../decorators/withStyles';
-import Link from '../Link';
-import UISVG from '../atoms/UISVG';
+import withStyles from '../../../decorators/withStyles';
+import Link from '../../Link';
+import UISVG from '../../atoms/UISVG';
 import classNames from 'classnames';
-import utils from '../../utils/utils';
+import utils from '../../../utils/utils';
 
 var initialState = {
 	isFocused: false,

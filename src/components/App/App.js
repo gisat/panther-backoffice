@@ -5,7 +5,7 @@ import OperationStore from '../../stores/OperationStore';
 import withContext from '../../decorators/withContext';
 import withStyles from '../../decorators/withStyles';
 import logger from '../../core/Logger';
-import Menu from '../Menu';
+import Navigation from '../Navigation';
 import Page from '../Page';
 import Loader from '../atoms/Loader';
 
@@ -65,7 +65,7 @@ class App extends PantherComponent {
 			ret = (
 				<div>
 					{loadingOverlay}
-					<Menu
+					<Navigation
 						activeScreenSet={activeScreenSetKey}
 						scope={this.state.scope || null}
 					/>
