@@ -11,28 +11,29 @@ export default {
 
 	// todo documentation
 	// don't forget leading slash. like this: /backoffice
-	publicPath: "/backoffice",
+	// When leading is also trailing / dont. Please just dont.
+	publicPath: "",
 	serverPort: 5000,
 
 	/**
 	 * backend API config
 	 */
 	apiProtocol: "http://",
-	apiHost: "localhost", //host + port
-	apiPath: "/backend",
+	apiHost: "localhost:4000", //host + port
+	apiPath: "/",
 
 	/**
 	 * other Panther components' location
 	 */
 	//address: host + port + base path
 	geonodeProtocol: "http://",
-	geonodeAddress: "localhost",
+	geonodeAddress: "10.0.75.2",
 
 	geoserverProtocol: "http://",
-	geoserverAddress: "localhost/geoserver",
+	geoserverAddress: "10.0.75.2/geoserver",
 
 	frontOfficeProtocol: "http://",
-	frontOfficeAddress: "localhost",
+	frontOfficeAddress: "10.0.75.2",
 	frontOfficeExplorationPath: "tool/",
 
 
@@ -45,7 +46,7 @@ export default {
 	// 3 means ERROR only
 	// 4 means nothing from our application will be displayed. This should be default for production use.
 	// Any other or none means INFO as this is default logging level.
-	loggingLevel: 4,
+	loggingLevel: 1,
 
 
 	/**
