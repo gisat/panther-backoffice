@@ -14,7 +14,7 @@ import TopicStore from '../../../stores/TopicStore';
 
 import ActionCreator from '../../../actions/ActionCreator';
 import ObjectList from '../../elements/ObjectList';
-import ScreenMetadataObject from '../ScreenMetadataObject';
+import ScreenPermissionsObject from '../ScreenPermissionsObject';
 
 @withStyles(styles)
 class ScreenPermissionsBaseController extends ControllerComponent {
@@ -73,7 +73,7 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 		this.context.onInteraction().call();
 		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
 		let options = {
-			component: ScreenMetadataObject,
+			component: ScreenPermissionsObject,
 			parentUrl: this.props.parentUrl,
 			size: 40,
 			data: {
@@ -85,6 +85,7 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 	}
 
 	onObjectListAddClick(itemType, event) {
+		// TODO: Update actions related to the User and Group other than permission handling.
 		this.context.onInteraction().call();
 		let model = new Model[itemType]({active:false});
 		let responseData = {

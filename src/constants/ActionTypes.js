@@ -50,6 +50,7 @@ export default keyMirror({
 	ADD_OPERATION: null,
 	REMOVE_OPERATION: null,
 	GROUP_ADD: null,
+	GROUP_CREATE_RESPOND: null,
 	GROUP_LOAD: null,
 	GROUP_DELETE: null,
 	GROUP_ADD_MEMBER: null,

@@ -2,6 +2,7 @@ import path from 'path';
 import superagent from 'superagent';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
+import EventTypes from '../constants/EventTypes';
 import ActionTypes from '../constants/ActionTypes';
 
 import logger from '../core/Logger';
@@ -52,15 +53,19 @@ class GroupStore extends Store {
 
 	add(name, operationId) {
 		logger.info('GroupStore#add Add group started');
+		let response;
 		return superagent
 			.post(this.groupUrl)
 			.send({name: name})
 			.withCredentials()
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Origin', 'true')
-			.set('Access-Control-Allow-Credentials', 'true').then(response => {
+			.set('Access-Control-Allow-Credentials', 'true').then(pResponse => {
+				response = pResponse;
 				logger.info('GroupStore#add Group Added. Body: ', response.body);
 				return this.reload(operationId);
+			}).then(() => {
+				return response;
 			}).catch(err => {
 				this.emitError(err, operationId);
 				logger.error('GroupStore#add Error: ',err);
@@ -174,6 +179,12 @@ let storeInstance = new GroupStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
 	switch(action.type) {
+		case ActionTypes.GROUP_CREATE_RESPOND:
+			storeInstance.add(action.model.name || '', action.instanceId).then(group => {
+				let groupModel = new GroupModel(null, group);
+				storeInstance.emit(EventTypes.OBJECT_CREATED,groupModel,action.responseData,action.stateHash, action.instanceId);
+			});
+			break;
 		case ActionTypes.GROUP_LOAD:
 			storeInstance.load(action.data.operationId);
 			break;

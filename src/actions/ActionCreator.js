@@ -3,7 +3,7 @@ import ActionTypes from '../constants/ActionTypes'
 import ObjectTypes from '../constants/ObjectTypes'
 import logger from '../core/Logger'
 
-export default {
+let actionCreator = {
 
 	createObjectAndRespond: function(model,objectType,responseData,stateHash,instanceId) {
 		var action = {
@@ -335,3 +335,6 @@ export default {
 		AppDispatcher.dispatch(action);
 	}
 };
+
+
+export default actionCreator;
