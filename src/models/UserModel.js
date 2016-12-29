@@ -47,16 +47,6 @@ class UserModel extends Model {
 			permissions: {
 				serverName: 'permissions',
 				sendToServer: false
-			},
-			groups: {
-				serverName: 'groups',
-				sendToServer: false,
-				transformForLocal: function(data) {
-					return Promise.all(
-						data.map(group => GroupStore.byId(group.id))
-					);
-				},
-				isPromise: true
 			}
 		}
 	}
