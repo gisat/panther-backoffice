@@ -22,28 +22,39 @@ class ScreenPermissionsObject extends ScreenController {
 		switch (props.data.objectType) {
 			case ObjectTypes.SCOPE:
 				storeloads = {
-					scopes: this._load(ScopeStore)
+					scopes: this._load(ScopeStore),
+					users: this._load(UserStore),
+					groups: this._load(GroupStore)
 				};
 				break;
 			case ObjectTypes.PLACE:
 				storeloads = {
 					places: this._load(PlaceStore),
-					scopes: this._load(ScopeStore)
+					users: this._load(UserStore),
+					groups: this._load(GroupStore)
 				};
 				break;
 			case ObjectTypes.TOPIC:
 				storeloads = {
-					topics: this._load(TopicStore)
+					topics: this._load(TopicStore),
+					users: this._load(UserStore),
+					groups: this._load(GroupStore)
 				};
 				break;
 			case ObjectTypes.GROUP:
 				storeloads = {
+					topics: this._load(TopicStore),
+					places: this._load(PlaceStore),
+					scopes: this._load(ScopeStore),
 					groups: this._load(GroupStore)
 				};
 				break;
 			case ObjectTypes.USER:
 				storeloads = {
-					groups: this._load(UserStore)
+					topics: this._load(TopicStore),
+					places: this._load(PlaceStore),
+					scopes: this._load(ScopeStore),
+					users: this._load(UserStore)
 				};
 				break;
 		}

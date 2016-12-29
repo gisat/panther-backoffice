@@ -47,7 +47,6 @@ class UserStore extends Store {
 				this.cache = data.data.map(user => new UserModel(null, user));
 				logger.info('UserStore#reload Loaded users: ', this.cache);
 				this.emitChange();
-				console.log(this.cache);
 				return this.cache;
 			}).catch(err => {
 				this.emitError(err, operationId);
@@ -55,10 +54,10 @@ class UserStore extends Store {
 			});
 	}
 
-	addPermission(groupId, permission, operationId) {
+	addPermission(userId, permission, operationId) {
 		return superagent
 			.post(this.permissionUserUrl)
-			.send({groupId: groupId, resourceType: permission.resourceType, resourceId: permission.resourceId, permission: permission.permission})
+			.send({userId: userId, resourceType: permission.resourceType, resourceId: permission.resourceId, permission: permission.permission})
 			.withCredentials()
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Origin', 'true')
@@ -72,10 +71,10 @@ class UserStore extends Store {
 			});
 	}
 
-	removePermission(groupId, permission, operationId) {
+	removePermission(userId, permission, operationId) {
 		return superagent
 			.delete(this.permissionUserUrl)
-			.send({groupId: groupId, resourceType: permission.resourceType, resourceId: permission.resourceId, permission: permission.permission})
+			.send({userId: userId, resourceType: permission.resourceType, resourceId: permission.resourceId, permission: permission.permission})
 			.withCredentials()
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Origin', 'true')

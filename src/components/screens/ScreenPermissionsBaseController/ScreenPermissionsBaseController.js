@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenPermissionsBaseController.css';
 import withStyles from '../../../decorators/withStyles';
 import classnames from 'classnames';
+import utils from '../../../utils/utils';
 
 import ControllerComponent from '../../common/ControllerComponent';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
@@ -94,10 +95,19 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 		ActionCreator.createObjectAndRespond(model,itemType,responseData,this.getStateHash(),this.instance);
 	}
 
+	/**
+	 * Differentiate between states
+	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
+	 */
+	updateStateHash() {
+		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
+		this._stateHash = utils.stringHash("ScreenMetadataObject" + this.state.ui.activeMenuItem);
+	}
+
 	render() {
 		let ret = null;
 
-		console.log(this.props.store);
+		console.log("ScreenPermissionsBaseController", this.props.store);
 
 		if(this.state.built) {
 			var tabsInsert = [];
@@ -137,7 +147,6 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 								onItemClick={this.onObjectListItemClick.bind(this, tab.dataType)}
 								onAddClick={this.onObjectListAddClick.bind(this, tab.dataType)}
 								itemClasses={classnames({'template': tab.isTemplate})}
-								//selectedItemKey={this.state.activeObjectListItems[tab.dataType]}
 							/>
 						</div>
 					);
