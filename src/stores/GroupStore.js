@@ -72,6 +72,27 @@ class GroupStore extends Store {
 			});
 	}
 
+	update(groupId, name, operationId) {
+		logger.info('GroupStore#update Update group started');
+		let response;
+		return superagent
+			.put(this.groupUrl + '/' + groupId)
+			.send({name: name})
+			.withCredentials()
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Access-Control-Allow-Credentials', 'true').then(pResponse => {
+				response = pResponse;
+				logger.info('GroupStore#add Group Updates. Body: ', response.body);
+				return this.reload(operationId);
+			}).then(() => {
+				return response;
+			}).catch(err => {
+				this.emitError(err, operationId);
+				logger.error('GroupStore#add Error: ',err);
+			});
+	}
+
 	delete(groupId, operationId) {
 		logger.info('GroupStore#delete Delete group started');
 		return superagent
@@ -190,6 +211,9 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			break;
 		case ActionTypes.GROUP_ADD:
 			storeInstance.add(action.data.name, action.data.operationId);
+			break;
+		case ActionTypes.GROUP_UPDATE:
+			storeInstance.update(action.data.id, action.data.name, action.data.operationId);
 			break;
 		case ActionTypes.GROUP_DELETE:
 			storeInstance.delete(action.data.id, action.data.operationId);

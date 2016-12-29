@@ -53,6 +53,7 @@ export default keyMirror({
 	GROUP_CREATE_RESPOND: null,
 	GROUP_LOAD: null,
 	GROUP_DELETE: null,
+	GROUP_UPDATE: null,
 	GROUP_ADD_MEMBER: null,
 	GROUP_ADD_PERMISSION: null,
 	GROUP_REMOVE_PERMISSION: null,

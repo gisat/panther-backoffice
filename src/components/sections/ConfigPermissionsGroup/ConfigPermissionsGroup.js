@@ -2,6 +2,9 @@ import React, { PropTypes, Component } from 'react';
 import ControllerComponent from '../../common/ControllerComponent';
 import _ from 'underscore';
 
+import styles from './ConfigPermissionsGroup.css';
+import withStyles from '../../../decorators/withStyles';
+
 import ObjectTypes from '../../../constants/ObjectTypes';
 
 import UIObjectSelect from '../../atoms/UIObjectSelect';
@@ -14,7 +17,8 @@ import UserStore from '../../../stores/UserStore';
 import GroupStore from '../../../stores/GroupStore';
 
 import ActionCreator from '../../../actions/ActionCreator';
-
+import ConfigControls from '../../atoms/ConfigControls';
+import { Input } from '../../SEUI/elements';
 
 var initialState = {
 	valuesUsersRead: [],
@@ -23,9 +27,11 @@ var initialState = {
 	valuesGroupsUpdate: [],
 	valuesUsersDelete: [],
 	valuesGroupsDelete: [],
-	valuesMembers: []
+	valuesMembers: [],
+	valuesName: ''
 };
 
+@withStyles(styles)
 class ConfigPermissionsGroup extends ControllerComponent {
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -67,7 +73,9 @@ class ConfigPermissionsGroup extends ControllerComponent {
 					valuesUsersUpdate: [],
 					valuesGroupsUpdate: [],
 					valuesUsersDelete: [],
-					valuesGroupsDelete: []
+					valuesGroupsDelete: [],
+					valuesMembers: _.pluck(groups.members, "key"),
+					valuesName: groups.name
 				};
 				groups.permissions.group.forEach(permission => {
 					if(permission.permission == 'GET') {
@@ -202,12 +210,55 @@ class ConfigPermissionsGroup extends ControllerComponent {
 		this._stateHash = utils.stringHash(this.props.selectorValue);
 	}
 
+	onChangeName(e) {
+		this.setCurrentState({
+			valuesName: e.target.value
+		});
+	}
+
+	saveForm() {
+		let operationId = super.saveForm();
+
+		ActionCreator.updateGroup(operationId, this.props.selectorValue, this.state.current.valuesName);
+	}
+
+	deleteObject(key) {
+		ActionCreator.deleteGroup(this.instance, key);
+		if (key == this.props.selectorValue) {
+			ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		}
+	}
+
 	render() {
 		let ret = null;
 
 		if(this.state.built) {
 			ret = (
 				<div>
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Name
+							<Input
+								type="text"
+								name="name"
+								placeholder=" "
+								value={this.state.current.valueName}
+								onChange={this.onChangeName.bind(this)}
+							/>
+						</label>
+					</div>
+
+					<ConfigControls
+						key={"ConfigControls" + this.props.selectorValue}
+						disabled={this.props.disabled}
+						saved={this.equalStates(this.state.current,this.state.saved)}
+						saving={this.state.saving}
+						onSave={this.saveForm.bind(this)}
+						onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
+					/>
+
+					<div></div>
+
 					<div><h2>Members of this group</h2></div>
 					<div className="frame-input-wrapper">
 						<label className="container">

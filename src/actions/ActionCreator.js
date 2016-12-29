@@ -220,6 +220,18 @@ let actionCreator = {
 		AppDispatcher.dispatch(action);
 	},
 
+	updateGroup(operationId, groupId, name) {
+		let action = {
+			type: ActionTypes.GROUP_UPDATE,
+			data: {
+				name: name,
+				id: groupId,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
 	loadGroups(operationId) {
 		let action = {
 			type: ActionTypes.GROUP_LOAD,
