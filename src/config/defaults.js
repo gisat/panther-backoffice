@@ -101,7 +101,7 @@ export default {
 		},
 		ATTRIBUTE: {
 			type: true,
-			code: true,
+			code: false,
 			standardUnits: true,
 			customUnits: true,
 			color: true,
