@@ -71,9 +71,9 @@ class ObjectList extends Component {
 			);
 		});
 
-		return (
-			<div>
-
+		let addButton = null;
+		if(this.props.allowAdd || this.props.allowAdd !== false) {
+			addButton = (
 				<a
 					className="puma-item add"
 					href="#"
@@ -82,6 +82,13 @@ class ObjectList extends Component {
 				>
 					<span><Icon name="plus"/></span>
 				</a>
+			)
+		}
+
+		return (
+			<div>
+
+				{addButton}
 
 				{itemsInsert}
 

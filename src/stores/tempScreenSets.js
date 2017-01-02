@@ -14,6 +14,8 @@ import ScreenMetadataLayerVector from '../components/screens/ScreenMetadataLayer
 import ScreenPlacesBase from '../components/screens/ScreenPlacesBase';
 import ScreenPlaceDataSourceAttSet from '../components/screens/ScreenPlaceDataSourceAttSet';
 
+import ScreenPermissionsBase from '../components/screens/ScreenPermissionsBase';
+
 module.exports = [
 	{
 		key: "analyses",
@@ -88,6 +90,17 @@ module.exports = [
 				key: "ScreenMetadataBase",
 				component: ScreenMetadataBase
 				//component: <ScreenMetadataBase/>
+			}
+		]
+	},
+
+	{
+		key: "permissions",
+		title: "Permissions",
+		screens: [
+			{
+				key: "ScreenPermissionsBase",
+				component: ScreenPermissionsBase
 			}
 		]
 	},

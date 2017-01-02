@@ -1,26 +1,20 @@
-import Model from './Model';
 import ObjectTypes from '../constants/ObjectTypes';
+import Model from './Model';
 import UserStore from '../stores/UserStore';
 
-
-class TopicModel extends Model {
-
+class GroupModel extends Model {
 	getType() {
-		return ObjectTypes.TOPIC;
+		return ObjectTypes.GROUP;
 	}
 
 	data() {
 		return {
 			key: {
-				serverName: '_id', //number
+				serverName: '_id',
 				sendToServer: true
 			},
 			name: {
-				serverName: 'name', //string
-				sendToServer: true
-			},
-			active: {
-				serverName: 'active', //boolean
+				serverName: 'name',
 				sendToServer: true
 			},
 			changed: {
@@ -49,15 +43,22 @@ class TopicModel extends Model {
 				},
 				isPromise: true
 			},
-			requiresFullRef: { // todo name - wth is this?
-				serverName: 'requiresFullRef', //boolean
-				sendToServer: true
-			},
 			permissions: {
 				serverName: 'permissions',
 				sendToServer: false
+			},
+			permissionsTowards: {
+				serverName: 'permissionsTowards',
+				sendToServer: false
+			},
+			users: {
+				serverName: 'users',
+				sendToServer: false,
+				transformForLocal: function(data) {
+					return data.map(id => UserStore.getById(id));
+				}
 			}
-		};
+		}
 	}
 
 	addPermission(type, id, permission) {
@@ -84,4 +85,4 @@ class TopicModel extends Model {
 	}
 }
 
-export default TopicModel;
+export default GroupModel;

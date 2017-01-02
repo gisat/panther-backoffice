@@ -9,7 +9,7 @@ import LoginPage from './components/pages/LoginPage';
 import ContentPage from './components/temp/ContentPage';
 import NotFoundPage from './components/temp/NotFoundPage';
 import ErrorPage from './components/temp/ErrorPage';
-import logged from './models/UserModel';
+import UserStore from './stores/UserStore';
 
 import { publicPath } from './config';
 
@@ -22,7 +22,7 @@ const router = new Router(on => {
 	hookRoute(on, '/login', async () => <LoginPage />);
 
 	on('*', async (state, next) => {
-		if(!logged.isLogged()){
+		if(!UserStore.loggedIn()){
 			return <LoginPage />
 		} else {
 			const component = await next();
@@ -39,6 +39,8 @@ const router = new Router(on => {
 	hookRoute(on, '/analyses', async () => <Page screenSet="analyses" />);
 
 	hookRoute(on, '/metadata', async () => <Page screenSet="metadata" />);
+
+	hookRoute(on, '/permissions', async () => <Page screenSet="permissions" />);
 
 	on('*', async (state) => {
 		const content = await http.get(`${publicPath}/api/content?path=${state.path}`);

@@ -7,9 +7,8 @@ import async from 'async';
 
 import ListenerHandler from '../core/ListenerHandler';
 
-import DataLayerModel from '../models/DataLayerModel';
 import EventTypes from '../constants/EventTypes';
-import logged from '../models/UserModel';
+import UserStore from '../stores/UserStore';
 
 import { apiProtocol, apiHost, apiPath } from '../config';
 import logger from '../core/Logger';
@@ -21,7 +20,7 @@ class ApiStore extends Store {
 		super();
 		this._models = new Promise(function(resolve,reject){});
 		this.loginListener = new ListenerHandler(this, this.initialLoad, 'addLoginListener', 'removeLoginListener');
-		this.loginListener.add(logged);
+		this.loginListener.add(UserStore);
 		this.changeListener = new ListenerHandler(this, this.reload, 'addChangeListener', 'removeChangeListener');
 		this.registerListeners();
 		this._maxListeners = 40; // increase listener limit a bit, but todo fix removeListeners
