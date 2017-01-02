@@ -1,0 +1,6 @@
+{
+  "name": "ScreenPermissionsObject",
+  "version": "0.0.1",
+	"private": true,
+	"main": "./ScreenPermissionsObject.js"
+}

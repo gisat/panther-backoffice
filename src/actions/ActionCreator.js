@@ -3,7 +3,7 @@ import ActionTypes from '../constants/ActionTypes'
 import ObjectTypes from '../constants/ObjectTypes'
 import logger from '../core/Logger'
 
-export default {
+let actionCreator = {
 
 	createObjectAndRespond: function(model,objectType,responseData,stateHash,instanceId) {
 		var action = {
@@ -207,6 +207,146 @@ export default {
 			id: id
 		};
 		AppDispatcher.dispatch(action);
-	}
+	},
 
+	addGroup(operationId, name){
+		let action = {
+			type: ActionTypes.GROUP_ADD,
+			data: {
+				name: name,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	updateGroup(operationId, groupId, name) {
+		let action = {
+			type: ActionTypes.GROUP_UPDATE,
+			data: {
+				name: name,
+				id: groupId,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	loadGroups(operationId) {
+		let action = {
+			type: ActionTypes.GROUP_LOAD,
+			data: {
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	deleteGroup(operationId, groupId) {
+		let action = {
+			type: ActionTypes.GROUP_DELETE,
+			data: {
+				id: groupId,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	addMemberToGroup(operationId, groupId, userId) {
+		let action = {
+			type: ActionTypes.GROUP_ADD_MEMBER,
+			data: {
+				groupId: groupId,
+				userId: userId,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	removeMemberFromGroup(operationId, groupId, userId) {
+		let action = {
+			type: ActionTypes.GROUP_REMOVE_MEMBER,
+			data: {
+				groupId: groupId,
+				userId: userId,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	addPermission(operationId, groupId, permission) {
+		let action = {
+			type: ActionTypes.GROUP_ADD_PERMISSION,
+			data: {
+				groupId: groupId,
+				permission: permission,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	removePermission(operationId, groupId, permission) {
+		let action = {
+			type: ActionTypes.GROUP_REMOVE_PERMISSION,
+			data: {
+				groupId: groupId,
+				permission: permission,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	loadUsers(operationId) {
+		let action = {
+			type: ActionTypes.USER_LOAD,
+			data: {
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	addPermissionUser(operationId, userId, permission) {
+		let action = {
+			type: ActionTypes.USER_ADD_PERMISSION,
+			data: {
+				userId: userId,
+				permission: permission,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	removePermissionFromUser(operationId, userId, permission) {
+		let action = {
+			type: ActionTypes.USER_REMOVE_PERMISSION,
+			data: {
+				userId: userId,
+				permission: permission,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	login(username, password, operationId) {
+		let action = {
+			type: ActionTypes.LOGIN,
+			data: {
+				username: username,
+				password: password,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	}
 };
+
+
+export default actionCreator;

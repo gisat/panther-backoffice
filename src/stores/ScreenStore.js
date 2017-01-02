@@ -16,6 +16,8 @@ import ScreenDataLayersBase from '../components/screens/ScreenDataLayersBase';
 import ScreenMetadataBase from '../components/screens/ScreenMetadataBase';
 
 import ScreenPlacesBase from '../components/screens/ScreenPlacesBase';
+
+import ScreenPermissionsBase from '../components/screens/ScreenPermissionsBase';
 import logger from '../core/Logger';
 
 var initialScreenSets = {
@@ -89,6 +91,17 @@ var initialScreenSets = {
 			ScreenPlacesBase: {
 				order: 0,
 				component: ScreenPlacesBase
+			}
+		}
+	},
+
+	permissions: {
+		title: "Permissions",
+		hasMaximised: false,
+		screens: {
+			ScreenPermissionsBase: {
+				order: 0,
+				component: ScreenPermissionsBase
 			}
 		}
 	}
