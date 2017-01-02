@@ -21,7 +21,7 @@ import ConfigControls from '../../atoms/ConfigControls';
 import OptionStandardUnits from '../../atoms/UICustomSelect/OptionStandardUnits';
 import SingleValueStandardUnits from '../../atoms/UICustomSelect/SingleValueStandardUnits';
 
-let modelConfig = _.assign({}, config.models.common, config.models.PLACE);
+let modelConfig = _.assign({}, config.models.common, config.models.ATTRIBUTE);
 
 
 var initialState = {
