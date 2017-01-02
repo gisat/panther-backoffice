@@ -68,16 +68,6 @@ class Navigation extends PantherComponent {
 						</li>
 						<li>
 							<a
-								//href={publicPath + "/scopes"}
-								//onClick={this.onLinkClick.bind(this)}
-								tabIndex="-1"
-								className={this.props.activeScreenSet == "scopes" ? "current" : ""}
-							>
-								<UISVG src='scopes.isvg' />
-							</a>
-						</li>
-						<li>
-							<a
 								href={publicPath + "/places"}
 								onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
@@ -114,16 +104,6 @@ class Navigation extends PantherComponent {
 								className={this.props.activeScreenSet == "metadata" ? "current" : ""}
 							>
 								<UISVG src='icon-metadata.isvg' />
-							</a>
-						</li>
-						<li>
-							<a
-								//href={publicPath + "/data"}
-								//onClick={this.onLinkClick.bind(this)}
-								tabIndex="-1"
-								className={this.props.activeScreenSet == "data" ? "current" : ""}
-							>
-								<UISVG src='objects.isvg' />
 							</a>
 						</li>
 						<li>
