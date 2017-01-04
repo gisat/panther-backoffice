@@ -158,15 +158,12 @@ class ScreenController extends PantherComponent {
 			var loads = [];
 			var keys = [];
 			for(var key in map){
-				console.log(key);
 				if(map.hasOwnProperty(key) && (setAll || (limitKeys.indexOf(key)!=-1))) {
 					loads.push(map[key]()); //execute the functions here, not earlier (so only those needed are run)
 					keys.push(key);
 				}
 			}
-			console.log(loads);
 			Promise.all(loads).then(function(data){
-				console.log(data);
 				var ret = {};
 				for(var i in keys){
 					if (keys.hasOwnProperty(i)) {

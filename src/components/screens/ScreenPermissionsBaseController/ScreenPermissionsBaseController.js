@@ -107,8 +107,6 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 	render() {
 		let ret = null;
 
-		console.log("ScreenPermissionsBaseController", this.props.store);
-
 		if(this.state.built) {
 			var tabsInsert = [];
 			var contentInsert = [];

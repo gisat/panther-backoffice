@@ -19,7 +19,6 @@ class ListenerHandler {
 		} else {
 			newListener = this.storeChangeHandler.bind(this.component);
 		}
-		console.log(this.addListenerName);
 		store[this.addListenerName](newListener);
 		this.storeListeners[store].push(newListener);
 	}
