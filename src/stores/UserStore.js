@@ -20,6 +20,7 @@ class UserStore extends Store {
 
 		this.logged = null;
 		this.loginListeners = [];
+		this.responseListeners = [];
 	}
 
 	urlFor(serverPath) {
@@ -142,6 +143,10 @@ class UserStore extends Store {
 
 	addLoginListener(loginFunction) {
 		this.loginListeners.push(loginFunction);
+	}
+
+	addResponseListener(responseFunction) {
+		this.responseListeners.push(responseFunction);
 	}
 }
 let storeInstance = new UserStore();

@@ -18,6 +18,7 @@ class GroupStore extends Store {
 		this.groupUrl = this.urlFor('/rest/group');
 		this.membersUrl = this.urlFor('/rest/member/group');
 		this.permissionGroupUrl = this.urlFor('/rest/permission/group');
+		this.responseListeners = [];
 	}
 
 	urlFor(serverPath) {
@@ -193,6 +194,10 @@ class GroupStore extends Store {
 
 	getAll() {
 		return this.all();
+	}
+
+	addResponseListener(responseFunction) {
+		this.responseListeners.push(responseFunction);
 	}
 }
 
