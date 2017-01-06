@@ -550,7 +550,7 @@ class ConfigPlaceDataSourcePeriod extends PantherComponent {
 	}
 
 
-
+  // Here I need to add possibility to add another layer. For this I need to be able to load all the available data layers including analysis.
 	render() {
 
 		var thisComponent = this;

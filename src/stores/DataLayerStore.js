@@ -9,11 +9,11 @@ import logger from '../core/Logger';
 class DataLayerStore extends ApiStore {
 
 	getApiUrl(){
-		return "api/layers/getLayers";
+		return "rest/layer";
 	}
 
 	getApiLoadMethod(){
-		return "POST";
+		return "GET";
 	}
 
 	registerListeners(){
