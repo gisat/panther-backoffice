@@ -736,7 +736,7 @@ class ConfigDataLayer extends ControllerComponent {
 					border: '1px solid rgba(0,0,0,.15)'
 				};
 				//var mapFrameSrc = apiProtocol + apiHost+ "/geoserver/geonode/wms/reflect?layers=" + this.props.selectorValue + "&width=300&format=application/openlayers&transparent=true";
-				var mapImageSrc = geoserverProtocol + geoserverAddress + "/" + dataLayer.geoserverWorkspace + "/wms/reflect?layers=" + dataLayer.key + "&width=800&transparent=true";
+				var mapImageSrc = geoserverProtocol + geoserverAddress + "/" + dataLayer.geoserverWorkspace + "/wms/reflect?layers=" + dataLayer.path + "&width=800&transparent=true";
 
 				//// todo not an iframe
 				//mapFrame = (

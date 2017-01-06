@@ -6,10 +6,14 @@ import withStyles from '../../../decorators/withStyles';
 import utils from '../../../utils/utils';
 import logger from '../../../core/Logger';
 
+import { allowDuplication } from '../../../config';
+
 import ListenerHandler from '../../../core/ListenerHandler';
 
 import path from "path";
 import _ from "underscore";
+
+import ActionCreator from '../../../actions/ActionCreator';
 
 import DataLayerStore from '../../../stores/DataLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
@@ -93,6 +97,17 @@ class ScreenDataLayersBase extends ScreenController {
 		},this.loadState);
 	}
 
+	duplicate() {
+		if(!this.state.selectorValue) {
+			return;
+		}
+		let layerToFilter = this.state.store.dataLayers.filter(dataLayer => dataLayer.key == this.state.selectorValue);
+		if(layerToFilter.length == 0) {
+			return;
+		}
+		ActionCreator.duplicateLayer(layerToFilter[0].path)
+	}
+
 	render() {
 		logger.trace("ScreenDataLayersBase# render(), This state: ", this.state);
 
@@ -116,6 +131,15 @@ class ScreenDataLayersBase extends ScreenController {
 			);
 		}
 
+		let duplicateLayer = "";
+		if(allowDuplication) {
+			duplicateLayer = (
+				<div className="button float" onClick={this.duplicate.bind(this)}>
+					Duplicate layer
+				</div>
+			);
+		}
+
 		if (this.state.initialized) {
 			ret = (
 				<div>
@@ -130,6 +154,8 @@ class ScreenDataLayersBase extends ScreenController {
 								onFocus={this.onSelectorFocus.bind(this)}
 							/>
 						</div>
+
+						{duplicateLayer}
 					</div>
 					<div className="screen-content">
 						<div>

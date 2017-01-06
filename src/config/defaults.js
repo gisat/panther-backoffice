@@ -47,6 +47,11 @@ export default {
 	// Any other or none means INFO as this is default logging level.
 	loggingLevel: 4,
 
+	/**
+	 * Whether the data layer page will contain button for duplication of layers.
+	 */
+	allowDuplication: false,
+
 
 	/**
 	 * Data models - types & properties

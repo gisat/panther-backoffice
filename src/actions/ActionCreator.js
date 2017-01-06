@@ -345,6 +345,16 @@ let actionCreator = {
 			}
 		};
 		AppDispatcher.dispatch(action);
+	},
+
+	duplicateLayer(name) {
+		let action = {
+			type: ActionTypes.DUPLICATE_LAYER,
+			data: {
+				name: name
+			}
+		};
+		AppDispatcher.dispatch(action);
 	}
 };
 

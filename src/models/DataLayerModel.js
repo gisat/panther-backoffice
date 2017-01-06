@@ -11,6 +11,9 @@ class DataLayerModel extends Model {
 			referenced: {
 				serverName: 'referenced' //boolean
 			},
+			path: {
+				serverName: 'path'
+			},
 			geoserverWorkspace: {
 				serverName: 'name', //string
 				transformForLocal: function (data) {
