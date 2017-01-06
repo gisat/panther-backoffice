@@ -28,7 +28,6 @@ class UserStore extends Store {
 	}
 
 	load(operationId){
-		console.log("Cache", this.cache);
 		if(!this.cache) {
 			return this.reload(operationId);
 		} else {

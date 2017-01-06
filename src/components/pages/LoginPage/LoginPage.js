@@ -1,4 +1,5 @@
 import React, {PropTypes, Component} from 'react';
+import logger from '../../../core/Logger';
 import styles from './LoginPage.css';
 import withStyles from '../../../decorators/withStyles';
 import Location from '../../../core/Location';
@@ -46,8 +47,9 @@ class LoginPage extends Component {
 				Location.pushState(
 					null, publicPath + "/"
 				);
-			}).catch(() => {
+			}).catch(error => {
 			ActionCreator.removeOperation(id);
+			logger.error("LoginPage#onClick Error: ", error)
 			this.setState({
 				errorMessage: "Invalid credentials"
 			});
