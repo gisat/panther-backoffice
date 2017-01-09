@@ -23,7 +23,8 @@ import StyleStore from '../../../stores/StyleStore';
 
 import logger from '../../../core/Logger';
 
-
+// TODO: Add possibility to manage layers.
+// TODO: Add permissions towards custom layers.
 @withStyles(styles)
 class ScreenMetadataBase extends ScreenController {
 
