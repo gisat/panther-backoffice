@@ -36,7 +36,7 @@ class DataLayerStore extends ApiStore {
 
 	duplicateLayer(name) {
 		let path = name;
-		let newName = name + utils.guid();
+		let newName = name + this.shortUniqueId();
 		return superagent
 			.post(this.urlFor(this.getApiUrl()))
 			.send({name: newName, path: path})
@@ -51,6 +51,10 @@ class DataLayerStore extends ApiStore {
 				this.emitError(err);
 				logger.error('DataLayerStore#duplicateLayer Error: ',err);
 			});
+	}
+
+	shortUniqueId() {
+		return (Math.random() * new Date().getMilliseconds()).toFixed(0);
 	}
 }
 
