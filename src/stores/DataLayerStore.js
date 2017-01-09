@@ -34,9 +34,9 @@ class DataLayerStore extends ApiStore {
 		return apiProtocol + apiHost + path.join(apiPath, serverPath).replace(/\\/g, "/");
 	}
 
-	duplicateLayer(name) {
+	duplicateLayer(name, newName) {
 		let path = name;
-		let newName = name + this.shortUniqueId();
+		newName = newName || name + this.shortUniqueId();
 		return superagent
 			.post(this.urlFor(this.getApiUrl()))
 			.send({name: newName, path: path})
@@ -64,7 +64,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 	logger.info("DataLayerStore# dispatchToken(), Action:", action);
 
 	if(action.type == ActionTypes.DUPLICATE_LAYER) {
-		storeInstance.duplicateLayer(action.data.name);
+		storeInstance.duplicateLayer(action.data.name, action.data.newName);
 	}
 });
 

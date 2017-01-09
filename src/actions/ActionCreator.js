@@ -347,11 +347,12 @@ let actionCreator = {
 		AppDispatcher.dispatch(action);
 	},
 
-	duplicateLayer(name) {
+	duplicateLayer(name, newName) {
 		let action = {
 			type: ActionTypes.DUPLICATE_LAYER,
 			data: {
-				name: name
+				name: name,
+				newName: newName
 			}
 		};
 		AppDispatcher.dispatch(action);

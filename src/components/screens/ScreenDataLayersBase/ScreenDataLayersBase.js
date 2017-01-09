@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import ScreenController from "../../common/ScreenController";
 import styles from './ScreenDataLayersBase.css';
 import withStyles from '../../../decorators/withStyles';
+import { Input } from '../../SEUI/elements';
 
 import utils from '../../../utils/utils';
 import logger from '../../../core/Logger';
@@ -33,7 +34,8 @@ import ConfigDataLayer from '../../sections/ConfigDataLayer';
 import Loader from '../../atoms/Loader';
 
 var initialState = {
-	selectorValue: null
+	selectorValue: null,
+	valueNewLayerName: ""
 };
 
 
@@ -105,7 +107,13 @@ class ScreenDataLayersBase extends ScreenController {
 		if(layerToFilter.length == 0) {
 			return;
 		}
-		ActionCreator.duplicateLayer(layerToFilter[0].path)
+		ActionCreator.duplicateLayer(layerToFilter[0].path, this.state.valueNewLayerName)
+	}
+
+	onChangeNewLayerName(e) {
+		this.setState({
+			valueNewLayerName: e.target.value
+		})
 	}
 
 	render() {
@@ -134,8 +142,19 @@ class ScreenDataLayersBase extends ScreenController {
 		let duplicateLayer = "";
 		if(allowDuplication) {
 			duplicateLayer = (
-				<div className="button float" onClick={this.duplicate.bind(this)}>
-					Duplicate layer
+				<div className="float">
+					<div>
+						<Input
+							type="text"
+							name="Name of duplicated layer"
+							placeholder=" "
+							value={this.state.valueNewLayerName}
+							onChange={this.onChangeNewLayerName.bind(this)}
+						/>
+					</div>
+					<div className="button" onClick={this.duplicate.bind(this)}>
+						Duplicate layer
+					</div>
 				</div>
 			);
 		}
