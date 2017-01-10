@@ -237,6 +237,10 @@ class ConfigMetadataAttribute extends ControllerComponent {
 				key: "km2",
 				name: "km2",
 				nameToSquare: "km"
+			},
+			{
+				key: "ha",
+				name: "ha"
 			}
 		];
 
