@@ -114,6 +114,7 @@ class UserStore extends Store {
 				// TODO: Store in cookie.
 				return this.logged;
 		}).catch(error => {
+			logger.error('UserStore#login Error: ', error);
 			this.emitError(error, operationId);
 			})
 	}

@@ -51,7 +51,7 @@ class ScreenPermissionsBase extends ScreenController {
 	}
 
 	getUrl() {
-		return path.join(this.props.parentUrl, "metadata/" + this.state.activeMenuItem);
+		return path.join(this.props.parentUrl, "permissions/" + this.state.activeMenuItem);
 	}
 
 	render() {

@@ -28,7 +28,8 @@ var initialState = {
 	valuesUsersDelete: [],
 	valuesGroupsDelete: [],
 	valuesMembers: [],
-	valuesName: ''
+	valuesName: '',
+	valuesResources: []
 };
 
 @withStyles(styles)
@@ -75,7 +76,8 @@ class ConfigPermissionsGroup extends ControllerComponent {
 					valuesUsersDelete: [],
 					valuesGroupsDelete: [],
 					valuesMembers: _.pluck(groups.members, "key"),
-					valuesName: groups.name
+					valuesName: groups.name,
+					valuesResources: []
 				};
 				groups.permissions.group.forEach(permission => {
 					if(permission.permission == 'GET') {
@@ -95,6 +97,11 @@ class ConfigPermissionsGroup extends ControllerComponent {
 						nextState.valuesUsersUpdate.push(permission.id);
 					}
 				});
+				//TODO: Refactor. Currently the whole permission for BackOffice are in two categories. One for the creation types and one for the rest.
+				groups.permissionsTowards.forEach(permission => {
+					nextState.valuesResources.push(permission.resourceType);
+				})
+
 			}
 		}
 		return nextState;
@@ -201,6 +208,34 @@ class ConfigPermissionsGroup extends ControllerComponent {
 		this.setCurrentState(newState);
 	}
 
+	onChangePermissions(value, values) {
+		let group = _.findWhere(this.props.store.groups, {key: this.props.selectorValue});
+		let current = this.state.current.valuesResources;
+		let newOnes = _.pluck(values, 'key');
+
+		if(current.length < newOnes.length) {
+			let toAdd = _.difference(newOnes, current);
+			toAdd.forEach(resourceType => {
+				ActionCreator.addPermission(this.instance, group.key, {
+					resourceType: resourceType,
+					resourceId: null,
+					permission: 'POST'
+				});
+			});
+		} else if(current.length > newOnes.length) {
+			let toRemove = _.difference(current, newOnes);
+			toRemove.forEach(resourceType => {
+				ActionCreator.removePermission(this.instance, group.key, {
+					resourceType: resourceType,
+					resourceId: null,
+					permission: 'POST'
+				});
+			});
+		} else {
+			console.log('This should never happen');
+		}
+	}
+
 	/**
 	 * Differentiate between states
 	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
@@ -231,6 +266,20 @@ class ConfigPermissionsGroup extends ControllerComponent {
 
 	render() {
 		let ret = null;
+
+		let availableTypesForPermissions = [{
+			key: 'scope',
+			name: 'Scope'
+		}, {
+			key: 'place',
+			name: 'Place'
+		}, {
+			key: 'topic',
+			name: 'Topic'
+		}, {
+			key: 'group',
+			name: 'Group'
+		}];
 
 		if(this.state.built) {
 			ret = (
@@ -276,6 +325,21 @@ class ConfigPermissionsGroup extends ControllerComponent {
 						</label>
 					</div>
 
+					<div><h2>Permissions for creation of types</h2></div>
+					<div className="frame-input-wrapper">
+						<label className="container">
+							<UIObjectSelect
+								multi
+								className="template"
+								onChange={this.onChangePermissions.bind(this)}
+								options={availableTypesForPermissions}
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.valuesResources}
+							/>
+						</label>
+					</div>
 
 					<div><h2>Specify the permissions towards the group</h2></div>
 
