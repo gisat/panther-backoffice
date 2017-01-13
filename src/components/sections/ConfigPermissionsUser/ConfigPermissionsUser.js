@@ -93,10 +93,10 @@ class ConfigPermissionsUser extends ControllerComponent {
 
 	render() {
 		let options = [{
-			key: 'scope',
+			key: 'dataset',
 			name: 'Scope'
 		}, {
-			key: 'place',
+			key: 'location',
 			name: 'Place'
 		}, {
 			key: 'topic',

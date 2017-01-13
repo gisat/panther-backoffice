@@ -268,10 +268,10 @@ class ConfigPermissionsGroup extends ControllerComponent {
 		let ret = null;
 
 		let availableTypesForPermissions = [{
-			key: 'scope',
+			key: 'dataset',
 			name: 'Scope'
 		}, {
-			key: 'place',
+			key: 'location',
 			name: 'Place'
 		}, {
 			key: 'topic',
