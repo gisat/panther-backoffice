@@ -15,6 +15,7 @@ import ScreenPlacesBase from '../components/screens/ScreenPlacesBase';
 import ScreenPlaceDataSourceAttSet from '../components/screens/ScreenPlaceDataSourceAttSet';
 
 import ScreenPermissionsBase from '../components/screens/ScreenPermissionsBase';
+import ScreenLayersBase from '../components/screens/ScreenLayersBase';
 
 module.exports = [
 	{
@@ -101,6 +102,17 @@ module.exports = [
 			{
 				key: "ScreenPermissionsBase",
 				component: ScreenPermissionsBase
+			}
+		]
+	},
+
+	{
+		key: "layers",
+		title: "Layers",
+		screens: [
+			{
+				key: "ScreenLayersBase",
+				component: ScreenLayersBase
 			}
 		]
 	},

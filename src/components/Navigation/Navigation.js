@@ -116,6 +116,16 @@ class Navigation extends PantherComponent {
 								<UISVG src='users.isvg' />
 							</a>
 						</li>
+						<li>
+							<a
+								href={publicPath + "/layers"}
+								onClick={this.onLinkClick.bind(this)}
+								tabIndex="-1"
+								className={this.props.activeScreenSet == "layers" ? "current" : ""}
+							>
+								<UISVG src='icon-datalayers.isvg' />
+							</a>
+						</li>
 					</ul>
 				</div>
 				<div id="navigation-filter">
