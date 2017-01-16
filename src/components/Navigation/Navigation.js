@@ -46,14 +46,6 @@ class Navigation extends PantherComponent {
 				<div id="navigation-menu">
 
 				</div>
-				<div id="navigation-menu-opener">
-					<a
-						onClick={this.toggleMenu.bind(this)}
-						tabIndex="-1"
-					>
-						<UISVG src='menu.isvg' />
-					</a>
-				</div>
 				<div id="navigation-quick-access">
 					<ul>
 						<li>

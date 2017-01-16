@@ -138,6 +138,22 @@ class ScreenDashboardBase extends PantherComponent {
 								<span>Users</span>
 								<Icon name="external" className="right"/>
 							</a>
+							<a
+								className="row right-icon"
+								target="_blank"
+								href={geoNodeURL+"account/invite_user/"}
+							>
+								<span>User invitation</span>
+								<Icon name="external" className="right"/>
+							</a>
+							<a
+								className="row right-icon"
+								target="_blank"
+								href={geoNodeURL+"admin/people/profile/"}
+							>
+								<span>User Management</span>
+								<Icon name="external" className="right"/>
+							</a>
 						</div>
 
 						{/*<div className="frame-wrapper flexchild">

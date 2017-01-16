@@ -26,6 +26,9 @@ import ScreenHelpTutorial08SpatialAnalysis from '../help/ScreenHelpTutorial08Spa
 import ScreenHelpTutorial09MathAnalysis from '../help/ScreenHelpTutorial09MathAnalysis';
 import ScreenHelpTutorial10AggregationAnalysis from '../help/ScreenHelpTutorial10AggregationAnalysis';
 import ScreenHelpTutorial11Styles from '../help/ScreenHelpTutorial11Styles';
+import ScreenHelpTutorial12UserManagement from '../help/ScreenHelpTutorial12UserManagement';
+import ScreenHelpTutorial13GroupManagement from '../help/ScreenHelpTutorial13GroupManagement';
+import ScreenHelpTutorial14Permissions from '../help/ScreenHelpTutorial14Permissions';
 
 import logger from '../../../core/Logger';
 import PantherComponent from "../../common/PantherComponent";
@@ -94,6 +97,15 @@ class ScreenHelpIndex extends PantherComponent {
 			case 'Tutorial11Styles':
 				component = ScreenHelpTutorial11Styles;
 				break;
+			case 'Tutorial12UserManagement':
+				component = ScreenHelpTutorial12UserManagement;
+				break;
+			case 'Tutorial13GroupManagement':
+				component = ScreenHelpTutorial13GroupManagement;
+				break;
+			case 'Tutorial14Permissions':
+				component = ScreenHelpTutorial14Permissions;
+				break;
 		}
 		if (component) {
 			let options = {
@@ -147,63 +159,9 @@ class ScreenHelpIndex extends PantherComponent {
 							Sections and controls in Back Office
 						</span>
 					</a>
-					{/*
-					 <a
-					 className="help-link"
-					 onClick={this.onHelpLinkClick.bind(this, 'TopicKeyboard')}
-					 >
-						<span>
-							Keyboard shorcuts
-						</span>
-					</a>*/}
-
-					{/*<h3>Use cases</h3>
-
-					<a
-						className="help-link"
-						onClick={this.onHelpLinkClick.bind(this, 'UseCaseLayerAdd')}
-					>
-						<span>
-							Adding a new layer
-						</span>
-						<span className="description">
-							Uploading, describing and displaying layers
-						</span>
-					</a>
-					<a
-						className="help-link"
-						onClick={this.onHelpLinkClick.bind(this, 'CreatePlace')}
-					>
-						<span>
-							Create new place
-						</span>
-						<span className="description">
-							Create new place and associated layers.
-						</span>
-					</a>*/}
 
 
-					{/*
-					 <a
-					 className="help-link"
-					 onClick={this.onHelpLinkClick.bind(this, 'UseCaseAnalysisCreate')}
-					 >
-						<span>
-							Creating a new analysis
-						</span>
-					</a>
-					 <a
-					 className="help-link"
-					 onClick={this.onHelpLinkClick.bind(this, 'UseCasePlaceManage')}
-					 >
-						<span>
-							Managing a place
-						</span>
-					</a>*/}
-
-
-
-					<h3>Video totorial</h3>
+					<h3>Video tutorials</h3>
 
 					<a
 						className="help-link"
@@ -301,7 +259,29 @@ class ScreenHelpIndex extends PantherComponent {
 						<span className="description">Cartographic styles of layers</span>
 					</a>
 
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial12Permissions')}
+					>
+						<span>12: User management</span>
+						<span className="description">Create, edit and delete users.</span>
+					</a>
 
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial12Permissions')}
+					>
+						<span>13: Group management</span>
+						<span className="description">Create, edit and delete groups.</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial12Permissions')}
+					>
+						<span>14: Permissions</span>
+						<span className="description">Handling permissions of the metadata</span>
+					</a>
 				</div></div>
 			</div>
 		);
