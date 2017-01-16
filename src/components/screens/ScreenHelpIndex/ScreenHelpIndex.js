@@ -261,7 +261,7 @@ class ScreenHelpIndex extends PantherComponent {
 
 					<a
 						className="help-link"
-						onClick={this.onHelpLinkClick.bind(this, 'Tutorial12Permissions')}
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial12UserManagement')}
 					>
 						<span>12: User management</span>
 						<span className="description">Create, edit and delete users.</span>
@@ -269,7 +269,7 @@ class ScreenHelpIndex extends PantherComponent {
 
 					<a
 						className="help-link"
-						onClick={this.onHelpLinkClick.bind(this, 'Tutorial12Permissions')}
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial13GroupManagement')}
 					>
 						<span>13: Group management</span>
 						<span className="description">Create, edit and delete groups.</span>
@@ -277,7 +277,7 @@ class ScreenHelpIndex extends PantherComponent {
 
 					<a
 						className="help-link"
-						onClick={this.onHelpLinkClick.bind(this, 'Tutorial12Permissions')}
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial14Permissions')}
 					>
 						<span>14: Permissions</span>
 						<span className="description">Handling permissions of the metadata</span>
