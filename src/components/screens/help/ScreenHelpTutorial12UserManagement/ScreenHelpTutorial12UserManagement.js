@@ -30,6 +30,15 @@ class ScreenHelpTutorial12UserManagement extends PantherComponent {
 							<li>The user should now receive link, which allows him to register.</li>
 						</ol>
 
+						<iframe
+							className="help-video"
+							width="720"
+							height="421"
+							src="https://www.youtube.com/embed/KcJgqlO8a0c"
+							frameBorder="0"
+							allowFullScreen
+						></iframe>
+
 					</div>
 				</div>
 			</div>

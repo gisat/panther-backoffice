@@ -54,7 +54,7 @@ class ScreenHelpTutorial13Permissions extends PantherComponent {
 							className="help-video"
 							width="720"
 							height="421"
-							src="https://www.youtube.com/embed/RKAZ7FlkmVI?rel=0&cc_load_policy=1&cc_lang_pref=en"
+							src="https://www.youtube.com/embed/xzi_E18Mgvw"
 							frameBorder="0"
 							allowFullScreen
 						></iframe>

@@ -39,7 +39,7 @@ class ScreenHelpTutorial13GroupManagement extends PantherComponent {
 							className="help-video"
 							width="720"
 							height="421"
-							src="https://www.youtube.com/embed/RKAZ7FlkmVI?rel=0&cc_load_policy=1&cc_lang_pref=en"
+							src="https://www.youtube.com/embed/kyt7FkoLj9k"
 							frameBorder="0"
 							allowFullScreen
 						></iframe>
