@@ -157,7 +157,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 		if (modelConfig.description) {
 			modelData.description = this.state.current.valueDescription;
 		}
-		if (modelConfig.geometry) {
+		if (modelConfig.geometry && this.state.current.valueGeometry) {
 			modelData.geometry = JSON.parse(this.state.current.valueGeometry);
 		}
 		let modelObj = new Model[ObjectTypes.PLACE](modelData);
