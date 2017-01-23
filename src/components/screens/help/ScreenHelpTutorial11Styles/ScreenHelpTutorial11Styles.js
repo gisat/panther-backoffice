@@ -1,8 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 
-import ActionCreator from '../../../../actions/ActionCreator';
-
-import logger from '../../../../core/Logger';
 import PantherComponent from "../../../common/PantherComponent";
 
 class ScreenHelpTutorial11Styles extends PantherComponent {
@@ -11,25 +8,6 @@ class ScreenHelpTutorial11Styles extends PantherComponent {
 		onInteraction: PropTypes.func.isRequired,
 		screenSetKey: PropTypes.string.isRequired
 	};
-
-	onHelpLinkClick(helpScreenKey) {
-		var screenName = this.props.screenKey + "-ScreenHelp" + helpScreenKey;
-		let component = null;
-		let size = 50;
-		switch (helpScreenKey) {
-
-		}
-		if (component) {
-			let options = {
-				component: component,
-				parentUrl: this.props.parentUrl,
-				size: size
-			};
-			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
-		} else {
-			logger.error("ScreenHelpTutorial11Styles# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
-		}
-	}
 
 	render() {
 

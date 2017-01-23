@@ -1,11 +1,12 @@
 import React, {PropTypes, Component} from 'react';
+import logger from '../../../core/Logger';
 import styles from './LoginPage.css';
 import withStyles from '../../../decorators/withStyles';
-import {login} from '../../../models/UserModel';
 import Location from '../../../core/Location';
 import ActionCreator from '../../../actions/ActionCreator';
 import utils from '../../../utils/utils';
 import {publicPath} from '../../../config';
+import UserStore from '../../../stores/UserStore';
 
 import {Input, Button} from '../../SEUI/elements';
 import Loader from '../../atoms/Loader';
@@ -39,20 +40,20 @@ class LoginPage extends Component {
 		});
 		let id = utils.guid();
 		ActionCreator.addOperation(id, {});
-		login(this.state.valueName, this.state.valuePassphrase, this.requestEnd.bind(this, id));
-	}
-
-	requestEnd(operationId, result) {
-		ActionCreator.removeOperation(operationId);
-		if(result.err) {
+		UserStore
+			.login(this.state.valueName, this.state.valuePassphrase)
+			.then(() => {
+				ActionCreator.removeOperation(id);
+				Location.pushState(
+					null, publicPath + "/"
+				);
+			}).catch(error => {
+			ActionCreator.removeOperation(id);
+			logger.error("LoginPage#onClick Error: ", error)
 			this.setState({
 				errorMessage: "Invalid credentials"
 			});
-		} else {
-			Location.pushState(
-				null, publicPath + "/"
-			);
-		}
+		});
 	}
 
 	onChangeName(event){

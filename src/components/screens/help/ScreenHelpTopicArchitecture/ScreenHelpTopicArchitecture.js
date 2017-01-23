@@ -48,9 +48,7 @@ class ScreenHelpTopicArchitecture extends PantherComponent {
 
 					<h3>Integrated data sources</h3>
 
-					<p><b>GeoNode</b> is used for source data management, including permission management </p>
-
-					<p><b>GeoServer</b> is used for style management </p>
+					<p><b>GeoNode</b> is used for source data management, including permission management towards data sources.</p>
 
 				</div></div>
 			</div>

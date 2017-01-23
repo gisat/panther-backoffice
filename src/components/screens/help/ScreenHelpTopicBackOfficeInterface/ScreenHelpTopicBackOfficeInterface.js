@@ -123,6 +123,17 @@ class ScreenHelpTopicBackOfficeInterface extends PantherComponent {
 						<p>Manage all metadata structures in Back Office.</p>
 					</div>
 
+					<div className="help-bo-section">
+						<div className="help-bo-section-icon">
+							<UISVG
+								src='users.isvg'
+								className="positive medium"
+							/>
+						</div>
+						<h3>Permissions</h3>
+						<p>It manages groups, users and their permissions towards different metadata resources in the platform.</p>
+					</div>
+
 
 					<div className="section-header">
 						<h3>Controls</h3>

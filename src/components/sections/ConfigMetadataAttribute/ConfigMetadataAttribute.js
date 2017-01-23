@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import ControllerComponent from '../../common/ControllerComponent';
-import ActionCreator from '../../../actions/ActionCreator';
+import config from '../../../config';
 import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
 import _ from 'underscore';
@@ -9,6 +9,7 @@ import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 import ScopeModel from '../../../models/ScopeModel';
 import AttributeModel from '../../../models/AttributeModel';
 import AttributeStore from '../../../stores/AttributeStore';
+import ActionCreator from '../../../actions/ActionCreator';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
@@ -20,17 +21,21 @@ import ConfigControls from '../../atoms/ConfigControls';
 import OptionStandardUnits from '../../atoms/UICustomSelect/OptionStandardUnits';
 import SingleValueStandardUnits from '../../atoms/UICustomSelect/SingleValueStandardUnits';
 
+let modelConfig = _.assign({}, config.models.common, config.models.ATTRIBUTE);
+
 
 var initialState = {
 	valueActive: false,
 	valueName: "",
-	//valueCode: "",
 	//valueType: [],
 	valueType: "",
 	valueUnitsStandard: "",
 	valueUnitsCustom: "",
 	valueColor: ""
 };
+if (modelConfig.code) {
+	initialState.valueCode = "";
+}
 
 
 class ConfigMetadataAttribute extends ControllerComponent {
@@ -73,12 +78,14 @@ class ConfigMetadataAttribute extends ControllerComponent {
 				nextState = {
 					valueActive: attribute.active,
 					valueName: attribute.name,
-					//valueCode: attribute.code,
 					valueType: attribute.type,
 					valueUnitsStandard: attribute.standardUnits,
 					valueUnitsCustom: attribute.customUnits,
 					valueColor: attribute.color
 				};
+				if (modelConfig.code) {
+					nextState.valueCode = attribute.code;
+				}
 			}
 		}
 		return nextState;
@@ -109,7 +116,9 @@ class ConfigMetadataAttribute extends ControllerComponent {
 		_.assign(modelData, attribute);
 		modelData.active = this.state.current.valueActive;
 		modelData.name = this.state.current.valueName;
-		//modelData.code = this.state.valueCode;
+		if (modelConfig.code) {
+			modelData.code = this.state.current.valueCode;
+		}
 		modelData.type = this.state.current.valueType;
 		modelData.standardUnits = this.state.current.valueUnitsStandard;
 		modelData.customUnits = this.state.current.valueUnitsCustom;
@@ -228,8 +237,36 @@ class ConfigMetadataAttribute extends ControllerComponent {
 				key: "km2",
 				name: "km2",
 				nameToSquare: "km"
+			},
+			{
+				key: "ha",
+				name: "ha"
 			}
 		];
+
+			let codeField = null;
+			if (modelConfig.code) {
+				codeField = (
+					<div
+						className="frame-input-wrapper"
+						key="extended-fields-code"
+					>
+						<label className="container">
+							Code
+							<Input
+								type="text"
+								name="serverName"
+								placeholder=" "
+								value={this.state.current.valueCode}
+								onChange={this.onChangeCode.bind(this)}
+							/>
+						</label>
+						<div className="frame-input-wrapper-info">
+
+						</div>
+					</div>
+				);
+			}
 
 		ret = (
 			<div>
@@ -247,21 +284,7 @@ class ConfigMetadataAttribute extends ControllerComponent {
 					</label>
 				</div>
 
-				{/*<div className="frame-input-wrapper">
-					<label className="container">
-						Code
-						<Input
-							type="text"
-							name="serverName"
-							placeholder=" "
-							value={this.state.valueCode}
-							onChange={this.onChangeCode.bind(this)}
-						/>
-					</label>
-					<div className="frame-input-wrapper-info">
-
-					</div>
-				</div>*/}
+				{codeField}
 
 				<div className="frame-input-wrapper required">
 					<label className="container">

@@ -149,29 +149,27 @@ class ScreenController extends PantherComponent {
 	getStateFromStores(map, limitKeys) {
 		logger.info(this.constructor.name + ":ScreenController# getStateFromStores(), Data: ", map, ", limited to keys:", limitKeys);
 
-		return new Promise ( function (resolve, reject) {
-			var setAll = false;
-			if(!limitKeys){
-				limitKeys = [];
-				setAll = true;
+		var setAll = false;
+		if(!limitKeys){
+			limitKeys = [];
+			setAll = true;
+		}
+		var loads = [];
+		var keys = [];
+		for(var key in map){
+			if(map.hasOwnProperty(key) && (setAll || (limitKeys.indexOf(key)!=-1))) {
+				loads.push(map[key]()); //execute the functions here, not earlier (so only those needed are run)
+				keys.push(key);
 			}
-			var loads = [];
-			var keys = [];
-			for(var key in map){
-				if(map.hasOwnProperty(key) && (setAll || (limitKeys.indexOf(key)!=-1))) {
-					loads.push(map[key]()); //execute the functions here, not earlier (so only those needed are run)
-					keys.push(key);
+		}
+		return Promise.all(loads).then(function(data){
+			var ret = {};
+			for(var i in keys){
+				if (keys.hasOwnProperty(i)) {
+					ret[keys[i]] = data[i];
 				}
 			}
-			Promise.all(loads).then(function(data){
-				var ret = {};
-				for(var i in keys){
-					if (keys.hasOwnProperty(i)) {
-						ret[keys[i]] = data[i];
-					}
-				}
-				resolve(ret);
-			});
+			return ret;
 		});
 	}
 
