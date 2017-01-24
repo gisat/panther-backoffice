@@ -1,0 +1,6 @@
+{
+	"name": "ScreenLayersObjectController",
+	"version": "0.0.1",
+	"private": true,
+	"main": "./ScreenLayersObjectController.js"
+}

@@ -1,32 +1,27 @@
 import React, { PropTypes, Component } from 'react';
-import ControllerComponent from '../../common/ControllerComponent';
+import ControllerComponent from '../../../../components/common/ControllerComponent';
 
-import withStyles from '../../../decorators/withStyles';
-import styles from './ScreenPermissionsObjectController.css';
+import withStyles from '../../../../decorators/withStyles';
+import styles from './ScreenLayersObjectController.css';
 
-import utils from '../../../utils/utils';
+import utils from '../../../../utils/utils';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
-import LayerObjectTypes from '../../../layers/constants/ObjectTypes';
+import LayerObjectTypes from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 
-import SelectorMetadataObject from '../../sections/SelectorMetadataObject';
+import SelectorMetadataObject from '../../../../components/sections/SelectorMetadataObject';
 
-import ConfigPermissionsUser from '../../sections/ConfigPermissionsUser';
-import ConfigPermissionsPlace from '../../sections/ConfigPermissionsPlace';
-import ConfigPermissionsTopic from '../../sections/ConfigPermissionsTopic';
-import ConfigPermissionsScope from '../../sections/ConfigPermissionsScope';
-import ConfigPermissionsGroup from '../../sections/ConfigPermissionsGroup';
-import ConfigPermissionsGeonodeLayer from '../../sections/ConfigPermissionsGeonodeLayers';
-import ConfigPermissionsWmsLayer from '../../sections/ConfigPermissionsWmsLayers';
+import ConfigGeonodeLayer from '../../sections/ConfigGeonodeLayer';
+import ConfigWmsLayer from '../../sections/ConfigWmsLayer';
 
-import logger from '../../../core/Logger';
+import logger from '../../../../core/Logger';
 
 let initialState = {
 	selectorValue: null
 };
 
 @withStyles(styles)
-class ScreenPermissionsObjectController extends ControllerComponent {
+class ScreenLayersObjectController extends ControllerComponent {
 	constructor(props) {
 		super(props);
 		this.state.ui = _.assign(this.state.ui, utils.deepClone(initialState));
@@ -117,33 +112,13 @@ class ScreenPermissionsObjectController extends ControllerComponent {
 				screenKey: this.props.screenKey
 			};
 			switch (this.props.data.objectType) {
-				case ObjectTypes.SCOPE:
-					configComponent = <ConfigPermissionsScope {...props} />;
-					selectorData = this.props.store.scopes;
+				case ObjectTypes.GEONODE_LAYER:
+					configComponent = <ConfigGeonodeLayer {...props} />;
+					selectorData = this.props.store.geonode;
 					break;
-				case ObjectTypes.PLACE:
-					configComponent = <ConfigPermissionsPlace {...props} />;
-					selectorData = this.props.store.places;
-					break;
-				case ObjectTypes.TOPIC:
-					configComponent = <ConfigPermissionsTopic {...props} />;
-					selectorData = this.props.store.topics;
-					break;
-				case LayerObjectTypes.GEONODE_LAYER:
-					configComponent = <ConfigPermissionsGeonodeLayer {...props} />;
-					selectorData = this.props.store.groups;
-					break;
-				case LayerObjectTypes.WMS_LAYER:
-					configComponent = <ConfigPermissionsWmsLayer {...props} />;
-					selectorData = this.props.store.groups;
-					break;
-				case ObjectTypes.USER:
-					configComponent = <ConfigPermissionsUser {...props} />;
-					selectorData = this.props.store.users;
-					break;
-				case ObjectTypes.GROUP:
-					configComponent = <ConfigPermissionsGroup {...props} />;
-					selectorData = this.props.store.groups;
+				case ObjectTypes.WMS_LAYER:
+					configComponent = <ConfigWmsLayer {...props} />;
+					selectorData = this.props.store.wms;
 					break;
 			}
 
@@ -173,4 +148,4 @@ class ScreenPermissionsObjectController extends ControllerComponent {
 	}
 }
 
-export default ScreenPermissionsObjectController;
+export default ScreenLayersObjectController;

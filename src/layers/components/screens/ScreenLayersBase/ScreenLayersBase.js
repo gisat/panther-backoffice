@@ -1,18 +1,21 @@
 import React, { PropTypes, Component } from 'react';
-import ScreenController from '../../common/ScreenController';
+import ScreenController from '../../../../components/common/ScreenController';
 
-import withStyle from '../../../decorators/withStyles';
+import withStyle from '../../../../decorators/withStyles';
 import styles from './ScreenLayersBase.css';
 
-import utils from '../../../utils/utils';
+import utils from '../../../../utils/utils';
 
 import WmsStore from '../../../stores/WmsStore';
 import GeonodeStore from '../../../stores/GeonodeStore';
+import ScopeStore from '../../../../stores/ScopeStore';
+import PlaceStore from '../../../../stores/PlaceStore';
+import PeriodStore from '../../../../stores/PeriodStore';
 
 import ScreenLayersBaseController from '../ScreenLayersBaseController';
 
 @withStyle(styles)
-class ScreenPermissionsBase extends ScreenController {
+class ScreenLayersBase extends ScreenController {
 	static propTypes = {
 		disabled: PropTypes.bool,
 		screenKey: PropTypes.string.isRequired
@@ -29,6 +32,9 @@ class ScreenPermissionsBase extends ScreenController {
 
 	_getStoreLoads(){
 		return {
+			periods: this._load(PeriodStore),
+			scopes: this._load(ScopeStore),
+			places: this._load(PlaceStore),
 			geonode: this._load(GeonodeStore),
 			wms: this._load(WmsStore)
 		}
@@ -58,4 +64,4 @@ class ScreenPermissionsBase extends ScreenController {
 	}
 }
 
-export default ScreenPermissionsBase;
+export default ScreenLayersBase;

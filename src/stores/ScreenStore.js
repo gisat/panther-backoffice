@@ -4,6 +4,7 @@ import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
 import utils from '../utils/utils';
 
+import logger from '../core/Logger';
 import _ from 'underscore';
 import ga from 'react-ga';
 
@@ -18,7 +19,8 @@ import ScreenMetadataBase from '../components/screens/ScreenMetadataBase';
 import ScreenPlacesBase from '../components/screens/ScreenPlacesBase';
 
 import ScreenPermissionsBase from '../components/screens/ScreenPermissionsBase';
-import logger from '../core/Logger';
+
+import ScreenLayersBase from '../layers/components/screens/ScreenLayersBase';
 
 var initialScreenSets = {
 	analyses: {
@@ -28,25 +30,7 @@ var initialScreenSets = {
 			ScreenAnalysesBase: {
 				order: 0,
 				component: ScreenAnalysesBase
-			},
-			// ScreenAnalysisRulesSpatial: {
-			// 	order: 2,
-			// 	size: 80,
-			// 	position: "retracted",
-			// 	component: ScreenAnalysisRulesSpatial
-			// },
-			// ScreenAnalysisRulesLevel: {
-			// 	order: 3,
-			// 	size: 60,
-			// 	position: "retracted",
-			// 	component: ScreenAnalysisRulesLevel
-			// },
-			// ScreenAnalysisRulesMath: {
-			// 	order: 4,
-			// 	size: 80,
-			// 	position: "retracted",
-			// 	component: ScreenAnalysisRulesMath
-			// }
+			}
 		}
 	},
 
@@ -102,6 +86,17 @@ var initialScreenSets = {
 			ScreenPermissionsBase: {
 				order: 0,
 				component: ScreenPermissionsBase
+			}
+		}
+	},
+
+	layers: {
+		title: "Layers",
+		hasMaximized: false,
+		screens: {
+			ScreenLayersBase: {
+				order: 0,
+				component: ScreenLayersBase
 			}
 		}
 	}

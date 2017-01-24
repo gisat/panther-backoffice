@@ -6,12 +6,15 @@ import styles from './ScreenPermissionsObject.css';
 
 import utils from '../../../utils/utils';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
+import LayerObjectTypes from '../../../layers/constants/ObjectTypes';
 
 import UserStore from '../../../stores/UserStore';
 import GroupStore from '../../../stores/GroupStore';
 import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
 import TopicStore from '../../../stores/TopicStore';
+import GeonodeStore from '../../../layers/stores/GeonodeStore';
+import WmsStore from '../../../layers/stores/WmsStore';
 
 import ScreenPermissionsObjectController from '../ScreenPermissionsObjectController';
 
@@ -56,6 +59,20 @@ class ScreenPermissionsObject extends ScreenController {
 					places: this._load(PlaceStore),
 					scopes: this._load(ScopeStore),
 					users: this._load(UserStore)
+				};
+				break;
+			case LayerObjectTypes.GEONODE_LAYER:
+				storeloads = {
+					layers: this._load(GeonodeStore),
+					users: this._load(UserStore),
+					groups: this._load(GroupStore)
+				};
+				break;
+			case LayerObjectTypes.WMS_LAYER:
+				storeloads = {
+					layers: this._load(WmsStore),
+					users: this._load(UserStore),
+					groups: this._load(GroupStore)
 				};
 				break;
 		}

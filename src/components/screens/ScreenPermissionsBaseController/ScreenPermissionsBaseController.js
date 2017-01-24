@@ -6,12 +6,15 @@ import utils from '../../../utils/utils';
 
 import ControllerComponent from '../../common/ControllerComponent';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
+import LayerObjectTypes from '../../../layers/constants/ObjectTypes';
 
 import UserStore from '../../../stores/UserStore';
 import GroupStore from '../../../stores/GroupStore';
 import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
 import TopicStore from '../../../stores/TopicStore';
+import GeonodeStore from '../../../layers/stores/GeonodeStore';
+import WmsStore from '../../../layers/stores/WmsStore';
 
 import ActionCreator from '../../../actions/ActionCreator';
 import ObjectList from '../../elements/ObjectList';
@@ -40,6 +43,8 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 			{data: "places", dataType: ObjectTypes.PLACE, allowAdd: false},
 			{data: "scopes", dataType: ObjectTypes.SCOPE, allowAdd: false},
 			{data: "topics", dataType: ObjectTypes.TOPIC, allowAdd: false},
+			{data: "geonode_layers", dataType: LayerObjectTypes.GEONODE_LAYER, allowAdd: false},
+			{data: "wms_layers", dataType: LayerObjectTypes.WMS_LAYER, allowAdd: false},
 			{data: "users", dataType: ObjectTypes.USER, allowAdd: false},
 			{data: "groups", dataType: ObjectTypes.GROUP, allowAdd: true}
 		];
@@ -62,6 +67,8 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 		this.responseListener.add(TopicStore);
 		this.responseListener.add(UserStore);
 		this.responseListener.add(GroupStore);
+		this.responseListener.add(GeonodeStore);
+		this.responseListener.add(WmsStore);
 	}
 
 	onChangeActive(value) {
