@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import _ from 'underscore';
 import Select from 'react-select';
@@ -26,11 +26,13 @@ class ConfigDataLayerAnalytical extends PantherComponent{
 		destinations: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 		valueLevel: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valueScope: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+		valuesPeriods: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		valuesPlaces: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 		columnMap: React.PropTypes.object.isRequired,
 		onChangeLevel: React.PropTypes.func.isRequired,
 		onChangeScope: React.PropTypes.func.isRequired,
 		onChangePlaces: React.PropTypes.func.isRequired,
+		onChangePeriods: React.PropTypes.func.isRequired,
 		onObjectClick: React.PropTypes.func.isRequired,
 		onChangeColumnTableDestination: React.PropTypes.func,
 		onChangeColumnTablePeriods: React.PropTypes.func
@@ -128,6 +130,22 @@ class ConfigDataLayerAnalytical extends PantherComponent{
 							valueKey="key"
 							labelKey="name"
 							value={this.props.valueLevel}
+						/>
+					</label>
+				</div>
+
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Period
+						<UIObjectSelect
+							onChange={this.props.onChangePeriods}
+							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PERIOD)}
+							options={this.props.periods}
+							allowCreate
+							newOptionCreator={utils.keyNameOptionFactory}
+							valueKey="key"
+							labelKey="name"
+							value={this.props.valuesPeriods}
 						/>
 					</label>
 				</div>
