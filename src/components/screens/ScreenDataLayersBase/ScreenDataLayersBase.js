@@ -53,14 +53,15 @@ class ScreenDataLayersBase extends ScreenController {
 
 	_getStoreLoads() {
 		let selectorValue = this.state.selectorValue;
+		let layerToFilter;
 		if(this.state.store.dataLayers) {
-			let layerToFilter = this.state.store.dataLayers.filter(dataLayer => dataLayer.key == this.state.selectorValue);
+			layerToFilter = this.state.store.dataLayers.filter(dataLayer => dataLayer.key == this.state.selectorValue);
 		}
 		return {
 			dataLayers: this._load(DataLayerStore),
 			dataLayer: this._loadWhere(DataLayerStore,{key: selectorValue}),
-			relations: this._loadWhere(ObjectRelationStore,{dataSourceString: layerToFilter.path}),
-			dataLayerColumns: function(){return DataLayerColumnsStore.getByDataSource(selectorValue)},
+			relations: this._loadWhere(ObjectRelationStore,{dataSourceString: selectorValue}),
+			dataLayerColumns: function(){return DataLayerColumnsStore.getByDataSource(layerToFilter && layerToFilter.path || selectorValue)},
 			scopes: this._load(ScopeStore),
 			places: this._load(PlaceStore),
 			vectorLayerTemplates: this._load(VectorLayerStore),
