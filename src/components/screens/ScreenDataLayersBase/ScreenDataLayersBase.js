@@ -53,7 +53,7 @@ class ScreenDataLayersBase extends ScreenController {
 
 	_getStoreLoads() {
 		let selectorValue = this.state.selectorValue;
-		let layerToFilter;
+		let layerToFilter = [];
 		if(this.state.store.dataLayers) {
 			layerToFilter = this.state.store.dataLayers.filter(dataLayer => dataLayer.key == this.state.selectorValue);
 		}
