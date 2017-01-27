@@ -171,12 +171,12 @@ class ObjectRelationModel extends Model {
 		};
 	}
 
-	transformDataSourceForLocal (data) {
+	transformDataSourceForLocal (data, serverObject) {
 		if (~data.indexOf("analysis:")) {
 			let id = data.split("_")[1];
 			return AnalysisRunStore.getById(id); // todo process an_analysisRunId_auLevel
 		} else {
-			return DataLayerStore.getById(data)
+			return DataLayerStore.getById(serverObject.path)
 		}
 	}
 
