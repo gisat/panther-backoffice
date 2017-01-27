@@ -116,9 +116,6 @@ class UserStore extends Store {
 					return null;
 				}
 
-				this.loginListeners.forEach((listener) => {
-					listener(logged);
-				});
 				return logged;
 			}).catch(error => {
 				logger.error('UserStore#login Error: ', error);
@@ -138,6 +135,9 @@ class UserStore extends Store {
 					return null;
 				}
 				this.logged = new UserModel(null, response.body);
+				this.loginListeners.forEach((listener) => {
+					listener(logged);
+				});
 				return this.logged;
 			});
 	}
