@@ -262,7 +262,12 @@ class ConfigDataLayer extends ControllerComponent {
 			logger.trace("ConfigDataLayer# relations2state(): Relations", relations);
 			ret.layerType = relations[0].layerObject.layerType;
 			var values = {};
-			relations.map(function(relation){
+			relations.map((relation) => {
+				// If data source name is set then filter on it.
+				if(relation.dataSourceName && relation.dataSourceName  != this.props.selectorValue) {
+					return;
+				}
+
 				if (relation.layerObject){
 					values.template = [relation.layerObject.key];
 				}
@@ -407,6 +412,7 @@ class ConfigDataLayer extends ControllerComponent {
 						// Possibly take a look at the usage of Number.
 						let object = {
 							dataSource: _.findWhere(thisComponent.props.store.dataLayers, {key: thisComponent.props.selectorValue}),
+							dataSourceName: _.findWhere(thisComponent.props.store.dataLayers, {key: thisComponent.props.selectorValue}).name,
 							place: _.findWhere(thisComponent.props.store.places, {key: placeValue}),
 							period: _.findWhere(thisComponent.props.store.periods, {key: periodValue})
 						};
@@ -498,6 +504,7 @@ class ConfigDataLayer extends ControllerComponent {
 								// does not exist -> create
 								let object = {
 									dataSource: _.findWhere(thisComponent.props.store.dataLayers, {key: thisComponent.props.selectorValue}),
+									dataSourceName: _.findWhere(thisComponent.props.store.dataLayers, {key: thisComponent.props.selectorValue}).name,
 									place: _.findWhere(thisComponent.props.store.places, {key: placeValue}),
 									period: _.findWhere(thisComponent.props.store.periods, {key: periodValue}),
 									columnMap: columnMap,

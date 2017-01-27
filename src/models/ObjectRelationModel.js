@@ -94,6 +94,10 @@ class ObjectRelationModel extends Model {
 				serverName: 'layer', //id
 				sendToServer: false //temp local value only, until we can filter by nested key/value + backup of dataSource (when that gets nullified)
 			},
+			dataSourceName: {
+				serverName: 'layerName',
+				sendToServer: true
+			},
 			dataSourceOrigin: {
 				serverName: 'dataSourceOrigin', // geonode / analyses / future whatever
 				sendToServer: true,
