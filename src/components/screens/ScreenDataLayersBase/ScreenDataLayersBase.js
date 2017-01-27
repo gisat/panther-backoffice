@@ -61,8 +61,6 @@ class ScreenDataLayersBase extends ScreenController {
 			dataLayers: this._load(DataLayerStore),
 			dataLayer: this._loadWhere(DataLayerStore,{key: selectorValue}),
 			relations: this._loadWhere(ObjectRelationStore,{dataSourceString: selectorValue}),
-			relationsForName: this._loadWhere(ObjectRelationStore, {dataSourceName: selectorValue}),
-			allRelations: this._load(ObjectRelationStore),
 			dataLayerColumns: function(){return DataLayerColumnsStore.getByDataSource(layerToFilter.length && layerToFilter[0] && layerToFilter[0].path || selectorValue)},
 			scopes: this._load(ScopeStore),
 			places: this._load(PlaceStore),

@@ -106,7 +106,7 @@ class ConfigDataLayer extends ControllerComponent {
 		if (!props) {
 			props = this.props;
 		}
-		let relations2state = this.relations2state(props.store.relations, props.store.relationsForName, props.store.allRelations);
+		let relations2state = this.relations2state(props.store.relations);
 		let columnMap = this.columns2state(relations2state.layerType, props.store.dataLayerColumns, props.store.relations);
 		return {
 			layerType: relations2state.layerType,
@@ -250,7 +250,7 @@ class ConfigDataLayer extends ControllerComponent {
 	 * @param relations
 	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
 	 */
-	relations2state(relations, relationsForName, allRelations) {
+	relations2state(relations) {
 		let ret = {
 			layerType: null,
 			valueTemplate: [],
@@ -261,15 +261,8 @@ class ConfigDataLayer extends ControllerComponent {
 		if(relations.length > 0) {
 			logger.trace("ConfigDataLayer# relations2state(): Relations", relations);
 			ret.layerType = relations[0].layerObject.layerType;
-			var values = {}
-			allRelations.map((relation) => {
-				// If data source name is set then filter on it. Also take into account dataSourceString.
-				if(relation.dataSourceName && relation.dataSourceName != this.props.selectorValue) {
-					return;
-				} else if(relation.dataSourceString != this.props.selectorValue) {
-					return;
-				}
-
+			var values = {};
+			relations.map(function(relation){
 				if (relation.layerObject){
 					values.template = [relation.layerObject.key];
 				}
@@ -414,7 +407,6 @@ class ConfigDataLayer extends ControllerComponent {
 						// Possibly take a look at the usage of Number.
 						let object = {
 							dataSource: _.findWhere(thisComponent.props.store.dataLayers, {key: thisComponent.props.selectorValue}),
-							dataSourceName: _.findWhere(thisComponent.props.store.dataLayers, {key: thisComponent.props.selectorValue}).name,
 							place: _.findWhere(thisComponent.props.store.places, {key: placeValue}),
 							period: _.findWhere(thisComponent.props.store.periods, {key: periodValue})
 						};
@@ -506,7 +498,6 @@ class ConfigDataLayer extends ControllerComponent {
 								// does not exist -> create
 								let object = {
 									dataSource: _.findWhere(thisComponent.props.store.dataLayers, {key: thisComponent.props.selectorValue}),
-									dataSourceName: _.findWhere(thisComponent.props.store.dataLayers, {key: thisComponent.props.selectorValue}).name,
 									place: _.findWhere(thisComponent.props.store.places, {key: placeValue}),
 									period: _.findWhere(thisComponent.props.store.periods, {key: periodValue}),
 									columnMap: columnMap,

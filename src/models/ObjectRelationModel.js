@@ -94,10 +94,6 @@ class ObjectRelationModel extends Model {
 				serverName: 'layer', //id
 				sendToServer: false //temp local value only, until we can filter by nested key/value + backup of dataSource (when that gets nullified)
 			},
-			dataSourceName: {
-				serverName: 'layerName',
-				sendToServer: true
-			},
 			dataSourceOrigin: {
 				serverName: 'dataSourceOrigin', // geonode / analyses / future whatever
 				sendToServer: true,
@@ -175,18 +171,18 @@ class ObjectRelationModel extends Model {
 		};
 	}
 
-	transformDataSourceForLocal (data, serverObject) {
+	transformDataSourceForLocal (data) {
 		if (~data.indexOf("analysis:")) {
 			let id = data.split("_")[1];
 			return AnalysisRunStore.getById(id); // todo process an_analysisRunId_auLevel
 		} else {
-			return DataLayerStore.getById(serverObject.path)
+			return DataLayerStore.getById(data)
 		}
 	}
 
 	transformDataSourceForServer (model, relationModel) {
 		if (model instanceof DataLayerModel) {
-			return model && model.path || null;
+			return this.getKey(model);
 		} else {
 			return relationModel.dataSourceString;
 		}
