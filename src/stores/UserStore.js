@@ -131,8 +131,7 @@ class UserStore extends Store {
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then((response) => {
-				console.log(response);
-				if (response.status == 404) {
+				if (response.body._id == 0) {
 					return null;
 				}
 				this.logged = new UserModel(null, response.body);
