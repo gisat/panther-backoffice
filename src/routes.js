@@ -23,11 +23,13 @@ const router = new Router(on => {
 
 	on('*', async (state, next) => {
 		if(!UserStore.loggedIn()){
-			return <LoginPage />
-		} else {
-			const component = await next();
-			return component;
+			let logged = await UserStore.getLogged();
+			if(!logged) {
+				return <LoginPage />
+			}
 		}
+
+		return await next();
 	});
 
 	hookRoute(on, '/', async () => <Page screenSet="dashboard" />);

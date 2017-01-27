@@ -5,7 +5,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
 import logger from '../core/Logger';
-import { apiProtocol, apiHost, apiPath } from '../config';
+import {apiProtocol, apiHost, apiPath} from '../config';
 import Store from './Store';
 import UserModel from '../models/UserModel';
 
@@ -27,8 +27,8 @@ class UserStore extends Store {
 		return apiProtocol + apiHost + path.join(apiPath, serverPath).replace(/\\/g, "/");
 	}
 
-	load(operationId){
-		if(!this.cache) {
+	load(operationId) {
+		if (!this.cache) {
 			return this.reload(operationId);
 		} else {
 			return Promise.resolve(this.cache);
@@ -50,14 +50,19 @@ class UserStore extends Store {
 				return this.cache;
 			}).catch(err => {
 				this.emitError(err, operationId);
-				logger.error('UserStore#reload Error: ',err);
+				logger.error('UserStore#reload Error: ', err);
 			});
 	}
 
 	addPermission(userId, permission, operationId) {
 		return superagent
 			.post(this.permissionUserUrl)
-			.send({userId: userId, resourceType: permission.resourceType, resourceId: permission.resourceId, permission: permission.permission})
+			.send({
+				userId: userId,
+				resourceType: permission.resourceType,
+				resourceId: permission.resourceId,
+				permission: permission.permission
+			})
 			.withCredentials()
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Origin', 'true')
@@ -67,14 +72,19 @@ class UserStore extends Store {
 				return this.reload(operationId);
 			}).catch(err => {
 				this.emitError(err, operationId);
-				logger.error('UserStore#reload Error: ',err);
+				logger.error('UserStore#reload Error: ', err);
 			});
 	}
 
 	removePermission(userId, permission, operationId) {
 		return superagent
 			.delete(this.permissionUserUrl)
-			.send({userId: userId, resourceType: permission.resourceType, resourceId: permission.resourceId, permission: permission.permission})
+			.send({
+				userId: userId,
+				resourceType: permission.resourceType,
+				resourceId: permission.resourceId,
+				permission: permission.permission
+			})
 			.withCredentials()
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Origin', 'true')
@@ -84,7 +94,7 @@ class UserStore extends Store {
 				return this.reload(operationId);
 			}).catch(err => {
 				this.emitError(err, operationId);
-				logger.error('UserStore#reload Error: ',err);
+				logger.error('UserStore#reload Error: ', err);
 			});
 	}
 
@@ -100,23 +110,36 @@ class UserStore extends Store {
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(() => {
-				return superagent
-					.get(this.urlFor('/rest/logged'))
-					.withCredentials()
-					.set('Access-Control-Allow-Origin', 'true')
-					.set('Accept', 'application/json')
-					.set('Access-Control-Allow-Credentials', 'true');
-			}).then((response) => {
-				this.logged = new UserModel(null, response.body);
+				return this.getLogged();
+			}).then(logged => {
+				if(logged == null) {
+					return null;
+				}
+
 				this.loginListeners.forEach((listener) => {
-					listener(this.logged);
+					listener(logged);
 				});
-				// TODO: Store in cookie.
-				return this.logged;
-		}).catch(error => {
-			logger.error('UserStore#login Error: ', error);
-			this.emitError(error, operationId);
+				return logged;
+			}).catch(error => {
+				logger.error('UserStore#login Error: ', error);
+				this.emitError(error, operationId);
 			})
+	}
+
+	async getLogged() {
+		return superagent
+			.get(this.urlFor('/rest/logged'))
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then((response) => {
+				if (response.status == 404) {
+					return null;
+				}
+				this.logged = new UserModel(null, response.body);
+				return this.logged;
+			});
 	}
 
 	byId(id) {
@@ -149,10 +172,11 @@ class UserStore extends Store {
 		this.responseListeners.push(responseFunction);
 	}
 }
+
 let storeInstance = new UserStore();
 
 storeInstance.dispatchToken = AppDispatcher.register(action => {
-	switch(action.type) {
+	switch (action.type) {
 		case ActionTypes.USER_LOAD:
 			storeInstance.load(action.data.operationId);
 			break;
