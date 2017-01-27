@@ -22,8 +22,10 @@ const router = new Router(on => {
 	hookRoute(on, '/login', async () => <LoginPage />);
 
 	on('*', async (state, next) => {
+		console.log(UserStore.loggedIn());
 		if(!UserStore.loggedIn()){
 			let logged = await UserStore.getLogged();
+			console.log(logged);
 			if(!logged) {
 				return <LoginPage />
 			}
