@@ -182,7 +182,7 @@ class ObjectRelationModel extends Model {
 
 	transformDataSourceForServer (model, relationModel) {
 		if (model instanceof DataLayerModel) {
-			return this.getKey(model);
+			return model && model.path || null;
 		} else {
 			return relationModel.dataSourceString;
 		}
