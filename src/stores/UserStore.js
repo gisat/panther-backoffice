@@ -131,6 +131,7 @@ class UserStore extends Store {
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then((response) => {
+				console.log(response);
 				if (response.status == 404) {
 					return null;
 				}
