@@ -136,7 +136,7 @@ class UserStore extends Store {
 				}
 				this.logged = new UserModel(null, response.body);
 				this.loginListeners.forEach((listener) => {
-					listener(logged);
+					listener(this.logged);
 				});
 				return this.logged;
 			});
