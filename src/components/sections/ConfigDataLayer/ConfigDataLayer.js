@@ -106,7 +106,7 @@ class ConfigDataLayer extends ControllerComponent {
 		if (!props) {
 			props = this.props;
 		}
-		let relations2state = this.relations2state(props.store.relations, props.store.relationsForName);
+		let relations2state = this.relations2state(props.store.relations, props.store.relationsForName, props.store.allRelations);
 		let columnMap = this.columns2state(relations2state.layerType, props.store.dataLayerColumns, props.store.relations);
 		return {
 			layerType: relations2state.layerType,
@@ -250,7 +250,7 @@ class ConfigDataLayer extends ControllerComponent {
 	 * @param relations
 	 * @returns {{layerType: (null|*|layerType|{serverName}|{serverName, transformForLocal})}}
 	 */
-	relations2state(relations, relationsForName) {
+	relations2state(relations, relationsForName, allRelations) {
 		let ret = {
 			layerType: null,
 			valueTemplate: [],
@@ -261,30 +261,12 @@ class ConfigDataLayer extends ControllerComponent {
 		if(relations.length > 0) {
 			logger.trace("ConfigDataLayer# relations2state(): Relations", relations);
 			ret.layerType = relations[0].layerObject.layerType;
-			var values = {};
-			relations.map((relation) => {
-				// If data source name is set then filter on it.
-				if(relation.dataSourceName && relation.dataSourceName  != this.props.selectorValue) {
+			var values = {}
+			allRelations.map((relation) => {
+				// If data source name is set then filter on it. Also take into account dataSourceString.
+				if(relation.dataSourceName && relation.dataSourceName != this.props.selectorValue) {
 					return;
-				}
-
-				if (relation.layerObject){
-					values.template = [relation.layerObject.key];
-				}
-				if (relation.place){
-					if (relation.place.scope){
-						values.scope = [relation.place.scope.key];
-					}
-					values.places = _.union(values.places,[relation.place.key]);
-				}
-				if (relation.period){
-					values.periods = _.union(values.periods,[relation.period.key]);
-				}
-			});
-
-			relationsForName.map(relation => {
-				// If data source name is set then filter on it.
-				if(relation.dataSourceName && relation.dataSourceName  != this.props.selectorValue) {
+				} else if(relation.dataSourceString != this.props.selectorValue) {
 					return;
 				}
 
