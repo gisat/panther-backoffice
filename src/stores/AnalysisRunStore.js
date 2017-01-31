@@ -20,7 +20,7 @@ class AnalysisRunStore extends ApiStore {
 	}
 
 	getCreateApiUrl() {
-		return "/api/analysis/create";
+		return "/rest/run/analysis";
 	}
 
 	registerListeners(){
