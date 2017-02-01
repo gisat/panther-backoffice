@@ -55,7 +55,7 @@ class GroupModel extends Model {
 				serverName: 'users',
 				sendToServer: false,
 				transformForLocal: function(data) {
-					return data.map(id => UserStore.getById(id));
+					return (data && data.map(id => UserStore.getById(id))) || [];
 				}
 			}
 		}
