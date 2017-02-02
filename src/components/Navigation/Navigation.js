@@ -103,9 +103,19 @@ class Navigation extends PantherComponent {
 								href={publicPath + "/permissions"}
 								onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
-								className={this.props.activeScreenSet == "users" ? "current" : ""}
+								className={this.props.activeScreenSet == "permissions" ? "current" : ""}
 							>
 								<UISVG src='users.isvg' />
+							</a>
+						</li>
+						<li>
+							<a
+								href={publicPath + "/layers"}
+								onClick={this.onLinkClick.bind(this)}
+								tabIndex="-1"
+								className={this.props.activeScreenSet == "layers" ? "current" : ""}
+							>
+								<UISVG src='icon-datalayers.isvg' />
 							</a>
 						</li>
 					</ul>

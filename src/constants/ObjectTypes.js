@@ -17,6 +17,8 @@ import AnalysisModel from '../models/AnalysisModel';
 import AnalysisRunModel from '../models/AnalysisRunModel';
 import GroupModel from '../models/GroupModel';
 import UserModel from '../models/UserModel';
+import GeonodeLayerModel from '../layers/models/GeonodeLayerModel';
+import WmsLayerModel from '../layers/models/WmsLayerModel';
 
 import ScopeStore from '../stores/ScopeStore';
 import PlaceStore from '../stores/PlaceStore';
@@ -36,6 +38,8 @@ import AnalysisStore from '../stores/AnalysisStore';
 import AnalysisRunStore from '../stores/AnalysisRunStore';
 import GroupStore from '../stores/GroupStore';
 import UserStore from '../stores/UserStore';
+import GeonodeStore from '../layers/stores/GeonodeStore';
+import WmsStore from '../layers/stores/WmsStore';
 
 export const Store = {
 	SCOPE: ScopeStore,
@@ -58,7 +62,9 @@ export const Store = {
 	ANALYSIS_MATH: AnalysisStore,
 	ANALYSIS_RUN: AnalysisRunStore,
 	GROUP: GroupStore,
-	USER: UserStore
+	USER: UserStore,
+	GEONODE_LAYER: GeonodeStore,
+	WMS_LAYER: WmsStore
 };
 
 export const Model = {
@@ -82,7 +88,9 @@ export const Model = {
 	ANALYSIS_MATH: AnalysisModel,
 	ANALYSIS_RUN: AnalysisRunModel,
 	GROUP: GroupModel,
-	USER: UserModel
+	USER: UserModel,
+	GEONODE_LAYER: GeonodeLayerModel,
+	WMS_LAYER: WmsLayerModel
 };
 
 export default keyMirror(Model);
@@ -176,5 +184,13 @@ export const objectTypesMetadata = {
 	GROUP: {
 		name: "Group",
 		url: "group"
+	},
+	GEONODE_LAYER: {
+		name: "Geonode Layer",
+		url: 'geonode_layer'
+	},
+	WMS_LAYER: {
+		name: "WMS Layer",
+		url: 'wms_layer'
 	}
 };

@@ -1,27 +1,22 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './ScreenPermissionsBaseController.css';
-import withStyles from '../../../decorators/withStyles';
+import styles from './ScreenLayersBaseController.css';
+import withStyles from '../../../../decorators/withStyles';
 import classnames from 'classnames';
-import utils from '../../../utils/utils';
+import utils from '../../../../utils/utils';
 
-import ControllerComponent from '../../common/ControllerComponent';
+import ControllerComponent from '../../../../components/common/ControllerComponent';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
-import LayerObjectTypes from '../../../layers/constants/ObjectTypes';
+import LayerObjectTypes from '../../../constants/ObjectTypes';
 
-import UserStore from '../../../stores/UserStore';
-import GroupStore from '../../../stores/GroupStore';
-import ScopeStore from '../../../stores/ScopeStore';
-import PlaceStore from '../../../stores/PlaceStore';
-import TopicStore from '../../../stores/TopicStore';
-import GeonodeStore from '../../../layers/stores/GeonodeStore';
-import WmsStore from '../../../layers/stores/WmsStore';
+import GeonodeStore from '../../../../layers/stores/GeonodeStore';
+import WmsStore from '../../../../layers/stores/WmsStore';
 
 import ActionCreator from '../../../actions/ActionCreator';
-import ObjectList from '../../elements/ObjectList';
-import ScreenPermissionsObject from '../ScreenPermissionsObject';
+import ObjectList from '../../../../components/elements/ObjectList';
+import ScreenLayersObject from '../ScreenLayersObject';
 
 @withStyles(styles)
-class ScreenPermissionsBaseController extends ControllerComponent {
+class ScreenLayersBaseController extends ControllerComponent {
 	static propTypes = {
 		disabled: PropTypes.bool,
 		screenKey: PropTypes.string.isRequired
@@ -40,13 +35,8 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 		super(props);
 
 		this._tabs = [
-			{data: "places", dataType: ObjectTypes.PLACE, allowAdd: false},
-			{data: "scopes", dataType: ObjectTypes.SCOPE, allowAdd: false},
-			{data: "topics", dataType: ObjectTypes.TOPIC, allowAdd: false},
-			{data: "geonode_layers", dataType: LayerObjectTypes.GEONODE_LAYER, allowAdd: false},
-			{data: "wms_layers", dataType: LayerObjectTypes.WMS_LAYER, allowAdd: false},
-			{data: "users", dataType: ObjectTypes.USER, allowAdd: false},
-			{data: "groups", dataType: ObjectTypes.GROUP, allowAdd: true}
+			{data: "geonode_layers", dataType: LayerObjectTypes.GEONODE_LAYER, allowAdd: true},
+			{data: "wms_layers", dataType: LayerObjectTypes.WMS_LAYER, allowAdd: true}
 		];
 		for (let tab of this._tabs) {
 			if(!tab.header) {
@@ -62,11 +52,6 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 	componentDidMount(){
 		super.componentDidMount();
 
-		this.responseListener.add(ScopeStore);
-		this.responseListener.add(PlaceStore);
-		this.responseListener.add(TopicStore);
-		this.responseListener.add(UserStore);
-		this.responseListener.add(GroupStore);
 		this.responseListener.add(GeonodeStore);
 		this.responseListener.add(WmsStore);
 	}
@@ -81,7 +66,7 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 		this.context.onInteraction().call();
 		var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
 		let options = {
-			component: ScreenPermissionsObject,
+			component: ScreenLayersObject,
 			parentUrl: this.props.parentUrl,
 			size: 40,
 			data: {
@@ -164,7 +149,7 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 				<div>
 					<div className="screen-content">
 						<div>
-							<h1>Permissions</h1>
+							<h1>Layers</h1>
 
 							<div className="metadata-grid">
 								<div className="metadata-grid-types">
@@ -187,4 +172,4 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 	}
 }
 
-export default ScreenPermissionsBaseController;
+export default ScreenLayersBaseController;

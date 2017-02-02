@@ -11,6 +11,8 @@ import GroupStore from '../../../stores/GroupStore';
 import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
 import TopicStore from '../../../stores/TopicStore';
+import GeonodeStore from '../../../layers/stores/GeonodeStore';
+import WmsStore from '../../../layers/stores/WmsStore';
 
 import ScreenPermissionsBaseController from '../ScreenPermissionsBaseController';
 
@@ -36,7 +38,9 @@ class ScreenPermissionsBase extends ScreenController {
 			places: this._load(PlaceStore),
 			topics: this._load(TopicStore),
 			users: this._load(UserStore),
-			groups: this._load(GroupStore)
+			groups: this._load(GroupStore),
+			geonode_layers: this._load(GeonodeStore),
+			wms_layers: this._load(WmsStore)
 		}
 	}
 
@@ -48,6 +52,8 @@ class ScreenPermissionsBase extends ScreenController {
 		this.changeListener.add(TopicStore, ["topics"]);
 		this.changeListener.add(UserStore, ["users"]);
 		this.changeListener.add(GroupStore, ["groups"]);
+		this.changeListener.add(GeonodeStore, ["geonode_layers"]);
+		this.changeListener.add(WmsStore, ["wms_layers"]);
 	}
 
 	getUrl() {
