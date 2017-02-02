@@ -22,7 +22,7 @@ class ScreenHelpTutorial13Permissions extends PantherComponent {
 							permissions to create these resources and then per resource it is possible to specify permissions to read,
 							update and delete.</p>
 
-						<p>User has a permission towards reosurce when either the user has permission set or when one of the group,
+						<p>User has a permission towards resource when either the user has permission set or when one of the group,
 							he is member of has permission set.</p>
 
 						<h3>Permissions to create resources</h3>
