@@ -138,7 +138,6 @@ class ConfigDataLayerAnalytical extends PantherComponent{
 					<label className="container">
 						Period
 						<UIObjectSelect
-							multi
 							onChange={this.props.onChangePeriods}
 							onOptionLabelClick={this.props.onObjectClick.bind(this, ObjectTypes.PERIOD)}
 							options={this.props.periods}
