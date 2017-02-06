@@ -7,7 +7,7 @@ import styles from './ScreenLayersObjectController.css';
 import utils from '../../../../utils/utils';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
 import LayerObjectTypes from '../../../constants/ObjectTypes';
-import ActionCreator from '../../../actions/ActionCreator';
+import ActionCreator from '../../../../actions/ActionCreator';
 
 import SelectorMetadataObject from '../../../../components/sections/SelectorMetadataObject';
 

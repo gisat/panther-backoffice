@@ -33,6 +33,10 @@ class WmsStore extends Store {
 		}
 	}
 
+	addResponseListener(listener){
+		this.responseListeners.push(listener);
+	}
+
 	reload(operationId) {
 		return superagent
 			.get(this.layerUrl)
@@ -41,8 +45,11 @@ class WmsStore extends Store {
 			.set('Access-Control-Allow-Origin', 'true')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(response => {
-				let data = JSON.parse(response.body);
-				this.cache = data.data.map(wmsLayerData => new WmsLayerModel(null, wmsLayerData));
+				return Promise.all(
+					response.body.data.map(wmsLayerData => new WmsLayerModel(null, wmsLayerData)) || []
+				);
+			}).then(layers => {
+				this.cache = layers || [];
 				logger.info('WmsStore#reload loaded: ', this.cache);
 				this.emitChange();
 				return this.cache;

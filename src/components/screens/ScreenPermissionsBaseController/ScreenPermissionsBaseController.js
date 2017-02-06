@@ -43,7 +43,6 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 			{data: "places", dataType: ObjectTypes.PLACE, allowAdd: false},
 			{data: "scopes", dataType: ObjectTypes.SCOPE, allowAdd: false},
 			{data: "topics", dataType: ObjectTypes.TOPIC, allowAdd: false},
-			{data: "geonode_layers", dataType: LayerObjectTypes.GEONODE_LAYER, allowAdd: false},
 			{data: "wms_layers", dataType: LayerObjectTypes.WMS_LAYER, allowAdd: false},
 			{data: "users", dataType: ObjectTypes.USER, allowAdd: false},
 			{data: "groups", dataType: ObjectTypes.GROUP, allowAdd: true}
@@ -95,7 +94,7 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 	onObjectListAddClick(itemType, event) {
 		// TODO: Update actions related to the User and Group other than permission handling.
 		this.context.onInteraction().call();
-		let model = new Model[itemType]({active:false});
+		let model = new Model[itemType]();
 		let responseData = {
 			objectType: itemType
 		};

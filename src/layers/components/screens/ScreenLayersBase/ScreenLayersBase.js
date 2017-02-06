@@ -35,7 +35,6 @@ class ScreenLayersBase extends ScreenController {
 			periods: this._load(PeriodStore),
 			scopes: this._load(ScopeStore),
 			places: this._load(PlaceStore),
-			geonode: this._load(GeonodeStore),
 			wms: this._load(WmsStore)
 		}
 	}
@@ -43,7 +42,6 @@ class ScreenLayersBase extends ScreenController {
 	componentDidMount(){
 		super.componentDidMount();
 
-		this.changeListener.add(GeonodeStore);
 		this.changeListener.add(WmsStore);
 	}
 
@@ -52,7 +50,7 @@ class ScreenLayersBase extends ScreenController {
 	}
 
 	render() {
-		if (this.state.ready && Object.keys(this.state.store).length >= 5) {
+		if (this.state.ready && Object.keys(this.state.store).length >= 4) {
 			let props = utils.clone(this.props);
 			props.store = this.state.store;
 			return React.createElement(ScreenLayersBaseController, props);

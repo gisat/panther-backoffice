@@ -107,7 +107,7 @@ class ConfigPermissionsWmsLayers extends ControllerComponent {
 		let newOnes = _.pluck(values, "key");
 		// Find added ones
 		let permission = {
-			resourceType: 'wms_layer',
+			resourceType: 'layer_wms',
 			resourceId: this.props.selectorValue,
 			permission: operationType
 		};
@@ -139,7 +139,7 @@ class ConfigPermissionsWmsLayers extends ControllerComponent {
 		let newOnes = _.pluck(values, "key");
 		// Find added ones
 		let permission = {
-			resourceType: 'wms_layer',
+			resourceType: 'layer_wms',
 			resourceId: this.props.selectorValue,
 			permission: operationType
 		};

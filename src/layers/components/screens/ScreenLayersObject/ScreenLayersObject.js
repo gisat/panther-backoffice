@@ -21,11 +21,6 @@ class ScreenLayersObject extends ScreenController {
 	_getStoreLoads(props) {
 		let storeloads = {};
 		switch (props.data.objectType) {
-			case ObjectTypes.GEONODE_LAYER:
-				storeloads = {
-					layers: this._load(GeonodeStore)
-				};
-				break;
 			case ObjectTypes.WMS_LAYER:
 				storeloads = {
 					places: this._load(PlaceStore),

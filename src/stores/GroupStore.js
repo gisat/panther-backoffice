@@ -33,6 +33,7 @@ class GroupStore extends Store {
 		}
 	}
 
+	// TODO: This shouldn't work
 	reload(operationId) {
 		return superagent
 			.get(this.groupUrl)

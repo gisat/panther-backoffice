@@ -5,13 +5,13 @@ import classnames from 'classnames';
 import utils from '../../../../utils/utils';
 
 import ControllerComponent from '../../../../components/common/ControllerComponent';
-import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
+import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../../constants/ObjectTypes';
 import LayerObjectTypes from '../../../constants/ObjectTypes';
 
 import GeonodeStore from '../../../../layers/stores/GeonodeStore';
 import WmsStore from '../../../../layers/stores/WmsStore';
 
-import ActionCreator from '../../../actions/ActionCreator';
+import ActionCreator from '../../../../actions/ActionCreator';
 import ObjectList from '../../../../components/elements/ObjectList';
 import ScreenLayersObject from '../ScreenLayersObject';
 
@@ -35,8 +35,7 @@ class ScreenLayersBaseController extends ControllerComponent {
 		super(props);
 
 		this._tabs = [
-			{data: "geonode_layers", dataType: LayerObjectTypes.GEONODE_LAYER, allowAdd: true},
-			{data: "wms_layers", dataType: LayerObjectTypes.WMS_LAYER, allowAdd: true}
+			{data: "wms", dataType: LayerObjectTypes.WMS_LAYER, allowAdd: true}
 		];
 		for (let tab of this._tabs) {
 			if(!tab.header) {
@@ -71,7 +70,7 @@ class ScreenLayersBaseController extends ControllerComponent {
 			size: 40,
 			data: {
 				objectType: itemType,
-				objectKey:item.key
+				objectKey: item.key
 			}
 		};
 		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
@@ -80,7 +79,7 @@ class ScreenLayersBaseController extends ControllerComponent {
 	onObjectListAddClick(itemType, event) {
 		// TODO: Update actions related to the User and Group other than permission handling.
 		this.context.onInteraction().call();
-		let model = new Model[itemType]({active:false});
+		let model = new Model[itemType]();
 		let responseData = {
 			objectType: itemType
 		};
@@ -99,6 +98,7 @@ class ScreenLayersBaseController extends ControllerComponent {
 	render() {
 		let ret = null;
 
+		console.log("Render: ", this.state.built);
 		if(this.state.built) {
 			var tabsInsert = [];
 			var contentInsert = [];
