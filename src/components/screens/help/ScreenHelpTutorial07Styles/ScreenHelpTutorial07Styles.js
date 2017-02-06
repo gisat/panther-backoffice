@@ -14,7 +14,7 @@ class ScreenHelpTutorial07Styles extends PantherComponent {
 		return (
 			<div>
 				<div className="screen-content-only help-page"><div>
-					<h2>Video Tutorial 11: Styles</h2>
+					<h2>Video Tutorial 7: Styles</h2>
 
 					<p>Cartographic styles (symbologies) of Layers can be loaded from GeoServer or defined directly in Back Office.</p>
 

@@ -36,7 +36,7 @@ class ScreenHelpTutorial08AddVector extends PantherComponent {
 		return (
 			<div>
 				<div className="screen-content-only help-page"><div>
-					<h2>Video Tutorial 7: Vector Layer</h2>
+					<h2>Video Tutorial 8: Vector Layer</h2>
 
 					<p>Map vector Data Layer to Place</p>
 

@@ -36,7 +36,7 @@ class ScreenHelpTutorial11AggregationAnalysis extends PantherComponent {
 		return (
 			<div>
 				<div className="screen-content-only help-page"><div>
-					<h2>Video Tutorial 10: Aggregation Analysis</h2>
+					<h2>Video Tutorial 11: Aggregation Analysis</h2>
 
 					<p>Create and run Aggregation Analyses</p>
 

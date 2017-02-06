@@ -36,7 +36,7 @@ class ScreenHelpTutorial10MathAnalysis extends PantherComponent {
 		return (
 			<div>
 				<div className="screen-content-only help-page"><div>
-					<h2>Video Tutorial 9: Math Analysis</h2>
+					<h2>Video Tutorial 10: Math Analysis</h2>
 
 					<p>Create and run Math Analyses</p>
 

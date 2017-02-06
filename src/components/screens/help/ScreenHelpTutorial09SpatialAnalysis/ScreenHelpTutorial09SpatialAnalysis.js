@@ -36,7 +36,7 @@ class ScreenHelpTutorial09SpatialAnalysis extends PantherComponent {
 		return (
 			<div>
 				<div className="screen-content-only help-page"><div>
-					<h2>Video Tutorial 8: Spatial Analysis</h2>
+					<h2>Video Tutorial 9: Spatial Analysis</h2>
 
 					<p>Create and run Spatial Analyses</p>
 
