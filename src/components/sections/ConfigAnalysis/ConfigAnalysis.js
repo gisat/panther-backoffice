@@ -101,9 +101,9 @@ class ConfigAnalysis extends PantherComponent {
 		this.setStateFromStores(this.props,keys);
 	}
 
-	componentDidMount() { 
+	componentDidMount() {
 		super.componentDidMount();
-		
+
 		this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(AnalysisRunStore, ["runs"]);
 

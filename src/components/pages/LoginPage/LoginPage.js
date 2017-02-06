@@ -45,7 +45,7 @@ class LoginPage extends Component {
 			.then(() => {
 				ActionCreator.removeOperation(id);
 				Location.pushState(
-					null, publicPath + "/"
+					null, window.location.pathname 
 				);
 			}).catch(error => {
 			ActionCreator.removeOperation(id);
