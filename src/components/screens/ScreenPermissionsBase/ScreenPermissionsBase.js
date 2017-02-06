@@ -14,6 +14,8 @@ import TopicStore from '../../../stores/TopicStore';
 import GeonodeStore from '../../../layers/stores/GeonodeStore';
 import WmsStore from '../../../layers/stores/WmsStore';
 
+import Loader from '../../atoms/Loader';
+
 import ScreenPermissionsBaseController from '../ScreenPermissionsBaseController';
 
 @withStyle(styles)
@@ -67,7 +69,9 @@ class ScreenPermissionsBase extends ScreenController {
 			return React.createElement(ScreenPermissionsBaseController, props);
 		} else {
 			return (
-				<div className="component-loading"></div>
+				<div className="component-loading">
+					<Loader />
+				</div>
 			);
 		}
 	}

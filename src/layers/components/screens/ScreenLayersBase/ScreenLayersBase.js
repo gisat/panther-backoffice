@@ -7,12 +7,13 @@ import styles from './ScreenLayersBase.css';
 import utils from '../../../../utils/utils';
 
 import WmsStore from '../../../stores/WmsStore';
-import GeonodeStore from '../../../stores/GeonodeStore';
 import ScopeStore from '../../../../stores/ScopeStore';
 import PlaceStore from '../../../../stores/PlaceStore';
 import PeriodStore from '../../../../stores/PeriodStore';
 
 import ScreenLayersBaseController from '../ScreenLayersBaseController';
+
+import Loader from '../../../../components/atoms/Loader';
 
 @withStyle(styles)
 class ScreenLayersBase extends ScreenController {
@@ -56,7 +57,9 @@ class ScreenLayersBase extends ScreenController {
 			return React.createElement(ScreenLayersBaseController, props);
 		} else {
 			return (
-				<div className="component-loading"></div>
+				<div className="component-loading">
+					<Loader />
+				</div>
 			);
 		}
 	}
