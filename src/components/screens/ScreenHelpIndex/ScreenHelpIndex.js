@@ -29,6 +29,7 @@ import ScreenHelpTutorial11Styles from '../help/ScreenHelpTutorial11Styles';
 import ScreenHelpTutorial12UserManagement from '../help/ScreenHelpTutorial12UserManagement';
 import ScreenHelpTutorial13GroupManagement from '../help/ScreenHelpTutorial13GroupManagement';
 import ScreenHelpTutorial14Permissions from '../help/ScreenHelpTutorial14Permissions';
+import ScreenHelpTutorial15CustomWMS from '../help/ScreenHelpTutorial15CustomWMS';
 
 import logger from '../../../core/Logger';
 import PantherComponent from "../../common/PantherComponent";
@@ -105,6 +106,9 @@ class ScreenHelpIndex extends PantherComponent {
 				break;
 			case 'Tutorial14Permissions':
 				component = ScreenHelpTutorial14Permissions;
+				break;
+			case 'Tutorial15CustomWMS':
+				component = ScreenHelpTutorial15CustomWMS;
 				break;
 		}
 		if (component) {
@@ -281,6 +285,14 @@ class ScreenHelpIndex extends PantherComponent {
 					>
 						<span>14: Permissions</span>
 						<span className="description">Handling permissions of the metadata</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial15CustomWMS')}
+					>
+						<span>15: Custom WMS Layer</span>
+						<span className="description">Managing custom WMS layers in the system.</span>
 					</a>
 				</div></div>
 			</div>

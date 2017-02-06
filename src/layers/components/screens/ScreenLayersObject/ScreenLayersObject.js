@@ -14,6 +14,8 @@ import PeriodStore from '../../../../stores/PeriodStore';
 import GeonodeStore from '../../../stores/GeonodeStore';
 import WmsStore from '../../../stores/WmsStore';
 
+import Loader from '../../../../components/atoms/Loader';
+
 import ScreenLayersObjectController from '../ScreenLayersObjectController';
 
 @withStyles(styles)
@@ -63,7 +65,9 @@ class ScreenLayersObject extends ScreenController {
 		}
 		else {
 			return (
-				<div className="component-loading"></div>
+				<div className="component-loading">
+					<Loader />
+				</div>
 			);
 		}
 

@@ -22,6 +22,15 @@ let initialState = {
 
 @withStyles(styles)
 class ScreenLayersObjectController extends ControllerComponent {
+
+	static propTypes = {
+		disabled: React.PropTypes.bool,
+		data: React.PropTypes.array.isRequired,		// Expects "key","name"
+		onChange: React.PropTypes.func.isRequired,
+		onNew: React.PropTypes.func,
+		value: React.PropTypes.any
+	};
+
 	constructor(props) {
 		super(props);
 		this.state.ui = _.assign(this.state.ui, utils.deepClone(initialState));
