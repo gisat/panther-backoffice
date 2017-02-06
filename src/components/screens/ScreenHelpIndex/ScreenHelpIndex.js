@@ -21,11 +21,11 @@ import ScreenHelpTutorial03AnalyticalUnits from '../help/ScreenHelpTutorial03Ana
 import ScreenHelpTutorial04AttributeSetsAttributes from '../help/ScreenHelpTutorial04AttributeSetsAttributes';
 import ScreenHelpTutorial05AddPeriod from '../help/ScreenHelpTutorial05AddPeriod';
 import ScreenHelpTutorial06AddRaster from '../help/ScreenHelpTutorial06AddRaster';
-import ScreenHelpTutorial07AddVector from '../help/ScreenHelpTutorial07AddVector';
-import ScreenHelpTutorial08SpatialAnalysis from '../help/ScreenHelpTutorial08SpatialAnalysis';
-import ScreenHelpTutorial09MathAnalysis from '../help/ScreenHelpTutorial09MathAnalysis';
-import ScreenHelpTutorial10AggregationAnalysis from '../help/ScreenHelpTutorial10AggregationAnalysis';
-import ScreenHelpTutorial11Styles from '../help/ScreenHelpTutorial11Styles';
+import ScreenHelpTutorial07Styles from '../help/ScreenHelpTutorial07Styles';
+import ScreenHelpTutorial08AddVector from '../help/ScreenHelpTutorial08AddVector';
+import ScreenHelpTutorial09SpatialAnalysis from '../help/ScreenHelpTutorial09SpatialAnalysis';
+import ScreenHelpTutorial10MathAnalysis from '../help/ScreenHelpTutorial10MathAnalysis';
+import ScreenHelpTutorial11AggregationAnalysis from '../help/ScreenHelpTutorial11AggregationAnalysis';
 import ScreenHelpTutorial12UserManagement from '../help/ScreenHelpTutorial12UserManagement';
 import ScreenHelpTutorial13GroupManagement from '../help/ScreenHelpTutorial13GroupManagement';
 import ScreenHelpTutorial14Permissions from '../help/ScreenHelpTutorial14Permissions';
@@ -83,20 +83,20 @@ class ScreenHelpIndex extends PantherComponent {
 			case 'Tutorial06AddRaster':
 				component = ScreenHelpTutorial06AddRaster;
 				break;
-			case 'Tutorial07AddVector':
-				component = ScreenHelpTutorial07AddVector;
+			case 'Tutorial07Styles':
+				component = ScreenHelpTutorial07Styles;
 				break;
-			case 'Tutorial08SpatialAnalysis':
-				component = ScreenHelpTutorial08SpatialAnalysis;
+			case 'Tutorial08AddVector':
+				component = ScreenHelpTutorial08AddVector;
 				break;
-			case 'Tutorial09MathAnalysis':
-				component = ScreenHelpTutorial09MathAnalysis;
+			case 'Tutorial09SpatialAnalysis':
+				component = ScreenHelpTutorial09SpatialAnalysis;
 				break;
-			case 'Tutorial10AggregationAnalysis':
-				component = ScreenHelpTutorial10AggregationAnalysis;
+			case 'Tutorial10MathAnalysis':
+				component = ScreenHelpTutorial10MathAnalysis;
 				break;
-			case 'Tutorial11Styles':
-				component = ScreenHelpTutorial11Styles;
+			case 'Tutorial11AggregationAnalysis':
+				component = ScreenHelpTutorial11AggregationAnalysis;
 				break;
 			case 'Tutorial12UserManagement':
 				component = ScreenHelpTutorial12UserManagement;
@@ -225,42 +225,42 @@ class ScreenHelpIndex extends PantherComponent {
 
 					<a
 						className="help-link"
-						onClick={this.onHelpLinkClick.bind(this, 'Tutorial07AddVector')}
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial07Styles')}
 					>
-						<span>7: Vector Layer</span>
+						<span>7: Styles</span>
+						<span className="description">Cartographic styles of layers</span>
+					</a>
+
+					<a
+						className="help-link"
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial08AddVector')}
+					>
+						<span>8: Vector Layer</span>
 						<span className="description">Map vector Data Layer to Place</span>
 					</a>
 
 					<a
 						className="help-link"
-						onClick={this.onHelpLinkClick.bind(this, 'Tutorial08SpatialAnalysis')}
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial09SpatialAnalysis')}
 					>
-						<span>8: Spatial Analysis</span>
+						<span>9: Spatial Analysis</span>
 						<span className="description">Create and run Spatial Analyses</span>
 					</a>
 
 					<a
 						className="help-link"
-						onClick={this.onHelpLinkClick.bind(this, 'Tutorial09MathAnalysis')}
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial10MathAnalysis')}
 					>
-						<span>9: Math Analysis</span>
+						<span>10: Math Analysis</span>
 						<span className="description">Create and run Math Analyses</span>
 					</a>
 
 					<a
 						className="help-link"
-						onClick={this.onHelpLinkClick.bind(this, 'Tutorial10AggregationAnalysis')}
+						onClick={this.onHelpLinkClick.bind(this, 'Tutorial11AggregationAnalysis')}
 					>
-						<span>10: Aggregation Analysis</span>
+						<span>11: Aggregation Analysis</span>
 						<span className="description">Create and run Aggregation Analyses</span>
-					</a>
-
-					<a
-						className="help-link"
-						onClick={this.onHelpLinkClick.bind(this, 'Tutorial11Styles')}
-					>
-						<span>11: Styles</span>
-						<span className="description">Cartographic styles of layers</span>
 					</a>
 
 					<a

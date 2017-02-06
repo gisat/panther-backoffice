@@ -5,7 +5,7 @@ import ActionCreator from '../../../../actions/ActionCreator';
 import logger from '../../../../core/Logger';
 import PantherComponent from "../../../common/PantherComponent";
 
-class ScreenHelpTutorial08SpatialAnalysis extends PantherComponent {
+class ScreenHelpTutorial08AddVector extends PantherComponent {
 
 	static contextTypes = {
 		onInteraction: PropTypes.func.isRequired,
@@ -27,7 +27,7 @@ class ScreenHelpTutorial08SpatialAnalysis extends PantherComponent {
 			};
 			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
 		} else {
-			logger.error("ScreenHelpTutorial08SpatialAnalysis# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
+			logger.error("ScreenHelpTutorial08AddVector# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
 		}
 	}
 
@@ -36,21 +36,21 @@ class ScreenHelpTutorial08SpatialAnalysis extends PantherComponent {
 		return (
 			<div>
 				<div className="screen-content-only help-page"><div>
-					<h2>Video Tutorial 8: Spatial Analysis</h2>
+					<h2>Video Tutorial 7: Vector Layer</h2>
 
-					<p>Create and run Spatial Analyses</p>
+					<p>Map vector Data Layer to Place</p>
 
 					<p>
-						Spatial analysis allows you to map the information contained in vector layers to the analytical units. For
-						example if you would have the land use vector layer you can use spatial analysis to count the amount of
-						different types of land use per analyticial unit.
+						Vector layer represents vector layer imported via GeoNode as one of the supported formats. Basically it
+						means that the data contains column geom, representing geometry for each row. This type of data can be used
+						inside of the analysis and as a source for attributes.
 					</p>
 
 					<iframe
 						className="help-video"
 						width="720"
 						height="421"
-						src="https://www.youtube.com/embed/V_-EqlWHlFU?rel=0&cc_load_policy=1&cc_lang_pref=en"
+						src="https://www.youtube.com/embed/x5iLGFBp040?rel=0&cc_load_policy=1&cc_lang_pref=en"
 						frameBorder="0"
 						allowFullScreen
 					></iframe>
@@ -62,4 +62,4 @@ class ScreenHelpTutorial08SpatialAnalysis extends PantherComponent {
 	}
 }
 
-export default ScreenHelpTutorial08SpatialAnalysis;
+export default ScreenHelpTutorial08AddVector;

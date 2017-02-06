@@ -5,7 +5,7 @@ import ActionCreator from '../../../../actions/ActionCreator';
 import logger from '../../../../core/Logger';
 import PantherComponent from "../../../common/PantherComponent";
 
-class ScreenHelpTutorial10AggregationAnalysis extends PantherComponent {
+class ScreenHelpTutorial09SpatialAnalysis extends PantherComponent {
 
 	static contextTypes = {
 		onInteraction: PropTypes.func.isRequired,
@@ -27,7 +27,7 @@ class ScreenHelpTutorial10AggregationAnalysis extends PantherComponent {
 			};
 			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
 		} else {
-			logger.error("ScreenHelpTutorial10AggregationAnalysis# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
+			logger.error("ScreenHelpTutorial09SpatialAnalysis# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
 		}
 	}
 
@@ -36,20 +36,21 @@ class ScreenHelpTutorial10AggregationAnalysis extends PantherComponent {
 		return (
 			<div>
 				<div className="screen-content-only help-page"><div>
-					<h2>Video Tutorial 10: Aggregation Analysis</h2>
+					<h2>Video Tutorial 8: Spatial Analysis</h2>
 
-					<p>Create and run Aggregation Analyses</p>
+					<p>Create and run Spatial Analyses</p>
 
 					<p>
-						Aggregation analysis allows to use the spatial analysis, when it was performed on more detailed level, and
-						aggregate it for less detailed levels.
+						Spatial analysis allows you to map the information contained in vector layers to the analytical units. For
+						example if you would have the land use vector layer you can use spatial analysis to count the amount of
+						different types of land use per analyticial unit.
 					</p>
 
 					<iframe
 						className="help-video"
 						width="720"
 						height="421"
-						src="https://www.youtube.com/embed/2Cd2NzAwk1o?rel=0&cc_load_policy=1&cc_lang_pref=en"
+						src="https://www.youtube.com/embed/V_-EqlWHlFU?rel=0&cc_load_policy=1&cc_lang_pref=en"
 						frameBorder="0"
 						allowFullScreen
 					></iframe>
@@ -61,4 +62,4 @@ class ScreenHelpTutorial10AggregationAnalysis extends PantherComponent {
 	}
 }
 
-export default ScreenHelpTutorial10AggregationAnalysis;
+export default ScreenHelpTutorial09SpatialAnalysis;

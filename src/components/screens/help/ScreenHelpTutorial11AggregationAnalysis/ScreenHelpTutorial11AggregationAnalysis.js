@@ -5,7 +5,7 @@ import ActionCreator from '../../../../actions/ActionCreator';
 import logger from '../../../../core/Logger';
 import PantherComponent from "../../../common/PantherComponent";
 
-class ScreenHelpTutorial07AddVector extends PantherComponent {
+class ScreenHelpTutorial11AggregationAnalysis extends PantherComponent {
 
 	static contextTypes = {
 		onInteraction: PropTypes.func.isRequired,
@@ -27,7 +27,7 @@ class ScreenHelpTutorial07AddVector extends PantherComponent {
 			};
 			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
 		} else {
-			logger.error("ScreenHelpTutorial07AddVector# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
+			logger.error("ScreenHelpTutorial11AggregationAnalysis# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
 		}
 	}
 
@@ -36,21 +36,20 @@ class ScreenHelpTutorial07AddVector extends PantherComponent {
 		return (
 			<div>
 				<div className="screen-content-only help-page"><div>
-					<h2>Video Tutorial 7: Vector Layer</h2>
+					<h2>Video Tutorial 10: Aggregation Analysis</h2>
 
-					<p>Map vector Data Layer to Place</p>
+					<p>Create and run Aggregation Analyses</p>
 
 					<p>
-						Vector layer represents vector layer imported via GeoNode as one of the supported formats. Basically it
-						means that the data contains column geom, representing geometry for each row. This type of data can be used
-						inside of the analysis and as a source for attributes.
+						Aggregation analysis allows to use the spatial analysis, when it was performed on more detailed level, and
+						aggregate it for less detailed levels.
 					</p>
 
 					<iframe
 						className="help-video"
 						width="720"
 						height="421"
-						src="https://www.youtube.com/embed/x5iLGFBp040?rel=0&cc_load_policy=1&cc_lang_pref=en"
+						src="https://www.youtube.com/embed/2Cd2NzAwk1o?rel=0&cc_load_policy=1&cc_lang_pref=en"
 						frameBorder="0"
 						allowFullScreen
 					></iframe>
@@ -62,4 +61,4 @@ class ScreenHelpTutorial07AddVector extends PantherComponent {
 	}
 }
 
-export default ScreenHelpTutorial07AddVector;
+export default ScreenHelpTutorial11AggregationAnalysis;

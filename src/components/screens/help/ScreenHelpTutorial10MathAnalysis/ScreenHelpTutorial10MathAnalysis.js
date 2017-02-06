@@ -5,7 +5,7 @@ import ActionCreator from '../../../../actions/ActionCreator';
 import logger from '../../../../core/Logger';
 import PantherComponent from "../../../common/PantherComponent";
 
-class ScreenHelpTutorial09MathAnalysis extends PantherComponent {
+class ScreenHelpTutorial10MathAnalysis extends PantherComponent {
 
 	static contextTypes = {
 		onInteraction: PropTypes.func.isRequired,
@@ -27,7 +27,7 @@ class ScreenHelpTutorial09MathAnalysis extends PantherComponent {
 			};
 			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
 		} else {
-			logger.error("ScreenHelpTutorial09MathAnalysis# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
+			logger.error("ScreenHelpTutorial10MathAnalysis# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
 		}
 	}
 
@@ -61,4 +61,4 @@ class ScreenHelpTutorial09MathAnalysis extends PantherComponent {
 	}
 }
 
-export default ScreenHelpTutorial09MathAnalysis;
+export default ScreenHelpTutorial10MathAnalysis;

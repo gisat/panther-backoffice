@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 
 import PantherComponent from "../../../common/PantherComponent";
 
-class ScreenHelpTutorial11Styles extends PantherComponent {
+class ScreenHelpTutorial07Styles extends PantherComponent {
 
 	static contextTypes = {
 		onInteraction: PropTypes.func.isRequired,
@@ -34,4 +34,4 @@ class ScreenHelpTutorial11Styles extends PantherComponent {
 	}
 }
 
-export default ScreenHelpTutorial11Styles;
+export default ScreenHelpTutorial07Styles;
