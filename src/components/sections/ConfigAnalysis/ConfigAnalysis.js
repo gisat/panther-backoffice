@@ -285,7 +285,7 @@ class ConfigAnalysis extends PantherComponent {
 							finished = "failed";
 						} else {
 							if (analysisRunModel.finished instanceof Date) {
-								finished = analysisRunModel.finished.getFullYear() + "-" + analysisRunModel.finished.getMonth() + "-" + analysisRunModel.finished.getDate();
+								finished = analysisRunModel.finished.getFullYear() + "-" + (analysisRunModel.finished.getMonth()+1) + "-" + analysisRunModel.finished.getDate();
 							} else {
 								finished = analysisRunModel.finished;
 							}
