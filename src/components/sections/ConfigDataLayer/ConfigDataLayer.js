@@ -339,7 +339,7 @@ class ConfigDataLayer extends ControllerComponent {
 				layerTemplates = thisComponent.props.store.auLevels;
 				values.template = thisComponent.state.current.valueTemplate[0];
 				values.places = thisComponent.state.current.valuePlaces;
-				values.periods = thisComponent.state.current.valuePeriods;
+				values.periods = AUPeriods;;
 				break;
 		}
 
@@ -839,12 +839,10 @@ class ConfigDataLayer extends ControllerComponent {
 							valueLevel={this.state.current.valueTemplate}
 							valueScope={this.state.current.valueScope}
 							valuesPlaces={this.state.current.valuePlaces}
-							valuesPeriods={this.state.current.valuePeriods}
 							columnMap={this.state.current.columnMap}
 							onChangeLevel={this.onChangeObjectSelect.bind(this, "valueTemplate", ObjectTypes.AU_LEVEL)}
 							onChangeScope={this.onChangeObjectSelect.bind(this, "valueScope", ObjectTypes.SCOPE)}
 							onChangePlaces={this.onChangeObjectSelect.bind(this, "valuePlaces", ObjectTypes.PLACE)}
-							onChangePeriods={this.onChangeObjectSelect.bind(this, "valuePeriods", ObjectTypes.PERIOD)}
 							onObjectClick={this.onObjectClick.bind(this)}
 							onChangeColumnTableDestination={this.onChangeColumnTableSelect.bind(this, "valueUseAs")}
 							onChangeColumnTablePeriods={this.onChangeColumnTableSelect.bind(this, "valuesPeriods")}
