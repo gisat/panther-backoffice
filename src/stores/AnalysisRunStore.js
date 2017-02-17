@@ -78,9 +78,8 @@ function reloadThisStoreUntilAllFinished() {
 
 		if(!containsInformation) {
 			setTimeout(reloadThisStoreUntilAllFinished, 5000);
-		} else {
-			storeInstance.emitChange();
 		}
+		storeInstance.emitChange();
 	});
 }
 
