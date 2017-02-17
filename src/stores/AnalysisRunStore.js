@@ -24,7 +24,6 @@ class AnalysisRunStore extends ApiStore {
 	}
 
 	registerListeners(){
-		//this.changeListener.add(UserStore);
 		this.changeListener.add(AnalysisStore);
 		this.changeListener.add(GeneralLayerStore);
 		this.changeListener.add(ScopeStore);
@@ -65,7 +64,7 @@ function reloadThisStoreUntilAllFinished() {
 
 	let promisesOfLoad = storeInstance.reloadInternal();
 	if(!promisesOfLoad) {
-		setTimeout(reloadThisStoreUntilAllFinished, 500);
+		setTimeout(reloadThisStoreUntilAllFinished, 5000);
 		return;
 	}
 
@@ -78,7 +77,7 @@ function reloadThisStoreUntilAllFinished() {
 		});
 
 		if(!containsInformation) {
-			setTimeout(reloadThisStoreUntilAllFinished, 500);
+			setTimeout(reloadThisStoreUntilAllFinished, 5000);
 		} else {
 			storeInstance.emitChange();
 		}

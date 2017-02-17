@@ -4,24 +4,17 @@ import PantherComponent from '../../common/PantherComponent';
 import _ from 'underscore';
 import utils from '../../../utils/utils';
 import ActionCreator from '../../../actions/ActionCreator';
-import ListenerHandler from '../../../core/ListenerHandler';
 import ObjectTypes, {Model, Store, objectTypesMetadata} from '../../../constants/ObjectTypes';
 
 import { Input, Icon, IconButton, Buttons } from '../../SEUI/elements';
-import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import { Table } from '../../SEUI/collections';
-import Select from 'react-select';
 
-import UIObjectSelect from '../../atoms/UIObjectSelect';
 import UIScreenButton from '../../atoms/UIScreenButton';
 import SaveButton from '../../atoms/SaveButton';
 
 import AnalysisStore from '../../../stores/AnalysisStore';
 import AnalysisModel from '../../../models/AnalysisModel';
 import AnalysisRunStore from '../../../stores/AnalysisRunStore';
-import TopicStore from '../../../stores/TopicStore';
-
-import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
 import ConfigAnalysisRulesSpatial from '../../sections/ConfigAnalysisRulesSpatial';
 import ConfigAnalysisRulesLevel from '../../sections/ConfigAnalysisRulesLevel';
