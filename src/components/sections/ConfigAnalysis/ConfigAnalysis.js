@@ -259,7 +259,7 @@ class ConfigAnalysis extends PantherComponent {
 			var runsTable = null;
 			if (this.state.runs.length) {
 				var runsTableRows = [];
-				var runs = _.sortBy(this.state.runs, 'created');
+				var runs = _.sortBy(this.state.runs, 'changed');
 				_.each(runs, function (analysisRunModel) {
 
 					// create AU Levels string
