@@ -22,6 +22,13 @@ class LoginPage extends Component {
 			errorMessage: "",
 			ready: false
 		};
+
+		UserStore.addErrorListener((error) => {
+			logger.error("LoginPage#onClick Error: ", error);
+			this.setState({
+				errorMessage: "Invalid credentials"
+			});
+		});
 	}
 
 	static contextTypes = {
@@ -45,11 +52,11 @@ class LoginPage extends Component {
 			.then(() => {
 				ActionCreator.removeOperation(id);
 				Location.pushState(
-					null, window.location.pathname 
+					null, window.location.pathname
 				);
 			}).catch(error => {
 			ActionCreator.removeOperation(id);
-			logger.error("LoginPage#onClick Error: ", error)
+			logger.error("LoginPage#onClick Error: ", error);
 			this.setState({
 				errorMessage: "Invalid credentials"
 			});
