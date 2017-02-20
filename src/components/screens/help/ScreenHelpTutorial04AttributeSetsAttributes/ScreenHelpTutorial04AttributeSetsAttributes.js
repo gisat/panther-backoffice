@@ -46,7 +46,7 @@ class ScreenHelpTutorial04AttributeSetsAttributes extends PantherComponent {
 
 					<p>
 						Attributes themselves represent the columns in the data, which can be used in analysis, charts, filters and
-						thematic maps.
+						thematic maps. Before the attributes will be correctly available in the FrontOffice it is necessary to assign the topic Common (tutorial), which was already created before to the correct
 					</p>
 
 					<iframe
@@ -57,6 +57,16 @@ class ScreenHelpTutorial04AttributeSetsAttributes extends PantherComponent {
 						frameBorder="0"
 						allowFullScreen
 					></iframe>
+
+					<h3>Manifestation in FrontOffice</h3>
+
+					<p>
+						At this moment, you should be able to go to the FrontOffice. You get there via the Dashboard and clicking on Data Exploration under the FrontOffice.
+					</p>
+
+					<p>
+						Now you should be able to create your first charts in the FrontOffice. To verify that your mapping is correct, it is best to select the combination of Scope, Theme and Place and then add table with the added attribute. In default settings the table will show you the data, which are in the database table.
+					</p>
 
 				</div></div>
 			</div>

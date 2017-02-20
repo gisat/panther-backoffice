@@ -54,6 +54,16 @@ class ScreenHelpTutorial03AnalyticalUnits extends PantherComponent {
 						allowFullScreen
 					></iframe>
 
+					<h3>Manifestation in Front Office</h3>
+
+					<p>
+						At this moment, you should be able to go to the FrontOffice. You get there via the Dashboard and clicking on Data Exploration under the FrontOffice.
+					</p>
+
+					<p>
+						From the previous tutorial we added the possibility to view Area outlines. In the left part of the frontoffice window under the layers, you see area outlines. At this moment if you select them you should be able to see them in black outlines.
+					</p>
+
 				</div></div>
 			</div>
 		);

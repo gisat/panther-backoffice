@@ -70,6 +70,20 @@ class ScreenHelpTutorial01ScopeThemeTopic extends PantherComponent {
 						allowFullScreen
 					></iframe>
 
+					<h3>Manifestation in Front Office</h3>
+
+					<p>
+						At this moment, you should be able to go to the FrontOffice. You get there via the Dashboard and clicking on Data Exploration under the FrontOffice.
+					</p>
+
+					<p>
+						If you click on the select next to the Scope, you should be able to see the newly created Scope: Local (Tutorial). Once you selected the scope, you should also be able to pick the theme Population (tutorial). You won't be able to get any further now as you didn't yet create place to show.
+					</p>
+
+					<p>
+						It is important to mention that at this moment you and the administrators are the only ones who see the created Scope and therefore also the theme. There are two reasons this might happen. First is when you don't set the Scope as active. In this case only you will see it. Second is the permissions. In the part 14 of this tutorial you will see how to decide who else will have access to the Scope.
+					</p>
+
 				</div></div>
 			</div>
 		);

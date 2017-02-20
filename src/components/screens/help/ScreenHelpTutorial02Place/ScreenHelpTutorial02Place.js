@@ -54,6 +54,29 @@ class ScreenHelpTutorial02Place extends PantherComponent {
 						allowFullScreen
 					></iframe>
 
+					<h3>Manifestation in FrontOffice</h3>
+
+					<p>
+						At this moment, you should be able to go to the FrontOffice. You get there via the Dashboard and clicking on Data Exploration under the FrontOffice.
+					</p>
+
+					<p>
+						Based on the previous tutorial you should be able to choose previously created Scope and Theme. On top of that you should be able to choose the place you created. The FrontOffice will load, but at the current moment there won't be anything else for you to do in this combination of Scope, Place and Theme. First you will need to map the uploaded layers to the scope.
+					</p>
+
+					<p>
+						At the current moment only you will see the Place. There are two possible reasons for this. In order for others to see the place and associated layers, you must make the place active and give them permissions towards the place. More on handling permissions is in the chapter 14 of this tutorial.
+					</p>
+
+					<iframe
+						className="help-video"
+						width="720"
+						height="421"
+						src="https://www.youtube.com/embed/pHS_vtqVzMQ?rel=0&cc_load_policy=1&cc_lang_pref=en"
+						frameBorder="0"
+						allowFullScreen
+					></iframe>
+
 				</div></div>
 			</div>
 		);
