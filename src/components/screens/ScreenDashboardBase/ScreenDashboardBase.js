@@ -176,7 +176,7 @@ class ScreenDashboardBase extends PantherComponent {
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={frontOfficeURL+"help"}
+								href={frontOfficeURL+"help-frontoffice/"}
 							>
 								Front office help
 								<Icon name="external" className="right"/>
@@ -184,7 +184,7 @@ class ScreenDashboardBase extends PantherComponent {
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={geoNodeURL+"help-with-geonode/"}
+								href={geoNodeURL+"help/"}
 							>
 								<span>GeoNode help</span>
 								<Icon name="external" className="right"/>
