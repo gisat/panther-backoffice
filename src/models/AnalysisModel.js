@@ -103,7 +103,7 @@ class AnalysisModel extends Model {
 				serverName: 'attributeSets', //id
 				sendToServer: true,
 				transformForLocal: function (data) {
-					return AttributeSetStore.getFiltered({key: data});
+					return AttributeSetStore.getByKeyArray(data);
 				},
 				transformForServer: this.getKeys,
 				isPromise: true
