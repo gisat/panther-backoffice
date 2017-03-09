@@ -62,6 +62,7 @@ class Navigation extends PantherComponent {
 								onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
 								className={this.props.activeScreenSet == "dashboard" ? "current" : ""}
+								title="Dashboard"
 							>
 								<UISVG src='icon-dashboard.isvg' />
 							</a>
@@ -82,6 +83,7 @@ class Navigation extends PantherComponent {
 								onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
 								className={this.props.activeScreenSet == "places" ? "current" : ""}
+								title="Places"
 							>
 								<UISVG src='icon-places.isvg' />
 							</a>
@@ -92,6 +94,7 @@ class Navigation extends PantherComponent {
 								onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
 								className={this.props.activeScreenSet == "dataLayers" ? "current" : ""}
+								title="Data layers"
 							>
 								<UISVG src='icon-datalayers.isvg' />
 							</a>
@@ -102,6 +105,7 @@ class Navigation extends PantherComponent {
 								onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
 								className={this.props.activeScreenSet == "analyses" ? "current" : ""}
+								title="Analyses"
 							>
 								<UISVG src='icon-analyses.isvg' />
 							</a>
@@ -112,6 +116,7 @@ class Navigation extends PantherComponent {
 								onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
 								className={this.props.activeScreenSet == "metadata" ? "current" : ""}
+								title="Metadata structures"
 							>
 								<UISVG src='icon-metadata.isvg' />
 							</a>
@@ -132,6 +137,7 @@ class Navigation extends PantherComponent {
 								onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
 								className={this.props.activeScreenSet == "permissions" ? "current" : ""}
+								title="Permissions"
 							>
 								<UISVG src='users.isvg' />
 							</a>
@@ -142,6 +148,7 @@ class Navigation extends PantherComponent {
 								onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
 								className={this.props.activeScreenSet == "layers" ? "current" : ""}
+								title="Layers"
 							>
 								<UISVG src='icon-datalayers.isvg' />
 							</a>
