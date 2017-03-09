@@ -46,6 +46,14 @@ class Navigation extends PantherComponent {
 				<div id="navigation-menu">
 
 				</div>
+				<div id="navigation-menu-opener">
+					<a
+						onClick={this.toggleMenu.bind(this)}
+						tabIndex="-1"
+					>
+						<UISVG src='menu.isvg' />
+					</a>
+				</div>
 				<div id="navigation-quick-access">
 					<ul>
 						<li>
@@ -56,6 +64,16 @@ class Navigation extends PantherComponent {
 								className={this.props.activeScreenSet == "dashboard" ? "current" : ""}
 							>
 								<UISVG src='icon-dashboard.isvg' />
+							</a>
+						</li>
+						<li>
+							<a
+								//href={publicPath + "/scopes"}
+								//onClick={this.onLinkClick.bind(this)}
+								tabIndex="-1"
+								className={this.props.activeScreenSet == "scopes" ? "current" : ""}
+							>
+								<UISVG src='scopes.isvg' />
 							</a>
 						</li>
 						<li>
@@ -96,6 +114,16 @@ class Navigation extends PantherComponent {
 								className={this.props.activeScreenSet == "metadata" ? "current" : ""}
 							>
 								<UISVG src='icon-metadata.isvg' />
+							</a>
+						</li>
+						<li>
+							<a
+								//href={publicPath + "/data"}
+								//onClick={this.onLinkClick.bind(this)}
+								tabIndex="-1"
+								className={this.props.activeScreenSet == "data" ? "current" : ""}
+							>
+								<UISVG src='objects.isvg' />
 							</a>
 						</li>
 						<li>
