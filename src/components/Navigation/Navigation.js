@@ -73,6 +73,7 @@ class Navigation extends PantherComponent {
 								//onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
 								className={this.props.activeScreenSet == "scopes" ? "current" : ""}
+								title="Scopes"
 							>
 								<UISVG src='scopes.isvg' />
 							</a>
@@ -127,6 +128,7 @@ class Navigation extends PantherComponent {
 								//onClick={this.onLinkClick.bind(this)}
 								tabIndex="-1"
 								className={this.props.activeScreenSet == "data" ? "current" : ""}
+								title="All data structures"
 							>
 								<UISVG src='objects.isvg' />
 							</a>
