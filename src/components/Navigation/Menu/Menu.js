@@ -80,12 +80,12 @@ class Menu extends PantherComponent {
 
 		let items = [];
 		items.push(this.renderItem('', 'dashboard', 'icon-dashboard', 'Dashboard', 'Dashboard'));
-		items.push(this.renderItem('scopes', 'scopes', 'scopes', 'Scopes', 'Scopes'));
+		//items.push(this.renderItem('scopes', 'scopes', 'scopes', 'Scopes', 'Scopes'));
 		items.push(this.renderItem('places', 'places', 'icon-places', 'Places', 'Places'));
 		items.push(this.renderItem('datalayers', 'dataLayers', 'icon-datalayers', 'Data layers', 'Data layers'));
 		items.push(this.renderItem('analyses', 'analyses', 'icon-analyses', 'Analyses', 'Analyses'));
 		items.push(this.renderItem('metadata', 'metadata', 'icon-metadata', 'Metadata structures', 'Metadata structures'));
-		items.push(this.renderItem('data', 'data', 'objects', 'Data structures', 'All data structures'));
+		//items.push(this.renderItem('data', 'data', 'objects', 'Data structures', 'All data structures'));
 		items.push(this.renderItem('permissions', 'permissions', 'users', 'Permissions', 'Users, groups & permissions'));
 		items.push(this.renderItem('layers', 'layers', 'icon-datalayers', 'WMS data layers', 'WMS data layers'));
 
