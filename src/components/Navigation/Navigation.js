@@ -73,6 +73,7 @@ class Navigation extends PantherComponent {
 					<Menu
 						ref={node => {this.menuNode = node}}
 						onLinkClick={this.onLinkClick.bind(this)}
+						activeScreenSet={this.props.activeScreenSet}
 					/>
 				</div>
 				<div
@@ -90,6 +91,7 @@ class Navigation extends PantherComponent {
 					<Menu
 						quickAccess
 						onLinkClick={this.onLinkClick.bind(this)}
+						activeScreenSet={this.props.activeScreenSet}
 					/>
 				</div>
 				<div id="navigation-filter">
