@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import ReactDOM from 'react-dom';
 import PantherComponent from "../common/PantherComponent";
 import { publicPath } from '../../config';
 
@@ -8,6 +9,8 @@ import Link from '../Link';
 import UISVG from '../atoms/UISVG';
 import classNames from 'classnames';
 import utils from '../../utils/utils';
+
+import Menu from './Menu';
 
 let initialState = {
 	showMenu: false
@@ -25,11 +28,34 @@ class Navigation extends PantherComponent {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+
+		this.onDocumentClick = this.onDocumentClick.bind(this);
+	}
+
+	componentDidMount() {
+		document.addEventListener('mousedown', this.onDocumentClick);
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('mousedown', this.onDocumentClick);
 	}
 
 
+	onDocumentClick(e) {
+		let menuDOMNode = ReactDOM.findDOMNode(this.menuNode);
+		let menuOpenerDOMNode = ReactDOM.findDOMNode(this.menuOpenerNode);
+		if (menuDOMNode && !menuDOMNode.contains(e.target) && !menuOpenerDOMNode.contains(e.target)) {
+			this.setState({
+				showMenu: false
+			});
+		}
+	}
+
 	onLinkClick(e) {
 		Link.handleClick(e);
+		this.setState({
+			showMenu: false
+		});
 	}
 
 	toggleMenu() {
@@ -43,89 +69,30 @@ class Navigation extends PantherComponent {
 
 		return (
 			<div id="navigation">
-				<div id="navigation-menu">
-
+				<div id="navigation-menu" className={classNames({'open': this.state.showMenu})}>
+					<Menu
+						ref={node => {this.menuNode = node}}
+						onLinkClick={this.onLinkClick.bind(this)}
+						activeScreenSet={this.props.activeScreenSet}
+					/>
+				</div>
+				<div
+					id="navigation-menu-opener"
+					ref={node => {this.menuOpenerNode = node}}
+				>
+					<a
+						onClick={this.toggleMenu.bind(this)}
+						tabIndex="-1"
+					>
+						<UISVG src='menu.isvg' />
+					</a>
 				</div>
 				<div id="navigation-quick-access">
-					<ul>
-						<li>
-							<a
-								href={publicPath + "/"}
-								onClick={this.onLinkClick.bind(this)}
-								tabIndex="-1"
-								className={this.props.activeScreenSet == "dashboard" ? "current" : ""}
-								title="Dashboard"
-							>
-								<UISVG src='icon-dashboard.isvg' />
-							</a>
-						</li>
-						<li>
-							<a
-								href={publicPath + "/places"}
-								onClick={this.onLinkClick.bind(this)}
-								tabIndex="-1"
-								className={this.props.activeScreenSet == "places" ? "current" : ""}
-								title="Places"
-							>
-								<UISVG src='icon-places.isvg' />
-							</a>
-						</li>
-						<li>
-							<a
-								href={publicPath + "/datalayers"}
-								onClick={this.onLinkClick.bind(this)}
-								tabIndex="-1"
-								className={this.props.activeScreenSet == "dataLayers" ? "current" : ""}
-								title="Data layers"
-							>
-								<UISVG src='icon-datalayers.isvg' />
-							</a>
-						</li>
-						<li>
-							<a
-								href={publicPath + "/analyses"}
-								onClick={this.onLinkClick.bind(this)}
-								tabIndex="-1"
-								className={this.props.activeScreenSet == "analyses" ? "current" : ""}
-								title="Analyses"
-							>
-								<UISVG src='icon-analyses.isvg' />
-							</a>
-						</li>
-						<li>
-							<a
-								href={publicPath + "/metadata"}
-								onClick={this.onLinkClick.bind(this)}
-								tabIndex="-1"
-								className={this.props.activeScreenSet == "metadata" ? "current" : ""}
-								title="Metadata structures"
-							>
-								<UISVG src='icon-metadata.isvg' />
-							</a>
-						</li>
-						<li>
-							<a
-								href={publicPath + "/permissions"}
-								onClick={this.onLinkClick.bind(this)}
-								tabIndex="-1"
-								className={this.props.activeScreenSet == "permissions" ? "current" : ""}
-								title="Permissions"
-							>
-								<UISVG src='users.isvg' />
-							</a>
-						</li>
-						<li>
-							<a
-								href={publicPath + "/layers"}
-								onClick={this.onLinkClick.bind(this)}
-								tabIndex="-1"
-								className={this.props.activeScreenSet == "layers" ? "current" : ""}
-								title="Layers"
-							>
-								<UISVG src='icon-datalayers.isvg' />
-							</a>
-						</li>
-					</ul>
+					<Menu
+						quickAccess
+						onLinkClick={this.onLinkClick.bind(this)}
+						activeScreenSet={this.props.activeScreenSet}
+					/>
 				</div>
 				<div id="navigation-filter">
 

@@ -21,7 +21,8 @@ class Menu extends PantherComponent {
 
 	static propTypes = {
 		activeScreenSet: PropTypes.string,
-		className: PropTypes.string
+		className: PropTypes.string,
+		quickAccess: PropTypes.bool
 	};
 
 	constructor(props) {
@@ -55,12 +56,6 @@ class Menu extends PantherComponent {
 		});
 	}
 
-	onLinkClick(e) {
-		this.setState({
-			forceClose: true
-		});
-		Link.handleClick(e);
-	}
 
 	//  className="current"
 	render() {
@@ -72,73 +67,48 @@ class Menu extends PantherComponent {
 			'hover': !this.state.forceClose && this.state.isHovered
 		});
 
+		let elementType = this.props.quickAccess ? 'div' : 'nav';
+
+		let elementProps = {
+			id: this.props.quickAccess ? null : 'menu',
+			className: classes,
+			onFocus: this.onFocus.bind(this),
+			onBlur: this.onBlur.bind(this),
+			onMouseEnter: this.onMouseEnter.bind(this),
+			onMouseLeave: this.onMouseLeave.bind(this)
+		};
+
+		let items = [];
+		items.push(this.renderItem('', 'dashboard', 'icon-dashboard', 'Dashboard', 'Dashboard'));
+		//items.push(this.renderItem('scopes', 'scopes', 'scopes', 'Scopes', 'Scopes'));
+		items.push(this.renderItem('places', 'places', 'icon-places', 'Places', 'Places'));
+		items.push(this.renderItem('datalayers', 'dataLayers', 'icon-datalayers', 'Data layers', 'Data layers'));
+		items.push(this.renderItem('analyses', 'analyses', 'icon-analyses', 'Analyses', 'Analyses'));
+		items.push(this.renderItem('metadata', 'metadata', 'icon-metadata', 'Metadata structures', 'Metadata structures'));
+		//items.push(this.renderItem('data', 'data', 'objects', 'Data structures', 'All data structures'));
+		items.push(this.renderItem('permissions', 'permissions', 'users', 'Permissions', 'Users, groups & permissions'));
+		items.push(this.renderItem('layers', 'layers', 'icon-datalayers', 'WMS data layers', 'WMS data layers'));
+
+		return React.createElement(elementType, elementProps, React.createElement('ul', null, items));
+
+	}
+
+	renderItem(path, screenSet, icon, caption, title) {
 		return (
-			<nav
-				id="menu"
-				className={classes}
-				onFocus={this.onFocus.bind(this)}
-				onBlur={this.onBlur.bind(this)}
-				onMouseEnter={this.onMouseEnter.bind(this)}
-				onMouseLeave={this.onMouseLeave.bind(this)}
-			>
-				<ul>
-					<li>
-						<a
-							href={publicPath + "/"}
-							onClick={this.onLinkClick.bind(this)}
-							tabIndex="-1"
-							className={this.props.activeScreenSet == "dashboard" ? "current" : ""}
-						>
-							<UISVG src='icon-dashboard.isvg' />
-							<span>Dashboard</span>
-						</a>
-					</li>
-					<li>
-						<a
-							href={publicPath + "/places"}
-							onClick={this.onLinkClick.bind(this)}
-							tabIndex="-1"
-							className={this.props.activeScreenSet == "places" ? "current" : ""}
-						>
-							<UISVG src='icon-places.isvg' />
-							<span>Places</span>
-						</a>
-					</li>
-					<li>
-						<a
-							href={publicPath + "/datalayers"}
-							onClick={this.onLinkClick.bind(this)}
-							tabIndex="-1"
-							className={this.props.activeScreenSet == "dataLayers" ? "current" : ""}
-						>
-							<UISVG src='icon-datalayers.isvg' />
-							<span>Data layers</span>
-						</a>
-					</li>
-					<li>
-						<a
-							href={publicPath + "/analyses"}
-							onClick={this.onLinkClick.bind(this)}
-							tabIndex="-1"
-							className={this.props.activeScreenSet == "analyses" ? "current" : ""}
-						>
-							<UISVG src='icon-analyses.isvg' />
-							<span>Analyses</span>
-						</a>
-					</li>
-					<li>
-						<a
-							href={publicPath + "/metadata"}
-							onClick={this.onLinkClick.bind(this)}
-							tabIndex="-1"
-							className={this.props.activeScreenSet == "metadata" ? "current" : ""}
-						>
-							<UISVG src='icon-metadata.isvg' />
-							<span>Metadata structures</span>
-						</a>
-					</li>
-				</ul>
-			</nav>
+			<li>
+				<a
+					href={publicPath + "/" + path}
+					onClick={this.props.onLinkClick}
+					tabIndex="-1"
+					className={this.props.activeScreenSet == screenSet ? "current" : ""}
+					title={title}
+				>
+					<UISVG src={icon + '.isvg'} />
+					{!this.props.quickAccess ? (
+					<span>{caption}</span>
+					) : null}
+				</a>
+			</li>
 		);
 	}
 

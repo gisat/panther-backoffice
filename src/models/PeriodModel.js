@@ -54,7 +54,7 @@ class PeriodModel extends Model {
 				sendToServer: true,
 				transformForLocal: this.transformDate,
 				transformForServer: function(date) {
-					return date.toISOString();
+					return date ? date.toISOString() : null;
 				}
 			}
 		};
