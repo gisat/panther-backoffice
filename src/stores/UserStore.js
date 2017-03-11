@@ -1,5 +1,6 @@
 import path from 'path';
 import superagent from 'superagent';
+import _ from 'lodash';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
@@ -162,6 +163,16 @@ class UserStore extends Store {
 
 	loggedIn() {
 		return this.logged;
+	}
+
+	async getCurrentUser() {
+		//let logged = this.logged || await this.getLogged(); // would not respect outside logout
+		let logged = await this.getLogged();
+		if (logged) {
+			let models = await this.load();
+			return _.find(models, {key: logged.key});
+		}
+		return null;
 	}
 
 	addLoginListener(loginFunction) {
