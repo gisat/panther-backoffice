@@ -53,6 +53,21 @@ class ScreenHelpTutorial06AddRaster extends PantherComponent {
 						allowFullScreen
 					></iframe>
 
+					<h3>Manifestation in FrontOffice</h3>
+
+					<p>
+						At this moment, you should be able to go to Front Office. You get there via the Dashboard and clicking on Data Exploration under the Front Office.
+					</p>
+
+					<iframe
+						className="help-video"
+						width="720"
+						height="421"
+						src="https://www.youtube.com/embed/8zhTOZb8rCU?rel=0&cc_load_policy=1&cc_lang_pref=en"
+						frameBorder="0"
+						allowFullScreen
+					></iframe>
+
 				</div></div>
 			</div>
 		);
