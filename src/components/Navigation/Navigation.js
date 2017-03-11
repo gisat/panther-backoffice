@@ -12,6 +12,8 @@ import utils from '../../utils/utils';
 
 import Menu from './Menu';
 
+import UserModel from '../../models/UserModel';
+
 let initialState = {
 	showMenu: false
 };
@@ -22,6 +24,7 @@ class Navigation extends PantherComponent {
 
 	static propTypes = {
 		activeScreenSet: PropTypes.string,
+		currentUser: PropTypes.instanceOf(UserModel),
 		className: PropTypes.string
 	};
 
@@ -64,6 +67,12 @@ class Navigation extends PantherComponent {
 		});
 	}
 
+	toggleUserMenu() {
+		this.setState({
+			showUserMenu: !this.state.showUserMenu
+		});
+	}
+
 
 	render() {
 
@@ -98,7 +107,20 @@ class Navigation extends PantherComponent {
 
 				</div>
 				<div id="navigation-user">
-
+					<div className="ptr-navigation-user-info">
+						<span>{this.props.currentUser.name}</span>
+					</div>
+					<div
+						id="navigation-user-menu-opener"
+						ref={node => {this.userMenuOpenerNode = node}}
+					>
+						<a
+							onClick={this.toggleUserMenu.bind(this)}
+							tabIndex="-1"
+						>
+							<UISVG src='dots.isvg' />
+						</a>
+					</div>
 				</div>
 			</div>
 		);

@@ -68,6 +68,7 @@ class App extends PantherComponent {
 					<Navigation
 						activeScreenSet={activeScreenSetKey}
 						scope={this.state.scope || null}
+						currentUser={this.props.currentUser}
 					/>
 					{React.cloneElement(page, {
 						scope: this.state.scope || null,
