@@ -18,6 +18,7 @@ class UserStore extends Store {
 		this.userUrl = this.urlFor('/rest/user');
 		this.permissionUserUrl = this.urlFor('/rest/permission/user');
 		this.loginUrl = this.urlFor('/api/login/login');
+		this.logoutUrl = this.urlFor('/api/login/logout');
 
 		this.logged = null;
 		this.loginListeners = [];
@@ -124,6 +125,21 @@ class UserStore extends Store {
 			})
 	}
 
+	logout(operationId) {
+		return superagent
+			.post(this.logoutUrl)
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(() => {
+				this.logged = null;
+			}).catch(error => {
+				logger.error('UserStore#logout Error: ', error);
+				this.emitError(error, operationId);
+			})
+	}
+
 	async getLogged() {
 		return superagent
 			.get(this.urlFor('/rest/logged'))
@@ -199,6 +215,9 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			break;
 		case ActionTypes.LOGIN:
 			storeInstance.login(action.data.username, action.data.password, action.data.operationId);
+			break;
+		case ActionTypes.LOGOUT:
+			storeInstance.logout(action.operationId);
 			break;
 	}
 });

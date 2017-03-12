@@ -10,6 +10,8 @@ import UISVG from '../atoms/UISVG';
 import classNames from 'classnames';
 import utils from '../../utils/utils';
 
+import ActionCreator from '../../actions/ActionCreator';
+
 import Menu from './Menu';
 
 import UserModel from '../../models/UserModel';
@@ -74,7 +76,7 @@ class Navigation extends PantherComponent {
 	}
 
 	logOut(e) {
-		//ActionCreator.logOut();
+		ActionCreator.logout();
 		Link.handleClick(e);
 	}
 
