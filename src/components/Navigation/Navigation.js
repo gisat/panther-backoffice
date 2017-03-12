@@ -73,6 +73,11 @@ class Navigation extends PantherComponent {
 		});
 	}
 
+	logOut(e) {
+		//ActionCreator.logOut();
+		Link.handleClick(e);
+	}
+
 
 	render() {
 
@@ -120,6 +125,22 @@ class Navigation extends PantherComponent {
 						>
 							<UISVG src='dots.isvg' />
 						</a>
+					</div>
+				</div>
+				<div id="navigation-user-menu" className={classNames({'open': this.state.showUserMenu})}>
+					<div>
+						<ul>
+							<li>
+								<a
+									href={publicPath + "/"}
+									onClick={this.logOut.bind(this)}
+									tabIndex="-1"
+									title="Log out"
+								>
+									<span>Log out</span>
+								</a>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>

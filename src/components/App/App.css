@@ -283,6 +283,23 @@ label.container {
 	left: 0;
 }
 
+#navigation-user-menu {
+	position: absolute;
+	top: 3.75rem;
+	right: 0;
+	width: 12rem;
+	height: 0;
+	overflow: hidden;
+	background-color: #222;
+	box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.7);
+
+	transition:
+		height .2s ease-in-out;
+}
+#navigation-user-menu.open {
+	height: 3.75rem;
+}
+
 #navigation-filter {
 	width: 12rem;
 	border-left: 1px solid #555;
@@ -302,6 +319,9 @@ label.container {
 	transform: translateY(-50%);
 	max-width: 100%;
 	padding-left: .875rem;
+}
+#navigation-user-menu-opener {
+	cursor: pointer;
 }
 
 #navigation-quick-access {
@@ -326,14 +346,6 @@ label.container {
 #menu ul li {
 	width: 100%;
 }
-#navigation a img,
-#navigation a svg {
-	width: 2.5rem;
-	height: 2.5rem;
-	margin: 0;
-}
-
-
 #navigation a, #navigation a span {
 	vertical-align: top;
 }
@@ -351,6 +363,21 @@ label.container {
 #navigation a:focus {
 	color:#fff;
 }
+#navigation a img,
+#navigation a svg {
+	width: 2.5rem;
+	height: 2.5rem;
+	margin: 0;
+}
+#navigation-user-menu-opener a {
+	padding: .9375rem;
+}
+#navigation-user-menu-opener a svg {
+	width: 1.875rem;
+	height: 1.875rem;
+}
+
+
 
 #navigation a .line {
 	fill:#999;
@@ -386,7 +413,8 @@ label.container {
 	margin:0 .625rem;
 }
 
-#navigation-menu a {
+#navigation-menu a,
+#navigation-user-menu a {
 	display: block;
 }
 
