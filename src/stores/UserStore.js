@@ -26,6 +26,17 @@ class UserStore extends Store {
 		this.responseListeners = [];
 	}
 
+	/**
+	 * TOTALLY TEMPORARY until we update ListenerHandler to newer version - todo
+	 * @param callback
+	 */
+	addLogoutListener(callback) {
+		this.addEventListener(EventTypes.USER_LOGGED_OUT, callback);
+	}
+	removeLogoutListener(callback) {
+		this.removeEventListener(EventTypes.USER_LOGGED_OUT, callback);
+	}
+
 	urlFor(serverPath) {
 		return apiProtocol + apiHost + path.join(apiPath, serverPath).replace(/\\/g, "/");
 	}
