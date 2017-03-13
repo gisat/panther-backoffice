@@ -47,12 +47,24 @@ class Navigation extends PantherComponent {
 
 
 	onDocumentClick(e) {
+		let newState = {};
 		let menuDOMNode = ReactDOM.findDOMNode(this.menuNode);
 		let menuOpenerDOMNode = ReactDOM.findDOMNode(this.menuOpenerNode);
 		if (menuDOMNode && !menuDOMNode.contains(e.target) && !menuOpenerDOMNode.contains(e.target)) {
-			this.setState({
-				showMenu: false
-			});
+			newState.showMenu = false;
+		}
+		let userMenuDOMNode = ReactDOM.findDOMNode(this.userMenuNode);
+		let userMenuOpenerDOMNode = ReactDOM.findDOMNode(this.userMenuOpenerNode);
+		if (userMenuDOMNode && !userMenuDOMNode.contains(e.target) && !userMenuOpenerDOMNode.contains(e.target)) {
+			newState.showUserMenu = false;
+		}
+		//let menuDOMNode = ReactDOM.findDOMNode(this.menuNode);
+		//let menuOpenerDOMNode = ReactDOM.findDOMNode(this.menuOpenerNode);
+		//if (menuDOMNode && !menuDOMNode.contains(e.target) && !menuOpenerDOMNode.contains(e.target)) {
+		//	newState.showMenu = false;
+		//}
+		if (Object.keys(newState).length) {
+			this.setState(newState);
 		}
 	}
 
@@ -130,7 +142,9 @@ class Navigation extends PantherComponent {
 					</div>
 				</div>
 				<div id="navigation-user-menu" className={classNames({'open': this.state.showUserMenu})}>
-					<div>
+					<div
+						ref={node => {this.userMenuNode = node}}
+					>
 						<ul>
 							<li>
 								<a
