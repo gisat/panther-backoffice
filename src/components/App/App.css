@@ -301,8 +301,8 @@ label.container {
 }
 
 #navigation-filter {
-	width: 12rem;
-	border-left: 1px solid #555;
+	/*width: 12rem;*/
+	/*border-left: 1px solid #555;*/
 }
 #navigation-user {
 	width: 12rem;
