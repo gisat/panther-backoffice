@@ -77,7 +77,7 @@ class Navigation extends PantherComponent {
 
 	logOut(e) {
 		ActionCreator.logout();
-		Link.handleClick(e);
+		e.preventDefault();
 	}
 
 

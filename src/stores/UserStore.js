@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
+import EventTypes from '../constants/EventTypes';
 
 import logger from '../core/Logger';
 import {apiProtocol, apiHost, apiPath} from '../config';
@@ -134,6 +135,7 @@ class UserStore extends Store {
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(() => {
 				this.logged = null;
+				this.emit(EventTypes.USER_LOGGED_OUT);
 			}).catch(error => {
 				logger.error('UserStore#logout Error: ', error);
 				this.emitError(error, operationId);
@@ -151,9 +153,14 @@ class UserStore extends Store {
 				if (response.body._id == 0) {
 					return null;
 				}
+				let oldUserKey = this.logged && this.logged.key;
 				this.logged = new UserModel(null, response.body);
-				this.loginListeners.forEach((listener) => {
-					listener(this.logged);
+				this.logged.ready.then(() => {
+					if (this.logged.key != oldUserKey) {
+						this.loginListeners.forEach((listener) => {
+							listener(this.logged);
+						});
+					}
 				});
 				return this.logged;
 			});
