@@ -14,9 +14,13 @@ class UserModel extends Model {
 				serverName: '_id',
 				sendToServer: true
 			},
-			name: {
+			username: {
 				serverName: 'username',
 				sendToServer: true
+			},
+			name: {
+				serverName: 'username', //for now copy username
+				sendToServer: false
 			},
 			permissions: {
 				serverName: 'permissions',

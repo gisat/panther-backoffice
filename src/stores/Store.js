@@ -9,6 +9,19 @@ import utils from '../utils/utils';
 class Store extends EventEmitter {
 
 
+	emit(event, ...args) {
+		logger.trace(this.constructor.name + " EMIT " + event, args);
+		super.emit(event, ...args);
+	}
+
+	addEventListener(event, callback) {
+		this.on(event, callback);
+	}
+
+	removeEventListener(event, callback) {
+		this.removeListener(event, callback);
+	}
+
 	emitChange() {
 		logger.trace(this.constructor.name + ":Store# emitChange()");
 		this.emit(EventTypes.STORE_CHANGE);

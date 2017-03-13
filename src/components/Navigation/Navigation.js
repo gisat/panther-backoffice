@@ -10,7 +10,11 @@ import UISVG from '../atoms/UISVG';
 import classNames from 'classnames';
 import utils from '../../utils/utils';
 
+import ActionCreator from '../../actions/ActionCreator';
+
 import Menu from './Menu';
+
+import UserModel from '../../models/UserModel';
 
 let initialState = {
 	showMenu: false
@@ -22,6 +26,7 @@ class Navigation extends PantherComponent {
 
 	static propTypes = {
 		activeScreenSet: PropTypes.string,
+		currentUser: PropTypes.instanceOf(UserModel),
 		className: PropTypes.string
 	};
 
@@ -42,12 +47,24 @@ class Navigation extends PantherComponent {
 
 
 	onDocumentClick(e) {
+		let newState = {};
 		let menuDOMNode = ReactDOM.findDOMNode(this.menuNode);
 		let menuOpenerDOMNode = ReactDOM.findDOMNode(this.menuOpenerNode);
 		if (menuDOMNode && !menuDOMNode.contains(e.target) && !menuOpenerDOMNode.contains(e.target)) {
-			this.setState({
-				showMenu: false
-			});
+			newState.showMenu = false;
+		}
+		let userMenuDOMNode = ReactDOM.findDOMNode(this.userMenuNode);
+		let userMenuOpenerDOMNode = ReactDOM.findDOMNode(this.userMenuOpenerNode);
+		if (userMenuDOMNode && !userMenuDOMNode.contains(e.target) && !userMenuOpenerDOMNode.contains(e.target)) {
+			newState.showUserMenu = false;
+		}
+		//let menuDOMNode = ReactDOM.findDOMNode(this.menuNode);
+		//let menuOpenerDOMNode = ReactDOM.findDOMNode(this.menuOpenerNode);
+		//if (menuDOMNode && !menuDOMNode.contains(e.target) && !menuOpenerDOMNode.contains(e.target)) {
+		//	newState.showMenu = false;
+		//}
+		if (Object.keys(newState).length) {
+			this.setState(newState);
 		}
 	}
 
@@ -62,6 +79,17 @@ class Navigation extends PantherComponent {
 		this.setState({
 			showMenu: !this.state.showMenu
 		});
+	}
+
+	toggleUserMenu() {
+		this.setState({
+			showUserMenu: !this.state.showUserMenu
+		});
+	}
+
+	logOut(e) {
+		ActionCreator.logout();
+		e.preventDefault();
 	}
 
 
@@ -98,7 +126,38 @@ class Navigation extends PantherComponent {
 
 				</div>
 				<div id="navigation-user">
-
+					<div className="ptr-navigation-user-info">
+						<span>{this.props.currentUser.name}</span>
+					</div>
+					<div
+						id="navigation-user-menu-opener"
+						ref={node => {this.userMenuOpenerNode = node}}
+					>
+						<a
+							onClick={this.toggleUserMenu.bind(this)}
+							tabIndex="-1"
+						>
+							<UISVG src='dots.isvg' />
+						</a>
+					</div>
+				</div>
+				<div id="navigation-user-menu" className={classNames({'open': this.state.showUserMenu})}>
+					<div
+						ref={node => {this.userMenuNode = node}}
+					>
+						<ul>
+							<li>
+								<a
+									href={publicPath + "/"}
+									onClick={this.logOut.bind(this)}
+									tabIndex="-1"
+									title="Log out"
+								>
+									<span>Log out</span>
+								</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		);

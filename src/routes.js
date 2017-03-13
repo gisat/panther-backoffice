@@ -15,22 +15,18 @@ import { publicPath } from './config';
 
 const router = new Router(on => {
 	on('*', async (state, next) => {
-		const component = await next();
-		return component && <App context={state.context}>{React.cloneElement(component, {screenState: parseScreens(state.params.activePath, state.search)} )}</App>;
+		let currentUser = await UserStore.getCurrentUser();
+		const component = currentUser ? await next() : <LoginPage />;
+		return component &&
+			<App
+				context={state.context}
+				currentUser={currentUser}
+			>
+				{React.cloneElement(component, {screenState: parseScreens(state.params.activePath, state.search)} )}
+			</App>;
 	});
 
 	hookRoute(on, '/login', async () => <LoginPage />);
-
-	on('*', async (state, next) => {
-		if(!UserStore.loggedIn()){
-			let logged = await UserStore.getLogged();
-			if(!logged) {
-				return <LoginPage />
-			}
-		}
-
-		return await next();
-	});
 
 	hookRoute(on, '/', async () => <Page screenSet="dashboard" />);
 

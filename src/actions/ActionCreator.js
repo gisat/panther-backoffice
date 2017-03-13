@@ -347,6 +347,14 @@ let actionCreator = {
 		AppDispatcher.dispatch(action);
 	},
 
+	logout(operationId) {
+		let action = {
+			type: ActionTypes.LOGOUT,
+			operationId: operationId
+		};
+		AppDispatcher.dispatch(action);
+	},
+
 	duplicateLayer(name, newName) {
 		let action = {
 			type: ActionTypes.DUPLICATE_LAYER,
