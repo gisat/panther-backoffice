@@ -61,6 +61,7 @@ export default keyMirror({
 	USER_ADD_PERMISSION: null,
 	USER_REMOVE_PERMISSION: null,
 	LOGIN: null,
+	LOGOUT: null,
 	DUPLICATE_LAYER: null,
 	GEONODE_LAYER_CREATE_RESPOND: null,
 	WMS_LAYER_CREATE_RESPOND: null

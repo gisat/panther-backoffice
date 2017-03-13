@@ -1,8 +1,10 @@
 import path from 'path';
 import superagent from 'superagent';
+import _ from 'lodash';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
+import EventTypes from '../constants/EventTypes';
 
 import logger from '../core/Logger';
 import {apiProtocol, apiHost, apiPath} from '../config';
@@ -17,10 +19,22 @@ class UserStore extends Store {
 		this.userUrl = this.urlFor('/rest/user');
 		this.permissionUserUrl = this.urlFor('/rest/permission/user');
 		this.loginUrl = this.urlFor('/api/login/login');
+		this.logoutUrl = this.urlFor('/api/login/logout');
 
 		this.logged = null;
 		this.loginListeners = [];
 		this.responseListeners = [];
+	}
+
+	/**
+	 * TOTALLY TEMPORARY until we update ListenerHandler to newer version - todo
+	 * @param callback
+	 */
+	addLogoutListener(callback) {
+		this.addEventListener(EventTypes.USER_LOGGED_OUT, callback);
+	}
+	removeLogoutListener(callback) {
+		this.removeEventListener(EventTypes.USER_LOGGED_OUT, callback);
 	}
 
 	urlFor(serverPath) {
@@ -123,6 +137,22 @@ class UserStore extends Store {
 			})
 	}
 
+	logout(operationId) {
+		return superagent
+			.post(this.logoutUrl)
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(() => {
+				this.logged = null;
+				this.emit(EventTypes.USER_LOGGED_OUT);
+			}).catch(error => {
+				logger.error('UserStore#logout Error: ', error);
+				this.emitError(error, operationId);
+			})
+	}
+
 	async getLogged() {
 		return superagent
 			.get(this.urlFor('/rest/logged'))
@@ -134,9 +164,14 @@ class UserStore extends Store {
 				if (response.body._id == 0) {
 					return null;
 				}
+				let oldUserKey = this.logged && this.logged.key;
 				this.logged = new UserModel(null, response.body);
-				this.loginListeners.forEach((listener) => {
-					listener(this.logged);
+				this.logged.ready.then(() => {
+					if (this.logged.key != oldUserKey) {
+						this.loginListeners.forEach((listener) => {
+							listener(this.logged);
+						});
+					}
 				});
 				return this.logged;
 			});
@@ -164,6 +199,16 @@ class UserStore extends Store {
 		return this.logged;
 	}
 
+	async getCurrentUser() {
+		//let logged = this.logged || await this.getLogged(); // would not respect outside logout
+		let logged = await this.getLogged();
+		if (logged) {
+			let models = await this.load();
+			return _.find(models, {key: logged.key});
+		}
+		return null;
+	}
+
 	addLoginListener(loginFunction) {
 		this.loginListeners.push(loginFunction);
 	}
@@ -188,6 +233,9 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			break;
 		case ActionTypes.LOGIN:
 			storeInstance.login(action.data.username, action.data.password, action.data.operationId);
+			break;
+		case ActionTypes.LOGOUT:
+			storeInstance.logout(action.operationId);
 			break;
 	}
 });

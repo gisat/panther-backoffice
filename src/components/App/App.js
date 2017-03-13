@@ -1,12 +1,20 @@
 import React, { PropTypes } from 'react';
 import styles from './App.css';
 import PantherComponent from '../common/PantherComponent';
-import OperationStore from '../../stores/OperationStore';
 import withContext from '../../decorators/withContext';
 import withStyles from '../../decorators/withStyles';
+
+import config from '../../config';
 import logger from '../../core/Logger';
+import ListenerHandler from '../../core/ListenerHandler';
+import Location from '../../core/Location';
+
+import OperationStore from '../../stores/OperationStore';
+import UserStore from '../../stores/UserStore';
+
 import Navigation from '../Navigation';
 import Page from '../Page';
+
 import Loader from '../atoms/Loader';
 
 
@@ -26,11 +34,13 @@ class App extends PantherComponent {
 			scope: null,
 			loading: 0
 		};
+		this.logoutListener = new ListenerHandler(this, this._onLogout, 'addLogoutListener', 'removeLogoutListener');
 	}
 
 	componentDidMount(){
 		super.componentDidMount();
 		this.changeListener.add(OperationStore);
+		this.logoutListener.add(UserStore);
 	}
 
 	_onStoreChange() {
@@ -41,6 +51,23 @@ class App extends PantherComponent {
 			loading: count
 		});
 	}
+
+	_onLogout() {
+		let url = '';
+		if (config.publicPath) {
+			let cleanPublicPath = config.publicPath.replace(/^\/*(.*?)\/*$/, "$1");
+			if (cleanPublicPath) {
+				url = "/" + cleanPublicPath;
+			}
+		}
+		Location.replaceState(null, url);
+	}
+
+	componentWillUnmount() {
+		super.componentWillUnmount();
+		this.logoutListener.clean();
+	}
+
 
 	render() {
 		let ret = "";
@@ -68,6 +95,7 @@ class App extends PantherComponent {
 					<Navigation
 						activeScreenSet={activeScreenSetKey}
 						scope={this.state.scope || null}
+						currentUser={this.props.currentUser}
 					/>
 					{React.cloneElement(page, {
 						scope: this.state.scope || null,
