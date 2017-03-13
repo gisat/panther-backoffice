@@ -51,8 +51,12 @@ class LoginPage extends Component {
 			.login(this.state.valueName, this.state.valuePassphrase)
 			.then(() => {
 				ActionCreator.removeOperation(id);
+				var path = window.location.pathname;
+				if(!path.endsWith('/')){
+					path += '/';
+				}
 				Location.pushState(
-					null, window.location.pathname
+					null, path
 				);
 			}).catch(error => {
 			ActionCreator.removeOperation(id);
