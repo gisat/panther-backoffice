@@ -368,6 +368,15 @@ class ConfigMetadataStyle extends ControllerComponent {
 
 	onChangeRuleFilter(ruleIndex,filterType,key,e) {
 		if (ruleIndex) {
+			if(!this.state.current.valueDefinitionRules[ruleIndex].filter[filterType]) {
+				var rules = this.state.current.valueDefinitionRules.slice();
+				rules[ruleIndex].filter[filterType] = {};
+				this.setStateDeep({
+					current: {
+						valueDefinitionRules: {$set: rules}
+					}
+				});
+			}
 			this.setStateDeep({
 				current: {
 					valueDefinitionRules: {
