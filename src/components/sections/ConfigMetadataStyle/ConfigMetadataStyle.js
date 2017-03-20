@@ -182,6 +182,8 @@ class ConfigMetadataStyle extends ControllerComponent {
 			} else if (firstState.valueFilterType == 'attributeCsv' || firstState.valueFilterType == 'attributeInterval') {
 				limitKeys = ['valueDefinitionRules', 'valueFilterAttributeSet', 'valueFilterAttribute'];
 			}
+		} else if (firstState.valueSource == 'geoserver') {
+			return firstState.valueServerName == secondState.valueServerName;
 		}
 		return super.equalStates(firstState, secondState, limitKeys);
 	}
