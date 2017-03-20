@@ -162,6 +162,32 @@ class ConfigMetadataStyle extends ControllerComponent {
 		}
 	}
 
+
+	equalStates(firstState, secondState, limitKeys) {
+		if (
+			(firstState.valueSource != secondState.valueSource)
+			|| (firstState.valueName != secondState.valueName)
+		) {
+			return false;
+		}
+		if (firstState.valueSource == 'definition') {
+			if (
+				(firstState.valueFeaturesType != secondState.valueFeaturesType)
+				|| (firstState.valueFilterType != secondState.valueFilterType)
+			) {
+				return false;
+			}
+			if (firstState.valueFilterType == 'no') {
+				limitKeys = ['valueDefinitionSingleRule'];
+			} else if (firstState.valueFilterType == 'attributeCsv' || firstState.valueFilterType == 'attributeInterval') {
+				limitKeys = ['valueDefinitionRules', 'valueFilterAttributeSet', 'valueFilterAttribute'];
+			}
+		} else if (firstState.valueSource == 'geoserver') {
+			return firstState.valueServerName == secondState.valueServerName;
+		}
+		return super.equalStates(firstState, secondState, limitKeys);
+	}
+
 	/**
 	 * Prepare options for data table selects
 	 * Called in store2state().
