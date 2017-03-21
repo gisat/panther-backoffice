@@ -68,7 +68,7 @@ class ScreenHelpTutorial03AnalyticalUnits extends PantherComponent {
 						className="help-video"
 						width="720"
 						height="421"
-						src="https://www.youtube.com/embed/jIpt7nwpQrA?rel=0&cc_load_policy=1&cc_lang_pref=en"
+						src="https://www.youtube.com/embed/meF31lmTz5g?rel=0&cc_load_policy=1&cc_lang_pref=en"
 						frameBorder="0"
 						allowFullScreen
 					></iframe>
