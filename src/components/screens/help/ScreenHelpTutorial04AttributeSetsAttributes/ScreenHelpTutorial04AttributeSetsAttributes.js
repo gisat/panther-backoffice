@@ -61,12 +61,22 @@ class ScreenHelpTutorial04AttributeSetsAttributes extends PantherComponent {
 					<h3>Manifestation in FrontOffice</h3>
 
 					<p>
-						At this moment, you should be able to go to the FrontOffice. You get there via the Dashboard and clicking on Data Exploration under the FrontOffice.
+						At this moment, you should be able to go to the Front Office. You get there via the Dashboard and clicking on Data Exploration under the Front Office.
 					</p>
 
 					<p>
-						Now you should be able to create your first charts in the FrontOffice. To verify that your mapping is correct, it is best to select the combination of Scope, Theme and Place and then add table with the added attribute. In default settings the table will show you the data, which are in the database table.
+						Now you should be able to create your first choropleths and charts in the Front Office. To verify that your mapping is correct, it is best to select the combination of Scope, Theme and Place and then add table with the added attribute. In default settings the table will show you the data, which are in the database table.
 					</p>
+
+					<iframe
+						className="help-video"
+						width="720"
+						height="421"
+						src="https://www.youtube.com/embed/Vqc15Wfbm3I?rel=0&cc_load_policy=1&cc_lang_pref=en"
+						frameBorder="0"
+						allowFullScreen
+					></iframe>
+
 
 				</div></div>
 			</div>
