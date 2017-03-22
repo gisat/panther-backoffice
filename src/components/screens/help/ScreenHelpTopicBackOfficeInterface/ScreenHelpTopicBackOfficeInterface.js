@@ -109,7 +109,7 @@ class ScreenHelpTopicBackOfficeInterface extends PantherComponent {
 							/>
 						</div>
 						<h3>Analyses</h3>
-						<p>Set analyses to be run on specified raw data and run them on chosen locations and analytical units levels. Get computed totals, averages, intersections of features with analytical units, surface proportions etc. available for use in both backoffice and frontoffice in the same ways as raw data.</p>
+						<p>Set analyses to be run on specified raw data and run them on chosen locations and analytical units levels. Get computed totals, averages, intersections of features with analytical units, surface proportions etc. available for use in both Back Office and Front Office in the same ways as raw data.</p>
 					</div>
 
 					<div className="help-bo-section">

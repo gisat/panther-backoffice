@@ -46,7 +46,7 @@ class ScreenHelpTutorial04AttributeSetsAttributes extends PantherComponent {
 
 					<p>
 						Attributes themselves represent the columns in the data, which can be used in analysis, charts, filters and
-						thematic maps. Before the attributes will be correctly available in the FrontOffice it is necessary to assign the topic Common (tutorial), which was already created before to the correct
+						thematic maps. Before the attributes will be correctly available in the Front Office it is necessary to assign the topic Common (tutorial), which was already created before to the correct
 					</p>
 
 					<iframe
@@ -58,7 +58,7 @@ class ScreenHelpTutorial04AttributeSetsAttributes extends PantherComponent {
 						allowFullScreen
 					></iframe>
 
-					<h3>Manifestation in FrontOffice</h3>
+					<h3>Result in Front Office</h3>
 
 					<p>
 						At this moment, you should be able to go to the Front Office. You get there via the Dashboard and clicking on Data Exploration under the Front Office.

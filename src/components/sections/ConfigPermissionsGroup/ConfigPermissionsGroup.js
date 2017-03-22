@@ -97,7 +97,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 						nextState.valuesUsersUpdate.push(permission.id);
 					}
 				});
-				//TODO: Refactor. Currently the whole permission for BackOffice are in two categories. One for the creation types and one for the rest.
+				//TODO: Refactor. Currently the whole permission for Back Office are in two categories. One for the creation types and one for the rest.
 				groups.permissionsTowards.forEach(permission => {
 					nextState.valuesResources.push(permission.resourceType);
 				})

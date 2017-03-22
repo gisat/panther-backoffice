@@ -41,7 +41,7 @@ class ScreenHelpTutorial05AddPeriod extends PantherComponent {
 					<p>Add new Reference Period to existing Scope</p>
 
 					<p>
-						Period represents time period with the data. In the FrontOffice it is possible to show the data based on the
+						Period represents time period with the data. In the Front Office it is possible to show the data based on the
 						time.
 					</p>
 
@@ -54,7 +54,7 @@ class ScreenHelpTutorial05AddPeriod extends PantherComponent {
 						allowFullScreen
 					></iframe>
 
-					<h3>Manifestation in Front Office</h3>
+					<h3>Result in Front Office</h3>
 
 					<p>
 						At this moment, you should be able to go to the Front Office. You get there via the Dashboard and clicking on Data Exploration under the Front Office.

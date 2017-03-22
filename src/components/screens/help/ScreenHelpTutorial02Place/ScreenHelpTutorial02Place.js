@@ -54,14 +54,14 @@ class ScreenHelpTutorial02Place extends PantherComponent {
 						allowFullScreen
 					></iframe>
 
-					<h3>Manifestation in FrontOffice</h3>
+					<h3>Result in Front Office</h3>
 
 					<p>
-						At this moment, you should be able to go to the FrontOffice. You get there via the Dashboard and clicking on Data Exploration under the FrontOffice.
+						At this moment, you should be able to go to the Front Office. You get there via the Dashboard and clicking on Data Exploration under the Front Office.
 					</p>
 
 					<p>
-						Based on the previous tutorial you should be able to choose previously created Scope and Theme. On top of that you should be able to choose the place you created. The FrontOffice will load, but at the current moment there won't be anything else for you to do in this combination of Scope, Place and Theme. First you will need to map the uploaded layers to the scope.
+						Based on the previous tutorial you should be able to choose previously created Scope and Theme. On top of that you should be able to choose the place you created. The Front Office will load, but at the current moment there won't be anything else for you to do in this combination of Scope, Place and Theme. First you will need to map the uploaded layers to the scope.
 					</p>
 
 					<p>

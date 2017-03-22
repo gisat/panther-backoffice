@@ -55,7 +55,7 @@ class ScreenHelpTutorial01ScopeThemeTopic extends PantherComponent {
 					</p>
 
 					<ol className="plain list-steps">
-						<li>From BackOffice, navigate to the <b>Metadata</b> section.</li>
+						<li>From Back Office, navigate to the <b>Metadata</b> section.</li>
 						<li>In the left tab, choose <b>Scope</b>. Here you can see already created Scopes and on top you can click on the <b>+</b> row, which will create a new Scope.</li>
 						<li>Panel on the right side of the application has opened. In this panel, you need to fil Name of the scope, Levels of analytical units and Reference periods. If the ones you need aren't already prepared in the system, you can also create them here. Just start writing in the prepared field and if there is none such, it will offer you possibility to create a new one. By default, Scope is inactive and only you have access to it. This means that until you make Scope active and give others access to it, nobody else will see it.</li>
 						<li>Once we have created Scope, we need to create Theme associated with the Scope. The Theme is basically a tag for a combination of Attributes and Attribute sets available in such part of the Scope. Usually, it is used when for the same area you want to show different information such as Land Cover, Transportation and Population. These all would be good candidates for Theme. The Theme belongs to the Scope. Select either existing one or the one we've created earlier. It also can contain Topics. Topic itself is a structure grouping together Attribute sets and Attributes. This is useful, when you have for one Theme or Place multiple types of Analytical units. In this case, you can keep the structure of Attribute sets and Attributes. Beware, you still need to associate data from relevant Data layers to these Attribute sets and Attributes.</li>
@@ -70,10 +70,10 @@ class ScreenHelpTutorial01ScopeThemeTopic extends PantherComponent {
 						allowFullScreen
 					></iframe>
 
-					<h3>Manifestation in Front Office</h3>
+					<h3>Result in Front Office</h3>
 
 					<p>
-						At this moment, you should be able to go to the FrontOffice. You get there via the Dashboard and clicking on Data Exploration under the FrontOffice.
+						At this moment, you should be able to go to the Front Office. You get there via the Dashboard and clicking on Data Exploration under the Front Office.
 					</p>
 
 					<p>

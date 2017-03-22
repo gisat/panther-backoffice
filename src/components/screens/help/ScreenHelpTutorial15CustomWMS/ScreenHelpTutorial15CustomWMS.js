@@ -23,10 +23,10 @@ class ScreenHelpTutorial15CustomWMS extends PantherComponent {
 						<h3>Manage WMS layer from custom server</h3>
 
 						<ol className="plain list-steps">
-							<li>Go to the <b>layers</b> page in the BackOffice.</li>
+							<li>Go to the <b>layers</b> page in the Back Office.</li>
 							<li>On the left side choose <b>WMS Layer</b></li>
 							<li>Click on the box for adding new one or on already existing one for edit</li>
-							<li>Fill in all necessary details. Name is shown in the FrontOffice in the area, where layers are
+							<li>Fill in all necessary details. Name is shown in the Front Office in the area, where layers are
 								displayed. Url is full URL to the WMS server on which the layer resides. Layer is the name of the layer
 								on the WMS server.
 							</li>

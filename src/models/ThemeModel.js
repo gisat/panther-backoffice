@@ -91,7 +91,7 @@ class ThemeModel extends Model {
 				isPromise: true,
 				isArray: true
 			},
-			visualizations: { // ordered array of ids, not using in backoffice
+			visualizations: { // ordered array of ids, not using in Back Office
 				serverName: 'visOrder',
 				sendToServer: false
 			}

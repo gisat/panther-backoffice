@@ -28,7 +28,7 @@ class ScreenHelpTutorial13Permissions extends PantherComponent {
 						<h3>Permissions to create resources</h3>
 
 						<ol className="plain list-steps">
-							<li>Go to the <b>permission</b> page in the BackOffice.</li>
+							<li>Go to the <b>permission</b> page in the Back Office.</li>
 							<li>On the left side choose either <b>User</b> or <b>Group</b></li>
 							<li>Choose specific user or group.</li>
 							<li>There is part Permissions for creation of types, where you can choose among the resources and by
@@ -40,7 +40,7 @@ class ScreenHelpTutorial13Permissions extends PantherComponent {
 						<h3>Permissions to read, update, delete specific resource</h3>
 
 						<ol className="plain list-steps">
-							<li>Go to the <b>permission</b> page in the BackOffice.</li>
+							<li>Go to the <b>permission</b> page in the Back Office.</li>
 							<li>On the left side choose from: Place, Scope, Topic, Group</li>
 							<li>Choose specific resource</li>
 							<li>On the left side there are lists. These lists are saved whenever new item is added or an item is

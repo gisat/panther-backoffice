@@ -23,7 +23,7 @@ class ScreenHelpTutorial12UserManagement extends PantherComponent {
 						<h3>Invitation - Any user can invite others</h3>
 
 						<ol className="plain list-steps">
-							<li>Go to the <b>Dashboard</b> in the BackOffice</li>
+							<li>Go to the <b>Dashboard</b> in the Back Office</li>
 							<li>Click on the <b>User Invitation</b></li>
 							<li>This opens new tab with the page for invitation of users. Here specify the email and username of the
 								invited user and click on <b>Invite User</b></li>

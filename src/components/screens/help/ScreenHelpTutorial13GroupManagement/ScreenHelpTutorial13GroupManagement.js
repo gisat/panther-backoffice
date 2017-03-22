@@ -26,7 +26,7 @@ class ScreenHelpTutorial13GroupManagement extends PantherComponent {
 							system. In case you are admin you can add other administrators if you decide to do so.</p>
 
 						<ol className="plain list-steps">
-							<li>Go to the <b>permission</b> page in the BackOffice.</li>
+							<li>Go to the <b>permission</b> page in the Back Office.</li>
 							<li>Choose <b>Group</b> on the left side</li>
 							<li>To create group click on the + the same way as for any other type of metadata</li>
 							<li>To Edit group, click on the group name</li>
