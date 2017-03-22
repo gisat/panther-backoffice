@@ -54,6 +54,26 @@ class ScreenHelpTutorial05AddPeriod extends PantherComponent {
 						allowFullScreen
 					></iframe>
 
+					<h3>Manifestation in Front Office</h3>
+
+					<p>
+						At this moment, you should be able to go to the Front Office. You get there via the Dashboard and clicking on Data Exploration under the Front Office.
+					</p>
+
+					<p>
+						Now you should be able to see both Periods on the timeline and switch between them.
+					</p>
+
+					<iframe
+						className="help-video"
+						width="720"
+						height="421"
+						src="https://www.youtube.com/embed/4zDZNCfHvf8?rel=0&cc_load_policy=1&cc_lang_pref=en"
+						frameBorder="0"
+						allowFullScreen
+					></iframe>
+
+
 				</div></div>
 			</div>
 		);
