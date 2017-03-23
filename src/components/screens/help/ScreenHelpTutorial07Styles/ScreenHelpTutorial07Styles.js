@@ -1,6 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 
+import logger from '../../../../core/Logger';
+
 import PantherComponent from "../../../common/PantherComponent";
+import ScreenHelpTutorial08AddVector from '../ScreenHelpTutorial08AddVector';
+
 
 class ScreenHelpTutorial07Styles extends PantherComponent {
 
@@ -14,7 +18,9 @@ class ScreenHelpTutorial07Styles extends PantherComponent {
 		let component = null;
 		let size = 50;
 		switch (helpScreenKey) {
-
+			case 'Tutorial08AddVector':
+				component = ScreenHelpTutorial08AddVector;
+				break;
 		}
 		if (component) {
 			let options = {
@@ -51,7 +57,6 @@ class ScreenHelpTutorial07Styles extends PantherComponent {
 					<p>
 						To see the effect of multiple Styles with one Layer, see the video in the chapter
 						<a
-							className="help-link"
 							onClick={this.onHelpLinkClick.bind(this, 'Tutorial08AddVector')}
 						>8: Vector Layer</a>.<br/>
 
