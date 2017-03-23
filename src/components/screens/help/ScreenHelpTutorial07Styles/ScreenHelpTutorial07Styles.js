@@ -15,7 +15,8 @@ class ScreenHelpTutorial07Styles extends PantherComponent {
 	};
 
 	onHelpLinkClick(helpScreenKey) {
-		var screenName = this.props.screenKey + "-ScreenHelp" + helpScreenKey;
+		// fix name base, to avoid opening in new screen when one is opened from helpIndex
+		var screenName = "ScreenDashboardBase-ScreenHelpIndex-ScreenHelp" + helpScreenKey;
 		let component = null;
 		let size = 50;
 		switch (helpScreenKey) {
@@ -56,7 +57,7 @@ class ScreenHelpTutorial07Styles extends PantherComponent {
 					<h3>Result in Front Office</h3>
 
 					<p>
-						To see the effect of multiple Styles with one Layer, see the video in the chapter <a
+						To see the effect of multiple Styles with one Layer, see the result video in the chapter <a
 							href="#"
 							onClick={this.onHelpLinkClick.bind(this, 'Tutorial08AddVector')}
 						>8: Vector Layer</a>.<br/>
