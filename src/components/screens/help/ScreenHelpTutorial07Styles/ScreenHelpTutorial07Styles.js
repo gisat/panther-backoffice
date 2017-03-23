@@ -9,6 +9,25 @@ class ScreenHelpTutorial07Styles extends PantherComponent {
 		screenSetKey: PropTypes.string.isRequired
 	};
 
+	onHelpLinkClick(helpScreenKey) {
+		var screenName = this.props.screenKey + "-ScreenHelp" + helpScreenKey;
+		let component = null;
+		let size = 50;
+		switch (helpScreenKey) {
+
+		}
+		if (component) {
+			let options = {
+				component: component,
+				parentUrl: this.props.parentUrl,
+				size: size
+			};
+			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
+		} else {
+			logger.error("ScreenHelpCreatePlace# onHelpLinkClick(), Unknown help screen.", helpScreenKey);
+		}
+	}
+
 	render() {
 
 		return (
@@ -26,6 +45,18 @@ class ScreenHelpTutorial07Styles extends PantherComponent {
 						frameBorder="0"
 						allowFullScreen
 					></iframe>
+
+					<h3>Result in Front Office</h3>
+
+					<p>
+						To see the effect of multiple Styles with one Layer, see the video in the chapter
+						<a
+							className="help-link"
+							onClick={this.onHelpLinkClick.bind(this, 'Tutorial08AddVector')}
+						>8: Vector Layer</a>.<br/>
+
+
+					</p>
 
 				</div></div>
 			</div>
