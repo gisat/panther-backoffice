@@ -60,7 +60,7 @@ class ScreenHelpTutorial07Styles extends PantherComponent {
 						To see the effect of multiple Styles with one Layer, see the result video in the chapter <a
 							href="#"
 							onClick={this.onHelpLinkClick.bind(this, 'Tutorial08AddVector')}
-						>8: Vector Layer</a>.<br/>
+						>8:&nbsp;Vector&nbsp;Layer</a>.<br/>
 
 					</p>
 
