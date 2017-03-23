@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 
 import logger from '../../../../core/Logger';
+import ActionCreator from '../../../../actions/ActionCreator';
 
 import PantherComponent from "../../../common/PantherComponent";
 import ScreenHelpTutorial08AddVector from '../ScreenHelpTutorial08AddVector';
@@ -55,11 +56,10 @@ class ScreenHelpTutorial07Styles extends PantherComponent {
 					<h3>Result in Front Office</h3>
 
 					<p>
-						To see the effect of multiple Styles with one Layer, see the video in the chapter
-						<a
+						To see the effect of multiple Styles with one Layer, see the video in the chapter <a
+							href="#"
 							onClick={this.onHelpLinkClick.bind(this, 'Tutorial08AddVector')}
 						>8: Vector Layer</a>.<br/>
-
 
 					</p>
 
