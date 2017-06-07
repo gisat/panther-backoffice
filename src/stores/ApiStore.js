@@ -89,7 +89,10 @@ class ApiStore extends Store {
 
 	load() {
 		var method = this.getApiLoadMethod();
-		return this.request(method);
+		return this.request(method).catch(error => {
+			logger.error(`ApiStore# load() Error: `, error);
+			return [];
+		});
 	}
 
 	initialLoad() {
