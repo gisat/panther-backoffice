@@ -142,14 +142,19 @@ class PlaceRelations extends PantherComponent {
 				};
 			}
 			if(!rel.isOfAttributeSet) {
-				if(!repo[rel.layerObject.key].periods[rel.period.key]) {
-					repo[rel.layerObject.key].periods[rel.period.key] = {
-						key: rel.period.key,
-						name: rel.period.name,
-						relations: []
-					};
+				if(rel.period === null) {
+					repo[rel.layerObject.key].allTime = repo[rel.layerObject.key].allTime || [];
+					repo[rel.layerObject.key].allTime.push(rel);
+				} else {
+					if(!repo[rel.layerObject.key].periods[rel.period.key]) {
+						repo[rel.layerObject.key].periods[rel.period.key] = {
+							key: rel.period.key,
+							name: rel.period.name,
+							relations: []
+						};
+					}
+					repo[rel.layerObject.key].periods[rel.period.key].relations.push(rel);
 				}
-				repo[rel.layerObject.key].periods[rel.period.key].relations.push(rel);
 			} else {
 				if(!repo[rel.layerObject.key].attSets[rel.attributeSet.key]) {
 					repo[rel.layerObject.key].attSets[rel.attributeSet.key] = {
@@ -158,14 +163,19 @@ class PlaceRelations extends PantherComponent {
 						periods: {}
 					};
 				}
-				if(!repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key]) {
-					repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key] = {
-						key: rel.period.key,
-						name: rel.period.name,
-						relations: []
-					};
+				if(rel.period === null) {
+					repo[rel.layerObject.key].attSets[rel.attributeSet.key].allTime = repo[rel.layerObject.key].attSets[rel.attributeSet.key].allTime || [];
+					repo[rel.layerObject.key].attSets[rel.attributeSet.key].allTime.push(rel);
+				} else {
+					if (!repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key]) {
+						repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key] = {
+							key: rel.period.key,
+							name: rel.period.name,
+							relations: []
+						};
+					}
+					repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key].relations.push(rel);
 				}
-				repo[rel.layerObject.key].attSets[rel.attributeSet.key].periods[rel.period.key].relations.push(rel);
 			}
 		};
 
@@ -184,14 +194,19 @@ class PlaceRelations extends PantherComponent {
 					periods: {}
 				};
 			}
-			if(!repo[rel.attributeSet.key].levels[rel.layerObject.key].periods[rel.period.key]) {
-				repo[rel.attributeSet.key].levels[rel.layerObject.key].periods[rel.period.key] = {
-					key: rel.period.key,
-					name: rel.period.name,
-					relations: []
-				};
+			if(rel.period === null) {
+				repo[rel.attributeSet.key].levels[rel.layerObject.key].allTime = repo[rel.attributeSet.key].levels[rel.layerObject.key].allTime || [];
+				repo[rel.attributeSet.key].levels[rel.layerObject.key].allTime.push(rel);
+			} else {
+				if (!repo[rel.attributeSet.key].levels[rel.layerObject.key].periods[rel.period.key]) {
+					repo[rel.attributeSet.key].levels[rel.layerObject.key].periods[rel.period.key] = {
+						key: rel.period.key,
+						name: rel.period.name,
+						relations: []
+					};
+				}
+				repo[rel.attributeSet.key].levels[rel.layerObject.key].periods[rel.period.key].relations.push(rel);
 			}
-			repo[rel.attributeSet.key].levels[rel.layerObject.key].periods[rel.period.key].relations.push(rel);
 		};
 
 		var addRelationLevel = function(repo,rel) {
