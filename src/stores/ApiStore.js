@@ -282,6 +282,8 @@ class ApiStore extends Store {
 								delete instance.ready;
 							}, this);
 							resolve(ret);
+						}).catch(error => {
+							logger.error(`ApiStore# request() Failed to resolve instances. Error: ${error}`);
 						});
 
 					}
