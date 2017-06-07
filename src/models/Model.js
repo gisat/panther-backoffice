@@ -60,7 +60,7 @@ class Model {
 					Promise.all(nestedPromises).then(function(arrayOfNested){
 						ret[key] = arrayOfNested;
 					}).catch(error => {
-						logger.error(`Model# resolveForLocal() Failed to resolve nested promises. Error: ${error} | data: ${data}`);
+						logger.error(`Model# resolveForLocal() Failed to resolve nested promises. Error: ${error} | data:`, data);
 					});
 					promises.push(Promise.all(nestedPromises));
 				} else {
@@ -77,7 +77,7 @@ class Model {
 							ret[key] = transformedNestedData;
 						}
 					}).catch(error => {
-						logger.error(`Model# resolveForLocal() Failed to resolve nested promise data. Error: ${error} | data: ${data}`);
+						logger.error(`Model# resolveForLocal() Failed to resolve nested promise data. Error: ${error} | data:`, data);
 					});
 					promises.push(nestedPromise);
 				} else if (!keyProps.ignoreEmpty) {
@@ -89,7 +89,7 @@ class Model {
 					promise.then(function(transformedData){
 						ret[key] = transformedData;
 					}).catch(error => {
-						logger.error(`Model# resolveForLocal() Failed to resolve data. Error: ${error} | data: ${data}`);
+						logger.error(`Model# resolveForLocal() Failed to resolve data. Error: ${error} | data:`, data, '| key: ', key, '| keyProps:', keyProps);
 					});
 					promises.push(promise);
 				} else if (!keyProps.ignoreEmpty || !!data[keyProps.serverName]) {
