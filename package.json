@@ -43,7 +43,7 @@
     "babel-loader": "^5.3.2",
     "babel-plugin-react-transform": "^1.1.1",
     "browser-sync": "^2.9.7",
-    "css-loader": "^0.19.0",
+    "css-loader": "0.19.0",
     "csscomb": "^3.1.8",
     "del": "^2.0.2",
     "eslint": "^1.6.0",
