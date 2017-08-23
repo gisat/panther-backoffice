@@ -13,6 +13,9 @@ import UserStore from './stores/UserStore';
 
 import { publicPath } from './config';
 
+import RegisterPage from './components/pages/RegisterPage';
+import UpdatePage from './components/pages/UpdatePage';
+
 const router = new Router(on => {
 	on('*', async (state, next) => {
 		let currentUser = await UserStore.getCurrentUser();
@@ -29,6 +32,8 @@ const router = new Router(on => {
 	hookRoute(on, '/login', async () => <LoginPage />);
 
 	hookRoute(on, '/register', async () => <RegisterPage />);
+
+	hookRoute(on, '/update', async () => <UpdatePage />);
 
 	hookRoute(on, '/', async () => <Page screenSet="dashboard" />);
 

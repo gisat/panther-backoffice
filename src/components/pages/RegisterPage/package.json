@@ -1,6 +1,6 @@
 {
-	"name": "InvitationPage",
+	"name": "RegisterPage",
 	"version": "0.0.0",
 	"private": true,
-	"main": "./InvitationPage.js"
+	"main": "./RegisterPage.js"
 }
