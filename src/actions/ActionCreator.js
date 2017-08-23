@@ -335,13 +335,14 @@ let actionCreator = {
 		AppDispatcher.dispatch(action);
 	},
 
-	login(username, password, operationId) {
+	login(username, password, operationId, callback) {
 		let action = {
 			type: ActionTypes.LOGIN,
 			data: {
 				username: username,
 				password: password,
-				operationId: operationId
+				operationId: operationId,
+				callback: callback
 			}
 		};
 		AppDispatcher.dispatch(action);

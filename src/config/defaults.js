@@ -35,6 +35,7 @@ export default {
 	frontOfficeAddress: "localhost",
 	frontOfficeExplorationPath: "tool/",
 
+	baseUrl: "http://localhost/backoffice",
 
 	/**
 	 * Logger

@@ -1,7 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import ActionCreator from '../../../actions/ActionCreator';
-
-import utils from '../../../utils/utils';
+import {baseUrl} from '../../../config';
 
 class RegisterPage extends Component {
 	constructor(props) {
@@ -54,7 +53,7 @@ class RegisterPage extends Component {
 	onCreateUserResponseListener(response) {
 		// If the user was correctly registered, log him in and redirect to the system.
 		if(!response.error) {
-			ActionCreator.login(this.state.valueName, this.state.valuePassword,new UUID().toString());
+			ActionCreator.login(this.state.valueName, this.state.valuePassword, new UUID().toString(), this.onLoginResponse.bind(this));
 		} else {
 			this.setState({
 				valueName: '',
@@ -65,6 +64,10 @@ class RegisterPage extends Component {
 				message: response.error
 			});
 		}
+	}
+
+	onLoginResponse(response) {
+		window.location = baseUrl;
 	}
 
 	render() {

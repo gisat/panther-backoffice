@@ -112,7 +112,7 @@ class UserStore extends Store {
 			});
 	}
 
-	login(username, password, operationId) {
+	login(username, password, operationId, callback) {
 		return superagent
 			.post(this.loginUrl)
 			.send({
@@ -124,15 +124,22 @@ class UserStore extends Store {
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(() => {
-				return this.getLogged();
+				return this.getLogged().then((user) => {
+					callback(user);
+
+					return user;
+				});
 			}).then(logged => {
 				if(logged == null) {
+					callback(null);
 					return null;
 				}
 
+				callback(logged);
 				return logged;
 			}).catch(error => {
 				logger.error('UserStore#login Error: ', error);
+				callback(error);
 				this.emitError(error, operationId);
 			})
 	}
@@ -315,7 +322,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			storeInstance.removePermission(action.data.userId, action.data.permission, action.data.operationId);
 			break;
 		case ActionTypes.LOGIN:
-			storeInstance.login(action.data.username, action.data.password, action.data.operationId);
+			storeInstance.login(action.data.username, action.data.password, action.data.operationId, action.data.callback || function(){});
 			break;
 		case ActionTypes.LOGOUT:
 			storeInstance.logout(action.operationId);
