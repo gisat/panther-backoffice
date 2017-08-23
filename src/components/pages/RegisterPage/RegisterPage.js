@@ -3,18 +3,18 @@ import ActionCreator from '../../../actions/ActionCreator';
 
 import utils from '../../../utils/utils';
 
-let initialState = {
-	error: false,
-	message: null,
-	valueName: '',
-	valueUsername: '',
-	valuePassword: '',
-	valuePasswordConfirmation: ''
-};
-
 class RegisterPage extends Component {
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			error: false,
+			message: null,
+			valueName: '',
+			valueUsername: '',
+			valuePassword: '',
+			valuePasswordConfirmation: ''
+		}
 	}
 
 	onChangeNameListener(e){

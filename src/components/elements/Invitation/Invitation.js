@@ -1,14 +1,17 @@
 import React, {PropTypes, Component} from 'react';
 import ActionCreator from '../../../actions/ActionCreator';
 
-let initialState = {
-	valueEmail: '',
-	isWorking: false
-};
-
 class Invitation extends Component {
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			processing: false,
+			message: null,
+			error: null,
+
+			valueEmail: ''
+		}
 	}
 
 	onEmailChangeListener(e) {

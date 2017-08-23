@@ -2,20 +2,18 @@ import React, {PropTypes, Component} from 'react';
 import ActionCreator from '../../../actions/ActionCreator';
 import UserStore from '../../../stores/UserStore';
 
-import utils from '../../../utils/utils';
-
-let initialState = {
-	error: false,
-	message: null,
-	valueName: '',
-	valueUsername: '',
-	valuePassword: '',
-	valuePasswordConfirmation: ''
-};
-
 class UpdatePage extends Component {
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			error: false,
+			message: null,
+			valueName: '',
+			valueUsername: '',
+			valuePassword: '',
+			valuePasswordConfirmation: ''
+		}
 	}
 
 	onChangeNameListener(e){
