@@ -26,7 +26,7 @@ class Invitation extends Component {
 			error: '',
 			message: ''
 		});
-		ActionCreator.inviteUser(this.state.valueEmail, this.onResponseListener);
+		ActionCreator.inviteUser(this.state.valueEmail, this.onResponseListener.bind(this));
 	}
 
 	onResponseListener(response) {
