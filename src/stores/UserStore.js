@@ -184,7 +184,7 @@ class UserStore extends Store {
 	 */
 	inviteUser(email, callback) {
 		superagent
-			.get(this.urlFor('/rest/invitation/user'))
+			.post(this.urlFor('/rest/invitation/user'))
 			.send({
 				email: email
 			})
