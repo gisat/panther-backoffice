@@ -19,7 +19,16 @@ import UpdatePage from './components/pages/UpdatePage';
 const router = new Router(on => {
 	on('*', async (state, next) => {
 		let currentUser = await UserStore.getCurrentUser();
-		const component = currentUser ? await next() : <LoginPage />;
+		let component;
+		if(currentUser) {
+			component = await next();
+		} else {
+			if(state.params.activePath.indexOf('register') != -1) {
+				component = <RegisterPage/>
+			} else {
+				component = <LoginPage/>;
+			}
+		}
 		return component &&
 			<App
 				context={state.context}
@@ -30,8 +39,6 @@ const router = new Router(on => {
 	});
 
 	hookRoute(on, '/login', async () => <LoginPage />);
-
-	hookRoute(on, '/register', async () => <RegisterPage />);
 
 	hookRoute(on, '/update', async () => <UpdatePage />);
 
