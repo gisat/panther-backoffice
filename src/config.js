@@ -57,3 +57,4 @@ export const frontOfficeAddress = config.frontOfficeAddress;
 export const frontOfficeExplorationPath = config.frontOfficeExplorationPath;
 export const loggingLevel = config.loggingLevel;
 export const allowDuplication = config.allowDuplication;
+export const allowInvitation = config.allowInvitation;

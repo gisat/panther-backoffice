@@ -52,6 +52,10 @@ export default {
 	 */
 	allowDuplication: false,
 
+	/**
+	 * Whether there will be possibility to allow invitation of new users into the system. Usually it will be possible.
+	 */
+	allowInvitation: true,
 
 	/**
 	 * Data models - types & properties

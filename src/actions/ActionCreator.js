@@ -364,6 +364,33 @@ let actionCreator = {
 			}
 		};
 		AppDispatcher.dispatch(action);
+	},
+
+	inviteUser(email, callback) {
+		let action = {
+			type: ActionTypes.INVITE_USER,
+			data: {
+				email: email,
+				callback: callback
+			}
+		};
+
+		AppDispatcher.dispatch(action);
+	},
+
+	createUser(hash, name, password, username, callback) {
+		let action = {
+			type: ActionTypes.CREATE_USER,
+			data: {
+				hash: hash,
+				name: name,
+				password: password,
+				username: username,
+				callback: callback
+			}
+		};
+
+		AppDispatcher.dispatch(action);
 	}
 };
 

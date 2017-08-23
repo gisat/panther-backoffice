@@ -177,6 +177,91 @@ class UserStore extends Store {
 			});
 	}
 
+	/**
+	 * It mails invitation to the user with given email.
+	 * @param email {String} Email of the user to send the email to.
+	 * @param callback {Function} Function to be called back once the operation finishes.
+	 */
+	inviteUser(email, callback) {
+		superagent
+			.get(this.urlFor('/rest/user/invitation'))
+			.send({
+				email: email
+			})
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(response => {
+				callback({
+					message: response
+				});
+			})
+			.catch(error => {
+				callback({
+					error: error
+				})
+			})
+	}
+
+	/**
+	 * It seriously creates new user on the server. The rights to do so are verified by the hash.
+	 * @param hash {String} The valid hash is necessary in order to create the user.
+	 * @param name {String} Name of the new user
+	 * @param password {String} Password of the new user. It will be hashed on the backend
+	 * @param username {String} Username used to log in the system.
+	 * @param callback {Function} Function to be called when the operation finishes.
+	 */
+	createUser(hash, name, password, username, callback) {
+		superagent
+			.post(this.urlFor('/rest/user'))
+			.send({
+				hash: hash,
+				name: name,
+				password: password,
+				username: username
+			})
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(response => {
+				callback({
+					message: response
+				});
+			})
+			.catch(error => {
+				callback({
+					error: error
+				})
+			})
+	}
+
+	updateUser(id, name, password, username, callback) {
+		superagent
+			.put(this.urlFor('/rest/user'))
+			.send({
+				id: id,
+				name: name,
+				password: password,
+				username: username
+			})
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(response => {
+				callback({
+					message: response
+				});
+			})
+			.catch(error => {
+				callback({
+					error: error
+				})
+			})
+	}
+
 	byId(id) {
 		return this.load().then(all => {
 			return all.filter(user => user.id == id);
@@ -236,6 +321,15 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			break;
 		case ActionTypes.LOGOUT:
 			storeInstance.logout(action.operationId);
+			break;
+		case ActionTypes.INVITE_USER:
+			storeInstance.inviteUser(action.data.email, action.data.callback);
+			break;
+		case ActionTypes.CREATE_USER:
+			storeInstance.createUser(action.data.hash, action.data.name, action.data.password, action.data.username, action.data.callback);
+			break;
+		case ActionTypes.UPDATE_USER:
+			storeInstance.updateUser(action.data.id, action.data.name, action.data.password, action.data.username, action.data.callback);
 			break;
 	}
 });
