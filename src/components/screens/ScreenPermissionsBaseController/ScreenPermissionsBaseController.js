@@ -163,6 +163,8 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 			ret = (
 				<div>
 					<div className="screen-content">
+						<Invitation />
+
 						<div>
 							<h1>Permissions</h1>
 
@@ -178,8 +180,6 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 							</div>
 
 						</div>
-
-						<Invitation />
 					</div>
 				</div>
 			);
