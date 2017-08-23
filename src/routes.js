@@ -18,6 +18,7 @@ import UpdatePage from './components/pages/UpdatePage';
 
 const router = new Router(on => {
 	on('*', async (state, next) => {
+		console.log(state);
 		let currentUser = await UserStore.getCurrentUser();
 		let component;
 		if(currentUser) {
