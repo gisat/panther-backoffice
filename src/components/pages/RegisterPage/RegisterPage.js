@@ -11,7 +11,6 @@ class RegisterPage extends Component {
 			error: false,
 			message: null,
 			valueName: '',
-			valueUsername: '',
 			valuePassword: '',
 			valuePasswordConfirmation: ''
 		}
@@ -35,12 +34,6 @@ class RegisterPage extends Component {
 		});
 	}
 
-	onChangeUsernameListener(e) {
-		this.setState({
-			valueUsername: e.target.value
-		});
-	}
-
 	onCreateUserListener() {
 		if(this.state.valuePassword != this.state.valuePasswordConfirmation) {
 			this.setState({
@@ -54,7 +47,7 @@ class RegisterPage extends Component {
 				processing: true
 			});
 			let parsedUrl = new URL(window.location.href);
-			ActionCreator.createUser(parsedUrl.searchParams.get("hash"), this.state.valueName, this.state.valuePassword, this.state.valueUsername, this.onCreateUserResponseListener.bind(this));
+			ActionCreator.createUser(parsedUrl.searchParams.get("hash"), this.state.valueName, this.state.valuePassword, this.onCreateUserResponseListener.bind(this));
 		}
 	}
 
@@ -96,10 +89,6 @@ class RegisterPage extends Component {
 			html = (
 				<div>
 					<h1>Register.</h1>
-
-					<div>
-						<label>Username: <input type="text" onChange={this.onChangeUsernameListener.bind(this)} /></label>
-					</div>
 
 					<div>
 						<label>Name: <input type="text" onChange={this.onChangeNameListener.bind(this)} /></label>

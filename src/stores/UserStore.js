@@ -209,10 +209,9 @@ class UserStore extends Store {
 	 * @param hash {String} The valid hash is necessary in order to create the user.
 	 * @param name {String} Name of the new user
 	 * @param password {String} Password of the new user. It will be hashed on the backend
-	 * @param username {String} Username used to log in the system.
 	 * @param callback {Function} Function to be called when the operation finishes.
 	 */
-	createUser(hash, name, password, username, callback) {
+	createUser(hash, name, password, callback) {
 		superagent
 			.post(this.urlFor('/rest/user'))
 			.send({
@@ -326,7 +325,7 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			storeInstance.inviteUser(action.data.email, action.data.callback);
 			break;
 		case ActionTypes.CREATE_USER:
-			storeInstance.createUser(action.data.hash, action.data.name, action.data.password, action.data.username, action.data.callback);
+			storeInstance.createUser(action.data.hash, action.data.name, action.data.password, action.data.callback);
 			break;
 		case ActionTypes.UPDATE_USER:
 			storeInstance.updateUser(action.data.id, action.data.name, action.data.password, action.data.username, action.data.callback);

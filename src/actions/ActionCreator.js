@@ -378,14 +378,13 @@ let actionCreator = {
 		AppDispatcher.dispatch(action);
 	},
 
-	createUser(hash, name, password, username, callback) {
+	createUser(hash, name, password, callback) {
 		let action = {
 			type: ActionTypes.CREATE_USER,
 			data: {
 				hash: hash,
 				name: name,
 				password: password,
-				username: username,
 				callback: callback
 			}
 		};
