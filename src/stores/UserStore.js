@@ -217,8 +217,7 @@ class UserStore extends Store {
 			.send({
 				hash: hash,
 				name: name,
-				password: password,
-				username: username
+				password: password
 			})
 			.withCredentials()
 			.set('Access-Control-Allow-Origin', 'true')
