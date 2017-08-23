@@ -24,11 +24,7 @@ const router = new Router(on => {
 		if(currentUser) {
 			component = await next();
 		} else {
-			if(state.params.activePath.indexOf('register') != -1) {
-				component = <RegisterPage/>
-			} else {
-				component = <LoginPage/>;
-			}
+			component = <LoginPage/>;
 		}
 		return component &&
 			<App
