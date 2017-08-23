@@ -24,7 +24,11 @@ const router = new Router(on => {
 		if(currentUser) {
 			component = await next();
 		} else {
-			component = <LoginPage/>;
+			if(state.path.indexOf('register') != -1) { // TODO: Improve
+				component = <RegisterPage/>
+			} else {
+				component = <LoginPage/>;
+			}
 		}
 		return component &&
 			<App
