@@ -53,8 +53,8 @@ class RegisterPage extends Component {
 				message: null,
 				processing: true
 			});
-			let hash = utils.url({path: 'last'});
-			ActionCreator.createUser(hash, this.state.valueName, this.state.valuePassword, this.state.valueUsername, this.onCreateUserResponseListener.bind(this));
+			let parsedUrl = new URL(window.location.href);
+			ActionCreator.createUser(parsedUrl.searchParams.get("hash"), this.state.valueName, this.state.valuePassword, this.state.valueUsername, this.onCreateUserResponseListener.bind(this));
 		}
 	}
 

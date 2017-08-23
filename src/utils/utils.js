@@ -465,16 +465,6 @@ export default {
 
 		return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
 			s4() + '-' + s4() + s4() + s4();
-	},
-
-	url(options) {
-		let pathArray = window.location.pathname.split( '/' );
-
-		if(options.path == 'last') {
-			return pathArray[pathArray.length - 1];
-		} else {
-			return pathArray[options.path];
-		}
 	}
 
 }
