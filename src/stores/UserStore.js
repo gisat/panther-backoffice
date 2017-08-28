@@ -113,6 +113,9 @@ class UserStore extends Store {
 	}
 
 	login(username, password, operationId, callback) {
+		if(!callback) {
+			callback = function() {};
+		}
 		return superagent
 			.post(this.loginUrl)
 			.send({
