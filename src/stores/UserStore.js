@@ -128,11 +128,13 @@ class UserStore extends Store {
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(() => {
 				return this.getLogged().then((user) => {
+					console.log('Retrieved user');
 					callback(user);
 
 					return user;
 				});
 			}).then(logged => {
+				console.log('Logged ', logged);
 				if(logged == null) {
 					callback(null);
 					return null;
