@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import ActionCreator from '../../../actions/ActionCreator';
 import UserStore from '../../../stores/UserStore';
+import UUID from '../../../utils/UUID';
 
 class UpdatePage extends Component {
 	constructor(props) {

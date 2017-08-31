@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import ActionCreator from '../../../actions/ActionCreator';
 import {baseUrl} from '../../../config';
+import UUID from '../../../utils/UUID';
 
 class RegisterPage extends Component {
 	constructor(props) {
