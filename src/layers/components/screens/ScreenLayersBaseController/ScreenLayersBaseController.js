@@ -98,7 +98,6 @@ class ScreenLayersBaseController extends ControllerComponent {
 	render() {
 		let ret = null;
 
-		console.log("Render: ", this.state.built);
 		if(this.state.built) {
 			var tabsInsert = [];
 			var contentInsert = [];

@@ -391,7 +391,6 @@ class ScreenAnalysisRulesMath extends PantherComponent {
 		let attributeSetMap = utils.clone(this.state.valueAttributeSetMap);
 		let attributeSetMapRecord = attributeSetMap[resultAttSetKey][attSetIndex];
 		attributeSetMapRecord.attributeSet = _.findWhere(this.state.attributeSets,{key: newValue[0]});
-		console.log(attributeSetMapRecord.attributeSet);
 
 		let newState = {
 			valueAttributeSetMap: {$merge: attributeSetMap}

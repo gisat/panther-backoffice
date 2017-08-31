@@ -13,10 +13,22 @@ import UserStore from './stores/UserStore';
 
 import { publicPath } from './config';
 
+import RegisterPage from './components/pages/RegisterPage';
+import UpdatePage from './components/pages/UpdatePage';
+
 const router = new Router(on => {
 	on('*', async (state, next) => {
 		let currentUser = await UserStore.getCurrentUser();
-		const component = currentUser ? await next() : <LoginPage />;
+		let component;
+		if(currentUser) {
+			component = await next();
+		} else {
+			if(state.path.indexOf('register') != -1) { // TODO: Improve
+				component = <RegisterPage/>
+			} else {
+				component = <LoginPage/>;
+			}
+		}
 		return component &&
 			<App
 				context={state.context}
