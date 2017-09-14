@@ -27,6 +27,10 @@ class WmsLayerModel extends Model {
 				serverName: 'url', // In this case it represents URL of the WMS service.
 				sendToServer: true
 			},
+			custom: {
+				serverName: 'custom',
+				sendToServer: true
+			},
 			scope: {
 				serverName: 'scope',
 				transformForLocal: function (data) {

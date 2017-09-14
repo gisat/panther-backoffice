@@ -23,6 +23,7 @@ var initialState = {
 	valueName: "",
 	valueUrl: "",
 	valueLayer: "",
+	valueCustom: "",
 	valueScope: [],
 	valuePeriods: [],
 	valuePlaces: []
@@ -70,7 +71,8 @@ class ConfigWmsLayer extends ControllerComponent {
 					valueLayer: layer.layer,
 					valueScope: [],
 					valuePeriods: layer.periods,
-					valuePlaces: layer.places
+					valuePlaces: layer.places,
+					valueCustom: layer.custom
 				};
 				if (layer.scope) {
 					nextState.valueScope.push(layer.scope);
@@ -158,6 +160,12 @@ class ConfigWmsLayer extends ControllerComponent {
 		})
 	}
 
+	onChangeCustom(e) {
+		this.setCurrentState({
+			valueCustom: e.target.value
+		})
+	}
+
 	onChangeScope(value, values) {
 		this.setCurrentState({
 			valueScope: values
@@ -217,6 +225,19 @@ class ConfigWmsLayer extends ControllerComponent {
 								placeholder=" "
 								value={this.state.current.valueUrl}
 								onChange={this.onChangeUrl.bind(this)}
+							/>
+						</label>
+					</div>
+
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Custom parameters as JSON.
+							<Input
+								type="text"
+								name="custom"
+								placeholder=" "
+								value={this.state.current.valueCustom}
+								onChange={this.onChangeCustom.bind(this)}
 							/>
 						</label>
 					</div>
