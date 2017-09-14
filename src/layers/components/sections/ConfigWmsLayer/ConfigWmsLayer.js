@@ -108,6 +108,7 @@ class ConfigWmsLayer extends ControllerComponent {
 		layer.name = this.state.current.valueName;
 		layer.url = this.state.current.valueUrl;
 		layer.layer = this.state.current.valueLayer;
+		layer.custom = this.state.current.valueCustom;
 		for(let key of this.state.current.valueScope) {
 			if(key instanceof ScopeModel) {
 				layer.scope = key;
