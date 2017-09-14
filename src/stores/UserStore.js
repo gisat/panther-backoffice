@@ -112,7 +112,10 @@ class UserStore extends Store {
 			});
 	}
 
-	login(username, password, operationId) {
+	login(username, password, operationId, callback) {
+		if(!callback) {
+			callback = function() {};
+		}
 		return superagent
 			.post(this.loginUrl)
 			.send({
@@ -124,15 +127,24 @@ class UserStore extends Store {
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(() => {
-				return this.getLogged();
+				return this.getLogged().then((user) => {
+					console.log('Retrieved user');
+					callback(user);
+
+					return user;
+				});
 			}).then(logged => {
+				console.log('Logged ', logged);
 				if(logged == null) {
+					callback(null);
 					return null;
 				}
 
+				callback(logged);
 				return logged;
 			}).catch(error => {
 				logger.error('UserStore#login Error: ', error);
+				callback(error);
 				this.emitError(error, operationId);
 			})
 	}
@@ -161,6 +173,7 @@ class UserStore extends Store {
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then((response) => {
+				console.log(response);
 				if (response.body._id == 0) {
 					return null;
 				}
@@ -175,6 +188,89 @@ class UserStore extends Store {
 				});
 				return this.logged;
 			});
+	}
+
+	/**
+	 * It mails invitation to the user with given email.
+	 * @param email {String} Email of the user to send the email to.
+	 * @param callback {Function} Function to be called back once the operation finishes.
+	 */
+	inviteUser(email, callback) {
+		superagent
+			.post(this.urlFor('/rest/invitation/user'))
+			.send({
+				email: email
+			})
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(response => {
+				callback({
+					message: response
+				});
+			})
+			.catch(error => {
+				callback({
+					error: error
+				})
+			})
+	}
+
+	/**
+	 * It seriously creates new user on the server. The rights to do so are verified by the hash.
+	 * @param hash {String} The valid hash is necessary in order to create the user.
+	 * @param name {String} Name of the new user
+	 * @param password {String} Password of the new user. It will be hashed on the backend
+	 * @param callback {Function} Function to be called when the operation finishes.
+	 */
+	createUser(hash, name, password, callback) {
+		superagent
+			.post(this.urlFor('/rest/user'))
+			.send({
+				hash: hash,
+				name: name,
+				password: password
+			})
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(response => {
+				callback({
+					message: response
+				});
+			})
+			.catch(error => {
+				callback({
+					error: error
+				})
+			})
+	}
+
+	updateUser(id, name, password, username, callback) {
+		superagent
+			.put(this.urlFor('/rest/user'))
+			.send({
+				id: id,
+				name: name,
+				password: password,
+				username: username
+			})
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(response => {
+				callback({
+					message: response
+				});
+			})
+			.catch(error => {
+				callback({
+					error: error
+				})
+			})
 	}
 
 	byId(id) {
@@ -232,10 +328,19 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			storeInstance.removePermission(action.data.userId, action.data.permission, action.data.operationId);
 			break;
 		case ActionTypes.LOGIN:
-			storeInstance.login(action.data.username, action.data.password, action.data.operationId);
+			storeInstance.login(action.data.username, action.data.password, action.data.operationId, action.data.callback || function(){});
 			break;
 		case ActionTypes.LOGOUT:
 			storeInstance.logout(action.operationId);
+			break;
+		case ActionTypes.INVITE_USER:
+			storeInstance.inviteUser(action.data.email, action.data.callback);
+			break;
+		case ActionTypes.CREATE_USER:
+			storeInstance.createUser(action.data.hash, action.data.name, action.data.password, action.data.callback);
+			break;
+		case ActionTypes.UPDATE_USER:
+			storeInstance.updateUser(action.data.id, action.data.name, action.data.password, action.data.username, action.data.callback);
 			break;
 	}
 });

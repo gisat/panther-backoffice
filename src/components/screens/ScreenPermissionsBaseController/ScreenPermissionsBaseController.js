@@ -19,6 +19,7 @@ import WmsStore from '../../../layers/stores/WmsStore';
 import ActionCreator from '../../../actions/ActionCreator';
 import ObjectList from '../../elements/ObjectList';
 import ScreenPermissionsObject from '../ScreenPermissionsObject';
+import Invitation from "../../elements/Invitation/Invitation";
 
 @withStyles(styles)
 class ScreenPermissionsBaseController extends ControllerComponent {
@@ -162,6 +163,8 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 			ret = (
 				<div>
 					<div className="screen-content">
+						<Invitation />
+
 						<div>
 							<h1>Permissions</h1>
 

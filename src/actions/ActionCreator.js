@@ -335,13 +335,14 @@ let actionCreator = {
 		AppDispatcher.dispatch(action);
 	},
 
-	login(username, password, operationId) {
+	login(username, password, operationId, callback) {
 		let action = {
 			type: ActionTypes.LOGIN,
 			data: {
 				username: username,
 				password: password,
-				operationId: operationId
+				operationId: operationId,
+				callback: callback
 			}
 		};
 		AppDispatcher.dispatch(action);
@@ -363,6 +364,32 @@ let actionCreator = {
 				newName: newName
 			}
 		};
+		AppDispatcher.dispatch(action);
+	},
+
+	inviteUser(email, callback) {
+		let action = {
+			type: ActionTypes.INVITE_USER,
+			data: {
+				email: email,
+				callback: callback
+			}
+		};
+
+		AppDispatcher.dispatch(action);
+	},
+
+	createUser(hash, name, password, callback) {
+		let action = {
+			type: ActionTypes.CREATE_USER,
+			data: {
+				hash: hash,
+				name: name,
+				password: password,
+				callback: callback
+			}
+		};
+
 		AppDispatcher.dispatch(action);
 	}
 };

@@ -40,6 +40,8 @@ const router = new Router(on => {
 
 	hookRoute(on, '/login', async () => <LoginPage />);
 
+	hookRoute(on, '/update', async () => <UpdatePage />);
+
 	hookRoute(on, '/', async () => <Page screenSet="dashboard" />);
 
 	hookRoute(on, '/places', async () => <Page screenSet="places" />);
