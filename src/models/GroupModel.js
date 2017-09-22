@@ -58,15 +58,16 @@ class GroupModel extends Model {
 					return (data && data.map(id => {
 						console.log(id);
 						return UserStore.all().then(models => {
+							let found = [];
 							for(var i = 0; i < models.length; i++) {
 								console.log(models[i].key);
 								if(Number(models[i].key) === Number(id)) {
-									console.log('User found.');
-									return models[i];
+									console.log('User found.', models[i]);
+									found.push(models[i]);
 								}
 							}
+							return found;
 						});
-						return UserStore.getById(Number(id))
 					})) || [];
 				}
 			}
