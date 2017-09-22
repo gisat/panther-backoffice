@@ -275,6 +275,7 @@ class UserStore extends Store {
 
 	async byId(id) {
 		let models = await this.load();
+		console.log('Models: ', models);
 		return _.find(models, {key: id});
 	}
 
