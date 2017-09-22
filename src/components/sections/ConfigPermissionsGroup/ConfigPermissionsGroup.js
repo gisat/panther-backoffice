@@ -75,7 +75,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 					valuesGroupsUpdate: [],
 					valuesUsersDelete: [],
 					valuesGroupsDelete: [],
-					valuesMembers: _.pluck(groups.members, "key"),
+					valuesMembers: _.pluck(groups.users, "key"),
 					valuesName: groups.name,
 					valuesResources: []
 				};
@@ -291,7 +291,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 								type="text"
 								name="name"
 								placeholder=" "
-								value={this.state.current.valueName}
+								value={this.state.current.valuesName}
 								onChange={this.onChangeName.bind(this)}
 							/>
 						</label>

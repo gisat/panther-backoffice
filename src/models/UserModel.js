@@ -11,7 +11,7 @@ class UserModel extends Model {
 	data() {
 		return {
 			key: {
-				serverName: '_id',
+				serverName: 'id',
 				sendToServer: true
 			},
 			username: {
