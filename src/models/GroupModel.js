@@ -70,7 +70,7 @@ class GroupModel extends Model {
 								})
 							);
 						});
-						return models;
+						return Promise.all(models);
 					} else {
 						return Promise.resolve([]);
 					}
