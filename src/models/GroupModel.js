@@ -57,6 +57,15 @@ class GroupModel extends Model {
 				transformForLocal: function(data) {
 					return (data && data.map(id => {
 						console.log(id);
+						return UserStore.all().then(models => {
+							for(var i = 0; i < models.length; i++) {
+								console.log(models[i].key);
+								if(Number(models[i].key) === Number(id)) {
+									console.log('User found.');
+									return models[i];
+								}
+							}
+						});
 						return UserStore.getById(Number(id))
 					})) || [];
 				}
