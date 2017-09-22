@@ -274,8 +274,12 @@ class UserStore extends Store {
 	}
 
 	byId(id) {
+		console.log('UserStore: ID: ', id);
 		return this.load().then(all => {
-			return all.filter(user => user.key == id);
+			return all.filter(user => {
+				console.log('UserStore: User: ', user.key, ' ID: ', id);
+				return user.key == id;
+			});
 		});
 	}
 
