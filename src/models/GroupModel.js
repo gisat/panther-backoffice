@@ -54,21 +54,26 @@ class GroupModel extends Model {
 			users: {
 				serverName: 'users',
 				sendToServer: false,
-				transformForLocal: function(data) {
-					return (data && data.map(id => {
-						console.log(id);
-						return UserStore.all().then(models => {
-							let found = [];
-							for(var i = 0; i < models.length; i++) {
-								console.log(models[i].key);
-								if(Number(models[i].key) === Number(id)) {
-									console.log('User found.', models[i]);
-									found.push(models[i]);
-								}
-							}
-							return found;
+				transformForLocal: function (data) {
+					if (data) {
+						let models = [];
+						data.forEach(id => {
+							models.push(
+								UserStore.all().then(models => {
+									for (let i = 0; i < models.length; i++) {
+										console.log(models[i].key);
+										if (Number(models[i].key) === Number(id)) {
+											console.log('User found.', models[i]);
+											return models[i];
+										}
+									}
+								})
+							);
 						});
-					})) || [];
+						return models;
+					} else {
+						return Promise.resolve([]);
+					}
 				},
 				isPromise: true,
 				isArray: true
@@ -78,9 +83,9 @@ class GroupModel extends Model {
 
 	addPermission(type, id, permission) {
 		permission.id = id;
-		if(type == ObjectTypes.USER) {
+		if (type == ObjectTypes.USER) {
 			this.permissions.user.push(permission);
-		} else if(type == ObjectTypes.GROUP) {
+		} else if (type == ObjectTypes.GROUP) {
 			this.permissions.group.push(permission);
 		} else {
 			console.log("This should never happen");
@@ -90,9 +95,9 @@ class GroupModel extends Model {
 
 	removePermission(type, id, permission) {
 		permission.id = id;
-		if(type == ObjectTypes.USER) {
+		if (type == ObjectTypes.USER) {
 			this.permissions.user = this.permissions.user.filter(userPermission => permission.permission != userPermission.permission || permission.resourceId != userPermission.resourceId || permission.resourceType != userPermission.resourceType || permission.id != userPermission.id);
-		} else if(type == ObjectTypes.GROUP) {
+		} else if (type == ObjectTypes.GROUP) {
 			this.permissions.group = this.permissions.group.filter(userPermission => permission.permission != userPermission.permission || permission.resourceId != userPermission.resourceId || permission.resourceType != userPermission.resourceType || permission.id != userPermission.id);
 		} else {
 			console.log("This should never happen");
