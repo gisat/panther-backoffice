@@ -275,7 +275,7 @@ class UserStore extends Store {
 
 	byId(id) {
 		return this.load().then(all => {
-			return all.filter(user => user.id == id);
+			return all.filter(user => user.key == id);
 		});
 	}
 
