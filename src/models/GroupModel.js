@@ -69,7 +69,9 @@ class GroupModel extends Model {
 							return found;
 						});
 					})) || [];
-				}
+				},
+				isPromise: true,
+				isArray: true
 			}
 		}
 	}
