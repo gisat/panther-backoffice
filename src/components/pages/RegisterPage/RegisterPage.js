@@ -68,7 +68,7 @@ class RegisterPage extends Component {
 	}
 
 	onLoginResponse(response) {
-		window.location = baseUrl;
+		window.location = new URL(window.location.href).hostname + '/backoffice'; // TODO: Configure properly.
 	}
 
 	render() {
