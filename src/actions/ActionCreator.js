@@ -391,6 +391,21 @@ let actionCreator = {
 		};
 
 		AppDispatcher.dispatch(action);
+	},
+
+	updateUser(id, name, password, username, callback) {
+		let action = {
+			type: ActionTypes.UPDATE_USER,
+			data: {
+				id: id,
+				name: name,
+				password: password,
+				username: username,
+				callback: callback
+			}
+		};
+
+		AppDispatcher.dispatch(action);
 	}
 };
 
