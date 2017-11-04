@@ -148,6 +148,15 @@ class Navigation extends PantherComponent {
 						<ul>
 							<li>
 								<a
+									href={publicPath + "/update"}
+									tabIndex="-1"
+									title="Update details"
+								>
+									<span>Update details</span>
+								</a>
+							</li>
+							<li>
+								<a
 									href={publicPath + "/"}
 									onClick={this.logOut.bind(this)}
 									tabIndex="-1"
