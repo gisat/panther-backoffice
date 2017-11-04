@@ -54,7 +54,7 @@ class UpdatePage extends Component {
 				processing: true
 			});
 			UserStore.getLogged().then(user => {
-				ActionCreator.updateUser(user.id, this.state.valueName, this.state.valuePassword, this.state.valueUsername, this.onUpdateUserResponseListener.bind(this));
+				ActionCreator.updateUser(user.key, this.state.valueName, this.state.valuePassword, this.state.valueUsername, this.onUpdateUserResponseListener.bind(this));
 			});
 		}
 	}
