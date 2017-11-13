@@ -34,6 +34,9 @@ if (modelConfig.description) {
 if (modelConfig.geometry) {
 	initialState.valueGeometry = "";
 }
+if (modelConfig.tacrb2_simple) {
+	initialState.valueTacrb2Type = false;
+}
 
 
 class ConfigMetadataPlace extends ControllerComponent {
@@ -85,6 +88,9 @@ class ConfigMetadataPlace extends ControllerComponent {
 				}
 				if (modelConfig.geometry) {
 					nextState.valueGeometry = JSON.stringify(place.geometry);
+				}
+				if (modelConfig.tacrb2_simple) {
+					nextState.valueTacrb2Type = !!place.tacrb2_simple;
 				}
 			}
 		}
@@ -159,6 +165,9 @@ class ConfigMetadataPlace extends ControllerComponent {
 		}
 		if (modelConfig.geometry && this.state.current.valueGeometry) {
 			modelData.geometry = JSON.parse(this.state.current.valueGeometry);
+		}
+		if (modelConfig.tacrb2_simple && this.state.current.hasOwnProperty("valueTacrb2Type")) {
+			modelData.tacrb2_simple = this.state.current.valueTacrb2Type;
 		}
 		let modelObj = new Model[ObjectTypes.PLACE](modelData);
 		actionData.push({type:"update",model:modelObj});
@@ -253,6 +262,12 @@ class ConfigMetadataPlace extends ControllerComponent {
 		});
 	}
 
+	onChangeTacrb2Type() {
+		this.setCurrentState({
+			valueTacrb2Type: !this.state.valueTacrb2Type
+		});
+	}
+
 	onChangeObjectSelect (stateKey, objectType, value, values) {
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
@@ -335,6 +350,25 @@ class ConfigMetadataPlace extends ControllerComponent {
 				);
 			}
 
+			let tacrb2TypeField = null;
+			if (modelConfig.tacrb2_simple) {
+				tacrb2TypeField = (
+					<div
+						className="frame-input-wrapper"
+						key="extended-fields-tacrb2-type"
+					>
+						<label className="container">
+							Simple
+							<Checkbox
+								name="tacrb2_type"
+								checked={this.state.current.valueTacrb2Type}
+								onClick={this.onChangeTacrb2Type.bind(this)}
+							/>
+						</label>
+					</div>
+				);
+			}
+
 			return (
 				<div>
 
@@ -408,6 +442,8 @@ class ConfigMetadataPlace extends ControllerComponent {
 						id="one"
 						onMount={this.wwdMounted.bind(this)}
 					/>
+
+					{tacrb2TypeField}
 
 					<ConfigControls
 						key={"ConfigControls" + this.props.selectorValue}

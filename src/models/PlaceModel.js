@@ -78,6 +78,10 @@ class PlaceModel extends Model {
 			permissions: {
 				serverName: 'permissions',
 				sendToServer: false
+			},
+			tacrb2_simple: {
+				serverName: 'tacrb2_simple',
+				sendToServer: true
 			}
 		};
 	}

@@ -84,7 +84,8 @@ export default {
 			boundingBox: true,
 			center: true,
 			description: false,
-			geometry: false
+			geometry: false,
+			tacrb2_simple: false
 		},
 		PERIOD: {
 			date: false
