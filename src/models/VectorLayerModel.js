@@ -111,6 +111,10 @@ class VectorLayerModel extends Model {
 				transformForServer: this.getKeys,
 				isPromise: true,
 				isArray: true
+			},
+			tacrb2_symbol: {
+				serverName: 'tacrb2_symbol',
+				sendToServer: true
 			}
 		};
 	}

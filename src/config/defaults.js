@@ -95,7 +95,8 @@ export default {
 			layerGroup: true,
 			styles: true,
 			topic: true,
-			attributeSets: true
+			attributeSets: true,
+			tacrb2_symbol: false
 		},
 		RASTER_LAYER_TEMPLATE: {
 			layerType: true,

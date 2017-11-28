@@ -39,6 +39,9 @@ var initialState = {
 	valuesAttSets: [],
 	valueScope: []
 };
+if (modelConfig.tacrb2_symbol) {
+	initialState.valueTacrb2Symbol = "";
+}
 
 
 class ConfigMetadataLayerVector extends ControllerComponent {
@@ -97,13 +100,16 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 
 				nextState = {
 					valueActive: layer.active,
-					valueName: layer.name,
+					valueName: layer.name || "",
 					valueTopic: layer.topic ? [layer.topic.key] : [],
 					valueLayerGroup: layer.layerGroup ? [layer.layerGroup.key] : [],
 					valuesStyles: utils.getModelsKeys(layer.styles),
 					valuesAttSets: utils.getModelsKeys(attSets),
 					valueScope: layer.scope ? [layer.scope.key] : []
 				};
+				if (modelConfig.tacrb2_symbol) {
+					nextState.valueTacrb2Symbol = layer.tacrb2_symbol || "";
+				}
 			}
 		}
 		return nextState;
@@ -210,6 +216,9 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 			modelData.styles.push(period);
 		}
 		modelData.attributeSets = [];
+		if (modelConfig.tacrb2_symbol && this.state.current.hasOwnProperty("valueTacrb2Symbol")) {
+			modelData.tacrb2_symbol = this.state.current.valueTacrb2Symbol;
+		}
 
 		// for now, vectorLayer-attributeSet relations are stored in attribute sets
 		var attSetActionData = [], oldAttSets = [];
@@ -265,6 +274,14 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 		if(this.mounted) {
 			this.setCurrentState({
 				valueName: e.target.value
+			});
+		}
+	}
+
+	onChangeTacrb2Symbol(e) {
+		if (e.target.value.length < 2 && Number.isInteger(Number(e.target.value)) && e.target.value < 5 && e.target.value >= 0) {
+			this.setCurrentState({
+				valueTacrb2Symbol: e.target.value
 			});
 		}
 	}
@@ -347,6 +364,30 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 				</div>
 			);
 		}
+
+			let tacrb2SymbolField = null;
+			if (modelConfig.tacrb2_symbol) {
+				tacrb2SymbolField = (
+					<div
+						className="frame-input-wrapper"
+						key="extended-fields-tacrb2-symbol"
+					>
+						<label className="container">
+							Symbol
+							<Input
+								type="text"
+								name="tacrb2_symbol"
+								placeholder=" "
+								value={this.state.current.valueTacrb2Symbol}
+								onChange={this.onChangeTacrb2Symbol.bind(this)}
+							/>
+						</label>
+						<div className="frame-input-wrapper-info">
+							Mosty - symbol bodu (0 - 4)
+						</div>
+					</div>
+				);
+			}
 
 		ret = (
 			<div>
@@ -442,6 +483,8 @@ class ConfigMetadataLayerVector extends ControllerComponent {
 						Attribute sets for attributes usually contained in the data layers using the template.<br/>Only attribute sets with the same topic as the template can be selected.
 					</div>
 				</div>
+
+				{tacrb2SymbolField}
 
 				<ConfigControls
 					key={"ConfigControls" + this.props.selectorValue}
