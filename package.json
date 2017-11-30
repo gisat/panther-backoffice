@@ -1,5 +1,8 @@
 {
-  "private": true,
+	"name": "PANTHER",
+	"description": "PANTHER platform",
+	"version": "2.3.0",
+	"private": true,
   "engines": {
     "node": ">=4.1 <5",
     "npm": ">=3.1 <4"

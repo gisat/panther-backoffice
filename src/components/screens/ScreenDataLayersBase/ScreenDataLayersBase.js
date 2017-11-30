@@ -32,6 +32,7 @@ import SelectorDataLayer from '../../sections/SelectorDataLayer';
 import ConfigDataLayer from '../../sections/ConfigDataLayer';
 
 import Loader from '../../atoms/Loader';
+import FileUpload from "../../../layers/components/elements/FileUpload/FileUpload";
 
 var initialState = {
 	selectorValue: null,
@@ -180,6 +181,7 @@ class ScreenDataLayersBase extends ScreenController {
 
 						{duplicateLayer}
 					</div>
+					<FileUpload />
 					<div className="screen-content">
 						<div>
 							{configInsert}
