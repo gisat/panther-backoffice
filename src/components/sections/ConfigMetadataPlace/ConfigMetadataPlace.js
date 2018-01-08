@@ -169,7 +169,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 		if (modelConfig.description) {
 			modelData.description = this.state.current.valueDescription;
 		}
-		if (modelConfig.geometry && this.state.current.valueGeometry) {
+		if (modelConfig.geometry && this.state.current.hasOwnProperty("valueGeometry")) {
 			modelData.geometry = JSON.parse(this.state.current.valueGeometry);
 		}
 		if (modelConfig.tacrb2_simple && this.state.current.hasOwnProperty("valueTacrb2Type")) {
