@@ -37,6 +37,9 @@ if (modelConfig.geometry) {
 if (modelConfig.tacrb2_simple) {
 	initialState.valueTacrb2Type = false;
 }
+if (modelConfig.tacrb2_allowInteractivityRangeMax) {
+	initialState.valueTacrb2AllowInteractivityRangeMax = "";
+}
 
 
 class ConfigMetadataPlace extends ControllerComponent {
@@ -91,6 +94,9 @@ class ConfigMetadataPlace extends ControllerComponent {
 				}
 				if (modelConfig.tacrb2_simple) {
 					nextState.valueTacrb2Type = !!place.tacrb2_simple;
+				}
+				if (modelConfig.tacrb2_allowInteractivityRangeMax) {
+					nextState.valueTacrb2AllowInteractivityRangeMax = place.tacrb2_allowInteractivityRangeMax || "";
 				}
 			}
 		}
@@ -168,6 +174,9 @@ class ConfigMetadataPlace extends ControllerComponent {
 		}
 		if (modelConfig.tacrb2_simple && this.state.current.hasOwnProperty("valueTacrb2Type")) {
 			modelData.tacrb2_simple = this.state.current.valueTacrb2Type;
+		}
+		if (modelConfig.tacrb2_allowInteractivityRangeMax && this.state.current.hasOwnProperty("valueTacrb2AllowInteractivityRangeMax")) {
+			modelData.tacrb2_allowInteractivityRangeMax = this.state.current.valueTacrb2AllowInteractivityRangeMax;
 		}
 		let modelObj = new Model[ObjectTypes.PLACE](modelData);
 		actionData.push({type:"update",model:modelObj});
@@ -264,7 +273,13 @@ class ConfigMetadataPlace extends ControllerComponent {
 
 	onChangeTacrb2Type() {
 		this.setCurrentState({
-			valueTacrb2Type: !this.state.valueTacrb2Type
+			valueTacrb2Type: !this.state.current.valueTacrb2Type
+		});
+	}
+
+	onChangeTacrb2AllowInteractivityRangeMax(e) {
+		this.setCurrentState({
+			valueTacrb2AllowInteractivityRangeMax: e.target.value
 		});
 	}
 
@@ -369,6 +384,27 @@ class ConfigMetadataPlace extends ControllerComponent {
 				);
 			}
 
+			let tacrb2AllowInteractivityRangeMaxField = null;
+			if (modelConfig.tacrb2_allowInteractivityRangeMax) {
+				tacrb2AllowInteractivityRangeMaxField = (
+					<div
+						className="frame-input-wrapper"
+						key="extended-fields-tacrb2-allowInteractivityRangeMax"
+					>
+						<label className="container">
+							Allow interactivity below range:
+							<Input
+								type="text"
+								name="tacrb2_allowInteractivityRangeMax"
+								placeholder=" "
+								value={this.state.current.valueTacrb2AllowInteractivityRangeMax}
+								onChange={this.onChangeTacrb2AllowInteractivityRangeMax.bind(this)}
+							/>
+						</label>
+					</div>
+				);
+			}
+
 			return (
 				<div>
 
@@ -438,12 +474,13 @@ class ConfigMetadataPlace extends ControllerComponent {
 						</div>
 					</div>
 
+					{tacrb2TypeField}
+					{tacrb2AllowInteractivityRangeMaxField}
+
 					<WorldWindow
 						id="one"
 						onMount={this.wwdMounted.bind(this)}
 					/>
-
-					{tacrb2TypeField}
 
 					<ConfigControls
 						key={"ConfigControls" + this.props.selectorValue}
