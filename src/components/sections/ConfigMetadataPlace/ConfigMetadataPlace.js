@@ -90,7 +90,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 					nextState.valueDescription = place.description;
 				}
 				if (modelConfig.geometry) {
-					nextState.valueGeometry = JSON.stringify(place.geometry);
+					nextState.valueGeometry = place.geometry ? JSON.stringify(place.geometry) : "";
 				}
 				if (modelConfig.tacrb2_simple) {
 					nextState.valueTacrb2Type = !!place.tacrb2_simple;
@@ -170,7 +170,7 @@ class ConfigMetadataPlace extends ControllerComponent {
 			modelData.description = this.state.current.valueDescription;
 		}
 		if (modelConfig.geometry && this.state.current.hasOwnProperty("valueGeometry")) {
-			modelData.geometry = JSON.parse(this.state.current.valueGeometry);
+			modelData.geometry = this.state.current.valueGeometry ? JSON.parse(this.state.current.valueGeometry) : null;
 		}
 		if (modelConfig.tacrb2_simple && this.state.current.hasOwnProperty("valueTacrb2Type")) {
 			modelData.tacrb2_simple = this.state.current.valueTacrb2Type;
