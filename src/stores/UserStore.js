@@ -41,7 +41,7 @@ class UserStore extends Store {
 		return apiProtocol + apiHost + path.join(apiPath, serverPath).replace(/\\/g, "/");
 	}
 
-	load(operationId) {
+	async load(operationId) {
 		if (!this.cache) {
 			return this.reload(operationId);
 		} else {
@@ -49,7 +49,7 @@ class UserStore extends Store {
 		}
 	}
 
-	reload(operationId) {
+	async reload(operationId) {
 		return superagent
 			.get(this.userUrl)
 			.withCredentials()

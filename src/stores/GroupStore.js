@@ -88,6 +88,7 @@ class GroupStore extends Store {
 				logger.info('GroupStore#add Group Updates. Body: ', response.body);
 				return this.reload(operationId);
 			}).then(() => {
+				this.emitChange();
 				return response;
 			}).catch(err => {
 				this.emitError(err, operationId);

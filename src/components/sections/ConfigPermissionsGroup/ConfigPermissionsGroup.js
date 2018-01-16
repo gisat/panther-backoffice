@@ -80,27 +80,32 @@ class ConfigPermissionsGroup extends ControllerComponent {
 					valuesName: groups.name,
 					valuesResources: []
 				};
-				groups.permissions.group.forEach(permission => {
-					if(permission.permission == 'GET') {
-						nextState.valuesGroupsRead.push(permission.id);
-					} else if(permission.permission == 'DELETE') {
-						nextState.valuesGroupsDelete.push(permission.id);
-					} else if(permission.permission == 'PUT') {
-						nextState.valuesGroupsUpdate.push(permission.id);
-					}
-				});
-				groups.permissions.user.forEach(permission => {
-					if(permission.permission == 'GET') {
-						nextState.valuesUsersRead.push(permission.id);
-					} else if(permission.permission == 'DELETE') {
-						nextState.valuesUsersDelete.push(permission.id);
-					} else if(permission.permission == 'PUT') {
-						nextState.valuesUsersUpdate.push(permission.id);
-					}
-				});
+				if(groups.permissionsGroups) {
+					groups.permissionsGroups.forEach(permission => {
+						if (permission.permission == 'GET') {
+							nextState.valuesGroupsRead.push(permission.groupId);
+						} else if (permission.permission == 'DELETE') {
+							nextState.valuesGroupsDelete.push(permission.groupId);
+						} else if (permission.permission == 'PUT') {
+							nextState.valuesGroupsUpdate.push(permission.groupId);
+						}
+					});
+				}
+				if(groups.permissionsUsers) {
+					groups.permissionsUsers.forEach(permission => {
+						if (permission.permission == 'GET') {
+							nextState.valuesUsersRead.push(permission.userId);
+						} else if (permission.permission == 'DELETE') {
+							nextState.valuesUsersDelete.push(permission.userId);
+						} else if (permission.permission == 'PUT') {
+							nextState.valuesUsersUpdate.push(permission.userId);
+						}
+					});
+				}
+
 				//TODO: Refactor. Currently the whole permission for Back Office are in two categories. One for the creation types and one for the rest.
 				groups.permissionsTowards.forEach(permission => {
-					nextState.valuesResources.push(permission.resourceType);
+					nextState.valuesResources.push(permission.key);
 				})
 
 			}
@@ -142,12 +147,16 @@ class ConfigPermissionsGroup extends ControllerComponent {
 	saveForm() {
 		let operationId = super.saveForm();
 
+		let permissions = this.props.store.permissions;
+		let resources = this.state.current.valuesResources.map(resource => {
+			return _.find(permissions, permission => resource === permission.key).type
+		});
 		let group = {
 			id: this.props.selectorValue,
 			name: this.state.current.valuesName,
 
 			members: this.state.current.valuesMembers,
-			permissions: this.state.current.valuesResources,
+			permissions: resources,
 
 			users: {
 				read: this.state.current.valuesUsersRead,

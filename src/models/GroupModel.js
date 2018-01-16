@@ -1,6 +1,7 @@
 import ObjectTypes from '../constants/ObjectTypes';
 import Model from './Model';
 import UserStore from '../stores/UserStore';
+import PermissionStore from '../stores/PermissionStore';
 
 class GroupModel extends Model {
 	getType() {
@@ -49,6 +50,19 @@ class GroupModel extends Model {
 			},
 			permissionsTowards: {
 				serverName: 'permissionsTowards',
+				sendToServer: false,
+				transformForLocal: function(data) {
+					return data && data.map(permission => {
+						return PermissionStore.getByType(permission.resourceType);
+					}) || [];
+				}
+			},
+			permissionsUsers: {
+				serverName: 'permissionsUsers',
+				sendToServer: false
+			},
+			permissionsGroups: {
+				serverName: 'permissionsGroups',
 				sendToServer: false
 			},
 			users: {
