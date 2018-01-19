@@ -311,30 +311,6 @@ let actionCreator = {
 		AppDispatcher.dispatch(action);
 	},
 
-	addPermissionUser(operationId, userId, permission) {
-		let action = {
-			type: ActionTypes.USER_ADD_PERMISSION,
-			data: {
-				userId: userId,
-				permission: permission,
-				operationId: operationId
-			}
-		};
-		AppDispatcher.dispatch(action);
-	},
-
-	removePermissionFromUser(operationId, userId, permission) {
-		let action = {
-			type: ActionTypes.USER_REMOVE_PERMISSION,
-			data: {
-				userId: userId,
-				permission: permission,
-				operationId: operationId
-			}
-		};
-		AppDispatcher.dispatch(action);
-	},
-
 	login(username, password, operationId, callback) {
 		let action = {
 			type: ActionTypes.LOGIN,
@@ -393,15 +369,24 @@ let actionCreator = {
 		AppDispatcher.dispatch(action);
 	},
 
-	updateUser(id, name, password, username, callback) {
+	updateUser(operationId, user) {
 		let action = {
 			type: ActionTypes.UPDATE_USER,
 			data: {
-				id: id,
-				name: name,
-				password: password,
-				username: username,
-				callback: callback
+				id: operationId,
+				user: user
+			}
+		};
+
+		AppDispatcher.dispatch(action);
+	},
+
+	deleteUser(operationId, id) {
+		let action = {
+			type: ActionTypes.DELETE_USER,
+			data: {
+				operationId: operationId,
+				userId: id
 			}
 		};
 

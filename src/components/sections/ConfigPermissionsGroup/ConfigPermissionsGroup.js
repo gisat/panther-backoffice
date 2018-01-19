@@ -67,8 +67,8 @@ class ConfigPermissionsGroup extends ControllerComponent {
 		}
 		let nextState = {};
 		if(props.selectorValue) {
-			let groups = _.findWhere(props.store.groups, {key: props.selectorValue});
-			if (groups) {
+			let group = _.findWhere(props.store.groups, {key: props.selectorValue});
+			if (group) {
 				nextState = {
 					valuesUsersRead: [],
 					valuesGroupsRead: [],
@@ -76,12 +76,12 @@ class ConfigPermissionsGroup extends ControllerComponent {
 					valuesGroupsUpdate: [],
 					valuesUsersDelete: [],
 					valuesGroupsDelete: [],
-					valuesMembers: _.pluck(groups.users, "key"),
-					valuesName: groups.name,
+					valuesMembers: _.pluck(group.users, "key"),
+					valuesName: group.name,
 					valuesResources: []
 				};
-				if(groups.permissionsGroups) {
-					groups.permissionsGroups.forEach(permission => {
+				if(group.permissionsGroups) {
+					group.permissionsGroups.forEach(permission => {
 						if (permission.permission == 'GET') {
 							nextState.valuesGroupsRead.push(permission.groupId);
 						} else if (permission.permission == 'DELETE') {
@@ -91,8 +91,8 @@ class ConfigPermissionsGroup extends ControllerComponent {
 						}
 					});
 				}
-				if(groups.permissionsUsers) {
-					groups.permissionsUsers.forEach(permission => {
+				if(group.permissionsUsers) {
+					group.permissionsUsers.forEach(permission => {
 						if (permission.permission == 'GET') {
 							nextState.valuesUsersRead.push(permission.userId);
 						} else if (permission.permission == 'DELETE') {
@@ -103,10 +103,11 @@ class ConfigPermissionsGroup extends ControllerComponent {
 					});
 				}
 
-				//TODO: Refactor. Currently the whole permission for Back Office are in two categories. One for the creation types and one for the rest.
-				groups.permissionsTowards.forEach(permission => {
-					nextState.valuesResources.push(permission.key);
-				})
+				if(group.permissionsTowards) {
+					group.permissionsTowards.forEach(permission => {
+						nextState.valuesResources.push(permission.key);
+					})
+				}
 
 			}
 		}
@@ -117,9 +118,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 		super.componentDidMount();
 
 		this.responseListener.add(UserStore);
-		this.responseListener.add(GroupStore);
 		this.errorListener.add(UserStore);
-		this.errorListener.add(GroupStore);
 	}
 
 	onChangeMultiple(stateKey, objectType, value, values) {

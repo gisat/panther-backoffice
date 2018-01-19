@@ -34,7 +34,6 @@ class PermissionStore {
 	}
 
 	getByType(type) {
-		console.log('Permission: Type ',type);
 		return this.permissions.filter(permission => permission.type === type)[0];
 	}
 

@@ -10,6 +10,7 @@ import logger from '../core/Logger';
 import {apiProtocol, apiHost, apiPath} from '../config';
 import Store from './Store';
 import UserModel from '../models/UserModel';
+import GroupModel from "../models/GroupModel";
 
 class UserStore extends Store {
 	constructor() {
@@ -68,50 +69,6 @@ class UserStore extends Store {
 			});
 	}
 
-	addPermission(userId, permission, operationId) {
-		return superagent
-			.post(this.permissionUserUrl)
-			.send({
-				userId: userId,
-				resourceType: permission.resourceType,
-				resourceId: permission.resourceId,
-				permission: permission.permission
-			})
-			.withCredentials()
-			.set('Accept', 'application/json')
-			.set('Access-Control-Allow-Origin', 'true')
-			.set('Access-Control-Allow-Credentials', 'true')
-			.then(() => {
-				logger.info('UserStore#reload Permission added');
-				return this.reload(operationId);
-			}).catch(err => {
-				this.emitError(err, operationId);
-				logger.error('UserStore#reload Error: ', err);
-			});
-	}
-
-	removePermission(userId, permission, operationId) {
-		return superagent
-			.delete(this.permissionUserUrl)
-			.send({
-				userId: userId,
-				resourceType: permission.resourceType,
-				resourceId: permission.resourceId,
-				permission: permission.permission
-			})
-			.withCredentials()
-			.set('Accept', 'application/json')
-			.set('Access-Control-Allow-Origin', 'true')
-			.set('Access-Control-Allow-Credentials', 'true')
-			.then(() => {
-				logger.info('UserStore#removePermission Permission removed');
-				return this.reload(operationId);
-			}).catch(err => {
-				this.emitError(err, operationId);
-				logger.error('UserStore#reload Error: ', err);
-			});
-	}
-
 	login(username, password, operationId, callback) {
 		if(!callback) {
 			callback = function() {};
@@ -134,7 +91,6 @@ class UserStore extends Store {
 					return user;
 				});
 			}).then(logged => {
-				console.log('Logged ', logged);
 				if(logged == null) {
 					callback(null);
 					return null;
@@ -248,34 +204,53 @@ class UserStore extends Store {
 			})
 	}
 
-	updateUser(id, name, password, username, callback) {
-		superagent
+	updateUser(operationId, user) {
+		let response;
+		return superagent
 			.put(this.urlFor('/rest/user'))
+			.send(user)
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(pResponse => {
+				response = pResponse;
+				logger.info('GroupStore#update Group Updates. Body: ', response.body);
+				return this.reload(operationId);
+			}).then(() => {
+				this.emitChange();
+				return response;
+			}).catch(error => {
+				this.emitError(error, operationId);
+				logger.error('UserStore#updateUser Error: ',err);
+			})
+	}
+
+	deleteUser(operationId, id) {
+		let response;
+		return superagent
+			.delete(this.urlFor('/rest/user'))
 			.send({
-				id: id,
-				name: name,
-				password: password,
-				username: username
+				id: id
 			})
 			.withCredentials()
 			.set('Access-Control-Allow-Origin', 'true')
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Credentials', 'true')
-			.then(response => {
-				callback({
-					message: response
-				});
+			.then(pResponse => {
+				response = pResponse;
+				return this.reload(operationId);
+			}).then(() => {
+				this.emitChange();
+				return response;
 			})
 			.catch(error => {
-				callback({
-					error: error
-				})
+				this.emitError(error, operationId);
 			})
 	}
 
 	async byId(id) {
 		let models = await this.load();
-		console.log('Models: ', models);
 		return _.find(models, {key: id});
 	}
 
@@ -321,12 +296,6 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 		case ActionTypes.USER_LOAD:
 			storeInstance.load(action.data.operationId);
 			break;
-		case ActionTypes.USER_ADD_PERMISSION:
-			storeInstance.addPermission(action.data.userId, action.data.permission, action.data.operationId);
-			break;
-		case ActionTypes.USER_REMOVE_PERMISSION:
-			storeInstance.removePermission(action.data.userId, action.data.permission, action.data.operationId);
-			break;
 		case ActionTypes.LOGIN:
 			storeInstance.login(action.data.username, action.data.password, action.data.operationId, action.data.callback || function(){});
 			break;
@@ -340,7 +309,10 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			storeInstance.createUser(action.data.hash, action.data.name, action.data.password, action.data.callback);
 			break;
 		case ActionTypes.UPDATE_USER:
-			storeInstance.updateUser(action.data.id, action.data.name, action.data.password, action.data.username, action.data.callback);
+			storeInstance.updateUser(action.data.id, action.data.user);
+			break;
+		case ActionTypes.DELETE_USER:
+			storeInstance.deleteUser(action.data.operationId, action.data.userId);
 			break;
 	}
 });

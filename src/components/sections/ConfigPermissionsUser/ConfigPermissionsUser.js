@@ -1,21 +1,40 @@
-import _ from 'underscore';
-
 import React, { PropTypes, Component } from 'react';
 import ControllerComponent from '../../common/ControllerComponent';
-import utils from '../../../utils/utils';
-import ActionCreator from '../../../actions/ActionCreator';
-import UIObjectSelect from '../../atoms/UIObjectSelect';
+import _ from 'underscore';
 
-import UserStore from '../../../stores/UserStore';
-import GroupStore from '../../../stores/GroupStore';
+import styles from './ConfigPermissionsUser.css';
+import withStyles from '../../../decorators/withStyles';
+
+import ObjectTypes from '../../../constants/ObjectTypes';
+
+import UIObjectSelect from '../../atoms/UIObjectSelect';
+import utils from '../../../utils/utils';
 
 import UserModel from '../../../models/UserModel';
 import GroupModel from '../../../models/GroupModel';
 
-let initialState = {
-	valuesResources: []
+import UserStore from '../../../stores/UserStore';
+import GroupStore from '../../../stores/GroupStore';
+
+import ActionCreator from '../../../actions/ActionCreator';
+import ConfigControls from '../../atoms/ConfigControls';
+import { Input } from '../../SEUI/elements';
+
+var initialState = {
+	valuesUsername: '',
+	valuesPassword: '',
+	valuesPasswordAgain: '',
+	valuesResources: [],
+
+	valuesUsersRead: [],
+	valuesGroupsRead: [],
+	valuesUsersUpdate: [],
+	valuesGroupsUpdate: [],
+	valuesUsersDelete: [],
+	valuesGroupsDelete: []
 };
 
+@withStyles(styles)
 class ConfigPermissionsUser extends ControllerComponent {
 	static propTypes = {
 		disabled: React.PropTypes.bool,
@@ -24,6 +43,16 @@ class ConfigPermissionsUser extends ControllerComponent {
 			groups: PropTypes.arrayOf(PropTypes.instanceOf(GroupModel))
 		}).isRequired,
 		selectorValue: React.PropTypes.any
+	};
+
+	static defaultProps = {
+		disabled: false,
+		selectorValue: null
+	};
+
+	static contextTypes = {
+		onInteraction: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
 	};
 
 	constructor(props) {
@@ -42,44 +71,48 @@ class ConfigPermissionsUser extends ControllerComponent {
 			let user = _.findWhere(props.store.users, {key: props.selectorValue});
 			if (user) {
 				nextState = {
+					valuesUsersRead: [],
+					valuesGroupsRead: [],
+					valuesUsersUpdate: [],
+					valuesGroupsUpdate: [],
+					valuesUsersDelete: [],
+					valuesGroupsDelete: [],
+					valuesUsername: user.username,
+					valuesPassword: '',
+					valuesPasswordAgain: '',
 					valuesResources: []
 				};
-				user.permissions.forEach(permission => {
-					if(permission.permission == 'POST') {
-						nextState.valuesResources.push(permission.resourceType);
-					}
-				});
+				if(user.permissionsGroups) {
+					user.permissionsGroups.forEach(permission => {
+						if (permission.permission === 'GET') {
+							nextState.valuesGroupsRead.push(permission.groupId);
+						} else if (permission.permission === 'DELETE') {
+							nextState.valuesGroupsDelete.push(permission.groupId);
+						} else if (permission.permission === 'PUT') {
+							nextState.valuesGroupsUpdate.push(permission.groupId);
+						}
+					});
+				}
+				if(user.permissionsUsers) {
+					user.permissionsUsers.forEach(permission => {
+						if (permission.permission === 'GET') {
+							nextState.valuesUsersRead.push(permission.userId);
+						} else if (permission.permission === 'DELETE') {
+							nextState.valuesUsersDelete.push(permission.userId);
+						} else if (permission.permission === 'PUT') {
+							nextState.valuesUsersUpdate.push(permission.userId);
+						}
+					});
+				}
+
+				if(user.permissionsTowards) {
+					user.permissionsTowards.forEach(permission => {
+						nextState.valuesResources.push(permission.key);
+					})
+				}
 			}
 		}
 		return nextState;
-	}
-
-	onChangePermissions(value, values) {
-		let current = this.state.current.valuesResources;
-		let newOnes = _.pluck(values, 'key');
-		let user = _.findWhere(this.props.store.users, {key: this.props.selectorValue});
-
-		if(current.length < newOnes.length) {
-			let toAdd = _.difference(newOnes, current);
-			toAdd.forEach(resourceType => {
-				ActionCreator.addPermissionUser(this.instance, user.key, {
-					resourceType: resourceType,
-					resourceId: null,
-					permission: 'POST'
-				});
-			});
-		} else if(current.length > newOnes.length) {
-			let toRemove = _.difference(current, newOnes);
-			toRemove.forEach(resourceType => {
-				ActionCreator.removePermissionFromUser(this.instance, user.key, {
-					resourceType: resourceType,
-					resourceId: null,
-					permission: 'POST'
-				});
-			});
-		} else {
-			console.log('This should never happen');
-		}
 	}
 
 	componentDidMount() {
@@ -91,40 +124,262 @@ class ConfigPermissionsUser extends ControllerComponent {
 		this.errorListener.add(GroupStore);
 	}
 
-	render() {
-		let options = [{
-			key: 'dataset',
-			name: 'Scope'
-		}, {
-			key: 'location',
-			name: 'Place'
-		}, {
-			key: 'topic',
-			name: 'Topic'
-		}, {
-			key: 'group',
-			name: 'Group'
-		}];
+	onChangeMultiple(stateKey, objectType, value, values) {
+		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
+		let newState = {};
+		newState[stateKey] = newValues;
+		this.setCurrentState(newState);
+	}
 
-		return (
-			<div>
-				<div><h2>Permissions for creation of types</h2></div>
-				<div className="frame-input-wrapper">
-					<label className="container">
-						<UIObjectSelect
-							multi
-							className="template"
-							onChange={this.onChangePermissions.bind(this)}
-							options={options}
-							newOptionCreator={utils.keyNameOptionFactory}
-							valueKey="key"
-							labelKey="name"
-							value={this.state.current.valuesResources}
-						/>
-					</label>
+	/**
+	 * Differentiate between states
+	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
+	 */
+	updateStateHash() {
+		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
+		this._stateHash = utils.stringHash(this.props.selectorValue);
+	}
+
+	onChangeName(e) {
+		this.setCurrentState({
+			valuesName: e.target.value
+		});
+	}
+
+	onChangeUsername(e) {
+		this.setCurrentState({
+			valuesUsername: e.target.value
+		});
+	}
+
+	onChangePassword(e) {
+		this.setCurrentState({
+			valuesPassword: e.target.value
+		});
+	}
+
+	onChangePasswordAgain(e) {
+		this.setCurrentState({
+			valuesPasswordAgain: e.target.value
+		});
+	}
+
+	saveForm() {
+		let operationId = super.saveForm();
+
+		let permissions = this.props.store.permissions;
+		let resources = this.state.current.valuesResources.map(resource => {
+			return _.find(permissions, permission => resource === permission.key).type
+		});
+		let user = {
+			id: this.props.selectorValue,
+			name: this.state.current.valuesName,
+			username: this.state.current.valuesUsername,
+			password: this.state.current.valuesPassword,
+
+			permissions: resources,
+
+			users: {
+				read: this.state.current.valuesUsersRead,
+				update: this.state.current.valuesUsersUpdate,
+				delete: this.state.current.valuesUsersDelete
+			},
+
+			groups: {
+				read: this.state.current.valuesGroupsRead,
+				update: this.state.current.valuesGroupsUpdate,
+				delete: this.state.current.valuesGroupsDelete
+			}
+		};
+
+		ActionCreator.updateUser(operationId, user);
+	}
+
+	deleteObject(key) {
+		ActionCreator.deleteUser(this.instance, key);
+		if (key == this.props.selectorValue) {
+			ActionCreator.closeScreen(this.props.screenKey); //todo close after confirmed
+		}
+	}
+
+	render() {
+		let ret = null;
+
+		if(this.state.built) {
+			ret = (
+				<div>
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Username (Login)
+							<Input
+								type="text"
+								name="username"
+								placeholder=" "
+								value={this.state.current.valuesUsername}
+								onChange={this.onChangeUsername.bind(this)}
+							/>
+						</label>
+					</div>
+
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Password
+							<Input
+								type="password"
+								name="password"
+								placeholder=" "
+								value={this.state.current.valuesPassword}
+								onChange={this.onChangePassword.bind(this)}
+							/>
+						</label>
+					</div>
+
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Password for control
+							<Input
+								type="password"
+								name="passwordAgain"
+								placeholder=" "
+								value={this.state.current.valuesPasswordAgain}
+								onChange={this.onChangePasswordAgain.bind(this)}
+							/>
+						</label>
+					</div>
+
+					<div><h2>Permissions for creation of types</h2></div>
+					<div className="frame-input-wrapper">
+						<label className="container">
+							<UIObjectSelect
+								multi
+								className="template"
+								onChange={this.onChangeMultiple.bind(this, "valuesResources", ObjectTypes.PERMISSIONS)}
+								options={this.props.store.permissions}
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.valuesResources}
+							/>
+						</label>
+					</div>
+
+					<div><h2>Specify the permissions towards the group</h2></div>
+
+					<div className="frame-input-wrapper">
+						<label className="container">
+							Users with permission to see this user
+							<UIObjectSelect
+								multi
+								className="template"
+								onChange={this.onChangeMultiple.bind(this, "valuesUsersRead", ObjectTypes.USERS)}
+								options={this.props.store.users}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.valuesUsersRead}
+							/>
+						</label>
+					</div>
+
+					<div className="frame-input-wrapper">
+						<label className="container">
+							Users with permission to update this user
+							<UIObjectSelect
+								multi
+								className="template"
+								onChange={this.onChangeMultiple.bind(this, "valuesUsersUpdate", ObjectTypes.USERS)}
+								options={this.props.store.users}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.valuesUsersUpdate}
+							/>
+						</label>
+					</div>
+
+					<div className="frame-input-wrapper">
+						<label className="container">
+							Users with permission to delete this user
+							<UIObjectSelect
+								multi
+								className="template"
+								onChange={this.onChangeMultiple.bind(this, "valuesUsersDelete", ObjectTypes.USERS)}
+								options={this.props.store.users}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.valuesUsersDelete}
+							/>
+						</label>
+					</div>
+
+					<div className="frame-input-wrapper">
+						<label className="container">
+							Groups with permission to see this user
+							<UIObjectSelect
+								multi
+								className="template"
+								onChange={this.onChangeMultiple.bind(this, "valuesGroupsRead", ObjectTypes.GROUPS)}
+								options={this.props.store.groups}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.valuesGroupsRead}
+							/>
+						</label>
+					</div>
+
+					<div className="frame-input-wrapper">
+						<label className="container">
+							Groups with permission to update this user
+							<UIObjectSelect
+								multi
+								className="template"
+								onChange={this.onChangeMultiple.bind(this, "valuesGroupsUpdate", ObjectTypes.GROUPS)}
+								options={this.props.store.groups}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.valuesGroupsUpdate}
+							/>
+						</label>
+					</div>
+
+					<div className="frame-input-wrapper">
+						<label className="container">
+							Groups with permission to delete this user
+							<UIObjectSelect
+								multi
+								className="template"
+								onChange={this.onChangeMultiple.bind(this, "valuesGroupsDelete", ObjectTypes.GROUPS)}
+								options={this.props.store.groups}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.valuesGroupsDelete}
+							/>
+						</label>
+					</div>
+
+					<ConfigControls
+						key={"ConfigControls" + this.props.selectorValue}
+						disabled={this.props.disabled}
+						saved={this.equalStates(this.state.current,this.state.saved)}
+						saving={this.state.saving}
+						onSave={this.saveForm.bind(this)}
+						onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
+					/>
 				</div>
-			</div>
-		);
+			);
+		}
+
+		return ret;
 	}
 }
 

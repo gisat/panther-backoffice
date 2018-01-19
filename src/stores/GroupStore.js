@@ -45,7 +45,6 @@ class GroupStore extends Store {
 				this.cache = response.body.data.map(group => new GroupModel(null, group));
 				logger.info('GroupStore#reload Loaded groups: ', this.cache);
 				this.emitChange();
-				console.log(this.cache);
 				return this.cache;
 			}).catch(err => {
 				this.emitError(err, operationId);
@@ -85,14 +84,14 @@ class GroupStore extends Store {
 			.set('Access-Control-Allow-Origin', 'true')
 			.set('Access-Control-Allow-Credentials', 'true').then(pResponse => {
 				response = pResponse;
-				logger.info('GroupStore#add Group Updates. Body: ', response.body);
+				logger.info('GroupStore#update Group Updates. Body: ', response.body);
 				return this.reload(operationId);
 			}).then(() => {
 				this.emitChange();
 				return response;
 			}).catch(err => {
 				this.emitError(err, operationId);
-				logger.error('GroupStore#add Error: ',err);
+				logger.error('GroupStore#update Error: ',err);
 			});
 	}
 

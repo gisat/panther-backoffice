@@ -65,6 +65,7 @@ class ScreenPermissionsObject extends ScreenController {
 					places: this._load(PlaceStore),
 					scopes: this._load(ScopeStore),
 					users: this._load(UserStore),
+					groups: this._load(GroupStore),
 					permissions: this._load(PermissionsStore)
 				};
 				break;

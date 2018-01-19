@@ -75,9 +75,7 @@ class GroupModel extends Model {
 							models.push(
 								UserStore.all().then(models => {
 									for (let i = 0; i < models.length; i++) {
-										console.log(models[i].key);
 										if (Number(models[i].key) === Number(id)) {
-											console.log('User found.', models[i]);
 											return models[i];
 										}
 									}
