@@ -21,15 +21,16 @@ import ConfigControls from '../../atoms/ConfigControls';
 import { Input } from '../../SEUI/elements';
 
 var initialState = {
+	valuesName: '',
+	valuesMembers: [],
+	valuesResources: [],
+
 	valuesUsersRead: [],
 	valuesGroupsRead: [],
 	valuesUsersUpdate: [],
 	valuesGroupsUpdate: [],
 	valuesUsersDelete: [],
-	valuesGroupsDelete: [],
-	valuesMembers: [],
-	valuesName: '',
-	valuesResources: []
+	valuesGroupsDelete: []
 };
 
 @withStyles(styles)
@@ -66,8 +67,8 @@ class ConfigPermissionsGroup extends ControllerComponent {
 		}
 		let nextState = {};
 		if(props.selectorValue) {
-			let groups = _.findWhere(props.store.groups, {key: props.selectorValue});
-			if (groups) {
+			let group = _.findWhere(props.store.groups, {key: props.selectorValue});
+			if (group) {
 				nextState = {
 					valuesUsersRead: [],
 					valuesGroupsRead: [],
@@ -75,32 +76,38 @@ class ConfigPermissionsGroup extends ControllerComponent {
 					valuesGroupsUpdate: [],
 					valuesUsersDelete: [],
 					valuesGroupsDelete: [],
-					valuesMembers: _.pluck(groups.users, "key"),
-					valuesName: groups.name,
+					valuesMembers: _.pluck(group.users, "key"),
+					valuesName: group.name,
 					valuesResources: []
 				};
-				groups.permissions.group.forEach(permission => {
-					if(permission.permission == 'GET') {
-						nextState.valuesGroupsRead.push(permission.id);
-					} else if(permission.permission == 'DELETE') {
-						nextState.valuesGroupsDelete.push(permission.id);
-					} else if(permission.permission == 'PUT') {
-						nextState.valuesGroupsUpdate.push(permission.id);
-					}
-				});
-				groups.permissions.user.forEach(permission => {
-					if(permission.permission == 'GET') {
-						nextState.valuesUsersRead.push(permission.id);
-					} else if(permission.permission == 'DELETE') {
-						nextState.valuesUsersDelete.push(permission.id);
-					} else if(permission.permission == 'PUT') {
-						nextState.valuesUsersUpdate.push(permission.id);
-					}
-				});
-				//TODO: Refactor. Currently the whole permission for Back Office are in two categories. One for the creation types and one for the rest.
-				groups.permissionsTowards.forEach(permission => {
-					nextState.valuesResources.push(permission.resourceType);
-				})
+				if(group.permissionsGroups) {
+					group.permissionsGroups.forEach(permission => {
+						if (permission.permission == 'GET') {
+							nextState.valuesGroupsRead.push(permission.groupId);
+						} else if (permission.permission == 'DELETE') {
+							nextState.valuesGroupsDelete.push(permission.groupId);
+						} else if (permission.permission == 'PUT') {
+							nextState.valuesGroupsUpdate.push(permission.groupId);
+						}
+					});
+				}
+				if(group.permissionsUsers) {
+					group.permissionsUsers.forEach(permission => {
+						if (permission.permission == 'GET') {
+							nextState.valuesUsersRead.push(permission.userId);
+						} else if (permission.permission == 'DELETE') {
+							nextState.valuesUsersDelete.push(permission.userId);
+						} else if (permission.permission == 'PUT') {
+							nextState.valuesUsersUpdate.push(permission.userId);
+						}
+					});
+				}
+
+				if(group.permissionsTowards) {
+					group.permissionsTowards.forEach(permission => {
+						nextState.valuesResources.push(permission.key);
+					})
+				}
 
 			}
 		}
@@ -111,129 +118,14 @@ class ConfigPermissionsGroup extends ControllerComponent {
 		super.componentDidMount();
 
 		this.responseListener.add(UserStore);
-		this.responseListener.add(GroupStore);
 		this.errorListener.add(UserStore);
-		this.errorListener.add(GroupStore);
 	}
 
-	// TODO: refactor.
-	onChangeObjectSelectUser(stateKey, objectType, operationType, value, values) {
-		let group = _.findWhere(this.props.store.groups, {key: this.props.selectorValue});
-		let current = this.state.current[stateKey];
-		let newOnes = _.pluck(values, "key");
-		// Find added ones
-		let permission = {
-			resourceType: 'group',
-			resourceId: this.props.selectorValue,
-			permission: operationType
-		};
-		if(current.length < newOnes.length) {
-			let toAdd = _.difference(newOnes, current);
-			toAdd.forEach(id => {
-				group.addPermission(ObjectTypes.USER, id, permission);
-				ActionCreator.addPermissionUser(this.instance, id, permission);
-			});
-		} else if(current.length > newOnes.length) {
-			let toRemove = _.difference(current, newOnes);
-			toRemove.forEach(id => {
-				group.removePermission(ObjectTypes.USER, id, permission);
-				ActionCreator.removePermissionFromUser(this.instance, id, permission);
-			});
-		} else {
-			console.log("This should never happen");
-		}
-
+	onChangeMultiple(stateKey, objectType, value, values) {
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		let newState = {};
 		newState[stateKey] = newValues;
 		this.setCurrentState(newState);
-	}
-
-	onChangeObjectSelectGroup(stateKey, objectType, operationType, value, values) {
-		let group = _.findWhere(this.props.store.groups, {key: this.props.selectorValue});
-		let current = this.state.current[stateKey];
-		let newOnes = _.pluck(values, "key");
-		// Find added ones
-		let permission = {
-			resourceType: 'group',
-			resourceId: this.props.selectorValue,
-			permission: operationType
-		};
-		if(current.length < newOnes.length) {
-			let toAdd = _.difference(newOnes, current);
-			toAdd.forEach(id => {
-				group.addPermission(ObjectTypes.GROUP, id, permission);
-				ActionCreator.addPermission(this.instance, id, permission);
-			});
-		} else if(current.length > newOnes.length) {
-			let toRemove = _.difference(current, newOnes);
-			toRemove.forEach(id => {
-				group.removePermission(ObjectTypes.GROUP, id, permission);
-				ActionCreator.removePermission(this.instance, id, permission);
-			});
-		} else {
-			console.log("This should never happen");
-		}
-
-		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
-		let newState = {};
-		newState[stateKey] = newValues;
-		this.setCurrentState(newState);
-	}
-
-	onChangeObjectMember(stateKey, objectType, value, values) {
-		let group = _.findWhere(this.props.store.groups, {key: this.props.selectorValue});
-		let current = this.state.current[stateKey];
-		let newOnes = _.pluck(values, "key");
-		// Find added ones
-		if(current.length < newOnes.length) {
-			let toAdd = _.difference(newOnes, current);
-			toAdd.forEach(id => {
-				group.users.push(_.findWhere(this.props.store.users, {key: id}));
-				ActionCreator.addMemberToGroup(this.instance, group.key, id);
-			});
-		} else if(current.length > newOnes.length) {
-			let toRemove = _.difference(current, newOnes);
-			toRemove.forEach(id => {
-				group.users = _.without(group.users, id);
-				ActionCreator.removeMemberFromGroup(this.instance, group.key, id);
-			});
-		} else {
-			console.log("This should never happen");
-		}
-
-		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
-		let newState = {};
-		newState[stateKey] = newValues;
-		this.setCurrentState(newState);
-	}
-
-	onChangePermissions(value, values) {
-		let group = _.findWhere(this.props.store.groups, {key: this.props.selectorValue});
-		let current = this.state.current.valuesResources;
-		let newOnes = _.pluck(values, 'key');
-
-		if(current.length < newOnes.length) {
-			let toAdd = _.difference(newOnes, current);
-			toAdd.forEach(resourceType => {
-				ActionCreator.addPermission(this.instance, group.key, {
-					resourceType: resourceType,
-					resourceId: null,
-					permission: 'POST'
-				});
-			});
-		} else if(current.length > newOnes.length) {
-			let toRemove = _.difference(current, newOnes);
-			toRemove.forEach(resourceType => {
-				ActionCreator.removePermission(this.instance, group.key, {
-					resourceType: resourceType,
-					resourceId: null,
-					permission: 'POST'
-				});
-			});
-		} else {
-			console.log('This should never happen');
-		}
 	}
 
 	/**
@@ -254,7 +146,31 @@ class ConfigPermissionsGroup extends ControllerComponent {
 	saveForm() {
 		let operationId = super.saveForm();
 
-		ActionCreator.updateGroup(operationId, this.props.selectorValue, this.state.current.valuesName);
+		let permissions = this.props.store.permissions;
+		let resources = this.state.current.valuesResources.map(resource => {
+			return _.find(permissions, permission => resource === permission.key).type
+		});
+		let group = {
+			id: this.props.selectorValue,
+			name: this.state.current.valuesName,
+
+			members: this.state.current.valuesMembers,
+			permissions: resources,
+
+			users: {
+				read: this.state.current.valuesUsersRead,
+				update: this.state.current.valuesUsersUpdate,
+				delete: this.state.current.valuesUsersDelete
+			},
+
+			groups: {
+				read: this.state.current.valuesGroupsRead,
+				update: this.state.current.valuesGroupsUpdate,
+				delete: this.state.current.valuesGroupsDelete
+			}
+		};
+
+		ActionCreator.updateGroup(operationId, this.props.selectorValue, group);
 	}
 
 	deleteObject(key) {
@@ -266,20 +182,6 @@ class ConfigPermissionsGroup extends ControllerComponent {
 
 	render() {
 		let ret = null;
-
-		let availableTypesForPermissions = [{
-			key: 'dataset',
-			name: 'Scope'
-		}, {
-			key: 'location',
-			name: 'Place'
-		}, {
-			key: 'topic',
-			name: 'Topic'
-		}, {
-			key: 'group',
-			name: 'Group'
-		}];
 
 		if(this.state.built) {
 			ret = (
@@ -297,24 +199,13 @@ class ConfigPermissionsGroup extends ControllerComponent {
 						</label>
 					</div>
 
-					<ConfigControls
-						key={"ConfigControls" + this.props.selectorValue}
-						disabled={this.props.disabled}
-						saved={this.equalStates(this.state.current,this.state.saved)}
-						saving={this.state.saving}
-						onSave={this.saveForm.bind(this)}
-						onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
-					/>
-
-					<div></div>
-
 					<div><h2>Members of this group</h2></div>
 					<div className="frame-input-wrapper">
 						<label className="container">
 							<UIObjectSelect
 								multi
 								className="template"
-								onChange={this.onChangeObjectMember.bind(this, "valuesMembers", ObjectTypes.USERS)}
+								onChange={this.onChangeMultiple.bind(this, "valuesMembers", ObjectTypes.USERS)}
 								options={this.props.store.users}
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
@@ -331,8 +222,8 @@ class ConfigPermissionsGroup extends ControllerComponent {
 							<UIObjectSelect
 								multi
 								className="template"
-								onChange={this.onChangePermissions.bind(this)}
-								options={availableTypesForPermissions}
+								onChange={this.onChangeMultiple.bind(this, "valuesResources", ObjectTypes.PERMISSIONS)}
+								options={this.props.store.permissions}
 								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
 								labelKey="name"
@@ -349,7 +240,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 							<UIObjectSelect
 								multi
 								className="template"
-								onChange={this.onChangeObjectSelectUser.bind(this, "valuesUsersRead", ObjectTypes.USERS, "GET")}
+								onChange={this.onChangeMultiple.bind(this, "valuesUsersRead", ObjectTypes.USERS)}
 								options={this.props.store.users}
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
@@ -366,7 +257,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 							<UIObjectSelect
 								multi
 								className="template"
-								onChange={this.onChangeObjectSelectUser.bind(this, "valuesUsersUpdate", ObjectTypes.USERS, "PUT")}
+								onChange={this.onChangeMultiple.bind(this, "valuesUsersUpdate", ObjectTypes.USERS)}
 								options={this.props.store.users}
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
@@ -383,7 +274,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 							<UIObjectSelect
 								multi
 								className="template"
-								onChange={this.onChangeObjectSelectUser.bind(this, "valuesUsersDelete", ObjectTypes.USERS, "DELETE")}
+								onChange={this.onChangeMultiple.bind(this, "valuesUsersDelete", ObjectTypes.USERS)}
 								options={this.props.store.users}
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
@@ -400,7 +291,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 							<UIObjectSelect
 								multi
 								className="template"
-								onChange={this.onChangeObjectSelectGroup.bind(this, "valuesGroupsRead", ObjectTypes.GROUPS, "GET")}
+								onChange={this.onChangeMultiple.bind(this, "valuesGroupsRead", ObjectTypes.GROUPS)}
 								options={this.props.store.groups}
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
@@ -417,7 +308,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 							<UIObjectSelect
 								multi
 								className="template"
-								onChange={this.onChangeObjectSelectGroup.bind(this, "valuesGroupsUpdate", ObjectTypes.GROUPS, "PUT")}
+								onChange={this.onChangeMultiple.bind(this, "valuesGroupsUpdate", ObjectTypes.GROUPS)}
 								options={this.props.store.groups}
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
@@ -434,7 +325,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 							<UIObjectSelect
 								multi
 								className="template"
-								onChange={this.onChangeObjectSelectGroup.bind(this, "valuesGroupsDelete", ObjectTypes.GROUPS, "DELETE")}
+								onChange={this.onChangeMultiple.bind(this, "valuesGroupsDelete", ObjectTypes.GROUPS)}
 								options={this.props.store.groups}
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
@@ -444,6 +335,15 @@ class ConfigPermissionsGroup extends ControllerComponent {
 							/>
 						</label>
 					</div>
+
+					<ConfigControls
+						key={"ConfigControls" + this.props.selectorValue}
+						disabled={this.props.disabled}
+						saved={this.equalStates(this.state.current,this.state.saved)}
+						saving={this.state.saving}
+						onSave={this.saveForm.bind(this)}
+						onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
+					/>
 				</div>
 			);
 		}

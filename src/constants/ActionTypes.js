@@ -67,5 +67,7 @@ export default keyMirror({
 	WMS_LAYER_CREATE_RESPOND: null,
 	INVITE_USER: null,
 	CREATE_USER: null,
-	UPDATE_USER: null
+	UPDATE_USER: null,
+	DELETE_USER: null,
+	USER_CREATE_RESPOND: null
 });

@@ -82,10 +82,6 @@ class PlaceModel extends Model {
 			tacrb2_simple: {
 				serverName: 'tacrb2_simple',
 				sendToServer: true
-			},
-			tacrb2_allowInteractivityRangeMax: {
-				serverName: 'tacrb2_allowInteractivityRangeMax',
-				sendToServer: true
 			}
 		};
 	}

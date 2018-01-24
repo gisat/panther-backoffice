@@ -15,11 +15,16 @@ import PlaceStore from '../../../stores/PlaceStore';
 import TopicStore from '../../../stores/TopicStore';
 import GeonodeStore from '../../../layers/stores/GeonodeStore';
 import WmsStore from '../../../layers/stores/WmsStore';
+import PermissionsStore from '../../../stores/PermissionStore';
 
 import ScreenPermissionsObjectController from '../ScreenPermissionsObjectController';
 
 @withStyles(styles)
 class ScreenPermissionsObject extends ScreenController {
+	constructor(props) {
+		super(props);
+	}
+
 	_getStoreLoads(props) {
 		let storeloads = {};
 		switch (props.data.objectType) {
@@ -50,7 +55,8 @@ class ScreenPermissionsObject extends ScreenController {
 					places: this._load(PlaceStore),
 					scopes: this._load(ScopeStore),
 					users: this._load(UserStore),
-					groups: this._load(GroupStore)
+					groups: this._load(GroupStore),
+					permissions: this._load(PermissionsStore)
 				};
 				break;
 			case ObjectTypes.USER:
@@ -58,7 +64,9 @@ class ScreenPermissionsObject extends ScreenController {
 					topics: this._load(TopicStore),
 					places: this._load(PlaceStore),
 					scopes: this._load(ScopeStore),
-					users: this._load(UserStore)
+					users: this._load(UserStore),
+					groups: this._load(GroupStore),
+					permissions: this._load(PermissionsStore)
 				};
 				break;
 			case LayerObjectTypes.GEONODE_LAYER:

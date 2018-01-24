@@ -43,36 +43,30 @@ class WorldWindow extends BaseComponent {
 
 	componentDidMount() {
 		super.componentDidMount();
-		try {
-			this.wwd = new WorldWind.WorldWindow(this._canvasId);
-			if (this.wwd) {
-				var blueMarbleLayer = new WorldWind.BMNGLandsatLayer();
-				blueMarbleLayer.enabled = false;
-				var bingLayer = new WorldWind.BingAerialWithLabelsLayer(null);
-				bingLayer.enabled = true;
+		this.wwd = new WorldWind.WorldWindow(this._canvasId);
+		var blueMarbleLayer = new WorldWind.BMNGLandsatLayer();
+		blueMarbleLayer.enabled = false;
+		var bingLayer = new WorldWind.BingAerialWithLabelsLayer(null);
+		bingLayer.enabled = true;
 
-				this.wwd.addLayer(blueMarbleLayer);
-				this.wwd.addLayer(bingLayer);
+		this.wwd.addLayer(blueMarbleLayer);
+		this.wwd.addLayer(bingLayer);
 
-				if (this.props.onManualRedrawEnd) {
-					this.wwd.addEventListener("mouseup", this.props.onManualRedrawEnd.bind(this, this.wwd));
-					this.wwd.addEventListener("wheel", this.props.onManualRedrawEnd.bind(this, this.wwd));
-				}
-
-				if (this.props.mapState) {
-					this.wwd.navigator.lookAtLocation.latitude = this.props.mapState.latitude;
-					this.wwd.navigator.lookAtLocation.longitude = this.props.mapState.longitude;
-					this.wwd.navigator.range = this.props.mapState.range;
-					this.wwd.navigator.tilt = this.props.mapState.tilt;
-					this.wwd.navigator.heading = this.props.mapState.heading;
-					this.wwd.redraw();
-				}
-
-				this.props.onMount(this.wwd);
-			}
-		} catch(exception) {
-			logger.error("WorldWindow#componentDidMount",exception);
+		if (this.props.onManualRedrawEnd) {
+			this.wwd.addEventListener("mouseup", this.props.onManualRedrawEnd.bind(this, this.wwd));
+			this.wwd.addEventListener("wheel", this.props.onManualRedrawEnd.bind(this, this.wwd));
 		}
+
+		if (this.props.mapState) {
+			this.wwd.navigator.lookAtLocation.latitude = this.props.mapState.latitude;
+			this.wwd.navigator.lookAtLocation.longitude = this.props.mapState.longitude;
+			this.wwd.navigator.range = this.props.mapState.range;
+			this.wwd.navigator.tilt = this.props.mapState.tilt;
+			this.wwd.navigator.heading = this.props.mapState.heading;
+			this.wwd.redraw();
+		}
+
+		this.props.onMount(this.wwd);
 	}
 
 	render() {

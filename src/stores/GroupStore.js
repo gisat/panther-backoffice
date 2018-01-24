@@ -45,7 +45,6 @@ class GroupStore extends Store {
 				this.cache = response.body.data.map(group => new GroupModel(null, group));
 				logger.info('GroupStore#reload Loaded groups: ', this.cache);
 				this.emitChange();
-				console.log(this.cache);
 				return this.cache;
 			}).catch(err => {
 				this.emitError(err, operationId);
@@ -74,24 +73,25 @@ class GroupStore extends Store {
 			});
 	}
 
-	update(groupId, name, operationId) {
+	update(groupId, group, operationId) {
 		logger.info('GroupStore#update Update group started');
 		let response;
 		return superagent
 			.put(this.groupUrl + '/' + groupId)
-			.send({name: name})
+			.send({group: group})
 			.withCredentials()
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Origin', 'true')
 			.set('Access-Control-Allow-Credentials', 'true').then(pResponse => {
 				response = pResponse;
-				logger.info('GroupStore#add Group Updates. Body: ', response.body);
+				logger.info('GroupStore#update Group Updates. Body: ', response.body);
 				return this.reload(operationId);
 			}).then(() => {
+				this.emitChange();
 				return response;
 			}).catch(err => {
 				this.emitError(err, operationId);
-				logger.error('GroupStore#add Error: ',err);
+				logger.error('GroupStore#update Error: ',err);
 			});
 	}
 
@@ -108,74 +108,6 @@ class GroupStore extends Store {
 			}).catch(err => {
 				this.emitError(err, operationId);
 				logger.error('GroupStore#delete Error: ',err);
-			});
-	}
-
-	addMember(groupId, userId, operationId) {
-		logger.info('GroupStore#addMember Add member to group started');
-		return superagent
-			.post(this.membersUrl)
-			.send({groupId: groupId, userId: userId})
-			.withCredentials()
-			.set('Accept', 'application/json')
-			.set('Access-Control-Allow-Origin', 'true')
-			.set('Access-Control-Allow-Credentials', 'true').then(response => {
-				logger.info('GroupStore#addMember Add member to group deleted. Body: ', response.body);
-				return this.reload(operationId);
-			}).catch(err => {
-				this.emitError(err, operationId);
-				logger.error('GroupStore#addMember Error: ',err);
-			});
-	}
-
-	removeMember(groupId, userId, operationId) {
-		logger.info('GroupStore#removeMember Remove member from group started');
-		return superagent
-			.delete(this.membersUrl)
-			.send({groupId: groupId, userId: userId})
-			.withCredentials()
-			.set('Accept', 'application/json')
-			.set('Access-Control-Allow-Origin', 'true')
-			.set('Access-Control-Allow-Credentials', 'true').then(response => {
-				logger.info('GroupStore#removeMember Member removed from the group. Body: ', response.body);
-				return this.reload(operationId);
-			}).catch(err => {
-				this.emitError(err, operationId);
-				logger.error('GroupStore#removeMember Error: ',err);
-			});
-	}
-
-	addPermission(groupId, permission, operationId) {
-		logger.info('GroupStore#addPermission Add permission to group started.');
-		return superagent
-			.post(this.permissionGroupUrl)
-			.send({groupId: groupId, resourceType: permission.resourceType, resourceId: permission.resourceId, permission: permission.permission})
-			.withCredentials()
-			.set('Accept', 'application/json')
-			.set('Access-Control-Allow-Origin', 'true')
-			.set('Access-Control-Allow-Credentials', 'true').then(response => {
-				logger.info('GroupStore#addPermission Add permission to group finished. Body: ', response.body);
-				return this.reload(operationId);
-			}).catch(err => {
-				this.emitError(err, operationId);
-				logger.error('GroupStore#addPermission Error: ',err);
-			});
-	}
-
-	removePermission(groupId, permission, operationId) {
-		logger.info('GroupStore#removePermission Remove permission from group started');
-		return superagent
-			.delete(this.permissionGroupUrl)
-			.send({groupId: groupId, resourceType: permission.resourceType, resourceId: permission.resourceId, permission: permission.permission})
-			.withCredentials()
-			.set('Accept', 'application/json')
-			.set('Access-Control-Allow-Origin', 'true')
-			.set('Access-Control-Allow-Credentials', 'true').then(response => {
-				logger.info('GroupStore#removePermission Remove permission from group finished. Body: ', response.body);
-				return this.reload(operationId);
-			}).catch(err => {
-				this.emitError(err, operationId);
-				logger.error('GroupStore#removePermission Error: ',err);
 			});
 	}
 
@@ -219,22 +151,10 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			storeInstance.add(action.data.name, action.data.operationId);
 			break;
 		case ActionTypes.GROUP_UPDATE:
-			storeInstance.update(action.data.id, action.data.name, action.data.operationId);
+			storeInstance.update(action.data.id, action.data.group, action.data.operationId);
 			break;
 		case ActionTypes.GROUP_DELETE:
 			storeInstance.delete(action.data.id, action.data.operationId);
-			break;
-		case ActionTypes.GROUP_ADD_MEMBER:
-			storeInstance.addMember(action.data.groupId, action.data.userId, action.data.operationId);
-			break;
-		case ActionTypes.GROUP_REMOVE_MEMBER:
-			storeInstance.removeMember(action.data.groupId, action.data.userId, action.data.operationId);
-			break;
-		case ActionTypes.GROUP_ADD_PERMISSION:
-			storeInstance.addPermission(action.data.groupId, action.data.permission, action.data.operationId);
-			break;
-		case ActionTypes.GROUP_REMOVE_PERMISSION:
-			storeInstance.removePermission(action.data.groupId, action.data.permission, action.data.operationId);
 			break;
 	}
 });
