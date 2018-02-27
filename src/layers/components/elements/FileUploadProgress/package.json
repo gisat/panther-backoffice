@@ -1,0 +1,6 @@
+{
+	"name": "FileUploadProgress",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./FileUploadProgress.js"
+}

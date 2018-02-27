@@ -6,7 +6,10 @@ class DataLayerModel extends Model {
 	data() {
 		return {
 			key: {
-				serverName: 'name' //string
+				serverName: 'path' //string
+			},
+			name: {
+				serverName: 'name'
 			},
 			referenced: {
 				serverName: 'referenced' //boolean
@@ -15,7 +18,7 @@ class DataLayerModel extends Model {
 				serverName: 'path'
 			},
 			geoserverWorkspace: {
-				serverName: 'name', //string
+				serverName: 'path', //string
 				transformForLocal: function (data) {
 					return data.split(":",2)[0];
 				}
