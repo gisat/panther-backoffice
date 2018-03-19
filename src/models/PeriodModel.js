@@ -49,6 +49,10 @@ class PeriodModel extends Model {
 				},
 				isPromise: true
 			},
+			period: {
+				serverName: 'period', //string
+				sendToServer: true
+			},
 			date: {
 				serverName: 'date', //date string
 				sendToServer: true,
