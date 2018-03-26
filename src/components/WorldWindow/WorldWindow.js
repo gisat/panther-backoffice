@@ -44,6 +44,8 @@ class WorldWindow extends BaseComponent {
 	componentDidMount() {
 		super.componentDidMount();
 		this.wwd = new WorldWind.WorldWindow(this._canvasId);
+		this.wwd.globe = new WorldWind.Globe2D();
+		this.wwd.globe.projection = new WorldWind.ProjectionMercator();
 		var blueMarbleLayer = new WorldWind.BMNGLandsatLayer();
 		blueMarbleLayer.enabled = false;
 		var bingLayer = new WorldWind.BingAerialWithLabelsLayer(null);
