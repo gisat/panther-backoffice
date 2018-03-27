@@ -64,6 +64,10 @@ class WmsLayerModel extends Model {
 			permissions: {
 				serverName: 'permissions',
 				sendToServer: false
+			},
+			getDates: {
+				serverName: 'getDates',
+				sendToServer: true
 			}
 		};
 	}
