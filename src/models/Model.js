@@ -44,9 +44,10 @@ class Model {
 			model = self.data();
 			if (config.models && self._modelConfig) {
 				// only allow first level keys allowed in config
-				_.omit(model,function(keyProps, key) {
-					return !self._modelConfig[key];
-				});
+				//todo this doesn't work (omit returns, not mutates), but who knows what a fix will do
+				//_.omit(model,function(keyProps, key) {
+				//	return !self._modelConfig[key];
+				//});
 			}
 		}
 		_.each(model, function (keyProps, key) {
