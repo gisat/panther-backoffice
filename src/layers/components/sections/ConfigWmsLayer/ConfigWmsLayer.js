@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import ControllerComponent from '../../../../components/common/ControllerComponent';
+import config from '../../../../config';
 import LayerActionCreator from '../../../actions/ActionCreator';
 import ActionCreator from '../../../../actions/ActionCreator';
 import logger from '../../../../core/Logger';
@@ -9,6 +10,7 @@ import _ from 'underscore';
 import ObjectTypes, {Model} from '../../../constants/ObjectTypes';
 
 import {Input} from '../../../../components/SEUI/elements';
+import { CheckboxFields, Checkbox } from '../../../../components/SEUI/modules';
 import UIObjectSelect from '../../../../components/atoms/UIObjectSelect';
 import ConfigControls from '../../../../components/atoms/ConfigControls';
 
@@ -19,6 +21,8 @@ import PeriodModel from '../../../../models/PeriodModel';
 
 import WmsStore from '../../../stores/WmsStore';
 
+let modelConfig = _.assign({}, config.models.common, config.models.WMS_LAYER);
+
 var initialState = {
 	valueName: "",
 	valueUrl: "",
@@ -28,6 +32,9 @@ var initialState = {
 	valuePeriods: [],
 	valuePlaces: []
 };
+if (modelConfig.getDates) {
+	initialState.valueGetDates = false;
+}
 
 class ConfigWmsLayer extends ControllerComponent {
 
@@ -74,6 +81,9 @@ class ConfigWmsLayer extends ControllerComponent {
 					valuePlaces: layer.places,
 					valueCustom: layer.custom
 				};
+				if (modelConfig.getDates) {
+					nextState.valueGetDates = !!layer.getDates;
+				}
 				if (layer.scope) {
 					nextState.valueScope.push(layer.scope);
 				}
@@ -109,6 +119,9 @@ class ConfigWmsLayer extends ControllerComponent {
 		layer.url = this.state.current.valueUrl;
 		layer.layer = this.state.current.valueLayer;
 		layer.custom = this.state.current.valueCustom;
+		if (modelConfig.getDates && this.state.current.hasOwnProperty("valueGetDates")) {
+			layer.getDates = this.state.current.valueGetDates;
+		}
 		for(let key of this.state.current.valueScope) {
 			if(key instanceof ScopeModel) {
 				layer.scope = key;
@@ -185,6 +198,12 @@ class ConfigWmsLayer extends ControllerComponent {
 		})
 	}
 
+	onChangeGetDates() {
+		this.setCurrentState({
+			valueGetDates: !this.state.current.valueGetDates
+		});
+	}
+
 	render() {
 
 		let ret = null;
@@ -199,6 +218,26 @@ class ConfigWmsLayer extends ControllerComponent {
 				periods = scope.periods;
 			}
 
+
+
+			let getDatesField = null;
+			if (modelConfig.getDates) {
+				getDatesField = (
+					<div
+						className="frame-input-wrapper"
+						key="extended-fields-get-dates"
+					>
+						<label className="container">
+							Use getDates
+							<Checkbox
+								name="tacrb2_type"
+								checked={this.state.current.valueGetDates}
+								onClick={this.onChangeGetDates.bind(this)}
+							/>
+						</label>
+					</div>
+				);
+			}
 
 			ret = (
 				<div>
@@ -309,6 +348,8 @@ class ConfigWmsLayer extends ControllerComponent {
 							/>
 						</label>
 					</div>
+
+					{getDatesField}
 
 					<ConfigControls
 						key={"ConfigControls" + this.props.selectorValue}
