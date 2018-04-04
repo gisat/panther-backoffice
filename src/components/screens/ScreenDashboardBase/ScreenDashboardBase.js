@@ -3,7 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import styles from './ScreenDashboardBase.css';
 import withStyles from '../../../decorators/withStyles';
 
-import { geonodeProtocol, geonodeAddress, geoserverProtocol, geoserverAddress, frontOfficeProtocol, frontOfficeAddress, frontOfficeExplorationPath } from '../../../config';
+import { geoserverProtocol, geoserverAddress, frontOfficeProtocol, frontOfficeAddress, frontOfficeExplorationPath } from '../../../config';
 
 import utils from '../../../utils/utils';
 import ObjectTypes, {Model, objectTypesMetadata} from '../../../constants/ObjectTypes';
@@ -71,8 +71,6 @@ class ScreenDashboardBase extends PantherComponent {
 	render() {
 
 		var frontOfficeURL = frontOfficeProtocol + frontOfficeAddress + "/";
-		var geoNodeURL = geonodeProtocol + geonodeAddress + "/";
-		var geoServerURL = geoserverProtocol + geoserverAddress + "/";
 
 		return (
 			<div>
@@ -112,42 +110,6 @@ class ScreenDashboardBase extends PantherComponent {
 							</a>*/}
 						</div>
 
-						<div className="frame-wrapper flexchild">
-							<span className="row">GeoNode</span>
-							<a
-								className="row right-icon"
-								target="_blank"
-								href={geoNodeURL+"layers/upload"}
-							>
-								<span>Upload data layers</span>
-								<Icon name="external" className="right"/>
-							</a>
-							<a
-								className="row right-icon"
-								target="_blank"
-								href={geoNodeURL+"layers"}
-							>
-								<span>Data layers</span>
-								<Icon name="external" className="right"/>
-							</a>
-							<a
-								className="row right-icon"
-								target="_blank"
-								href={geoNodeURL+"people"}
-							>
-								<span>Users</span>
-								<Icon name="external" className="right"/>
-							</a>
-							<a
-								className="row right-icon"
-								target="_blank"
-								href={geoNodeURL+"account/invite_user/"}
-							>
-								<span>User invitation</span>
-								<Icon name="external" className="right"/>
-							</a>
-						</div>
-
 						{/*<div className="frame-wrapper flexchild">
 							<span className="row">GeoServer</span>
 							<a
@@ -179,14 +141,6 @@ class ScreenDashboardBase extends PantherComponent {
 								href={frontOfficeURL+"help-frontoffice/"}
 							>
 								Front office help
-								<Icon name="external" className="right"/>
-							</a>
-							<a
-								className="row right-icon"
-								target="_blank"
-								href={geoNodeURL+"help/"}
-							>
-								<span>GeoNode help</span>
 								<Icon name="external" className="right"/>
 							</a>
 						</div>

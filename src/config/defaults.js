@@ -24,10 +24,6 @@ export default {
 	/**
 	 * other Panther components' location
 	 */
-	//address: host + port + base path
-	geonodeProtocol: "http://",
-	geonodeAddress: "localhost",
-
 	geoserverProtocol: "http://",
 	geoserverAddress: "localhost/geoserver",
 
