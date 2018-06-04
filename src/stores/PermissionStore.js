@@ -29,6 +29,11 @@ class PermissionStore {
 				key: 'permission-user',
 				type: 'user',
 				name: 'User'
+			},
+			{
+				key: 'permission-scenario-case',
+				type: 'scenario_case',
+				name: 'Scenario case'
 			}
 		]
 	}
