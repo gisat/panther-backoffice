@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react'; 
+import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import _ from 'underscore';
 import Select from 'react-select';
@@ -82,6 +82,9 @@ class ConfigDataLayerVector extends PantherComponent{
 
 		return (
 			<div>
+				<div>
+					If you fail at mapping the vector layer for the first time, please unlink it fully and link again before trying the analysis.
+				</div>
 
 				<div className="frame-input-wrapper">
 						<label className="container">
