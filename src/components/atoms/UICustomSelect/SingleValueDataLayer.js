@@ -13,7 +13,7 @@ var SingleValue = React.createClass({
 	renderValue (option) {
 		return (
 			<div>
-				<span>{option.key}</span>
+				<span>{option.key} {option.name}</span>
 				<span className="option-parent">{option.referenced ? "" : "not set"}</span>
 			</div>
 		);
