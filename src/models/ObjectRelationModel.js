@@ -176,13 +176,13 @@ class ObjectRelationModel extends Model {
 			let id = data.split("_")[1];
 			return AnalysisRunStore.getById(id); // todo process an_analysisRunId_auLevel
 		} else {
-			return DataLayerStore.getById(data)
+			return DataLayerStore.getByPath(data)
 		}
 	}
 
 	transformDataSourceForServer (model, relationModel) {
 		if (model instanceof DataLayerModel) {
-			return this.getKey(model);
+			return model.path;
 		} else {
 			return relationModel.dataSourceString;
 		}

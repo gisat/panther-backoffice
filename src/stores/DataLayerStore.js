@@ -56,6 +56,10 @@ class DataLayerStore extends ApiStore {
 	shortUniqueId() {
 		return (Math.random() * new Date().getMilliseconds()).toFixed(0);
 	}
+
+	getByPath(path){
+		return this.getFiltered({path: path});
+	}
 }
 
 let storeInstance = new DataLayerStore();
