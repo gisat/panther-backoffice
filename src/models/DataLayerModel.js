@@ -6,7 +6,7 @@ class DataLayerModel extends Model {
 	data() {
 		return {
 			key: {
-				serverName: 'path' //string
+				serverName: 'id' //string
 			},
 			name: {
 				serverName: 'name'
