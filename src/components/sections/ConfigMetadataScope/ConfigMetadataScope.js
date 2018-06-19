@@ -25,6 +25,7 @@ import ConfigControls from '../../atoms/ConfigControls';
 var initialState = {
 	valueActive: false,
 	valueName: "",
+	valueDescription: "",
 	valuesAULevels: [],
 	valuesPeriods: [] //periods are to move from theme to scope, but cannot without changes in FO
 };
@@ -72,6 +73,7 @@ class ConfigMetadataScope extends ControllerComponent {
 				nextState = {
 					valueActive: scope.active,
 					valueName: scope.name,
+					valueDescription: scope.description,
 					valuesAULevels: utils.getModelsKeys(scope.levels),
 					valuesPeriods: utils.getModelsKeys(scope.periods)
 				};
@@ -144,6 +146,7 @@ class ConfigMetadataScope extends ControllerComponent {
 		_.assign(modelData, scope);
 		modelData.active = this.state.current.valueActive;
 		modelData.name = this.state.current.valueName;
+		modelData.description = this.state.current.valueDescription;
 		modelData.levels = [];
 		for (let key of this.state.current.valuesAULevels) {
 			let level = _.findWhere(this.props.store.auLevels, {key: key});
@@ -240,6 +243,12 @@ class ConfigMetadataScope extends ControllerComponent {
 		});
 	}
 
+	onChangeDescription(e){
+		this.setCurrentState({
+			valueName: e.target.value
+		});
+	}
+
 	onChangeObjectSelect (stateKey, objectType, value, values) {
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
@@ -316,6 +325,19 @@ class ConfigMetadataScope extends ControllerComponent {
 							placeholder=" "
 							value={this.state.current.valueName}
 							onChange={this.onChangeName.bind(this)}
+						/>
+					</label>
+				</div>
+
+				<div className="frame-input-wrapper required">
+					<label className="container">
+						Description
+						<Input
+							type="text"
+							name="description"
+							placeholder=" "
+							value={this.state.current.valueDescription}
+							onChange={this.onChangeDescription.bind(this)}
 						/>
 					</label>
 				</div>

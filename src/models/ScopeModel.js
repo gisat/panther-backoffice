@@ -21,6 +21,10 @@ class ScopeModel extends Model {
 				serverName: 'name', //string
 				sendToServer: true
 			},
+			description: {
+				serverName: 'description', //string
+				sendToServer: true
+			},
 			active: {
 				serverName: 'active', //boolean
 				sendToServer: true

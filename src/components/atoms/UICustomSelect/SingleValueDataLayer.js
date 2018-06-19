@@ -34,3 +34,6 @@ var SingleValue = React.createClass({
 });
 
 module.exports = SingleValue;
+
+// TODO: Add layerId to the layerref
+// TODO: Add the description to the scope.
