@@ -245,7 +245,7 @@ class ConfigMetadataScope extends ControllerComponent {
 
 	onChangeDescription(e){
 		this.setCurrentState({
-			valueName: e.target.value
+			valueDescription: e.target.value
 		});
 	}
 
