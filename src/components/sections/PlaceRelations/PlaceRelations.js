@@ -1,3 +1,4 @@
+import superagent from 'superagent';
 import React, { PropTypes, Component } from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import styles from './PlaceRelations.css';
@@ -7,7 +8,7 @@ import _ from 'underscore';
 import path from "path";
 
 import utils from '../../../utils/utils';
-import {apiProtocol,apiHost} from '../../../config';
+import {apiProtocol,apiHost, apiPath} from '../../../config';
 
 import UIScreenButton from '../../atoms/UIScreenButton';
 
@@ -27,6 +28,7 @@ import DataLayerStore from '../../../stores/DataLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
+import ThemeStore from '../../../stores/ThemeStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
 import AULevelStore from '../../../stores/AULevelStore';
@@ -78,6 +80,7 @@ class PlaceRelations extends PantherComponent {
 		return {
 			scopes: ScopeStore.getAll(),
 			place: PlaceStore.getById(props.selectorValue),
+			themes: ThemeStore.getAll(),
 			placeRelations: ObjectRelationStore.getFiltered({placeKey: props.selectorValue}) // todo rewrite after getFiltered can filter by nested key
 		};
 	}
@@ -360,6 +363,26 @@ class PlaceRelations extends PantherComponent {
 		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
 	}
 
+	createDataView(scope, theme, location, period) {
+		superagent.post(`${apiProtocol}${apiHost}${apiProtocol}/rest/initial/view`)
+			.data({
+				scope: scope,
+				theme: theme,
+				place: location,
+				period: period
+			})
+			.withCredentials()
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(() => {
+				alert('Data View was created.');
+			})
+			.catch(err => {
+				logger.error('PlaceRelations#createDataView Error: ', err);
+				alert('There was an error with creation of the Data Views ' + err);
+			})
+	}
 
 	render() {
 
@@ -384,7 +407,6 @@ class PlaceRelations extends PantherComponent {
 
 		if(this.state.place) {
 			if (this.state.place.scope) {
-
 				headerInsertChildren.push(
 					<div
 						key="placeScopeSettingsButton"
@@ -398,6 +420,29 @@ class PlaceRelations extends PantherComponent {
 						</UIScreenButton>
 					</div>
 				);
+
+				if(this.state.place.scope.periods && this.state.place.scope.periods.length > 0) {
+					const location = this.state.place.key;
+					const scope = this.state.place.scope.key;
+					const period = this.state.place.scope.periods[0];
+					// Get theme for Scope.
+					const theme = this.state.themes.filter(theme => {
+						return theme.scope.key === scope.key;
+					});
+					if(theme.length > 0) {
+						// At this moment I have all information to create the initial Data View.
+						headerInsertChildren.push(
+							<div>
+								<div>
+									If you are creating a new Scope, it isn't possible to get to it until the initial Data View is created.
+									This is the button that allows you to create the Data View for this Location.
+								</div>
+								<button onClick={this.createDataView.bind(this, scope, theme[0], location, period)}>Create Initial Data View for this Location</button>
+							</div>
+						)
+					}
+				}
+
 
 				configInsert = (
 					<div>
