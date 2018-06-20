@@ -364,7 +364,7 @@ class PlaceRelations extends PantherComponent {
 	}
 
 	createDataView(scope, theme, location, period) {
-		superagent.post(`${apiProtocol}${apiHost}${apiPath}/rest/initial/view`)
+		superagent.post(`${apiProtocol}${apiHost}${apiPath}/rest/initial/views`)
 			.send({
 				scope: scope,
 				theme: theme,
