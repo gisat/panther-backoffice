@@ -424,7 +424,7 @@ class PlaceRelations extends PantherComponent {
 				if(this.state.place.scope.periods && this.state.place.scope.periods.length > 0) {
 					const location = this.state.place.key;
 					const scope = this.state.place.scope.key;
-					const period = this.state.place.scope.periods[0];
+					const period = this.state.place.scope.periods[0].key;
 					// Get theme for Scope.
 					const theme = this.state.themes.filter(theme => {
 						return theme.scope && theme.scope.key === scope;
