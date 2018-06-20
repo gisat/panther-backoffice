@@ -144,26 +144,6 @@ class ScreenDataLayersBase extends ScreenController {
 			);
 		}
 
-		let duplicateLayer = "";
-		if(allowDuplication) {
-			duplicateLayer = (
-				<div className="float">
-					<div>
-						<Input
-							type="text"
-							name="Name of duplicated layer"
-							placeholder=" "
-							value={this.state.valueNewLayerName}
-							onChange={this.onChangeNewLayerName.bind(this)}
-						/>
-					</div>
-					<div className="button" onClick={this.duplicate.bind(this)}>
-						Duplicate layer
-					</div>
-				</div>
-			);
-		}
-
 		if (this.state.initialized) {
 			ret = (
 				<div>
@@ -178,8 +158,6 @@ class ScreenDataLayersBase extends ScreenController {
 								onFocus={this.onSelectorFocus.bind(this)}
 							/>
 						</div>
-
-						{duplicateLayer}
 					</div>
 					<FileUpload />
 					<div className="screen-content">
