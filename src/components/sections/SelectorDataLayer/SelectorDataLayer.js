@@ -58,7 +58,7 @@ class SelectorDataLayer extends PantherComponent {
 								optionComponent={OptionDataLayer}
 								singleValueComponent={SingleValueDataLayer}
 								valueKey="key"
-								labelKey="name"
+								labelKey="key"
 								value={this.props.value}
 								clearable={false}
 							/>

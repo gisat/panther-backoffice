@@ -35,7 +35,7 @@ var OptionPlace = React.createClass({
 	renderOption (option) {
 		return (
 			<div>
-				<span>{option.key} {option.name}</span>
+				<span>{option.key}</span>
 				<span className="option-parent">{option.referenced ? "" : "not set"}</span>
 			</div>
 	);
