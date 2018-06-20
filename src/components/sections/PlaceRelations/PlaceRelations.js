@@ -437,7 +437,7 @@ class PlaceRelations extends PantherComponent {
 									If you are creating a new Scope, it isn't possible to get to it until the initial Data View is created.
 									This is the button that allows you to create the Data View for this Location.
 								</div>
-								<button onClick={this.createDataView.bind(this, scope, theme[0], location, period)}>Create Initial Data View for this Location</button>
+								<button onClick={this.createDataView.bind(this, scope, theme[0].key, location, period)}>Create Initial Data View for this Location</button>
 							</div>
 						)
 					}
