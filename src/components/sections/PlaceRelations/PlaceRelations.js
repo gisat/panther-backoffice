@@ -427,7 +427,7 @@ class PlaceRelations extends PantherComponent {
 					const period = this.state.place.scope.periods[0];
 					// Get theme for Scope.
 					const theme = this.state.themes.filter(theme => {
-						return theme.scope.key === scope.key;
+						return theme.scope.key === scope;
 					});
 					if(theme.length > 0) {
 						// At this moment I have all information to create the initial Data View.
