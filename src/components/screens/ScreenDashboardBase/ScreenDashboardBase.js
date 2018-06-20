@@ -6,18 +6,12 @@ import withStyles from '../../../decorators/withStyles';
 import { geoserverProtocol, geoserverAddress, frontOfficeProtocol, frontOfficeAddress, frontOfficeExplorationPath } from '../../../config';
 
 import utils from '../../../utils/utils';
-import ObjectTypes, {Model, objectTypesMetadata} from '../../../constants/ObjectTypes';
 import ActionCreator from '../../../actions/ActionCreator';
 
 import { Icon, Input } from '../../SEUI/elements';
 
 import ScreenHelpIndex from '../../screens/ScreenHelpIndex';
 import PantherComponent from "../../common/PantherComponent";
-
-import Form from '../../atoms/Form/Form';
-import FormField from '../../atoms/FormField/FormField';
-import FormFieldActivation from '../../atoms/FormFieldActivation/FormFieldActivation';
-import Select from 'react-select';
 
 
 var initialState = {
@@ -70,7 +64,8 @@ class ScreenDashboardBase extends PantherComponent {
 
 	render() {
 
-		var frontOfficeURL = frontOfficeProtocol + frontOfficeAddress + "/";
+		const frontOfficeURL = frontOfficeProtocol + frontOfficeAddress + "/";
+		const geoServerURL = geoserverProtocol + geoserverAddress + "/";
 
 		return (
 			<div>
@@ -100,27 +95,19 @@ class ScreenDashboardBase extends PantherComponent {
 								<span>Project homepage</span>
 								<Icon name="external" className="right"/>
 							</a>
-							{/*<a
-								className="row right-icon"
-								target="_blank"
-								href={frontOfficeURL+"downloads"}
-							>
-								<span>Downloads</span>
-								<Icon name="external" className="right"/>
-							</a>*/}
 						</div>
 
-						{/*<div className="frame-wrapper flexchild">
+						{<div className="frame-wrapper flexchild">
 							<span className="row">GeoServer</span>
 							<a
 								className="row right-icon"
 								target="_blank"
-								href={geoServerURL+"web/?wicket:bookmarkablePage=:org.geoserver.wms.web.data.StylePage"}
+								href={geoServerURL+"web/wicket/bookmarkable/org.geoserver.web.demo.MapPreviewPage"}
 							>
-								<span>Manage styles</span>
+								<span>Download Source Layers</span>
 								<Icon name="external" className="right"/>
 							</a>
-						</div>*/}
+						</div>}
 
 						<div className="frame-wrapper flexchild">
 							<span className="row left-icon">
