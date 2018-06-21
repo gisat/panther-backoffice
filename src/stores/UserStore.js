@@ -277,12 +277,7 @@ class UserStore extends Store {
 
 	async getCurrentUser() {
 		//let logged = this.logged || await this.getLogged(); // would not respect outside logout
-		let logged = await this.getLogged();
-		if (logged) {
-			let models = await this.load();
-			return _.find(models, {key: logged.key});
-		}
-		return null;
+		return await this.getLogged();
 	}
 
 	addLoginListener(loginFunction) {
