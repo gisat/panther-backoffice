@@ -133,6 +133,7 @@ class UserStore extends Store {
 				if (response.body._id == 0) {
 					return null;
 				}
+
 				console.log(this.logged);
 				let oldUserKey = this.logged && this.logged.key;
 				this.logged = new UserModel(null, response.body);
