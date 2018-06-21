@@ -15,24 +15,26 @@ class FileUploadProgress extends Component {
 
 	retrieveStatus() {
 		// Update the status based on the information untill either error or done.
-		superagent
-			.get(this.props.url)
-			.then(status => {
-				if(status.body.status == 'done') {
-					window.clearInterval(this.timer);
-					this.props.onComplete();
-				} else if(status.body.status == 'error') {
-					window.clearInterval(this.timer);
-					this.props.onComplete(status.message);
-				} else {
-					let progress = status.body.progress;
-					this.setState({progress});
-				}
-			}).catch(error => {
+		if(this.props.url) {
+			superagent
+				.get(this.props.url)
+				.then(status => {
+					if (status.body.status == 'done') {
+						window.clearInterval(this.timer);
+						this.props.onComplete();
+					} else if (status.body.status == 'error') {
+						window.clearInterval(this.timer);
+						this.props.onComplete(status.message);
+					} else {
+						let progress = status.body.progress;
+						this.setState({progress});
+					}
+				}).catch(error => {
 				console.error(error);
 				window.clearInterval(this.timer);
 				this.props.onComplete(error);
-		});
+			});
+		}
 	}
 
 	render() {
