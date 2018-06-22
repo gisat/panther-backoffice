@@ -31,7 +31,8 @@ var initialState = {
 	valueType: "",
 	valueUnitsStandard: "",
 	valueUnitsCustom: "",
-	valueColor: ""
+	valueColor: "",
+	valueColumnName: ""
 };
 if (modelConfig.code) {
 	initialState.valueCode = "";
@@ -81,7 +82,8 @@ class ConfigMetadataAttribute extends ControllerComponent {
 					valueType: attribute.type,
 					valueUnitsStandard: attribute.standardUnits,
 					valueUnitsCustom: attribute.customUnits,
-					valueColor: attribute.color
+					valueColor: attribute.color,
+					valueColumnName: attribute.columnName
 				};
 				if (modelConfig.code) {
 					nextState.valueCode = attribute.code;
@@ -123,6 +125,7 @@ class ConfigMetadataAttribute extends ControllerComponent {
 		modelData.standardUnits = this.state.current.valueUnitsStandard;
 		modelData.customUnits = this.state.current.valueUnitsCustom;
 		modelData.color = this.state.current.valueColor;
+		modelData.columnName = this.state.current.valueColumnName;
 		let modelObj = new Model[ObjectTypes.ATTRIBUTE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.ATTRIBUTE, operationId);
@@ -175,6 +178,12 @@ class ConfigMetadataAttribute extends ControllerComponent {
 	onChangeUnitsCustom(e) {
 		this.setCurrentState({
 			valueUnitsCustom: e.target.value
+		});
+	}
+
+	onChangeColumnName(e) {
+		this.setCurrentState({
+			valueColumnName: e.target.value
 		});
 	}
 
@@ -326,6 +335,23 @@ class ConfigMetadataAttribute extends ControllerComponent {
 							placeholder=" "
 							value={this.state.current.valueUnitsCustom}
 							onChange={this.onChangeUnitsCustom.bind(this)}
+						/>
+					</label>
+					<div className="frame-input-wrapper-info">
+						All other units. (%, hectares, inhabitants, beds, meters/km2, etc.)<br/>
+						Only if no standard units are applied.
+					</div>
+				</div>
+
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Column name (For example for automated mapping)
+						<Input
+							type="text"
+							name="columnName"
+							placeholder=" "
+							value={this.state.current.valueColumnName}
+							onChange={this.onChangeColumnName.bind(this)}
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
