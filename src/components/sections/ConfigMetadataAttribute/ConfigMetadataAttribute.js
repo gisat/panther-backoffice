@@ -32,7 +32,8 @@ var initialState = {
 	valueUnitsStandard: "",
 	valueUnitsCustom: "",
 	valueColor: "",
-	valueColumnName: ""
+	valueColumnName: "",
+	valueEnumerationValues: ""
 };
 if (modelConfig.code) {
 	initialState.valueCode = "";
@@ -83,7 +84,8 @@ class ConfigMetadataAttribute extends ControllerComponent {
 					valueUnitsStandard: attribute.standardUnits,
 					valueUnitsCustom: attribute.customUnits,
 					valueColor: attribute.color,
-					valueColumnName: attribute.columnName
+					valueColumnName: attribute.columnName,
+					valueEnumerationValues: attribute.enumerationValues
 				};
 				if (modelConfig.code) {
 					nextState.valueCode = attribute.code;
@@ -126,6 +128,7 @@ class ConfigMetadataAttribute extends ControllerComponent {
 		modelData.customUnits = this.state.current.valueUnitsCustom;
 		modelData.color = this.state.current.valueColor;
 		modelData.columnName = this.state.current.valueColumnName;
+		modelData.enumerationValues = this.state.current.valueEnumerationValues;
 		let modelObj = new Model[ObjectTypes.ATTRIBUTE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.ATTRIBUTE, operationId);
@@ -184,6 +187,12 @@ class ConfigMetadataAttribute extends ControllerComponent {
 	onChangeColumnName(e) {
 		this.setCurrentState({
 			valueColumnName: e.target.value
+		});
+	}
+
+	onChangeEnumerationValues(e){
+		this.setCurrentState({
+			valueEnumerationValues: e.target.value
 		});
 	}
 
@@ -344,19 +353,35 @@ class ConfigMetadataAttribute extends ControllerComponent {
 				</div>
 
 				<div className="frame-input-wrapper">
+				<label className="container">
+					Column name (For example for automated mapping).
+					<Input
+						type="text"
+						name="columnName"
+						placeholder=" "
+						value={this.state.current.valueColumnName}
+						onChange={this.onChangeColumnName.bind(this)}
+					/>
+				</label>
+				<div className="frame-input-wrapper-info">
+					All other units. (%, hectares, inhabitants, beds, meters/km2, etc.)<br/>
+					Only if no standard units are applied.
+				</div>
+			</div>
+
+				<div className="frame-input-wrapper">
 					<label className="container">
-						Column name (For example for automated mapping)
-						<Input
-							type="text"
-							name="columnName"
+						Valid choices
+						<textarea
+							name="enumerationValues"
 							placeholder=" "
-							value={this.state.current.valueColumnName}
-							onChange={this.onChangeColumnName.bind(this)}
-						/>
+							value={this.state.current.valueEnumerationValues}
+							onChange={this.onChangeEnumerationValues.bind(this)}
+						></textarea>
 					</label>
 					<div className="frame-input-wrapper-info">
-						All other units. (%, hectares, inhabitants, beds, meters/km2, etc.)<br/>
-						Only if no standard units are applied.
+						The relevant format is [&#123;'name': '11100 High Density Buildings', value: '11100', color: '#00ff00'&#125;]
+						This is used only in case of update.
 					</div>
 				</div>
 
