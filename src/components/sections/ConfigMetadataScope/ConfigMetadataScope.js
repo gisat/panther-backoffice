@@ -25,6 +25,7 @@ import ConfigControls from '../../atoms/ConfigControls';
 var initialState = {
 	valueActive: false,
 	valueName: "",
+	valueDescription: "",
 	valuesAULevels: [],
 	valuesPeriods: [] //periods are to move from theme to scope, but cannot without changes in FO
 };
@@ -72,6 +73,7 @@ class ConfigMetadataScope extends ControllerComponent {
 				nextState = {
 					valueActive: scope.active,
 					valueName: scope.name,
+					valueDescription: scope.description,
 					valuesAULevels: utils.getModelsKeys(scope.levels),
 					valuesPeriods: utils.getModelsKeys(scope.periods)
 				};
@@ -144,6 +146,7 @@ class ConfigMetadataScope extends ControllerComponent {
 		_.assign(modelData, scope);
 		modelData.active = this.state.current.valueActive;
 		modelData.name = this.state.current.valueName;
+		modelData.description = this.state.current.valueDescription;
 		modelData.levels = [];
 		for (let key of this.state.current.valuesAULevels) {
 			let level = _.findWhere(this.props.store.auLevels, {key: key});
@@ -240,6 +243,12 @@ class ConfigMetadataScope extends ControllerComponent {
 		});
 	}
 
+	onChangeDescription(e){
+		this.setCurrentState({
+			valueDescription: e.target.value
+		});
+	}
+
 	onChangeObjectSelect (stateKey, objectType, value, values) {
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
@@ -279,102 +288,115 @@ class ConfigMetadataScope extends ControllerComponent {
 
 		if (this.state.built) {
 
-		let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
+			let scope = _.findWhere(this.props.store.scopes, {key: this.props.selectorValue});
 
 
-		var isActiveText = "inactive";
-		var isActiveClasses = "activeness-indicator";
-		if(scope && scope.active){
-			isActiveText = "active";
-			isActiveClasses = "activeness-indicator active";
-		}
+			var isActiveText = "inactive";
+			var isActiveClasses = "activeness-indicator";
+			if(scope && scope.active){
+				isActiveText = "active";
+				isActiveClasses = "activeness-indicator active";
+			}
 
-		ret = (
-			<div>
+			ret = (
+				<div>
 
-				<div className="frame-input-wrapper">
-					<div className="container activeness">
-						<Checkbox
-							checked={this.state.current.valueActive}
-							onClick={this.onChangeActive.bind(this)}
-						>
-							<span>Active</span>
-						</Checkbox>
-						<div className="frame-input-pull-right">
-							{isActiveText}
-							<div className={isActiveClasses}></div>
+					<div className="frame-input-wrapper">
+						<div className="container activeness">
+							<Checkbox
+								checked={this.state.current.valueActive}
+								onClick={this.onChangeActive.bind(this)}
+							>
+								<span>Active</span>
+							</Checkbox>
+							<div className="frame-input-pull-right">
+								{isActiveText}
+								<div className={isActiveClasses}></div>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div className="frame-input-wrapper required">
-					<label className="container">
-						Name
-						<Input
-							type="text"
-							name="name"
-							placeholder=" "
-							value={this.state.current.valueName}
-							onChange={this.onChangeName.bind(this)}
-						/>
-					</label>
-				</div>
-
-				<div className="frame-input-wrapper required">
-					<label className="container">
-						Analytical units Levels
-						<UIObjectSelect
-							multi
-							ordered
-							className="template"
-							onChange={this.onChangeObjectSelect.bind(this, "valuesAULevels", ObjectTypes.AU_LEVEL)}
-							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.AU_LEVEL)}
-							options={this.props.store.auLevels}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
-							valueKey="key"
-							labelKey="name"
-							value={this.state.current.valuesAULevels}
-						/>
-					</label>
-					<div className="frame-input-wrapper-info">
-						Hierarchy of analytical units, common for all places in the scope. Ordered from largest areas to most detailed division.
-						<br/>For areas and levels to work correctly in Exploration, all levels in all places in the scope must be linked to a data layer.
-						<br/><b>After linking data layers to levels, changes in levels can break display in Exploration!</b>
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Name
+							<Input
+								type="text"
+								name="name"
+								placeholder=" "
+								value={this.state.current.valueName}
+								onChange={this.onChangeName.bind(this)}
+							/>
+						</label>
 					</div>
-				</div>
 
-				<div className="frame-input-wrapper required">
-					<label className="container">
-						Imaging/reference periods
-						<UIObjectSelect
-							multi
-							onChange={this.onChangeObjectSelect.bind(this, "valuesPeriods", ObjectTypes.PERIOD)}
-							onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.PERIOD)}
-							options={this.props.store.periods}
-							allowCreate
-							newOptionCreator={utils.keyNameOptionFactory}
-							valueKey="key"
-							labelKey="name"
-							value={this.state.current.valuesPeriods}
-						/>
-					</label>
-					<div className="frame-input-wrapper-info">
-						Periods available for the scope.
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Description
+							<Input
+								type="text"
+								name="description"
+								placeholder=" "
+								value={this.state.current.valueDescription}
+								onChange={this.onChangeDescription.bind(this)}
+							/>
+						</label>
 					</div>
+
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Analytical units Levels
+							<UIObjectSelect
+								multi
+								ordered
+								className="template"
+								onChange={this.onChangeObjectSelect.bind(this, "valuesAULevels", ObjectTypes.AU_LEVEL)}
+								onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.AU_LEVEL)}
+								options={this.props.store.auLevels}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.valuesAULevels}
+							/>
+						</label>
+						<div className="frame-input-wrapper-info">
+							Hierarchy of analytical units, common for all places in the scope. Ordered from largest areas to most detailed division.
+							<br/>For areas and levels to work correctly in Exploration, all levels in all places in the scope must be linked to a data layer.
+							<br/><b>After linking data layers to levels, changes in levels can break display in Exploration!</b>
+						</div>
+					</div>
+
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Imaging/reference periods
+							<UIObjectSelect
+								multi
+								onChange={this.onChangeObjectSelect.bind(this, "valuesPeriods", ObjectTypes.PERIOD)}
+								onOptionLabelClick={this.onObjectClick.bind(this, ObjectTypes.PERIOD)}
+								options={this.props.store.periods}
+								allowCreate
+								newOptionCreator={utils.keyNameOptionFactory}
+								valueKey="key"
+								labelKey="name"
+								value={this.state.current.valuesPeriods}
+							/>
+						</label>
+						<div className="frame-input-wrapper-info">
+							Periods available for the scope.
+						</div>
+					</div>
+
+					<ConfigControls
+						key={"ConfigControls" + this.props.selectorValue}
+						disabled={this.props.disabled}
+						saved={this.equalStates(this.state.current,this.state.saved)}
+						saving={this.state.saving}
+						onSave={this.saveForm.bind(this)}
+						onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
+					/>
+
 				</div>
-
-				<ConfigControls
-					key={"ConfigControls" + this.props.selectorValue}
-					disabled={this.props.disabled}
-					saved={this.equalStates(this.state.current,this.state.saved)}
-					saving={this.state.saving}
-					onSave={this.saveForm.bind(this)}
-					onDelete={this.deleteObject.bind(this, this.props.selectorValue)}
-				/>
-
-			</div>
-		);
+			);
 
 		} else {
 			ret = (

@@ -1,13 +1,13 @@
-import React, { PropTypes, Component } from 'react';
+import React, {PropTypes, Component} from 'react';
 import ScreenController from "../../common/ScreenController";
 import styles from './ScreenDataLayersBase.css';
 import withStyles from '../../../decorators/withStyles';
-import { Input } from '../../SEUI/elements';
+import {Input} from '../../SEUI/elements';
 
 import utils from '../../../utils/utils';
 import logger from '../../../core/Logger';
 
-import { allowDuplication } from '../../../config';
+import {allowDuplication} from '../../../config';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 
@@ -55,14 +55,16 @@ class ScreenDataLayersBase extends ScreenController {
 	_getStoreLoads() {
 		let selectorValue = this.state.selectorValue;
 		let layerToFilter = [];
-		if(this.state.store.dataLayers) {
+		if (this.state.store.dataLayers) {
 			layerToFilter = this.state.store.dataLayers.filter(dataLayer => dataLayer.key == this.state.selectorValue);
 		}
 		return {
 			dataLayers: this._load(DataLayerStore),
-			dataLayer: this._loadWhere(DataLayerStore,{key: selectorValue}),
-			relations: this._loadWhere(ObjectRelationStore,{dataSourceString: selectorValue}),
-			dataLayerColumns: function(){return DataLayerColumnsStore.getByDataSource(layerToFilter.length && layerToFilter[0] && layerToFilter[0].path || selectorValue)},
+			dataLayer: this._loadWhere(DataLayerStore, {key: selectorValue}),
+			relations: this._loadWhere(ObjectRelationStore, {dataSourceString: selectorValue}),
+			dataLayerColumns: function () {
+				return DataLayerColumnsStore.getByDataSource(layerToFilter.length && layerToFilter[0] && layerToFilter[0].path || selectorValue)
+			},
 			scopes: this._load(ScopeStore),
 			places: this._load(PlaceStore),
 			vectorLayerTemplates: this._load(VectorLayerStore),
@@ -86,30 +88,30 @@ class ScreenDataLayersBase extends ScreenController {
 		this.changeListener.add(AttributeStore, ["attributes"]);
 		this.changeListener.add(PlaceStore, ["places"]);
 		this.changeListener.add(PeriodStore, ["periods"]);
-		this.changeListener.add(ObjectRelationStore,["relations"]);
-		this.changeListener.add(DataLayerColumnsStore,["dataLayerColumns"]);
+		this.changeListener.add(ObjectRelationStore, ["relations"]);
+		this.changeListener.add(DataLayerColumnsStore, ["dataLayerColumns"]);
 	}
 
-	onSelectorFocus(){
+	onSelectorFocus() {
 		logger.trace("ScreenDataLayersBase# onSelectorFocus()");
 		DataLayerStore.reload();
 	}
 
-	onSelectorChange (value) {
+	onSelectorChange(value) {
 		logger.trace("ScreenDataLayersBase# onSelectorChange(), Value: ", value);
 
 		this.setState({
 			selectorValue: value,
 			ready: false
-		},this.loadState);
+		}, this.loadState);
 	}
 
 	duplicate() {
-		if(!this.state.selectorValue) {
+		if (!this.state.selectorValue) {
 			return;
 		}
 		let layerToFilter = this.state.store.dataLayers.filter(dataLayer => dataLayer.key == this.state.selectorValue);
-		if(layerToFilter.length == 0) {
+		if (layerToFilter.length == 0) {
 			return;
 		}
 		ActionCreator.duplicateLayer(layerToFilter[0].path, this.state.valueNewLayerName)
@@ -127,7 +129,7 @@ class ScreenDataLayersBase extends ScreenController {
 		let ret = null;
 		let configInsert = (
 			<div className="component-loading">
-				<Loader />
+				<Loader/>
 			</div>
 		);
 
@@ -141,26 +143,6 @@ class ScreenDataLayersBase extends ScreenController {
 					screenKey={this.props.screenKey}
 					//parentUrl={this.getUrl()}
 				/>
-			);
-		}
-
-		let duplicateLayer = "";
-		if(allowDuplication) {
-			duplicateLayer = (
-				<div className="float">
-					<div>
-						<Input
-							type="text"
-							name="Name of duplicated layer"
-							placeholder=" "
-							value={this.state.valueNewLayerName}
-							onChange={this.onChangeNewLayerName.bind(this)}
-						/>
-					</div>
-					<div className="button" onClick={this.duplicate.bind(this)}>
-						Duplicate layer
-					</div>
-				</div>
 			);
 		}
 
@@ -178,10 +160,8 @@ class ScreenDataLayersBase extends ScreenController {
 								onFocus={this.onSelectorFocus.bind(this)}
 							/>
 						</div>
-
-						{duplicateLayer}
 					</div>
-					<FileUpload />
+					<FileUpload/>
 					<div className="screen-content">
 						<div>
 							{configInsert}

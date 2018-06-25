@@ -137,7 +137,7 @@ class ScreenHelpIndex extends PantherComponent {
 						onClick={this.onHelpLinkClick.bind(this, 'TopicArchitecture')}
 					>
 						<span>
-							PUMA system architecture
+							System architecture
 						</span>
 					</a>
 					<a
@@ -148,7 +148,7 @@ class ScreenHelpIndex extends PantherComponent {
 							Metadata structures
 						</span>
 						<span className="description">
-							Metadata types used in PUMA to describe uploaded data
+							Metadata types used in the application to describe uploaded data
 						</span>
 					</a>
 
@@ -172,7 +172,7 @@ class ScreenHelpIndex extends PantherComponent {
 						onClick={this.onHelpLinkClick.bind(this, 'Tutorial00UploadLayer')}
 					>
 						<span>0: Upload Layer</span>
-						<span className="description">Upload Data Layers in GeoNode</span>
+						<span className="description">Upload Data Layers</span>
 					</a>
 
 					<a

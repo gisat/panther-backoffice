@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import superagent from 'superagent';
+import React, {PropTypes, Component} from 'react';
 import PantherComponent from '../../common/PantherComponent';
 import styles from './PlaceRelations.css';
 import withStyles from '../../../decorators/withStyles';
@@ -7,7 +8,7 @@ import _ from 'underscore';
 import path from "path";
 
 import utils from '../../../utils/utils';
-import {apiProtocol,apiHost} from '../../../config';
+import {apiProtocol, apiHost, apiPath} from '../../../config';
 
 import UIScreenButton from '../../atoms/UIScreenButton';
 
@@ -27,6 +28,7 @@ import DataLayerStore from '../../../stores/DataLayerStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
 import ScopeStore from '../../../stores/ScopeStore';
 import PlaceStore from '../../../stores/PlaceStore';
+import ThemeStore from '../../../stores/ThemeStore';
 import VectorLayerStore from '../../../stores/VectorLayerStore';
 import RasterLayerStore from '../../../stores/RasterLayerStore';
 import AULevelStore from '../../../stores/AULevelStore';
@@ -72,26 +74,27 @@ class PlaceRelations extends PantherComponent {
 	}
 
 	store2state(props) {
-		if(!props){
+		if (!props) {
 			props = this.props;
 		}
 		return {
 			scopes: ScopeStore.getAll(),
 			place: PlaceStore.getById(props.selectorValue),
+			themes: ThemeStore.getAll(),
 			placeRelations: ObjectRelationStore.getFiltered({placeKey: props.selectorValue}) // todo rewrite after getFiltered can filter by nested key
 		};
 	}
 
-	setStateFromStores(props,keys) {
-		if(!props){
+	setStateFromStores(props, keys) {
+		if (!props) {
 			props = this.props;
 		}
 		var thisComponent = this;
 		let store2state = this.store2state(props);
 		super.setStateFromStores(store2state, keys);
 		// if stores changed, overrides user input - todo fix
-		if(!keys || keys.indexOf("placeRelations")!=-1) {
-			store2state.placeRelations.then(function(relations){
+		if (!keys || keys.indexOf("placeRelations") != -1) {
+			store2state.placeRelations.then(function (relations) {
 				super.setStateFromStores(thisComponent.relations2state(relations));
 			});
 		}
@@ -99,7 +102,7 @@ class PlaceRelations extends PantherComponent {
 
 	_onStoreChange(keys) {
 		logger.trace("PlaceRelations# _onStoreChange(), Keys:", keys);
-		this.setStateFromStores(this.props,keys);
+		this.setStateFromStores(this.props, keys);
 	}
 
 	componentDidMount() {
@@ -112,8 +115,8 @@ class PlaceRelations extends PantherComponent {
 	}
 
 	componentWillReceiveProps(newProps) {
-		if(newProps.selectorValue!=this.props.selectorValue) {
-			this.setStateFromStores(newProps,["place","placeRelations"]);
+		if (newProps.selectorValue != this.props.selectorValue) {
+			this.setStateFromStores(newProps, ["place", "placeRelations"]);
 			this.updateStateHash(newProps);
 		}
 	}
@@ -132,8 +135,8 @@ class PlaceRelations extends PantherComponent {
 			relationsRaster: {}
 		};
 
-		var addRelationLayer = function(repo,rel) {
-			if(!repo[rel.layerObject.key]) {
+		var addRelationLayer = function (repo, rel) {
+			if (!repo[rel.layerObject.key]) {
 				repo[rel.layerObject.key] = {
 					key: rel.layerObject.key,
 					name: rel.layerObject.name,
@@ -141,12 +144,12 @@ class PlaceRelations extends PantherComponent {
 					attSets: {}
 				};
 			}
-			if(!rel.isOfAttributeSet) {
-				if(rel.period === null) {
+			if (!rel.isOfAttributeSet) {
+				if (rel.period === null) {
 					repo[rel.layerObject.key].allTime = repo[rel.layerObject.key].allTime || [];
 					repo[rel.layerObject.key].allTime.push(rel);
 				} else {
-					if(!repo[rel.layerObject.key].periods[rel.period.key]) {
+					if (!repo[rel.layerObject.key].periods[rel.period.key]) {
 						repo[rel.layerObject.key].periods[rel.period.key] = {
 							key: rel.period.key,
 							name: rel.period.name,
@@ -156,14 +159,14 @@ class PlaceRelations extends PantherComponent {
 					repo[rel.layerObject.key].periods[rel.period.key].relations.push(rel);
 				}
 			} else {
-				if(!repo[rel.layerObject.key].attSets[rel.attributeSet.key]) {
+				if (!repo[rel.layerObject.key].attSets[rel.attributeSet.key]) {
 					repo[rel.layerObject.key].attSets[rel.attributeSet.key] = {
 						key: rel.attributeSet.key,
 						name: rel.attributeSet.name,
 						periods: {}
 					};
 				}
-				if(rel.period === null) {
+				if (rel.period === null) {
 					repo[rel.layerObject.key].attSets[rel.attributeSet.key].allTime = repo[rel.layerObject.key].attSets[rel.attributeSet.key].allTime || [];
 					repo[rel.layerObject.key].attSets[rel.attributeSet.key].allTime.push(rel);
 				} else {
@@ -179,22 +182,22 @@ class PlaceRelations extends PantherComponent {
 			}
 		};
 
-		var addRelationAttSet = function(repo,rel) {
-			if(!repo[rel.attributeSet.key]) {
+		var addRelationAttSet = function (repo, rel) {
+			if (!repo[rel.attributeSet.key]) {
 				repo[rel.attributeSet.key] = {
 					key: rel.attributeSet.key,
 					name: rel.attributeSet.name,
 					levels: {}
 				};
 			}
-			if(!repo[rel.attributeSet.key].levels[rel.layerObject.key]) {
+			if (!repo[rel.attributeSet.key].levels[rel.layerObject.key]) {
 				repo[rel.attributeSet.key].levels[rel.layerObject.key] = {
 					key: rel.layerObject.key,
 					name: rel.layerObject.name,
 					periods: {}
 				};
 			}
-			if(rel.period === null) {
+			if (rel.period === null) {
 				repo[rel.attributeSet.key].levels[rel.layerObject.key].allTime = repo[rel.attributeSet.key].levels[rel.layerObject.key].allTime || [];
 				repo[rel.attributeSet.key].levels[rel.layerObject.key].allTime.push(rel);
 			} else {
@@ -209,8 +212,8 @@ class PlaceRelations extends PantherComponent {
 			}
 		};
 
-		var addRelationLevel = function(repo,rel) {
-			if(!repo[rel.layerObject.key]) {
+		var addRelationLevel = function (repo, rel) {
+			if (!repo[rel.layerObject.key]) {
 				repo[rel.layerObject.key] = {
 					key: rel.layerObject.key,
 					name: rel.layerObject.name,
@@ -221,29 +224,29 @@ class PlaceRelations extends PantherComponent {
 		};
 
 
-		if(relations.length > 0) {
+		if (relations.length > 0) {
 			// separate relations by type
-			for(let rel of relations) {
-				if(rel.layerObject) {
-					switch(rel.layerObject.layerType) {
+			for (let rel of relations) {
+				if (rel.layerObject) {
+					switch (rel.layerObject.layerType) {
 						case "au":
-							if(rel.isOfAttributeSet) {
-								addRelationAttSet(ret.relationsAttSet,rel);
+							if (rel.isOfAttributeSet) {
+								addRelationAttSet(ret.relationsAttSet, rel);
 							} else {
-								addRelationLevel(ret.relationsAULevel,rel);
+								addRelationLevel(ret.relationsAULevel, rel);
 							}
 							break;
 						case "vector":
-							addRelationLayer(ret.relationsVector,rel);
+							addRelationLayer(ret.relationsVector, rel);
 							break;
 						case "raster":
-							addRelationLayer(ret.relationsRaster,rel);
+							addRelationLayer(ret.relationsRaster, rel);
 							break;
 						default:
-							logger.error("PlaceRelations# relations2state(), Relation has layerobject of invalid layerType",rel);
+							logger.error("PlaceRelations# relations2state(), Relation has layerobject of invalid layerType", rel);
 					}
 				} else {
-					logger.error("PlaceRelations# relations2state(), Relation has no layerobject",rel);
+					logger.error("PlaceRelations# relations2state(), Relation has no layerobject", rel);
 				}
 			}
 		}
@@ -256,14 +259,15 @@ class PlaceRelations extends PantherComponent {
 	 * - when receiving response for asynchronous action, ensure state has not changed in the meantime
 	 */
 	updateStateHash(props) {
-		if(!props){
+		if (!props) {
 			props = this.props;
 		}
 		// todo hash influenced by screen/page instance / active screen (unique every time it is active)
 		this._stateHash = utils.stringHash(props.selectorValue);
 	}
+
 	getStateHash() {
-		if(!this._stateHash) {
+		if (!this._stateHash) {
 			this.updateStateHash();
 		}
 		return this._stateHash;
@@ -272,7 +276,7 @@ class PlaceRelations extends PantherComponent {
 
 	onOpenPlaceConfig() {
 		this.context.onInteraction().call();
-		if(this.state.place) {
+		if (this.state.place) {
 			let itemType = ObjectTypes.PLACE;
 			var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
 			let options = {
@@ -284,13 +288,13 @@ class PlaceRelations extends PantherComponent {
 					objectKey: this.state.place.key
 				}
 			};
-			ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
 		}
 	}
 
 	onOpenScopeConfig() {
 		this.context.onInteraction().call();
-		if(this.state.place) {
+		if (this.state.place) {
 			let itemType = ObjectTypes.SCOPE;
 			var screenName = this.props.screenKey + "-ScreenMetadata" + itemType;
 			let options = {
@@ -302,17 +306,17 @@ class PlaceRelations extends PantherComponent {
 					objectKey: this.state.place.scope.key
 				}
 			};
-			ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+			ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
 		}
 	}
 
 
-	onCellClick (table, row, col) {
+	onCellClick(table, row, col) {
 		this.context.onInteraction().call();
 		var screenComponent, data;
-		switch(table){
+		switch (table) {
 			case "AttSet":
-				if(row==null) {
+				if (row == null) {
 					screenComponent = ScreenPlaceDataSourceAULevel;
 					table = "AULevel";
 				} else {
@@ -326,7 +330,7 @@ class PlaceRelations extends PantherComponent {
 				};
 				break;
 			case "Vector":
-				if(col==null) {
+				if (col == null) {
 					screenComponent = ScreenPlaceDataSourceLayer;
 				} else {
 					screenComponent = ScreenPlaceDataSourceVectorLayerAttSet;
@@ -357,9 +361,29 @@ class PlaceRelations extends PantherComponent {
 			size: 40,
 			data: data
 		};
-		ActionCreator.createOpenScreen(screenName,this.context.screenSetKey, options);
+		ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
 	}
 
+	createDataView(scope, theme, location, period) {
+		superagent.post(`${apiProtocol}${apiHost}${apiPath}/rest/initial/views`)
+			.send({
+				scope: scope,
+				theme: theme,
+				place: location,
+				period: period
+			})
+			.withCredentials()
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(() => {
+				alert('Data View was created.');
+			})
+			.catch(err => {
+				logger.error('PlaceRelations#createDataView Error: ', err);
+				alert('There was an error with creation of the Data Views ' + err);
+			})
+	}
 
 	render() {
 
@@ -382,9 +406,8 @@ class PlaceRelations extends PantherComponent {
 		}
 
 
-		if(this.state.place) {
+		if (this.state.place) {
 			if (this.state.place.scope) {
-
 				headerInsertChildren.push(
 					<div
 						key="placeScopeSettingsButton"
@@ -399,6 +422,32 @@ class PlaceRelations extends PantherComponent {
 					</div>
 				);
 
+				if (this.state.place.scope.periods && this.state.place.scope.periods.length > 0) {
+					const location = this.state.place.key;
+					const scope = this.state.place.scope.key;
+					const period = this.state.place.scope.periods[0].key;
+					// Get theme for Scope.
+					const theme = this.state.themes.filter(theme => {
+						return theme.scope && theme.scope.key === scope;
+					});
+					if (theme.length > 0) {
+						// At this moment I have all information to create the initial Data View.
+						headerInsertChildren.push(
+							<div>
+								<div>
+									If you are creating a new Scope, it isn't possible to get to it until the initial Data View is
+									created.
+									This is the button that allows you to create the Data View for this Location.
+								</div>
+								<button onClick={this.createDataView.bind(this, scope, theme[0].key, location, period)}>Create Initial
+									Data View for this Location
+								</button>
+							</div>
+						)
+					}
+				}
+
+
 				configInsert = (
 					<div>
 						<h2>Attribute sets</h2>
@@ -407,7 +456,7 @@ class PlaceRelations extends PantherComponent {
 							relationsAttSet={this.state.relationsAttSet}
 							relationsAULevel={this.state.relationsAULevel}
 							place={this.state.place}
-							onCellClick={this.onCellClick.bind(this,"AttSet")}
+							onCellClick={this.onCellClick.bind(this, "AttSet")}
 						/>
 
 						<h2>Vector layers</h2>
@@ -415,7 +464,7 @@ class PlaceRelations extends PantherComponent {
 							disabled={this.props.disabled}
 							relations={this.state.relationsVector}
 							place={this.state.place}
-							onCellClick={this.onCellClick.bind(this,"Vector")}
+							onCellClick={this.onCellClick.bind(this, "Vector")}
 						/>
 
 						<h2>Raster layers</h2>
@@ -423,7 +472,7 @@ class PlaceRelations extends PantherComponent {
 							disabled={this.props.disabled}
 							relations={this.state.relationsRaster}
 							place={this.state.place}
-							onCellClick={this.onCellClick.bind(this,"Raster")}
+							onCellClick={this.onCellClick.bind(this, "Raster")}
 						/>
 					</div>
 				);
@@ -447,7 +496,7 @@ class PlaceRelations extends PantherComponent {
 		}
 
 		headerInsert = React.createElement('div', null, headerInsertChildren);
-		var prodInsert =(
+		var prodInsert = (
 			<div className="prod">
 				{prod}
 			</div>

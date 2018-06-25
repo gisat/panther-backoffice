@@ -9,18 +9,11 @@
 export default {
 	publicPath: "/",
 
-	apiHost: "localhost:4000",
-	apiPath: "/",
-
-	geonodeProtocol: "http://",
-	geonodeAddress: "10.0.75.2",
+	apiHost: "192.168.2.205",
+	apiPath: "/backend/",
 
 	geoserverProtocol: "http://",
-	geoserverAddress: "10.0.75.2/geoserver",
-
-	frontOfficeProtocol: "http://",
-	frontOfficeAddress: "10.0.75.2",
-	frontOfficeExplorationPath: "tool/",
+	geoserverAddress: "192.168.2.205/geoserver",
 
 	baseUrl: "http://localhost:5000"
 
