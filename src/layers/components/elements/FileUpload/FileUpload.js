@@ -20,7 +20,11 @@ class FileUpload extends Component {
 	}
 
 	statusUrl(id) {
-		return apiProtocol + apiHost + path.join(apiPath, `rest/layerImporter/status/${id}`).replace(/\\/g, "/");
+		if(!id) {
+			return null;
+		} else {
+			return apiProtocol + apiHost + path.join(apiPath, `rest/layerImporter/status/${id}`).replace(/\\/g, "/");
+		}
 	}
 
 	uploadFile() {
@@ -31,6 +35,9 @@ class FileUpload extends Component {
 		let payload = new FormData();
 		payload.append('file', file);
 		payload.append('name', name);
+		this.setState({
+			isUploading: true
+		});
 
 		superagent
 			.post(this.url())

@@ -133,16 +133,21 @@ class UserStore extends Store {
 				if (response.body._id == 0) {
 					return null;
 				}
+
+				console.log(this.logged);
 				let oldUserKey = this.logged && this.logged.key;
 				this.logged = new UserModel(null, response.body);
-				this.logged.ready.then(() => {
+
+				return this.logged.ready.then(() => {
+					console.log(this.logged);
 					if (this.logged.key != oldUserKey) {
 						this.loginListeners.forEach((listener) => {
 							listener(this.logged);
 						});
 					}
+
+					return this.logged;
 				});
-				return this.logged;
 			});
 	}
 
@@ -272,12 +277,7 @@ class UserStore extends Store {
 
 	async getCurrentUser() {
 		//let logged = this.logged || await this.getLogged(); // would not respect outside logout
-		let logged = await this.getLogged();
-		if (logged) {
-			let models = await this.load();
-			return _.find(models, {key: logged.key});
-		}
-		return null;
+		return await this.getLogged();
 	}
 
 	addLoginListener(loginFunction) {

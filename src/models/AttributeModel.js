@@ -57,6 +57,14 @@ class AttributeModel extends Model {
 				serverName: 'code', // string
 				sendToServer: true
 			},
+			columnName: {
+				serverName: 'columnName',
+				sendToServer: true
+			},
+			enumerationValues: {
+				serverName: 'enumerationValues',
+				sendToServer: true
+			},
 			standardUnits: {
 				serverName: 'standardUnits', // text / numeric
 				sendToServer: true,

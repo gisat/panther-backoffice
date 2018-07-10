@@ -31,7 +31,9 @@ var initialState = {
 	valueType: "",
 	valueUnitsStandard: "",
 	valueUnitsCustom: "",
-	valueColor: ""
+	valueColor: "",
+	valueColumnName: "",
+	valueEnumerationValues: ""
 };
 if (modelConfig.code) {
 	initialState.valueCode = "";
@@ -81,7 +83,9 @@ class ConfigMetadataAttribute extends ControllerComponent {
 					valueType: attribute.type,
 					valueUnitsStandard: attribute.standardUnits,
 					valueUnitsCustom: attribute.customUnits,
-					valueColor: attribute.color
+					valueColor: attribute.color,
+					valueColumnName: attribute.columnName,
+					valueEnumerationValues: attribute.enumerationValues
 				};
 				if (modelConfig.code) {
 					nextState.valueCode = attribute.code;
@@ -123,6 +127,8 @@ class ConfigMetadataAttribute extends ControllerComponent {
 		modelData.standardUnits = this.state.current.valueUnitsStandard;
 		modelData.customUnits = this.state.current.valueUnitsCustom;
 		modelData.color = this.state.current.valueColor;
+		modelData.columnName = this.state.current.valueColumnName;
+		modelData.enumerationValues = this.state.current.valueEnumerationValues;
 		let modelObj = new Model[ObjectTypes.ATTRIBUTE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.ATTRIBUTE, operationId);
@@ -175,6 +181,18 @@ class ConfigMetadataAttribute extends ControllerComponent {
 	onChangeUnitsCustom(e) {
 		this.setCurrentState({
 			valueUnitsCustom: e.target.value
+		});
+	}
+
+	onChangeColumnName(e) {
+		this.setCurrentState({
+			valueColumnName: e.target.value
+		});
+	}
+
+	onChangeEnumerationValues(e){
+		this.setCurrentState({
+			valueEnumerationValues: e.target.value
 		});
 	}
 
@@ -331,6 +349,39 @@ class ConfigMetadataAttribute extends ControllerComponent {
 					<div className="frame-input-wrapper-info">
 						All other units. (%, hectares, inhabitants, beds, meters/km2, etc.)<br/>
 						Only if no standard units are applied.
+					</div>
+				</div>
+
+				<div className="frame-input-wrapper">
+				<label className="container">
+					Column name
+					<Input
+						type="text"
+						name="columnName"
+						placeholder=" "
+						value={this.state.current.valueColumnName}
+						onChange={this.onChangeColumnName.bind(this)}
+					/>
+				</label>
+				<div className="frame-input-wrapper-info">
+					Expected column name for automatic processing and linking of data sources.
+					(Attribute will be filled with data from this column in the source.)
+				</div>
+			</div>
+
+				<div className="frame-input-wrapper">
+					<label className="container">
+						Valid choices
+						<textarea
+							name="enumerationValues"
+							placeholder=" "
+							value={this.state.current.valueEnumerationValues}
+							onChange={this.onChangeEnumerationValues.bind(this)}
+						/>
+					</label>
+					<div className="frame-input-wrapper-info">
+						The relevant format is [&#123;'name': '11100 High Density Buildings', value: '11100', color: '#00ff00'&#125;]
+						This is used only in case of update.
 					</div>
 				</div>
 
