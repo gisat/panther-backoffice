@@ -354,7 +354,7 @@ class ConfigMetadataAttribute extends ControllerComponent {
 
 				<div className="frame-input-wrapper">
 				<label className="container">
-					Column name (For example for automated mapping).
+					Column name
 					<Input
 						type="text"
 						name="columnName"
@@ -364,8 +364,8 @@ class ConfigMetadataAttribute extends ControllerComponent {
 					/>
 				</label>
 				<div className="frame-input-wrapper-info">
-					All other units. (%, hectares, inhabitants, beds, meters/km2, etc.)<br/>
-					Only if no standard units are applied.
+					Expected column name for automatic processing and linking of data sources.
+					(Attribute will be filled with data from this column in the source.)
 				</div>
 			</div>
 
@@ -377,7 +377,7 @@ class ConfigMetadataAttribute extends ControllerComponent {
 							placeholder=" "
 							value={this.state.current.valueEnumerationValues}
 							onChange={this.onChangeEnumerationValues.bind(this)}
-						></textarea>
+						/>
 					</label>
 					<div className="frame-input-wrapper-info">
 						The relevant format is [&#123;'name': '11100 High Density Buildings', value: '11100', color: '#00ff00'&#125;]
