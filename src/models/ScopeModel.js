@@ -78,6 +78,12 @@ class ScopeModel extends Model {
 			permissions: {
 				serverName: 'permissions',
 				sendToServer: false
+			},
+			configuration: {
+				serverName: 'configuration',
+				sendToServer: true,
+				transformForLocal: JSON.stringify,
+				transformForServer: JSON.parse
 			}
 		};
 	}
