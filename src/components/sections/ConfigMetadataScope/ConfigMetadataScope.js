@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import ControllerComponent from '../../common/ControllerComponent';
-import ActionCreator from '../../../actions/ActionCreator';
+import config from '../../../config';
 import logger from '../../../core/Logger';
 import utils from '../../../utils/utils';
 import _ from 'underscore';
@@ -13,6 +13,7 @@ import ScopeStore from '../../../stores/ScopeStore';
 import AULevelStore from '../../../stores/AULevelStore';
 import PeriodStore from '../../../stores/PeriodStore';
 import ObjectRelationStore from '../../../stores/ObjectRelationStore';
+import ActionCreator from '../../../actions/ActionCreator';
 
 import ScreenMetadataObject from '../../screens/ScreenMetadataObject';
 
@@ -20,6 +21,8 @@ import { Input, IconButton } from '../../SEUI/elements';
 import { CheckboxFields, Checkbox } from '../../SEUI/modules';
 import UIObjectSelect from '../../atoms/UIObjectSelect';
 import ConfigControls from '../../atoms/ConfigControls';
+
+let modelConfig = _.assign({}, config.models.common, config.models.SCOPE);
 
 
 var initialState = {
@@ -29,6 +32,9 @@ var initialState = {
 	valuesAULevels: [],
 	valuesPeriods: [] //periods are to move from theme to scope, but cannot without changes in FO
 };
+if (modelConfig.configuration) {
+	initialState.valueConfiguration = "";
+}
 
 
 class ConfigMetadataScope extends ControllerComponent {
@@ -77,6 +83,9 @@ class ConfigMetadataScope extends ControllerComponent {
 					valuesAULevels: utils.getModelsKeys(scope.levels),
 					valuesPeriods: utils.getModelsKeys(scope.periods)
 				};
+				if (modelConfig.configuration) {
+					nextState.valueConfiguration = scope.configuration || "";
+				}
 			}
 		}
 		return nextState;
@@ -147,6 +156,9 @@ class ConfigMetadataScope extends ControllerComponent {
 		modelData.active = this.state.current.valueActive;
 		modelData.name = this.state.current.valueName;
 		modelData.description = this.state.current.valueDescription;
+		if (modelConfig.configuration) {
+			modelData.configuration = this.state.current.valueConfiguration;
+		}
 		modelData.levels = [];
 		for (let key of this.state.current.valuesAULevels) {
 			let level = _.findWhere(this.props.store.auLevels, {key: key});
@@ -249,6 +261,12 @@ class ConfigMetadataScope extends ControllerComponent {
 		});
 	}
 
+	onChangeConfiguration(e){
+		this.setCurrentState({
+			valueConfiguration: e.target.value
+		});
+	}
+
 	onChangeObjectSelect (stateKey, objectType, value, values) {
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
@@ -296,6 +314,29 @@ class ConfigMetadataScope extends ControllerComponent {
 			if(scope && scope.active){
 				isActiveText = "active";
 				isActiveClasses = "activeness-indicator active";
+			}
+
+			let configurationField = null;
+			if (modelConfig.configuration) {
+				configurationField = (
+					<div
+						className="frame-input-wrapper"
+						key="extended-fields-configuration"
+					>
+						<label className="container">
+							Configuration
+						<textarea
+							name="enumerationValues"
+							placeholder=" "
+							value={this.state.current.valueConfiguration}
+							onChange={this.onChangeConfiguration.bind(this)}
+						/>
+						</label>
+						<div className="frame-input-wrapper-info">
+							Configuration object
+						</div>
+					</div>
+				);
 			}
 
 			ret = (
@@ -385,6 +426,8 @@ class ConfigMetadataScope extends ControllerComponent {
 							Periods available for the scope.
 						</div>
 					</div>
+
+					{configurationField}
 
 					<ConfigControls
 						key={"ConfigControls" + this.props.selectorValue}
