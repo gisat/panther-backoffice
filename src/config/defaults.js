@@ -73,7 +73,8 @@ export default {
 		},
 		SCOPE: {
 			levels: true,
-			periods: true
+			periods: true,
+			configuration: true
 		},
 		PLACE: {
 			scope: true,
