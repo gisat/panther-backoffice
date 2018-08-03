@@ -63,7 +63,7 @@ class StyleModel extends Model {
 					}
 				}
 			},
-			serverName: {
+			symbologyName: {
 				serverName: 'symbologyName', //string
 				sendToServer: true
 			},
