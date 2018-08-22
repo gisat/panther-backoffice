@@ -42,6 +42,9 @@ let actionCreator = {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_CREATE;
 				break;
+			case ObjectTypes.ANALYSIS_RUN:
+				action.type = ActionTypes.ANALYSIS_RUN_CREATE;
+				break;
 			default:
 				return;
 		}

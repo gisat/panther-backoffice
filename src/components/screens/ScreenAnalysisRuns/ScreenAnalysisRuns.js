@@ -178,13 +178,14 @@ class ScreenAnalysisRuns extends PantherComponent {
 				modelData.scope = scope;
 
 				let modelObj = new AnalysisRunModel(modelData);
-				actionData.push({type:"create",model:modelObj});
+				// actionData.push({type:"create",model:modelObj});
+				ActionCreator.createObject(modelObj, ObjectTypes.ANALYSIS_RUN);
 
 			}
 		}
 
-		logger.info("ScreenAnalysisRuns# saveForm(), Add analysis runs:", actionData);
-		ActionCreator.handleObjects(actionData,ObjectTypes.ANALYSIS_RUN);
+		// logger.info("ScreenAnalysisRuns# saveForm(), Add analysis runs:", actionData);
+		// ActionCreator.handleObjects(actionData,ObjectTypes.ANALYSIS_RUN);
 	}
 
 

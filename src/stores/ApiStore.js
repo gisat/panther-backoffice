@@ -98,6 +98,19 @@ class ApiStore extends Store {
 	initialLoad() {
 		this._models = this.load();
 	}
+	
+	loadOne(key) {
+		var method = this.getApiLoadMethod();
+		if (method === 'GET' && key) {
+			let url = this.getApiUrl() + '/' + key;
+			return this.request(method, null, url).catch(error => {
+				logger.error(`ApiStore#loadOne() Error: `, error);
+				return null;
+			});
+		} else {
+			logger.error(`ApiStore#loadOne() not implemented for method`, method);
+		}
+	}
 
 	create(model) {
 		var object = model.serialize();
