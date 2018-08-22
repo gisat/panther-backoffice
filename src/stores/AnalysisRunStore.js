@@ -34,6 +34,37 @@ class AnalysisRunStore extends ApiStore {
 	getInstance(options,data){
 		return new AnalysisRunModel(options,data);
 	}
+	
+	create(model) {
+		super.create(model).then(models => {
+			let model = models[0];
+			this._models.then(thisModels => {
+				thisModels.push(model);
+				this._models = Promise.resolve(thisModels);
+				this.emitChangeWithoutDependencies();
+			});
+			let key = models[0].key;
+			if (key) {
+				setTimeout(this.checkRunStatusUntilFinished.bind(this, key), 5000);
+			}
+		});
+	}
+	
+	checkRunStatusUntilFinished(key) {
+		this.loadOne(key).then(models => {
+			if (models && models[0].status) {
+				//emit status
+				this._models.then(thisModels => {
+					let model = _.find(thisModels, {key: key});
+					Object.assign(model, models[0]);
+					this._models = Promise.resolve(thisModels);
+					this.emitChangeWithoutDependencies();
+				});
+			} else {
+				setTimeout(this.checkRunStatusUntilFinished.bind(this, key), 5000);
+			}
+		});
+	}
 
 }
 
@@ -45,6 +76,9 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 	switch(action.type) {
 		case ActionTypes.ANALYSIS_RUN_CREATE_RESPOND:
 			storeInstance.createObjectAndRespond(action.model, action.responseData, action.stateHash);
+			break;
+		case ActionTypes.ANALYSIS_RUN_CREATE:
+			storeInstance.create(action.model);
 			break;
 		case ActionTypes.ANALYSIS_RUN_HANDLE:
 			storeInstance.handle(action.data, action.operationId);
