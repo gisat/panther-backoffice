@@ -11,6 +11,7 @@ class RegisterPage extends Component {
 			error: false,
 			message: null,
 			valueName: '',
+			valuePhone: '',
 			valuePassword: '',
 			valuePasswordConfirmation: ''
 		}
@@ -20,6 +21,12 @@ class RegisterPage extends Component {
 		this.setState({
 			valueName: e.target.value
 		});
+	}
+
+	onChangePhoneListener(e) {
+		this.setState({
+			valuePhone: e.target.value
+		})
 	}
 
 	onChangePasswordListener(e) {
@@ -47,7 +54,7 @@ class RegisterPage extends Component {
 				processing: true
 			});
 			let parsedUrl = new URL(window.location.href);
-			ActionCreator.createUser(parsedUrl.searchParams.get("hash"), this.state.valueName, this.state.valuePassword, this.onCreateUserResponseListener.bind(this));
+			ActionCreator.createUser(parsedUrl.searchParams.get("hash"), this.state.valueName, this.state.valuePassword, this.state.valuePhone, this.onCreateUserResponseListener.bind(this));
 		}
 	}
 
@@ -58,6 +65,7 @@ class RegisterPage extends Component {
 		} else {
 			this.setState({
 				valueName: '',
+				valuePhone: '',
 				valuePassword: '',
 				valuePasswordConfirmation: '',
 				processing: false,
@@ -96,6 +104,10 @@ class RegisterPage extends Component {
 
 					<div>
 						<label>Name: <input type="text" onChange={this.onChangeNameListener.bind(this)} /></label>
+					</div>
+
+					<div>
+						<label>Phone: <input type="text" onChange={this.onChangePhoneListener.bind(this)} /></label>
 					</div>
 
 					<div>

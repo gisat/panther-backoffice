@@ -17,6 +17,10 @@ class UserModel extends Model {
 				serverName: 'username',
 				sendToServer: true
 			},
+			phone: {
+				serverName: 'phone',
+				sendToServer: true
+			},
 			name: {
 				serverName: 'username', //for now copy username
 				sendToServer: false
