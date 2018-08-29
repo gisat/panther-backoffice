@@ -24,6 +24,7 @@ var initialState = {
 	valuesUsername: '',
 	valuesPassword: '',
 	valuesPasswordAgain: '',
+	valuesPhone: '',
 	valuesResources: [],
 
 	valuesUsersRead: [],
@@ -78,6 +79,7 @@ class ConfigPermissionsUser extends ControllerComponent {
 					valuesUsersDelete: [],
 					valuesGroupsDelete: [],
 					valuesUsername: user.username,
+					valuesPhone: user.phone,
 					valuesPassword: '',
 					valuesPasswordAgain: '',
 					valuesResources: []
@@ -152,6 +154,12 @@ class ConfigPermissionsUser extends ControllerComponent {
 		});
 	}
 
+	onChangePhone(e) {
+		this.setCurrentState({
+			valuesPhone: e.target.value
+		})
+	}
+
 	onChangePassword(e) {
 		this.setCurrentState({
 			valuesPassword: e.target.value
@@ -176,6 +184,7 @@ class ConfigPermissionsUser extends ControllerComponent {
 			name: this.state.current.valuesName,
 			username: this.state.current.valuesUsername,
 			password: this.state.current.valuesPassword,
+			phone: this.state.current.valuesPhone,
 
 			permissions: resources,
 
@@ -217,6 +226,19 @@ class ConfigPermissionsUser extends ControllerComponent {
 								placeholder=" "
 								value={this.state.current.valuesUsername}
 								onChange={this.onChangeUsername.bind(this)}
+							/>
+						</label>
+					</div>
+
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Phone
+							<Input
+								type="text"
+								name="phone"
+								placeholder=" "
+								value={this.state.current.valuesPhone}
+								onChange={this.onChangePhone.bind(this)}
 							/>
 						</label>
 					</div>
