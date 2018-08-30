@@ -1,10 +1,10 @@
-import React, {PropTypes, Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import ActionCreator from '../../../actions/ActionCreator';
 import {baseUrl} from '../../../config';
 import styles from './RegisterPage.css';
 import UUID from '../../../utils/UUID';
 
-import {Input, Button} from '../../SEUI/elements';
+import {Button, Input} from '../../SEUI/elements';
 import Loader from '../../atoms/Loader';
 import withStyles from "../../../decorators/withStyles";
 
@@ -21,6 +21,7 @@ class RegisterPage extends Component {
 		this.state = {
 			error: false,
 			message: null,
+			valueHash: '',
 			valueEmail: '',
 			valueName: '',
 			valuePhone: '',
@@ -34,13 +35,36 @@ class RegisterPage extends Component {
 		this.onChangePassphraseRepeat = this.onChangePassphraseRepeat.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 		this.onCreateUserResponse = this.onCreateUserResponse.bind(this);
+		this.onInvitationLoaded = this.onInvitationLoaded.bind(this);
 	}
 	
 	componentDidMount() {
-		//todo load email
 		this.setState({
 			ready: true
 		});
+		this.loadInvitation()
+	}
+	
+	loadInvitation() {
+		let parsedUrl = new URL(window.location.href);
+		let hash =  parsedUrl.searchParams.get("hash");
+		if (hash) {
+			ActionCreator.loadInvitation(hash, this.onInvitationLoaded);
+		}
+	}
+	
+	onInvitationLoaded(result) {
+		if (result.error) {
+			this.setState({
+				error: true,
+				errorMessage: 'Invalid, used or expired invitation'
+			});
+		} else if (result.ok && result.ok) {
+			this.setState({
+				valueHash: result.ok.body.data.hash,
+				valueEmail: result.ok.body.data.email
+			});
+		}
 	}
 
 	onChangeName(e){
@@ -79,8 +103,7 @@ class RegisterPage extends Component {
 				errorMessage: null,
 				processing: true
 			});
-			let parsedUrl = new URL(window.location.href);
-			ActionCreator.createUser(parsedUrl.searchParams.get("hash"), this.state.valueName, this.state.valuePassphrase, this.state.valuePhone, this.onCreateUserResponse);
+			ActionCreator.createUser(this.state.valueHash, this.state.valueName, this.state.valuePassphrase, this.state.valuePhone, this.onCreateUserResponse);
 		}
 	}
 
@@ -103,7 +126,7 @@ class RegisterPage extends Component {
 	}
 
 	onLoginResponse(response) {
-		window.location = new URL(window.location.href).hostname + '/backoffice'; // TODO: Configure properly.
+		window.location = baseUrl; // TODO: Configure properly.
 	}
 
 	render() {
@@ -188,6 +211,7 @@ class RegisterPage extends Component {
 								basic
 								color="blue"
 								onClick={this.onSubmit}
+								disabled={!(this.state.valueHash && this.state.valueEmail && this.state.valuePassphrase && (this.state.valuePassphrase === this.state.valuePassphraseRepeat))}
 							>
 								Register
 							</Button>

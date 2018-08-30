@@ -358,12 +358,25 @@ let actionCreator = {
 		AppDispatcher.dispatch(action);
 	},
 
+	loadInvitation(hash, callback) {
+		let action = {
+			type: ActionTypes.USER_LOAD_INVITATION,
+			data: {
+				hash: hash,
+				callback: callback
+			}
+		};
+
+		AppDispatcher.dispatch(action);
+	},
+
 	createUser(hash, name, password, phone, callback) {
 		let action = {
 			type: ActionTypes.CREATE_USER,
 			data: {
 				hash: hash,
 				name: name,
+				phone: phone,
 				password: password,
 				callback: callback
 			}

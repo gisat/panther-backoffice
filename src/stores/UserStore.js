@@ -179,6 +179,30 @@ class UserStore extends Store {
 	}
 
 	/**
+	 * load invitation for hash
+	 * @param hash {String} hash
+	 * @param callback {Function} Function to be called back once the operation finishes.
+	 */
+	loadInvitation(hash, callback) {
+		superagent
+			.get(this.urlFor('/rest/invitation/user') + '/' + hash)
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(response => {
+				callback({
+					ok: response
+				});
+			})
+			.catch(error => {
+				callback({
+					error: error
+				})
+			})
+	}
+
+	/**
 	 * It seriously creates new user on the server. The rights to do so are verified by the hash.
 	 * @param hash {String} The valid hash is necessary in order to create the user.
 	 * @param name {String} Name of the new user
@@ -306,6 +330,9 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 			break;
 		case ActionTypes.INVITE_USER:
 			storeInstance.inviteUser(action.data.email, action.data.callback);
+			break;
+		case ActionTypes.USER_LOAD_INVITATION:
+			storeInstance.loadInvitation(action.data.hash, action.data.callback);
 			break;
 		case ActionTypes.CREATE_USER:
 			storeInstance.createUser(action.data.hash, action.data.name, action.data.password, action.data.phone, action.data.callback);
