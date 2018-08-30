@@ -1,76 +1,103 @@
 import React, {PropTypes, Component} from 'react';
 import ActionCreator from '../../../actions/ActionCreator';
 import {baseUrl} from '../../../config';
+import styles from './RegisterPage.css';
 import UUID from '../../../utils/UUID';
 
+import {Input, Button} from '../../SEUI/elements';
+import Loader from '../../atoms/Loader';
+import withStyles from "../../../decorators/withStyles";
+
+@withStyles(styles)
 class RegisterPage extends Component {
+	
+	static contextTypes = {
+		onSetTitle: PropTypes.func.isRequired
+	};
+	
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			error: false,
 			message: null,
+			valueEmail: '',
 			valueName: '',
 			valuePhone: '',
-			valuePassword: '',
-			valuePasswordConfirmation: ''
-		}
+			valuePassphrase: '',
+			valuePassphraseRepeat: ''
+		};
+		
+		this.onChangeName = this.onChangeName.bind(this);
+		this.onChangePhone = this.onChangePhone.bind(this);
+		this.onChangePassphrase = this.onChangePassphrase.bind(this);
+		this.onChangePassphraseRepeat = this.onChangePassphraseRepeat.bind(this);
+		this.onSubmit = this.onSubmit.bind(this);
+		this.onCreateUserResponse = this.onCreateUserResponse.bind(this);
+	}
+	
+	componentDidMount() {
+		//todo load email
+		this.setState({
+			ready: true
+		});
 	}
 
-	onChangeNameListener(e){
+	onChangeName(e){
 		this.setState({
 			valueName: e.target.value
 		});
 	}
 
-	onChangePhoneListener(e) {
+	onChangePhone(e) {
 		this.setState({
 			valuePhone: e.target.value
 		})
 	}
-
-	onChangePasswordListener(e) {
+	
+	onChangePassphrase(e) {
 		this.setState({
-			valuePassword: e.target.value
+			valuePassphrase: e.target.value
+		});
+	}
+	
+	onChangePassphraseRepeat(e) {
+		this.setState({
+			valuePassphraseRepeat: e.target.value
 		});
 	}
 
-	onChangePasswordConfirmationListener(e) {
-		this.setState({
-			valuePasswordConfirmation: e.target.value
-		});
-	}
-
-	onCreateUserListener() {
-		if(this.state.valuePassword != this.state.valuePasswordConfirmation) {
+	onSubmit() {
+		if(this.state.valuePassphrase !== this.state.valuePassphraseRepeat) {
 			this.setState({
 				error: true,
-				message: 'The password and confirmation password differs.'
+				errorMessage: 'The password and confirmation password differs.'
 			});
 		} else {
 			this.setState({
 				error: false,
-				message: null,
+				errorMessage: null,
 				processing: true
 			});
 			let parsedUrl = new URL(window.location.href);
-			ActionCreator.createUser(parsedUrl.searchParams.get("hash"), this.state.valueName, this.state.valuePassword, this.state.valuePhone, this.onCreateUserResponseListener.bind(this));
+			ActionCreator.createUser(parsedUrl.searchParams.get("hash"), this.state.valueName, this.state.valuePassphrase, this.state.valuePhone, this.onCreateUserResponse);
 		}
 	}
 
-	onCreateUserResponseListener(response) {
+	onCreateUserResponse(response) {
 		// If the user was correctly registered, log him in and redirect to the system.
 		if(!response.error) {
-			ActionCreator.login(this.state.valueName, this.state.valuePassword, new UUID().toString(), this.onLoginResponse.bind(this));
+			ActionCreator.login(this.state.valueEmail, this.state.valuePassphrase, new UUID().toString(), this.onLoginResponse);
 		} else {
 			this.setState({
+				valueEmail: '',
 				valueName: '',
 				valuePhone: '',
-				valuePassword: '',
-				valuePasswordConfirmation: '',
+				valuePassphrase: '',
+				valuePassphraseRepeat: '',
 				processing: false,
 				error: true,
-				message: response.error
+				errorMessage: response.error
 			});
 		}
 	}
@@ -80,62 +107,121 @@ class RegisterPage extends Component {
 	}
 
 	render() {
-		let html = '';
-
-		if(!this.state.processing) {
-			let info = '';
-			if(this.state.message && !this.state.error) {
-				info = (
-					<div>
-						The user was created
+		
+		const title = 'Register';
+		this.context.onSetTitle(title);
+		let registerBoxInsert = null, errorInsert = null;
+		
+		if (this.state.errorMessage) {
+			errorInsert = (
+				<div className="register-box-error error">
+					<div className="register-box-error-message">
+						{this.state.errorMessage}
 					</div>
-				);
-			} else if(this.state.error) {
-				info = (
-					<div className="error">
-						{this.state.message}
-					</div>
-				)
-			}
-
-			html = (
-				<div>
-					<h1>Register.</h1>
-
-					<div>
-						<label>Name: <input type="text" onChange={this.onChangeNameListener.bind(this)} /></label>
-					</div>
-
-					<div>
-						<label>Phone: <input type="text" onChange={this.onChangePhoneListener.bind(this)} /></label>
-					</div>
-
-					<div>
-						<label>Password: <input type="password" onChange={this.onChangePasswordListener.bind(this)} /></label>
-					</div>
-
-					<div>
-						<label>Password (Retype): <input type="password"  onChange={this.onChangePasswordConfirmationListener.bind(this)}/></label>
-					</div>
-
-					<div>
-						<input type="button" value="Create" onClick={this.onCreateUserListener.bind(this)} />
-					</div>
-
-					{info}
 				</div>
 			);
 		} else {
-			html = (
-				<div>
-					<h1>Register.</h1>
-
-					<div>Registration is in progress.</div>
+			errorInsert = (
+				<div className="register-box-error">
+					<div className="register-box-error-message"></div>
 				</div>
 			);
 		}
-
-		return html;
+		
+		if(!this.state.processing) {
+			if (this.state.ready) {
+				
+				registerBoxInsert = (
+					<div className="register-box frame-wrapper filled">
+						<div className="register-box-content">
+							<label className="container">
+								E-mail (login)
+								<Input
+									disabled
+									type="text"
+									name="email"
+									placeholder=" "
+									value={this.state.valueEmail}
+								/>
+							</label>
+							<label className="container">
+								Name
+								<Input
+									type="text"
+									name="name"
+									placeholder=" "
+									value={this.state.valueName}
+									onChange={this.onChangeName}
+								/>
+							</label>
+							<label className="container">
+								Phone
+								<Input
+									type="text"
+									name="phone"
+									placeholder=" "
+									value={this.state.valuePhone}
+									onChange={this.onChangePhone}
+								/>
+							</label>
+							<label className="container">
+								Passphrase
+								<Input
+									type="password"
+									name="pass"
+									placeholder=" "
+									value={this.state.valuePassphrase}
+									onChange={this.onChangePassphrase}
+								/>
+							</label>
+							<label className="container">
+								Passphrase (repeat)
+								<Input
+									type="password"
+									name="passRepeat"
+									placeholder=" "
+									value={this.state.valuePassphraseRepeat}
+									onChange={this.onChangePassphraseRepeat}
+								/>
+							</label>
+							<Button
+								basic
+								color="blue"
+								onClick={this.onSubmit}
+							>
+								Register
+							</Button>
+						</div>
+						{errorInsert}
+					</div>
+				);
+				
+			} else {
+				
+				registerBoxInsert = (
+					<div className="register-box frame-wrapper filled loading">
+						<Loader/>
+					</div>
+				);
+				
+			}
+			
+		} else {
+			// processing
+			registerBoxInsert = (
+				<div className="register-box frame-wrapper filled loading">
+					<Loader/>
+				</div>
+			);
+			
+		}
+		
+		return (
+			<div className="full-viewport register-page">
+				{registerBoxInsert}
+			</div>
+		);
+		
 	}
 }
 
