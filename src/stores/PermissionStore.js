@@ -29,6 +29,16 @@ class PermissionStore {
 				key: 'permission-user',
 				type: 'user',
 				name: 'User'
+			},
+			{
+				key: 'permission-view',
+				type: 'dataview',
+				name: 'View'
+			},
+			{
+				key: 'permission-lpis-case',
+				type: 'lpis_case',
+				name: 'LPIS Case'
 			}
 		]
 	}
