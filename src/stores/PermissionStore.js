@@ -39,6 +39,56 @@ class PermissionStore {
 				key: 'permission-lpis-case',
 				type: 'lpis_case',
 				name: 'LPIS Case'
+			},
+			{
+				key: 'permission-scenario',
+				type: 'scenario',
+				name: 'Scenario'
+			},
+			{
+				key: 'permission-scenario-case',
+				type: 'scenario_case',
+				name: 'Scenario case'
+			},
+			{
+				key: 'permission-attributeset',
+				type: 'attributeset',
+				name: 'Attribute set'
+			},
+			{
+				key: 'permission-layer',
+				type: 'layer',
+				name: 'Layer'
+			},
+			{
+				key: 'permission-attribute',
+				type: 'attribute',
+				name: 'Attribute'
+			},
+			{
+				key: 'permission-areatemplate',
+				type: 'areatemplate',
+				name: 'Layer templates'
+			},
+			{
+				key: 'permission-theme',
+				type: 'theme',
+				name: 'Theme'
+			},
+			{
+				key: 'permission-analysis',
+				type: 'analysis',
+				name: 'Analysis'
+			},
+			{
+				key: 'permission-layergroup',
+				type: 'layergroup',
+				name: 'Layer group'
+			},
+			{
+				key: 'permission-period',
+				type: 'year',
+				name: 'Period'
 			}
 		]
 	}
