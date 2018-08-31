@@ -13,8 +13,8 @@ class UserModel extends Model {
 				serverName: '_id',
 				sendToServer: true
 			},
-			username: {
-				serverName: 'username',
+			email: {
+				serverName: 'email',
 				sendToServer: true
 			},
 			phone: {
@@ -22,7 +22,7 @@ class UserModel extends Model {
 				sendToServer: true
 			},
 			name: {
-				serverName: 'username', //for now copy username
+				serverName: 'name',
 				sendToServer: false
 			},
 			permissions: {

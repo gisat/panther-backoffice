@@ -172,6 +172,22 @@ label.container {
 		display: block;
 		margin-bottom: .9315rem;
 }
+label.container.simple-required {
+	position: relative;
+}
+label.container.simple-required::after {
+	position: absolute;
+	top: .3rem;
+	right: .1rem;
+	display: block;
+	width: 1rem;
+	height: 1rem;
+	content: '*';
+	font-size: 2rem;
+	line-height: 2rem;
+	text-align: right;
+	color: #7b94bb;
+}
 
 .heading-sub {
 	margin-bottom: 4rem;

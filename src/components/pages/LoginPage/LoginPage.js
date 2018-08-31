@@ -17,7 +17,7 @@ class LoginPage extends Component {
 		super();
 
 		this.state = {
-			valueName: "",
+			valueEmail: "",
 			valuePassphrase: "",
 			errorMessage: "",
 			ready: false
@@ -48,7 +48,7 @@ class LoginPage extends Component {
 		let id = utils.guid();
 		ActionCreator.addOperation(id, {});
 		UserStore
-			.login(this.state.valueName, this.state.valuePassphrase)
+			.login(this.state.valueEmail, this.state.valuePassphrase)
 			.then(() => {
 				ActionCreator.removeOperation(id);
 				var path = window.location.pathname;
@@ -67,9 +67,9 @@ class LoginPage extends Component {
 		});
 	}
 
-	onChangeName(event){
+	onChangeEmail(event){
 		this.setState({
-			valueName: event.target.value
+			valueEmail: event.target.value
 		});
 	}
 
@@ -106,13 +106,13 @@ class LoginPage extends Component {
 				<div className="login-box frame-wrapper filled">
 					<div className="login-box-content">
 						<label className="container">
-							User
+							E-mail
 							<Input
 								type="text"
-								name="name"
+								name="email"
 								placeholder=" "
-								value={this.state.valueName}
-								onChange={this.onChangeName.bind(this)}
+								value={this.state.valueEmail}
+								onChange={this.onChangeEmail.bind(this)}
 							/>
 						</label>
 						<label className="container">

@@ -21,7 +21,8 @@ import ConfigControls from '../../atoms/ConfigControls';
 import { Input } from '../../SEUI/elements';
 
 var initialState = {
-	valuesUsername: '',
+	valuesEmail: '',
+	valuesName: '',
 	valuesPassword: '',
 	valuesPasswordAgain: '',
 	valuesPhone: '',
@@ -78,7 +79,8 @@ class ConfigPermissionsUser extends ControllerComponent {
 					valuesGroupsUpdate: [],
 					valuesUsersDelete: [],
 					valuesGroupsDelete: [],
-					valuesUsername: user.username,
+					valuesEmail: user.email,
+					valuesName: user.name,
 					valuesPhone: user.phone,
 					valuesPassword: '',
 					valuesPasswordAgain: '',
@@ -148,9 +150,9 @@ class ConfigPermissionsUser extends ControllerComponent {
 		});
 	}
 
-	onChangeUsername(e) {
+	onChangeEmail(e) {
 		this.setCurrentState({
-			valuesUsername: e.target.value
+			valuesEmail: e.target.value
 		});
 	}
 
@@ -182,7 +184,7 @@ class ConfigPermissionsUser extends ControllerComponent {
 		let user = {
 			id: this.props.selectorValue,
 			name: this.state.current.valuesName,
-			username: this.state.current.valuesUsername,
+			email: this.state.current.valuesEmail,
 			password: this.state.current.valuesPassword,
 			phone: this.state.current.valuesPhone,
 
@@ -219,13 +221,26 @@ class ConfigPermissionsUser extends ControllerComponent {
 				<div>
 					<div className="frame-input-wrapper required">
 						<label className="container">
-							Username (Login)
+							E-mail (Login)
 							<Input
 								type="text"
-								name="username"
+								name="email"
 								placeholder=" "
-								value={this.state.current.valuesUsername}
-								onChange={this.onChangeUsername.bind(this)}
+								value={this.state.current.valuesEmail}
+								onChange={this.onChangeEmail.bind(this)}
+							/>
+						</label>
+					</div>
+					
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Name
+							<Input
+								type="text"
+								name="name"
+								placeholder=" "
+								value={this.state.current.valuesName}
+								onChange={this.onChangeName.bind(this)}
 							/>
 						</label>
 					</div>
@@ -258,7 +273,7 @@ class ConfigPermissionsUser extends ControllerComponent {
 
 					<div className="frame-input-wrapper required">
 						<label className="container">
-							Password for control
+							Password (repeat)
 							<Input
 								type="password"
 								name="passwordAgain"

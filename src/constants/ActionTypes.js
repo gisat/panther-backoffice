@@ -61,6 +61,7 @@ export default keyMirror({
 	USER_LOAD: null,
 	USER_ADD_PERMISSION: null,
 	USER_REMOVE_PERMISSION: null,
+	USER_LOAD_INVITATION: null,
 	LOGIN: null,
 	LOGOUT: null,
 	DUPLICATE_LAYER: null,
