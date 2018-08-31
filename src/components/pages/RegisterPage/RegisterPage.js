@@ -157,7 +157,8 @@ class RegisterPage extends Component {
 				registerBoxInsert = (
 					<div className="register-box frame-wrapper filled">
 						<div className="register-box-content">
-							<label className="container">
+							<h2>Create account</h2>
+							<label className="container simple-required">
 								E-mail (login)
 								<Input
 									disabled
@@ -187,7 +188,7 @@ class RegisterPage extends Component {
 									onChange={this.onChangePhone}
 								/>
 							</label>
-							<label className="container">
+							<label className="container simple-required">
 								Passphrase
 								<Input
 									type="password"
@@ -197,7 +198,7 @@ class RegisterPage extends Component {
 									onChange={this.onChangePassphrase}
 								/>
 							</label>
-							<label className="container">
+							<label className="container simple-required">
 								Passphrase (repeat)
 								<Input
 									type="password"
@@ -213,7 +214,7 @@ class RegisterPage extends Component {
 								onClick={this.onSubmit}
 								disabled={!(this.state.valueHash && this.state.valueEmail && this.state.valuePassphrase && (this.state.valuePassphrase === this.state.valuePassphraseRepeat))}
 							>
-								Register
+								Create account
 							</Button>
 						</div>
 						{errorInsert}
