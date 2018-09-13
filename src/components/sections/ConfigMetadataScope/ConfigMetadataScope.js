@@ -30,7 +30,8 @@ var initialState = {
 	valueName: "",
 	valueDescription: "",
 	valuesAULevels: [],
-	valuesPeriods: [] //periods are to move from theme to scope, but cannot without changes in FO
+	valuesPeriods: [], //periods are to move from theme to scope, but cannot without changes in FO
+	valueUrls: []
 };
 if (modelConfig.configuration) {
 	initialState.valueConfiguration = "";
@@ -81,7 +82,8 @@ class ConfigMetadataScope extends ControllerComponent {
 					valueName: scope.name,
 					valueDescription: scope.description,
 					valuesAULevels: utils.getModelsKeys(scope.levels),
-					valuesPeriods: utils.getModelsKeys(scope.periods)
+					valuesPeriods: utils.getModelsKeys(scope.periods),
+					valueUrls: scope.urls
 				};
 				if (modelConfig.configuration) {
 					nextState.valueConfiguration = scope.configuration || "";
@@ -160,6 +162,7 @@ class ConfigMetadataScope extends ControllerComponent {
 			modelData.configuration = this.state.current.valueConfiguration;
 		}
 		modelData.levels = [];
+		modelData.urls = this.state.current.valueUrls;
 		for (let key of this.state.current.valuesAULevels) {
 			let level = _.findWhere(this.props.store.auLevels, {key: key});
 			modelData.levels.push(level);
@@ -267,6 +270,12 @@ class ConfigMetadataScope extends ControllerComponent {
 		});
 	}
 
+	onChangeUrls(e) {
+		this.setCurrentState({
+			valueUrls: e.target.value.replace(/ /g,'').split(`,`)
+		});
+	}
+
 	onChangeObjectSelect (stateKey, objectType, value, values) {
 		let newValues = utils.handleNewObjects(values, objectType, {stateKey: stateKey}, this.getStateHash());
 		var newState = {};
@@ -338,6 +347,26 @@ class ConfigMetadataScope extends ControllerComponent {
 					</div>
 				);
 			}
+
+			let urlsField = (
+					<div
+						className="frame-input-wrapper"
+						key="extended-fields-urls"
+					>
+						<label className="container">
+							Active for urls
+							<textarea
+								name="enumerationValues"
+								placeholder=" "
+								value={this.state.current.valueUrls.join(`, `)}
+								onChange={this.onChangeUrls.bind(this)}
+							/>
+						</label>
+						<div className="frame-input-wrapper-info">
+							List of urls for which scope is active
+						</div>
+					</div>
+				);
 
 			ret = (
 				<div>
@@ -428,6 +457,8 @@ class ConfigMetadataScope extends ControllerComponent {
 					</div>
 
 					{configurationField}
+
+					{urlsField}
 
 					<ConfigControls
 						key={"ConfigControls" + this.props.selectorValue}

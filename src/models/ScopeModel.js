@@ -84,6 +84,10 @@ class ScopeModel extends Model {
 				sendToServer: true,
 				transformForLocal: this.transformConfigurationForLocal,
 				transformForServer: this.transformConfigurationForServer
+			},
+			urls: {
+				serverName: 'urls',
+				sendToServer: true,
 			}
 		};
 	}
