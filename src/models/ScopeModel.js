@@ -88,6 +88,8 @@ class ScopeModel extends Model {
 			urls: {
 				serverName: 'urls',
 				sendToServer: true,
+				transformForLocal: this.transformUrlsForLocal,
+				transformForServer: this.transformUrlsForServer
 			}
 		};
 	}
@@ -121,6 +123,14 @@ class ScopeModel extends Model {
 	
 	transformConfigurationForServer(value) {
 		return value ? JSON.parse(value) : null;
+	}
+
+	transformUrlsForLocal(value) {
+		return value ? value.join(`;`) : "";
+	}
+
+	transformUrlsForServer(value) {
+		return value ? value.split(`;`) : [];
 	}
 
 }

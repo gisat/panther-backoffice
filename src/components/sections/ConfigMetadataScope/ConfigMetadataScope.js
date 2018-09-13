@@ -272,7 +272,7 @@ class ConfigMetadataScope extends ControllerComponent {
 
 	onChangeUrls(e) {
 		this.setCurrentState({
-			valueUrls: e.target.value.replace(/ /g,'').split(`,`)
+			valueUrls: e.target.value
 		});
 	}
 
@@ -358,7 +358,7 @@ class ConfigMetadataScope extends ControllerComponent {
 							<textarea
 								name="enumerationValues"
 								placeholder=" "
-								value={this.state.current.valueUrls.join(`, `)}	// todo Tohle (join) neni urcite dobry napad, takze vyresit lepe
+								value={this.state.current.valueUrls}
 								onChange={this.onChangeUrls.bind(this)}
 							/>
 						</label>
