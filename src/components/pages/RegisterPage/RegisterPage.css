@@ -1,0 +1,65 @@
+.register-page {
+	height: 100%;
+}
+.register-page-loader {
+	z-index: 5;
+	/*position: absolute;*/
+	/*top:50%;*/
+	/*left:50%;*/
+	/*transform: translate(-50%,-50%);*/
+	
+	/*width: 4rem;*/
+	/*height: 4rem;*/
+	
+	/*background: rgba(186, 186, 186, 0.8);*/
+	/*border-radius: 999%;*/
+	
+}
+.register-box {
+	position: absolute;
+	z-index: 10;
+	top:50%;
+	left:50%;
+	transform: translate(-51%,-55%);
+	
+	
+	width: 25rem;
+	min-height: 17.5rem;
+	
+	transition:
+		top .5s ease-in-out;
+}
+.register-box-content {
+	padding:2rem;
+}
+.register-box-error {
+	height: 0;
+	overflow: hidden;
+	transition:
+		height .3s ease-in-out;
+}
+.register-box-error.error {
+	height: 3.125rem;
+}
+.register-box-error-message {
+	
+	height: 3.125rem;
+	
+	padding: .75rem 2rem;
+	background: #ccb8b8;
+	color: #751d00;
+	font-size: 1rem;
+}
+.register-box-error.error .register-box-error-message {
+	border-top: 1px dashed #996b6b;
+}
+.register-box .ui.button {
+	margin-top:1rem;
+}
+.register-box.loading {
+	top:-50%;
+}
+/*.register-page {*/
+/*background: bottom center url("../../../public/hcmclandsat.jpg");*/
+/*background-size: cover;*/
+/*}*/

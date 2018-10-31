@@ -26,13 +26,26 @@ class Store extends EventEmitter {
 		logger.trace(this.constructor.name + ":Store# emitChange()");
 		this.emit(EventTypes.STORE_CHANGE);
 	}
+	
+	emitChangeWithoutDependencies() {
+		logger.trace(this.constructor.name + ":Store# emitChangeWithoutDependencies()");
+		this.emit(EventTypes.STORE_CHANGE_WITHOUT_DEPENDENCIES);
+	}
 
 	addChangeListener(callback) {
 		this.on(EventTypes.STORE_CHANGE, callback);
 	}
 
+	addChangeWithoutDependenciesListener(callback) {
+		this.on(EventTypes.STORE_CHANGE_WITHOUT_DEPENDENCIES, callback);
+	}
+
 	removeChangeListener(callback) {
 		this.removeListener(EventTypes.STORE_CHANGE, callback);
+	}
+
+	removeChangeWithoutDependenciesListener(callback) {
+		this.removeListener(EventTypes.STORE_CHANGE_WITHOUT_DEPENDENCIES, callback);
 	}
 
 	emitError(error, operationId, data) {

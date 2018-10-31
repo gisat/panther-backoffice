@@ -42,6 +42,9 @@ let actionCreator = {
 			case ObjectTypes.OBJECT_RELATION:
 				action.type = ActionTypes.OBJECT_RELATION_CREATE;
 				break;
+			case ObjectTypes.ANALYSIS_RUN:
+				action.type = ActionTypes.ANALYSIS_RUN_CREATE;
+				break;
 			default:
 				return;
 		}
@@ -355,12 +358,25 @@ let actionCreator = {
 		AppDispatcher.dispatch(action);
 	},
 
-	createUser(hash, name, password, callback) {
+	loadInvitation(hash, callback) {
+		let action = {
+			type: ActionTypes.USER_LOAD_INVITATION,
+			data: {
+				hash: hash,
+				callback: callback
+			}
+		};
+
+		AppDispatcher.dispatch(action);
+	},
+
+	createUser(hash, name, password, phone, callback) {
 		let action = {
 			type: ActionTypes.CREATE_USER,
 			data: {
 				hash: hash,
 				name: name,
+				phone: phone,
 				password: password,
 				callback: callback
 			}

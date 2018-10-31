@@ -82,8 +82,8 @@ class ScopeModel extends Model {
 			configuration: {
 				serverName: 'configuration',
 				sendToServer: true,
-				transformForLocal: JSON.stringify,
-				transformForServer: JSON.parse
+				transformForLocal: this.transformConfigurationForLocal,
+				transformForServer: this.transformConfigurationForServer
 			}
 		};
 	}
@@ -109,6 +109,14 @@ class ScopeModel extends Model {
 		} else {
 			console.log("This should never happen");
 		}
+	}
+	
+	transformConfigurationForLocal(value) {
+		return value ? JSON.stringify(value) : null;
+	}
+	
+	transformConfigurationForServer(value) {
+		return value ? JSON.parse(value) : null;
 	}
 
 }

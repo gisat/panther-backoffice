@@ -25,6 +25,7 @@ import ScreenAnalysisRulesMath from '../../screens/ScreenAnalysisRulesMath';
 import ScreenAnalysisRuns from '../../screens/ScreenAnalysisRuns';
 
 import logger from '../../../core/Logger';
+import ListenerHandler from "../../../core/ListenerHandler";
 
 var initialState = {
 	analysis: null,
@@ -53,6 +54,7 @@ class ConfigAnalysis extends PantherComponent {
 	constructor(props) {
 		super(props);
 		this.state = utils.deepClone(initialState);
+		this.changeWithoutDependenciesListener = new ListenerHandler(this, this._onStoreChange, 'addChangeWithoutDependenciesListener', 'removeChangeWithoutDependenciesListener');
 	}
 
 	store2state(props) {
@@ -99,6 +101,7 @@ class ConfigAnalysis extends PantherComponent {
 
 		this.changeListener.add(AnalysisStore, ["analysis"]);
 		this.changeListener.add(AnalysisRunStore, ["runs"]);
+		this.changeWithoutDependenciesListener.add(AnalysisRunStore, ["runs"]);
 
 		this.setStateFromStores();
 	}

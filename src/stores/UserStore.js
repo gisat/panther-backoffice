@@ -51,6 +51,7 @@ class UserStore extends Store {
 	}
 
 	async reload(operationId) {
+		this.cache = new Promise(() => {});
 		return superagent
 			.get(this.userUrl)
 			.withCredentials()
@@ -58,8 +59,7 @@ class UserStore extends Store {
 			.set('Access-Control-Allow-Origin', 'true')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(response => {
-				let data = JSON.parse(response.body);
-				this.cache = data.data.map(user => new UserModel(null, user));
+				this.cache = response.body.data.map(user => new UserModel(null, user));
 				logger.info('UserStore#reload Loaded users: ', this.cache);
 				this.emitChange();
 				return this.cache;
@@ -179,18 +179,44 @@ class UserStore extends Store {
 	}
 
 	/**
+	 * load invitation for hash
+	 * @param hash {String} hash
+	 * @param callback {Function} Function to be called back once the operation finishes.
+	 */
+	loadInvitation(hash, callback) {
+		superagent
+			.get(this.urlFor('/rest/invitation/user') + '/' + hash)
+			.withCredentials()
+			.set('Access-Control-Allow-Origin', 'true')
+			.set('Accept', 'application/json')
+			.set('Access-Control-Allow-Credentials', 'true')
+			.then(response => {
+				callback({
+					ok: response
+				});
+			})
+			.catch(error => {
+				callback({
+					error: error
+				})
+			})
+	}
+
+	/**
 	 * It seriously creates new user on the server. The rights to do so are verified by the hash.
 	 * @param hash {String} The valid hash is necessary in order to create the user.
 	 * @param name {String} Name of the new user
+	 * @param phone {String} Phone ot the new user
 	 * @param password {String} Password of the new user. It will be hashed on the backend
 	 * @param callback {Function} Function to be called when the operation finishes.
 	 */
-	createUser(hash, name, password, callback) {
+	createUser(hash, name, password, phone, callback) {
 		superagent
 			.post(this.urlFor('/rest/user'))
 			.send({
 				hash: hash,
 				name: name,
+				phone: phone,
 				password: password
 			})
 			.withCredentials()
@@ -305,8 +331,11 @@ storeInstance.dispatchToken = AppDispatcher.register(action => {
 		case ActionTypes.INVITE_USER:
 			storeInstance.inviteUser(action.data.email, action.data.callback);
 			break;
+		case ActionTypes.USER_LOAD_INVITATION:
+			storeInstance.loadInvitation(action.data.hash, action.data.callback);
+			break;
 		case ActionTypes.CREATE_USER:
-			storeInstance.createUser(action.data.hash, action.data.name, action.data.password, action.data.callback);
+			storeInstance.createUser(action.data.hash, action.data.name, action.data.password, action.data.phone, action.data.callback);
 			break;
 		case ActionTypes.UPDATE_USER:
 			storeInstance.updateUser(action.data.id, action.data.user);
