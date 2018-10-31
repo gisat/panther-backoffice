@@ -43,6 +43,11 @@ var initialState = {
 @withStyles(styles)
 class ScreenDataLayersBase extends ScreenController {
 
+	static contextTypes = {
+		onInteraction: PropTypes.func.isRequired,
+		screenSetKey: PropTypes.string.isRequired
+	};
+
 	constructor(props) {
 		super(props);
 		this.state = _.assign(this.state, utils.deepClone(initialState));
@@ -123,6 +128,16 @@ class ScreenDataLayersBase extends ScreenController {
 		})
 	}
 
+	onUploadClick() {
+		let screenName = "ScreenDataLayersBase-FileUpload";
+		let options = {
+			component: FileUpload,
+			parentUrl: this.props.parentUrl,
+			size: 40
+		};
+		ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
+	}
+
 	render() {
 		logger.trace("ScreenDataLayersBase# render(), This state: ", this.state);
 
@@ -158,6 +173,7 @@ class ScreenDataLayersBase extends ScreenController {
 								value={this.state.selectorValue}
 								onChange={this.onSelectorChange.bind(this)}
 								onFocus={this.onSelectorFocus.bind(this)}
+								onNew={this.onUploadClick.bind(this)}
 							/>
 						</div>
 					</div>
