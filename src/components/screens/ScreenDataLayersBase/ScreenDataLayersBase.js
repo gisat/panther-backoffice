@@ -177,7 +177,6 @@ class ScreenDataLayersBase extends ScreenController {
 							/>
 						</div>
 					</div>
-					<FileUpload/>
 					<div className="screen-content">
 						<div>
 							{configInsert}

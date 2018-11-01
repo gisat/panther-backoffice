@@ -35,6 +35,7 @@ import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import DataLayersMetadataPreview from "../DataLayersMetadataPreview/DataLayersMetadataPreview";
 
 const LAYERTYPES = [
 	{key: "vector", name: "Vector layer"},
@@ -756,6 +757,8 @@ class ConfigDataLayer extends ControllerComponent {
 				<div>
 
 					{mapImage}
+					
+					<DataLayersMetadataPreview/>
 
 					<div
 						//className="frame-input-wrapper"

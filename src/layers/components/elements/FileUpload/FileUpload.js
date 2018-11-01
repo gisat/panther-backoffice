@@ -76,7 +76,8 @@ class FileUpload extends Component {
 			/>
 		} else {
 			return (
-				<div>
+				<div className="screen-content"><div>
+
 					<h2>Upload the layer</h2>
 
 					<form>
@@ -86,7 +87,7 @@ class FileUpload extends Component {
 
 						<input type="button" value="Upload" onClick={this.uploadFile.bind(this)}/>
 					</form>
-				</div>
+				</div></div>
 			);
 		}
 	}
