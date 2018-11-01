@@ -723,7 +723,7 @@ class ConfigDataLayer extends ControllerComponent {
 			}
 
 			//var mapFrame = "";
-			var mapImage = "";
+			var mapImage = "", metadataPreview = "";
 			if (this.props.selectorValue) {
 
 				var dataLayer = _.findWhere(this.props.dataLayers, {key: this.props.selectorValue});
@@ -750,6 +750,12 @@ class ConfigDataLayer extends ControllerComponent {
 						<img src={mapImageSrc} style={mapImageStyle}/>
 					</div>
 				);
+				
+				metadataPreview = (
+					<DataLayersMetadataPreview
+						dataLayer={this.props.selectorValue}
+					/>
+				);
 
 			}
 
@@ -758,7 +764,7 @@ class ConfigDataLayer extends ControllerComponent {
 
 					{mapImage}
 					
-					<DataLayersMetadataPreview/>
+					{metadataPreview}
 
 					<div
 						//className="frame-input-wrapper"
