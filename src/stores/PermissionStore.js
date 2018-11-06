@@ -89,6 +89,11 @@ class PermissionStore {
 				key: 'permission-period',
 				type: 'year',
 				name: 'Period'
+			},
+			{
+				key: 'permission-spatial-relation',
+				type: 'spatial_relation',
+				name: 'Spatial relation'
 			}
 		]
 	}
