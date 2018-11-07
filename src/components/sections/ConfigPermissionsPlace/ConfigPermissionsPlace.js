@@ -121,7 +121,7 @@ class ConfigPermissionsPlace extends ControllerComponent {
 			let toRemove = _.difference(current, newOnes);
 			toRemove.forEach(id => {
 				place.removePermission(ObjectTypes.USER, id, permission);
-				ActionCreator.removePermissionFromUser(this.instance, id, permission);
+				ActionCreator.removePermissionUser(this.instance, id, permission);
 			});
 		} else {
 			console.log("This should never happen");
@@ -152,8 +152,8 @@ class ConfigPermissionsPlace extends ControllerComponent {
 		} else if(current.length > newOnes.length) {
 			let toRemove = _.difference(current, newOnes);
 			toRemove.forEach(id => {
-				place.removePermission(ObjectTypes.GROUP, id, permission);
-				ActionCreator.removePermission(this.instance, id, permission);
+				place.addPermission(ObjectTypes.GROUP, id, permission);
+				ActionCreator.addPermission(this.instance, id, permission);
 			});
 		} else {
 			console.log("This should never happen");
@@ -193,7 +193,7 @@ class ConfigPermissionsPlace extends ControllerComponent {
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
-								labelKey="name"
+								labelKey="email"
 								value={this.state.current.valuesUsersRead}
 							/>
 						</label>
@@ -210,7 +210,7 @@ class ConfigPermissionsPlace extends ControllerComponent {
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
-								labelKey="name"
+								labelKey="email"
 								value={this.state.current.valuesUsersUpdate}
 							/>
 						</label>
@@ -227,7 +227,7 @@ class ConfigPermissionsPlace extends ControllerComponent {
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
-								labelKey="name"
+								labelKey="email"
 								value={this.state.current.valuesUsersDelete}
 							/>
 						</label>
