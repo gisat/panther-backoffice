@@ -210,7 +210,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
-								labelKey="name"
+								labelKey="email"
 								value={this.state.current.valuesMembers}
 							/>
 						</label>
@@ -245,7 +245,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
-								labelKey="name"
+								labelKey="email"
 								value={this.state.current.valuesUsersRead}
 							/>
 						</label>
@@ -262,7 +262,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
-								labelKey="name"
+								labelKey="email"
 								value={this.state.current.valuesUsersUpdate}
 							/>
 						</label>
@@ -279,7 +279,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
-								labelKey="name"
+								labelKey="email"
 								value={this.state.current.valuesUsersDelete}
 							/>
 						</label>

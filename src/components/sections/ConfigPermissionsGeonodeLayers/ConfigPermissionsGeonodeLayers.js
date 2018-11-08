@@ -114,13 +114,13 @@ class ConfigPermissionsGeonodeLayers extends ControllerComponent {
 		if(current.length < newOnes.length) {
 			let toAdd = _.difference(newOnes, current);
 			toAdd.forEach(id => {
-				layer.addPermission(ObjectTypes.USER, id, permission);
+				layer.addPermissionUser(ObjectTypes.USER, id, permission);
 				ActionCreator.addPermissionUser(this.instance, id, permission);
 			});
 		} else if(current.length > newOnes.length) {
 			let toRemove = _.difference(current, newOnes);
 			toRemove.forEach(id => {
-				layer.removePermission(ObjectTypes.USER, id, permission);
+				layer.removePermissionUser(ObjectTypes.USER, id, permission);
 				ActionCreator.removePermissionFromUser(this.instance, id, permission);
 			});
 		} else {
@@ -146,13 +146,13 @@ class ConfigPermissionsGeonodeLayers extends ControllerComponent {
 		if(current.length < newOnes.length) {
 			let toAdd = _.difference(newOnes, current);
 			toAdd.forEach(id => {
-				layer.addPermission(ObjectTypes.GROUP, id, permission);
+				layer.addPermissionUser(ObjectTypes.GROUP, id, permission);
 				ActionCreator.addPermission(this.instance, id, permission);
 			});
 		} else if(current.length > newOnes.length) {
 			let toRemove = _.difference(current, newOnes);
 			toRemove.forEach(id => {
-				layer.removePermission(ObjectTypes.GROUP, id, permission);
+				layer.removePermissionUser(ObjectTypes.GROUP, id, permission);
 				ActionCreator.removePermission(this.instance, id, permission);
 			});
 		} else {

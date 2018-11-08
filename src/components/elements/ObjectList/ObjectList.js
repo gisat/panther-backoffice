@@ -66,7 +66,7 @@ class ObjectList extends Component {
 					key={item.key}
 				>
 					<span className="item-id">{item.key}</span>
-					<span>{item.name}</span>
+					<span>{item.name || item.email}</span>
 				</a>
 			);
 		});
