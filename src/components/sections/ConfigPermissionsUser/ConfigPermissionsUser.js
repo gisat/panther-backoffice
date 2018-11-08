@@ -89,22 +89,22 @@ class ConfigPermissionsUser extends ControllerComponent {
 				if(user.permissionsGroups) {
 					user.permissionsGroups.forEach(permission => {
 						if (permission.permission === 'GET') {
-							nextState.valuesGroupsRead.push(permission.groupId);
+							nextState.valuesGroupsRead.push(permission.group_id);
 						} else if (permission.permission === 'DELETE') {
-							nextState.valuesGroupsDelete.push(permission.groupId);
+							nextState.valuesGroupsDelete.push(permission.group_id);
 						} else if (permission.permission === 'PUT') {
-							nextState.valuesGroupsUpdate.push(permission.groupId);
+							nextState.valuesGroupsUpdate.push(permission.group_id);
 						}
 					});
 				}
 				if(user.permissionsUsers) {
 					user.permissionsUsers.forEach(permission => {
 						if (permission.permission === 'GET') {
-							nextState.valuesUsersRead.push(permission.userId);
+							nextState.valuesUsersRead.push(permission.user_id);
 						} else if (permission.permission === 'DELETE') {
-							nextState.valuesUsersDelete.push(permission.userId);
+							nextState.valuesUsersDelete.push(permission.user_id);
 						} else if (permission.permission === 'PUT') {
-							nextState.valuesUsersUpdate.push(permission.userId);
+							nextState.valuesUsersUpdate.push(permission.user_id);
 						}
 					});
 				}
@@ -313,7 +313,7 @@ class ConfigPermissionsUser extends ControllerComponent {
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
-								labelKey="name"
+								labelKey="email"
 								value={this.state.current.valuesUsersRead}
 							/>
 						</label>
@@ -330,7 +330,7 @@ class ConfigPermissionsUser extends ControllerComponent {
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
-								labelKey="name"
+								labelKey="email"
 								value={this.state.current.valuesUsersUpdate}
 							/>
 						</label>
@@ -347,7 +347,7 @@ class ConfigPermissionsUser extends ControllerComponent {
 								allowCreate
 								newOptionCreator={utils.keyNameOptionFactory}
 								valueKey="key"
-								labelKey="name"
+								labelKey="email"
 								value={this.state.current.valuesUsersDelete}
 							/>
 						</label>

@@ -304,6 +304,30 @@ let actionCreator = {
 		AppDispatcher.dispatch(action);
 	},
 
+	addPermissionUser(operationId, userId, permission) {
+		let action = {
+			type: ActionTypes.USER_ADD_PERMISSION,
+			data: {
+				userId: userId,
+				permission: permission,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
+	removePermissionUser(operationId, userId, permission) {
+		let action = {
+			type: ActionTypes.USER_REMOVE_PERMISSION,
+			data: {
+				userId: userId,
+				permission: permission,
+				operationId: operationId
+			}
+		};
+		AppDispatcher.dispatch(action);
+	},
+
 	loadUsers(operationId) {
 		let action = {
 			type: ActionTypes.USER_LOAD,
