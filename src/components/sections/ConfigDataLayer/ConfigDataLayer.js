@@ -753,7 +753,7 @@ class ConfigDataLayer extends ControllerComponent {
 				
 				metadataPreview = (
 					<DataLayersMetadataPreview
-						dataLayer={this.props.selectorValue}
+						dataLayer={_.find(this.props.dataLayers, {key: this.props.selectorValue})}
 					/>
 				);
 

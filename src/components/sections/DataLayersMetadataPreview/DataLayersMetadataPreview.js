@@ -42,7 +42,10 @@ class DataLayersMetadataPreview extends PantherComponent{
 		let options = {
 			component: ScreenDataLayersMetadata,
 			// parentUrl: this.props.parentUrl,
-			size: 40
+			size: 40,
+			data: {
+				dataLayer: this.props.dataLayer
+			}
 		};
 		ActionCreator.createOpenScreen(screenName, this.context.screenSetKey, options);
 	}
