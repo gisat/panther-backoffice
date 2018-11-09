@@ -31,12 +31,13 @@ class ScreenDataLayersMetadata extends Component {
 		this.state = {
 			metadata: props.data.dataLayer.metadata,
 			sourceUrl: props.data.dataLayer.sourceUrl,
-			saving: false
+			saving: false,
+			saved: false
 		};
 	}
 
 	save() {
-		this.setState({saving: true});
+		this.setState({saving: true, saved: false});
 
 		return superagent
 			.put(`${config.apiProtocol}${config.apiHost}${config.apiPath}/rest/layer`)
@@ -50,7 +51,7 @@ class ScreenDataLayersMetadata extends Component {
 				source_url: this.state.sourceUrl
 			})
 			.then((result) => {
-				this.setState({saving: false});
+				this.setState({saving: false, saved: true});
 				DataLayerStore.reload();
 			})
 			.catch((error) => {
@@ -61,7 +62,7 @@ class ScreenDataLayersMetadata extends Component {
 
 
 	delete() {
-		this.setState({saving: true});
+		this.setState({saving: true, saved: false});
 
 		return superagent
 			.put(`${config.apiProtocol}${config.apiHost}${config.apiPath}/rest/layer`)
@@ -75,7 +76,7 @@ class ScreenDataLayersMetadata extends Component {
 				source_url: null
 			})
 			.then((result) => {
-				this.setState({saving: false});
+				this.setState({saving: false, saved: true});
 				DataLayerStore.reload();
 			})
 			.catch((error) => {
@@ -91,7 +92,7 @@ class ScreenDataLayersMetadata extends Component {
 
 	onChangeSourceUrl(event) {
 		this.setState({
-			sourceUrl: event.target.value ? event.target.value : null
+			sourceUrl: event.target.value ? event.target.value : null,
 		});
 	}
 
@@ -138,7 +139,7 @@ class ScreenDataLayersMetadata extends Component {
 						<ConfigControls
 							key={0}
 							disabled={false}
-							saved={this.state.metadata === this.props.data.dataLayer.metadata && this.state.sourceUrl === this.props.data.dataLayer.sourceUrl}
+							saved={(this.state.metadata === this.props.data.dataLayer.metadata && this.state.sourceUrl === this.props.data.dataLayer.sourceUrl) || this.state.saved}
 							saving={this.state.saving}
 							onSave={this.save.bind(this)}
 							onDelete={this.delete.bind(this)}
