@@ -5,6 +5,9 @@ class DataLayerModel extends Model {
 
 	data() {
 		return {
+			id: {
+				serverName: 'id'
+			},
 			key: {
 				serverName: 'path' //string
 			},
@@ -16,6 +19,12 @@ class DataLayerModel extends Model {
 			},
 			path: {
 				serverName: 'path'
+			},
+			metadata: {
+				serverName: 'metadata'
+			},
+			sourceUrl: {
+				serverName: 'source_url'
 			},
 			geoserverWorkspace: {
 				serverName: 'path', //string

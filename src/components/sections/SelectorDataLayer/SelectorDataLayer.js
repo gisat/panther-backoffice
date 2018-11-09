@@ -8,6 +8,7 @@ import Select from 'react-select';
 
 import OptionDataLayer from '../../atoms/UICustomSelect/OptionDataLayer';
 import SingleValueDataLayer from '../../atoms/UICustomSelect/SingleValueDataLayer';
+import UIScreenButton from "../../atoms/UIScreenButton";
 
 
 @withStyles(styles)
@@ -48,21 +49,32 @@ class SelectorDataLayer extends PantherComponent {
 		return (
 			<div>
 				<div className="selector">
-					<div className="input">
-						<label className="container">
-							Data layer
-							<Select
-								onChange={this.onChange.bind(this)}
-								onFocus={this.onFocus.bind(this)}
-								options={selectorData}
-								optionComponent={OptionDataLayer}
-								singleValueComponent={SingleValueDataLayer}
-								valueKey="key"
-								labelKey="key"
-								value={this.props.value}
-								clearable={false}
-							/>
-						</label>
+					<div className="input-wrapper">
+						<div>
+							<label className="container">
+								Data layer
+								<Select
+									onChange={this.onChange.bind(this)}
+									onFocus={this.onFocus.bind(this)}
+									options={selectorData}
+									optionComponent={OptionDataLayer}
+									singleValueComponent={SingleValueDataLayer}
+									valueKey="key"
+									labelKey="key"
+									value={this.props.value}
+									clearable={false}
+								/>
+							</label>
+						</div>
+						<div>
+							<UIScreenButton
+								basic
+								onClick={this.props.onNew}
+							>
+								<Icon name="plus" />
+								Upload
+							</UIScreenButton>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -35,6 +35,7 @@ import DataLayerColumnsStore from '../../../stores/DataLayerColumnsStore';
 
 import ListenerHandler from '../../../core/ListenerHandler';
 import logger from '../../../core/Logger';
+import DataLayersMetadataPreview from "../DataLayersMetadataPreview/DataLayersMetadataPreview";
 
 const LAYERTYPES = [
 	{key: "vector", name: "Vector layer"},
@@ -722,7 +723,7 @@ class ConfigDataLayer extends ControllerComponent {
 			}
 
 			//var mapFrame = "";
-			var mapImage = "";
+			var mapImage = "", metadataPreview = "";
 			if (this.props.selectorValue) {
 
 				var dataLayer = _.findWhere(this.props.dataLayers, {key: this.props.selectorValue});
@@ -749,6 +750,12 @@ class ConfigDataLayer extends ControllerComponent {
 						<img src={mapImageSrc} style={mapImageStyle}/>
 					</div>
 				);
+				
+				metadataPreview = (
+					<DataLayersMetadataPreview
+						dataLayer={_.find(this.props.dataLayers, {key: this.props.selectorValue})}
+					/>
+				);
 
 			}
 
@@ -756,6 +763,8 @@ class ConfigDataLayer extends ControllerComponent {
 				<div>
 
 					{mapImage}
+					
+					{metadataPreview}
 
 					<div
 						//className="frame-input-wrapper"
