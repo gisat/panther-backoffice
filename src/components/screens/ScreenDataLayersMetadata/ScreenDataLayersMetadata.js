@@ -32,8 +32,52 @@ class ScreenDataLayersMetadata extends Component {
 			metadata: props.data.dataLayer.metadata,
 			sourceUrl: props.data.dataLayer.sourceUrl,
 			saving: false,
-			saved: false
+			saved: false,
+			localSource: false
 		};
+	}
+
+	componentDidMount() {
+		this.isLocalVector(this.props.data.dataLayer.key)
+			.then((result) => {
+				if(result) {
+					this.setState({
+						localSource: `${config.geoserverProtocol}${config.geoserverAddress}/wfs?request=GetFeature&service=WFS&version=1.0.0&typeName=${this.props.data.dataLayer.key}&outputFormat=SHAPE-ZIP`
+					})
+				}
+			})
+	}
+
+	isLocalVector(dataLayerIdentificator) {
+		let dataLayerIdentificatorParts = dataLayerIdentificator.split(`:`);
+		let workspace = dataLayerIdentificatorParts[0];
+		let dataLayerName = dataLayerIdentificatorParts[1];
+
+		let datastore;
+
+		if(workspace === `geonode`) {
+			datastore = `datastore`;
+		} else if(workspace === `panther`) {
+			datastore = `views`;
+		}
+
+		return superagent
+			.get(`${config.geoserverProtocol}${config.geoserverAddress}/rest/workspaces/${workspace}/datastores/${datastore}/featuretypes/${dataLayerName}`)
+			.auth(`admin`, `geoserver`)
+			.then((response) => {
+				if(response.status === 200) {
+					return true;
+				}
+			})
+			.catch((error) => {
+				return false;
+			})
+	}
+
+	setLocalVectorSourceUrl() {
+		this.setState({
+			sourceUrl: this.state.localSource
+		})
 	}
 
 	save() {
@@ -100,6 +144,10 @@ class ScreenDataLayersMetadata extends Component {
 
 		let ret = null;
 
+		let localSource = this.state.localSource && !this.state.sourceUrl ? (<div className="frame-input-wrapper-info">
+			Layer is available on local server. Click <div onClick={this.setLocalVectorSourceUrl.bind(this)} style={{cursor: `pointer`, display: `inline-block`, fontWeight: `bold`}}>here</div> to generate url.
+		</div>) : null;
+
 		ret = (
 			<div>
 				<div className="screen-setter">
@@ -134,6 +182,7 @@ class ScreenDataLayersMetadata extends Component {
 									value={this.state.sourceUrl}
 									onChange={this.onChangeSourceUrl.bind(this)}
 								/>
+								{localSource}
 							</label>
 						</div>
 						<ConfigControls
