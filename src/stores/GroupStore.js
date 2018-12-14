@@ -35,6 +35,7 @@ class GroupStore extends Store {
 
 	// TODO: This shouldn't work
 	reload(operationId) {
+		let models = [];
 		return superagent
 			.get(this.groupUrl)
 			.withCredentials()
@@ -42,9 +43,9 @@ class GroupStore extends Store {
 			.set('Access-Control-Allow-Origin', 'true')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(response => {
-				let modelPromises = response.body.data.map(group => new GroupModel(null, group));
-				return Promise.all(modelPromises);
-			}).then(models => {
+				models = response.body.data.map(group => new GroupModel(null, group));
+				return Promise.all(models.map(model => model.ready));
+			}).then(() => {
 				this.cache = models;
 				logger.info('GroupStore#reload Loaded groups: ', this.cache);
 				this.emitChange();
