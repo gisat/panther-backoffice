@@ -42,7 +42,10 @@ class GroupStore extends Store {
 			.set('Access-Control-Allow-Origin', 'true')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(response => {
-				this.cache = response.body.data.map(group => new GroupModel(null, group));
+				let modelPromises = response.body.data.map(group => new GroupModel(null, group));
+				return Promise.all(modelPromises);
+			}).then(models => {
+				this.cache = models;
 				logger.info('GroupStore#reload Loaded groups: ', this.cache);
 				this.emitChange();
 				return this.cache;
