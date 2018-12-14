@@ -44,7 +44,7 @@ class GroupModel extends Model {
 				sendToServer: false,
 				transformForLocal: function (data) {
 					if (data) {
-						let models = data.map(id => UserStore.byId(id);
+						let models = data.map(id => UserStore.byId(id));
 						return Promise.all(models);
 					} else {
 						return Promise.resolve([]);
