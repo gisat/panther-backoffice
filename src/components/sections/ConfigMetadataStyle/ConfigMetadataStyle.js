@@ -820,24 +820,6 @@ class ConfigMetadataStyle extends ControllerComponent {
 
 			sourceForm = (
 				<div>
-				<div className="frame-input-wrapper required">
-					<div className="frame-input-wrapper required">
-						<label className="container">
-							Name
-							<Input
-								type="text"
-								name="name"
-								placeholder=" "
-								value={this.state.current.valueName}
-								onChange={this.onChangeName.bind(this)}
-							/>
-						</label>
-
-						<div className="frame-input-wrapper-info">
-							Name of the style.
-						</div>
-					</div>
-				</div>
 
 				<div className="frame-input-wrapper required">
 					<div className="frame-input-wrapper required">
