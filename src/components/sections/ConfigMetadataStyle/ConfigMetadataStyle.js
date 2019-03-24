@@ -845,7 +845,10 @@ class ConfigMetadataStyle extends ControllerComponent {
 							Styled Layer Descriptor
 								<div className="ui input">
 							<textarea
-								style="width: 100%; height: 100px;"
+								style={{
+									width: '100%',
+									height: '100px'
+								}}
 								type="textarea"
 								name="sld"
 								placeholder=" "
