@@ -833,16 +833,18 @@ class ConfigMetadataStyle extends ControllerComponent {
 						</label>
 					</div>
 
-					<label className="container">
-						Styled Layer Descriptor
-						<Input
-							type="textarea"
-							name="sld"
-							placeholder=" "
-							value={this.state.current.valueSld}
-							onChange={this.onChangeSld.bind(this)}
-						/>
-					</label>
+					<div className="frame-input-wrapper required">
+							<label className="container">
+							Styled Layer Descriptor
+							<textarea
+								type="textarea"
+								name="sld"
+								placeholder=" "
+								value={this.state.current.valueSld}
+								onChange={this.onChangeSld.bind(this)}
+							/>
+						</label>
+					</div>
 					<div className="frame-input-wrapper-info">
 						GeoServer Styled Layer Description
 					</div>
