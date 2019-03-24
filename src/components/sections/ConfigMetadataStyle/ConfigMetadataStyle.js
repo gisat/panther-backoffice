@@ -843,11 +843,11 @@ class ConfigMetadataStyle extends ControllerComponent {
 					<div className="frame-input-wrapper required">
 							<label className="container">
 							Styled Layer Descriptor
-								<div className="ui input">
+								<div className="ui input" style={{height: '200px;'}}>
 							<textarea
 								style={{
 									width: '100%',
-									height: '100px'
+									height: '200px'
 								}}
 								type="textarea"
 								name="sld"
