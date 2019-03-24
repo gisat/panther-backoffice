@@ -832,6 +832,10 @@ class ConfigMetadataStyle extends ControllerComponent {
 								onChange={this.onChangeName.bind(this)}
 							/>
 						</label>
+
+						<div className="frame-input-wrapper-info">
+							Name of the style.
+						</div>
 					</div>
 				</div>
 
@@ -841,6 +845,7 @@ class ConfigMetadataStyle extends ControllerComponent {
 							Styled Layer Descriptor
 								<div className="ui input">
 							<textarea
+								style="width: 100%; height: 100px;"
 								type="textarea"
 								name="sld"
 								placeholder=" "
@@ -849,6 +854,10 @@ class ConfigMetadataStyle extends ControllerComponent {
 							/>
 								</div>
 						</label>
+
+						<div className="frame-input-wrapper-info">
+							SLD to be used.
+						</div>
 					</div>
 				</div>
 				</div>
