@@ -42,6 +42,7 @@ var initialState = {
 
 const SOURCES = [
 	{key: "definition", name: "Definition (Back Office)"},
+	{key: "sld", name: "SLD"},
 	{key: "geoserver", name: "GeoServer"}
 ];
 
@@ -117,6 +118,10 @@ class ConfigMetadataStyle extends ControllerComponent {
 				else if (style.source=="geoserver") {
 					nextState.valueServerName = style.serverName;
 				}
+				else if (style.source == "sld") {
+					nextState.valueSld = style.valueSld;
+					nextState.valueName = style.valueName;
+				}
 			}
 		}
 		return nextState;
@@ -184,6 +189,9 @@ class ConfigMetadataStyle extends ControllerComponent {
 			}
 		} else if (firstState.valueSource == 'geoserver') {
 			return firstState.valueServerName == secondState.valueServerName;
+		} else if (firstState.valueSource == 'sld') {
+			return firstState.valueSld == secondState.valueSld &&
+				firstState.valueName == secondState.valueName;
 		}
 		return super.equalStates(firstState, secondState, limitKeys);
 	}
@@ -274,6 +282,10 @@ class ConfigMetadataStyle extends ControllerComponent {
 			}
 		}
 		else if (this.state.current.valueSource=="geoserver") {
+			modelData.serverName = this.state.current.valueServerName;
+		}
+		else if (this.state.current.valueSource == "sld") {
+			modelData.sld = this.state.current.valueSld;
 			modelData.serverName = this.state.current.valueServerName;
 		}
 
@@ -465,6 +477,12 @@ class ConfigMetadataStyle extends ControllerComponent {
 	onChangeServerName(e) {
 		this.setCurrentState({
 			valueServerName: e.target.value
+		});
+	}
+
+	onChangeSld(e) {
+		this.setCurrentState({
+			valueSld: e.target.value
 		});
 	}
 
@@ -798,6 +816,39 @@ class ConfigMetadataStyle extends ControllerComponent {
 			);
 
 		}
+		else if(this.state.current.valueSource == "sld") {
+
+			sourceForm = (
+				<div className="frame-input-wrapper required">
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Name
+							<Input
+								type="text"
+								name="name"
+								placeholder=" "
+								value={this.state.current.valueName}
+								onChange={this.onChangeName.bind(this)}
+							/>
+						</label>
+					</div>
+
+					<label className="container">
+						Styled Layer Descriptor
+						<Input
+							type="textarea"
+							name="sld"
+							placeholder=" "
+							value={this.state.current.valueSld}
+							onChange={this.onChangeSld.bind(this)}
+						/>
+					</label>
+					<div className="frame-input-wrapper-info">
+						GeoServer Styled Layer Description
+					</div>
+				</div>
+			);
+		}
 
 		ret = (
 			<div>
@@ -828,7 +879,7 @@ class ConfigMetadataStyle extends ControllerComponent {
 						/>
 					</label>
 					<div className="frame-input-wrapper-info">
-						Style can be defined locally in Back Office or loaded from another system.
+						Style can be defined locally in Back Office, defined as SLD or loaded from another system.
 					</div>
 				</div>
 

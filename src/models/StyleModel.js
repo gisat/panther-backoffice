@@ -67,6 +67,10 @@ class StyleModel extends Model {
 				serverName: 'symbologyName', //string
 				sendToServer: true
 			},
+			sld: {
+				serverName: 'sld',
+				sendToServer: true
+			},
 			definition: {
 				serverName: 'definition',
 				sendToServer: true,
