@@ -819,6 +819,7 @@ class ConfigMetadataStyle extends ControllerComponent {
 		else if(this.state.current.valueSource == "sld") {
 
 			sourceForm = (
+				<div>
 				<div className="frame-input-wrapper required">
 					<div className="frame-input-wrapper required">
 						<label className="container">
@@ -832,10 +833,13 @@ class ConfigMetadataStyle extends ControllerComponent {
 							/>
 						</label>
 					</div>
+				</div>
 
+				<div className="frame-input-wrapper required">
 					<div className="frame-input-wrapper required">
 							<label className="container">
 							Styled Layer Descriptor
+								<div className="ui input">
 							<textarea
 								type="textarea"
 								name="sld"
@@ -843,11 +847,10 @@ class ConfigMetadataStyle extends ControllerComponent {
 								value={this.state.current.valueSld}
 								onChange={this.onChangeSld.bind(this)}
 							/>
+								</div>
 						</label>
 					</div>
-					<div className="frame-input-wrapper-info">
-						GeoServer Styled Layer Description
-					</div>
+				</div>
 				</div>
 			);
 		}
