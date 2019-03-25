@@ -67,24 +67,7 @@ class Model {
 				} else {
 					ret[key] = [];
 				}
-			}	else if (keyProps.isNested) {
-				if(data[keyProps.serverName]) {
-					let nestedPromise = self.resolveForLocal(data[keyProps.serverName], model[key].model, self);
-					nestedPromise.then(function(transformedNestedData){
-						if (
-							!keyProps.ignoreEmpty ||
-							Object.keys(_.pick(transformedNestedData, _.identity)).length
-						) {
-							ret[key] = transformedNestedData;
-						}
-					}).catch(error => {
-						logger.error(`Model# resolveForLocal() Failed to resolve nested promise data. Error: ${error} | data:`, data);
-					});
-					promises.push(nestedPromise);
-				} else if (!keyProps.ignoreEmpty) {
-					ret[key] = {};
-				}
-			} else {
+			}	else {
 				if (keyProps.isPromise) {
 					let promise = keyProps.transformForLocal(data[keyProps.serverName], data);
 					promise.then(function(transformedData){
