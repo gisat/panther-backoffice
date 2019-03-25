@@ -119,8 +119,7 @@ class ConfigMetadataStyle extends ControllerComponent {
 					nextState.valueServerName = style.serverName;
 				}
 				else if (style.source == "sld") {
-					nextState.valueSld = style.valueSld;
-					nextState.valueName = style.valueName;
+					nextState.valueSld = style.sld;
 				}
 			}
 		}
