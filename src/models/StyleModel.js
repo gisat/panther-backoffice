@@ -74,6 +74,11 @@ class StyleModel extends Model {
 			definition: {
 				serverName: 'definition',
 				sendToServer: true,
+				transformForLocal: function(data) {
+					if(data) {
+						return JSON.parse(data);
+					}
+				},
 				isNested: true,
 				model: {
 					type: {
