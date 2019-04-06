@@ -30,7 +30,7 @@ class GeonodeStore extends Store {
 	}
 
 	load(operationId) {
-		console.log('Load Geonode');
+		console.log('Load Geonode ', this.cache);
 		if (!this.cache) {
 			return this.reload(operationId);
 		} else {
@@ -46,6 +46,7 @@ class GeonodeStore extends Store {
 			.set('Access-Control-Allow-Origin', 'true')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(response => {
+				console.log('Geonode Reload: ', response.body);
 				let data = JSON.parse(response.body);
 				this.cache = data.data.map(geonodeLayer => new GeonodeLayerModel(null, geonodeLayer));
 				logger.info('GeonodeStore#reload loaded: ', this.cache);
