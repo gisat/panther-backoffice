@@ -41,6 +41,7 @@ class ScreenPermissionsBase extends ScreenController {
 			topics: this._load(TopicStore),
 			users: this._load(UserStore),
 			groups: this._load(GroupStore),
+			layer: this._load(GeonodeStore),
 			wms_layers: this._load(WmsStore)
 		}
 	}
@@ -53,6 +54,7 @@ class ScreenPermissionsBase extends ScreenController {
 		this.changeListener.add(TopicStore, ["topics"]);
 		this.changeListener.add(UserStore, ["users"]);
 		this.changeListener.add(GroupStore, ["groups"]);
+		this.changeListener.add(GeonodeStore, ["layers"]);
 		this.changeListener.add(WmsStore, ["wms_layers"]);
 	}
 

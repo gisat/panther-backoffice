@@ -78,7 +78,7 @@ class ScreenPermissionsObject extends ScreenController {
 				break;
 			case LayerObjectTypes.WMS_LAYER:
 				storeloads = {
-					layers: this._load(GeonodeStore),
+					layers: this._load(WmsStore),
 					users: this._load(UserStore),
 					groups: this._load(GroupStore)
 				};

@@ -45,6 +45,7 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 			{data: "scopes", dataType: ObjectTypes.SCOPE, allowAdd: false},
 			{data: "topics", dataType: ObjectTypes.TOPIC, allowAdd: false},
 			{data: "wms_layers", dataType: LayerObjectTypes.WMS_LAYER, allowAdd: false},
+			{data: "layers", dataType: LayerObjectTypes.GEONODE_LAYER, allowAdd: false},
 			{data: "users", dataType: ObjectTypes.USER, allowAdd: false},
 			{data: "groups", dataType: ObjectTypes.GROUP, allowAdd: true}
 		];

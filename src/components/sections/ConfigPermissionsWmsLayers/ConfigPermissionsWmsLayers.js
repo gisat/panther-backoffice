@@ -107,7 +107,7 @@ class ConfigPermissionsWmsLayers extends ControllerComponent {
 		let newOnes = _.pluck(values, "key");
 		// Find added ones
 		let permission = {
-			resourceType: 'layer',
+			resourceType: 'layer_wms',
 			resourceId: this.props.selectorValue,
 			permission: operationType
 		};
@@ -139,7 +139,7 @@ class ConfigPermissionsWmsLayers extends ControllerComponent {
 		let newOnes = _.pluck(values, "key");
 		// Find added ones
 		let permission = {
-			resourceType: 'layer',
+			resourceType: 'layer_wms',
 			resourceId: this.props.selectorValue,
 			permission: operationType
 		};
@@ -180,11 +180,11 @@ class ConfigPermissionsWmsLayers extends ControllerComponent {
 		if(this.state.built) {
 			ret = (
 				<div>
-					<div><h2>Specify the permissions towards the layer</h2></div>
+					<div><h2>Specify the permissions towards the WMS layer</h2></div>
 
 					<div className="frame-input-wrapper">
 						<label className="container">
-							Users with permission to see this layer
+							Users with permission to see this WMS layer
 							<UIObjectSelect
 								multi
 								className="template"
@@ -201,7 +201,7 @@ class ConfigPermissionsWmsLayers extends ControllerComponent {
 
 					<div className="frame-input-wrapper">
 						<label className="container">
-							Users with permission to update this layer
+							Users with permission to update this WMS layer
 							<UIObjectSelect
 								multi
 								className="template"
@@ -218,7 +218,7 @@ class ConfigPermissionsWmsLayers extends ControllerComponent {
 
 					<div className="frame-input-wrapper">
 						<label className="container">
-							Users with permission to delete this layer
+							Users with permission to delete this WMS layer
 							<UIObjectSelect
 								multi
 								className="template"
@@ -235,7 +235,7 @@ class ConfigPermissionsWmsLayers extends ControllerComponent {
 
 					<div className="frame-input-wrapper">
 						<label className="container">
-							Groups with permission to see this layer
+							Groups with permission to see this WMS layer
 							<UIObjectSelect
 								multi
 								className="template"
@@ -252,7 +252,7 @@ class ConfigPermissionsWmsLayers extends ControllerComponent {
 
 					<div className="frame-input-wrapper">
 						<label className="container">
-							Groups with permission to update this layer
+							Groups with permission to update this WMS layer
 							<UIObjectSelect
 								multi
 								className="template"
@@ -269,7 +269,7 @@ class ConfigPermissionsWmsLayers extends ControllerComponent {
 
 					<div className="frame-input-wrapper">
 						<label className="container">
-							Groups with permission to delete this layer
+							Groups with permission to delete this WMS layer
 							<UIObjectSelect
 								multi
 								className="template"
