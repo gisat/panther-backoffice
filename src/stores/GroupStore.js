@@ -9,6 +9,7 @@ import logger from '../core/Logger';
 import { apiProtocol, apiHost, apiPath } from '../config';
 import GroupModel from '../models/GroupModel';
 import Store from './Store';
+import UserStore from './UserStore';
 
 class GroupStore extends Store {
 	constructor() {
@@ -122,9 +123,12 @@ class GroupStore extends Store {
 	getUpdatable() {
 		return this.load().then(groups => {
 			let groupsWithPermissions = [];
-			if(this.logged){
-				const userRelated = this.logged.permissions.filter(permission => permission.resourceType === 'group' &&
-					(permission.permission === 'PUT' || permission.permission === 'DELETE'))
+			const logged = UserStore.loggedIn();
+
+			if(logged && logged.permissions && logged.permissions.length > 0){
+				const userRelated = logged.permissions
+					.filter(permission => permission.resourceType === 'group' &&
+						(permission.permission === 'PUT' || permission.permission === 'DELETE'))
 					.map(permission => permission.resourceId);
 				groupsWithPermissions = groups.filter(group => userRelated.indexOf(group.key) !== -1);
 			}
