@@ -41,7 +41,7 @@ class ScreenPermissionsBase extends ScreenController {
 			topics: this._load(TopicStore),
 			users: this._loadOnlyWithUpdate(UserStore),
 			groups: this._loadOnlyWithUpdate(GroupStore),
-			layer: this._load(GeonodeStore),
+			layers: this._load(GeonodeStore),
 			wms_layers: this._load(WmsStore)
 		}
 	}
