@@ -103,6 +103,11 @@ class PermissionStore {
 				key: 'permission-spatial-relation',
 				type: 'spatial_relation',
 				name: 'Spatial relation'
+			},
+			{
+				key: 'permission-permission',
+				type: 'permission',
+				name: 'Permission'
 			}
 		]
 	}
