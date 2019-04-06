@@ -30,6 +30,7 @@ class GeonodeStore extends Store {
 	}
 
 	load(operationId) {
+		console.log('Load Geonode');
 		if (!this.cache) {
 			return this.reload(operationId);
 		} else {
@@ -48,6 +49,7 @@ class GeonodeStore extends Store {
 				let data = JSON.parse(response.body);
 				this.cache = data.data.map(geonodeLayer => new GeonodeLayerModel(null, geonodeLayer));
 				logger.info('GeonodeStore#reload loaded: ', this.cache);
+				console.log('GeonodeStore ', this.cache);
 				this.emitChange();
 				return this.cache;
 			}).catch(err => {
