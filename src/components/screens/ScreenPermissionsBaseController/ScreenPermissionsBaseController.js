@@ -148,7 +148,7 @@ class ScreenPermissionsBaseController extends ControllerComponent {
 							key={"metadata-items-" + tab.key}
 						>
 							<ObjectList
-								data={this.props.store[tab.data]}
+								data={this.props.store[tab.data] || []}
 								allowAdd = {tab.allowAdd}
 								onItemClick={this.onObjectListItemClick.bind(this, tab.dataType)}
 								onAddClick={this.onObjectListAddClick.bind(this, tab.dataType)}
