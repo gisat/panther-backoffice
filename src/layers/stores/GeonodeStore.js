@@ -11,6 +11,7 @@ import GeonodeLayerModel from '../models/GeonodeLayerModel';
 
 import {apiProtocol, apiHost, apiPath} from '../../config';
 import logger from '../../core/Logger';
+import WmsLayerModel from "../models/WmsLayerModel";
 
 /**
  * It returns all layers duplicated from the geonode layers as well as the original geonode layers. It is possible to
@@ -48,9 +49,12 @@ class GeonodeStore extends Store {
 			.then(response => {
 				console.log('Geonode Reload: ', response.body);
 				let data = JSON.parse(response.body);
-				this.cache = data.data.map(geonodeLayer => new GeonodeLayerModel(null, geonodeLayer));
+				return Promise.all(
+					data.data.map(geonodeLayerData => new GeonodeLayerModel(null, geonodeLayerData)) || []
+				);
+			}).then(layers => {
+				this.cache = layers || [];
 				logger.info('GeonodeStore#reload loaded: ', this.cache);
-				console.log('GeonodeStore ', this.cache);
 				this.emitChange();
 				return this.cache;
 			}).catch(err => {
