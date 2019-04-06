@@ -67,7 +67,7 @@ class ScreenPermissionsBase extends ScreenController {
 	}
 
 	render() {
-		if (this.state.ready && Object.keys(this.state.store).length >= 5) {
+		if (this.state.ready && Object.keys(this.state.store).length >= 7) {
 			let props = utils.clone(this.props);
 			props.store = this.state.store;
 			return React.createElement(ScreenPermissionsBaseController, props);
