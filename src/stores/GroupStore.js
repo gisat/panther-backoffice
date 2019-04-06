@@ -123,8 +123,9 @@ class GroupStore extends Store {
 		return this.load().then(groups => {
 			let groupsWithPermissions = [];
 			if(this.logged){
-				const userRelated = _.pluck(this.logged.permissions.filter(permission => permission.resourceType === 'group' &&
-					(permission.permission === 'PUT' || permission.permission === 'DELETE')), 'resourceid');
+				const userRelated = this.logged.permissions.filter(permission => permission.resourceType === 'group' &&
+					(permission.permission === 'PUT' || permission.permission === 'DELETE'))
+					.map(permission => permission.resourceId);
 				groupsWithPermissions = groups.filter(group => userRelated.indexOf(group.key) !== -1);
 			}
 
