@@ -293,6 +293,19 @@ class UserStore extends Store {
 		return this.load();
 	}
 
+	getUpdatable() {
+		return this.load().then(users => {
+			let usersWithPermissions = [];
+			if(this.logged){
+				const userRelated = _.pluck(this.logged.permissions.filter(permission => permission.resourceType === 'user' &&
+					(permission.permission === 'PUT' || permission.permission === 'DELETE')), 'resourceid');
+				usersWithPermissions = users.filter(user => userRelated.indexOf(user.key) !== -1);
+			}
+
+			return usersWithPermissions;
+		});
+	}
+
 	getAll() {
 		return this.all();
 	}

@@ -119,6 +119,19 @@ class GroupStore extends Store {
 		return this.load();
 	}
 
+	getUpdatable() {
+		return this.load().then(groups => {
+			let groupsWithPermissions = [];
+			if(this.logged){
+				const userRelated = _.pluck(this.logged.permissions.filter(permission => permission.resourceType === 'group' &&
+					(permission.permission === 'PUT' || permission.permission === 'DELETE')), 'resourceid');
+				groupsWithPermissions = groups.filter(group => userRelated.indexOf(group.key) !== -1);
+			}
+
+			return groupsWithPermissions;
+		});
+	}
+
 	byId(id) {
 		return this.load().then(all => {
 			return all.filter(group => group.id == id);

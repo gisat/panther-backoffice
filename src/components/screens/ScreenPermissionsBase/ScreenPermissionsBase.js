@@ -39,11 +39,15 @@ class ScreenPermissionsBase extends ScreenController {
 			scopes: this._load(ScopeStore),
 			places: this._load(PlaceStore),
 			topics: this._load(TopicStore),
-			users: this._load(UserStore),
-			groups: this._load(GroupStore),
+			users: this._loadOnlyWithUpdate(UserStore),
+			groups: this._loadOnlyWithUpdate(GroupStore),
 			layer: this._load(GeonodeStore),
 			wms_layers: this._load(WmsStore)
 		}
+	}
+
+	_loadOnlyWithUpdate(store) {
+		return function(){return store.getUpdatable()};
 	}
 
 	componentDidMount(){
