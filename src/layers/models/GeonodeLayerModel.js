@@ -8,6 +8,9 @@ class GeonodeLayerModel extends Model {
 			key: {
 				serverName: 'name' //string
 			},
+			name: {
+				serverName: 'name' // string
+			},
 			referenced: {
 				serverName: 'referenced' //boolean
 			},
