@@ -124,6 +124,12 @@ class GroupStore extends Store {
 		return this.load().then(groups => {
 			let groupsWithPermissions = [];
 			const logged = UserStore.loggedIn();
+			if(this.logged && this.groups) {
+				const groupIds = this.groups.map(group => group.key);
+				if(groupIds.indexOf(1) !== -1) {
+					return groups;
+				}
+			}
 
 			if(logged && logged.permissions && logged.permissions.length > 0){
 				const userRelated = logged.permissions

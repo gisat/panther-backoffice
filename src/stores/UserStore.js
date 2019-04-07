@@ -296,6 +296,12 @@ class UserStore extends Store {
 	getUpdatable() {
 		return this.load().then(users => {
 			let usersWithPermissions = [];
+			if(this.logged && this.groups) {
+				const groupIds = this.groups.map(group => group.key);
+				if(groupIds.indexOf(1) !== -1) {
+					return users;
+				}
+			}
 			if(this.logged && this.logged.permissions && this.logged.permissions.length > 0){
 				const userRelated = this.logged.permissions.filter(permission => permission.resourceType === 'user' &&
 					(permission.permission === 'PUT' || permission.permission === 'DELETE'))
