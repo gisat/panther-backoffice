@@ -53,6 +53,7 @@ class GeonodeStore extends Store {
 					data.data.map(geonodeLayerData => new GeonodeLayerModel(null, geonodeLayerData)) || []
 				);
 			}).then(layers => {
+				console.log('Parsed Layers: ', layers);
 				this.cache = layers || [];
 				logger.info('GeonodeStore#reload loaded: ', this.cache);
 				this.emitChange();
