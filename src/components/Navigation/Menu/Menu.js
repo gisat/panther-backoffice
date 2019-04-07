@@ -79,6 +79,11 @@ class Menu extends PantherComponent {
 		};
 
 		let items = [];
+		items.push(this.renderExternalLink('/geobrowser/?id=portfolio', 'images/utep/urban_geobrowser.png', 'Product Portfolio'));
+		items.push(this.renderExternalLink('/puma/tool', 'images/utep/urban_data.png', 'Analytics Toolbox'));
+		items.push(this.renderExternalLink('/geobrowser/?id=eoservices', 'images/utep/urban_eoservices.png', 'Earth Observation Services'));
+		items.push(this.renderExternalLink('/#!communities', 'images/utep/urban_community_hub.png', 'Community Hub'));
+
 		items.push(this.renderItem('', 'dashboard', 'icon-dashboard', 'Dashboard', 'Dashboard'));
 		//items.push(this.renderItem('scopes', 'scopes', 'scopes', 'Scopes', 'Scopes'));
 		items.push(this.renderItem('places', 'places', 'icon-places', 'Places', 'Places'));
@@ -91,6 +96,21 @@ class Menu extends PantherComponent {
 
 		return React.createElement(elementType, elementProps, React.createElement('ul', null, items));
 
+	}
+
+	renderExternalLink(url, icon, title) {
+		return (
+			<li>
+				<a
+					href={url}
+					tabIndex="-1"
+					className={""}
+					title={title}
+				>
+					<img src={icon} alt={title} />
+				</a>
+			</li>
+		);
 	}
 
 	renderItem(path, screenSet, icon, caption, title) {
