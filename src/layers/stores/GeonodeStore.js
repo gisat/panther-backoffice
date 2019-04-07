@@ -30,7 +30,6 @@ class GeonodeStore extends Store {
 	}
 
 	load(operationId) {
-		console.log('Load Geonode ', this.cache);
 		if (!this.cache) {
 			return this.reload(operationId);
 		} else {

@@ -129,17 +129,14 @@ class UserStore extends Store {
 			.set('Accept', 'application/json')
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then((response) => {
-				console.log(response);
 				if (response.body._id == 0) {
 					return null;
 				}
 
-				console.log(this.logged);
 				let oldUserKey = this.logged && this.logged.key;
 				this.logged = new UserModel(null, response.body);
 
 				return this.logged.ready.then(() => {
-					console.log(this.logged);
 					if (this.logged.key != oldUserKey) {
 						this.loginListeners.forEach((listener) => {
 							listener(this.logged);
