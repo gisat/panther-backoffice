@@ -48,10 +48,9 @@ class GeonodeStore extends Store {
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(response => {
 				console.log('Geonode Reload: ', response.body);
-				let data = JSON.parse(response.body);
-				return Promise.all(
-					data.data.map(geonodeLayerData => new GeonodeLayerModel(null, geonodeLayerData)) || []
-				);
+				let processedLayers = data.data.map(geonodeLayerData => new GeonodeLayerModel(null, geonodeLayerData));
+				console.log('Processed: ', processedLayers);
+				return processedLayers;
 			}).then(layers => {
 				console.log('Parsed Layers: ', layers);
 				this.cache = layers || [];
