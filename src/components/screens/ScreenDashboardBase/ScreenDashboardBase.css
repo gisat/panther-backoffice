@@ -49,8 +49,8 @@ a.row:hover {
 
 
 .pumalogo {
-	min-width: 440px;
-	min-height: 190px;
+	min-width: 200px;
+	min-height: 83px;
 
 	background: 0px 0px url("../../../public/urban_tep_logo.png") no-repeat;
 }
