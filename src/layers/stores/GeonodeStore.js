@@ -11,7 +11,6 @@ import GeonodeLayerModel from '../models/GeonodeLayerModel';
 
 import {apiProtocol, apiHost, apiPath} from '../../config';
 import logger from '../../core/Logger';
-import WmsLayerModel from "../models/WmsLayerModel";
 
 /**
  * It returns all layers duplicated from the geonode layers as well as the original geonode layers. It is possible to
@@ -48,6 +47,9 @@ class GeonodeStore extends Store {
 			.set('Access-Control-Allow-Credentials', 'true')
 			.then(response => {
 				console.log('Geonode Reload: ', response.body);
+				let data = response.body.data;
+				console.log('Data: ', data);
+				console.log('Func: ', data.map);
 				let processedLayers = response.body.data.map(geonodeLayerData => {
 					console.log('Data: ', geonodeLayerData);
 					return new GeonodeLayerModel(null, geonodeLayerData);
