@@ -17,6 +17,10 @@ class UserModel extends Model {
 				serverName: 'email',
 				sendToServer: true
 			},
+			groups: {
+				serverName: 'groups',
+				sendToServer: false
+			},
 			phone: {
 				serverName: 'phone',
 				sendToServer: true
