@@ -108,6 +108,9 @@ class Menu extends PantherComponent {
 					title={title}
 				>
 					<img src={icon} alt={title} />
+					{!this.props.quickAccess ? (
+						<span>{title}</span>
+					) : null}
 				</a>
 			</li>
 		);
