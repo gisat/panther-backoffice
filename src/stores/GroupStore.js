@@ -125,7 +125,7 @@ class GroupStore extends Store {
 			let groupsWithPermissions = [];
 			const logged = UserStore.loggedIn();
 			if(logged && logged.groups) {
-				const groupIds = this.groups.map(group => group.key);
+				const groupIds = logged.groups.map(group => group.key);
 				if(groupIds.indexOf(1) !== -1) {
 					return groups;
 				}
