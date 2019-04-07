@@ -84,26 +84,6 @@ class ScreenDashboardBase extends PantherComponent {
 
 							</div>
 
-							<div className="frame-wrapper flexchild">
-								<span className="row">Front Office</span>
-								<a
-									className="row right-icon"
-									target="_blank"
-									href={frontOfficeURL + frontOfficeExplorationPath}
-								>
-									<span>Data Exploration</span>
-									<Icon name="external" className="right"/>
-								</a>
-								<a
-									className="row right-icon"
-									target="_blank"
-									href={frontOfficeURL}
-								>
-									<span>Project homepage</span>
-									<Icon name="external" className="right"/>
-								</a>
-							</div>
-
 							{<div className="frame-wrapper flexchild">
 								<span className="row">GeoServer</span>
 								<a
