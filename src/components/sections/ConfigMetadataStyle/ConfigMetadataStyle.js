@@ -288,6 +288,9 @@ class ConfigMetadataStyle extends ControllerComponent {
 			modelData.serverName = this.state.current.valueServerName;
 		}
 
+		if(this.props.selectorValue) {
+			modelData.key = modelData._id = this.props.selectorValue;
+		}
 		let modelObj = new Model[ObjectTypes.STYLE](modelData);
 		actionData.push({type:"update",model:modelObj});
 		ActionCreator.handleObjects(actionData,ObjectTypes.STYLE, operationId);
