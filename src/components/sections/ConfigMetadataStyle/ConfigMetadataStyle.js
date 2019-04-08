@@ -289,7 +289,7 @@ class ConfigMetadataStyle extends ControllerComponent {
 		}
 
 		if(this.props.selectorValue) {
-			modelData.key = modelData._id = this.props.selectorValue;
+			modelData.key = this.props.selectorValue;
 		}
 		let modelObj = new Model[ObjectTypes.STYLE](modelData);
 		actionData.push({type:"update",model:modelObj});
