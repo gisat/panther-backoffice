@@ -18,6 +18,10 @@ class GroupModel extends Model {
 				serverName: 'name',
 				sendToServer: true
 			},
+			identifier: {
+				serverName: 'identifier',
+				sendToServer: true
+			},
 			permissions: {
 				serverName: 'permissions',
 				sendToServer: false

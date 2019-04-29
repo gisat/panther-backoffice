@@ -22,6 +22,7 @@ import { Input } from '../../SEUI/elements';
 
 var initialState = {
 	valuesName: '',
+	valuesIdentifier: '',
 	valuesMembers: [],
 	valuesResources: [],
 
@@ -78,6 +79,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 					valuesGroupsDelete: [],
 					valuesMembers: _.pluck(group.users, "key"),
 					valuesName: group.name,
+					valuesIdentifier: group.identifier,
 					valuesResources: []
 				};
 				if(group.permissionsGroups) {
@@ -143,6 +145,12 @@ class ConfigPermissionsGroup extends ControllerComponent {
 		});
 	}
 
+	onChangeIdentifier(e) {
+		this.setCurrentState({
+			valuesIdentifier: e.target.value
+		});
+	}
+
 	saveForm() {
 		let operationId = super.saveForm();
 
@@ -153,6 +161,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 		let group = {
 			id: this.props.selectorValue,
 			name: this.state.current.valuesName,
+			identifier: this.state.current.valuesIdentifier,
 
 			members: this.state.current.valuesMembers,
 			permissions: resources,
@@ -195,6 +204,19 @@ class ConfigPermissionsGroup extends ControllerComponent {
 								placeholder=" "
 								value={this.state.current.valuesName}
 								onChange={this.onChangeName.bind(this)}
+							/>
+						</label>
+					</div>
+
+					<div className="frame-input-wrapper required">
+						<label className="container">
+							Identifier (Integration with Communities)
+							<Input
+								type="text"
+								name="name"
+								placeholder=" "
+								value={this.state.current.valuesIdentifier}
+								onChange={this.onChangeIdentifier.bind(this)}
 							/>
 						</label>
 					</div>
