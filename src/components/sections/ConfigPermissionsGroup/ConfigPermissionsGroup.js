@@ -213,7 +213,7 @@ class ConfigPermissionsGroup extends ControllerComponent {
 							Identifier (Integration with Communities)
 							<Input
 								type="text"
-								name="name"
+								name="identifier"
 								placeholder=" "
 								value={this.state.current.valuesIdentifier}
 								onChange={this.onChangeIdentifier.bind(this)}
