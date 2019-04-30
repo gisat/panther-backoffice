@@ -103,7 +103,8 @@ class LoginPage extends Component {
 		if (this.state.ready) {
 
 			let styles = {
-				paddingRight: "5px"
+				paddingRight: "5px",
+				border: "0px"
 			};
 
 			loginBoxInsert = (
