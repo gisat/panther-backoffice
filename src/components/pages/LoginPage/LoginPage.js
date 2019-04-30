@@ -105,6 +105,9 @@ class LoginPage extends Component {
 			loginBoxInsert = (
 				<div className="login-box frame-wrapper filled">
 					<div className="login-box-content">
+						<div style={{
+							width: "20rem"
+						}}>
 						<a style={{fontSize: "1.125rem",
 							textDecoration: "none",
 							padding: ".75rem 1.5rem",
@@ -113,6 +116,10 @@ class LoginPage extends Component {
 							textAlign: "center",
 							background: "#99364b",
 							color: "#ddd"}} href="https://urban-tep.eu/umsso?r=https%3A%2F%2Furban-tep.eu%2Fpuma%2Ftool" target="_blank">Login via EO-SSO</a>
+						</div>
+						<div style={{
+							width: "20rem"
+						}}>
 						<a style={{fontSize: "1.125rem",
 							textDecoration: "none",
 							padding: ".75rem 1.5rem",
@@ -120,6 +127,7 @@ class LoginPage extends Component {
 							width: "20rem",
 							textAlign: "center",
 							color: "#ccc"}} href="https://eo-sso-idp.eo.esa.int/idp/umsso20/registration" target="_blank">Sign Up</a>
+						</div>
 
 						<label className="container">
 							E-mail
