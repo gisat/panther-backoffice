@@ -117,7 +117,7 @@ class LoginPage extends Component {
 							width: "20rem",
 							textAlign: "center",
 							background: "#99364b",
-							color: "#ddd"}} href="https://urban-tep.eu/umsso?r=https%3A%2F%2Furban-tep.eu%2Fpuma%2Ftool" target="_blank">Login via EO-SSO</a>
+							color: "#ddd"}} href="https://urban-tep.eu/umsso?r=https%3A%2F%2Furban-tep.eu%2Fpuma%2Ftool%2Fbackoffice%2F" target="_blank">Login via EO-SSO</a>
 						</div>
 						<div style={{
 							width: "20rem",
