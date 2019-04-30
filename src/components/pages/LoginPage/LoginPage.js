@@ -106,7 +106,9 @@ class LoginPage extends Component {
 				<div className="login-box frame-wrapper filled">
 					<div className="login-box-content">
 						<div style={{
-							width: "20rem"
+							width: "20rem",
+							height: "2.5rem",
+							textAlign: "center"
 						}}>
 						<a style={{fontSize: "1.125rem",
 							textDecoration: "none",
@@ -118,7 +120,10 @@ class LoginPage extends Component {
 							color: "#ddd"}} href="https://urban-tep.eu/umsso?r=https%3A%2F%2Furban-tep.eu%2Fpuma%2Ftool" target="_blank">Login via EO-SSO</a>
 						</div>
 						<div style={{
-							width: "20rem"
+							width: "20rem",
+							height: "2.5rem",
+							textAlign: "center",
+							marginBottom: "2rem"
 						}}>
 						<a style={{fontSize: "1.125rem",
 							textDecoration: "none",
