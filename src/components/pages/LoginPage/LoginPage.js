@@ -102,67 +102,91 @@ class LoginPage extends Component {
 
 		if (this.state.ready) {
 
-			loginBoxInsert = (
-				<div className="login-box frame-wrapper filled">
-					<div className="login-box-content">
-						<div style={{
-							width: "20rem",
-							height: "2.5rem",
-							textAlign: "center"
-						}}>
-						<a style={{fontSize: "1.125rem",
-							textDecoration: "none",
-							padding: ".75rem 1.5rem",
-							marginTop: "1rem",
-							width: "20rem",
-							textAlign: "center",
-							background: "#99364b",
-							color: "#ddd"}} href="https://urban-tep.eu/umsso?r=https%3A%2F%2Furban-tep.eu%2Fpuma%2Ftool%2Fbackoffice%2F" target="_blank">Login via EO-SSO</a>
-						</div>
-						<div style={{
-							width: "20rem",
-							height: "2.5rem",
-							textAlign: "center",
-							marginBottom: "2rem"
-						}}>
-						<a style={{fontSize: "1.125rem",
-							textDecoration: "none",
-							padding: ".75rem 1.5rem",
-							marginTop: "1rem",
-							width: "20rem",
-							textAlign: "center",
-							color: "#ccc"}} href="https://eo-sso-idp.eo.esa.int/idp/umsso20/registration" target="_blank">Sign Up</a>
-						</div>
+			let styles = {
+				paddingRight: "5px"
+			};
 
-						<label className="container">
-							E-mail
-							<Input
-								type="text"
-								name="email"
-								placeholder=" "
-								value={this.state.valueEmail}
-								onChange={this.onChangeEmail.bind(this)}
-							/>
-						</label>
-						<label className="container">
-							Passphrase
-							<Input
-								type="password"
-								name="name"
-								placeholder=" "
-								value={this.state.valuePassphrase}
-								onChange={this.onChangePassphrase.bind(this)}
-							/>
-						</label>
-						<Button
-							basic
-							color="blue"
-							onClick={this.onClick.bind(this)}
-						>
-							Log in
-						</Button>
+			loginBoxInsert = (
+				<div>
+					<div style={{
+						position: "absolute",
+						top: "10px",
+						left: "10px"
+					}}>
+						<a className="utep-link" href="/geobrowser/?id=portfolio">
+							<img src="../images/utep/urban_geobrowser.png" width="30px" height="30px" style={styles}/>
+						</a>
+						<a className="utep-link" href="/puma/tool">
+							<img src="../images/utep/urban_data.png" width="30px" height="30px" style={styles} />
+						</a>
+						<a className="utep-link" href="/geobrowser/?id=eoservices">
+							<img src="../images/utep/urban_eoservices.png" width="30px" height="30px" style={styles} />
+						</a>
+						<a className="utep-link" href="/#!communities">
+							<img src="../images/utep/urban_community_hub.png" width="30px" height="30px" style={styles} />
+						</a>
 					</div>
-					{errorInsert}
+					<div className="login-box frame-wrapper filled">
+						<div className="login-box-content">
+							<div style={{
+								width: "20rem",
+								height: "2.5rem",
+								textAlign: "center"
+							}}>
+							<a style={{fontSize: "1.125rem",
+								textDecoration: "none",
+								padding: ".75rem 1.5rem",
+								marginTop: "1rem",
+								width: "20rem",
+								textAlign: "center",
+								background: "#99364b",
+								color: "#ddd"}} href="https://urban-tep.eu/umsso?r=https%3A%2F%2Furban-tep.eu%2Fpuma%2Ftool%2Fbackoffice%2F" target="_blank">Login via EO-SSO</a>
+							</div>
+							<div style={{
+								width: "20rem",
+								height: "2.5rem",
+								textAlign: "center",
+								marginBottom: "2rem"
+							}}>
+							<a style={{fontSize: "1.125rem",
+								textDecoration: "none",
+								padding: ".75rem 1.5rem",
+								marginTop: "1rem",
+								width: "20rem",
+								textAlign: "center",
+								color: "#ccc"}} href="https://eo-sso-idp.eo.esa.int/idp/umsso20/registration" target="_blank">Sign Up</a>
+							</div>
+
+							<label className="container">
+								E-mail
+								<Input
+									type="text"
+									name="email"
+									placeholder=" "
+									value={this.state.valueEmail}
+									onChange={this.onChangeEmail.bind(this)}
+								/>
+							</label>
+							<label className="container">
+								Passphrase
+								<Input
+									type="password"
+									name="name"
+									placeholder=" "
+									value={this.state.valuePassphrase}
+									onChange={this.onChangePassphrase.bind(this)}
+								/>
+							</label>
+							<Button
+								basic
+								color="blue"
+								onClick={this.onClick.bind(this)}
+							>
+								Log in
+							</Button>
+						</div>
+						{errorInsert}
+					</div>
 				</div>
 			);
 
