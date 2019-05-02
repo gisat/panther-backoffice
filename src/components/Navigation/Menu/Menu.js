@@ -8,6 +8,7 @@ import Link from '../../Link';
 import UISVG from '../../atoms/UISVG';
 import classNames from 'classnames';
 import utils from '../../../utils/utils';
+import UserStore from '../../../stores/UserStore';
 
 var initialState = {
 	isFocused: false,
@@ -91,7 +92,12 @@ class Menu extends PantherComponent {
 		items.push(this.renderItem('analyses', 'analyses', 'icon-analyses', 'Analyses', 'Analyses'));
 		items.push(this.renderItem('metadata', 'metadata', 'icon-metadata', 'Metadata structures', 'Metadata structures'));
 		//items.push(this.renderItem('data', 'data', 'objects', 'Data structures', 'All data structures'));
-		items.push(this.renderItem('permissions', 'permissions', 'users', 'Permissions', 'Users, groups & permissions'));
+		const user = UserStore.loggedIn();
+		const groupIds = user && user.groups && user.groups.map(group => group.key) || [];
+		if(groupIds.indexOf(1) !== -1) {
+			items.push(this.renderItem('permissions', 'permissions', 'users', 'Permissions', 'Users, groups & permissions'));
+		}
+
 		items.push(this.renderItem('layers', 'layers', 'icon-datalayers', 'WMS data layers', 'WMS data layers'));
 
 		return React.createElement(elementType, elementProps, React.createElement('ul', null, items));
