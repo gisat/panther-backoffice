@@ -93,7 +93,7 @@ class Menu extends PantherComponent {
 		items.push(this.renderItem('metadata', 'metadata', 'icon-metadata', 'Metadata structures', 'Metadata structures'));
 		//items.push(this.renderItem('data', 'data', 'objects', 'Data structures', 'All data structures'));
 		const user = UserStore.loggedIn();
-		const groupIds = user && user.groups && user.groups.map(group => group.key) || [];
+		const groupIds = user && user.groups && user.groups.map(group => group._id) || [];
 		if(groupIds.indexOf(1) !== -1) {
 			items.push(this.renderItem('permissions', 'permissions', 'users', 'Permissions', 'Users, groups & permissions'));
 		}
