@@ -80,7 +80,7 @@ class Menu extends PantherComponent {
 		};
 
 		let items = [];
-		items.push(this.renderExternalLink('/geobrowser/?id=portfolio', 'images/utep/urban_geobrowser.png', 'Product Portfolio'));
+		items.push(this.renderExternalLink('/puma/tool/?id=567873922', 'images/utep/urban_geobrowser.png', 'Product Portfolio'));
 		items.push(this.renderExternalLink('/puma/tool', 'images/utep/urban_data.png', 'Analytics Toolbox'));
 		items.push(this.renderExternalLink('/geobrowser/?id=eoservices', 'images/utep/urban_eoservices.png', 'Earth Observation Services'));
 		items.push(this.renderExternalLink('/#!communities', 'images/utep/urban_community_hub.png', 'Community Hub'));

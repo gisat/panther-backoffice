@@ -114,7 +114,7 @@ class LoginPage extends Component {
 						top: "10px",
 						left: "10px"
 					}}>
-						<a className="utep-link" href="/geobrowser/?id=portfolio">
+						<a className="utep-link" href="/puma/tool/?id=567873922">
 							<img src="../images/utep/urban_geobrowser.png" width="30px" height="30px" style={styles}/>
 						</a>
 						<a className="utep-link" href="/puma/tool">
