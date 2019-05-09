@@ -109,14 +109,6 @@ class ScreenDashboardBase extends PantherComponent {
 									Help index
 									<Icon name="angle double right" className="right"/>
 								</a>
-								<a
-									className="row right-icon"
-									target="_blank"
-									href={frontOfficeURL + "help-frontoffice/"}
-								>
-									Front office help
-									<Icon name="external" className="right"/>
-								</a>
 							</div>
 
 						</div>
