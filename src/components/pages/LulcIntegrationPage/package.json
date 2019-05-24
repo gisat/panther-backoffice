@@ -1,0 +1,6 @@
+{
+	"name": "LulcIntegrationPage",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./LulcIntegrationPage.js"
+}

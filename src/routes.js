@@ -9,6 +9,7 @@ import LoginPage from './components/pages/LoginPage';
 import ContentPage from './components/temp/ContentPage';
 import NotFoundPage from './components/temp/NotFoundPage';
 import ErrorPage from './components/temp/ErrorPage';
+import LulcIntegrationPage from './components/pages/LulcIntegrationPage';
 import UserStore from './stores/UserStore';
 
 import { publicPath } from './config';
@@ -41,6 +42,8 @@ const router = new Router(on => {
 	hookRoute(on, '/login', async () => <LoginPage />);
 
 	hookRoute(on, '/update', async () => <UpdatePage />);
+
+	hookRoute(on, '/lulc', async () => <LulcIntegrationPage />);
 
 	hookRoute(on, '/', async () => <Page screenSet="dashboard" />);
 
