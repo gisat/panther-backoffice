@@ -18,7 +18,7 @@ class LulcIntegrationPage extends Component {
 
 	render() {
 		return (
-			<form method="POST" action={apiProtocol + apiHost + apiPath + '/rest/integration/lulc'} encType="multipart/form-data" >
+			<form method="POST" action={apiProtocol + apiHost + apiPath + 'rest/integration/lulc'} encType="multipart/form-data" >
 				<div>
 					<label>Scope Id: <input name="scopeId" type="text" /></label>
 				</div>
