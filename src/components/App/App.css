@@ -525,7 +525,7 @@ todo hex colours, button icons */
 
 .beside {
 	position: absolute;
-	left:52rem;
+	left:72rem;
 }
 
 
@@ -651,7 +651,7 @@ todo hex colours, button icons */
 	.screen-content-only > div,
 	.screen-content > div,
 	.screen-setter > div {
-		width: 50rem;
+		width: 70rem;
 	}
 
 

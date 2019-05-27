@@ -13,7 +13,7 @@
 
 #ConfigDataLayerAnalyticalColumnTable thead tr th:first-child,
 #ConfigDataLayerVectorColumnTable thead tr th:first-child {
-	width:10rem;
+	width:22rem;
 }
 #ConfigDataLayerAnalyticalColumnTable thead tr th:nth-child(3),
 #ConfigDataLayerVectorColumnTable thead tr th:nth-child(3) {
