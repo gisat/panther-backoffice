@@ -23,9 +23,21 @@ class LulcIntegrationPage extends Component {
 					<label>Scope Id: <input name="scopeId" type="text" /></label>
 				</div>
 				<div>
-					<label>Place Id: <input name="placeId" type="text" /></label>
-
+					<label>Place Name: <input name="placeName" type="text" /></label>
 				</div>
+				<div>
+					<label>Place Bbox: <input name="bbox" type="text" /></label>
+				</div>
+				<div>
+					<label>Place AU1 Table: <input name="analyticalLevels[]" type="text" /></label>
+				</div>
+				<div>
+					<label>Place AU2 Table: <input name="analyticalLevels[]" type="text" /></label>
+				</div>
+				<div>
+					<label>Place AU3 Table: <input name="analyticalLevels[]" type="text" /></label>
+				</div>
+
 				<div>
 					<label>AU 1: <input name="au1" type="file" /></label>
 				</div>
