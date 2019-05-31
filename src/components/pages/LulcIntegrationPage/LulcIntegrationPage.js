@@ -70,7 +70,7 @@ class LulcIntegrationPage extends Component {
 					<label>Node: <input name="node" type="file" /></label>
 				</div>
 				<div>
-					<label>Transport: <input name="" type="file" /></label>
+					<label>Transport: <input name="transport" type="file" /></label>
 				</div>
 				<div>
 					<input type="submit" value="Integrate" />
