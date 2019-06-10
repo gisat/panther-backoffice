@@ -18,62 +18,98 @@ class LulcIntegrationPage extends Component {
 
 	render() {
 		return (
-			<form method="POST" action={apiProtocol + apiHost + apiPath + '/rest/integration/lulc'} encType="multipart/form-data" >
+			<form method="POST" action={apiProtocol + apiHost + apiPath + '/rest/integration/lulc'}
+						encType="multipart/form-data">
 				<div>
-					<label>Scope Id: <input name="scopeId" type="text" /></label>
+					<label>Scope Id: <input name="scopeId" type="text"/></label>
 				</div>
 				<div>
-					<label>Place Name: <input name="placeName" type="text" /></label>
+					<label>Place Name: <input name="placeName" type="text"/></label>
 				</div>
 				<div>
-					<label>Place Bbox: <input name="bbox" type="text" /></label>
+					<label>Place Bbox: <input name="bbox" type="text"/></label>
 				</div>
 				<div>
-					<label>Place AU1 Table: <input name="analyticalLevels[]" type="text" /></label>
+					<label>Place AU1 Table: <input name="analyticalLevels[]" type="text"/></label>
 				</div>
 				<div>
-					<label>Place AU2 Table: <input name="analyticalLevels[]" type="text" /></label>
+					<label>Place AU2 Table: <input name="analyticalLevels[]" type="text"/></label>
 				</div>
 				<div>
-					<label>Place AU3 Table: <input name="analyticalLevels[]" type="text" /></label>
+					<label>Place AU3 Table: <input name="analyticalLevels[]" type="text"/></label>
 				</div>
 
 				<div>
-					<label>AU 1: <input name="au1" type="file" /></label>
+					<label>AU 1: <input name="au1" type="file"/></label>
 				</div>
 				<div>
-					<label>AU 2: <input name="au2" type="file" /></label>
+					<label>AU 2: <input name="au2" type="file"/></label>
 				</div>
 				<div>
-					<label>AU 3: <input name="au3" type="file" /></label>
+					<label>AU 3: <input name="au3" type="file"/></label>
+
+					<div>
+						<h1>First Year</h1>
+					</div>
 
 				</div>
 				<div>
-					<label>VHR:  <input name="vhr" type="file" /></label>
+					<label>VHR: <input name="vhr" type="file"/></label>
 				</div>
 				<div>
-					<label>HR: <input name="hr" type="file" /></label>
+					<label>HR: <input name="hr" type="file"/></label>
 				</div>
 				<div>
-					<label>LULC Change: <input name="lulc_change" type="file" /></label>
+					<label>LULC Change: <input name="lulc_change" type="file"/></label>
 				</div>
 				<div>
-					<label>Flood: <input name="flood" type="file" /></label>
+					<label>Flood: <input name="flood" type="file"/></label>
 				</div>
 				<div>
-					<label>Green Extension: <input name="green_extension" type="file" /></label>
+					<label>Green Extension: <input name="green_extension" type="file"/></label>
 				</div>
 				<div>
-					<label>Informal Settlements: <input name="informal_settlements" type="file" /></label>
+					<label>Informal Settlements: <input name="informal_settlements" type="file"/></label>
 				</div>
 				<div>
-					<label>Node: <input name="node" type="file" /></label>
+					<label>Node: <input name="node" type="file"/></label>
 				</div>
 				<div>
-					<label>Transport: <input name="transport" type="file" /></label>
+					<label>Transport: <input name="transport" type="file"/></label>
+				</div>
+
+				<div>
+					<h1>Second Year</h1>
+				</div>
+
+				<div>
+					<label>VHR: <input name="vhr_second" type="file"/></label>
 				</div>
 				<div>
-					<input type="submit" value="Integrate" />
+					<label>HR: <input name="hr_second" type="file"/></label>
+				</div>
+				<div>
+					<label>LULC Change: <input name="lulc_change_second" type="file"/></label>
+				</div>
+				<div>
+					<label>Flood: <input name="flood_second" type="file"/></label>
+				</div>
+				<div>
+					<label>Green Extension: <input name="green_extension_second" type="file"/></label>
+				</div>
+				<div>
+					<label>Informal Settlements: <input name="informal_settlements_second" type="file"/></label>
+				</div>
+				<div>
+					<label>Node: <input name="node_second" type="file"/></label>
+				</div>
+				<div>
+					<label>Transport: <input name="transport_second" type="file"/></label>
+				</div>
+
+
+				<div>
+					<input type="submit" value="Integrate"/>
 				</div>
 			</form>
 		);
