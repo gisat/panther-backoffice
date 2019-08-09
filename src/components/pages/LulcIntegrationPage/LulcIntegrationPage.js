@@ -77,6 +77,12 @@ class LulcIntegrationPage extends Component {
 				<div>
 					<label>Transport: <input name="transport" type="file"/></label>
 				</div>
+				<div>
+					<label>Other 1: <input name="other1" type="file"/></label>
+				</div>
+				<div>
+					<label>Other 2: <input name="other2" type="file"/></label>
+				</div>
 
 				<div>
 					<h1>Second Year</h1>
@@ -105,6 +111,12 @@ class LulcIntegrationPage extends Component {
 				</div>
 				<div>
 					<label>Transport: <input name="transport_second" type="file"/></label>
+				</div>
+				<div>
+					<label>Other 1: <input name="other1_second" type="file"/></label>
+				</div>
+				<div>
+					<label>Other 2: <input name="other2_second" type="file"/></label>
 				</div>
 
 
